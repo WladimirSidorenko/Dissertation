@@ -1,9 +1,12 @@
 \documentclass[a4paper,11pt]{article}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage{paralist}
+\usepackage{amsthm}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \renewcommand{\labelenumii}{\theenumi.\arabic{enumii} }
+\theoremstyle{definition}
+\newtheorem{exmp}{Example}[section]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \title{Research Proposal for PhD-Thesis}
@@ -46,51 +49,52 @@
 \section{Introduction}
 
 The explosive expansion of online communication means (OCM) and social
-networks in recent decades has lead to a change in the language in
-which people communicate with each other via these means.  While
-communication partners still are striving to express their opinions,
-attitudes, thoughts, and moods in their full generality, they often do
-not have reach enough possibilities for doing that in OCM as they
-would have them in everyday speech.  One, for example, cannot show her
-vein via facial expression or voice tonality in Twitter, neither there
-is wide room for kinesics in Facebook posts.  As a consequence, new
-language forms and meanings started appearing in online talks --
-smileys replaced users' faces, exclamation marks replaced the voice
-etc.
+networks in recent decades has lead to a change in the language in which
+people communicate with each other via these means.  While communication
+partners still are striving to express their opinions, attitudes, thoughts,
+and moods in their full generality, they often do not have reach enough
+possibilities for doing that in OCM as they would have them in everyday
+speech.  One, for example, cannot show her vein via facial expression or voice
+tonality in Twitter, neither there is wide room for kinesics in Facebook
+posts.  As a consequence, new language forms and meanings started appearing in
+online talks -- smileys replaced users' faces, exclamation marks replaced the
+voice etc.
 
-This work is supposed to be a bottom-up study of ways and means how
-people express their polar attitudes or sentiments in online
-communication.  The object of this study are users' discourses on
-Twitter.  The aim of the work is to detect and determine how polar
-attitudes of people are expressed in these discourses and what and
-first of all how different levels of the language interact with each
-other when people express their opinions.
+This work is supposed to be a bottom-up study of ways and means how people
+express their polar attitudes or sentiments in online communication.  The
+object of this study are users' discourses on Twitter.  The aim of the work is
+to detect and determine how polar attitudes of people are expressed in these
+discourses and what and first of all how different levels of the language
+interact with each other when people express their opinions.
 
-We begin with the lowest level of natural language processing and
-investigate based on character and word segments how widely the
-language of OCM deviates from the standard language form.  In section
-\ref{section-preprocessing} we also propose a normalization procedure
-for mitigating spurious effects of casual writings to ease the work of
-further NLP modules.  After a short description of intermediate
-language analysis modules, we explore in section
-\ref{section-sentsentiment} how polar attitudes of people are
-expressed on sentential and subsentential level.  Since polar opinion
-expressions however do not solely confine themselves to the sentence
-level only, we take one step further and explore how relations between
-different discourse segements help us detect more polar expressions as
-well as sources and target of already detected sentiments.
+We begin with the lowest level of natural language processing and investigate
+on the basis of character and word segments how widely the language of OCM
+deviates from the standard language form.  In section
+\ref{section-preprocessing} we subsequently propose a text normalization
+procedure for mitigating the most spurious effects of casual writings which
+were found during the analysis.  After a short digression in section
+\ref{section-nlp-pipeline} in which intermediate NLP modules are described, we
+change the emphasis of our work on the way how polar attitudes of people are
+expressed on sentential and subsentential level and how these forms of
+sentiments can be efficiently processed automatically.  These are the main
+topics of section \ref{section-sentsentiment} in our thesis.  Since the
+expressions of polar opinions however do not solely confine themselves to the
+sentence level only, we take one step further and explore how relations
+between different discourse segements can help us detect more polar
+expressions and how already detected sentiments can be enriched with their
+missing sources and targets by utilizing discourse analysis.
 
 \section{Corpus}
 
-To begin our survey, we start with the preparation of a corpus in
-which information relevant to sentiment extraction is annotated.  The
-aim of this annotation is:
+At the very beginning our survey, we start with the preparation of a corpus in
+which information relevant to sentiment extraction is annotated.  The aim of
+this annotation is:
 \begin{itemize}
   \item to determine whether polar judgements of users can be reliably
-    annotated by people thus proving the amenability of this task for
-    automatic computer analysis (this hypothesis has already been
-    proven by Wiebe (\cite{TWilsonDiss08}) for English newspaper
-    texts, now we prove this for German social media discourses);
+    annotated by people thus proving the amenability of this task to automatic
+    computer analysis (this hypothesis has already been proven by Wiebe
+    \cite{TWilsonDiss08} for English newspaper texts, our goal is to confirm
+    this notion for German social media discourses);
 
   \item to evaluate existing systems and resources used for extracting
     German sentiments;
@@ -105,30 +109,33 @@ aim of this annotation is:
 For the above goals, we decided to annotate the following lexical
 clues in the corpus:
 \begin{itemize}
-  \item \textit{emotional expressions} (lexical items which inherently
-    possess some polar connotation in their meaning);
-  \item \textit{intensifiers} and \textit{diminishers} (lexical items
-    which may shift or vice versa reduce primary polar meaning of
-    emotional expressions);
-  \item \textit{negations} (lexical or grammatical which on their own
-    can turn the polarity of an expression to its complete opposite).
+  \item \textit{emotional expressions} (lexical items which inherently possess
+    some polar connotation in their meaning, e.g. ``\textbf{nice}'',
+    ``\textbf{disgusting}'');
+  \item \textit{intensifiers} and \textit{diminishers} (lexical items which
+    may shift or vice versa reduce primary polar meaning of emotional
+    expressions, e.g. ``\textbf{very} polite'', ``\textbf{hardly} pleasant'');
+  \item \textit{negations} (lexical or grammatical constructions which on
+    their own can turn the polarity of an expression to its complete opposite,
+    e.g. ``\textbf{not} good'' meaning ``bad'' or ``\textbf{without} fear''
+    meaning ``brave'').
 \end{itemize}
-The selection of these attributes was inspired by the annotation
-scheme used for Layer 2 of the multi-layer sentiment corpus MLSA
-(cf. \cite{MLSA}) and should primarily serve for evaluation of
-existing sentiment lexica, as well as training basis for further
-machine learning sentiment extraction system.
+The selection of these attributes was inspired by the annotation scheme used
+for Layer 2 of the multi-layer sentiment corpus MLSA (cf. \cite{MLSA}) and
+should primarily serve for evaluation of existing sentiment lexica, as well as
+training basis for further machine learning based sentiment analysis.
 
-To train and test the performance of the actual sentiment extraction
-system, we have also annotated spans of texts encompassing the
-following elements of polar opinions:
+To train and test the performance of the actual sentiment extraction system,
+we have also annotated spans of the text encompassing the following elements
+of polar opinions:
 \begin{itemize}
-  \item the actual \textit{sentiment}s encompassing all the relevant
-    information pertaining to subjective attitude;
-  \item sentiment \textit{target}s which are actual subjects of
-    particular judgements;
-  \item sentiment \textit{source}s -- these elements represent
-    immediate authors of polar opinions.
+  \item the actual \textit{sentiment}s which we regarded as text spans
+    comprising all the relevant information pertaining to the expression of
+    one's subjective attitude;
+  \item sentiment \textit{target}s which considered as actual topics or
+    subjects of particular polar judgements;
+  \item sentiment \textit{source}s -- which represented immediate authors of
+    the respective opinions.
 \end{itemize}
 
 In order to keep the corpus as balanced as possible but at the same
@@ -149,8 +156,8 @@ assembled it from three equal parts:
   criteria.
 \end{enumerate}
 
-All of the above three parts were drawn in equal shares of 111
-messages from four different data collections, namely:
+All of the above three parts were drawn in equal shares consisting of 111
+messages each from four different data collections, namely:
 \begin{enumerate}
   \item a corpus of generic users' tweets gathered in April 2013;
   \item a corpus of users' tweets pertaining to the election of the
@@ -160,37 +167,164 @@ messages from four different data collections, namely:
   \item a corpus of users' tweets pertaining to the federal election
     in Germany in autumn 2013.
 \end{enumerate}
-The total size of the corpus then run up to $3 * 4 * 111 = 1332$
-messages.
+The total size of the corpus run up to $3 * 4 * 111 = 1332$ messages.
 
-This corpus has been annotated by ... annotators.  In a conluding step
-after annotation is finished, we also plan to measure the
-inter-annotator agreement and to see what annotation elements have
-caused most difficulties for the annotators.
+This corpus has been annotated by ... annotators.  In a conluding step, we
+also plan to measure the inter-annotator agreement and to see which annotation
+elements have presented most difficulties to the annotators.
 
-\textbf{Open Questions:} Manfred, maybe it would make sense to add
-discourse level annotation already to this corpus? We than would have
-all the annotation and corpus questions solved in one place.
+\textbf{Open Questions:} Maybe it would make sense to add discourse level
+annotation already to this corpus?  We than would have all the annotation and
+corpus questions solved in one place.
 
 
 \section{Preprocessing}\label{section-preprocessing}
 
-In order to prepare the text for further NLP preprocessing with
-established automatic text analysis tools, we decided to perform some
-normalization steps prior to the analysis since many of the utilized
-tools were not adjusted to the peculiarities of OCM texts a priori.
+In order to ease and improve further NLP preprocessing with established NLP
+applications, we decided to perform some normalization steps on the text prior
+to doing its analysis.  The necessity of such normalization was motivated by
+the fact that many of the existing natural language toolkits had been created
+before online communication was widely spread and therefore were not prepared
+for many phenomena which OCM discourses brought along with them.
 
-For doing so, we performed a study of what words could be considered
-as out-of-vocabulary (OOV) and which part of them would require
-normalization.  This study showed us (cf. \cite{Sidorernko}) that
-approximately 20~\% of all input tokens on average were considered as
-OOV by \texttt{TreeTagger} (\cite{Schmid}) and \texttt{hunspell}.
+Before devising the normalization procedure, a study of unknown words found in
+Twitter messages was conducted.  We have regarded as unknown tokens which were
+classified as out-of-vocabulary (OOV) by either \texttt{TreeTagger}
+\cite{Schmid} or the freely available spell checking program
+\texttt{hunspell}.  Our study showed that approximately 20~\% of all input
+tokens on average were considered as OOV by both of the tools.  We subdivided
+the detected OOV tokens into three major classes:
+\begin{enumerate}
+\item Limitations of machine readabale dictionaries (i.e. valid in-vocabulary
+  terms which had erroneously been omitted from corresponfing tools'
+  dictionaries);
+\item Stylistic specifics of text genre (i.e. words which did not belong to
+  the standard language but were perfectly valid terms in the domain of web
+  discourse);\label{item-style}
+\item Deviating spellings (i.e. words whose spelling either accidentally or on
+  purpose differred from the official spelling norm).\label{item-spell}
+\end{enumerate}
+Of these three classes only the latter two were considered to be subject to
+normalization.
+
+A more thorough analysis of the detected OOV items also revealed the fact that
+class \ref{item-style} and a half of the items belonging to class
+\ref{item-spell} could easily be tackled by a set of transformation rules
+(cf. \cite{Sidorenko}).  The remaining part of class \ref{item-spell} would
+however require the use of probabilistic methods.
+
+\section{Natural Language Processing Pipeline}\label{section-nlp-pipeline}
+Along with normalization we simultaneously perform part-of-speech tagging
+using the \texttt{TreeTagger} program by Helmut Schmid \cite{Schmid}.  Several
+recent studies including \cite{Neunerdt} and \cite{Rehbein} have proved that
+this tagger showed a superior quality for tagging social media texts in
+comparison with other available taggers.
+
+As dependency parser Bernd Bohnet's Mate Parser \cite{Bohnet} is used since
+this parser also has shown better results in comparative studies
+\cite{Sennrich}.
+
+\textbf{Open Questions:} Should we add other modules with their description,
+e.g. morphologic analyzer for splitting compounds, named entity recognition
+etc.?
 
 \section{Sentence-Level Sentiment Analysis}\label{section-sentsentiment}
+In this chapter we describe the main module for extracting sentiment relations
+from text.  The goal of this module is to extract a triple of elements $(s_i,
+t_i, p_i)$ in which $s_i$ represents the source of a polar opinion, $t_i$
+stands for its target, and $p_i$ is the respective polarity of the attitude.
+Such triple representation is motivated by the traditional Liu's sentiment
+quintuple \cite{Liu}. We however removed the elements \textit{aspect of an
+  entity} and \textit{time of opinion's expression} from it.
 
-\section{Discourse-Level Sentiment Analysis}
+We pursue to extract such triples by using a probabilistic graphical model
+formalism, namely Markov Logic Network (MLN).  Our main tool for this is the
+\texttt{Alchemy} framework developed by Domingos et al. \cite{Domingos}.  The
+strength of this model is, on the one hand, the possibility to impose strong
+constraints on the desired output and, on the other hand, the potential to
+represent actual causality effects found in text in an easy and native way,
+namely by means of first-order-logic predicates.  One of such predicates, for
+example, could enforce an absolute contraint that a given word if it is
+assumed to be sentiment's target should obligatory have either positive or
+negative polarity.  Another logic rule could state that the polarity of a
+presumable target should correlate with the prior polarity of its immediate
+syntactic dependents, it could however be switched by negations and so on.
 
-\section{Discourse-augmented Sentiment Analysis}
+The task of the MLN is then to compute a joint probability distribution over
+all possible variants on the basis of given training examples so that this
+joint probability should obligatory (or at least as much as possible) satisfy
+provided predicates and constraints.  As basic features for these constraints
+we use the prior opinion polarity of words as they were learned from our
+training corpus and/or existing polarity lexica.  Dependency grammar
+connectors would allow us to track how syntactical relations could change this
+polarity in context.  This polarity, for example, could be increased/decreased
+by intesifiers or diminishers or turned to the opposite by the negations.  It
+would also be possible to learn from corpus, in which case given word could be
+considered as sentiment's target if, for instance, we know that some polar
+words are located in its immediate vicinity in the syntactic tree.
+
+The limitedness of this approach however is a relatively local scope of the
+features.  Frankly speaking, one only could access setimental clues which are
+present in the immediate respective clause.  Nevertheless, it could allow us
+to capture such easy cases as specified in Examples \ref{exmpl-1} and
+\ref{exmpl-2}.
+\begin{exmp}\label{exmpl-1}
+Westerwelle ist ein schlechter Politiker.  Er soll jetzt blo\ss{} nicht denken das
+er f\"ur das Amt des Bundeskanzlers geeignet ist.
+\end{exmp}
+
+\begin{exmp}\label{exmpl-2}
+Ich hab vieles nicht an der jetzt am Boden liegenden FDP gemocht, ...
+\end{exmp}
+
+It should however be noted that the confinement to a single clause could be a
+significant drawback for sentiment system.  The respective sources and targets
+of a given sentiment relation could be present outside of the local context
+and embedded somewhere earlier in the discussion.  Moreover sentiment's
+polarity could only become vivid if two or more rhetorical units were
+considered.  This discourse augmentation should be the topic of Section
+\ref{section-discsentiment}.
+
+
+\section{Discourse-Level Sentiment Analysis}\label{section-discsentiment}
+The full version of Example \ref{exmpl-2} in fact looks as follows:
+\begin{exmp}\label{exmpl-3}
+Ich hab vieles nicht an der jetzt am Boden liegenden FDP gemocht, den Guido z.B.
+\end{exmp}
+The addition ``den Guido z.B.'' on its own does not convey a sentiment on its
+own if taken outside os the context.  If we however consider the fact that
+this was an explanatory supplement to an immediately preceding sentiment
+relation, we could draw the conclusion that ``Guido'' in fact is another
+sentiment with the same polarity as its preceding counterpart.
+
+Further examples of discourse relevance for opinion mining are contrastive and
+concessive relations between different rhetorical units, for instance:
+\begin{exmp}\label{exmpl-4}
+Sie ist eine gute S\"angerin, aber sie kann sich auf der Szene nicht bewegen.
+\end{exmp}
+The sole fact that someone cannot move on the stage does not imply that it
+necessarily should be a polar attitude.  One could speak, for example, about a
+scrub which cannot move by itself.  This however would be just a statement of
+an objectively given fact.  In Example \ref{exmpl-4} we however can see, that
+the preceding rhetorical unit was an expression of positive attitude,
+therefore its contradiction should rather be a negative opinion.
+
+This is the first of the two main goals of this section.  We need to
+investigate which and how many sentiment relations can be captured by
+considering discourse relations.  For detecting such relations, we are
+planning to use a rhetorical structure parser which could segment text and
+give us the rhetirical relations between different segments.  Such relations
+and belonging of words to particular rhetorical units could be incorporated in
+our training set and used as additional features in the inference module.
+
+Another part of this chapter is supposed to be a study in how many cases
+sources and targets of sentiment relations are missing from given immediate
+rhetorical units and what would be the best way to detect them in preceding
+rhetorical segments.
+
+\textbf{Open Questions:} We obviously need an RST parser, but is there one for
+German? Or could one of the existing parsers for English be rapidly adjusted
+-- do we have time for it?
 
 \bibliographystyle{plain} \bibliography{bibliography}
 \end{document}
