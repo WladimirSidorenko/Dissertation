@@ -1,0 +1,87 @@
+% FILE: main.tex  Version 2.1
+% AUTHOR:
+% Universität Duisburg-Essen, Standort Duisburg
+% AG Prof. Dr. Günter Törner
+% Verena Gondek, Andy Braune, Henning Kerstan
+% Fachbereich Mathematik
+% Lotharstr. 65., 47057 Duisburg
+% entstanden im Rahmen des DFG-Projektes DissOnlineTutor
+% in Zusammenarbeit mit der
+% Humboldt-Universitaet zu Berlin
+% AG Elektronisches Publizieren
+% Joanna Rycko
+% und der
+% DNB - Deutsche Nationalbibliothek
+
+% Dies ist die Hauptdatei Ihrer Dissertation. Mit * gekennzeichnete
+% Elemente sind optional und können durch Entfernen/Hinzufügen des
+% %-Zeichens gewählt/abgewählt werden. Weitere Informationen
+% entnehmen Sie bitte der beiliegenden Broschüre!
+
+% Dokumentenklasse
+\RequirePackage[patch]{kvoptions}
+\documentclass{Dissertation}
+
+% Eigene Trennungsregeln*
+\include{hyphenations}
+
+%-zusaetzliche Kommandos*
+%\include{command}
+
+% Dokumentenanfang
+\begin{document}
+
+% Seitennummerierung für Titel, Widmung, Danksagung, Zusammenfassung,
+% Inhaltsverzeichnis werden in römischen Zahlen gesetzt
+\pagenumbering{roman}
+\pagestyle{empty}
+
+% Titelblatt
+\include{titlepage}
+\maketitle
+
+% Widmung*
+\include{dedication}
+
+% Danksagung*
+\include{acknowledgement}
+
+% Zusammenfassung/Abstract
+\include{abstract}
+
+% Inhalts-, Abbildungs*-, Tabellen*-Verzeichnis
+\setcounter{page}{1}
+\tableofcontents
+\newpage
+%\listoffigures
+%\newpage
+%\listoftables
+%\newpage
+
+% Seitennummerierung im Hauptteil
+\pagenumbering{arabic}
+\pagestyle{myheadings}
+
+% Kapitel
+ \include{chapter01}
+ %\include{chapter02}
+% usw.
+
+% Anhang*
+\appendix
+\include{appendixA}
+%\include{appendixB}
+% usw
+
+% Literaturverzeichnis
+\bibliography{bibliography}
+\bibliographystyle{plaindin}
+
+% Lebenslauf*
+%\include{cv}
+
+% Selbstständigkeiterklärung
+%\include{declaration}
+
+% Dokumentenende
+\end{document}
