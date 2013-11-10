@@ -1,4 +1,4 @@
 Dissertation
 ============
 
-Dissertation Thesis
+Dissertation thesis of Uladzimir Sidarenka.
