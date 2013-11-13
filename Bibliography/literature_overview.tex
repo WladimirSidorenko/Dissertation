@@ -18,23 +18,68 @@
 
 \subsubsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
 In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
-automatically mining subjective judgements on product features described in
-customer reviews.  This system first searches the reviews for frequently
-occurring mentions of prominent features of specific products by using an
-association mining algorithm.  This algorithm extracts nouns and noun phrases
-which occur frequently across muliple documents.  Implicit features and
-features which are not represented by nouns are not taken into consideration
-by this algorithm.  The extracted feature candidates are then pruned if the
-components of detected noun phrases do not occur in a specific order in
-sentences or if some features are full subsets of other ones.
+automatically mining subjective judgements on product features in customer
+reviews.  This system searches the reviews for frequently occurring mentions
+of prominent features of specific products by using an association mining
+algorithm.  The algorithm extracts nouns and noun phrases which frequently
+occur across multiple documents.  Implicit features and features which are not
+represented by nouns are not taken into consideration.  Extracted feature
+candidates are then pruned off if their components do not occur in a specific
+order in sentences or if some features appear to be full subsets of other
+ones.
 
-As the next processing step, text passages surrounding detected feature
-candidates in text are searched for adjectives, since words belonging to this
-part-of-speech are assumed to be the most prominent indicators of subjective
-opinions.  Found adjectives are then classified into subjective and objective
-ones.  Adjectives of the former class are subsequently subclassified into
-positive and negative ones depending on their polarity.  Both subjectivity and
-polarity are determined on the basis of WordNet information.
+In the following processing step, text passages surrounding feature candidates
+are searched for adjectives, since words of this part-of-speech are considered
+to be the most obvious indicators of subjective opinions.  Found adjectives
+are classified into subjective and objective ones.  The subjective class is
+thereby subdivided into positive and negative subclasses depending on the type
+of adjectives' polarity.  Both subjectivity and polarity are determined by
+using WordNet information.  For this, two manually constructed sets of
+adjectives with opposite polarities are used.  Synonyms and antonyms of
+adjectives found in text are searched for occurrences of any adjectives from
+one of the two seed sets.  If such an occurrence is found, the text adjective
+is added to the respective seed set or its counterpart depending on whether
+the occurrence was found in synonyms or antonyms.  The algorithm stops when
+both seed sets stop growing or when the list of text adjectives is exhausted.
+Adjectives which were not assigned to any of the seed cluster during this
+procedure are assumed to have neutral polarity and are skipped.
+
+In the next step, sentences which don not contain any frequent features but
+which contain at least one opinion adjective are analyzed.  The aim of this
+analysis is to find less frequent features of a product which still can be
+important for the user.  It is conjectured by the authors that less frequent
+features will usually be expressed by nouns or noun phrases which are nearest
+to the opinion word.
+
+Further, overall polarity of sentences containing frequent and less frequent
+product features is determined.  Here three different possible cases are
+distinguished:
+\begin{enumerate}
+  \item The user likes or dislikes most or all the features in one sentence.
+  \item The user likes or dislikes most of the features in one sentence, but
+    there is an equal number of positive and negative opinion words.
+  \item All the other cases.
+\end{enumerate}
+For case 1, the dominant orientation of a sentence is easily identified as
+average orientation of adjectives used in this sentence.  For case 2, the
+orientation of effective opinions of features is used instead.  Effective
+opinion is assumed to be the most related opinion for a feature.  For case 3,
+the orientation of the opinion sentence is assumed to be the same as the
+orientation of previous opinion sentence unless the former sentence is
+introduced by a contrastive connector like ``but'' or ``however'' in which
+case the orientation is swapped to the opposite.
+
+In the final step, a review summary is generated for each sentence containing
+a subjective opinion on a frequent or less frequent feature of a product.  The
+summary generation procedure generally consists of two steps:
+\begin{itemize}
+  \item For each discovered feature, related opinion sentences are put into
+    positive and negative categories according to the opinion sentences'
+    orientations.
+
+  \item All features are ranked according to the frequency of their
+    appearances in the reviews.
+\end{itemize}
 
 \section{Markov Logic Network}
 
