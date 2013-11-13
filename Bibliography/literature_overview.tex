@@ -1,14 +1,40 @@
 \documentclass[a4paper,11pt]{article}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Packages
+\usepackage{paralist}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Variables and Methods
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Documents
 \begin{document}
 \section{Pre-Processing}
 
 \section{Sentiment Analysis}
-\subsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
-In their article, Bing and Liu describe a system for automatically mining
-subjective judgements about particular features of certain products in
-customer reviews.  This system uses a bootstrapping method
+\subsubsection{Turney: Thumbs Up or Thumbs Down? Semantic Orientation Applied to
+               Unsupervised Classification of Reviews\cite{Turney02}}
+
+\subsubsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
+In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
+automatically mining subjective judgements on product features described in
+customer reviews.  This system first searches the reviews for frequently
+occurring mentions of prominent features of specific products by using an
+association mining algorithm.  This algorithm extracts nouns and noun phrases
+which occur frequently across muliple documents.  Implicit features and
+features which are not represented by nouns are not taken into consideration
+by this algorithm.  The extracted feature candidates are then pruned if the
+components of detected noun phrases do not occur in a specific order in
+sentences or if some features are full subsets of other ones.
+
+As the next processing step, text passages surrounding detected feature
+candidates in text are searched for adjectives, since words belonging to this
+part-of-speech are assumed to be the most prominent indicators of subjective
+opinions.  Found adjectives are then classified into subjective and objective
+ones.  Adjectives of the former class are subsequently subclassified into
+positive and negative ones depending on their polarity.  Both subjectivity and
+polarity are determined on the basis of WordNet information.
 
 \section{Markov Logic Network}
 
