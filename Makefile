@@ -9,16 +9,34 @@ LITERATURE_OVERVIEW = ${BIBDIR}/literature_overview.pdf
 # Special Targets
 .DELETE_ON_ERROR:
 
-.PHONY: all clean
+.PHONY: all thesis literature_overview \
+	clean clean_thesis clean_literature_overview
 
 ##################################################################
-all: ${MAIN_FILE} ${LITERATURE_OVERVIEW}
+# Main Target
+all: thesis literature_overview
 
+clean: clean_thesis clean_literature_overview
+
+##################################################################
+# Thesis
+thesis: ${MAIN_FILE}
+
+clean_thesis:
+	-rm -f ${MAIN_FILE}
+
+##################################################################
+# Literature Overview
+literature_overview: ${LITERATURE_OVERVIEW}
+
+clean_literature_overview:
+	-rm -f ${LITERATURE_OVERVIEW}
+
+##################################################################
+# Thesis and Literature Overview Rule
 ${MAIN_FILE} ${LITERATURE_OVERVIEW}: %.pdf: %.tex
 	@set -e; \
 	pdflatex -halt-on-error -output-directory ${@D} $< && bibtex $(basename $<) && \
 	pdflatex -halt-on-error -output-directory ${@D} $< && pdflatex -halt-on-error \
 	-output-directory ${@D} $<
 
-clean:
-	-rm -f ${MAIN_FILE} ${LITERATURE_OVERVIEW}

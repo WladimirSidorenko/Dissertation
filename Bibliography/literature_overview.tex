@@ -14,7 +14,7 @@
 
 \section{Sentiment Analysis}
 \subsubsection{Turney: Thumbs Up or Thumbs Down? Semantic Orientation Applied to
-               Unsupervised Classification of Reviews\cite{Turney02}}
+               Unsupervised Classification of Reviews\cite{Turney-02}}
 
 \subsubsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
 In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
@@ -81,11 +81,110 @@ summary generation procedure generally consists of two steps:
     appearances in the reviews.
 \end{itemize}
 
+\subsubsection{Scheible and Sch\"utze: Sentiment Relevance\cite{Scheible-13}}
+
+In their article, Scheible and Sch\"utze propose a novel concept for
+measuring the importance of a single sentence for an overall sentiment
+polarity of a document and call this concept \textit{sentiment
+  relevance}.
+
+The authors deviate from the well-established notion of sentence
+subjectivity by showing that not every sentence which appears to be
+subjective may contribute to document's polarity and vice versa an
+apparently objective sentence may be highly sentiment relevant for a
+document.  They illustrate this with an example form the movie review
+database (IMDB).  In a review, a sentence describing movie's plot and
+acting characters can be highly subjective containing strong polarity
+markers like, for example, ``Bruce Banner, a genetics researcher with
+a \textit{tragic} past, suffers a \textit{horrible} accident'', but
+this sentence does not say much about author's attitude to the
+``Hulk'' movie which it describes.  On the contrary, a sentence like
+``The movie won a Golden Globe'' is relevant for the overall movie
+review despite that it merely states an objective fact.
+
+To confirm their assumption that sentiment relevance and subjectivity
+are different concepts, the authors created a corpus (henceforth
+\textit{SR-corpus}) of sentences from 125 randomly selected documents
+from the movie review dataset \cite{Pang-02}.  Each of these sentences
+was manually annotated for S-relevance.  Another corpus (the
+\textit{P\&L} corpus) was automatically constructed from the
+subjectivity dataset provided by Pang and Lee \cite{Pang-Lee-04}.  In
+the latter data collection, all subjectivity markers were automaticlly
+considered as S-relevent and all objective markers were regarded as
+S-nonrelevant.  The authors than showed than a MaxEnt classifier
+performed significantly worse if it was trained on one corpus and
+tested on the other than if it was trained and tested on the data
+taken from the same set.
+
+Since no large collections of annotated S-relevance data are available
+yet, Scheible and Sch\"utze propose two different semi-supervised
+techniques for doing such classification automatically.  These
+techniques are
+\begin{inparaenum}[\itshape a)\upshape]
+  \item distant supervision and
+  \item transfer learning.
+\end{inparaenum} In their experimental setup, the authors use three kinds of features:
+\begin{enumerate}
+  \item \textit{Named Entity} features (NE) which are binary features
+    indicating the presence of an actor, character, or staff member
+    mention in a sentence.  Named entity detection and resolution is
+    performed on the basis of lexicons obtained from the IMDB metadate
+    database;\label{li-ne-feat}
+  \item \textit{Sequential} features (SQ) which effectively repeat the
+    former features by transferring them to the following sentence in
+    document.  It means that if sentence $s_i$ had feature
+    \texttt{<character>}, then the following sentence $s_{i+1}$ will
+    automatically get a sequential feature \texttt{<character$+1$>};
+  \item \textit{Semantic} features (SEM) which are semantic classes of
+    nouns or verbs which are obtained from \texttt{CoreLex} and
+    \texttt{VerbNet}.  These features are added to sentences depending
+    on the words which appear in them.
+\end{enumerate}
+Additionally to that, to account for discourse coherence factors, the
+authors represent the whole document as a graph with $n + 2$ nodes
+where $n$ is the number of sentences and the two additional nodes
+(called source and sink) represent the classes S-relevance and
+S-nonrelevance, respectively.  The weights $ind(s, x)$ between a
+sentence $s$ and the source/sink vertex $x$ are measured as the number
+of actors and staff mentions in the sentence when $x = SR$ and the
+number of characters mentions when $x = SNR$.  It means that if a
+sentence $s$ has more actors mentions in it than characters mentions,
+it is more likely to be S-relevant and therefore has a higher weight
+attached to the edge connecting it with the $x_{sr}$ verex than with
+the $x_{nsr}$ vertex.  The coherence factor between two consecutive
+sentences $i$ and $j$ is estimated as $assoc(s_i, s_j) = c / (j -
+i)^2$ where $c$ is a parameter which is set to $1$ in distant
+supervision setup and empirically found to bring best results when set
+to $0.8$ in transfer learning.
+
+In distant supervision, the authors first assign a relevance class to
+each sentence according to the majority of NE features found in it.
+They than train a MaxEnt classifier on these noisy labels and impose
+the MinCut discourse constraint on it.  These re-labeled data serve as
+training set for the next iteration of MaxEnt training.  In this next
+iteration the authors than look how different features affect the
+model.  The best total performace with average $F_1 = 67.0$ is then
+achieved by a distantly supervised MaxEnt classifier with activated
+features SQ and NE.
+
+In the transfer learning setup, the authors use the P\&L corpus as
+their training data, though the labels of this corpus rather
+correspond to the subjectivity measure than to S-relevance.  This
+time, they first classify the data using a supervised classifier and
+then use MinCut to smooth the sequences.  The individual weight
+$ind(s,x)$ on the edge between sentence $s$ and class $x$ is set to
+the estimate $p(x|s)$ returned by the supervised classifier.  The
+parameter $c$ of the MinCut model is tuned using the run count method.
+The authors establish a baseline by obtaining a classifier with a
+simple bag-of-words representation of sentence.  The addition of
+semantic information and smoothing with MinCut discourse constraint
+gives an improvement over the baseline by 12.6\% with an averaged
+$F_1$ equal to $82.5\%$.
+
 \section{Markov Logic Network}
 
 \section{Discourse Analysis}
 
-\nocite{*}
-\bibliography{bibliography}     % relative to the project's root directory
-\bibliographystyle{plain}
+\nocite{*} \bibliography{bibliography} % relative to the project's
+root directory \bibliographystyle{plain}
 \end{document}
