@@ -16,6 +16,48 @@
 \subsubsection{Turney: Thumbs Up or Thumbs Down? Semantic Orientation Applied to
                Unsupervised Classification of Reviews\cite{Turney-02}}
 
+\subsubsection{Pang, Lee, and Vaithyanathan: Thumbs up? Sentiment Classification using Machine
+                  Learning Techniques\cite{Pang-Lee-02}}
+
+This article deals with the problem of sentiment classification of movie
+reviews.  For this task, the authors explore three popular machine learning
+techniques, namely Naive Bayes, maximum entropy, and support vector machines.
+They compare these techniques against each other and also against a
+human-based baseline classifier which relied on a deductively constructed
+dictionary of polarity terms.
+
+For their training and testing purposes, the authors created a corpus of 752
+negative and 1301 positive reviews.  Discrimination between subjective and
+objective articles was left out of the scope of this study.  To establish a
+classifier baseline, the authors first asked two graduate students to
+introspectively devise two lists of polarity terms each -- one containing
+positive and one containing negative polarity markers.  A simple decision
+procedure than counted occurrences of terms from these lists in each review in
+the corpus selection and assigned to these reviews the class of the list with
+most items found.  This procedure showed a classification accuracy of 58\% for
+the lists of the first student and 64\% for the second.  A manually refined
+list with fewer items, however, allowed to increase the baseline to 69\%.
+
+In their machine learning experiments, the authors represented each document
+as a word vector.  They tested different experimental setups, including simple
+unigrams with either presence flag or frequency counts, bigram and
+bigram+unigram binary presence flags.  The authors also tried to restrict the
+features solely to adjectives and to combine unigram presence features with
+their parts-of-speech or position in text.  The best result was then achieved
+by a SVM classifier which only used unigram presence markers as its features.
+It should be said, that for unigrams, the authors also used the negation
+heuristics proposed by Das and Chen \cite{Das-Chen-01} and added the
+\texttt{NOT\_} prefix to every word between a negation and a punctuation mark.
+This heuristics, however, was not used for bigrams, since bigrams were
+considered to be a sufficient source of context information on their own.
+
+In general, sentiment classification task was said to be harder than
+conventional topic-classification.  The authors also noted the fact, that
+their system experienced serious difficulties due to the lack of discourse
+information.  Because sentences describing the plot of the movies often
+expressed opposite polarity than one of the author's real attitude to the
+described movie.
+
 \subsubsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
 In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
 automatically mining subjective judgements on product features in customer
