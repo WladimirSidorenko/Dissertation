@@ -13,10 +13,10 @@
 \section{Pre-Processing}
 
 \section{Sentiment Analysis}
-\subsubsection{Turney: Thumbs Up or Thumbs Down? Semantic Orientation Applied to
+\subsection{Turney: Thumbs Up or Thumbs Down? Semantic Orientation Applied to
                Unsupervised Classification of Reviews\cite{Turney-02}}
 
-\subsubsection{Pang, Lee, and Vaithyanathan: Thumbs up? Sentiment Classification using Machine
+\subsection{Pang, Lee, and Vaithyanathan: Thumbs up? Sentiment Classification using Machine
                   Learning Techniques\cite{Pang-Lee-02}}
 
 This article deals with the problem of sentiment classification of movie
@@ -58,7 +58,7 @@ information.  Because sentences describing the plot of the movies often
 expressed opposite polarity than one of the author's real attitude to the
 described movie.
 
-\subsubsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
+\subsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
 In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
 automatically mining subjective judgements on product features in customer
 reviews.  This system searches the reviews for frequently occurring mentions
@@ -123,7 +123,7 @@ summary generation procedure generally consists of two steps:
     appearances in the reviews.
 \end{itemize}
 
-\subsubsection{Scheible and Sch\"utze: Sentiment Relevance\cite{Scheible-13}}
+\subsection{Scheible and Sch\"utze: Sentiment Relevance\cite{Scheible-13}}
 
 In their article, Scheible and Sch\"utze propose a novel concept for
 measuring the importance of a single sentence for an overall sentiment
@@ -147,7 +147,7 @@ review despite that it merely states an objective fact.
 To confirm their assumption that sentiment relevance and subjectivity
 are different concepts, the authors created a corpus (henceforth
 \textit{SR-corpus}) of sentences from 125 randomly selected documents
-from the movie review dataset \cite{Pang-02}.  Each of these sentences
+from the movie review dataset \cite{Pang-Lee-02}.  Each of these sentences
 was manually annotated for S-relevance.  Another corpus (the
 \textit{P\&L} corpus) was automatically constructed from the
 subjectivity dataset provided by Pang and Lee \cite{Pang-Lee-04}.  In
@@ -227,6 +227,111 @@ $F_1$ equal to $82.5\%$.
 
 \section{Discourse Analysis}
 
-\nocite{*} \bibliography{bibliography} % relative to the project's
-root directory \bibliographystyle{plain}
+\subsection{L\"ungen et al.: Discourse Segmentation of German Written Texts\cite{Luengen-06}}
+
+In their article, L\"ungen et al. \cite{Luengen-06} propose a rule-based
+approach for parsing German scientific articles into coherent discourse
+segments.  The authors thereby distinguish three levels of discours
+segmentation with different granularities.  These levels are called:
+\begin{enumerate}
+  \item \textit{complex discourse segments},\label{enum-cds}
+  \item \textit{sentential discourse segments},\label{enum-sds}
+  \item and \textit{elementary discourse segments} or \textit{EDS}.\label{enum-eds}
+\end{enumerate}
+
+Discourse elements of type \ref{enum-cds} are obtained from the DocBook XML
+annotation (cf. \cite{Walsh-99}) of input documents and comprise such logical
+structures as title, main text, footnotes, acknowledgements section,
+bibliography entries etc.
+
+A more fine-grained level of analysis is represented by sentential discourse
+segments which roughly correspond to individual sentences in text.
+
+Elementary discourse segments are the smallest parsing units of discourse and
+are supposed to represent single coherent and relatively indepent
+propositions.  The authors slightly deviate from the traditional notion of
+elementary discourse units suggested by Marcu \cite{Marcu-99} and define EDSs
+in terms of syntactic constructions by which EDSs can be expressed.  The
+authors distinguish 10 types of grammatical structures which can give rise to
+an EDS on their own:
+\begin{enumerate}
+  \item \textit{main clauses};
+  \item \textit{modal subclauses};
+  \item \textit{coordinated clauses};
+  \item \textit{embedded segments}, which are segments marked by punctuation
+    (brackets, dashes, or commas) so that they disrupt other EDSs, and which
+    themselves are EDSs. An exception to this form brackets that contain only
+    figures;
+  \item \textit{quotations} that are delimited by quotation marks and are
+    introduced by reporting verbs;
+  \item \textit{clausal complements of reporting verbs} such as (meinen,
+    sagen, feststellen) in connection with a citation or quotation;
+  \item \textit{clausal complements and relative clauses preceded by
+    adverbials}: Clausal complements of verbs or nouns, or relative clauses
+    that are preceded by a discourse marking adverbial such as n\"amlich,
+    namentlich, besonders, insbesondere, d.h., vozugsweise;
+  \item \textit{prepositional phrases of attribution}, i.e. prepositional
+    phrases which are formed by one of the prepositions nach, laut, gem\"a\ss
+    + a named entity, or a pronoun referring to a named entity, in connection
+    with a citation or quotation;
+  \item \textit{appositives} which are NPs that can be used postnominally as
+    supplements to NPs;
+  \item \textit{PPs} that are separated by a comma .
+\end{enumerate}
+
+The authors explicitly say that in contrast to Carlson and Marcu
+\cite{Carlson-Marcu-01} they do not consider as independent EDSs folowing
+units:
+\begin{itemize}
+  \item clausal subjects or clausal complements of verbs and nouns (with the
+    exception of cases described above);
+  \item conditional clauses introduced by \textit{wenn, ...}, \textit{dann,
+    ...}, \textit{je..., desto} etc.;
+  \item propositional clauses introduced by comparative connectors like
+    \textit{mehr... als}, \textit{weniger... als}, \textit{so JJ... wie} etc.
+\end{itemize}
+An additional constraint also says that potential EDSs which are subordinate
+or coordinate to a non-segmantable clause cannot be EDSs, either.
+
+The automatic recognition of complex and sentential discourse segments is than
+straightforward.  The former units are extracted from XML tags in the
+document, the latter ones are obtained during sentence splitting.
+
+For EDSs, parsing procedure looks more sophisticated.  Here, first all
+potential segment boundaries are detected including commas, lexical markers
+e.g. \textit{und} and \textit{oder} as well as parentheses.  Subsequently,
+boundary markers within parentheses and quotations are deleted, since these
+units are already supposed to represent elementary segments.  Next, POS tags
+surrounding markers are analyzed and iteratively joined to higher-order
+syntactic constructs.  At every step, it is than checked whether POS
+categories or syntactic structures on either side of a potential boundary are
+the same.  If yes, such a boundary is assumed to unite two or more
+enumerations.
+
+The results of the test are then fed into a separate filtering module.  In
+this module, first, those markers that are associated with the conjunctions
+\textit{und} and \textit{oder} are removed if the conjunctors were only
+enumerative.  Then, those markers that are associated with a comma are
+evaluated in the following order.  If the current comma marker is associated
+with a sentential subject or complement, or a proportional clause, or an
+infinitival complement, this marker and all other markers up to the following
+comma marker are removed.  If the current comma marker is associated with an
+enumeration, only the current marker is removed.  If it is associated with a
+relative clause, then not only all markers up to the next comma marker are
+removed, but also the marker after that one.  If next marker marked an
+enumeration or a relative clause, this marker is re-calculated, and
+\texttt{remove()} procedure is called again.  Such design is supposed to
+reflect the default assumption that all clauses following a main clause and a
+sub-clause EDS should be treated as being sub-subordinated.  After this
+evaluation of tests for potential EDS boundaries, each EDS established so far
+is checked for further internal boundaries brought about by EDSs below the
+clause level, i.e. phrases.
+
+The authors subsequently test their procedure on a manually annotated set of
+six documents.  Depending on document, the precision of EDS detection varies
+from 0.6\% to 0.82\%, the best recall is achieved with 0.88\%, though it is
+also highly dependent on the peculiarities of analyzed text.
+
+\bibliography{bibliography} % relative to the project's root directory
+\bibliographystyle{plain}
 \end{document}
