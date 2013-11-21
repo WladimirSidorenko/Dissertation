@@ -2,6 +2,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Packages
+\usepackage{amsmath}
 \usepackage{paralist}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -122,6 +123,85 @@ summary generation procedure generally consists of two steps:
   \item All features are ranked according to the frequency of their
     appearances in the reviews.
 \end{itemize}
+
+\subsection{Pang and Lee: A Sentimental Education: Sentiment Analysis Using Subjectivity
+               Summarization Based on Minimum Cuts\cite{Pang-Lee-04}}
+
+This paper presents a two-step approach for polarity classification of
+movie reviews.  The first step of this approach
+(\textit{subjectivity-detector}) consists in detecting and extracting
+subjective sentences present in the review.  The next step
+(\textit{default polarity classifier}) then classifies found
+subjective sentences in either positive or negative ones using Naive
+Bayes (NB) or SVM methods presented earlier in \cite{Pang-Lee-02}.
+
+To identify whether a single sentence is subjective or not, two
+different kinds of scores are considered:
+\begin{enumerate}
+  \item individual sentence scores and
+  \item sentential coherence scores.
+\end{enumerate}
+The former scores show the probability that a particular single
+sentence on its own would belong to either subjective or objective
+class.  To compute this, a Naive Bayes and an SVM classifier are
+trained on a special subjectivity dataset that was automatically
+constructed from the Web.  This dataset comprises 5000 movie review
+snippets which were considered to be subjective a priori, and 5000
+summaries of movie plots that were regarded to be objective.
+
+The sentential coherence scores represent the probability that a
+particular sentence would share same subjectivity class as its
+preceding and following sentences.
+
+Both score weights for individual document's sentences are combined
+into a single graph $G$ in which vertices $V$ represent individual
+sentences.  Additionally, two artificial nodes $C_1$ and $C_2$ are
+added to the graph.  These nodes, also called \textit{source} and
+\textit{sink}, represent subjective and objective classes,
+respectively.  Weighted edges \textit{$e_{ji}$} are then established
+from each class centroid $C_j$ to every sentence $s_i$ in document.
+Weights of these edges $ind_j(s_i)$ are set to the probability values
+provided by the pre-trained subjectivity classifiers, either Naive
+Bayes or SVM.  So, $ind_1(s_i) = Pr^{NB}_{sub}(s_i)$ is the weight of
+the edge $ind$ between the subjective class $C_1$ and sentence $s_i$
+set to the probability calculated by $NB$ classifier of this sentence
+being subjective.  Corresponding weight for objective class is then
+set to $ind_2(s_i) = 1 - Pr^{NB}_{sub}(s_i)$.  Same estimations are
+performed for SVM.
+
+To incorporate coherence scores in the graph, $\binom{n}{2}$ edges are
+established between all $n$ sentences.  The coherence weight between
+two sentences $i$ and $j$ is then estimated using the following formula:
+\begin{displaymath}
+  assoc(s_i, s_j) := \begin{cases}
+    f(j -i) \cdot c & \text{if} (j - i) \leq T;\\
+   0 & \text{otherwise}
+  \end{cases}
+\end{displaymath}
+In this formula, $f$, $c$, and $T$ are free parameters, where $f(d)$
+is a non-increasing function that shows how the influence of proximal
+sentences decays with respect to distance $d$.  $T$ is a threshold
+value that specifies maximum distance by which two sentences can be
+separated and still be considered coherent.  Finally, $c$ is a
+constant which controls the relative weight of association scores.
+The higher $c$, the higher is the prevalence of association scores
+over individual sentence scores.
+
+The subjectivity detection task is then defined as finding a cut
+$(S,T)$ in graph $G$ which minimizes the weights of all edges crossing
+from $S$ to $T$ which is also known as minimum-cut problem.
+
+The authors first experiment with basic subjectivity detection in
+which only individual sentence scores are used for classification.
+After leaving only sentences which were recognized as subjective in
+the review and throwing off objective ones, the authors observe an
+increase in the accuracy of basic NB polarity classifier by 3.6 \%
+from 82.8 \% to 86.4 \%.  For SVM polarity classifier, the accuracy,
+on the contrary, drops by less than one percent which is considered to
+be statistically insignificant.  After incorporating coherence scores
+in the graph, a statistically significant improvement is observed for
+the combination of the SVM subjectivity classifier for both polarity
+classifiers.
 
 \subsection{Scheible and Sch\"utze: Sentiment Relevance\cite{Scheible-13}}
 
