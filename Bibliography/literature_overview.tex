@@ -20,37 +20,41 @@
 \subsection{Pang, Lee, and Vaithyanathan: Thumbs up? Sentiment Classification using Machine
                   Learning Techniques\cite{Pang-Lee-02}}
 
-This article deals with the problem of sentiment classification of movie
-reviews.  For this task, the authors explore three popular machine learning
-techniques, namely Naive Bayes, maximum entropy, and support vector machines.
-They compare these techniques against each other and also against a
-human-based baseline classifier which relied on a deductively constructed
-dictionary of polarity terms.
+This article deals with the problem of sentiment classification of
+movie reviews.  For this task, the authors explore three popular
+machine learning techniques, namely Naive Bayes, maximum entropy, and
+support vector machines.  They compare these techniques against each
+other and also against a human-based baseline classifier which relies
+on a deductively constructed dictionary of polarity terms.
 
-For their training and testing purposes, the authors created a corpus of 752
-negative and 1301 positive reviews.  Discrimination between subjective and
-objective articles was left out of the scope of this study.  To establish a
-classifier baseline, the authors first asked two graduate students to
-introspectively devise two lists of polarity terms each -- one containing
-positive and one containing negative polarity markers.  A simple decision
-procedure than counted occurrences of terms from these lists in each review in
-the corpus selection and assigned to these reviews the class of the list with
-most items found.  This procedure showed a classification accuracy of 58\% for
-the lists of the first student and 64\% for the second.  A manually refined
-list with fewer items, however, allowed to increase the baseline to 69\%.
+For their training and testing purposes, the authors created a corpus
+of 752 negative and 1301 positive reviews.  Discrimination between
+subjective and objective articles was left out of the scope of this
+study.  To establish a classifier baseline, the authors first asked
+two graduate students to introspectively devise two lists of polarity
+terms each -- one containing positive and one containing negative
+polarity markers.  A simple decision procedure than counted
+occurrences of terms from these lists in each review in the corpus
+selection and assigned to these reviews the class of the list with
+most items found.  This procedure showed a classification accuracy of
+58\% for the lists of the first student and 64\% for the second.  A
+manually refined list with fewer items, however, allowed to increase
+the baseline to 69\%.
 
-In their machine learning experiments, the authors represented each document
-as a word vector.  They tested different experimental setups, including simple
-unigrams with either presence flag or frequency counts, bigram and
-bigram+unigram binary presence flags.  The authors also tried to restrict the
-features solely to adjectives and to combine unigram presence features with
-their parts-of-speech or position in text.  The best result was then achieved
-by a SVM classifier which only used unigram presence markers as its features.
-It should be said, that for unigrams, the authors also used the negation
-heuristics proposed by Das and Chen \cite{Das-Chen-01} and added the
-\texttt{NOT\_} prefix to every word between a negation and a punctuation mark.
-This heuristics, however, was not used for bigrams, since bigrams were
-considered to be a sufficient source of context information on their own.
+In their machine learning experiments, the authors represented each
+document as a word vector.  They tested different experimental setups,
+including simple unigrams with either presence flag or frequency
+counts, bigram and bigram+unigram binary presence flags.  The authors
+also tried to restrict the features solely to adjectives and to
+combine unigram presence features with their parts-of-speech or
+position in text.  The best result was then achieved by the SVM
+classifier which only used unigram presence markers as its features.
+It should be said, that for unigrams, the authors also used the
+negation heuristics proposed by Das and Chen \cite{Das-Chen-01} and
+added the \texttt{NOT\_} prefix to every word between a negation and a
+punctuation mark.  This heuristics, however, was not used for bigrams,
+since bigrams were considered to be a sufficient source of context
+information on their own.
 
 In general, sentiment classification task was said to be harder than
 conventional topic-classification.  The authors also noted the fact, that
@@ -61,33 +65,34 @@ described movie.
 
 \subsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
 In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
-automatically mining subjective judgements on product features in customer
-reviews.  This system searches the reviews for frequently occurring mentions
-of prominent features of specific products by using an association mining
-algorithm.  The algorithm extracts nouns and noun phrases which frequently
-occur across multiple documents.  Implicit features and features which are not
-represented by nouns are not taken into consideration.  Extracted feature
-candidates are then pruned off if their components do not occur in a specific
-order in sentences or if some features appear to be full subsets of other
-ones.
+automatically mining subjective judgements on product features in
+customer reviews.  This system searches the reviews for frequently
+occurring mentions of prominent features of specific products by using
+an association mining algorithm.  The algorithm extracts nouns and
+noun phrases which frequently occur together across multiple
+documents.  Implicit features and features which are not represented
+by nouns are not taken into consideration.  Extracted feature
+candidates are then pruned off if their components do not occur in a
+specific order in sentences or if some features appear to be full
+subsets of other ones.
 
-In the following processing step, text passages surrounding feature candidates
-are searched for adjectives, since words of this part-of-speech are considered
-to be the most obvious indicators of subjective opinions.  Found adjectives
-are classified into subjective and objective ones.  The subjective class is
-thereby subdivided into positive and negative subclasses depending on the type
-of adjectives' polarity.  Both subjectivity and polarity are determined by
-using WordNet information.  For this, two manually constructed sets of
-adjectives with opposite polarities are used.  Synonyms and antonyms of
-adjectives found in text are searched for occurrences of any adjectives from
-one of the two seed sets.  If such an occurrence is found, the text adjective
-is added to the respective seed set or its counterpart depending on whether
-the occurrence was found in synonyms or antonyms.  The algorithm stops when
-both seed sets stop growing or when the list of text adjectives is exhausted.
-Adjectives which were not assigned to any of the seed cluster during this
-procedure are assumed to have neutral polarity and are skipped.
+In the following processing step, text passages surrounding feature
+candidates are searched for adjectives, since words of this
+part-of-speech are considered to be the most obvious indicators of
+subjective opinions.  Both subjectivity and polarity of these
+adjectives are then determined by using WordNet information.  For
+this, two manually constructed sets of adjectives with opposite
+polarities are used.  Synonyms and antonyms of adjectives found in
+text are searched for occurrences of any adjectives from one of the
+two seed sets.  If such an occurrence is found, the text adjective is
+added to the respective seed set or its counterpart depending on
+whether the occurrence was found in synonyms or antonyms.  The
+algorithm stops when both seed sets stop growing or when the list of
+text adjectives is exhausted.  Adjectives which were not assigned to
+any of the seed cluster during this procedure are assumed to have
+neutral polarity and are skipped.
 
-In the next step, sentences which don not contain any frequent features but
+In the next step, sentences which do not contain any frequent features but
 which contain at least one opinion adjective are analyzed.  The aim of this
 analysis is to find less frequent features of a product which still can be
 important for the user.  It is conjectured by the authors that less frequent
@@ -128,12 +133,12 @@ summary generation procedure generally consists of two steps:
                Summarization Based on Minimum Cuts\cite{Pang-Lee-04}}
 
 This paper presents a two-step approach for polarity classification of
-movie reviews.  The first step of this approach
-(\textit{subjectivity-detector}) consists in detecting and extracting
-subjective sentences present in the review.  The next step
-(\textit{default polarity classifier}) then classifies found
-subjective sentences in either positive or negative ones using Naive
-Bayes (NB) or SVM methods presented earlier in \cite{Pang-Lee-02}.
+movie reviews.  The first step (\textit{subjectivity-detector})
+consists in detecting and extracting subjective sentences present in
+the review.  The next step (\textit{default polarity classifier}) then
+classifies found subjective sentences in either positive or negative
+ones using Naive Bayes (NB) or SVM methods presented earlier in
+\cite{Pang-Lee-02}.
 
 To identify whether a single sentence is subjective or not, two
 different kinds of scores are considered:
@@ -164,10 +169,10 @@ Weights of these edges $ind_j(s_i)$ are set to the probability values
 provided by the pre-trained subjectivity classifiers, either Naive
 Bayes or SVM.  So, $ind_1(s_i) = Pr^{NB}_{sub}(s_i)$ is the weight of
 the edge $ind$ between the subjective class $C_1$ and sentence $s_i$
-set to the probability calculated by $NB$ classifier of this sentence
-being subjective.  Corresponding weight for objective class is then
-set to $ind_2(s_i) = 1 - Pr^{NB}_{sub}(s_i)$.  Same estimations are
-performed for SVM.
+and it is set to the probability of this sentence being subjective as
+it is calculated by the $NB$ classifier.  Corresponding weight for
+objective class is then set to $ind_2(s_i) = 1 - Pr^{NB}_{sub}(s_i)$.
+Same estimations are performed for SVM.
 
 To incorporate coherence scores in the graph, $\binom{n}{2}$ edges are
 established between all $n$ sentences.  The coherence weight between
@@ -200,8 +205,7 @@ from 82.8 \% to 86.4 \%.  For SVM polarity classifier, the accuracy,
 on the contrary, drops by less than one percent which is considered to
 be statistically insignificant.  After incorporating coherence scores
 in the graph, a statistically significant improvement is observed for
-the combination of the SVM subjectivity classifier for both polarity
-classifiers.
+the SVM subjectivity classifier for either polarity classifiers.
 
 \subsection{Scheible and Sch\"utze: Sentiment Relevance\cite{Scheible-13}}
 
@@ -214,7 +218,7 @@ The authors deviate from the well-established notion of sentence
 subjectivity by showing that not every sentence which appears to be
 subjective may contribute to document's polarity and vice versa an
 apparently objective sentence may be highly sentiment relevant for a
-document.  They illustrate this with an example form the movie review
+document.  They illustrate this with an example from the movie review
 database (IMDB).  In a review, a sentence describing movie's plot and
 acting characters can be highly subjective containing strong polarity
 markers like, for example, ``Bruce Banner, a genetics researcher with
@@ -227,16 +231,16 @@ review despite that it merely states an objective fact.
 To confirm their assumption that sentiment relevance and subjectivity
 are different concepts, the authors created a corpus (henceforth
 \textit{SR-corpus}) of sentences from 125 randomly selected documents
-from the movie review dataset \cite{Pang-Lee-02}.  Each of these sentences
-was manually annotated for S-relevance.  Another corpus (the
+from the movie review dataset \cite{Pang-Lee-02}.  Each of these
+sentences was manually annotated for S-relevance.  Another corpus (the
 \textit{P\&L} corpus) was automatically constructed from the
 subjectivity dataset provided by Pang and Lee \cite{Pang-Lee-04}.  In
-the latter data collection, all subjectivity markers were automaticlly
-considered as S-relevent and all objective markers were regarded as
-S-nonrelevant.  The authors than showed than a MaxEnt classifier
-performed significantly worse if it was trained on one corpus and
-tested on the other than if it was trained and tested on the data
-taken from the same set.
+the latter data collection, all subjectivity markers were
+automatically considered as S-relevent and all objective markers were
+regarded as S-nonrelevant.  The authors than showed than a MaxEnt
+classifier performed significantly worse if it was trained on one
+corpus and tested on the other than if it was trained and tested on
+the data taken from the same set.
 
 Since no large collections of annotated S-relevance data are available
 yet, Scheible and Sch\"utze propose two different semi-supervised
@@ -250,8 +254,8 @@ techniques are
   \item \textit{Named Entity} features (NE) which are binary features
     indicating the presence of an actor, character, or staff member
     mention in a sentence.  Named entity detection and resolution is
-    performed on the basis of lexicons obtained from the IMDB metadate
-    database;\label{li-ne-feat}
+    performed on the basis of lexicons that are obtained from the IMDB
+    metadata database;\label{li-ne-feat}
   \item \textit{Sequential} features (SQ) which effectively repeat the
     former features by transferring them to the following sentence in
     document.  It means that if sentence $s_i$ had feature
@@ -281,11 +285,11 @@ to $0.8$ in transfer learning.
 
 In distant supervision, the authors first assign a relevance class to
 each sentence according to the majority of NE features found in it.
-They than train a MaxEnt classifier on these noisy labels and impose
-the MinCut discourse constraint on it.  These re-labeled data serve as
-training set for the next iteration of MaxEnt training.  In this next
-iteration the authors than look how different features affect the
-model.  The best total performace with average $F_1 = 67.0$ is then
+Afterwards, they train a MaxEnt classifier on these noisy labels and
+impose the MinCut discourse constraint on it.  These re-labeled data
+serve as training set for the next iteration of MaxEnt training.  In
+the next iteration, the authors look how different features affect the
+model.  The best total performance with average $F_1 = 67.0$ is then
 achieved by a distantly supervised MaxEnt classifier with activated
 features SQ and NE.
 
@@ -327,13 +331,14 @@ bibliography entries etc.
 A more fine-grained level of analysis is represented by sentential discourse
 segments which roughly correspond to individual sentences in text.
 
-Elementary discourse segments are the smallest parsing units of discourse and
-are supposed to represent single coherent and relatively indepent
-propositions.  The authors slightly deviate from the traditional notion of
-elementary discourse units suggested by Marcu \cite{Marcu-99} and define EDSs
-in terms of syntactic constructions by which EDSs can be expressed.  The
-authors distinguish 10 types of grammatical structures which can give rise to
-an EDS on their own:
+Elementary discourse segments are the smallest parsing units of
+discourse and are supposed to represent single coherent and relatively
+indepent propositions.  The authors slightly deviate from the
+traditional notion of elementary discourse units suggested by Marcu
+\cite{Marcu-99} and define EDSs in terms of syntactic constructions
+which can potentially produce an EDS.  The authors distinguish 10
+types of grammatical structures which can give rise to an EDS
+including:
 \begin{enumerate}
   \item \textit{main clauses};
   \item \textit{modal subclauses};
@@ -378,15 +383,16 @@ straightforward.  The former units are extracted from XML tags in the
 document, the latter ones are obtained during sentence splitting.
 
 For EDSs, parsing procedure looks more sophisticated.  Here, first all
-potential segment boundaries are detected including commas, lexical markers
-e.g. \textit{und} and \textit{oder} as well as parentheses.  Subsequently,
-boundary markers within parentheses and quotations are deleted, since these
-units are already supposed to represent elementary segments.  Next, POS tags
-surrounding markers are analyzed and iteratively joined to higher-order
-syntactic constructs.  At every step, it is than checked whether POS
-categories or syntactic structures on either side of a potential boundary are
-the same.  If yes, such a boundary is assumed to unite two or more
-enumerations.
+potential segment boundaries are detected including commas, lexical
+markers e.g. \textit{und} and \textit{oder} as well as parentheses.
+Subsequently, boundary markers within parentheses and quotations are
+deleted, since these units are already supposed to represent
+elementary segments.  Next, POS tags surrounding markers are analyzed
+and iteratively joined to higher-order syntactic constructs.  At every
+step, it is than checked whether POS categories or syntactic
+structures on either side of a potential boundary are the same.  If
+yes, such a boundary is assumed to unite an enumeration and therefore
+can not be an EDS boundary.
 
 The results of the test are then fed into a separate filtering module.  In
 this module, first, those markers that are associated with the conjunctions
