@@ -27,54 +27,51 @@ support vector machines.  They compare these techniques against each
 other and also against a human-based baseline classifier which relies
 on a deductively constructed dictionary of polarity terms.
 
-For their training and testing purposes, the authors created a corpus
-of 752 negative and 1301 positive reviews.  Discrimination between
-subjective and objective articles was left out of the scope of this
-study.  To establish a classifier baseline, the authors first asked
-two graduate students to introspectively devise two lists of polarity
-terms each -- one containing positive and one containing negative
-polarity markers.  A simple decision procedure than counted
-occurrences of terms from these lists in each review in the corpus
-selection and assigned to these reviews the class of the list with
-most items found.  This procedure showed a classification accuracy of
-58\% for the lists of the first student and 64\% for the second.  A
-manually refined list with fewer items, however, allowed to increase
-the baseline to 69\%.
+For their training and testing purposes, the authors created a corpus of 752
+negative and 1301 positive reviews.  Discrimination between subjective and
+objective articles was left out of the scope of this study.  To establish a
+classifier baseline, the authors first asked two graduate students to
+introspectively devise two lists of polarity terms -- one containing positive
+and one containing negative polarity markers.  A simple decision procedure
+than counted occurrences of terms from these lists in each review in the
+corpus selection and assigned to these reviews the class of the list with most
+items found.  This procedure showed a classification accuracy of 58\% for the
+lists of the first student and 64\% for that of the second.  A manually
+refined list with fewer items, however, allowed to increase the baseline to
+69\%.
 
-In their machine learning experiments, the authors represented each
-document as a word vector.  They tested different experimental setups,
-including simple unigrams with either presence flag or frequency
-counts, bigram and bigram+unigram binary presence flags.  The authors
-also tried to restrict the features solely to adjectives and to
-combine unigram presence features with their parts-of-speech or
-position in text.  The best result was then achieved by the SVM
-classifier which only used unigram presence markers as its features.
-It should be said, that for unigrams, the authors also used the
-negation heuristics proposed by Das and Chen \cite{Das-Chen-01} and
+In their machine learning experiments, the authors represented each document
+as a vector of words.  They tested different experimental setups, including
+simple unigrams with either presence flag or frequency counts, bigram and
+bigram+unigram binary presence flags.  The authors also tried to restrict the
+features solely to adjectives and to combine unigram presence features with
+their part-of-speech tags or position in text.  The best result was then
+achieved by the SVM classifier which only used unigram presence markers as its
+features.  It should, however, be said, that for unigrams, the authors also
+used the negation heuristics proposed by Das and Chen \cite{Das-Chen-01} and
 added the \texttt{NOT\_} prefix to every word between a negation and a
-punctuation mark.  This heuristics, however, was not used for bigrams,
-since bigrams were considered to be a sufficient source of context
-information on their own.
+punctuation mark.  This heuristics, though, was not used for bigrams, since
+bigrams were considered to be a sufficient source of context information on
+their own.
 
 In general, sentiment classification task was said to be harder than
 conventional topic-classification.  The authors also noted the fact, that
 their system experienced serious difficulties due to the lack of discourse
-information.  Because sentences describing the plot of the movies often
-expressed opposite polarity than one of the author's real attitude to the
-described movie.
+information.  The reason for that was that sentences describing the plot of
+the movies often expressed different polarity than the polarity of the
+author's real attitude to the described movie.
 
 \subsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
 In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
-automatically mining subjective judgements on product features in
-customer reviews.  This system searches the reviews for frequently
-occurring mentions of prominent features of specific products by using
-an association mining algorithm.  The algorithm extracts nouns and
-noun phrases which frequently occur together across multiple
-documents.  Implicit features and features which are not represented
-by nouns are not taken into consideration.  Extracted feature
-candidates are then pruned off if their components do not occur in a
-specific order in sentences or if some features appear to be full
-subsets of other ones.
+automatically mining subjective judgements on product features in customer
+reviews.  This system searches the reviews for frequently occurring mentions
+of prominent features of specific products by using an association mining
+algorithm.  The algorithm extracts nouns and noun phrases which frequently
+occur together across multiple documents.  Implicit features (i.e. those which
+are not explicitly present in text) and features which are not represented by
+nouns are not taken into account.  Extracted feature candidates are then
+pruned off if their components do not occur in a specific order in sentences
+or if some features appear to be full subsets of broader ones.
 
 In the following processing step, text passages surrounding feature
 candidates are searched for adjectives, since words of this
@@ -308,6 +305,63 @@ gives an improvement over the baseline by 12.6\% with an averaged
 $F_1$ equal to $82.5\%$.
 
 \section{Markov Logic Network}
+
+\subsection{Markov Logic: An Interface Layer for Artificial Intelligence \cite{Domingos-09}}
+
+In their book, Domingos and Lowd present Markov Logic Network (MLN) -- a
+machine learning framework which combines the ideas of first-order logic (FOL)
+with the expressive power of probabilistic graphical models (PGM).
+
+Features in MLN are represented in the form of logical formulas.  Such
+formulas are usually composed of four different types of elements:
+\begin{inparaenum}[\itshape a)\upshape]
+\item constants,
+\item variables,
+\item functions, and
+\item predicates.
+\end{inparaenum}
+
+Constants in formulas represent specific objects in the domain of interest.
+Variables are symbols which range over all objects of a particular class.
+Functions are either built-in or user-defined procedures which map tuples of
+objects to other objects in the domain.  And, finally, predicates are symbols,
+that represent relations between sigle objects or properties of one particular
+object in a possible world.
+
+Any expression which represents one particular object in the interpreted world
+is called a \textit{term}.  A term can be represented by a constant, a
+variable, or a function which is applied to a tuple of terms.  A term which
+contains no variables is called a \textit{ground term}.  A predicate applied
+to a tuple of terms is called an \textit{atomic formula} or \textit{atom}.
+Correspondingly, if all the arguments of an atomic formula are ground terms,
+this formula can also be called a \textit{ground atom}.
+
+Internally, all formulas of an MLN are later joined to a large single formula
+in the conjunctive normal form (CNF).  The CNF formula represents a single
+conjunction of clauses, where each clause, in turn, is a disjunction of
+literals.
+
+In the next step, the CNF knowledge base is converted to a Markov network
+(MN).  In the constructed network, each possible grounding of each predicate
+in the logical KB is represented as a binary node.  A node takes on the value
+of 1, if its corresponding ground predicate is true, and 0 otherwise.
+Furthermore, nodes of all predicates appearing in same formula are connected
+via edges, thus forming a clique.  MN cliques are direct graphical equivalents
+of logical formulas in the KB and therefore immediate representations of the
+features.  Like ground predicates, features associated with the cliques take
+on the value of 1, if their corresponding formulas are true, and 0 if formulas
+are false.  The weight of each feature is the weight of the formula in the KB.
+
+The probability distribution over possible worlds $x$ specified by the ground
+Markov network $M$ is estimated using the following formula:
+\begin{equation}
+  P(X=x) = \frac{1}{Z}\left(\sum_i{w_in_i(x)}\right) = %
+    \frac{1}{Z}\prod_i{\phi_i(x_{\{i\}})^{n_i(x)}}
+\end{equation}
+where $n_i$ is the number of true groundings of formula $F_i$ in the given
+world $x$, $x_{\{i\}}$ is the state (truth values) of the predicates appearing
+in $F_i$, and $\phi(x_{\{i\}}) = e^{w_i}$ where $w_i$ is the weight associated
+with the $i$-th formula.
 
 \section{Discourse Analysis}
 
