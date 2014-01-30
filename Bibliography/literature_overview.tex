@@ -4,6 +4,7 @@
 %% Packages
 \usepackage{amsmath}
 \usepackage{paralist}
+\usepackage{url}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Variables and Methods
@@ -304,6 +305,89 @@ semantic information and smoothing with MinCut discourse constraint
 gives an improvement over the baseline by 12.6\% with an averaged
 $F_1$ equal to $82.5\%$.
 
+\subsection{Bidirectional Inter-dependencies of Subjective Expressions and
+                  Targets and their Value for a Joint Model \cite{Klinger-13}}
+
+In this paper, Klinger and Cimiano investigate the intedependence relation
+between sentiment spans and text spans denoting the targets of polar opinions.
+In their attempt to prove the existence of bidirectional dependencies between
+these two elements, the authors propose a probabilistic inference model which
+jointly detects the boundaries of opinions and their respective target
+elements.  This model is created by means of imperatively defined factor
+graphs (IDFs) -- a probabilistic graphical framework first proposed by
+McCallum et al. \cite{McCallum-09}.
+
+An IDF represents a bipartite graph over factors and variables.  A factor
+$\psi_i$ can then be used to compute a scalar value over two disjoint subsets
+of variables $x_i$ and $y_i$, if these subsets are neighbours of $\psi_i$ in
+the graph.  This real-valued function is often defined as the exponential of
+an inner product over sufficient statistics ${f_{ik}(x_i, y_i)}$ and
+parameters ${\Theta_{ik}}$, where $k \in [1, K_i]$ and $K_i$ is the number of
+parameters for the factor $\psi_i$.
+
+A \emph{factor template} $T_j$ is used to define a set of factors representing
+arbitrary relations between variable sets $x_i$ and $y_i$, in which all of the
+factors share common parameters $\Theta_{jk}$ and a common set of sufficient
+statistic functions ${f_{jk}}$.
+
+In their model, the authors use two different types of templates for defining
+factors between variables: a \emph{single span} template and an
+\emph{inter-span} template.  The former type characterizes a span on the basis
+of its inner tokens.  Features belonging to this type of template are token's
+POS tag, the lower-case representation of the token as well as both in
+combination.  In addition, the sequence of POS tags of all tokens in the span
+is included as a feature.  For the latter type of templates, the following
+features are used: a boolean indicator whether a potential target span
+contains a noun which is the closest to a subjective expression, an indicator
+whether a span of the other class is in the same sentence and, finally, a
+boolean function indicating whether there is only one edge between the tokens
+contained in spans of a different class.  The final set of inter-span features
+is then obtained by taking the cross-product of these three characteristics
+with all single span features.
+
+Inference is performed via Markov Chain Monte Carlo sampling (MCMC).  For
+learning the parameter weights, the authors use the SampleRank framework
+(cf. \cite{Wick-11}).  A crucial component of this framework is the objective
+cost function $f$ whose value should be optimized through parameters' fitting
+during the training.  In their approach, Klinger and Cimiano define the cost
+function as follows:
+\begin{equation}
+  f(t) = \max_{g \in s}\frac{o(t, g)}{|g|} - \alpha \cdot p(t, g),
+\end{equation}
+where $s$ is the set of all spans in the gold standard.  The function $o$
+calculates the token overlap between two spans and the function $p$ returns
+the number of tokens in $t$ that are not contained in $g$.  Parameter $\alpha$
+in the formula above controls the penalty for too long or incorrectly detected
+spans.
+
+For evaluation purposes, the authors use the J.D. Power and Associates
+Sentiment Corpora\footnote{\url{http://verbs.colorado.edu/jdpacorpus/}} and a
+Twitter data set by Spina et
+al.\footnote{\url{http://nlp.uned.es/~damiano/datasets/
+    entityProfiling_ORM_Twitter.html}} As evaluation metric, the $F_1$ measure
+was used.
+
+Four different types of experiments were conducted.  First, the authors tried
+predicting subjectivity expressions followed by predicting targets while
+making use of the previous prediction.  Second, prediction of targets was
+followed by prediction of subjective expressions.  Third, assuming perfect
+knowledge of subjective expressions, target prediction was conducted, and,
+finally, assuming perfect knowledge of targets, the authors tried predicting
+subjective expressions.  Both, perfect and approximate match modes were used
+in these experiments.
+
+The results showed that target phrases and subjective terms were clearly
+interdependent on each other.  However, this impact was shown to be
+asymmetric.  The experiments proved that better recognition of subjective
+terms yielded considerably better results for the detection of targets than
+the other way round.  For the first corpus, the recognition of subjective
+expression increased from 0.54 $F_1$ for the camera set and 0.56 $F_1$ for the
+car set to 0.6 $F_1$ and 0.66 $F_1$, correspondingly. The results for target
+prediction were much lower when not knowing subjective expressions in advance
+(0.32 $F_1$, 0.33 $F_1$), and clearly increased with predicted subjective
+expressions (0.48 $F_1$, 0.43 $F_1$).  Same tendency could be observed for the
+Twitter data set.  However the results obtained there were in general lower.
+
 \section{Markov Logic Network}
 
 \subsection{Markov Logic: An Interface Layer for Artificial Intelligence \cite{Domingos-09}}
@@ -348,9 +432,10 @@ of 1, if its corresponding ground predicate is true, and 0 otherwise.
 Furthermore, nodes of all predicates appearing in same formula are connected
 via edges, thus forming a clique.  MN cliques are direct graphical equivalents
 of logical formulas in the KB and therefore immediate representations of the
-features.  Like ground predicates, features associated with the cliques take
-on the value of 1, if their corresponding formulas are true, and 0 if formulas
-are false.  The weight of each feature is the weight of the formula in the KB.
+features in graph.  Like ground predicates, features associated with cliques
+take on the value of 1, if their corresponding formulas are true, and 0 if
+formulas are false.  The weight of each feature is the weight of the formula
+in the KB.
 
 The probability distribution over possible worlds $x$ specified by the ground
 Markov network $M$ is estimated using the following formula:
@@ -397,10 +482,10 @@ including:
   \item \textit{main clauses};
   \item \textit{modal subclauses};
   \item \textit{coordinated clauses};
-  \item \textit{embedded segments}, which are segments marked by punctuation
-    (brackets, dashes, or commas) so that they disrupt other EDSs, and which
-    themselves are EDSs. An exception to this form brackets that contain only
-    figures;
+  \item \textit{embedded segments}, which are segments marked by a punctuation
+    mark (brackets, dashes, or commas) so that they on the one hand disrupt
+    other EDSs, and on the other hand are EDSs by themselves.  An exception to
+    this form brackets, that contain only figures;
   \item \textit{quotations} that are delimited by quotation marks and are
     introduced by reporting verbs;
   \item \textit{clausal complements of reporting verbs} such as (meinen,
