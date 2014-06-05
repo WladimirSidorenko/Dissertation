@@ -15,7 +15,7 @@
 
 %--- Diese Datei darf nicht verändert werden, alle benötigten
 % Anpassungen nehmen Sie in einer der anderen mitgelieferten Dateien vor.---------
-\NeedsTeXFormat{LaTeX2e} 
+\NeedsTeXFormat{LaTeX2e}
 \ProvidesClass{DissOnlineLatex}[2011/01/05 v2.1 Vorlage zur Erstellung digitaler Hochschulschriften]
 
 % Einstellungen für kvoptions - DOT = DissOnlineTutor
@@ -44,7 +44,7 @@
 \fi
 
 \ifx\DOT@inputenc\@empty
-  \RequirePackage[latin1]{inputenc} 
+  \RequirePackage[latin1]{inputenc}
 \else
   \expandafter\RequirePackage\expandafter[\DOT@inputenc]{inputenc}
 \fi
@@ -56,7 +56,7 @@
 \fi
 
 \ifx\DOT@babel\@empty
-  \RequirePackage[english,ngerman]{babel} % Sprachen: Deutsch (Primär), Englisch
+  \RequirePackage[ngerman,english]{babel} % Sprachen: Deutsch, Englisch (Primär)
 \else
   \expandafter\RequirePackage\expandafter[\DOT@babel]{babel}
 \fi
@@ -64,8 +64,8 @@
 % Seitenränder vorgeben
 \PassOptionsToPackage{left=4cm,top=3cm,right=3cm,bottom=4cm}{geometry}
 \ifx\DOT@geometry\@empty
-  \RequirePackage{geometry} 
-\else  
+  \RequirePackage{geometry}
+\else
   \expandafter\RequirePackage\expandafter[\DOT@geometry]{geometry}
 \fi
 
@@ -74,7 +74,7 @@
 
 %-------Absatzformatierung----------------------------------------------------------
 \setlength{\parindent}{5mm}
-\renewcommand{\baselinestretch}{1.3} % 1.3-facher Zeilenabstand 
+\renewcommand{\baselinestretch}{1.3} % 1.3-facher Zeilenabstand
 
 %-------Neudefinition der Abstract-Umgebung-----------------------------------------
 \def\sprachtestE{Abstract}

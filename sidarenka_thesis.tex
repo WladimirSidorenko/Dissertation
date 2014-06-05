@@ -17,72 +17,71 @@
 % Elemente sind optional und können durch Entfernen/Hinzufügen des
 % %-Zeichens gewählt/abgewählt werden. Weitere Informationen
 % entnehmen Sie bitte der beiliegenden Broschüre!
-
-% Dokumentenklasse
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Document Class
 \RequirePackage[patch]{kvoptions}
-\documentclass{Dissertation}
+\documentclass{dissertation}
 
-% Eigene Trennungsregeln*
-\include{hyphenations}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+\usepackage[font={small,it}]{caption}
+\usepackage{multirow}
+\usepackage{tabularx}
 
-%-zusaetzliche Kommandos*
-%\include{command}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Custom Lengths, Environments, and Commands
+\include{command}
 
-% Dokumentenanfang
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Document
 \begin{document}
 
-% Seitennummerierung für Titel, Widmung, Danksagung, Zusammenfassung,
-% Inhaltsverzeichnis werden in römischen Zahlen gesetzt
 \pagenumbering{roman}
 \pagestyle{empty}
 
-% Titelblatt
+% Title Page
 \include{titlepage}
 \maketitle
 
-% Widmung*
+% Dedication
 \include{dedication}
 
-% Danksagung*
+% Acknowledgement
 \include{acknowledgement}
 
-% Zusammenfassung/Abstract
+% Abstract
 \include{abstract}
 
-% Inhalts-, Abbildungs*-, Tabellen*-Verzeichnis
+% Table of Contents, List of Tables and Figures
 \setcounter{page}{1}
 \tableofcontents
 \newpage
-%\listoffigures
-%\newpage
-%\listoftables
-%\newpage
+\listoffigures
+\newpage
+\listoftables
+\newpage
 
-% Seitennummerierung im Hauptteil
+% Chapters
 \pagenumbering{arabic}
 \pagestyle{myheadings}
 
-% Kapitel
- \include{chapter01}
- %\include{chapter02}
-% usw.
+\include{chapter-introduction}
 
-% Anhang*
+\include{chapter-normalization}
+
+\include{chapter-sentiment}
+
+\include{chapter-discourse}
+
+% Appendices
 \appendix
 \include{appendixA}
-%\include{appendixB}
-% usw
 
-% Literaturverzeichnis
+% Bibliography
 \nocite{*}
 \bibliography{bibliography}
 \bibliographystyle{plaindin}
 
-% Lebenslauf*
-%\include{cv}
-
-% Selbstständigkeiterklärung
+% Statement of Authorship
 %\include{declaration}
-
-% Dokumentenende
 \end{document}
