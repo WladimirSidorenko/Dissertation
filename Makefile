@@ -1,6 +1,7 @@
 ##################################################################
 # Variables
 BIBDIR := Bibliography
+BIBFILE := bibliography.bib
 
 MAIN_FILE = sidarenka_thesis.pdf
 LITERATURE_OVERVIEW = ${BIBDIR}/literature_overview.pdf
@@ -34,7 +35,7 @@ clean_literature_overview:
 
 ##################################################################
 # Thesis and Literature Overview Rule
-${MAIN_FILE} ${LITERATURE_OVERVIEW}: %.pdf: %.tex $(wildcard *.tex)
+${MAIN_FILE} ${LITERATURE_OVERVIEW}: %.pdf: %.tex ${BIBFILE} $(wildcard *.tex)
 	@set -e; \
 	pdflatex -halt-on-error -output-directory ${@D} $< && bibtex $(basename $<) && \
 	pdflatex -halt-on-error -output-directory ${@D} $< && pdflatex -halt-on-error \

@@ -4,6 +4,7 @@
 %% Packages
 \usepackage{amsmath}
 \usepackage{paralist}
+\usepackage{url}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Variables and Methods
@@ -27,54 +28,51 @@ support vector machines.  They compare these techniques against each
 other and also against a human-based baseline classifier which relies
 on a deductively constructed dictionary of polarity terms.
 
-For their training and testing purposes, the authors created a corpus
-of 752 negative and 1301 positive reviews.  Discrimination between
-subjective and objective articles was left out of the scope of this
-study.  To establish a classifier baseline, the authors first asked
-two graduate students to introspectively devise two lists of polarity
-terms each -- one containing positive and one containing negative
-polarity markers.  A simple decision procedure than counted
-occurrences of terms from these lists in each review in the corpus
-selection and assigned to these reviews the class of the list with
-most items found.  This procedure showed a classification accuracy of
-58\% for the lists of the first student and 64\% for the second.  A
-manually refined list with fewer items, however, allowed to increase
-the baseline to 69\%.
+For their training and testing purposes, the authors created a corpus of 752
+negative and 1301 positive reviews.  Discrimination between subjective and
+objective articles was left out of the scope of this study.  To establish a
+classifier baseline, the authors first asked two graduate students to
+introspectively devise two lists of polarity terms -- one containing positive
+and one containing negative polarity markers.  A simple decision procedure
+than counted occurrences of terms from these lists in each review in the
+corpus selection and assigned to these reviews the class of the list with most
+items found.  This procedure showed a classification accuracy of 58\% for the
+lists of the first student and 64\% for that of the second.  A manually
+refined list with fewer items, however, allowed to increase the baseline to
+69\%.
 
-In their machine learning experiments, the authors represented each
-document as a word vector.  They tested different experimental setups,
-including simple unigrams with either presence flag or frequency
-counts, bigram and bigram+unigram binary presence flags.  The authors
-also tried to restrict the features solely to adjectives and to
-combine unigram presence features with their parts-of-speech or
-position in text.  The best result was then achieved by the SVM
-classifier which only used unigram presence markers as its features.
-It should be said, that for unigrams, the authors also used the
-negation heuristics proposed by Das and Chen \cite{Das-Chen-01} and
+In their machine learning experiments, the authors represented each document
+as a vector of words.  They tested different experimental setups, including
+simple unigrams with either presence flag or frequency counts, bigram and
+bigram+unigram binary presence flags.  The authors also tried to restrict the
+features solely to adjectives and to combine unigram presence features with
+their part-of-speech tags or position in text.  The best result was then
+achieved by the SVM classifier which only used unigram presence markers as its
+features.  It should, however, be said, that for unigrams, the authors also
+used the negation heuristics proposed by Das and Chen \cite{Das-Chen-01} and
 added the \texttt{NOT\_} prefix to every word between a negation and a
-punctuation mark.  This heuristics, however, was not used for bigrams,
-since bigrams were considered to be a sufficient source of context
-information on their own.
+punctuation mark.  This heuristics, though, was not used for bigrams, since
+bigrams were considered to be a sufficient source of context information on
+their own.
 
 In general, sentiment classification task was said to be harder than
 conventional topic-classification.  The authors also noted the fact, that
 their system experienced serious difficulties due to the lack of discourse
-information.  Because sentences describing the plot of the movies often
-expressed opposite polarity than one of the author's real attitude to the
-described movie.
+information.  The reason for that was that sentences describing the plot of
+the movies often expressed different polarity than the polarity of the
+author's real attitude to the described movie.
 
 \subsection{Bing and Liu: Mining and summarizing customer reviews\cite{Bing-Liu-04}}
 In their article, Bing and Liu \cite{Bing-Liu-04} propose a system for
-automatically mining subjective judgements on product features in
-customer reviews.  This system searches the reviews for frequently
-occurring mentions of prominent features of specific products by using
-an association mining algorithm.  The algorithm extracts nouns and
-noun phrases which frequently occur together across multiple
-documents.  Implicit features and features which are not represented
-by nouns are not taken into consideration.  Extracted feature
-candidates are then pruned off if their components do not occur in a
-specific order in sentences or if some features appear to be full
-subsets of other ones.
+automatically mining subjective judgements on product features in customer
+reviews.  This system searches the reviews for frequently occurring mentions
+of prominent features of specific products by using an association mining
+algorithm.  The algorithm extracts nouns and noun phrases which frequently
+occur together across multiple documents.  Implicit features (i.e. those which
+are not explicitly present in text) and features which are not represented by
+nouns are not taken into account.  Extracted feature candidates are then
+pruned off if their components do not occur in a specific order in sentences
+or if some features appear to be full subsets of broader ones.
 
 In the following processing step, text passages surrounding feature
 candidates are searched for adjectives, since words of this
@@ -307,7 +305,297 @@ semantic information and smoothing with MinCut discourse constraint
 gives an improvement over the baseline by 12.6\% with an averaged
 $F_1$ equal to $82.5\%$.
 
+\subsection{T\"ackstr\"om and McDonald: Discovering Fine-Grained Sentiment with Latent Variable
+                  Structured Prediction Models \cite{Tackstrom-11}}
+
+In their paper, T\"ackstr\"om and McDonald present a method which
+automatically learns sentence-level sentiment labels from document-level
+annotated data using hidden conditional random fields (HCRF).
+
+As a training set for their model, the authors sampled a total of 143,580
+unique positive, negative and neutral reviews from five different domains:
+\textit{books, dvds, electronics, music} and \textit{videogames}.
+Document-level labels for these reviews were extracted automatically from
+their star rating.  Each of the reviews was subsequently split into sentences.
+And the final set of 1.5 million sentences was automatically enriched with
+information about the negation scope and matches against a polarity lexicon.
+
+For the test set, the authors sampled 300 reviews from different domains and
+document sentiment categories.  The resulting set of 97 positive, 98 neutral
+and 99 negative unique reviews was subsequently also split into sentences.
+Two annotators annotated then the polarity of each of the four thousand
+obtained sentences.  The overall raw inter-annotator agreement for this task
+run up to 86\% with a Cohen’s $\kappa$ value of 0.79.
+
+As baselines for the experiments, one rule-based and two machine-learning
+based approaches were used.  The rule-based system relied on the VoteFlip
+algorithm \cite{Choi-09} and used information about the number of positive and
+negative lexicon matches as well as the existence of negations to classify a
+sentence.  Both machine-learning approaches were log-linear classifiers.  For
+training the first one, called \textit{Sentence as Document (SaD)}, each
+sentence in the training set was assigned the overall polarity of the
+corresponding document and the classifier was trained on these automatically
+labeled sentence instances.  The second system, called \textit{Document as
+  Sentence (DaS)}, regarded each document in the training set as a single long
+sentence.
+
+For deriving their own model, the authors assumed that:
+\begin{inparaenum}[\itshape 1)\upshape]
+\item polarity of the most sentences will agree with the overall polarity of a
+  document,
+\item at the same time, sentence labels should be flexible enough to disagree
+  with the overall polarity of the document if the local context suggests
+  otherwise.
+\end{inparaenum}
+Based on these assumptions, the model was then defined as follows.  Let $d$ be
+a document consisting of $n$ sentences, $\mathbf{s} = (s_i)^n_{i=1}$.  Then,
+$\mathbf{y^d} = (y^d; \mathbf{y^s})$ denotes random variables that include the
+document level sentiment, $y^d$, and the sequence of sentence level sentiment,
+$\mathbf{y^s} = (y^s_i)^n_{i=1}$.  Both $y^d$ and all $y^s_i$ belong to ${POS,
+  NEG, NEU}$.  The authors then hypothesize that there is a sequential
+relationship over sentence level sentiment and that the document level
+sentiment is influenced by all sentence level sentiment (and vice versa).  A
+first order Markov property is assumed, according to which each sentence
+variable $y^s_i$ is independent of all other variables, conditioned on the
+document variable $y^d$ and its adjacent sentences, $y^s_{i-1}/y^s_{i+1}$.
+The strength of this model is that it allows sentence and document level
+classifications to influence each other while giving them freedom to disagree
+when influenced by the input.
+
+The distribtion of the random variable $\mathbf{y^d} = (y^d; \mathbf{y^s})$,
+conditioned on input sentences $s$, is then defined as exponent:
+\begin{equation}
+  p_\theta(y^d; \mathbf{y^s}|s) = exp(\langle\phi(y^d, \mathbf{y^{d}},
+  \mathbf{s}), \theta\rangle - A_\theta(s));
+\end{equation}
+where $\theta$ is a vector of model parameters, $\phi(\cdot)$ is a vector
+valued feature function, and $A_\theta(s)$, is a normalization constant, which
+ensures that $p_\theta$ is a proper probability distribution.  By the
+previously defined independence assumption, $\phi(\cdot)$ factorizes as
+follows:
+\begin{equation}
+  \phi(y^d; \mathbf{y^s}; \mathbf{s}) = \oplus_{i=1}^n\phi(y^d; y^s_i;
+  y^s_{i-1}; \mathbf{s}),
+\end{equation}
+where $\oplus$ means vector summation.  The feature function $\phi(y^d; y^s_i;
+y^s_{i-1}; \mathbf{s})$ at position $i$ is then defined as summation of two
+feature vectors $\phi(y^d; y^s_i; y^s_{i-1}) \oplus \phi(y_i^s, \mathbf{s})$.
+The features of the former vector $(y^d; y^s_i; y^s_{i-1})$ encode the
+relation between two contiguous sentences in document.  Groundings of these
+features are various combinations of the document and sentence sentiment
+variables.  The latter vector $(y_i^s, \mathbf{s})$ represents information
+about each particular sentence $i$ and encodes the following sentence
+properties:
+\begin{itemize}
+  \item TOKENS($s_i$) -- the set of tokens in $s_i$;
+  \item POSITIVETOKENS($s_i$) -- the set of tokens in $s_i$ matching the
+    positive lexicon;
+  \item NEGATIVETOKENS($s_i$) -- the set of tokens in $s_i$ matching the
+    negative lexicon;
+  \item NEGATEDTOKENS($s_i$) -- the set of tokens in $s_i$ that are negated according to;
+  \item \#POSITIVE($s_i$) -- the cardinality of POSITIVETOKENS($s_i$);
+  \item \#NEGATIVE($s_i$) -- the cardinality of NEGATIVETOKENS($s_i$);
+  \item VOTEFLIP($s_i$) -- the output of the vote-flip algorithm.
+\end{itemize}
+The conditional probability of the observed variable, in this case the
+document sentiment, is then obtained by marginalizing over the posited hidden
+variables
+\begin{equation}
+  p_\theta(y^d|\mathbf{s}) = \sum_{\mathbf{y^s}}{p_\theta(y^d,
+    \mathbf{y^s}|\mathbf{s})}.
+\end{equation}
+
+The learning of parameters $\theta$ is done by maximizing an L2-regularized
+conditional log-likelihood function, which corresponds to maximum a posteriori
+probability (MAP):
+\begin{equation}\label{eq:hcrf-soft}
+  L^{soft}(\theta) = \sum_{j = 1}^{|D|}log\sum_{\mathbf{y^s}}p_\theta(y_j^d,
+  \mathbf{y^s}|\mathbf{s_j}) - \frac{||\theta||^2}{2\sigma^2},
+\end{equation}
+where $L^{soft}$ is the objective function to be maximized, $|D|$ is the
+cardinality of the training set $D$, and $\frac{||\theta||^2}{2\sigma^2}$ is
+the regularization term.  As an alternative to this method, the authors also
+perform hard estimation (also known as \emph{Viterbi estimation}) by instead
+maximizing
+\begin{equation}\label{eq:hcrf-hard}
+  \begin{split}
+  L^{hard}(\theta) =&\sum_{j = 1}^{|D|}log\sum_{\mathbf{y^s}}p_\theta(y_j^d,
+  \mathbf{\hat{y}^s}|\mathbf{s_j}) - \frac{||\theta||^2}{2\sigma^2},\\
+  \text{where }&\mathbf{\hat{y}^s} = \arg\max_{\mathbf{y^s}}p_\theta(y_j^d,
+  \mathbf{y^s}|\mathbf{s_j}).
+  \end{split}
+\end{equation}
+Equation \ref{eq:hcrf-soft} is trained using \emph{sum-product}
+(forward-backward) inference. For maximizing the joint distribution formulated
+by equation \ref{eq:hcrf-hard}, the authors used the \emph{max-sum} (Viterbi)
+algorithm.  The problem of getting stuck to local optima did nit appear during
+the training, although both functions were not convex.
+
+For testing, the same type of inference was applied for the HCRF models as was
+used for training.  As baseline for their experiments, the authors chose to
+assign each sentence in a document the polarity of that document.  The
+F-measure of this baseline run up to 48,5 and was pretty competitive on its
+own.  Neither SaD nor DaS algorithms could outperform it.  Both HCRF systems,
+however, could show better results than the baseline.  When the labels of the
+documents were not observed, the soft HCRF model yielded an F-measure of 47.8
+and the hard version achieved an F-measure of 48.5.  With observed document
+polarities, these figures raised to 51.9 and 53.2 respectively.  In both cases
+(with and without observed observed document labels) the improvement over the
+baseline was statistically significant.
+
+An analysis errors showed that all compared models performed worst on neutral
+sentences.  In order to study the impact of the training set size on the
+prediction accuracy, the auhors also created two additional smaller training
+sets, by sampling 1,500 and 15,000 documents, respectively, from the full
+training data.  They then observed that adding more training examples improved
+all models. For the smaller data set there was no significant difference
+between the learning based models, but starting with the medium data set, the
+HCRF models outperformed the baselines. Furthermore, while the improvements
+were relatively small for the baselines, the improvement was substantial for
+the HCRF models.
+
+\subsection{Klinger and Cimiano: Bidirectional Inter-dependencies of Subjective
+  Expressions and Targets and their Value for a Joint Model \cite{Klinger-13}}
+
+In this paper, Klinger and Cimiano investigate the intedependence relation
+between sentiment spans and text spans denoting the targets of polar opinions.
+In their attempt to prove the existence of bidirectional dependencies between
+these two elements, the authors propose a probabilistic inference model which
+jointly detects the boundaries of opinions and their respective target
+elements.  This model is created by means of imperatively defined factor
+graphs (IDFs) -- a probabilistic graphical framework first proposed by
+McCallum et al. \cite{McCallum-09}.
+
+An IDF represents a bipartite graph over factors and variables.  A factor
+$\psi_i$ can then be used to compute a scalar value over two disjoint subsets
+of variables $x_i$ and $y_i$, if these subsets are neighbours of $\psi_i$ in
+the graph.  This real-valued function is often defined as the exponential of
+an inner product over sufficient statistics ${f_{ik}(x_i, y_i)}$ and
+parameters ${\Theta_{ik}}$, where $k \in [1, K_i]$ and $K_i$ is the number of
+parameters for the factor $\psi_i$.
+
+A \emph{factor template} $T_j$ is used to define a set of factors representing
+arbitrary relations between variable sets $x_i$ and $y_i$, in which all of the
+factors share common parameters $\Theta_{jk}$ and a common set of sufficient
+statistic functions ${f_{jk}}$.
+
+In their model, the authors use two different types of templates for defining
+factors between variables: a \emph{single span} template and an
+\emph{inter-span} template.  The former type characterizes a span on the basis
+of its inner tokens.  Features belonging to this type of template are token's
+POS tag, the lower-case representation of the token as well as both in
+combination.  In addition, the sequence of POS tags of all tokens in the span
+is included as a feature.  For the latter type of templates, the following
+features are used: a boolean indicator whether a potential target span
+contains a noun which is the closest to a subjective expression, an indicator
+whether a span of the other class is in the same sentence and, finally, a
+boolean function indicating whether there is only one edge between the tokens
+contained in spans of a different class.  The final set of inter-span features
+is then obtained by taking the cross-product of these three characteristics
+with all single span features.
+
+Inference is performed via Markov Chain Monte Carlo sampling (MCMC).  For
+learning the parameter weights, the authors use the SampleRank framework
+(cf. \cite{Wick-11}).  A crucial component of this framework is the objective
+cost function $f$ whose value should be optimized through parameters' fitting
+during the training.  In their approach, Klinger and Cimiano define the cost
+function as follows:
+\begin{equation}
+  f(t) = \max_{g \in s}\frac{o(t, g)}{|g|} - \alpha \cdot p(t, g),
+\end{equation}
+where $s$ is the set of all spans in the gold standard.  The function $o$
+calculates the token overlap between two spans and the function $p$ returns
+the number of tokens in $t$ that are not contained in $g$.  Parameter $\alpha$
+in the formula above controls the penalty for too long or incorrectly detected
+spans.
+
+For evaluation purposes, the authors use the J.D. Power and Associates
+Sentiment Corpora\footnote{\url{http://verbs.colorado.edu/jdpacorpus/}} and a
+Twitter data set by Spina et
+al.\footnote{\url{http://nlp.uned.es/~damiano/datasets/
+    entityProfiling_ORM_Twitter.html}} As evaluation metric, the $F_1$ measure
+was used.
+
+Four different types of experiments were conducted.  First, the authors tried
+predicting subjectivity expressions followed by predicting targets while
+making use of the previous prediction.  Second, prediction of targets was
+followed by prediction of subjective expressions.  Third, assuming perfect
+knowledge of subjective expressions, target prediction was conducted, and,
+finally, assuming perfect knowledge of targets, the authors tried predicting
+subjective expressions.  Both, perfect and approximate match modes were used
+in these experiments.
+
+The results showed that target phrases and subjective terms were clearly
+interdependent on each other.  However, this impact was shown to be
+asymmetric.  The experiments proved that better recognition of subjective
+terms yielded considerably better results for the detection of targets than
+the other way round.  For the first corpus, the recognition of subjective
+expression increased from 0.54 $F_1$ for the camera set and 0.56 $F_1$ for the
+car set to 0.6 $F_1$ and 0.66 $F_1$, correspondingly. The results for target
+prediction were much lower when not knowing subjective expressions in advance
+(0.32 $F_1$, 0.33 $F_1$), and clearly increased with predicted subjective
+expressions (0.48 $F_1$, 0.43 $F_1$).  Same tendency could be observed for the
+Twitter data set.  However the results obtained there were in general lower.
+
 \section{Markov Logic Network}
+
+\subsection{Markov Logic: An Interface Layer for Artificial Intelligence \cite{Domingos-09}}
+
+In their book, Domingos and Lowd present Markov Logic Network (MLN) -- a
+machine learning framework which combines the ideas of first-order logic (FOL)
+with the expressive power of probabilistic graphical models (PGM).
+
+Features in MLN are represented in the form of logical formulas.  Such
+formulas are usually composed of four different types of elements:
+\begin{inparaenum}[\itshape a)\upshape]
+\item constants,
+\item variables,
+\item functions, and
+\item predicates.
+\end{inparaenum}
+
+Constants in formulas represent specific objects in the domain of interest.
+Variables are symbols which range over all objects of a particular class.
+Functions are either built-in or user-defined procedures which map tuples of
+objects to other objects in the domain.  And, finally, predicates are symbols,
+that represent relations between sigle objects or properties of one particular
+object in a possible world.
+
+Any expression which represents one particular object in the interpreted world
+is called a \textit{term}.  A term can be represented by a constant, a
+variable, or a function which is applied to a tuple of terms.  A term which
+contains no variables is called a \textit{ground term}.  A predicate applied
+to a tuple of terms is called an \textit{atomic formula} or \textit{atom}.
+Correspondingly, if all the arguments of an atomic formula are ground terms,
+this formula can also be called a \textit{ground atom}.
+
+Internally, all formulas of an MLN are later joined to a large single formula
+in the conjunctive normal form (CNF).  The CNF formula represents a single
+conjunction of clauses, where each clause, in turn, is a disjunction of
+literals.
+
+In the next step, the CNF knowledge base is converted to a Markov network
+(MN).  In the constructed network, each possible grounding of each predicate
+in the logical KB is represented as a binary node.  A node takes on the value
+of 1, if its corresponding ground predicate is true, and 0 otherwise.
+Furthermore, nodes of all predicates appearing in same formula are connected
+via edges, thus forming a clique.  MN cliques are direct graphical equivalents
+of logical formulas in the KB and therefore immediate representations of the
+features in graph.  Like ground predicates, features associated with cliques
+take on the value of 1, if their corresponding formulas are true, and 0 if
+formulas are false.  The weight of each feature is the weight of the formula
+in the KB.
+
+The probability distribution over possible worlds $x$ specified by the ground
+Markov network $M$ is estimated using the following formula:
+\begin{equation}
+  P(X=x) = \frac{1}{Z}\left(\sum_i{w_in_i(x)}\right) = %
+    \frac{1}{Z}\prod_i{\phi_i(x_{\{i\}})^{n_i(x)}}
+\end{equation}
+where $n_i$ is the number of true groundings of formula $F_i$ in the given
+world $x$, $x_{\{i\}}$ is the state (truth values) of the predicates appearing
+in $F_i$, and $\phi(x_{\{i\}}) = e^{w_i}$ where $w_i$ is the weight associated
+with the $i$-th formula.
 
 \section{Discourse Analysis}
 
@@ -343,10 +631,10 @@ including:
   \item \textit{main clauses};
   \item \textit{modal subclauses};
   \item \textit{coordinated clauses};
-  \item \textit{embedded segments}, which are segments marked by punctuation
-    (brackets, dashes, or commas) so that they disrupt other EDSs, and which
-    themselves are EDSs. An exception to this form brackets that contain only
-    figures;
+  \item \textit{embedded segments}, which are segments marked by a punctuation
+    mark (brackets, dashes, or commas) so that they on the one hand disrupt
+    other EDSs, and on the other hand are EDSs by themselves.  An exception to
+    this form brackets, that contain only figures;
   \item \textit{quotations} that are delimited by quotation marks and are
     introduced by reporting verbs;
   \item \textit{clausal complements of reporting verbs} such as (meinen,
