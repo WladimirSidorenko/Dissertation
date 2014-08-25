@@ -62,7 +62,7 @@
 \fi
 
 % Seitenränder vorgeben
-\PassOptionsToPackage{left=4cm,top=3cm,right=3cm,bottom=4cm}{geometry}
+\PassOptionsToPackage{left=4cm,top=3cm,right=3cm,bottom=3cm}{geometry}
 \ifx\DOT@geometry\@empty
   \RequirePackage{geometry}
 \else
@@ -93,7 +93,7 @@
       \par\vfil\@Keywords
       \else
       \par\vfil\@Schlagwoerter
-      \fi 
+      \fi
       \endtitlepage}
 \else
   \renewenvironment{abstract}{%
@@ -111,29 +111,29 @@
 
 % Makros zum Einlesen der Metadaten (werden in metadata.tex benutzt)
 \newcommand*{\Anrede}[1]{\gdef\@Anrede{#1}}
-\newcommand*{\Nachname}[1]{\gdef\@Nachname{#1}}
-\newcommand*{\NachnameohneUmlaute}[1]{\gdef\@NachnameohneUmlaute{#1}}
-\newcommand*{\Vorname}[1]{\gdef\@Vorname{#1}}
-\newcommand*{\Geburtsdatum}[1]{\gdef\@Geburtsdatum{#1}}
-\newcommand*{\Geburtsort}[1]{\gdef\@Geburtsort{#1}}
+\newcommand*{\Surname}[1]{\gdef\@Surname{#1}}
+\newcommand*{\SurnameASCII}[1]{\gdef\@SurnameASCII{#1}}
+\newcommand*{\Fname}[1]{\gdef\@Fname{#1}}
+\newcommand*{\DOB}[1]{\gdef\@DOB{#1}}
+\newcommand*{\Birthplace}[1]{\gdef\@Birthplace{#1}}
 
-\newcommand*{\Typ}[1]{\gdef\@Typ{#1}}
-\newcommand*{\Titel}[1]{\gdef\@Titel{#1}}
-\newcommand*{\TitelohneUmlaute}[1]{\gdef\@TitelohneUmlaute{#1}}
-\newcommand*{\Untertitel}[1]{\gdef\@Untertitel{#1}}
+\newcommand*{\Type}[1]{\gdef\@Type{#1}}
+\newcommand*{\Title}[1]{\gdef\@Title{#1}}
+\newcommand*{\TitleASCII}[1]{\gdef\@TitleASCII{#1}}
+\newcommand*{\Subtitle}[1]{\gdef\@Subtitle{#1}}
 
+\newcommand*{\Supervisor}[1]{\gdef\@Supervisor{#1}}
 \newcommand*{\GutachterA}[1]{\gdef\@GutachterA{#1}}
 \newcommand*{\GutachterB}[1]{\gdef\@GutachterB{#1}}
-\newcommand*{\GutachterC}[1]{\gdef\@GutachterC{#1}}
 
-\newcommand*{\Grad}[1]{\gdef\@Grad{#1}}
+\newcommand*{\Degree}[1]{\gdef\@Degree{#1}}
 \newcommand*{\Fach}[1]{\gdef\@Fach{#1}}
-\newcommand*{\Fakultaet}[1]{\gdef\@Fakultaet{#1}}
-\newcommand*{\Universitaet}[1]{\gdef\@Universitaet{#1}}
+\newcommand*{\Faculty}[1]{\gdef\@Faculty{#1}}
+\newcommand*{\University}[1]{\gdef\@University{#1}}
 \newcommand*{\Dekan}[1]{\gdef\@Dekan{#1}}
 \newcommand*{\Rektor}[1]{\gdef\@Rektor{#1}}
 
-\newcommand*{\Abgabedatum}[1]{\gdef\@Abgabedatum{#1}}
+\newcommand*{\SubmissionDate}[1]{\gdef\@SubmissionDate{#1}}
 \newcommand*{\Pruefungsdatum}[1]{\gdef\@Pruefungsdatum{#1}}
 
 \newcommand*{\Schlagwoerter}[1]{\gdef\@Schlagwoerter{#1}}
@@ -147,9 +147,9 @@
 
 \ifpdf
 \PassOptionsToPackage{%
-	pdftitle={\@TitelohneUmlaute},
-	pdfauthor={\@NachnameohneUmlaute},
-	pdfsubject={\@Typ},
+	pdftitle={\@TitleASCII},
+	pdfauthor={\@SurnameASCII},
+	pdfsubject={\@Type},
 	pdfkeywords={\@Keywords},
 	pdfpagemode=UseOutlines,
         colorlinks=true,					% bitte nicht ändern!
