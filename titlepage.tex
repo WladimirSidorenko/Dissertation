@@ -16,13 +16,15 @@
 %----------Generierung der Titelseite------------------------------------------
 
 \makeatletter % Diese Zeile darf nicht geslöscht werden!
-
-\title{\Huge \@Title \\
-\large{\@Subtitle}\\
-\vspace{2cm}
-\@Fname\ \@Surname\\
-\vfill
-\large{\textit{\@Type\ eingereicht bei der \@Faculty\ der \@University}}\\
+\title{
+\titlerule\\
+\Huge \@Title \\
+%% \large{\@Subtitle}\\
+\titlerule\\
+\vspace{0.03\paperheight}
+\large\@Fname\ \@Surname\\
+\vspace{\fill}
+\large{\textit{\@Type\ eingereicht\\ bei der \@Faculty\\ der \@University}}\\
 \vspace{1cm}
 \the\year\\
 }
@@ -31,11 +33,11 @@
 
 \maketitle
 
-\vfill
+\par\vspace*{\fill}
 \raggedright{
 Datum der Einreichung: \@SubmissionDate \\
 \vspace{1cm}
-Betreuer: \@Supervisor\\
+Wissenschaftlicher Betreuer: \@Supervisor\\
 Gutachter: \@GutachterA\\
 \vspace{1cm}
 Tag der m\"undlichen Pr\"ufung: \@Pruefungsdatum
