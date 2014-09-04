@@ -62,7 +62,7 @@
 \fi
 
 % Seitenränder vorgeben
-\PassOptionsToPackage{left=4cm,top=3cm,right=3cm,bottom=3cm}{geometry}
+\PassOptionsToPackage{top=2cm,bottom=2cm,left=2.5cm,right=2cm}{geometry}
 \ifx\DOT@geometry\@empty
   \RequirePackage{geometry}
 \else
@@ -73,7 +73,8 @@
 \listfiles
 
 %-------Absatzformatierung----------------------------------------------------------
-\setlength{\parindent}{5mm}
+\setlength{\parindent}{1.3em}
+\setlength{\parskip}{10pt plus 3pt minus 3pt}
 \renewcommand{\baselinestretch}{1.3} % 1.3-facher Zeilenabstand
 
 %-------Neudefinition der Abstract-Umgebung-----------------------------------------
@@ -295,7 +296,3 @@
 					{Vorsicht, das Paket here ist veraltet und die Verwendung kann Fehler verursachen. Verwenden Sie stattdessen das Paket float.}}
 				{}
 	}
-
-
-
-
