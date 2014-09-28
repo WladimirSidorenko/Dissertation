@@ -19,33 +19,53 @@
 \selectlanguage{english}
 \section*{Abstract}
 \addcontentsline{toc}{section}{Abstract}
-This thesis presents a comprehensive study of political discussions on German
-Twitter from both liguistic and computational points of views.  In our work,
-we investigate how well
+This thesis presents a comprehensive study of politically oriented discussions
+on German Twitter.  In our work, we investigate how much users' conversations
+about political topics on this popular social media platform differ from
+standard language texts found in official documents and newspapers.  We
+perform this analysis from both computational and linguistic perspectives on
+three different NLP-subtasks with distinct levels of granularity.
 
-we analyze political online discourses from both liguistic and
-computational points of views by analyzing manually annotated corpora from the
-linguistic perspective and finding the most efficient solutions for imposed
-questions from the computational perspective.
+On the first level of analysis -- which we also call \emph{subsentential} --
+we investigate how well existing NLP-applications, such as sentence splitters,
+tokenizers, PoS-taggers, and syntactic parsers, perform on tweets and what
+difficulties may be encountered by these tools in short messages which usually
+do not occur in other text genres.  In order to assess the unconventionality
+of Twitter posts quantitatively, we estimate the rate of out-of-vocabulary
+(OOV) tokens in users' messages, classify found OOV's, and suggest several
+techniques of how to deal with such phenomena in order to mitigate their
+negative effect on the performance of NLP-applications.
+
+We then turn to the \emph{sentential} level of automatic text analysis on the
+example of the sentiment extraction task.  Here, we first present a novel
+comprehensive corpus of German tweets manually annotated with fine-grained
+sentiment relations.  From the psychological and linguistic perspectives, we
+first show how difficult the task of sentiment annotation is for humans, what
+language phenomena are typically used to express evaluative opinions, and by
+which linguistic means the polarity and intensity of evaluations can be
+affected.  With these observations in mind, we then demonstrate how well the
+sentiment classification task can be done automatically using machine learning
+and lexicon-based techniques.  In our experiments, we consder three related
+subtasks:
+\begin{inparaenum}[\itshape a)\upshape]
+ \item automatic classification of prior polarity of words,
+ \item machine learning-based prediction of fine-grained sentiment
+ constituents (i.e. opinion holders, targets, and evaluation spans), and,
+ finally,
+ \item automatic detection of sentiment intensity and polarity.
+\end{inparaenum}
+
+In an attempt to improve the performance of our automatic sentiment extraction
+system, we focus our attention on the \emph{suprasentential}
+or \emph{discourse} level of natural language analysis and show how difficult
+the automatic recognition of discourse segments and relations between those
+segments is for Twitter.  In this part of the work, we adapt the traditional
+definition of the rhetorical structure theory (\shortcite{Mann-88}) to the
+peculiarities of tweets and extend this formalism by adding dialogue relations
+for definining relations between tweets.
 
 
-investigate how much the language used on the Web differs
-from standard used in newspaper articles; how strong the ungrammaticality of
-users' posts affects the performace of existing NLP-applications; what ways of
-expressing opionions
-
-the peculiarities of political online
-discourses from both linguistic and computational points of view.
-
-
-We use linguistic knowledge for creating manually annotated text corpora,
-resolving controversial annotation cases and classifying different phenomena
-found in text.  We uilize our knowledge of computational algorithms, data
-structures, and probability theory for finding optimal ways of dealing with
-Twitter-specific phenomena in automatic text processing applications.
-
-We first investigate how much the language used in tweets differs from
-standard German used in newspaper articles.  We do that from both linguistic
-and computational point of view by measuring the rate of out-of-ocabulary
-tokens for two most popular open-source text processing tools
-(\texttt{TreeTagger} \cite{} and \texttt{hunspell})
+In the concluding step, we demonstrate how different levels of analysis might
+beefit from each other by showing the impact of the improvements in low-level
+processing and incorporation of discourse information on the performance of
+the sentiment extraction module.
