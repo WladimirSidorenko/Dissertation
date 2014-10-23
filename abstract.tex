@@ -19,15 +19,73 @@
 \selectlanguage{english}
 \section*{Abstract}
 \addcontentsline{toc}{section}{Abstract}
-This thesis presents a comprehensive study of politically oriented discussions
-on German Twitter.  In our work, we investigate how much users' conversations
-about political topics on this popular social media platform differ from
-standard language texts found in official documents and newspapers.  We
-perform this analysis from both computational and linguistic perspectives on
-three different NLP-subtasks with distinct levels of granularity.
 
-On the first level of analysis -- which we also call \emph{subsentential} --
-we investigate how well existing NLP-applications, such as sentence splitters,
+The growing popularity of online communication platforms along with the
+increasing accessibility of their data to the research community made
+Internet-based conversations (IBC) an attractive research object for many
+scientific disciplines, including economics, political science, sociology etc.
+But dealing with the abundance of unstructured text data in manual way, as it
+used to be the case in several human sciences for many years, is both
+cumbersome and inefficient.  Therefore, if we want to understand the way the
+Internet-aware society works, we urgently need new effecient automatic natural
+language processing (NLP) tools which are able to deal even with such
+``unconventional'' linguistic variations as the Web language.
+
+Unfortunately, until the last few years, online conversations have not
+attracted as much attention of the scientific NLP community as they probably
+deserved.  This concerns both the number of theoretical works dealing with IBC
+and the number of practical applications adapted to the peculiarities of the
+online language.  This situation is even more aggravated for languages other
+than English.  In our thesis, we aim to fill the existing theoretical and
+practical gaps in the research of German Web language.
+
+From the theoretical point of view, we should investigate which linguistic
+phenomena make the Web language different from its canonical variant.  We also
+suggest a linguistically motivated classification of the detected IBC
+phenomena into classes and conduct a quantitative analysis of those classes on
+real corpus data.  By this means, we try to determine which linguistic IBC
+aspects are most productive on the German Web nowadays and which of them have
+the most negative effect on the quality of automatic text processing
+applications.
+
+From the practical perspective, we evaluate the performance of existing NLP
+programs and techiques on online messages.  Then, we investigate possible ways
+to improve that performance and to make NLP technologies more robust and more
+suitable for the new form of language.
+
+The object of our research are user discussions on the
+Twitter\footnote{\url{https://twitter.com}} platform.  Since these discussions
+differ from other forms of conversations in many ways and on all levels of
+language, we also conduct our analysis on several NLP tasks with different
+levels of analysis granularity.  The first level -- which we
+call \emph{subsentential} -- deals with low-level preprocessing and
+segmentation issues for words and sentences.  On the next level of analysis --
+which we refer to as \emph{sentential} -- we concentrate on the opinion
+extraction task also known as sentiment analysis.  Finally, in Chapter \ref{}
+we turn our attention to the problem of discourse analysis, i.e. the problem
+of detecting discourse units and relations between them in text.  We call this
+level \emph{suprasentential}.
+
+We perform our analysis on three different but related analysis subtasks:
+\begin{inparaenum}[\itshape i)\upshape]
+\item low-level pre-processing and segmentation,
+\item sentiment extraction, and
+\item discourse analysis.
+\end{inparaenum}
+For each of these tasks, we estimate the performance of the exisiting NLP
+solutions.  We then make a linguistic analysis of the errors brought along by
+the style and then propose our ways for avoiding those errors.
+
+We first begin with the \emph{subsentential} level of automatic analysis.  At
+this level, we investigate how difficult the automatic segmentation of words
+and sentences is for tweets.  After choosing the best tokenization and
+sentence splitting technique, we then preliminary estimate the performance of
+existing PoS-taggers and syntactic parsers that exist for German.  Since
+Twitter messages are known to contain many nontraditional words or words with
+deviating spelling, we next make an attempt to
+
+On the first level of analysis -- which we call \emph{subsentential} -- we
+investigate how well existing NLP-applications, such as sentence splitters,
 tokenizers, PoS-taggers, and syntactic parsers, perform on tweets and what
 difficulties may be encountered by these tools in short messages which usually
 do not occur in other text genres.  In order to assess the unconventionality
