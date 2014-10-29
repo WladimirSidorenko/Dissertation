@@ -20,110 +20,92 @@
 \section*{Abstract}
 \addcontentsline{toc}{section}{Abstract}
 
-The growing popularity of online communication platforms along with the
-increasing accessibility of their data to the research community made
-Internet-based conversations (IBC) an attractive research object for many
-scientific disciplines, including economics, political science, sociology etc.
-But dealing with the abundance of unstructured text data in manual way, as it
-used to be the case in several human sciences for many years, is both
-cumbersome and inefficient.  Therefore, if we want to understand the way the
-Internet-aware society works, we urgently need new effecient automatic natural
-language processing (NLP) tools which are able to deal even with such
-``unconventional'' linguistic variations as the Web language.
+The growing popularity of online conversation platforms over the last few
+years has lead to a dramatic increase in the amount of unstructured text data
+communicated via these platforms.  As a consequence, dealing with this
+abundance of texts in manual way becomes both cumbersome and inefficient.  But
+the existing natural language processing (NLP) applications do not scale up
+well to the relatively peculiar genre of the online communication either.
+Therefore, we urgently need more robust and more high-quality NLP programs
+that are able to handle even such ``unconventional'' linguistic variations as
+the Web language.  But in order to build such programs, we first need to
+understand the nature of these variations better.
 
-Unfortunately, until the last few years, online conversations have not
-attracted as much attention of the scientific NLP community as they probably
-deserved.  This concerns both the number of theoretical works dealing with IBC
-and the number of practical applications adapted to the peculiarities of the
-online language.  This situation is even more aggravated for languages other
-than English.  In our thesis, we aim to fill the existing theoretical and
-practical gaps in the research of German Web language.
+%% But in order to build a high-quality NLP application for a particular language
+%% form, one should first understand the nature of this
 
-From the theoretical point of view, we should investigate which linguistic
-phenomena make the Web language different from its canonical variant.  We also
-suggest a linguistically motivated classification of the detected IBC
-phenomena into classes and conduct a quantitative analysis of those classes on
-real corpus data.  By this means, we try to determine which linguistic IBC
-aspects are most productive on the German Web nowadays and which of them have
-the most negative effect on the quality of automatic text processing
-applications.
+%% This thesis presents a linguistic and computational study of one of the most
+%% proliferating variants of the German online language -- namely, users'
+%% microblogs (tweets) posted on Twitter.\footnote{\url{https://twitter.com/}}
+%% From the linguistic perspective, we investigate in our work what language
+%% phenomena actually account for the notorious language style of tweets making
+%% it different from the standard German variant, how frequent those phenomena
+%% are,
 
-From the practical perspective, we evaluate the performance of existing NLP
-programs and techiques on online messages.  Then, we investigate possible ways
-to improve that performance and to make NLP technologies more robust and more
-suitable for the new form of language.
+In this thesis, we present a study of one of the most proliferating forms of
+the German online language -- namely, users' conversations on the Twitter
+platform.\footnote{\url{https://twitter.com/}} We investigate the specific
+characteristics of Twitter messages (tweets) from both linguistic and
+computational perspectives.  From the linguistic point of view, we analyze
+which language phenomena actually account for the notoriously peculiar style
+of the tweets, how frequent these phenomena are, and what role they play in
+the online communication.  From the computational perspective, we evaluate to
+what extent differences in the language style can affect the performance of
+the existing NLP approaches and how this performance could be improved for
+social media texts.
 
-The object of our research are user discussions on the
-Twitter\footnote{\url{https://twitter.com}} platform.  Since these discussions
-differ from other forms of conversations in many ways and on all levels of
-language, we also conduct our analysis on several NLP tasks with different
-levels of analysis granularity.  The first level -- which we
-call \emph{subsentential} -- deals with low-level preprocessing and
-segmentation issues for words and sentences.  On the next level of analysis --
-which we refer to as \emph{sentential} -- we concentrate on the opinion
-extraction task also known as sentiment analysis.  Finally, in Chapter \ref{}
-we turn our attention to the problem of discourse analysis, i.e. the problem
-of detecting discourse units and relations between them in text.  We call this
-level \emph{suprasentential}.
-
-We perform our analysis on three different but related analysis subtasks:
-\begin{inparaenum}[\itshape i)\upshape]
-\item low-level pre-processing and segmentation,
-\item sentiment extraction, and
-\item discourse analysis.
-\end{inparaenum}
-For each of these tasks, we estimate the performance of the exisiting NLP
-solutions.  We then make a linguistic analysis of the errors brought along by
-the style and then propose our ways for avoiding those errors.
-
-We first begin with the \emph{subsentential} level of automatic analysis.  At
-this level, we investigate how difficult the automatic segmentation of words
-and sentences is for tweets.  After choosing the best tokenization and
-sentence splitting technique, we then preliminary estimate the performance of
-existing PoS-taggers and syntactic parsers that exist for German.  Since
-Twitter messages are known to contain many nontraditional words or words with
-deviating spelling, we next make an attempt to
-
-On the first level of analysis -- which we call \emph{subsentential} -- we
-investigate how well existing NLP-applications, such as sentence splitters,
-tokenizers, PoS-taggers, and syntactic parsers, perform on tweets and what
-difficulties may be encountered by these tools in short messages which usually
-do not occur in other text genres.  In order to assess the unconventionality
-of Twitter posts quantitatively, we estimate the rate of out-of-vocabulary
-(OOV) tokens in users' messages, classify found OOV's, and suggest several
-techniques of how to deal with such phenomena in order to mitigate their
-negative effect on the performance of NLP-applications.
-
-We then turn to the \emph{sentential} level of automatic text analysis on the
-example of the sentiment extraction task.  Here, we first present a novel
-comprehensive corpus of German tweets manually annotated with fine-grained
-sentiment relations.  From the psychological and linguistic perspectives, we
-first show how difficult the task of sentiment annotation is for humans, what
-language phenomena are typically used to express evaluative opinions, and by
-which linguistic means the polarity and intensity of evaluations can be
-affected.  With these observations in mind, we then demonstrate how well the
-sentiment classification task can be done automatically using machine learning
-and lexicon-based techniques.  In our experiments, we consder three related
-subtasks:
-\begin{inparaenum}[\itshape a)\upshape]
- \item automatic classification of prior polarity of words,
- \item machine learning-based prediction of fine-grained sentiment
- constituents (i.e. opinion holders, targets, and evaluation spans), and,
- finally,
- \item automatic detection of sentiment intensity and polarity.
+We conduct our study on three different levels of analysis granularity:
+\begin{inparaenum}[\itshape a\upshape)]
+    \item the \emph{subsentential},
+    \item the \emph{sentential}, and
+    \item the \emph{suprasentential} one.
 \end{inparaenum}
 
-In an attempt to improve the performance of our automatic sentiment extraction
-system, we focus our attention on the \emph{suprasentential}
-or \emph{discourse} level of natural language analysis and show how difficult
-the automatic recognition of discourse segments and relations between those
-segments is for Twitter.  In this part of the work, we adapt the traditional
-definition of the rhetorical structure theory (\shortcite{Mann-88}) to the
-peculiarities of tweets and extend this formalism by adding dialogue relations
-for definining relations between tweets.
+In the first (\emph{subsentential}) stage of our research, we investigate how
+difficult the task of automatic low-level segmentation (i.e. automatic
+detection of word and sentence boundaries) is for tweets.  After that, we turn
+to the analysis of spelling deviations which are knowingly ubiquituous in
+Twitter messages.  In order to estimate how aggravated this problem is, we
+collect statistics of the most frequent out-of-vocabulary words drawn from a
+sample of users' posts; classify these words into three major classes (regular
+German words omitted from dictionaries, stylistic specifics of text genre, and
+true spelling deviations), and calculate how frequent each of these classes
+are.  We then present possible strategies for handling the latter two groups
+(rule-based normalization of stylistic specifics and hybrid correction of
+spelling mistakes).  In the description of related work, we also juxtapose two
+general approaches to handling noisy texts -- text normalization and domain
+adaptation -- and analyze the pros and cons of these approaches.
 
+On the \emph{sentential} level, we concentrate on the task of automatic
+sentiment analysis in sentences.  Here, we first present a comprehensive
+corpus of German tweets which were manually annotated with fine-grained
+sentiment relations.  We then conduct an agreement study of this corpus in
+order to evaluate how difficult the sentiment analysis task is for humans and
+what sentiment elements, text topics, and tweet types are most difficult to
+annotate.  After this, we demonstrate how well the sentiment classification
+task can be done automatically using machine learning and lexicon-based
+techniques.  In our experiments, we consider three related subtasks:
+\begin{inparaenum}[\itshape a\upshape)]
+ \item automatic classification of polar words,
+ \item automatic detection of sentiment constituents (i.e. opinion holders,
+ targets, and evaluation spans), and, finally,
+ \item automatic prediction of the intensity and polarity of sentiments.
+\end{inparaenum}
 
-In the concluding step, we demonstrate how different levels of analysis might
-beefit from each other by showing the impact of the improvements in low-level
-processing and incorporation of discourse information on the performance of
-the sentiment extraction module.
+On the \emph{suprasentential} or \emph{discourse} level of the analysis, we
+focus our attention on the task of automatic discourse segmentation and
+relation extraction.  We first try to apply the ideas of the classical
+Rhetorical Structure Theory \citep{Mann-88} to Twitter conversations.  Since
+this theory, however, was primarily developed for official monologue texts
+rather than casual multilogues like the ones found on Twitter, several
+refinements and extensions to this framework turned out to be necessary.
+These refinements primarily concerned the definition of elementary discourse
+units (EDUs) for such Twitter-specific elements like @-mentions, hyperlinks,
+hashtags etc.  Furthermore, several additions to the discourse relations set
+were needed in order to cover the inter-tweet relationships.  After defining
+these extensions, we then evaluate methods and strategies for automatically
+detecting EDU boundaries and succeeding discourse parsing on Twitter.
+
+In the concluding step, we investigate how using text normalization, on the
+one hand, and incorporating discourse information, on the other, can help us
+improve the results of sentence-level sentiment analysis.
