@@ -2,79 +2,60 @@
 % AUTHOR: Uladzimir Sidarenka
 
 % This is a modified version of the file main.tex developed by the
-% University Duisburg-Essen, Duisburg, AG Prof. Dr. Günter Törner
+% University Duisburg-Essen, Duisburg, AG Prof. Dr. GÃ¼nter TÃ¶rner
 % Verena Gondek, Andy Braune, Henning Kerstan Fachbereich Mathematik
 % Lotharstr. 65., 47057 Duisburg entstanden im Rahmen des
 % DFG-Projektes DissOnlineTutor in Zusammenarbeit mit der
 % Humboldt-Universitaet zu Berlin AG Elektronisches Publizieren Joanna
 % Rycko und der DNB - Deutsche Nationalbibliothek
 
-\chapter*{Introduction}
-%% \epigraph{\itshape Romance should never begin with sentiment. It should begin
-%%   with science and end with a settlement.}{Oscar Wilde: \textit{An Ideal
-%%     Husband}}
+\chapter{Introduction}
+
+\section{Overview}
+As social media become more and more ubiquitous nowadays, the need for
+automatic analysis of their data rises.  But this analysis is greatly
+exacerbated by the fact that the language used in these media is fundamentally
+different from the one used in newspapers or scientific articles.  As we shall
+see later in this work, some researchers consider the discrepancies between
+the two language variants so overwhelming that they even suggest using a
+machine translation approach in order to transform one form into another
+\citep[cf.][]{Aw:06,Pennell:11}.
+
+Indeed, messages like the tweets in Example \ref{intro:exmp:tweets:en} are
+arguably hard to understand even for humans, let alone computer programs.
+\begin{example}\label{intro:exmp:tweets:en}
+Boom! Ya ur website suxx bro {\upshape (Sarah Silverman)}
+
+\dots dats why pluto is pluto it can neva b a star {\upshape (Shaquille o'Neil)}
+\end{example}
+But even though almost everyone today agrees that the language of the Web is
+different, not to say \emph{bad}, no formal definition exists until today of
+what this difference actually is, how it is expressed, and no ultimate answer
+is given to the question of what one should do about this difference.
 
 
-The growing popularity of online conversation platforms along with the
-increasing accessibility of their data to the research community made
-Internet-based communication (IBC) an attractive research object for many
-scientific disciplines, including economics, political science, sociology etc.
-But dealing with the abundance of unstructured text data in manual way, as it
-used to be the case in several human sciences for many years, is both
-cumbersome and inefficient.  Therefore, if we want to understand the way the
-Internet-aware society works, we urgently need new effecient automatic natural
-language processing (NLP) tools which are able to deal even with such
-``unconventional'' linguistic variations as the Web language.
+As noted by \cite{Eisenstein:13}, ``the rise of social media has brought
+computational linguistics to ever-closer contact with \emph{bad language}:
+text that defies our expectations about vocabulary, spelling, and syntax.''
+To prove his statement, the author gives the following examples of tweets
+posted by american celebrities:
 
-Unfortunately, until the last few years, online conversations have not
-attracted as much attention of the scientific NLP community as they probably
-deserved.  This concerns both the number of theoretical works and the number
-of practical applications adapted to the peculiarities of the online language.
-Furthermore, this situation becomes even more aggravated for languages other
-than English.  In our thesis, we aim to fill the existing theoretical and
-practical gaps in the research of the German Web sociolect.  We conduct our
-analysis on the basis of Twitter\footnote{\url{https://twitter.com/}}
-microblogs.  The reason for choosing this platform is, on the one hand, its
-rapidly growing popularity and, on the other hand, the richness of its
-messages in many diverse IBC phenomena.
-%% The reasons for choosing this type of social media were, on the one hand,
-%% the rapidly growing popularity of the platform and, on the other hand, the
-%% high density and diversity of IBC phenomena in users' posts found there.
+\begin{example}
+Boom! Ya ur website suxx bro {\upshape (Sarah Silverman)}
 
-From the linguistic perspective, we investigate which language features
-actually account for the peculiarities of the online sociolect making it
-different from the standard language form.  From the computational
-perspective, we analyze how these features affect the performance of existing
-NLP applications and how this performance could be improved.  And since
-language is not a uniform object but much more a hierarchical system, we also
-perform our study on three different levels of the linguistic analysis:
-\begin{inparaenum}[i)]
-        \item the \emph{subsentential},
-        \item the \emph{sentential}, and
-        \item the \emph{suprasentential} one.
-\end{inparaenum}
+... dats why pluto is pluto it can neva b a star {\upshape (Shaquille o'Neil)}
+\end{example}
+These messages are arguably hard to understand even for humans, let alone
+computer programs.  But while almost everyone today agrees that the language
+of the Web is essentially \emph{different} from the standard norm, not to say
+\emph{bad}, no one can precisely define what this \emph{difference} or
+\emph{badness} actually is, what it is caused by, and how it, in fact, affects
+the analysis.
 
 
-%% When Oscar Wilde's famous masterpiece ``An Ideal Husband'' was first performed
-%% on the stage in 1895, its audience hardly knew anything about the Internet,
-%% Twitter or any other kind of social networks. What people at that time,
-%% however, knew about was politics and what they felt were real emotions.
-
-%% Today, the world has changed.  It is now much more likely to meet a person who
-%% knows almost everything about followers, likes and re-tweets on Twitter or
-%% Facebook than one who knows who Oscar Wilde is or who cares about political
-%% issues in the local government.
-
-%% The worlds did not diverge completely though.  There are still people
-%% interested in political maters and many of them are also fimiliar with the
-%% Internet-based communication means.  But even more important is that we still
-%% feel emotions, only that the ways of expressing our feelings have probably
-%% changed -- from face to face to screen to screen mode.
-
-%% This dissertation investigates the cut surface of emotions, politics, and
-%% web-based talks.
-
-\section{Terminology}
-\section{Hypotheses}
-\section{Methodology}
-\section{Research Overview}
+Another question which is closely related with the previous ones is what one
+should do about the \emph{badness} of casual online texts.  Should it be
+curated or should it be accepted as is, following the famous ``that's not a
+bug, that's an undocumented feature!'' approach.  As we should see later, this
+question remains unsolved untill today, though both approaches have their
+distinct pros and contras.
