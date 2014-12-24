@@ -14,34 +14,118 @@
 \section{Overview}
 As social media become more and more ubiquitous nowadays, the need for
 automatic analysis of their data rises.  This analysis, however, is greatly
-exacerbated by the fact that the language form used on the Web is
-fundamentally different from the linguistic norm that is common in newspapers
-or scientific articles.  Indeed, sentences like the ones shown in Example
-\ref{intro:exmp:tweets:en} (taken from \citet{Eisenstein:13}) are highly
-unlikely to appear in editorials or official documents even though their
-wording is commonplace on the U.S. English Twitter.
+exacerbated by the fact that the language style used on the Web is
+fundamentally different from the linguistic standard that is typical for
+newspapers or scientific articles.  Indeed, sentences like the ones shown in
+Example \ref{intro:exmp:tweets:en} (taken from \citet{HanBaldwin:11}) are
+highly unlikely to appear in editorials or official documents even though
+their wording is commonplace on the U.S. English Twitter.
 \begin{example}\label{intro:exmp:tweets:en}
-Boom! Ya ur website suxx bro {\upshape (Sarah Silverman)}
+u must be talkin bout the paper but I was thinkin movies
 
-\dots dats why pluto is pluto it can neva b a star {\upshape (Shaquille o'Neil)}
+\dots so hw many time remaining so I can calculate it?
 \end{example}
-Similar differences between Web sociolects and established linguistic
-standards can be observed in other languages too, and German is not an
-exception.
+Similar discrepancy between these two genres can be observed in other
+languages too, and German is not an exception.
 
-Thus far,
+Until recently, however, the alleged difficulty of the online style for the
+automatic processing has rather been a conjecture than a proven fact.  Proving
+or disproving this conjecture is precisely one of the major goals of this
+dissertation.  But before we start addressing this goal, we first need to
+clarify some methodological aspects that are closely related to it.
 
-Of course, one would expect that most of the existing NLP tools -- the vast
-majority of which was created for and trained only on standard language data
--- would not perform as well on text forms that only vaguely resemble their
-originally intended domain.  But thus far, this hypothesis has only been a
-conjecture.  And one of the major goals of this thesis is to check the
-validity of this conjecture.
+First of all, we should note that in order to assess the impact of stylistic
+peculiarities on the performance of automatic text applications, we need to
+answer the question of what these peculiarities actually are, i.e. which
+linguistic phenomena in fact contribute to the idiosyncracy of the online
+genre.  In order to answer this question, we should conduct an extensive study
+of out-of-vocabulary (OOV) words found in Twitter microblogs and divide found
+OOVs into separate classes depending on their word formation type.  Then, we
+shall investigate which of the suggested classes are typical only for the
+online language and which are common for all text genres.
 
-But previously to drawing any conclusions about whether the social media genre
-is principally less or more amenable to the automatic processing, a number of
-methodologically important questions need to be addressed and clarified.
+Secondly, after determining the Web-specific elements, we should
+\begin{inparaenum}[\itshape a)\upshape]
+\item investigate the effect of those elements on the automatic analysis and
+\item find an efficient strategy for mitigating the negative consequences of
+  that effect.
+\end{inparaenum}
+For solving the former task, we will compare the performance of the existing
+NLP methods obtained on standard language texts with their respective results
+achieved on microblog messages.  For solving the latter task, we will first
+introduce two general techniques that are commonly used in computational
+linguistics for adjusting existing NLP tools to new domains.  These techniques
+are called \emph{domain adaptation} and \emph{text normalization}.  We will
+briefly describe each of them and shortly point out their strengths and
+weaknesses.  After that, we will mainly concentrate on the latter method --
+the \emph{text normalization}.
 
+In this task, our goal will be to provide a formal definition of the text
+normalization task with regard to Twitter specifics.  As we should see later
+and as is also confirmed by \citet{Eisenstein:13}, it will turn out to be
+surprisingly difficult to find a precise definition of the normalization.  The
+reason for it lies in the fact that the notion of the language ``norm'' by
+itself appears to be lax and slippery.
+
+After providing a working definition of normalization, our next goal will be
+to investigate different normalization strategies and to find out which of
+these strategies are most suitable for treating Twitter-specific phenomena.
+This, of course, would not be possible without an appropriate evaluation
+metric.  % for measuring how good the performed normalization is.
+We will first rely on purely intrisic (\emph{in vitro}) metrics which measure
+the normalization quality on its own.
+
+For sure, an in vitro evaluation measure can tell much about the quality of
+the performed preprocessing.  But like for many other NLP-related tasks, a
+good performance of a standalone module does not necessarily lead to an equal
+quality improvement in further downstream processing.  This is especially true
+for the text normalization task whose mere positive effect on the subsequent
+analysis is often called into question.  \citet{DuBois:07}, for example,
+claims that language variation serves a pragmatic and/or stancetaking function
+and, consequently, eliminating variation would strip those additional layers
+of meaning.  \citet{BrodyDiakopoulos:11} provide a concrete example showing
+that intentional prosidic lengthenings of words are often a vivid indicator of
+opinionated sentences and keeping these elongations in text would result in
+better sentiment analysis.
+
+At this point, we arrive at the third methodological aspect that we need to
+address.  Deciding whether Twitter-genre is more or less amenable to automatic
+processing and evaluating the effects of text normalization should be done by
+inspecting different levels of automatic linguistic analysis.  Because
+language is not a uniform object but much more a complex hierarchical
+structure, we cannot draw an overall conclusion about its difficulty in
+general, if we only inspect one of its multiple levels.  In this work, we
+decided to concentrate on three levels:
+\begin{inparaenum}[\itshape i)\upshape]
+  \item subsentenial (on the example of sentence splitting and tokenization),
+  \item sentential (on the example of fine-grained sentiment analysis), and
+  \item the suprasentential or discourse level (on the example of discourse
+    segmentation and parsing).
+\end{inparaenum}
+
+For each of these levels, we will perform automatic analyses of standard
+language texts and compare their results with figures obtained on Twitter
+corpora.  Since annotated Twitter data are still scarce, we had to develop our
+own corpus for each of the above tasks.  In this work, we will briefly discuss
+the annotation scheme, the format, the selection criteria and several other
+issues involved in the creation of each of these corpora.
+
+Finally, we should note that all evaluations of automatic results should be
+done only with respect to the difficulty of that particular tasks for humans.
+For this purpose, we will conduct and present extensive inter-annotator
+agreement studies for each of our presented corpora and also discuss which
+elements, topics, and other linguistic criteria caused most difficulties
+during the annotation procedure.  We will then compare the results of the
+automatic systems with the results obtained of the inter-annotator agreement
+in order to compare how better or worse an automatic system works if compared
+to humans.
+
+In the concluding part of our dissertation, we will summarize our results
+obtained in each chapter and also investigate how different levels of
+automatic analysis might benefit form each other, and how text normalization
+procedure affects the final results.
+
+\section{Research Object, Methods, and Goals}
 First of all, in this work, we should only concentrate on German Twitter data.
 The justification for choosing precisely this genre as typical representative
 of the ensemble of online languages is given in Section
@@ -49,43 +133,4 @@ of the ensemble of online languages is given in Section
 differences of Twitter data from the standard language texts and the impact of
 these differences on the performace of NLP applications.
 
-To this end, we will first perform an extensive analysis
-
-As we shall see later in this work, some researchers consider the
-discrepancies between the two language variants so overwhelming that they even
-suggest using a machine translation approach in order to transform one form
-into another \citep[cf.][]{Aw:06,Pennell:11}.
-
-Indeed, messages like the tweets in Example \ref{intro:exmp:tweets:en} are
-arguably hard to understand even for humans, let alone computer programs.
-But even though almost everyone today agrees that the language of the Web is
-different, not to say \emph{bad}, no formal definition exists until today of
-what this difference actually is, how it is expressed, and no ultimate answer
-is given to the question of what one should do about this difference.
-
-
-As noted by \cite{Eisenstein:13}, ``the rise of social media has brought
-computational linguistics to ever-closer contact with \emph{bad language}:
-text that defies our expectations about vocabulary, spelling, and syntax.''
-To prove his statement, the author gives the following examples of tweets
-posted by american celebrities:
-
-\begin{example}
-Boom! Ya ur website suxx bro {\upshape (Sarah Silverman)}
-
-... dats why pluto is pluto it can neva b a star {\upshape (Shaquille o'Neil)}
-\end{example}
-These messages are arguably hard to understand even for humans, let alone
-computer programs.  But while almost everyone today agrees that the language
-of the Web is essentially \emph{different} from the standard norm, not to say
-\emph{bad}, no one can precisely define what this \emph{difference} or
-\emph{badness} actually is, what it is caused by, and how it, in fact, affects
-the analysis.
-
-
-Another question which is closely related with the previous ones is what one
-should do about the \emph{badness} of casual online texts.  Should it be
-curated or should it be accepted as is, following the famous ``that's not a
-bug, that's an undocumented feature!'' approach.  As we should see later, this
-question remains unsolved untill today, though both approaches have their
-distinct pros and contras.
+\section{Contributions and Outline of This Work}
