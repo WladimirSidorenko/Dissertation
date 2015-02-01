@@ -22,15 +22,15 @@
 
 The growing popularity of online conversation platforms over the last few
 years has lead to a dramatic increase in the amount of unstructured text data
-communicated through these platforms.  Dealing with this abundance of data in
-manual way becomes fairly impossible nowadays.  But, unfortunately, existing
-natural language processing (NLP) applications -- most of which were created
-for standard language texts -- cannot handle the relatively peculiar genre of
-casual online conversations sufficiently good either.  Therefore, we urgently
-need other, more robust and more high-quality NLP programs which are able to
-process even such ``unconventional'' linguistic variants as the Web language.
-But in order to build them, we first need to understand the nature of these
-variants better.
+communicated through these platforms.  As a consequence, dealing with this
+abundance of texts in manual way becomes fairly impossible nowadays.  But,
+unfortunately, existing automatic natural language processing (NLP) tools --
+most of which were created for standard language texts -- cannot handle the
+relatively peculiar genre of casual online conversations sufficiently good
+either.  Therefore, we urgently need other, more robust and more high-quality
+NLP applications which are able to process even such ``unconventional''
+linguistic variants as the Web language.  But in order to build them, we first
+need to understand the nature of these variants better.
 
 %% But in order to build a high-quality NLP application for a particular language
 %% form, one should first understand the nature of this
@@ -47,13 +47,13 @@ In this thesis, we present a study of one of the most proliferating forms of
 the German online language -- namely, users' conversations on the Twitter
 platform.\footnote{\url{https://twitter.com/}} We investigate the specific
 characteristics of Twitter messages (tweets) from both linguistic and
-computational perspectives.  From the linguistic point of view, we analyze
-which language phenomena actually account for the notoriously peculiar style
-of tweets, how frequent those phenomena are, and what role they play in the
-online communication.  From the computational perspective, we evaluate to what
+computational sides.  From the linguistic perspective, we analyze which
+language phenomena actually account for the notoriously peculiar style of
+tweets, how frequent those phenomena are and what role they play in the online
+communication.  From the computational point of view, we evaluate to what
 extent differences in the language style can affect the performance of the
 existing NLP approaches and what techniques could help improve this
-performance.
+performance in future.
 
 We conduct our study on three different levels of analysis granularity:
 \begin{inparaenum}[\itshape a\upshape)]
@@ -68,21 +68,21 @@ detection of word and sentence boundaries) is for tweets.  After that, we turn
 to the analysis of spelling deviations which are knowingly ubiquituous in
 Twitter messages.  In order to estimate how aggravated this problem is, we
 collect statistics of the most frequent out-of-vocabulary words drawn from a
-sample of users' posts; classify these words into three major classes (regular
-German words omitted from dictionaries, stylistic specifics of text genre, and
-true spelling deviations), and calculate how frequent each of these classes
-are.  We then present possible strategies for handling the latter two groups
-(rule-based normalization of stylistic specifics and hybrid correction of
-spelling mistakes).  In the description of related work, we also juxtapose two
-general approaches to handling noisy texts -- text normalization and domain
-adaptation -- and analyze the pros and cons of these approaches.
+sample of users' messages; classify these words into three major classes
+(regular German words omitted from dictionaries, stylistic specifics of text
+genre, and true spelling deviations), and calculate how frequent each of these
+classes are.  We then present possible strategies for handling the latter two
+groups (rule-based normalization of stylistic specifics and hybrid correction
+of spelling mistakes).  In the description of the related work, we also
+juxtapose two general approaches to handling noisy texts -- text normalization
+and domain adaptation -- and analyze the pros and cons of these approaches.
 
 On the \emph{sentential} level, we concentrate on the task of automatic
 sentiment analysis in sentences.  Here, we first present a comprehensive
 corpus of German tweets which were manually annotated with fine-grained
 sentiment relations.  We then conduct an agreement study of this corpus in
 order to evaluate how difficult the sentiment analysis task is for humans and
-what sentiment elements, text topics, and tweet types are most difficult to
+which sentiment elements, text topics, and tweet types are most difficult to
 annotate.  After that, we demonstrate how well the sentiment classification
 task can be done automatically using machine learning and lexicon-based
 techniques.  In our experiments, we consider three related subtasks:
@@ -98,16 +98,16 @@ focus our attention on the task of automatic discourse segmentation and
 relation extraction.  We first try to apply the ideas of the classical
 Rhetorical Structure Theory \citep{Mann-88} to Twitter conversations.  Since
 this theory, however, was primarily developed for official monologue texts
-rather than casual multilogues like the ones found on Twitter, several
-refinements and extensions to this framework turned out to be necessary.
-These refinements primarily concern the definition of elementary discourse
-units (EDUs) for such Twitter-specific elements as @-mentions, hyperlinks,
-hashtags etc.  Furthermore, as we show, several additions to the discourse
-relations set are needed in order to cover the inter-tweet relationships.
-After defining these extensions, we evaluate different methods and strategies
-for automatically detecting EDU boundaries and doing discourse parsing on
-Twitter.
+rather than casual multilogues, several refinements and extensions to this
+framework turned out to be necessary for analyzing Twitter discourses.  These
+refinements primarily concern the definition of elementary discourse units
+(EDUs) for such Twitter-specific elements as @-mentions, hyperlinks, hashtags
+etc.  Furthermore, as we show, several additions to the discourse relations
+set are needed in order to cover the interplay between discourse segments both
+within and across the tweets.  After defining these extensions, we evaluate
+different methods and strategies for automatically detecting EDU boundaries
+and discourse structures in microblogs.
 
-In the concluding step, we investigate how using text normalization, on the
-one hand, and incorporating discourse information, on the other, can help us
+In a concluding step, we investigate how using text normalization, on the one
+hand, and incorporating discourse information, on the other hand, can help us
 improve the results of sentence-level sentiment analysis.

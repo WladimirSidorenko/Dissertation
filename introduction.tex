@@ -14,25 +14,74 @@
 \section{Overview}
 As social media become more and more ubiquitous nowadays, the need for
 automatic analysis of their data rises.  This analysis, however, is greatly
-exacerbated by the fact that the language style used on the Web is
-fundamentally different from the linguistic standard that is typical for
-newspapers or scientific articles.  Indeed, sentences like the ones shown in
-Example \ref{intro:exmp:tweets:en} (taken from \citet{HanBaldwin:11}) are
-highly unlikely to appear in editorials or official documents even though
-their wording is commonplace on the U.S. English Twitter.
+aggravated by the fact that the language style used on the Web is
+fundamentally different from the style that is typical for newspapers or
+scientific articles.  Indeed, sentences like the ones shown in Example
+\ref{intro:exmp:tweets:en} (taken from \citet{HanBaldwin:11}) are highly
+unlikely to appear in editorials or government documents even though their
+wording is commonplace on the U.S. English Twitter.
 \begin{example}\label{intro:exmp:tweets:en}
 u must be talkin bout the paper but I was thinkin movies
 
 \dots so hw many time remaining so I can calculate it?
 \end{example}
-Similar discrepancy between these two genres can be observed in other
+Similar discrepancies between the formalism of the official style and the
+casual nature of spontaneous Web conversations can be observed in other
 languages too, and German is not an exception.
 
-Until recently, however, the alleged difficulty of the online style for the
-automatic processing has rather been a conjecture than a proven fact.  Proving
-or disproving this conjecture is precisely one of the major goals of this
-dissertation.  But before we start addressing this goal, we first need to
-clarify some methodological aspects that are closely related to it.
+It is, however, unclear whether the idiosyncracies of the online style should
+be considered as a drawback or an advantage for the automated language
+analysis.  While most of the NLP-researchers tend to consider these
+peculiarities as a hindrance and even suggest converting online texts to a
+more standard language-like form before doing any processing (cf. relevant
+works in Section \ref{sec:normalization:relwork}), other scientists at least
+object that a straightforward normalization would loose many significant
+details and therefore lead to a decrease in the performance.
+\citet{BrodyDiakopoulos:11}, for example, claim that the intentional prosodic
+lengthenings of the words (like, for example, \texample{sooooooo strong} or
+\texample{coooolllllll}) are often a vivid indicator of opinionated sentences
+and keeping these elongations in text would result in better sentiment
+analysis.  \citet{Collister:11,Collister:12} also notes that the online
+discourse deictics like, for instance, \texample{\upshape <--} (the arrow),
+\texample{\upshape\^{}} (the carat), and \texample{\upshape *} (the asterisk)
+might play an important pragmatic role and this should also be taken into
+account when analyzing text.  Furthermore, as noted by \citet{Eisenstein:13},
+even in many cases of lexical normalization, changing a colloquial variant of
+an expression to its standard language counterpart often involves a
+considerable shift in its original meaning.
+
+\paragraph{Goals.}
+
+Providing an answer to the question whether the stylistic peculiarities of the
+online language do more harm or good to the automated analysis is precisely
+one of the major goals of this dissertation.  We cannot, however, achieve this
+goal without realizing first what these stylistic peculiarities in fact are.
+That means our first and primary objective is \emph{to find out linguistic
+  phenomena that actually account for the idiosyncracies of the Web genre}.
+
+After doing so, the next question that naturally arises is what to do about
+these idiosyncrasies -- should we leave them unchanged or should we process
+them in some special way and, if so, what this special way might look like?
+Thus, the second preliminary objective is \emph{}
+
+
+Of course, this answer can only be obtained on the basis of empirical results.
+
+can only be
+given on the basis of the empirical results.  But before obtaining such
+results, one first needs to realize what these peculiarities actually are,
+i.e. which linguistic phenomena in fact contribute to the idiosyncracy of the
+Web genre.  Finding those phenimena is precisely one of the major goals of
+this dissertation.
+
+
+
+\paragraph{Goals.}
+
+\paragraph{Research objects.}
+
+But before we start addressing our goals, we first would like to clarify some
+methodological aspects that are related to our research.
 
 First of all, we should note that in order to assess the impact of stylistic
 peculiarities on the performance of automatic text applications, we need to
