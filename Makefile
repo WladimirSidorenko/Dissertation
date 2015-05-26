@@ -18,6 +18,7 @@ LITERATURE_OVERVIEW = ${BIBDIR}/literature_overview.pdf
 all: thesis literature_overview
 
 clean: clean_thesis clean_literature_overview
+	-rm -f *.log *.aux *.out *.bbl *.lof *.blg
 
 ##################################################################
 # Thesis
