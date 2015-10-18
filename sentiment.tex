@@ -13,7 +13,7 @@
 
 \section{Introduction to Sentiment Analysis}
 
-Interpersonnel communication is not only a way to share objective
+Interpersonal communication is not only a way to share objective
 information with other people but also a vibrant channel to convey
 one's subjective thoughts, attitudes, and feelings.  It is, in fact,
 this latter use which provides a personal touch to our discourses,
@@ -26,11 +26,11 @@ facts.
 
 The field of knowledge which deals with the analysis of people's
 opinions, sentiments, evaluations, appraisals, attitudes, and emotions
-towards particular entities in discourse is called \emph{sentiment
-  analysis} (SA) \citep{Liu:12}.  The definition of this discipline,
-however, much like the definition of the term \emph{sentiment} itself
-is neither complete nor universally accepted.  The main reasons for
-these controversies are
+towards particular entities mentioned in discourse is called
+\emph{sentiment analysis} (SA) \citep{Liu:12}.  The definition of this
+discipline, however, much like the definition of the term
+\emph{sentiment} itself is neither complete nor universally accepted.
+The main reasons for these controversies are
 \begin{inparaenum}[\itshape i)\upshape]
   \item a frequently unclear delimitation of the subjective and
     objective components of information and
@@ -38,74 +38,79 @@ these controversies are
     are applied.
 \end{inparaenum}
 
-The former factor, for instance, makes it difficult to define what
-kinds of events ans expressions actually fall in the domain of
-sentiment analysis and which ones should rather be excluded from it.
-A prominent example of such borderline cases are the so-called
-subjective facts such as \emph{bomb attack} or \emph{cancer treatment}
-which some people perceive as emotionally laden while the other do
-not.
+The former factor, for instance, makes it difficult to delimitate what
+kinds of events and expressions should actually belong to the domain
+of sentiment analysis and which ones shall rather be excluded from it.
+A prominent example of such problematic borderline cases are the
+so-called subjective facts, such as \emph{terrorist attacks} or
+\emph{cancer drugs}, which some people perceive as emotionally laden
+terms while others regard them as purely objective statements.
 
-The latter factor complicates a precise definition, since different
-levels of language have their own concepts of subjectivity which in
-turn require different approaches and methods of analysis.  Typically,
-depending on the granularity and language level being analyzed,
-researchers distinguish the following subdisciplines of SA:
+The latter factor complicates a precise definition of SA because
+different levels of language have their own concepts of subjectivity,
+which in turn require different approaches and methods of analysis.
+Depending on the language level being analyzed, researchers typically
+distinguish three different subtypes of sentiment analysis:
 \begin{itemize}
-  \item\emph{subsentential} of \emph{fine-grained} sentiment analysis
-    whose task is to determine and analyze specific subjective
-    opinions and/or evealuations within single clauses,
+  \item\emph{subsentential} of \emph{fine-grained} SA whose task is to
+    determine and analyze specific subjective opinions and/or
+    evealuations within single clauses,
   \item\emph{sentential} analysis which tries to ascribe a single
-    polarity class to each sentence in text, and
+    polarity class to each sentence in a text, and
   \item\emph{suprasentential} or \emph{document-level} sentiment
-    classification which seeks to determine polarity and subjectivity
-    classes of complete discourses.
+    classification which seeks to determine the polarity and
+    subjectivity classes of complete discourses.
 \end{itemize}
 
-Each of these subfields has its own assets and drawbacks.
+Each of these subtypes has its own characteristic strengths and
+weaknesses.  The fine-grained SA, for example, is typically considered
+to be the ultimate goal of any opinion mining\footnote{Following
+  \citet{Liu:12}, we do not make a distinction between the terms
+  \emph{opinion mining} and \emph{sentiment analysis} in this thesis
+  and use both names interchangeably in our work.}  system as it aims
+at the highest possible recall of all subjective expressions occurring
+in text.  At the same time, this task is unfortunately very
+challenging even for human beings, as we will show in Section
+\ref{sec:corpus}, let alone computer programs.  The consequently low
+results often prevent subsentential SA systems from being used in
+industrial applications.
 
-that is
-being analyzed.  Typical subsentential, sentential, and
-supersentential SA.  The first sub-field (also calles fine-grained SA)
-seeks to determine and analyze specific subjective opinions and/or
-evealuations within single clauses.  The last two (coarse-grained
-approaches) rely on the assumption that a single polarity or emotion
-class can be ascribed to each sentence or text respectively, which
-they then try to determine.
+The last two subdisciplines (sentential and document-level sentiment
+analyses) can be considered as approximations of the first one.  They
+coarsen the targeted recall down to the level of sentences or texts
+respectively, assuming that there can be only one (most prominent)
+expression of subjectivity per analyzed unit.  In contrast to
+fine-grained SA, these approaches typically yield better results but,
+again, this improvement comes at the cost of loosing some important
+details.
 
-Each of these sub-fields has its own strengths and weaknesses.  While
-fine-grained SA typically represents the ultimate goal of the opinion
-research, achieving this goal often is a challenging endeavor even for
-human beings let alone computer programs.  In this regard, the
-coarse-grained methods usually show much better results but this
-success comes at the costs of loosing important details of
-information. So, for example, when one ascribes a single polarity
-class to a complete sentence or even text, any contradicting
+As it can be seen, speaking of the difficulty or easiness of sentiment
+analysis for a specific domain in general is in the same way wrong as
+judging about the amenability of this domain to natural language
+processing: one always has to specify the level of granularity that
+the SA system under scrutiny is dealing with as she has to specify the
+particular NLP task whose difficulty is estimated.
 
-But despite a relatively long history of this research area with the
-first works dating back to the early 1990s \cite{Wiebe:90a,Wiebe:90b},
-neither a precise delimitation of this discipline nor a universally
-accepted definition of sentiment exists to date.  The reasons for
-these difficulties are mostly due to two factors:
-\begin{inparaenum}[\itshape a)\upshape]
-  \item the mere term \emph{sentiment} is ambiguos and subjective by
-    itself (i.e. it is interpreted different by different people)
-\end{inparaenum}
-
-
-More precisely, sentiment analysis or opinion mining is a subfield of
-computational linguistics (CL) which deals with TODO: add definition from
-Liu\dots.  But like for many other branches of CL, giving a precise complete
-definition of SA is a difficult.  These difficulties arise for two reasons:
-\begin{inparaenum}
-  \item
-\end{inparaenum}
+In this chapter, we will primarily concentrate on the most challenging
+SA objective -- that of the fine-grained SA.  After a brief summary of
+related work done on the opinion mining for social media so far, we
+will introduce a comprehensive corpus of German tweets that has been
+created as part of this work.  A detailed inter-annotator agreement
+study of this dataset will reveal which linguistic and
+extra-linguistic factors significantly influence the distribution of
+sentiments in Twitter and which of them cause utter confusion among
+human experts.  After obtaining an upper bound on human performance
+for SA, we will successively compare with it the results attained by
+automatic sentiment systems, starting with the most fundamental task
+of recognizing subjective expression and concluding with the ultimate
+aim of recognizing textual spans of sentiments, their objects of
+evaluation (\emph{targets}), and authors (\emph{sources}).
 
 \subsection{Sentiment Analysis of Social Media}
 
 \subsection{Overview of This Chapter}
 
-\section{Sentiment Corpus}
+\section{Sentiment Corpus}\label{sec:corpus}
 \subsection{Selection Criteria}
 \subsubsection{Topic Selection}
 \subsubsection{Formal Selection}
