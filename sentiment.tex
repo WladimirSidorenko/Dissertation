@@ -34,7 +34,7 @@ The main reasons for these controversies are
 \begin{inparaenum}[\itshape i)\upshape]
   \item a frequently unclear delimitation of the subjective and
     objective components of information and
-  \item the heteroginity of the language system, to which SA methods
+  \item the heteroginity of the language system to which SA methods
     are applied.
 \end{inparaenum}
 
@@ -54,7 +54,7 @@ distinguish three different subtypes of sentiment analysis:
 \begin{itemize}
   \item\emph{subsentential} of \emph{fine-grained} SA whose task is to
     determine and analyze specific subjective opinions and/or
-    evealuations within single clauses,
+    evaluations within single clauses,
   \item\emph{sentential} analysis which tries to ascribe a single
     polarity class to each sentence in a text, and
   \item\emph{suprasentential} or \emph{document-level} sentiment
@@ -66,27 +66,27 @@ Each of these subtypes has its own characteristic strengths and
 weaknesses.  The fine-grained SA, for example, is typically considered
 to be the ultimate goal of any opinion mining\footnote{Following
   \citet{Liu:12}, we do not make a distinction between the terms
-  \emph{opinion mining} and \emph{sentiment analysis} in this thesis
-  and use both names interchangeably in our work.}  system as it aims
-at the highest possible recall of all subjective expressions occurring
-in text.  At the same time, this task is unfortunately very
-challenging even for human beings, as we will show in Section
-\ref{sec:corpus}, let alone computer programs.  The consequently low
-results often prevent subsentential SA systems from being used in
-industrial applications.
+  \emph{opinion mining} and \emph{sentiment analysis} and use both
+  names interchangeably in this thesis.}  system as it aims at the
+highest possible recall of all subjective expressions occurring in
+text.  At the same time, this task is unfortunately very challenging
+even for human beings, as we will show in Section \ref{sec:corpus},
+let alone computer programs.  The consequently low results often
+prevent subsentential SA systems from being used in industrial
+applications.
 
-The last two subdisciplines (sentential and document-level sentiment
-analyses) can be considered as approximations of the first one.  They
-coarsen the targeted recall down to the level of sentences or texts
-respectively, assuming that there can be only one (most prominent)
-expression of subjectivity per analyzed unit.  In contrast to
-fine-grained SA, these approaches typically yield better results but,
-again, this improvement comes at the cost of loosing some important
-details.
+The last two disciplines (sentential and document-level analyses) can
+be considered as approximations of the fine-grained SA.  They coarsen
+the targeted recall down to the level of sentences or texts
+respectively, trying to determine only one (most prominent) expression
+of subjectivity per analyzed unit.  In contrast to the subsentential
+SA, these approaches typically yield better results but sacrifice
+important information.
 
-As it can be seen, speaking of the difficulty or easiness of sentiment
-analysis for a specific domain in general is in the same way wrong as
-judging about the amenability of this domain to natural language
+Due to these crucial differences between different variants of
+sentiment analysis, speaking of its difficulty or easiness for a
+specific domain in general is in the same way wrong as making general
+judgments about the amenability of this domain to natural language
 processing: one always has to specify the level of granularity that
 the SA system under scrutiny is dealing with as she has to specify the
 particular NLP task whose difficulty is estimated.
@@ -99,14 +99,36 @@ created as part of this work.  A detailed inter-annotator agreement
 study of this dataset will reveal which linguistic and
 extra-linguistic factors significantly influence the distribution of
 sentiments in Twitter and which of them cause utter confusion among
-human experts.  After obtaining an upper bound on human performance
-for SA, we will successively compare with it the results attained by
-automatic sentiment systems, starting with the most fundamental task
-of recognizing subjective expression and concluding with the ultimate
+human experts.  After obtaining an upper bound on human performance,
+we will successively compare with it the results attained by automatic
+sentiment systems, starting with the most fundamental task of
+recognizing subjective expressions and concluding with the ultimate
 aim of recognizing textual spans of sentiments, their objects of
 evaluation (\emph{targets}), and authors (\emph{sources}).
 
 \section{Sentiment Analysis of Social Media}
+As noted by many researchers, sentiment analysis is a highly
+domain-dependent task: systems pre-trained for specific topics and
+specific domains do not neatly generalize to other descriptions and
+other text genres.  A natural questiion that arises in this context is
+which of the domains should be tackled first in this case.
+
+While earlier SA works were primaroly concentrating on narratives and
+formal newspaper texts, it soon became evident that social media are
+both a much more desired target for mining opinions.  Indeed, unlike
+most newswire documents
+
+ a virtual lack of any moderation on the most existing
+CMC platforms results in Ungezwungenheit at expressing one's emotions
+and feelings.  This factor combined with a tremenduous popularity of
+CMC channels among people makes SM a fruitful soil for the
+proliferation of sentiments.
+
+\begin{inparaenum}[\itshape i)\upshape]
+  \item a virtual lack of any censorship and, as a consequence,
+  \item the informality of the language
+\end{inparaenum}
+\citet{Derks:07} \citet{Thelwall:12}
 
 \section{Sentiment Corpus}\label{sec:corpus}
 \subsection{Selection Criteria}
