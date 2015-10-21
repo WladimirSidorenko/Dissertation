@@ -110,22 +110,91 @@ evaluation (\emph{targets}), and authors (\emph{sources}).
 As noted by many researchers \citep{Aue:05,Blitzer:07,Jakob:10},
 sentiment analysis is a highly domain-dependent task: systems trained
 for specific topics and on specific domains do not neatly generalize
-to other subjects and other text genres.  A natural questiion that
+to other subjects and other text genres.  A natural question that
 arises in this context is which of the domains should be addressed
 first in this case.
+
+One of the first attempts to analyze sentiments on Twitter was made by
+\citet{Go:09}.  For their experiments, the authors collected a set of
+1,600,000 tweets containing smileys.  Based on these emoticons, they
+automatically derived polarity classes for these messages (positive or
+negative) and used them to train a Na\"{\i}ve Bayes, a MaxEnt, and an
+SVM classifier.  The best $F$-score for this two-class classification
+problem could be achieved by the last system and run up to 82.2\%.
+
+Similar work was done later by \citet{Pak:10} who used a Na\"{\i}ve
+Bayes approach to differentiate between neutral, positive, and
+negative microblogs. \citet{Barbosa:10} also gathered a collection of
+200,000 tweets from three publicly available sentiment web-services
+and then trained an SVM classifier to predict the subjectivity and the
+polarity class of new unseen messages.
+
+Works attempting a more fine-grained sentiment analysis on Twitter
+usually try to derive a common polarity class for each message with
+respect to a particular target that is mentioned in that microblog.
+
+\citet{Jiang:11}, for instance, tried to classify the polarity of
+microblogs pertaining to a predefined set of specific topics, like
+\emph{Obama}, \emph{Google}, \emph{iPad} etc.  To this end, the
+authors manually labeled a corpus of 1,939 messages and trained a
+binary SVM model in order to predict the subjectivity and the polarity
+of the tweets with respect to the given subjects.
+
+This classifier could achieve an accuracy of 68.2\% for the
+subjectivity classification and 85.6\% for the polarity prediction.
+The $F$-score of this system for the latter task could further be
+improved from 66\% to 68.3\% by incorporating the information about
+the predicted polarity class of the re-tweets, replies, and other
+microblogs posted by the same author.
+
+\citet{Mitchell:13} broadened the set of possible targets by allowing
+any named entities found in microblogs to be associated with a
+specific polarity.  For that purpose, the authors combined a CRF-based
+NER system with a sentiment predicting CRF by considering three
+different possibilities of such combination: a pipeline approach, a
+joint multi-layer model, and a single classifier with a combined
+tagset.  The best scores on their corpora of 7,105 Spanish and 2,350
+English tweets could be achieved with the joint and pipeline
+approaches.  The accuracy of recognizing the opinionated named
+entities amounted to 31\% for Spanish and 30.4\% for English.
+
+Other notable works in this direction include \citet{Chunping:14} who
+first applied a Na\"{\i}ve Bayes classifier to predict the
+subjectivity class of microblogs and then sequentially used two CRF
+models to predict the particular type of subjectivity (such as anger,
+fear, happiness etc.) for message sentences.
+
+Other notable works in this direction include \citet{Dong:14} who used
+a recurrent neural network to predict the polarity class associated
+with the opinion targets.  They, however, assumed the targets of
+sentiments to be apriori known and only were interested whether a
+positive or a negative judgement was made about them.
 
 While earlier sentiment works were primarily concentrating on
 narratives \citep{Wiebe:90a,Wiebe:94} or formal newspaper texts
 \citep{Wiebe:03,Wiebe:05}, it soon became clear that social media
-represents a much more attractive goal for mining people's opinions.
-The reason for this is a virtual absence of any moderation on the most
-popular CMC services.  This lack of censorship allows users to be
-forthright about their feelings when confabulating with their friends.
-Combined with the great popularity that social networks experience
-nowadays, this freedom of expressing one's thoughts makes social media
-the arguably most fertile ground for disseminating sentiments.
+provides a much more fertile ground for mining people's opinions.  The
+reason for this is a virtual absence of any moderation on many modern
+CMC services.  The lack of censorship allows users to be forthright
+about their feelings when confabulating with their acquaitances and
+friends.  Combined with the great popularity of social networks, this
+freedom of expressing one's thoughts makes social media the arguably
+most suitable channel for sharing emotions.
 
-\citet{Derks:08} \citet{Thelwall:12}
+\citet{Derks:08}
+
+The \texttt{SentiStrength} system proposed by \cite{Thelwall:12} used
+an extensive list of 763 polar terms in order to predict positive and
+negative scores for MySpace comments.  The manually assigned scores of
+these terms were automatically fine-tuned during training using a
+perceptron-like technique.  In addition to the core lexicon, the final
+implementation of this system also utilized a set of heuristic methods
+and auxiliary modules such as spelling correction algorithm,
+dictionaries of booster words and negations as well as special rules
+for emoticons, repeated letters, and exclamation marks.  It correctly
+predicted positive emotions in 60.6~\% of the cases and attained
+73.5~\% accuracy at predicting negative sentiment scores.  All
+predictions were made at the level of complete messages.
 
 \section{Sentiment Corpus}\label{sec:corpus}
 \subsection{Selection Criteria}
@@ -136,7 +205,7 @@ the arguably most fertile ground for disseminating sentiments.
 \subsection{Statistics and Preliminary Results}
 \begin{table}[h]
   \centering\small
-  \caption[Sentiment corpus statistics]{Statistics on the annotated
+  \caption[Sentiment corpus statistics]{Statistics on the annotatedwith
     sentiment corpus.\\ POL = corpus part with discussions about
     general politic topics; FE = corpus part describing the federal
     election 2013; PE = corpus part with discussions about the Pope
