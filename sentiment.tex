@@ -29,7 +29,7 @@ opinions, sentiments, evaluations, appraisals, attitudes, and emotions
 towards particular entities mentioned in discourse is called
 \emph{sentiment analysis} (SA) \citep{Liu:12}.  The definition of this
 discipline, however, much like the definition of the term
-\emph{sentiment} itself is neither complete nor universally accepted.
+\emph{sentiment} itself, is neither complete nor universally accepted.
 The main reasons for these controversies are
 \begin{inparaenum}[\itshape i)\upshape]
   \item a frequently unclear delimitation of the subjective and
@@ -67,43 +67,44 @@ weaknesses.  The fine-grained SA, for example, is typically considered
 to be the ultimate goal of any opinion mining\footnote{Following
   \citet{Liu:12}, we do not make a distinction between the terms
   \emph{opinion mining} and \emph{sentiment analysis} and use both
-  names interchangeably in this thesis.}  system as it aims at the
-highest possible recall of all subjective expressions occurring in
+  expressions interchangeably in this thesis.}  system as it aims at
+the highest possible recall of all subjective expressions occurring in
 text.  At the same time, this task is unfortunately very challenging
 even for human beings, as we will show in Section \ref{sec:corpus},
 let alone computer programs.  The consequently low results often
-prevent subsentential SA systems from being used in industrial
-applications.
+intimidate researchers and prevent subsentential SA systems from being
+used in industrial applications.
 
 The last two disciplines (sentential and document-level analyses) can
 be considered as approximations of the fine-grained SA.  They coarsen
 the targeted recall down to the level of sentences or texts
-respectively, trying to determine only one (most prominent) expression
-of subjectivity per analyzed unit.  In contrast to the subsentential
-SA, these approaches typically yield better results but sacrifice
-important information.
+respectively, trying to determine only one (the most prominent)
+expression of subjectivity per analyzed unit.  In contrast to the
+subsentential SA, these approaches typically yield better results but
+sacrifice important information.
 
-Due to these crucial differences between different variants of
-sentiment analysis, speaking of its difficulty or easiness for a
-specific domain in general is in the same way wrong as making general
-judgments about the amenability of this domain to natural language
-processing: one always has to specify the level of granularity that
-the SA system under scrutiny is dealing with as she has to specify the
-particular NLP task whose difficulty is estimated.
+As can be seen, due to these crucial distinctions between different
+variants of sentiment analysis, speaking of the difficulty or easiness
+of this analysis for a specific domain in general is in the same way
+wrong as making overall judgments about the amenability of that domain
+to natural language processing: one always has to specify a particular
+NLP task and the precise level of sentiment granularity whose
+difficulty is being estimated before drawing any conclusions about
+their complexity.
 
 In this chapter, we will primarily concentrate on the most challenging
 SA objective -- that of the fine-grained SA.  After a brief summary of
 related work done on the opinion mining for social media so far, we
 will introduce a comprehensive corpus of German tweets that has been
-created as part of this work.  A detailed inter-annotator agreement
-study of this dataset will reveal which linguistic and
+created for the purpose of this work.  A detailed inter-annotator
+agreement study of this dataset will reveal which linguistic and
 extra-linguistic factors significantly influence the distribution of
 sentiments in Twitter and which of them cause utter confusion among
 human experts.  After obtaining an upper bound on human performance,
 we will successively compare with it the results attained by automatic
 sentiment systems, starting with the most fundamental task of
 recognizing subjective expressions and concluding with the ultimate
-aim of recognizing textual spans of sentiments, their objects of
+goal of recognizing textual spans of sentiments, their objects of
 evaluation (\emph{targets}), and authors (\emph{sources}).
 
 \section{Sentiment Analysis of Social Media}
@@ -113,6 +114,21 @@ for specific topics and on specific domains do not neatly generalize
 to other subjects and other text genres.  A natural question that
 arises in this context is which of the domains should be addressed
 first in this case.
+
+While earlier sentiment works were primarily concentrating on
+narratives \citep{Wiebe:90a,Wiebe:94} or formal newspaper texts
+\citep{Wiebe:03,Wiebe:05}, it soon became clear that social media
+provides a much more fertile ground for mining people's opinions.  The
+reason for this is a virtual absence of any moderation on many modern
+CMC services.  The lack of censorship allows users to be forthright
+about their feelings when confabulating with their acquaitances and
+friends.  Combined with the great popularity of social networks, this
+freedom of expressing one's thoughts makes social media the arguably
+most suitable channel for sharing emotions.
+
+\citet{Turney:02} (two-class classification of 410 Epinions reviews
+with 74\% accuracy)
+
 
 One of the first attempts to analyze sentiments on Twitter was made by
 \citet{Go:09}.  For their experiments, the authors collected a set of
@@ -169,17 +185,6 @@ a recurrent neural network to predict the polarity class associated
 with the opinion targets.  They, however, assumed the targets of
 sentiments to be apriori known and only were interested whether a
 positive or a negative judgement was made about them.
-
-While earlier sentiment works were primarily concentrating on
-narratives \citep{Wiebe:90a,Wiebe:94} or formal newspaper texts
-\citep{Wiebe:03,Wiebe:05}, it soon became clear that social media
-provides a much more fertile ground for mining people's opinions.  The
-reason for this is a virtual absence of any moderation on many modern
-CMC services.  The lack of censorship allows users to be forthright
-about their feelings when confabulating with their acquaitances and
-friends.  Combined with the great popularity of social networks, this
-freedom of expressing one's thoughts makes social media the arguably
-most suitable channel for sharing emotions.
 
 \citet{Derks:08}
 
