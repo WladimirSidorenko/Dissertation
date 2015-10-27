@@ -116,7 +116,7 @@ arises in this context is which of the domains should be addressed
 first in this case.
 
 While earlier sentiment works were primarily concentrating on
-narratives \citep{Wiebe:90a,Wiebe:94} or formal newspaper texts
+narratives \citep{Wiebe:90a,Wiebe:94} or newspaper articles
 \citep{Wiebe:03,Wiebe:05}, it soon became clear that social media
 provides a much more fertile ground for mining people's opinions.  The
 reason for this is the virtual absence of any moderation on many
@@ -126,30 +126,28 @@ Combined with the great popularity of social networks, such freedom of
 expressing one's thoughts makes social media the arguably most
 suitable channel for sharing emotions.
 
-It is, therefore, no wonder that the rapid growth of the number of SM
+It is therefore not surprising that the rapid emergence of numerous SM
 websites was accompanied by an increasing interest in their content
-from the side of NLP community.  One of the first reported attempts to
-mine users' evaluations automatically from CMC services was made by
+from the NLP community.  One of the first reported attempts to mine
+users' evaluations automatically on CMC services was made by
 \citet{Turney:02}.  The author performed a two-class classification of
 410 Epinions comments, dividing customers' reviews of automobiles,
 banks, movies, and travel destinations into \emph{recommended} (thumbs
-up) and \emph{not recommended} (thumbs down) ones.  To determine the
-polarity class of each message, the classifier first extracted
-adjectival and adverbial phrases from the text of that message and
-then computed the difference between the pointwise mutual information
-(PMI) of the obtained phrase and the word ``excellent'' and the PMI of
-that phrase and the word ``poor''.  The review was classified as
-\emph{thumbs up} if the sum of these differences over the whole text
-was positive and as \emph{thumbs down} otherwise.
+up) and \emph{not recommended} (thumbs down) ones.  These decisions
+were made by summing the pointwise mutual information (PMI) scores
+between the adjectival and adverbial phrases occurring in the review
+text and the word ``excellent'' and then subtracting from this sum the
+PMIs of these phrases in conjunction with the word ``poor''.
 
-In the same year, \citet{Pang:02} published an almost eponymous work
-in which they described their experiments with classifying movie
-reviews from the Internet Movie Database (IMDb) into positive and
-negative.  For this purpose, the authors applied several machine
-learning classifiers, including Na\"{\i}ve Bayes, MaxEnt, and SVM,
-considering different combinations of features.  The best results
-(82.9\% accuracy) were attained by the SVM system which used the
-presence of unigrams as classification traits.
+\citet{Turney:02} noted in their experiments that the movie critiques
+were by far the most difficult type of reviews to analyze (the
+accuracy on this subset only reached 66\% whereas, for banks and
+automobiles, it attained 80 and 84\% respectively).  This finding was
+also confirmed by \citet{Pang:02} who tested several machine learning
+classifiers on a manually annotated corpus of $\approx2,000$ Internet
+Movie Database (IMDb) write-ups.  The best results (82.9\% accuracy)
+for this task were attained by the SVM system which used the presence
+of unigrams as its classification features.
 
 One of the first attempts to analyze sentiments on Twitter was made by
 \citet{Go:09}.  For their experiments, the authors collected a set of
