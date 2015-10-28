@@ -128,26 +128,27 @@ suitable channel for sharing emotions.
 
 It is therefore not surprising that the rapid emergence of numerous SM
 websites was accompanied by an increasing interest in their content
-from the NLP community.  One of the first reported attempts to mine
-users' evaluations automatically on CMC services was made by
-\citet{Turney:02}.  The author performed a two-class classification of
-410 Epinions comments, dividing customers' reviews of automobiles,
-banks, movies, and travel destinations into \emph{recommended} (thumbs
-up) and \emph{not recommended} (thumbs down) ones.  These decisions
-were made by summing the pointwise mutual information (PMI) scores
+from NLP practitioners.  One of the first who attempted to mine users'
+evaluations automatically on CMC services was \citet{Turney:02}.  The
+author performed a two-class classification of 410 Epinions comments,
+dividing customers' reviews of automobiles, banks, movies, and travel
+destinations into \emph{recommended} (thumbs up) and \emph{not
+  recommended} (thumbs down) ones.  These decisions were made by
+taking the sum of the pointwise mutual information (PMI) scores
 between the adjectival and adverbial phrases occurring in the review
-text and the word ``excellent'' and then subtracting from this sum the
-PMIs of these phrases in conjunction with the word ``poor''.
+text and the word ``excellent'' and then subtracting from it the PMIs
+of these phrases in conjunction with the word ``poor''.
 
-\citet{Turney:02} noted in their experiments that the movie critiques
-were by far the most difficult type of reviews to analyze (the
-accuracy on this subset only reached 66\% whereas, for banks and
+As noted by \citet{Turney:02}, movie critiques were by far the most
+difficult type of reviews to analyze in these experiments (the
+accuracy on this subset only reached 66\%, whereas, for banks and
 automobiles, it attained 80 and 84\% respectively).  This finding was
-also confirmed by \citet{Pang:02} who tested several machine learning
-classifiers on a manually annotated corpus of $\approx2,000$ Internet
-Movie Database (IMDb) write-ups.  The best results (82.9\% accuracy)
-for this task were attained by the SVM system which used the presence
-of unigrams as its classification features.
+also confirmed by \citet{Pang:02} who tried out several machine
+learning classifiers on a manually annotated corpus of $\approx2,000$
+write-ups from the Internet Movie Database (IMDb).  The best results
+(82.9\% accuracy) for the two-class classification task
+(\emph{positive} versus \emph{negative}) were attained by an SVM
+system which used the presence of unigrams as classification features.
 
 One of the first attempts to analyze sentiments on Twitter was made by
 \citet{Go:09}.  For their experiments, the authors collected a set of
