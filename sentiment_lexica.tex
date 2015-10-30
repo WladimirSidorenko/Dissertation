@@ -1,0 +1,127 @@
+% FILE: sentiment_lexica.tex  Version 0.01
+% AUTHOR: Uladzimir Sidarenka
+
+% This is a modified version of the file main.tex developed by the
+% University Duisburg-Essen, Duisburg, AG Prof. Dr. Günter Törner
+% Verena Gondek, Andy Braune, Henning Kerstan Fachbereich Mathematik
+% Lotharstr. 65., 47057 Duisburg entstanden im Rahmen des
+% DFG-Projektes DissOnlineTutor in Zusammenarbeit mit der
+% Humboldt-Universitaet zu Berlin AG Elektronisches Publizieren Joanna
+% Rycko und der DNB - Deutsche Nationalbibliothek
+
+\section{Sentiment Lexica}
+\subsection{Ontology-based Identification of Subjective Elements}
+\subsection{Corpus-based Identification of Subjective Elements}
+\subsection{Machine Learning Approaches to Identification of Subjective Expressions}
+
+\subsection{Related Work}
+
+A pioneering work on semi-supervised lexicon induction from corpora
+was carried out by \citet{Hatzivassi:97}.  In the initial step of
+their work, the authors created a seed set of 1,336 adjectives to
+which they manually assigned their prior polarity scores.  Relying on
+the assumption that coordinatively conjoined adjectives will often
+have the same subjective polarity, they automatically extracted all
+conjoined pairs of adjectives from the Wall Street Journal corpus.
+Those pairs in which both elements belonged to the initial seed set
+were taken as the training material for a log-linear regression model.
+Polarity scores predicted by this model were then used as the arc
+weights in a graph whose nodes represented all observed co-occurring
+adjectives.  In the last step, the authors partitioned this graph into
+two clusters in order to obtain extended sets of positive and negative
+adjectives.
+
+Following \citeauthor{Turney:02}'s approach for classifying reviews
+\citep{Turney:02}, \citet{Turney:03} also attempted to generate a
+polarity lexicon by taking a seed set of 14 polar adjectives (seven
+negative and seven positive terms) and then looking for words that had
+strongest pointwise mutual information scores with these seeds. More
+precisely, the social orientation PMI (SO-PMI) of a word $w$ was
+defined as $\log_2\frac{PMI()}{}$
+
+\citet{Takamura:05} applied the Ising spin model from the statistical
+mechanics to determine the semantic orientation of words.  They
+represented all words found in \emph{WordNet} \cite{Miller:95}, the
+Wall Street Journal, and the Brown corpus as nodes in a graph.  The
+edges of this graph represented associativity links and were
+established between two words if one of these word was a synonym, an
+antonym, or a hyponym of the other one or appeared in its gloss or
+context.  Taking into account the a priori known polarities of some of
+the terms, the Ising model then tried to find an approximation of the
+most likely polarity combination of all terms over all possible
+assignments.
+
+%% The authors evaluated the accuracy of their model on the General
+%% Inquirer lexicon \cite{Stone:66}.  Its final results (81.9\%) were
+%% comparable to the figures obtained by \citet{Turney:03} in their
+%% method (82.84\%) and significantly outperformed the precision of
+%% the approach proposed by \citet{Kamps:04} (73.4 versus 70.8).
+
+A purely dictionary-based method for generating sentiment lexicons was
+proposed by \citet{Esuli:06b}.  The authors automatically assigned
+positive, negative, and neutral polarity scores to synsets in
+\emph{WordNet} by iteratively expanding seed sets for each of these
+three polarity classes using a committee of binary and multiclass
+classifiers.  At each step of this process, these classifiers were
+trained on the seed sets obtained from the previous runs and then used
+to predict if further synsets immediately accessible from the seeds
+would belong the same polarity class as their seed term.
+
+\subsubsection{Sentiment Lexica for German}
+
+One of the first attempts to create a sentiment dictionary for German
+was made by \citet{Remus:10}.  In their work, the authors
+automatically translated the General Inquirer lexicon \cite{Stone:66}
+into German.  In order to incorporate domain-specific knowledge into
+this translated resource, they also collected a set of terms that were
+strongly associated with positive or negative product reviews and
+added this set to their translations.  Finally, the resulting lexicon
+was enriched with inflection forms and frequent collocations of the
+translated expressions.  The authors automatically estimated polarity
+scores of their obtained 3,648 lexicon lemmas as the difference
+between their positive and negative PMIs (i.e. PMI scores between the
+collected terms and the pre-defined sets of positive or negative
+expressions).
+
+Similar work was also done by \citet{Waltinger:10} who compiled a list
+of 10,141 subjective terms by first automatically translating the
+Subjectivity Clues lexicon \cite{Wilson:05} and then manually
+reassessing polarity scores of the translated items.  The author
+expanded this list with the most frequent German synonyms of the
+translated terms and also added a set of negated opinionated phrases
+(e.g. \emph{nicht schlecht} (\emph{not bad})).  The resulting
+dictionary was used as a source of features for an automatic
+classification of the polarity of Amazon reviews and showed superior
+accuracy in comparison with other automatically translated resources.
+
+A slightly different approach was taken by \citet{Clematide:10} who
+manually annotated synsets from \emph{GermaNet} \cite{Hamp:97} with
+their prior polarities and polarity strengths.  A subsequently
+conducted study revealed, however, that the stock of polar adjectives
+obtained in this way was insufficient for doing proper subjectivity
+analysis of literary texts.  In order to overcome this problem, the
+authors followed the idea of \citet{Hatzivassi:97} and extracted an
+additional set of 918 adjectives which frequently co-occurred in
+conjoined phrases with subjective terms from their dictionary.  After
+manually inspecting each of the candidate terms, the authors added
+this pruned set of new adjectives to their original lexicon.  The
+total size of this final dictionary run up to 7,432 entries, 2,779 of
+which were positive.
+
+\subsection{Domain-Specific Sentiment Lexica}
+
+\citet{Chetviorkin:14} obtained a set of possible subjective terms
+from English and Russian microblogs by using an ensemble of supervised
+machine learning classifiers that had previously been trained on a
+manually annotated corpus of movie reviews.  In order to determine the
+prior polarity of the extracted terms, the authors first calculated
+approximate polarity scores of the processed messages using general
+polarity lexicons and then took these rough estimates as prior
+polarity expectations of the candidate expressions.  The posterior
+scores of these expressions were computed using the Ising spin model
+in a similar way to the approach proposed by \citet{Takamura:05}.  The
+resulting lexicon comprised 2,772 words for Russian and 2,786 lexical
+items for English.
+
+
+\subsection{Conclusions}
