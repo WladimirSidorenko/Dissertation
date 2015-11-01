@@ -16,28 +16,51 @@
 
 \subsection{Related Work}
 
-A pioneering work on semi-supervised lexicon induction from corpora
-was carried out by \citet{Hatzivassi:97}.  In the initial step of
-their work, the authors created a seed set of 1,336 adjectives to
-which they manually assigned their prior polarity scores.  Relying on
-the assumption that coordinatively conjoined adjectives will often
-have the same subjective polarity, they automatically extracted all
-conjoined pairs of adjectives from the Wall Street Journal corpus.
-Those pairs in which both elements belonged to the initial seed set
-were taken as the training material for a log-linear regression model.
-Polarity scores predicted by this model were then used as the arc
-weights in a graph whose nodes represented all observed co-occurring
-adjectives.  In the last step, the authors partitioned this graph into
-two clusters in order to obtain extended sets of positive and negative
-adjectives.
+Among the first who addressed the problem of the automatic generation
+of sentiment lexica were \citet{Hatzivassi:97}.  The authors proposed
+a method in which they created a seed set of 1,336 adjectives with
+manually assigned polarity scores.  Relying on the assumption that
+coordinatively conjoined terms often have the same semantic
+orientation, they automatically extracted all conjoined pairs of
+adjectives from the Wall Street Journal corpus.  Those pairs in which
+both elements belonged to the initial seed set were taken as the
+training material for a log-linear regression model.  Polarity scores
+predicted by this model were then used as arc weights in a graph of
+all observed co-occurring adjectives.  In the last step, the authors
+partitioned this graph into two clusters from which they obtained
+extended sets of positive and negative adjectives.
 
-Following \citeauthor{Turney:02}'s approach for classifying reviews
-\citep{Turney:02}, \citet{Turney:03} also attempted to generate a
-polarity lexicon by taking a seed set of 14 polar adjectives (seven
-negative and seven positive terms) and then looking for words that had
-strongest pointwise mutual information scores with these seeds. More
-precisely, the social orientation PMI (SO-PMI) of a word $w$ was
-defined as $\log_2\frac{PMI()}{}$
+A different way of bootstrapping polarity terms from large text
+corpora was proposed by \citet{Turney:03}.  Following
+\citeauthor{Turney:02}'s original approach for classifying reviews
+\citep{Turney:02}, they generated a polarity lexicon by first taking a
+seed set of 14 a priory known polar adjectives (seven negative and
+seven positive) and then expading this set with the words that had the
+strongest pointwise mutual information associations with the chosen
+seeds.  The PMI scores were computed as the log ratio between the
+number of hits in which a new word $w$ appeared with any of the seed
+terms divided by the total number of hits for the complete seed set.
+As hits, the authors considered the number of relevant documents
+returned by \texttt{AltaVista} for given search queries.  This system
+attained an accuracy of 82.84\% on the General Inquirer Lexicon
+\citep{Stone:66} and correctly predicted polar terms from the lexicon
+of \cite{Hatzivassi:97} in 87.13\% of the cases. This method could
+also further be improved by using cosine similarities between word
+vectors from an LSA matrix instead of web-based PMIs.
+
+%% Another
+%% interesting finding of this paper was surpassed by using the cosine
+%% similarities between word vectors in an LSA matrix instead of PMI
+%% scores from web crawlers.
+
+%% More precisely, the social orientation PMI (SO-PMI) of a new word
+%% $w$ was defined as: \begin{equation*} \text{SO-PMI}(w) =
+%% \log_2\bigg(\frac{\prod_{p\in\mathcal{P}}\text{hits}(w\text{NEAR}p)%
+%% \prod_{n\in\mathcal{N}}\text{hits}(w\text{NEAR}n)}%
+%% {\prod_{p\in\mathcal{P}}\text{hits}(p)\prod_{n\in\mathcal{N}}\text{hits}(n)}\bigg) \end{equation*}
+%% where $\mathcal{P}$ and $\mathcal{N}$ are the seed sets of positive
+%% and negative adjectives respectively and
+%% $\text{hits}(\cdot\text{NEAR}\cdot)$ is the number
 
 \citet{Takamura:05} applied the Ising spin model from the statistical
 mechanics to determine the semantic orientation of words.  They
