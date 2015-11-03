@@ -17,18 +17,21 @@
 \subsection{Related Work}
 
 Among the first who addressed the problem of the automatic generation
-of sentiment lexica were \citet{Hatzivassi:97}.  The authors proposed
-a method in which they created a seed set of 1,336 adjectives with
-manually assigned polarity scores.  Relying on the assumption that
-coordinatively conjoined terms often have the same semantic
-orientation, they automatically extracted all conjoined pairs of
-adjectives from the Wall Street Journal corpus.  Those pairs in which
-both elements belonged to the initial seed set were taken as the
-training material for a log-linear regression model.  Polarity scores
-predicted by this model were then used as arc weights in a graph of
-all observed co-occurring adjectives.  In the last step, the authors
-partitioned this graph into two clusters from which they obtained
-extended sets of positive and negative adjectives.
+of sentiment lexica were \citet{Hatzivassi:97}.  In their work, the
+authors relied on the hypothesis that coordinatively conjoined terms
+often share the same semantic orientation.  To test this conjecture,
+they automatically extracted all pairs of conjoined adjectives from
+the Wall Street Journal corpus and represented these adjectives as
+nodes in a graph.  The arcs weights of this graph were supposed to
+show the strength and direction by which two coordinatively conjoined
+terms influenced each others' polarity.  In order to derive these
+weights automatically, \citeauthor{Hatzivassi:97} trained a log-linear
+regression model on those pairs in which both nodes belonged to a
+manually labeled seed set of 1,336 adjectives and then let this model
+predict the weights for the rest of the arcs.  In the final step, the
+resulting graph was partitioned into two clusters -- that of positive
+and that of negative terms -- which were subsequently used to enrich
+the seed set.
 
 A different way of bootstrapping polarity terms from large text
 corpora was proposed by \citet{Turney:03}.  Following
