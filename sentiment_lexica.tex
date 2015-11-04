@@ -21,8 +21,8 @@ of sentiment lexica were \citet{Hatzivassi:97}.  In their work, the
 authors relied on the hypothesis that coordinatively conjoined terms
 often share the same semantic orientation.  To test this conjecture,
 they automatically extracted all pairs of conjoined adjectives from
-the Wall Street Journal corpus and represented these adjectives as
-nodes in a graph.  The arcs weights of this graph were supposed to
+the Wall Street Journal (WSJ) corpus and represented these adjectives
+as nodes in a graph.  The arcs weights of this graph were supposed to
 show the strength and direction by which two coordinatively conjoined
 terms influenced each others' polarity.  In order to derive these
 weights automatically, \citeauthor{Hatzivassi:97} trained a log-linear
@@ -31,7 +31,10 @@ manually labeled seed set of 1,336 adjectives and then let this model
 predict the weights for the rest of the arcs.  In the final step, the
 resulting graph was partitioned into two clusters -- that of positive
 and that of negative terms -- which were subsequently used to enrich
-the seed set.
+the seed set.  This method, enhanced by the possibility of recognizing
+gradable adjectives, was later used in the classification experiments
+of \citet{Hatzivassi:00} to predict subjective and objective sentences
+in the WSJ.
 
 A different way of bootstrapping polarity terms from large text
 corpora was proposed by \citet{Turney:03}.  Following
