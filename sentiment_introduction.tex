@@ -26,9 +26,9 @@ The field of knowledge which deals with the analysis of people's
 opinions, sentiments, evaluations, appraisals, attitudes, and emotions
 towards particular entities mentioned in discourse is called
 \emph{sentiment analysis} (SA) \citep{Liu:12}.  The definition of this
-discipline, however, much like the definition of the term
-\emph{sentiment} itself, is neither complete nor universally accepted.
-The main reasons for this are
+discipline, however, much like the definition of the \emph{sentiment}
+itself, is neither complete nor universally accepted.  The main
+reasons for this are
 \begin{inparaenum}[\itshape i)\upshape]
   \item a frequently unclear delimitation of the subjective and
     objective components of information and
@@ -47,9 +47,8 @@ terms while others regard them as purely objective statements.
 The latter factor complicates a precise definition of SA because
 different levels of the language have their own concepts of
 subjectivity, which in turn require different approaches and methods
-of analysis.  Depending on the language level being analyzed,
-researchers typically distinguish three different subtypes of
-sentiment analysis:
+to use.  Depending on the language level being analyzed, researchers
+typically distinguish three different subtypes of sentiment analysis:
 \begin{itemize}
   \item\emph{subsentential} of \emph{fine-grained} SA whose task is to
     determine and analyze specific subjective opinions and/or
@@ -71,8 +70,8 @@ the highest possible recall of all subjective expressions occurring in
 text.  At the same time, this task is unfortunately very challenging
 even for human beings, as we will show in Section \ref{sec:corpus},
 let alone computer programs.  The consequently low results often
-intimidate researchers and prevent subsentential SA systems from
-integration into industrial applications.
+intimidate researchers and prevent subsentential SA systems from being
+used in industrial applications.
 
 The last two disciplines (sentential and document-level analyses) can
 be considered as approximations of the fine-grained SA.  They coarsen
@@ -82,14 +81,14 @@ expression of subjectivity per analyzed unit.  In contrast to the
 subsentential SA, these approaches typically yield better results at
 the cost of sacrificing important details.
 
-Due to these crucial distinctions between different variants of
+Due to these crucial differences between different variants of
 sentiment analysis, speaking of the difficulty or easiness of this
-analysis for a specific domain in general is in the same way wrong as
-making overall judgments about the amenability of that domain to
-natural language processing: one always has to specify a particular
-NLP task and the precise level of sentiment granularity whose
-difficulty is being estimated before drawing any conclusions about
-their complexity.
+task for a specific domain in general is in the same way wrong as
+making overall judgments about the amenability of that domain to the
+whole natural language processing field: one always has to specify the
+precise level of sentiment analysis whose difficulty is being analyzed
+as she has to set apart a particular NLP task in order to assess its
+complicatedness.
 
 In this chapter, we will primarily concentrate on the most challenging
 SA objective -- that of the fine-grained SA.  After a brief summary of
@@ -107,12 +106,15 @@ goal of recognizing textual spans of sentiments, their objects of
 evaluation (\emph{targets}), and authors (\emph{sources}).
 
 \section{Sentiment Analysis of Social Media}
-As noted by many researchers \citep{Aue:05,Blitzer:07,Jakob:10},
-sentiment analysis is a highly domain-dependent task: systems trained
-for specific topics and on specific domains do not neatly generalize
-to other subjects and other text genres.  A natural question that
-arises in this context is which of the domains should be addressed
-first in this case.
+
+One of the main problems that people who start working on opinion
+mining are typically confronted with in the first place is that of the
+domain of discourse to be analyzed.  Since sentiment analysis is a
+highly domain-dependent task \citep[cf.][]{Aue:05,Blitzer:07,Jakob:10}
+-- i.e. systems trained for specific topics and on specific text
+genres do not neatly generalize to other subjects and other linguistic
+styles -- a natural question that arises in this context is which of
+the domains should be addressed first in that case.
 
 While earlier sentiment works were primarily concentrating on
 narratives \citep{Wiebe:90a,Wiebe:94} or newspaper articles
@@ -120,28 +122,30 @@ narratives \citep{Wiebe:90a,Wiebe:94} or newspaper articles
 provides a much more fertile ground for mining people's opinions.  The
 reason for this is the virtual absence of any moderation on many
 modern CMC services.  This lack of censorship allows users to be
-upfront about their feelings when confabulating with their friends.
-Combined with the great popularity of social networks, such freedom of
-expressing one's thoughts makes social media the arguably most
-suitable channel for sharing emotions.
+upfront about their feelings.  Combined with the great popularity of
+social networks, such freedom of expressing one's thoughts makes
+social media the arguably most suitable channel for sharing emotions.
 
 It is therefore not surprising that the rapid emergence of numerous SM
 websites was accompanied by an increasing interest in their content
-from NLP practitioners.  One of the first who attempted to mine users'
-evaluations automatically on CMC services was \citet{Turney:02}.  The
-author performed a two-class classification of 410 Epinions comments,
-dividing customers' reviews of automobiles, banks, movies, and travel
-destinations into \emph{recommended} (thumbs up) and \emph{not
-  recommended} (thumbs down) ones.  In order to make these decisions,
-the proposed system first computed the sum of the pointwise mutual
-information (PMI) scores between the adjectival and adverbial phrases
-occurring in the review text and the word ``excellent'' and then
-subtracted from this sum the PMIs of these phrases in conjunction with
-the word ``poor''.
+from many NLP practitioners.  One of the first who attempted to mine
+users' evaluations automatically on CMC services was
+\citet{Turney:02}.  The author performed a two-class classification of
+410 Epinions comments, dividing customers' reviews of automobiles,
+banks, movies, and travel destinations into \emph{recommended} (thumbs
+up) and \emph{not recommended} (thumbs down) ones.  In order to make
+these decisions, the proposed system first computed the sum of the
+pointwise mutual information (PMI) scores between the adjectival and
+adverbial phrases occurring in the review text and the word
+``excellent'' and then subtracted from it the PMIs of the found
+phrases in conjunction with the word ``poor''.  Reviews with negative
+results were subsequently considered as \emph{thumbs down} and
+comments with non-negative total scores were correspondingly
+classified as \emph{thumbs up}.
 
-According to \citet{Turney:02}, movie critiques were by far the most
-difficult type of reviews to analyze in these experiments (the
-accuracy on this subset only reached 66\%, whereas, for banks and
+According to \citet{Turney:02}, the most challenging type of reviews
+to analyze in these experiments turned out to be the movie critiques
+(the accuracy on this subset only reached 66\%, whereas, for banks and
 automobiles, it attained 80 and 84\% respectively).  This finding was
 also confirmed by \citet{Pang:02} who tried out several machine
 learning classifiers on a manually annotated corpus of $\approx2,000$
