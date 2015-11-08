@@ -26,9 +26,9 @@ The field of knowledge which deals with the analysis of people's
 opinions, sentiments, evaluations, appraisals, attitudes, and emotions
 towards particular entities mentioned in discourse is called
 \emph{sentiment analysis} (SA) \citep{Liu:12}.  The definition of this
-discipline, however, much like the definition of the \emph{sentiment}
-itself, is neither complete nor universally accepted.  The main
-reasons for this are
+discipline, however, much like the definition of the term
+\emph{sentiment} itself, is neither complete nor universally accepted.
+The main reasons for this are
 \begin{inparaenum}[\itshape i)\upshape]
   \item a frequently unclear delimitation of the subjective and
     objective components of information and
@@ -67,7 +67,7 @@ to be the ultimate goal of any opinion mining\footnote{Following
   \emph{opinion mining} and \emph{sentiment analysis} and use both
   expressions interchangeably in this thesis.}  system as it aims at
 the highest possible recall of all subjective expressions occurring in
-text.  At the same time, this task is unfortunately very challenging
+a text.  At the same time, this task is unfortunately very challenging
 even for human beings, as we will show in Section \ref{sec:corpus},
 let alone computer programs.  The consequently low results often
 intimidate researchers and prevent subsentential SA systems from being
@@ -81,7 +81,7 @@ expression of subjectivity per analyzed unit.  In contrast to the
 subsentential SA, these approaches typically yield better results at
 the cost of sacrificing important details.
 
-Due to these crucial differences between different variants of
+Due to these crucial disparities between different variants of
 sentiment analysis, speaking of the difficulty or easiness of this
 task for a specific domain in general is in the same way wrong as
 making overall judgments about the amenability of that domain to the
@@ -92,29 +92,32 @@ complicatedness.
 
 In this chapter, we will primarily concentrate on the most challenging
 SA objective -- that of the fine-grained SA.  After a brief summary of
-related work done on the opinion mining for social media so far, we
-will introduce a comprehensive corpus of German tweets that has been
-created for the purpose of this work.  A detailed inter-annotator
-agreement study of this dataset will reveal which linguistic and
-extra-linguistic factors significantly influence the distribution of
-sentiments in Twitter and which of them cause utter confusion among
-human experts.  After obtaining an upper bound on human performance,
-we will successively compare with it the results attained by automatic
-sentiment systems, starting with the most fundamental task of
-recognizing subjective expressions and concluding with the ultimate
-goal of recognizing textual spans of sentiments, their objects of
-evaluation (\emph{targets}), and authors (\emph{sources}).
+related work done on the opinion mining in general and sentiment
+analysis of social media in particular, we will introduce a
+comprehensive corpus of German tweets that has been created for the
+purpose of this work.  A detailed inter-annotator agreement study of
+this dataset will reveal which linguistic and extra-linguistic factors
+significantly influence the distribution of sentiments in Twitter and
+which of them cause utter confusion among human experts.  After
+obtaining an upper bound on human performance, we will successively
+compare with it the results attained by automatic sentiment systems,
+starting with the most fundamental task of recognizing subjective
+expressions and concluding with the ultimate goal of recognizing
+textual spans of sentiments, their objects of evaluation
+(\emph{targets}), and authors (\emph{sources}).
+
+%% \section{Prehistory of the Field}
 
 \section{Sentiment Analysis of Social Media}
 
-One of the main problems that people who start working on opinion
-mining are typically confronted with in the first place is that of the
-domain of discourse to be analyzed.  Since sentiment analysis is a
-highly domain-dependent task \citep[cf.][]{Aue:05,Blitzer:07,Jakob:10}
--- i.e. systems trained for specific topics and on specific text
-genres do not neatly generalize to other subjects and other linguistic
-styles -- a natural question that arises in this context is which of
-the domains should be addressed first in that case.
+One of the first problems that people who start working on opinion
+mining are typically confronted with is that of the discourse domain
+to be analyzed.  Since sentiment analysis is a highly domain-dependent
+task \citep[cf.][]{Aue:05,Blitzer:07,Jakob:10} -- i.e. systems trained
+for specific topics and on specific text genres do not neatly
+generalize to other subjects and other linguistic styles -- a natural
+question that arises in this context is which of the domains should be
+addressed first in that case.
 
 While earlier sentiment works were primarily concentrating on
 narratives \citep{Wiebe:90a,Wiebe:94} or newspaper articles
@@ -129,8 +132,22 @@ social media the arguably most suitable channel for sharing emotions.
 It is therefore not surprising that the rapid emergence of numerous SM
 websites was accompanied by an increasing interest in their content
 from many NLP practitioners.  One of the first who attempted to mine
-users' evaluations automatically on CMC services was
-\citet{Turney:02}.  The author performed a two-class classification of
+users' evaluations automatically on CMC services were \citet{Das:01}.
+The authors investigated the correlation between users' moods on the
+economic chat boards and stock prices for about eight stocks.  For
+this purpose, they trained a collection of five classifiers on a
+training set of 500 messages manually labeled with three classes:
+\emph{buy} (positive attitude), \emph{sell} (negative attitude), and
+\emph{null} (neutral message).  With these classifiers, they
+subsequently annotated the rest of the downloaded 25~K posts, taking
+the majority votes of the five systems as the final labels.  This
+study revealed that user chats strongly correlated with stock
+developments in a reactive way: changes in stock prices had typically
+lead to fluctuations of public opinions but not vica versa.
+
+
+Another notable attempt at analyzing sentiment in social media was
+made by \citet{Turney:02} who performed a two-class classification of
 410 Epinions comments, dividing customers' reviews of automobiles,
 banks, movies, and travel destinations into \emph{recommended} (thumbs
 up) and \emph{not recommended} (thumbs down) ones.  In order to make
@@ -140,19 +157,29 @@ adverbial phrases occurring in the review text and the word
 ``excellent'' and then subtracted from it the PMIs of the found
 phrases in conjunction with the word ``poor''.  Reviews with negative
 results were subsequently considered as \emph{thumbs down} and
-comments with non-negative total scores were correspondingly
-classified as \emph{thumbs up}.
+comments with non-negative total scores were accordingly classified as
+\emph{thumbs up}.
 
 According to \citet{Turney:02}, the most challenging type of reviews
-to analyze in these experiments turned out to be the movie critiques
-(the accuracy on this subset only reached 66\%, whereas, for banks and
-automobiles, it attained 80 and 84\% respectively).  This finding was
-also confirmed by \citet{Pang:02} who tried out several machine
-learning classifiers on a manually annotated corpus of $\approx2,000$
-write-ups from the Internet Movie Database (IMDb).  The best results
-(82.9\% accuracy) for the two-class classification task
-(\emph{positive} versus \emph{negative}) were attained by an SVM
-system which used the presence of unigrams as classification features.
+to analyze in these experiments were the movie critiques (the accuracy
+on this subset only reached 66\%, whereas, for banks and automobiles,
+it attained 80 and 84\% respectively).  This finding was also
+confirmed by \citet{Pang:02} who tried out several machine learning
+classifiers on a manually annotated corpus of $\approx2,000$ write-ups
+from the Internet Movie Database (IMDb).  The best results (82.9\%
+accuracy) for the two-class classification task (\emph{positive}
+versus \emph{negative}) were attained by an SVM system which used the
+presence of unigrams as classification features.
+
+A slightly different objective was pursued by \citet{Mishne:05} who
+attempted to classify Livejournal blogs according to the moods of
+their authors (e.g.  \emph{amused}, \emph{tired}, \emph{happy} etc.).
+The gold label corpus of $\approx$~815K blog posts was obtained
+automatically from the Livejournal website.  On this corpus, the
+author trained a supervised SVM classifier, reaching an average of 8\%
+improvement over the 50\% baseline.
+
+
 
 One of the first attempts to analyze sentiments on Twitter was made by
 \citet{Go:09}.  For their experiments, the authors collected a set of
