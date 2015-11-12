@@ -121,13 +121,14 @@ addressed first in that case.
 
 While earlier sentiment works were primarily concentrating on
 narratives \citep{Wiebe:90a,Wiebe:94} or newspaper articles
-\citep{Wiebe:03,Wiebe:05}, it soon became clear that social media
-provides a much more fertile ground for mining people's opinions.  The
-reason for this is the virtual absence of any moderation on many
-modern CMC services.  This lack of censorship allows users to be
-upfront about their feelings.  Combined with the great popularity of
-social networks, such freedom of expressing one's thoughts makes
-social media the arguably most suitable channel for sharing emotions.
+\citep{Wiebe:03,Wiebe:05,Bautin:08}, it soon became clear that social
+media provides a much more fertile ground for mining people's
+opinions.  The reason for this is the virtual absence of any
+moderation on many modern CMC services.  This lack of censorship
+allows users to be upfront about their feelings.  Combined with the
+great popularity of social networks, such freedom of expressing one's
+thoughts makes social media the arguably most suitable channel for
+sharing own emotions.
 
 It is therefore not surprising that the rapid emergence of numerous SM
 websites was accompanied by an increasing interest in their content
@@ -137,28 +138,27 @@ The authors investigated the correlation between users' moods on the
 economic chat boards and stock prices for about eight stocks.  For
 this purpose, they trained a collection of five classifiers on a
 training set of 500 messages manually labeled with three classes:
-\emph{buy} (positive attitude), \emph{sell} (negative attitude), and
-\emph{null} (neutral message).  With these classifiers, they
+\emph{buy} (positive attitudes), \emph{sell} (negative attitudes), and
+\emph{null} (neutral messages).  With these classifiers, they
 subsequently annotated the rest of the downloaded 25~K posts, taking
 the majority votes of the five systems as the final labels.  This
 study revealed that user chats strongly correlated with stock
 developments in a reactive way: changes in stock prices had typically
 lead to fluctuations of public opinions but not vica versa.
 
-
-Another notable attempt at analyzing sentiment in social media was
-made by \citet{Turney:02} who performed a two-class classification of
-410 Epinions comments, dividing customers' reviews of automobiles,
-banks, movies, and travel destinations into \emph{recommended} (thumbs
-up) and \emph{not recommended} (thumbs down) ones.  In order to make
-these decisions, the proposed system first computed the sum of the
-pointwise mutual information (PMI) scores between the adjectival and
-adverbial phrases occurring in the review text and the word
-``excellent'' and then subtracted from it the PMIs of the found
-phrases in conjunction with the word ``poor''.  Reviews with negative
-results were subsequently considered as \emph{thumbs down} and
-comments with non-negative total scores were accordingly classified as
-\emph{thumbs up}.
+A slightly different domain and objective were addressed by
+\citet{Turney:02} who performed a two-class classification of 410
+Epinions comments, dividing customers' reviews of automobiles, banks,
+movies, and travel destinations into \emph{recommended} (thumbs up)
+and \emph{not recommended} (thumbs down) ones.  In order to make these
+decisions, the proposed system first computed the sum of the pointwise
+mutual information (PMI) scores between the adjectival and adverbial
+phrases occurring in the review text and the word ``excellent'' and
+then subtracted from it the PMIs of the found phrases in conjunction
+with the word ``poor''.  Reviews with negative results were
+subsequently considered as \emph{thumbs down} and comments with
+non-negative total scores were accordingly classified as \emph{thumbs
+  up}.
 
 According to \citet{Turney:02}, the most challenging type of reviews
 to analyze in these experiments were the movie critiques (the accuracy
@@ -171,13 +171,16 @@ accuracy) for the two-class classification task (\emph{positive}
 versus \emph{negative}) were attained by an SVM system which used the
 presence of unigrams as classification features.
 
-A slightly different objective was pursued by \citet{Mishne:05} who
-attempted to classify Livejournal blogs according to the moods of
-their authors (e.g.  \emph{amused}, \emph{tired}, \emph{happy} etc.).
-The gold label corpus of $\approx$~815K blog posts was obtained
-automatically from the Livejournal website.  On this corpus, the
-author trained a supervised SVM classifier, reaching an average of 8\%
-improvement over the 50\% baseline.
+With the increasing spread of blogging services and social networks,
+sentiment researchers have also gradually shifted the focus of their
+work to these nascent text genres. \citet{Mishne:05} and
+\citet{Mishne:07}, for example, attempted to classify Livejournal
+blogs according to the moods of their authors (e.g.  \emph{amused},
+\emph{tired}, \emph{happy} etc.).  The gold label corpus of
+$\approx$~815K blog posts was obtained automatically from the
+Livejournal website.  On this corpus, the author trained a supervised
+SVM classifier, reaching an average of 8\% improvement over the 50\%
+baseline.
 
 
 
