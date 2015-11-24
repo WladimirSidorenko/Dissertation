@@ -19,52 +19,58 @@
 Among the first who addressed the problem of the automatic generation
 of sentiment lexica were \citet{Hatzivassi:97}.  In their work, the
 authors relied on the hypothesis that coordinatively conjoined terms
-often share the same semantic orientation.  To test this conjecture,
+often share the same semantic orientation while adversatively linked
+words rather express opposite polarities.  To test this conjecture,
 they automatically extracted all pairs of conjoined adjectives from
-the Wall Street Journal (WSJ) corpus and represented these adjectives
-as nodes in a graph.  The arcs weights of this graph were supposed to
-show the strength and direction by which two coordinatively conjoined
-terms influenced each others' polarity.  In order to derive these
-weights automatically, \citeauthor{Hatzivassi:97} trained a log-linear
-regression model on those pairs in which both nodes belonged to a
-manually labeled seed set of 1,336 adjectives and then let this model
-predict the weights for the rest of the arcs.  In the final step, the
+the Wall Street Journal (WSJ) corpus and represented those adjectives
+as nodes in a graph.  The arcs weights of this graph were to show the
+strength and direction by which two coordinatively conjoined terms
+influenced each others' polarity.  To derive these weights,
+\citeauthor{Hatzivassi:97} trained a log-linear regression model on
+those pairs of terms in which both nodes belonged to a manually
+labeled seed set of 1,336 adjectives and then let this model predict
+the weights for the rest of the arcs.  In the final step, the
 resulting graph was partitioned into two clusters -- that of positive
 and that of negative terms -- which were subsequently used to enrich
-the seed set.  This method, enhanced by the possibility of recognizing
-gradable adjectives, was later used in the classification experiments
-of \citet{Hatzivassi:00} to predict subjective and objective sentences
-in the WSJ.
+the initial seed set.
+%% This method, enhanced by the possibility of recognizing gradable
+%% adjectives, was later used in the classification experiments of
+%% \citet{Hatzivassi:00} to predict subjective and objective sentences in
+%% the WSJ.
 
 A different way of bootstrapping polarity terms from large text
 corpora was proposed by \citet{Turney:03}.  Following
 \citeauthor{Turney:02}'s original approach for classifying reviews
-\citep{Turney:02}, they generated a polarity lexicon by first taking a
-seed set of 14 a priory known polar adjectives (seven negative and
-seven positive) and then expading this set with the words that had the
-strongest pointwise mutual information associations with the chosen
-seeds.  The PMI scores were computed as the log ratio between the
-number of hits in which a new word $w$ appeared with any of the seed
-terms divided by the total number of hits for the complete seed set.
-As hits, the authors considered the number of relevant documents
-returned by \texttt{AltaVista} for given search queries.  This system
-attained an accuracy of 82.84\% on the General Inquirer Lexicon
-\citep{Stone:66} and correctly predicted polar terms from the lexicon
-of \cite{Hatzivassi:97} in 87.13\% of the cases. This method could
-also further be improved by using cosine similarities between word
-vectors from an LSA matrix instead of web-based PMIs.
+\citep{Turney:02}, the authors generated a polarity lexicon by first
+taking a seed set of 14 a priory known polar adjectives (seven
+negative and seven positive ones) and then expading this set with the
+words that had the strongest pointwise mutual information associations
+with the chosen seeds.  The PMI scores were computed as the log ratio
+between the number of hits in which a new word $w$ appeared with any
+of the seed terms, divided by the total number of hits for the
+complete seed set.  As hits, the authors considered the number of
+relevant documents returned by the \texttt{AltaVista} search engine
+for the given queries.  This system attained an accuracy of 82.84\% on
+the General Inquirer Lexicon \citep{Stone:66} and correctly predicted
+polar terms from the lexicon of \cite{Hatzivassi:97} in 87.13\% of the
+cases. %% This method could also be further improved by using cosine
+%% similarities between word vectors from an LSA matrix instead of
+%% web-based PMIs.
 
 One of the allegedly first attempts to derive a sentiment lexicon from
-a lexical ontology was made by \citet{Kim:04}.  In their work, the
-authors expanded their initial seed set of 34 adjectives and 44 verbs
-to a list of 18,192 presumably polar terms by iteratively enriching
-the seed words with their synonyms and antonyms from the WordNet
-database \citep{Miller:95}.
+a lexical ontology instead of corpus was made by \citet{Kim:04}.  In
+their work, the authors expanded an initial seed set of 34 adjectives
+and 44 verbs to a list of 18,192 presumably polar terms by iteratively
+enriching the seed words with their synonyms and antonyms from the
+\texttt{WordNet} database \citep{Miller:95}. In a similar way,
+\citet{Godbole:07} enriched their topic-specific seed sets of polar
+expressions by following the synonymy and antonymy links in
+\texttt{WordNet} and exponentially decreasing the probability of a new
+word being polar with the growing path length from a seed term.
 
-%% Another
-%% interesting finding of this paper was surpassed by using the cosine
-%% similarities between word vectors in an LSA matrix instead of PMI
-%% scores from web crawlers.
+%% Another interesting finding of this paper was surpassed by using
+%% the cosine similarities between word vectors in an LSA matrix
+%% instead of PMI scores from web crawlers.
 
 %% More precisely, the social orientation PMI (SO-PMI) of a new word
 %% $w$ was defined as: \begin{equation*} \text{SO-PMI}(w) =
@@ -75,33 +81,35 @@ database \citep{Miller:95}.
 %% and negative adjectives respectively and
 %% $\text{hits}(\cdot\text{NEAR}\cdot)$ is the number
 
-\citet{Takamura:05} applied the Ising spin model from the statistical
-mechanics to determine the semantic orientation of words.  They
-represented all words found in \emph{WordNet} \cite{Miller:95}, the
-Wall Street Journal, and the Brown corpus as nodes in a graph.  The
-edges of this graph represented associativity links and were
-established between two words if one of these word was a synonym, an
-antonym, or a hyponym of the other one or appeared in its gloss or
-context.  Taking into account the a priori known polarities of some of
-the terms, the Ising model then tried to find an approximation of the
-most likely polarity combination of all terms over all possible
-assignments.
-
 %% The authors evaluated the accuracy of their model on the General
 %% Inquirer lexicon \cite{Stone:66}.  Its final results (81.9\%) were
 %% comparable to the figures obtained by \citet{Turney:03} in their
 %% method (82.84\%) and significantly outperformed the precision of
 %% the approach proposed by \citet{Kamps:04} (73.4 versus 70.8).
 
-A purely dictionary-based method for generating sentiment lexicons was
-proposed by \citet{Esuli:06b}.  The authors automatically assigned
-positive, negative, and neutral polarity scores to synsets in
-\emph{WordNet} by iteratively expanding seed sets for each of these
-three polarity classes using a committee of binary and multiclass
-classifiers.  At each step of this process, these classifiers were
-trained on the seed sets obtained from the previous runs and then used
-to predict if further synsets immediately accessible from the seeds
-would belong the same polarity class as their seed term.
+Another purely dictionary-based method for generating sentiment
+lexicons was described by \citet{Esuli:06b}.  The authors
+automatically assigned positive, negative, and neutral polarity scores
+to synsets in \texttt{WordNet} by iteratively expanding seed sets for
+each of these three polarity classes using a committee of binary and
+multiclass classifiers.  At each step of this process, these
+classifiers were trained on the seed sets obtained from the previous
+runs and then used to predict whether further synsets immediately
+accessible from the recently expanded seeds would belong the same
+polarity class as their seed term.
+
+\citet{Takamura:05} attempted to unite corpus- and dictionary-based
+approaches into a single framework.  For this purpose, the authors
+adopted the Ising spin model from the statistical mechanics and
+represented all words found in \texttt{WordNet}, in the Wall Street
+Journal, and the Brown corpus as nodes in a graph.  The edges of this
+graph represented associativity links and were established between any
+two words if one of these word was a synonym, an antonym, or a hyponym
+of the other one or appeared in its gloss or context.  Taking into
+account the a priori known polarities of some of the terms, the Ising
+model then tried to find an approximation of the most likely polarity
+combination of all terms in the graph over all possible polarity
+assignments.
 
 \subsubsection{Sentiment Lexica for German}
 
