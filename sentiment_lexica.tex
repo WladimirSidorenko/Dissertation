@@ -57,8 +57,17 @@ cases. %% This method could also be further improved by using cosine
 %% similarities between word vectors from an LSA matrix instead of
 %% web-based PMIs.
 
+Other notable works on corpus-based lexicon induction include
+\citet{Kanayama:06}, who enhanced the method of
+\citeauthor{Hatzivassi:97} by incorporating iter-sentential coherence
+relations.  \citet{Kaji:07} also followed a corpus-based approach as
+they mined opinionated sentences from HTML pages using structural and
+linguistic clues and then extracted new polar terms from these
+sentences, considering words having the highest PMI association scores
+with the rest of the sentences as subjective.
+
 One of the allegedly first attempts to derive a sentiment lexicon from
-a lexical ontology instead of corpus was made by \citet{Kim:04}.  In
+a lexical ontology instead of a corpus was made by \citet{Kim:04}.  In
 their work, the authors expanded an initial seed set of 34 adjectives
 and 44 verbs to a list of 18,192 presumably polar terms by iteratively
 enriching the seed words with their synonyms and antonyms from the
@@ -87,25 +96,24 @@ word being polar with the growing path length from a seed term.
 %% method (82.84\%) and significantly outperformed the precision of
 %% the approach proposed by \citet{Kamps:04} (73.4 versus 70.8).
 
-Another purely dictionary-based method for generating sentiment
-lexicons was described by \citet{Esuli:06b}.  The authors
-automatically assigned positive, negative, and neutral polarity scores
-to synsets in \texttt{WordNet} by iteratively expanding seed sets for
-each of these three polarity classes using a committee of binary and
-multiclass classifiers.  At each step of this process, these
-classifiers were trained on the seed sets obtained from the previous
-runs and then used to predict whether further synsets immediately
-accessible from the recently expanded seeds would belong the same
-polarity class as their seed term.
+Another purely dictionary-based method was described by
+\citet{Esuli:06b}.  The authors automatically assigned positive,
+negative, and neutral polarity scores to synsets in \texttt{WordNet}
+by iteratively expanding seed sets for each of these three polarity
+classes using a committee of binary and multiclass classifiers.  At
+each step of this process, these classifiers were trained on the seed
+sets obtained from the previous runs and then used to predict whether
+further synsets immediately accessible from the recently expanded
+seeds would belong the same polarity class as their seed term.
 
 \citet{Takamura:05} attempted to unite corpus- and dictionary-based
-approaches into a single framework.  For this purpose, the authors
-adopted the Ising spin model from the statistical mechanics and
-represented all words found in \texttt{WordNet}, in the Wall Street
-Journal, and the Brown corpus as nodes in a graph.  The edges of this
-graph represented associativity links and were established between any
-two words if one of these word was a synonym, an antonym, or a hyponym
-of the other one or appeared in its gloss or context.  Taking into
+approaches into a single framework.  To this end, the authors adopted
+the Ising spin model from the statistical mechanics and represented
+all words found in \texttt{WordNet}, in the Wall Street Journal, and
+the Brown corpus as nodes in a graph.  The edges of this graph
+represented associativity links and were established between any two
+words, if one of these word was a synonym, an antonym, or a hyponym of
+the other one or appeared in its gloss or context.  Taking into
 account the a priori known polarities of some of the terms, the Ising
 model then tried to find an approximation of the most likely polarity
 combination of all terms in the graph over all possible polarity
@@ -115,7 +123,7 @@ assignments.
 
 One of the first attempts to create a sentiment dictionary for German
 was made by \citet{Remus:10}.  In their work, the authors
-automatically translated the General Inquirer lexicon \cite{Stone:66}
+automatically translated the General Inquirer lexicon \citep{Stone:66}
 into German.  In order to incorporate domain-specific knowledge into
 this translated resource, they also collected a set of terms that were
 strongly associated with positive or negative product reviews and
@@ -129,10 +137,10 @@ expressions).
 
 Similar work was also done by \citet{Waltinger:10} who compiled a list
 of 10,141 subjective terms by first automatically translating the
-Subjectivity Clues lexicon \cite{Wilson:05} and then manually
+Subjectivity Clues lexicon \citep{Wilson:05} and then manually
 reassessing polarity scores of the translated items.  The author
 expanded this list with the most frequent German synonyms of the
-translated terms and also added a set of negated opinionated phrases
+obtained terms and also added a set of negated opinionated phrases
 (e.g. \emph{nicht schlecht} (\emph{not bad})).  The resulting
 dictionary was used as a source of features for an automatic
 classification of the polarity of Amazon reviews and showed superior
@@ -152,7 +160,7 @@ this pruned set of new adjectives to their original lexicon.  The
 total size of this final dictionary run up to 7,432 entries, 2,779 of
 which were positive.
 
-\subsection{Domain-Specific Sentiment Lexica}
+\subsubsection{Domain-Specific Sentiment Lexica}
 
 \citet{Chetviorkin:14} obtained a set of possible subjective terms
 from English and Russian microblogs by using an ensemble of supervised
