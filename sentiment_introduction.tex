@@ -50,7 +50,7 @@ subjectivity, which in turn require different approaches and methods
 to use.  Depending on the language level being analyzed, researchers
 typically distinguish three different subtypes of sentiment analysis:
 \begin{itemize}
-  \item\emph{subsentential} of \emph{fine-grained} SA whose task is to
+  \item\emph{subsentential} or \emph{fine-grained} SA whose task is to
     determine and analyze specific subjective opinions and/or
     evaluations within single clauses,
   \item\emph{sentential} analysis which tries to ascribe a single
@@ -84,11 +84,11 @@ the cost of sacrificing important details.
 Due to these crucial disparities between different variants of
 sentiment analysis, speaking of the difficulty or easiness of this
 task for a specific domain in general is in the same way wrong as
-making overall judgments about the amenability of that domain to the
+making overall judgments about the amenability of this domain to the
 whole natural language processing field: one always has to specify the
 precise level of sentiment analysis whose difficulty is being analyzed
-as she has to set apart a particular NLP task in order to assess its
-complicatedness.
+just as she has to set apart a particular NLP task in order to assess
+its complicatedness.
 
 In this chapter, we will primarily concentrate on the most challenging
 SA objective -- that of the fine-grained SA.  After a brief summary of
@@ -113,14 +113,14 @@ TODO \cite{Nasukawa:03}, \cite{Yi:03}, \cite{Kanayama:04}
 
 One of the main problems that people working on opinion mining are
 typically confronted with in the first place is that of the discourse
-domain to analyze.  Since sentiment analysis is a highly
+domain to be analyzed.  Since sentiment analysis is a highly
 domain-dependent task \citep[cf.][]{Aue:05,Blitzer:07,Li:08} --
 i.e. systems trained for specific topics and on specific text genres
 do not neatly generalize to other subjects and other linguistic styles
 -- a natural question that arises in this context is which of the
 domains should be addressed first in that case.
 
-While earlier sentiment works primarily dealt with narratives
+While earlier sentiment works were primarily concerned with narratives
 \citep{Wiebe:90a,Wiebe:94} or newspaper articles
 \citep{Wiebe:03,Wiebe:05,Bautin:08}, it soon became clear that social
 media provides a much more fertile ground for mining people's
@@ -138,13 +138,14 @@ extract users' evaluations automatically from CMC services were
 \citet{Das:01}.  The authors investigated the correlation between
 users' attitudes on economic chat boards and stock prices for about
 eight stocks.  For this purpose, they trained a collection of five
-classifiers on a training set of 500 messages manually labeled with
-three classes: \emph{buy} (positive evaluations), \emph{sell}
-(negative evaluations), and \emph{null} (neutral statements).  With
-these classifiers, they subsequently annotated the rest of the
-downloaded 25,000 posts, taking the majority votes of the five systems
-as the final labels, and scrutinized the interrelationship between
-these predictions and the observed stock indices.
+classifiers on a training set of 500 messages that were manually
+labeled with three classes: \emph{buy} (positive evaluations),
+\emph{sell} (negative evaluations), and \emph{null} (neutral
+statements).  With these classifiers, they subsequently annotated the
+rest of the downloaded 25,000 posts, taking the majority votes of the
+five systems as the final labels, and scrutinized the
+interrelationship between these predictions and the observed stock
+indices.
 %% This study revealed that user chats strongly correlated with stock
 %% developments in a reactive way: changes in stock prices had
 %% typically lead to fluctuations of public opinions but not vica
@@ -179,9 +180,9 @@ versus \emph{negative}) were attained by an SVM system which used the
 presence of unigrams as classification features.
 
 Due to its high commercial impact, opinion mining of customer reviews
-soon became one of the most prolific topics in the sentiment analysis
-research. \cite{Dave:03}, for example, attempted to classify C|Net and
-Amazon reviews of movies and electrical appliances as positive or
+soon became one of the most popular topics in the sentiment analysis
+research. \citet{Dave:03}, for example, attempted to classify C|Net
+and Amazon reviews of movies and electrical appliances as positive or
 negative using the Na\"{\i}ve Bayes and SVM approaches.
 %% The authors found that replacing certain entities, such as product
 %% names, abbreviations, or numerals, with special meta-tokens and
@@ -192,8 +193,8 @@ TODO: add more works
 With the increasing spread of blogging services and social networks,
 sentiment researchers have also gradually shifted the focus of their
 work to these nascent text genres. \citet{Mishne:05} and
-\citet{Mishne:07}, for example, attempted to classify Livejournal
-blogs according to the moods of their authors (e.g.  \emph{amused},
+\citet{Mishne:07}, for instance, tried to classify Livejournal blogs
+according to the moods of their authors (e.g.  \emph{amused},
 \emph{tired}, \emph{happy} etc.).  The gold labels of their
 $\approx$~815,000 blog corpus were obtained automatically from blog
 labels on the Livejournal website.  On this corpus, the authors
@@ -209,15 +210,15 @@ further continued by \citet{Godbole:07}, who applied a lexicon-based
 method to detect users' opinions in newspapers and blogs, and
 \citet{Gill:08}, who conducted an inter-annotator agreement study of
 mood detection in blogs, finding that raters' consensus on the
-expressed emotions strongly increased with the length of the blogs.
+expressed emotions strongly increased with the length of blog entries.
 
 Speaking of blog length, it should certainly be said that the
 inception of the micro-blogging service Twitter in 2006 was a real
-game changer to the opinion research of social media: the sudden
-availability of huge amounts of data, the presence of all possible
-social, national, and age groups as well as a high idiosyncracy of the
-language used gave rise to numerous scientific publications worth to
-be described in a separate subsection.
+game changer to the opinion mining field: the sudden availability of
+huge amounts of data, the presence of all possible social, national,
+and age groups as well as a high idiosyncracy of the language used on
+this service gave rise to numerous scientific publications, which we
+think are worth to be described in a separate subsection.
 
 \subsection{Sentiment Analysis of Twitter}
 
