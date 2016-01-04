@@ -97,7 +97,7 @@ analysis of social media in particular, we will introduce a
 comprehensive corpus of German tweets that has been created for the
 purpose of this work.  A detailed inter-annotator agreement study of
 this dataset will reveal which linguistic and extra-linguistic factors
-significantly influence the distribution of sentiments in Twitter and
+significantly influence the distribution of sentiments in Twitter, and
 which of them cause utter confusion among human experts.  After
 obtaining an upper bound on human performance, we will successively
 compare with it the results attained by automatic sentiment systems,
@@ -108,22 +108,109 @@ textual spans of sentiments, their objects of evaluation
 
 \subsection{Prehistory of the Field}
 
-But before we delve into the odds and ends of contemporary sentiment
-analysis, we first would like to make a short digression into the
-history of this field, which would allow us to understand the modern
-trends and theories better.
+However, before we delve into the odds and ends of contemporary
+sentiment analysis, we first would like to make a short digression
+into the history of this field in order to understand its modern
+trends and theories better.  Like many other subdisciplines of
+computational linguistics, opinion mining has emerged from several
+other areas of research, including philosophy, psychology, cognitive
+sciences, and last but least narratology and linguistics.
 
-Like many other subdisciplines of computational linguistics, opinion
-mining takes its roots from miltiple areas of research, such as
-philosophy, psychology, cognitive sciences, and last but least
-narratology and linguistics.
+In \emph{philosophy}, the questions about the nature of emotions,
+their interaction with the human consciousness, and their influence on
+people's deeds have occupied the minds of many great scholars,
+starting from Plato and Aristotle.  Plato, for instance, argued in his
+treatise ``The Republic'' \citep[Book~IV]{Plato:91} that the human
+soul presumably consists of three fundamental parts: the rational, the
+appetitive, and the passionate.  The last part -- the one by which we
+become angry or get into a temper -- determines our notion of justice
+by favoring either the rational or the appetitive aspect.  These ideas
+were further particularized and partly revised by Plato's most
+prominent student -- Aristotle.  In Book~II of ``The Rhetoric''
+\citep{Aristotle:54}, Aristotle not only provided a precise taxonomy
+and definitions of possible emotions that constituted the passionate
+part of the mind, but also contended that these were both the reasons
+for the change of human judgements and the consequences of those
+changes \cite[cf.][p. 157]{Leighton:82}.
 
-In philosophy, TODO:
+As noted by \citet{Sousa:14}, the sheer variety of phenomena covered
+by the term ``emotion'' and its closest neighbors tended to discourage
+tidy philosophical theory and daunted researchers for a long period of
+time.  A real renaissance of the emotional studies happened, however,
+in the late 19-th century in \emph{psychology} with the introduction
+of the James-Lange Theory.
 
-In psychology: Evolutionary Theory of Emotion, James-Lange Theory of
-Emotion, Cannon-Bard Theory of Emotion, Schachter-Singer Theory
+In psychology:
 
-In literary studies and linguistics, Theory of Narrative Sentences
+TODO: Evolutionary Theory of Emotion, James-Lange Theory of Emotion,
+Cannon-Bard Theory of Emotion, Schachter-Singer Theory
+
+The simplest theory of emotions, and perhaps the theory most
+representative of common sense, is that emotions are simply a class of
+feelings, differentiated from sensation and proprioceptions by their
+experienced quality. William James proposed a variant of this view
+(commonly known as the ``James-Lange'' theory of emotion, after James
+and Carl G. Lange) according to which emotions are specifically
+feelings caused by changes in physiological conditions relating to the
+autonomic and motor functions. When we perceive that we are in danger,
+for example, this perception sets off a collection of bodily
+responses, and our awareness of these responses is what constitutes
+fear. James thus maintained that ``we feel sorry because we cry, angry
+because we strike, afraid because we tremble, and [it is] not that we
+cry, strike, or tremble, because we are sorry, angry, or fearful, as
+the case may be'' (James 1884, 190).
+
+That emotions typically have formal objects highlights another
+important feature of emotional experience which feeling theories
+neglect, and which other psychological theories attempt to
+accommodate: emotions involve evaluations. If someone insults me and I
+become angry, his impertinence will be the aspect of his behavior that
+fits the formal object of anger: I only become angry once I construe
+the person's remark as a slight; the specific nature of my emotion's
+formal object is a function of my appraisal of the situation. Magna
+Arnold introduced the notion of appraisal into psychology,
+characterizing it as the process through which the significance of a
+situation for an individual is determined. Appraisal gives rise to
+attraction or aversion, and emotion is equated with this ``felt
+tendency toward anything intuitively appraised as good (beneficial),
+or away from anything intuitively appraised as bad (harmful).''
+(Arnold 1960, 171). Subsequent appraisal theories accept the broad
+features of Arnold's account, and differ mainly in emphasis. Richard
+Lazarus (1991) makes the strong claim that appraisals are both
+necessary and sufficient for emotion, and sees the identity of
+particular emotions as being completely determined by the patterns of
+appraisal giving rise to them. Nico Frijda (1986) takes the patterns
+of action readiness following appraisals to be what characterize
+different emotions, but departs from Arnold in not characterizing
+these patterns solely in terms of attraction and aversion. Klaus
+Scherer and his Geneva school have elaborated appraisal theories into
+sophisticated models that anatomize different emotions in terms of
+some eighteen or more dimensions of appraisal. Emotions turn out to be
+reliably correlated, if not identified, with patterns of such complex
+appraisals. (Scherer et al., 2001). Appraisal theories can be
+described as taking a functional approach to emotion, insofar as
+appraisals lead to reactions whose function is to deal with specific
+situation types having some significance for an individual (Scherer
+2006). This approach suggests that the space of emotions can be
+conceptualized as multidimensional. In practice, however, so-called
+dimensional theories simplify the problem of representation by
+reducing these to just two or three (Russell 2003).
+
+In literary studies and linguistics,
+
+TODO: Theory of Narrative Sentences
+
+Some philosophers suggest that the directive power which emotions
+exert over perception is partly a function of their essentially
+dramatic or narrative structure (Rorty 1988). A particularly subtle
+examination of the role of narrative in constituting our emotions over
+the long term is to be found in (Goldie 2012).  de Sousa (1987) has
+suggested that the stories characteristic of different emotions are
+learned by association with ``paradigm scenarios.'' These are drawn
+first from our daily life as small children and later reinforced by
+the stories, art, and culture to which we are exposed. Later still,
+they are supplemented and refined by literature and other art forms
+capable of expanding the range of one's imagination of ways to live.
 
 Among the first who applied this theory to the needs and wants of
 \emph{computational linguistics} was \citet{Wiebe:90a}.  In her work,
@@ -137,8 +224,8 @@ sentences.
 
 The real breakthrough in the sentiment analysis field, however,
 happened with the introduction of the first manually annotated
-corpora.  Notable contributions to this were done by \cite{Wiebe:03}
-\cite{Wilson:03}.
+corpora.  Notable contributions in this regard were done by
+\cite{Wiebe:03} \cite{Wilson:03}.
 
 Computational Linguistics: Wilensky (1983), Dyer (1983),
 
