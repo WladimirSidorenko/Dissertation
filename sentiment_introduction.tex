@@ -214,7 +214,8 @@ established by the works of \citet{Pang:02}, \citet{Wiebe:05},
 \citet{Wilson:05}, \citet{Breck:07}, \citet{Choi:09,Choi:10},
 \citet{Yessenalina:11}, \citet{Socher:11, Socher:12} and many others.
 Nevertheless, many challenges of sentiment analysis, such as domain
-adaptation or analysis of non-English texts, still need to be met.
+adaptation or analysis of non-English texts, still pose considerable
+difficulties.
 
 \subsection{Sentiment Analysis of Social Media}
 
@@ -264,9 +265,9 @@ with a set of hand-crafted rules.  Further notable works in this
 direction include those of \citet{Antweiler:04}, who investigated how
 postings on stock message boards correlated with stock volatility;
 \citet{Gruhl:05}, who studied the cross-correlation between online
-mentions of a product and sales spikes for that commodity, also
+mentions of products and sales spikes for that commodities, also
 proposing an algorithm for tracking such correlations and making
-predictions about product's future sales automatically; finally,
+predictions about products' future sales automatically; finally,
 \citet{Ghose:07} examined the effect of opinions on the pricing power
 of merchants in online marketplaces, claiming that more positive
 opinions on the Web entitled traders to increase their selling prices.
@@ -319,16 +320,18 @@ milestones in this research direction were set by the works of
 %% using token n-grams of different lengths had a significant positive
 %% effect on the accuracy of both classifiers.
 
-Nevertheless, with the increasing spread of blogging services and
-social networks, sentiment researchers have also gradually shifted the
-focus of their work from product feedbacks to these upcoming text
-genres.  \citet{Mishne:05} and \citet{Mishne:07}, for instance, tried
-to classify Livejournal blogs according to the moods of their authors
-(e.g.  \emph{amused}, \emph{tired}, \emph{happy} etc.).  The gold
-labels for their $\approx$~815,000 blog corpus were obtained
-automatically from blog labels on the Livejournal website.  On this
-corpus, the authors trained a supervised SVM classifier, reaching an
-average of 8\% improvement over the 50\% baseline.
+Notwithstanding that product reviews continued playing a crucial role
+for the success of the e-commerce, with the increasing spread of
+blogging services and social networks, sentiment researchers have
+gradually shifted the focus of their work from product feedbacks to
+these upcoming text genres.  \citet{Mishne:05} and \citet{Mishne:07},
+for instance, tried to classify Livejournal blogs according to the
+moods of their authors (e.g.  \emph{amused}, \emph{tired},
+\emph{happy} etc.).  The gold labels for their $\approx$~815,000 blog
+corpus were obtained automatically from blog labels on the Livejournal
+website.  On this corpus, the authors trained a supervised SVM
+classifier, reaching an average of 8\% improvement over the 50\%
+baseline.
 
 \citet{Chesley:06} also applied an SVM system in order to classify
 user blogs into objective, positive and negative subjective ones.  The
@@ -369,6 +372,46 @@ sentiment web-services.  Using the majority prediction of these three
 services as their gold labels, the authors trained an SVM classifier
 on this corpus and then let their system predict the subjectivity and
 polarity classes of new unseen messages.
+
+As in the previous cases, a key factor for the success and popularity
+of this field was the creation and dissemination of high-quality big
+annotated corpora.  An important role in this respect was played by
+the organizers of the SemEval competition on sentiment analysis in
+Twitter \cite{Nakov:13,Rosenthal:14,Rosenthal:15}.  For the first run
+of the shared task in \citeyear{Nakov:13}, \citet{Nakov:13} prepared a
+substantially-sized dataset with more than 15,000 messages (the
+SemEval Tweet corpus), which were manually labeled on the
+crowdsourcing platform Amazon Mechanical Turk.  For this purpose, five
+turkers were asked to determine the overall polarity of each collected
+microblog and to annotate all occurrences of subjective expressions in
+those messages with their contextual polarity.
+
+The best performing system -- a supervised SVM classifier of
+\citet{Mohammad:13} -- won three out of four subtasks in this
+iteration.  This solution relied on an extensive set of hand-crafted
+surface-form, semantic, and syntactic features and also actively used
+multiple manually and automatically generated sentiment lexica,
+including the NRC emotion lexicon of \citeauthor{Mohammad:13a}
+(\citeyear{Mohammad:13a}), the MPQA lexicon of \citeauthor{Wilson:05}
+(\citeyear{Wilson:05}), and the sentiment list of \citeauthor{Hu:04}
+(\citeyear{Hu:04}).  The authors noticed a crucial impact of the
+lexicon features on the quality of final predictions (an ablation test
+showed that the results of the system worsened by $\approx8.5\%$ when
+the lexicon information was removed).
+
+Other competing submissions \cite{Becker:13,Guenther:13,Kokciyan:13}
+basically utilized the same approach as \citet{Mohammad:13} but used
+considerably less information from lexicons.  Nevertheless, all 10
+top-scoring systems in this run could outperform the 80\% benchmark
+when predicting the phrase-level polarity of subjective expressions
+and improve on the 60\% bound when classifying the overall polarity of
+the tweets.
+
+The success of this shared task, which attracted more than 40
+participating teams, incited the organizers to continue this
+competition in the following years.  With slight modifications, the
+message polarity subtack was offered in \citeyear{Rosenthal:14}
+\cite[cf.][]{Rosenthal:14}.  In addition
 
 TODO: \citet{Rosenthal:15} \citet{Sarker:15}, \citet{Dalmia:15},
 \citet{Han:15}, \citet{Chikersal:15}, \citet{Hagen:15},
