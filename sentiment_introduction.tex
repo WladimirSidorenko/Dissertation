@@ -361,29 +361,49 @@ authors collected a set of 1,600,000 Twitter messages containing
 smileys.  Based on these emoticons, they automatically derived
 polarity classes of these tweets (positive or negative) and then used
 these bootstrapped labels to train the Na\"{\i}ve Bayes, MaxEnt, and
-SVM classifiers.  The best $F$-score for this two-class classification
-problem could be achieved by the last system and run up to 82.2\%.
+SVM classifiers.  The last system produced the best results, reaching
+an $F$-score of 82.2\%.
 
-Similar work was done later by \citet{Pak:10}, who used the Na\"{\i}ve
-Bayes approach to differentiate between neutral, positive, and
-negative messages.  At roughly the same time, \citet{Barbosa:10} also
-gathered a collection of 200,000 microblogs from three publicly
-available sentiment web-services.  Using the majority prediction of
-these three services as their gold labels, the authors trained an SVM
-classifier on this corpus and then let their system predict the
-subjectivity and polarity classes of new unseen tweets.
+A similar approach was also used by \citet{Pak:10}, who applied the
+Na\"{\i}ve Bayes method to differentiate between neutral, positive,
+and negative messages.  Likewise, \citet{Davidov:10} obtained the gold
+labels for their corpus using distant supervision and then trained a
+kNN-like classifier on this dataset.
 
-In the same vein, \citet{Kouloumpis:11} trained a supervised AdaBoost
-classifier \cite{Schapire:00} on a subset of tweets from the Edinburgh
-Twitter corpus\footnote{\url{http://demeter.inf.ed.ac.uk}} and the
-emoticon dataset\footnote{\url{http://twittersentiment.appspot.com}}
-of \citet{Go:09}.  Reaching an average $F1$-measure of 68\% on a
-manually labeled dataset, the authors found the microblog-specific
-features (such as the presence of intensifiers or the occurrence of
-abbreviations and emoticons) the most relibale traits for making
-predictions.  Other important works in this direction include those of
-\citet{Davidov:10}, \citet{Jansen:09}, and \citet{Agarwal:11}.  TODO:
-elaborate on these works.
+A different way of collecting the data was proposed by
+\citet{Barbosa:10}.  The authors gathered a collection of 200,000
+microblogs from three publicly available sentiment web-services.
+Using the majority votes of these websites as the gold categories for
+the tweets, they trained a supervised SVM system on this corpus and
+then let this system predict the subjectivity and polarity classes of
+new unseen messages.
+
+The emoticon
+dataset\footnote{\url{http://twittersentiment.appspot.com}} of
+\citet{Go:09} along with a subset of the Edinburgh Twitter
+corpus\footnote{\url{http://demeter.inf.ed.ac.uk}} was later used by
+\citet{Kouloumpis:11}, who trained an AdaBoost classifier on these
+data.  Reaching an average $F1$-measure of 68\% on a held-out manually
+labeled dataset, the authors came to the conclusion that
+microblog-specific features (such as the presence or absence of
+intensifiers or the occurrence of abbreviations and emoticons) were
+the most relibale traits for this classification.  This finding,
+however, was doubted by \citet{Agarwal:11}, who contended that
+POS-specific polarity features and tree-kernel methods were a better
+alternative.
+
+Similarly to the opinion mining of customer reviews, sentiment
+analysis of Twitter could not go unnoticed by the economic and
+sociological communities.  One of the first attempts to analyze tweets
+from these perspectives was made by \citet{Jansen:09}, who studied
+microblogs' power as online word of mouth.  A manual inspection of
+messages mentioning renowned company brands revealed that almost 20\%
+of these tweets expressed some polar opinions about their products.
+More than a half of these opinionated microblogs were positive
+judgements whereas 35\% of the posts represented negative sentiments.
+These findings strongly correlated with the results of an automatic
+analysis, suggesting that social media in general and microblogging in
+particular could be a valuable source of economic evidence.
 
 An attempt to address sociological problems with SA methods was made
 by \citet{Tumasjan:10}, who analyzed public opinions about federal
@@ -396,24 +416,26 @@ parties or prominent German politicians and subsequently translated
 these tweets into English.  The resulting translations were analyzed
 with the proprietary LIWC software \cite{Pannebaker:07}, which used
 relative word counts to compute associations between the given topics
-and a pre-defined emotions set.  This study revealed that Twitter
+and a pre-defined emotions set.  This study also proved that Twitter
 could serve as a platform for political deliberation and that the mere
-number of tweets referencing some party strongly corresponded with the
+number of tweets referencing some party strongly corresponded to the
 results of political election polls.
 
 As in the previous cases, a key factor for the success and popularity
-of this subfield was the creation and dissemination of high-quality
-big annotated corpora.  An important role in this respect was played
-by the organizers of the SemEval competition on sentiment analysis in
-Twitter \cite{Nakov:13,Rosenthal:14,Rosenthal:15}.
+of this subfield among NLP researchers was the creation and
+dissemination of high-quality big annotated corpora.  An important
+role in this respect was played by the organizers of the SemEval
+competition on sentiment analysis in Twitter
+\cite{Nakov:13,Rosenthal:14,Rosenthal:15}.
 
 For the first run of the shared task in \citeyear{Nakov:13},
 \citet{Nakov:13} prepared a substantially-sized dataset with more than
 15,000 messages (the SemEval Tweet corpus), which were manually
-labeled on the crowdsourcing platform Amazon Mechanical Turk.  To this
-end, five Turkers were asked to determine the overall polarity of each
-collected microblog and to annotate all occurrences of subjective
-expressions in those messages with their contextual polarity.
+labeled on the crowdsourcing platform Amazon Mechanical Turk.  For
+this purpose, five Turkers were asked to determine the overall
+polarity of each collected microblog and to annotate all occurrences
+of subjective expressions in those messages with their contextual
+polarity.
 
 The best performing system in this iteration -- a supervised SVM
 classifier of \citet{Mohammad:13} -- won three out of four subtasks.
@@ -437,24 +459,24 @@ outperformed the 60\% benchmark when classifying the overall polarity
 of the tweets.
 
 The success of this shared task, which attracted more than 40
-participating teams, incited the organizers to continue this
-competition in the following years.  With slight modifications
-(addition of new tweets, sarcastic microblogs, and LiveJournal
-sentences), both subtasks were offered in \citeyear{Rosenthal:14}
-\cite[cf.][]{Rosenthal:14}.  Again, the system proposed by
-\citet{Mohammad:13} with some minor adjustments \cite{Zhu:14} ranked
-first in the phrase-polarity task and got fourth place on predicting
-the overall polarity of the messages.
+participants, incited the organizers to continue this competition in
+the following years.  With slight modifications (addition of new
+tweets, sarcastic microblogs, and LiveJournal sentences), both
+subtasks were offered in \citeyear{Rosenthal:14}
+\cite[cf.][]{Rosenthal:14}.
 
-The top-scoring system for the second track was proposed by
+Here again, the system proposed by \citet{Mohammad:13} with some minor
+adjustments \cite{Zhu:14} ranked first in the phrase-polarity task and
+got fourth place on predicting the overall polarity of the messages.
+The top-scoring solution for the latter track was proposed by
 \citet{Miura:14}.  It also relied on a supervised SVM classifier
 operating on a set of hand-crafted features but additionally utilized
 a dedicated pre-processing pipeline and also imposed special penalties
 on the polarity classes that were over-represented in the corpus.
 
-In \citeyear{Rosenthal:15}, three more subtasks were included in the
+In \citeyear{Rosenthal:15}, three more subtasks were included into the
 competition:
-\begin{inparaenum}[\itshape a\upshape)]
+\begin{inparaenum}[\itshape i\upshape)]
   \item message polarity classification on specific topics,
   \item topic-based trend prediction, and
   \item determining prior polarity of lexical terms.
