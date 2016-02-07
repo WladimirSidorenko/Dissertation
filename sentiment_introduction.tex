@@ -431,11 +431,10 @@ competition on sentiment analysis in Twitter
 For the first run of the shared task in \citeyear{Nakov:13},
 \citet{Nakov:13} prepared a substantially-sized dataset with more than
 15,000 messages (the SemEval Tweet corpus), which were manually
-labeled on the crowdsourcing platform Amazon Mechanical Turk.  For
-this purpose, five Turkers were asked to determine the overall
-polarity of each collected microblog and to annotate all occurrences
-of subjective expressions in those messages with their contextual
-polarity.
+labeled on the crowdsourcing platform Amazon Mechanical Turk.  To that
+end, five Turkers were asked to determine the overall polarity of each
+collected microblog and to annotate all occurrences of subjective
+expressions in those messages with their contextual polarity.
 
 The best performing system in this iteration -- a supervised SVM
 classifier of \citet{Mohammad:13} -- won three out of four subtasks.
@@ -461,58 +460,71 @@ of the tweets.
 The success of this shared task, which attracted more than 40
 participants, incited the organizers to continue this competition in
 the following years.  With slight modifications (addition of new
-tweets, sarcastic microblogs, and LiveJournal sentences), both
-subtasks were offered in \citeyear{Rosenthal:14}
+tweets, inclusion of sarcastic microblogs and LiveJournal sentences),
+both subtasks were offered in \citeyear{Rosenthal:14}
 \cite[cf.][]{Rosenthal:14}.
 
 Here again, the system proposed by \citet{Mohammad:13} with some minor
 adjustments \cite{Zhu:14} ranked first in the phrase-polarity task and
-got fourth place on predicting the overall polarity of the messages.
+got fourth place in predicting the overall polarity of the messages.
 The top-scoring solution for the latter track was proposed by
 \citet{Miura:14}.  It also relied on a supervised SVM classifier
 operating on a set of hand-crafted features but additionally utilized
 a dedicated pre-processing pipeline and also imposed special penalties
 on the polarity classes that were over-represented in the corpus.
 
-In \citeyear{Rosenthal:15}, three more subtasks were included into the
+In \citeyear{Rosenthal:15}, three more subtasks were included in the
 competition:
 \begin{inparaenum}[\itshape i\upshape)]
-  \item message polarity classification on specific topics,
+  \item polarity classification of messages pertaining to specific
+    topics,
   \item topic-based trend prediction, and
-  \item determining prior polarity of lexical terms.
+  \item determining prior polarity of lexical terms found in tweets.
 \end{inparaenum}
 
-\citet{Sarker:15}, \citet{Dalmia:15}, \citet{Han:15},
-\citet{Chikersal:15}, \citet{Hagen:15}, \citet{Fernandez:15}
+This time, the best system for the phrase polarity subtask, which also
+ranked second in predicting polarities of complete messages, was
+proposed by \citet{Severyn:15}.  In their approach, the authors first
+unsupervisedly learned neural embeddings for words from a big
+unannotated Twitter corpus.  These vector representations were then
+fine-tuned to the sentiment analysis task on the dataset of
+\citet{Go:09}.  Finally, the resulting embeddings were passed as input
+to a two-layer convolutional deep neural network.
 
-Works attempting a more fine-grained sentiment analysis on Twitter
-usually try to derive a common polarity class for each message with
-respect to a particular target that is mentioned in that microblog.
+A much harder subtask in this run turned out to be classifying message
+polarities towards some topics.
 
-\citet{Jiang:11}, for instance, tried to classify the polarity of
-microblogs pertaining to a predefined set of specific topics, like
-\emph{Obama}, \emph{Google}, \emph{iPad} etc.  To this end, the
-authors manually labeled a corpus of 1,939 messages and trained a
-binary SVM model in order to predict the subjectivity and the polarity
-of the tweets with respect to the given subjects.
+%% \citet{Sarker:15}, \citet{Dalmia:15}, \citet{Han:15},
+%% \citet{Chikersal:15}, \citet{Hagen:15}, \citet{Fernandez:15}
 
-This classifier could achieve an accuracy of 68.2\% for the
-subjectivity classification and 85.6\% for the polarity prediction.
-The $F$-score of this system for the latter task could further be
-improved from 66\% to 68.3\% by incorporating the information about
-the predicted polarity class of the re-tweets, replies, and other
-microblogs posted by the same author.
+%% Works attempting a more fine-grained sentiment analysis on Twitter
+%% usually try to derive a common polarity class for each message with
+%% respect to a particular target that is mentioned in that microblog.
 
-\citet{Mitchell:13} broadened the set of possible targets by allowing
-any named entities found in microblogs to be associated with a
-specific polarity.  For that purpose, the authors combined a CRF-based
-NER system with a sentiment predicting CRF by considering three
-different possibilities of such combination: a pipeline approach, a
-joint multi-layer model, and a single classifier with a combined
-tagset.  The best scores on their corpora of 7,105 Spanish and 2,350
-English tweets could be achieved with the joint and pipeline
-approaches.  The accuracy of recognizing the opinionated named
-entities amounted to 31\% for Spanish and 30.4\% for English.
+%% \citet{Jiang:11}, for instance, tried to classify the polarity of
+%% microblogs pertaining to a predefined set of specific topics, like
+%% \emph{Obama}, \emph{Google}, \emph{iPad} etc.  To this end, the
+%% authors manually labeled a corpus of 1,939 messages and trained a
+%% binary SVM model in order to predict the subjectivity and the polarity
+%% of the tweets with respect to the given subjects.
+
+%% This classifier could achieve an accuracy of 68.2\% for the
+%% subjectivity classification and 85.6\% for the polarity prediction.
+%% The $F$-score of this system for the latter task could further be
+%% improved from 66\% to 68.3\% by incorporating the information about
+%% the predicted polarity class of the re-tweets, replies, and other
+%% microblogs posted by the same author.
+
+%% \citet{Mitchell:13} broadened the set of possible targets by allowing
+%% any named entities found in microblogs to be associated with a
+%% specific polarity.  For that purpose, the authors combined a CRF-based
+%% NER system with a sentiment predicting CRF by considering three
+%% different possibilities of such combination: a pipeline approach, a
+%% joint multi-layer model, and a single classifier with a combined
+%% tagset.  The best scores on their corpora of 7,105 Spanish and 2,350
+%% English tweets could be achieved with the joint and pipeline
+%% approaches.  The accuracy of recognizing the opinionated named
+%% entities amounted to 31\% for Spanish and 30.4\% for English.
 
 %% Other notable works in this direction include \citet{Chunping:14} who
 %% first applied a Na\"{\i}ve Bayes classifier to predict the
