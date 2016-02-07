@@ -485,15 +485,60 @@ competition:
 This time, the best system for the phrase polarity subtask, which also
 ranked second in predicting polarities of complete messages, was
 proposed by \citet{Severyn:15}.  In their approach, the authors first
-unsupervisedly learned neural embeddings for words from a big
-unannotated Twitter corpus.  These vector representations were then
-fine-tuned to the sentiment analysis task on the dataset of
-\citet{Go:09}.  Finally, the resulting embeddings were passed as input
-to a two-layer convolutional deep neural network.
+unsupervisedly learned neural word embeddings from a big unannotated
+Twitter corpus.  These vector representations were then fine-tuned to
+the sentiment analysis task on the dataset of \citet{Go:09}.  Finally,
+the resulting embeddings were passed as input to a two-layer
+convolutional deep neural network and jointly trained on the official
+SemEval dataset.
 
-A much harder subtask in this run turned out to be classifying message
-polarities towards some topics.
+A much harder subtask, in which only three of seven participants could
+outperform the majority class baseline, proved to be the
+classification of message polarities towards specific topics (track
+C).  The winner of this subtask -- a system proposed by
+\citet{Boag:15} -- attained a macro-averaged $F1$-score of 50.51\%.
+This approach again relied on a supervised SVM classifier and used an
+extensive set of carefully designed hand-crafted features, including
+raw and normalized bag-of-words (BOW), the number of positive and
+negative emoticons, the number of question and exclamation marks,
+average and maximum sentiment scores of single words occurring in a
+tweet, and many others.  The BOW features along with the
+lexicon-derived information were found to be the most useful
+classification attributes in these experiments.  A dedicated
+preprocessing pipeline with spelling corrction and Twitter-specific
+tokenization also proved to have a positive effect on the final
+prediction results.
 
+As can be seen from the above, even despite its relatively young age,
+sentiment analysis of Twitter has already received much of attention
+in the NLP community.  A notable fact, however, is that, with a few
+exceptions \cite{Basile:13,Araque:15,Cesteros:15}, most of the works
+on opinion mining in microblogs were primarily dealing with either
+English data only or with English translations of foreign language
+tweets.  In the subsequent sections of this chapter, we are going to
+investigate whether preliminary findings that have already been
+obtained for English (the inherent difficulty of the Twitter domain
+for automatic SA methods, the crucial utility of lexicon features, the
+necessity of preprocessing the input text before passing it to a
+classifier) are equally applicable to German messages too.
+
+We begin by introducing a comprehensive corpus of German tweets that
+have been manually labeled by two human experts with sentiment
+information.  After describing the data gathering procedure used to
+compile this corpus, detailing its annotation scheme, and analyzing
+the inter-rater agreement, we turn our attention to the evaluation and
+analysis of existing sentiment resources used for German.  In Section
+\ref{sec:snt:lex}, we first evaluate three German polar lexica which
+have been semi-automatically translated from English.  We estimate the
+precision and recall of these dictionaries on our corpus and also
+compare with them current state-of-the-art approaches for generating
+such lexica automatically without translation.  After determining the
+best-performing lexicon, we then look how beneficial this lexicon
+information might be for fine-grained SA tasks, such as determining
+sources, targets, and the actual spans of subjective opinions in
+microblogs.  Finally, we summarize our findings and draw further
+conclusions in Section \ref{sec:snt:concl} of this chapter.
+\newpage
 %% \citet{Sarker:15}, \citet{Dalmia:15}, \citet{Han:15},
 %% \citet{Chikersal:15}, \citet{Hagen:15}, \citet{Fernandez:15}
 

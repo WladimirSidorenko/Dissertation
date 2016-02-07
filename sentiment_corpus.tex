@@ -10,6 +10,253 @@
 % Rycko und der DNB - Deutsche Nationalbibliothek
 
 \section{Sentiment Corpus}\label{sec:corpus}
+
+With the ever growing role of online social media (SM) in people's
+everyday life, a high-quality automatic analysis of text data shared
+on the SM services becomes a vital necessity.  Unfortunately, despite
+numerous attempts and strenuous efforts, the quality of automatic
+processing of computer-mediated messages is still far inferior to the
+results that are usually obtained on standard language texts.  This
+leeway is partially due to the lack of sufficiently big manually
+annotated corpora.  Indeed, most of the existing popular SM datasets
+\cite{Go:09,Pak:10} have been either created (semi-)automatically
+(thus introducing an additional noise into an already inherently noisy
+domain) or are rather small to be used in data-intensive
+machine-learning (ML) approaches.
+
+In this paper, we present a novel comprehensive corpus of German
+tweets that were manually labeled with fine-grained sentiment
+relations by two human experts.  With this corpus we try to overcome
+both of the above limitations: On the one hand, our dataset is
+sufficiently big, consisting of ${\approx}\,8,000$ tweets, which is
+just about 75\% of the size of the MPQA corpus \cite{Wiebe:05a} -- a
+de facto standard dataset in the sentiment analysis field.  On the
+other hand, a high level of inter-annotator agreement reached between
+the two experts (cf. Section \ref{sec:iaa}) suggests a high quality of
+the coded data.
+
+We begin our description with a brief summary of related work done on
+annotating sentiment-relevant information in the SM domain so far.  We
+then introduce the selection criteria that we used to sample the raw
+tweets for our corpus.  After presenting the annotation scheme in
+Section \ref{sec:ascheme} and describing the annotation tool and
+format in Section \ref{sec:tformat}, we present several
+inter-annotator agreement studies which we conducted on our corpus at
+different annotation steps (including the initial experiment, the
+adjudicating phase, and the final expansion of our dataset).  In the
+concluding part, we show statistics on the annotated elements and
+investigate how these statistics correlate with the selection criteria
+that we applied initially to collect the data.
+
+\section{Related work}
+
+The presumably first reported attempt at creating a labeled sentiment
+dataset for Twitter was made by \citet{Go:09}.  Drawing on the work of
+\citet{Read:05}, the authors gathered a large collection of 1.6~M
+microblogs by downloading messages which contained positive or
+negative smileys and then automatically assigned polarity labels
+(positive or negative) to the collected tweets based on these
+emoticons.  In the same vein, \citet{Pak:10} compiled a corpus of
+300~K short messages by retrieving microblogs with emotionally charged
+smileys and then expanded this collection with objective tweets
+obtained from Twitter accounts of popular newswires.
+
+A slightly different way of automatically bootstrapping corpus labels
+was proposed by \citet{Barbosa:10} who fetched 200~K microblogs along
+with their subjectivity classes and ${\approx}\,150$~K Twitter posts
+along with their polarity scores from three publicly available
+sentiment web-services and used the majority votes of these services
+as gold tags for their data.
+
+As already mentioned previously, all of these datasets were created in
+an unsupervised manner and therefore cannot serve as a reliable source
+of information.  An attempt to alleviate this problem was made by
+\citet{Nakov:13} as part of the SemEval competition.  The SemEval
+corpus -- the supposedly largest hand labeled sentiment collection of
+microblogs to date -- consists of more than 15~K tweets which were
+manually annotated with their overall polarities and subjective
+expressions by five experts using Amazon Mechanical Turk
+(cf. \citet{diakopoulos:10} for a similar crowdsourcing
+experiment). These annotations, however, did not capture the relation
+between the polarity expressed by tweet and the particular entity that
+this tweet was evaluating.
+
+Target-oriented sentiment annotation was attempted by \citet{Jiang:11}
+and \citet{Saif:13}.  The former authors collected a corpus of 1,939
+messages pertaining to one of a predefined set of five entities
+(\emph{Obama}, \emph{Google}, \emph{iPad}, \emph{Lakers}, and
+\emph{Lady Gaga}).\footnote{Similar work was done by Sanders group
+  (cf. \url{http://www.sananalytics.com/lab/twitter-sentiment/}).} The
+latter group obtained a short list of 28 popular targets that were
+frequenty metioned on Twitter and then randomly sampled 3,000
+microblogs related to one of these topics.  Both annotations were
+again done manually.
+
+The dataset presented in this paper significantly outperforms current
+state of the art in many noticeable regards: First of all, except for
+SemEval, the size of our corpus substantially surpasses any existing
+manually labeled sentiment collections created for Twitter.  Secondly,
+our annotation scheme is considerably richer than the one applied by
+Nakov et al. (It not only captures polarities of subjective terms but
+also reflects their intensities, possible negations, and modifiers as
+well as polarities and intensities of complete opinions, also
+capturing their respective sources and targets.) Last but not least,
+our corpus was created for German -- a language segment that only
+marginally was touched on in Twitter literature.
+
+\section{Data}
+
+The first question that naturally arises when one starts creating a
+new dataset is that of the selection criteria to use in order to
+collect the data.  For low-level NLP tasks (such as part-of-speech
+tagging or syntactic parsing), it typically suffices to define the
+language domain to sample from (since the phenomena of interest are
+usually ubiquitous and evenly spread within the domain).  For
+semantically demanding tasks, however, one also has to pay attention
+to various in-domain factors as they might significantly skew the
+desired distribution (if, for example, the desired phenomenon only
+occurs when people speak about a particular subject).
+
+For our work, the in-domain factors to consider were the topics and
+the form of tweets.  Since we wanted our corpus to be as
+representative as possible, we had to make sure that the topics we
+choose for sampling lend themselves as fruitful opinion sources.  At
+the same time, we did not want automatically generated ad and news
+tweets to spoil our data and also introduced additional formal
+criteria (described below) that the tweets had to satisfy in order to
+be chosen.  But then again, applying these restriction might make the
+dataset excessively biased, so we did allow for a certain proportion
+of tweets being selected even if they did not conform to our
+constraints.
+
+For the purpose of our experiments, we created a dataset consisting of
+7,992 German tweets.  These microblogs were tracked between March and
+September 2013 on the basis of extensive keyword lists for four
+different topics, including:
+\begin{itemize}
+\item the federal elections in Germany in 2013,
+\item the papal conclave 2013,
+\item discussions of general political issues,
+\item and casual everyday conversations.\footnote{For this part, we took
+  the German Twitter snapshot of \citet{Scheffler:14}.}
+\end{itemize}
+
+This tracking procedure gave us a set of 94.4 million messages.  In
+order to obtain a representative excerpt from this set that, on the
+one hand, would contain as many evaluative opinions as possible but,
+on the other hand, would not be excessively biased, we then applied
+three formal selection criteria to distribute the tweets of each topic
+into three bins:
+\begin{enumerate}
+\item tweets that
+  contain at least one polar term from the sentiment polarity
+  lexicon `SentiWS' \cite{Remus:10};
+\item tweets that fail the first criterion but have at
+  least one emoticon or an exclamation mark;
+\item all remaining tweets (for this topic).
+\end{enumerate}
+
+From each of the four topics and each of their three respective bins,
+we then randomly chose 666 messages. This gave us our final dataset of
+7,992 microblogs ($666\text{ tweets} \times 4\text{ topics} \times
+3\text{ formal criteria}$).
+
+\section{Annotation Scheme}\label{sec:ascheme}
+
+\section{Tools and Format}\label{sec:tformat}
+In the next step, two human experts annotated the corpus using the
+\texttt{MMAX2} tool.\footnote{\url{http://mmax2.sourceforge.net/}}
+
+\section{Inter-annotator Agreement}\label{sec:iaa}
+For estimating the inter-annotator agreement of the final dataset, we
+adopted the Cohen's $\kappa$ metric \cite{Cohen:60}.  Following the
+standard practice for computing this metric, we first calculated the
+observed agreement $p_o$ as the ratio of the matching token
+annotations to the total number of tokens:
+\begin{equation*}\textstyle
+  p_o = \frac{T - A_1 + M_1 - A_2 + M_2}{T}
+\end{equation*}
+where $T$ denotes the total number of tokens, $A_1$ and $A_2$ are the
+numbers of tokens annotated with the given class by the first and
+second annotator respectively, and $M_1$ and $M_2$ represent the
+number of tokens with matching annotations for that class.  And we
+then estimated the chance agreement $p_c$ in the usual way as:
+\begin{equation*}\textstyle
+  p_c = c_1 \times c_2 + (1.0 - c_1) \times (1.0 - c_2)
+\end{equation*}
+where $c_1$ and $c_2$ are the proportions of tokens annotated with the
+given class in the first and second annotation respectively, i.e. $c_1
+= \frac{A_1}{T}$ and $c_2 = \frac{A_2}{T}$.
+
+Two questions that arose during this computation were:
+\begin{inparaenum}[\itshape i)\upshape]
+\item if tokens belonging to several overlapping annotation spans of
+  the same class in one annotation had to be counted multiple times
+  when computing the $A$ scores (for instance, if we had to count
+  the words \textit{this}, \textit{nice}, and \textit{book} in
+  Example \ref{exmp:1} twice as sentiments when computing $A_1$ and
+  $A_2$), and
+\item if we had to assume that two annotated spans from different
+  experts agreed on all of their tokens when these spans had at
+  least one token in common or if we rather had to count the actual
+  number of tokens whose annotation was matching (i.e., if we had to
+  consider the annotation of the word \textit{My} in Example
+  \ref{exmp:1} as matching or not considering that the rest of the
+  sentiment spans agreed).
+\end{inparaenum}
+
+\begin{example}\label{exmp:1}
+  \textrm{Annotation 1:}\\ \sentiment{My father hates \sentiment{this
+      nice book}.}\\\\ \textrm{Annotation 2:}\\ My \sentiment{father
+    hates \sentiment{this nice book}.}
+\end{example}
+
+To answer these questions, we introduced two agreement metrics:
+\emph{binary} and \emph{proportional} kappa.  With the former variant,
+we counted tokens belonging to multiple eponymous annotation spans
+multiple times and considered all tokens belonging to the given
+annotation span as matching if this span agreed on at least one token
+with the annotation from the other expert.  With the latter metric,
+every token labeled as sentiment (target or source) was counted only
+once, and we only calculated the actual number of tokens with matching
+annotations when computing the $M$ scores.  The final agreement
+results measured with these two metrics are shown in Table
+\ref{tbl:agrmnt}.
+
+\begin{table}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}
+    \small
+    \begin{tabular}{|p{0.2\columnwidth}| % first columm
+        *{5}{>{\centering\arraybackslash}p{0.12\columnwidth}|}} % next five columns
+      \hline
+          {\bfseries Element} & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\kappa$\\\hline
+
+          \multicolumn{6}{|c|}{\cellcolor{cellcolor}Binary Kappa}\\\hline
+
+          Sentiment & 14,748 & 15,929 & 14,969 & 26,047 & 65.03\\
+          Target & 5,765 & 6,629 & 5,292 & 9,852 & 64.76\\
+          Source & 966 & 1,207 & 910 & 1,619 & 65.99\\
+          EExpression & 5,574 & 5,989 & 5,659 & 7,419 & 82.83\\\hline
+
+          \multicolumn{6}{|c|}{\cellcolor{cellcolor}Proportional Kappa}\\\hline
+
+          Sentiment & 13,316 & 15,375 & 13,316 & 25,352 & 58.82\\
+          Target & 4,789 & 6,462 & 4,789 & 9,659 & 56.61\\
+          Source & 898 & 1,180 & 898 & 1,604 & 64.1\\
+          EExpression & 5,441 & 5,977 & 5,441 & 7,395 & 80.29\\\hline
+    \end{tabular}
+    \egroup
+    \caption{Sentiment corpus agreement.\\
+      {\small ($M1$ -- number of tokens with matching labels in the
+        first annotation, $A1$ -- total number of labeled tokens in
+        the first annotation, $M2$ -- number of tokens with matching
+        labels in the second annotation, $A2$ -- total number of
+        labeled tokens in the second annotation)}}
+    \label{tbl:agrmnt}
+  \end{center}
+\end{table}
+
 \subsection{Selection Criteria}
 \subsubsection{Topic Selection}
 \subsubsection{Formal Selection}
