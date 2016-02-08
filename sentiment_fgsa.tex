@@ -1,0 +1,673 @@
+% FILE: sentiment_fgsa.tex  Version 0.0.1
+% AUTHOR: Uladzimir Sidarenka
+
+% This is a modified version of the file main.tex developed by the
+% University Duisburg-Essen, Duisburg, AG Prof. Dr. Günter Törner
+% Verena Gondek, Andy Braune, Henning Kerstan Fachbereich Mathematik
+% Lotharstr. 65., 47057 Duisburg entstanden im Rahmen des
+% DFG-Projektes DissOnlineTutor in Zusammenarbeit mit der
+% Humboldt-Universitaet zu Berlin AG Elektronisches Publizieren Joanna
+% Rycko und der DNB - Deutsche Nationalbibliothek
+
+\section{Fine-grained Sentiment Analysis}\label{sec:snt:fgsa}
+
+The main goal of fine-grained sentiment analysis is traditionally
+defined as the identification of subjective evaluative opinions
+(\emph{sentiments}), the holders of these opinions (\emph{sources}),
+and their respectively evaluated objects (\emph{targets}) in text.
+Since an accurate automatic prediction of these elements would enable
+us to track the public opinion on essentially any object (a product, a
+service, a political decision etc.) in a literally online mode,
+fine-grained sentiment analysis is commonly considered to be one of
+the most attractive but, unfortunately, also one of the most
+challenging tasks in computational linguistics.
+
+\subsection{Fine-grained Sentiment Analysis Using Conditional Random Fields}
+Our next step after obtaining the training data was to train automatic
+classifiers to see how good their performance would be on this dataset
+for the two proposed sentiment interpretations.
+
+Based on the current state-of-the-art practices in the sentiment
+analysis research, we formulated this task as a sequence labeling
+problem.  The main objective of this problem is to assign the
+most-probable label sequence $\vec{y} =
+\langle{}y_0,\ldots,y_n\rangle$ to an input instance $\bm{x} =
+\langle{}x_0,\ldots,x_n\rangle$ given a feature representation
+$\vec{x}$ for that instance.  The tagset $\mathcal{Y}$ in our case
+consisted of only four labels $\mathcal{Y} = \{\text{TRG}, \text{SRC},
+\text{SNT}, \text{NON}\}$ which represented targets, sources,
+sentiments, and ``none of the above'' elements respectively.
+
+Again, relying on the state-of-the-art approaches, we chose to use the
+conditional random fields classifiers which had previously shown
+superior results due to the discriminative structured nature of their
+predictions.
+
+\subsubsection{Linear-chain CRFs}
+In the case of the first-order linear-chain CRF model, the conditional
+probability of $\vec{y}$ given $\vec{x}$ w.r.t. the feature parameters
+$\Theta$ is formulated as the softmax function:
+\begin{equation*}\label{eqn:prob}\small
+  \begin{split}
+    p_{\Theta}(\vec{y}|\vec{x}) =
+    \frac{\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y},
+      \vec{x}, i)\Big)}{Z_{\vec{x}}}
+  \end{split}
+\end{equation*}
+where $n$ represents the total length of the input instance,
+$\theta_k$ and $\mathit{f}_k$ are the weight and value of the $k$-th
+feature activated at the $i$-th item of that instance (in our case,
+the $i$-th token of the input sentence), and $Z_{\vec{x}}$ is the
+normalization factor which is computed over all possible label
+assignments $\mathcal{Y}^n$:
+\begin{equation*}\small
+  \begin{split}
+    Z_{\vec{x}} = \sum\limits_{\vec{y}' \in
+      \mathcal{Y}^n}\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y}',
+    \vec{x}, i)\Big)
+  \end{split}
+\end{equation*}
+In the case of the first-order linear-chain models, the feature
+function $\mathit{f}_k(\vec{y},\vec{x}, i)$ is a binary- or
+real-valued function of the token $x_i$ and its predicted tag $y_i$
+(state feature) or a pair of adjacent token labels $(y_{i-1}, y_i)$
+(transition feature).
+
+During the training step, feature parameters $\Theta$ are successively
+optimized in order to maximize the log conditional likelihood of the
+training data $\mathcal{D} = \{(\vec{x}_m,\vec{y}_m)\}_{m=1}^M$.  The
+partial derivatives of the log-likelihood function $\ell(\mathcal{D})$
+w.r.t. to the feature weights $\Theta$, which are needed for
+performing this optimization, are then computed as the difference
+between the empirical and the model expectation of the respective
+feature values taken over the whole training set:
+\begin{equation*}\label{eqn:pderiv}\small
+  \begin{split}
+    \frac{\partial}{\partial{\theta_k}}\ell(\mathcal{D}) = &
+    \sum\limits_{m=1}^M\sum\limits_{i=1}^{n}\big(\mathit{f}_k(\vec{y}_m,
+    \vec{x}_m, i) -
+    \bm{E}_{\bm{\Theta}}[\mathit{f}_k(\mathcal{Y}^n, \vec{x}_m, i)]
+    \big)
+  \end{split}
+\end{equation*}
+The latter expectations can be estimated dynamically at each training
+step using the belief-propagation algorithm
+\cite{Pearl:82}.\footnote{A detailed description of the
+  belief-propagation algorithm in application to different CRF
+  variants is provided in Appendix A of this paper.}
+
+\subsubsection{Semi-Markov CRFs}
+Instead of making their predictions over single tokens, semi-Markov
+CRFs try to partition the input sequence $\bm{x}$ into contiguous
+segments $\vec{s} = \langle{}s_1,\ldots,s_l\rangle{}$ where each
+segment $s_i$ consists of one or more tokens which all share the same
+common tag $y_i$.
+
+Features in semi-Markov models are defined at the level of segments
+and, like in the linear-chain case, are binary- or real-valued
+functions associated either with the segment $s_i$ and its label $y_i$
+or a pair of adjacent segment labels $(y_{i-1}, y_i)$.
+
+During the training and the later prediction step, the model considers
+all potential segmentations for all possible label assignments and all
+possible segment lengths ranging from 1 to $L$ where $L$ is the length
+of the longest sequence of tokens with identical tags that was
+observed in the training data.  The decoding step then jointly finds
+the most probable segmentation $\hat{s}$ and the label sequence
+$\vec{y}$ for that segmentation using either the greedy search or the
+dynamic Viterbi algorithm.
+
+\subsubsection{Higher-order CRFs}
+Unlike the first-order models whose transition features can only
+access a pair of adjacent element labels $(y_{i-1}, y_i)$, transition
+features of higher-order linear-chain and semi-Markov CRFs encode
+information about complete label sequences up to length $d$ that might
+precede the predicted label $y_i$ where $d$ is the maximum order of
+the model.
+
+But since the number of such label sequences grows exponentially in
+the order of the encoded dependencies (up to
+$\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$), the running time of
+the training and inference algorithms rapidly becomes prohibitively
+expensive and amounts to
+$\mathcal{O}(n(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
+for the linear-chain case and
+$\mathcal{O}(nL(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
+for the semi-Markov models.
+
+Because this problem is intractable in general \cite{Istrail:00},
+researchers are usually forced to resort to some sort of heuristics
+like an early state pruning \cite{Mueller:13} or state-transition
+reduction.
+
+For the purpose of our experiments, we applied the affix-based
+algorithm of \citet{Nguyen:14}.  This algorithm relies on the
+advantage that the actual number of possible sequences of $d$
+consecutive segment labels that are observed in the training set is
+typically much smaller than
+$\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$.  Furthermore, the
+number of possible transitions that need to be considered for the
+given label sequence $(y_{i-d}, y_{i-d+1},\ldots,y_i)$ can further be
+reduced by restricting them only to those patterns for which this
+label sequence forms the longest possible suffix.
+
+The running time of this algorithm for the semi-Markov case runs up to
+$\mathcal{O}(nL\left\vert\mathcal{P}\right\vert\left\vert\mathcal{Y}\right\vert)$
+where $\left\vert\mathcal{P}\right\vert$ is the total number of the
+label prefixes observed in the training set.  And even though this
+number can still be exponential in the order of the dependencies in
+the worst case, this algorithm usually leads to much faster results in
+practice especially when the label patterns in the addressed domain
+are sparse.
+
+\subsubsection{Tree-structured CRFs}
+In contrast to the linearly structured models, in which the predicted
+label $y_i$ only depends on the state attributes of the respective
+item $x_i$ and the label scores of the preceding tokens or segments
+and where the syntax information can only be expressed as feature
+attributes of single items, tree-CRFs allow to incorporate syntactic
+dependencies directly into the model's structure.
+
+In our experiments, we used the automatically constructed dependency
+trees of the sentences as the underlying graphs for the
+tree-structured CRF model.  Like in the linear CRF case, every
+predicted label $y_i$ in this model is dependent on the state features
+of the token $x_i$, but, instead of hard-coding dependencies on the
+label scores of the previous tokens, we let transition features
+connect the predicted label with every label score $y_c$ where $c$
+ranges over all indices of the child nodes of the token $x_i$ in the
+dependency tree.
+
+Since the resulting model graphs are acyclic, the inference in this
+type of CRFs can still be exact and its running time remains the same
+as for the first-order linear chain models:
+$\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
+
+\subsubsection{Experiments}\label{sec:experiment}
+For our experiments, we split our final corpus into three parts using
+70\% of it as a training set, 15\% as cross-validation data, and the
+remaining 15\% for testing purposes.  The data were tokenized with an
+adjusted version of Christopher Potts'
+Twitter-tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+and preprocessed using the rule-based normalization approach of
+\citet{Sidarenka:13}.
+
+%% During the normalization, Twitter-specific phenomena like @-mentions,
+%% retweets, and URIs that were not syntactically integrated in any
+%% sentence of the message were removed from the tweets and those
+%% elements which played an integral syntactic role were replaced with
+%% the special artificial tokens \%User, \%Link etc.  Emoticons like :-),
+%% \smiley{}, \frownie{} etc. were also replaced with the placeholders
+%% \%PosSmiley, \%NegSmiley, or simply \%Smiley depending on their prior
+%% polarity.  Furthemore, out-of-vocabulary words which could be
+%% converted to in-vocabulary terms with a pre-defined set of
+%% transformations were also normalized.
+
+We then labeled the preprocessed data with their part-of-speech tags
+using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger} Version
+  3.2 with the German parameter file UTF-8.}  \cite{Schmid:95} and
+parsed obtained sentences with the \texttt{Mate} dependency
+parser\footnote{We used \texttt{Mate} Version \texttt{3.61} with the
+  German parameter model 3.6.}  \cite{Bohnet:13}.  These automatically
+derived trees were then used as the source of syntactic features for
+all our models and the underlying graph structures for tree-CRFs.
+
+Since \texttt{MMAX2} did not provide a straightforward support for
+storing character offsets of the tokens and the automatically
+tokenized preprocessed data did not necessarily agree with the corpus
+tokenization, we next applied the Needleman-Wunsch algorithm
+\cite{Needleman:70} to align the manual annotation with the
+automatically segmented data.
+
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \small
+    \begin{tabular}{|p{0.12\columnwidth}| % first columm
+        *{9}{>{\centering\arraybackslash}p{0.08\columnwidth}|}} % next nine columns
+      \hline
+          {\bfseries Element} & 1 lcCRF & 2 lcCRF & 3 lcCRF & 4 lcCRF & 1 smCRF & 2 smCRF & 3 smCRF & 4 smCRF & 1 trCRF\\\hline
+
+          \multicolumn{10}{|c|}{\cellcolor{cellcolor}Training Set}\\\hline
+
+          Sentiment & 85.91 & 83.82 & 84.33 & 85.45 & 82.92 & 88.13 & 83.15
+          & 80.67 & 87.07\\
+          Source & 78.14 & 76.74 & 77.84 & 80.59 & 73.15 & 79.88 & 73.95 &
+          71.55 & 80.47\\
+          Target & 79.31 & 70.52 & 71.57 & 73.47 & 67.95 & 76.18 & 70.04 &
+          67.51 & 82.14\\\hline
+          %% Sentiment & 87.77 & 85.25 & 86.18 & 81.91 & 86.11 & 90.06 & 86.91 & 81.96 & 80.53\\
+          %% Source & 77.58 & 73.77 & 77.94 & 74.09 & 75.83 & 80.83 & 68.3 & 70.85 & 72.65\\
+          %% Target & 79.07 & 78.57 & 79.83 & 75.19 & 70.95 & 77.04 & 72.3 & 75.56 & 72.45\\\hline
+
+          \multicolumn{10}{|c|}{\cellcolor{cellcolor}Test Set}\\\hline
+
+          Sentiment & 32.39 & 31.32 & 33.07 & 32.99 & 30.22 & \textbf{33.09}* & 30.69
+          & 30.41 & 31.66\\
+          Source & 25.31 & \textbf{29.64}** & 28.05 & 27.43 & 23.49 &
+          26.38 & 24.24 & 23.85 & 25.15\\
+          Target & \textbf{29.54} & 25.38 & 25.59 & 20.41 & 25.6 &
+          26.26 & 26.49 & 26.16 & 25.52\\\hline
+          %% Sentiment & 32.91 & 31.85 & 31.71 & 32.7 & 31.16 & 31.52 & 32.01 & \textbf{34} & 32.66\\
+          %% Source & 26.67 & 27.09 & \textbf{27.4} & 23.16 & 26.02 & 26.17 & 21.15 & 23.77 & 27.16\\
+          %% Target & 24.73 & 23 & 22.87 & \textbf{25.22} & 21.56 & 21.56 & 21.18 & 24.94 & 22.72\\\hline
+    \end{tabular}
+    \egroup
+    \caption{Automatic sentiment analysis (broad sentiment
+      interpretation).\\ {\small lcCRF -- linear-chain CRFs, smCRF --
+        semi-Markov CRFs, trCRF -- tree-structured CRFs; 1, 2, and 3
+        denote the order} \\ {\small token-level classification
+        accuracy differs statistically significantly from the 1 lcCRF
+        model at $p < 0.01$ (*) or $p < 0.05$ (**)}}
+    \label{tbl:res-broad}
+  \end{center}
+\end{table*}
+
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \small
+    \begin{tabular}{|p{0.12\columnwidth}| % first columm
+        *{9}{>{\centering\arraybackslash}p{0.08\columnwidth}|}} % next nine columns
+      \hline {\bfseries Element} & 1 lcCRF & 2 lcCRF & 3
+      lcCRF & 4 lcCRF & 1 smCRF & 2 smCRF & 3 smCRF & 4 smCRF & 1
+      trCRF\\\hline
+
+          \multicolumn{10}{|c|}{\cellcolor{cellcolor}Training Set}\\\hline
+
+          Sentiment & 87.36 & 83.43 & 83.63 & 81.17 & 82.85 & 81.59 &
+          80.03 & 80.37 & 84.68\\
+          Source & 67.12 & 69.38 & 71.34 & 66.58 & 61.46 & 65.06 &
+          63 & 65.67 & 61.52\\
+          Target & 72.84 & 62.72 & 64.77 & 60.52 & 60.02 & 61.47 &
+          59.14 & 60.17 & 66.41\\\hline
+
+          %% Sentiment & 87.01 & 83.42 & 83.4 & 81.53 & 82.36 & 81.5 & 81.8 & 80.38 & 84.32\\
+          %% Source & 66.63 & 68.41 & 70.79 & 68.67 & 60.88 & 66.09 & 67.8 & 66.82 & 61.56\\
+          %% Target & 73.65 & 64.85 & 66.67 & 64.76 & 61.61 & 63.61 & 65.16 & 62.23 & 67.18\\\hline
+
+          \multicolumn{10}{|c|}{\cellcolor{cellcolor}Test Set}\\\hline
+
+          Sentiment & 61.13 & 59.9 & 59.36 & 60.08 & 60.11 & 60.03 &
+          59.31 & 60.05 & \textbf{62.92}\\
+          Source & 20.18 & 22.53 & 24.51 & 23.26 & 18.13 & 23.55 &
+          \textbf{27.04} & 26.06 & 22.05\\
+          Target & 22.94 & 21.89 & 23.59 & 22.94 & 19.43 & 23.01 &
+          22.8 & \textbf{23.36} & 21.87\\\hline
+
+          %% Sentiment & 60.26 & 59.34 & 59.22 & 60.3 & 59.58 & 59.86 & 58.43 & 59.22 & \textbf{62.86}\\
+          %% Source & 19.3 & 21.13 & 23.38 & 25.75 & 19.2 & 24.49 & 24.18 & \textbf{26.77} & 21.83\\
+          %% Target & 20.43 & 20.5 & 20.96 & \textbf{22.76} & 17.86 & 21.01 & 21.78 & 20.83 & 19.99\\\hline
+    \end{tabular}
+    \egroup
+    \caption{Automatic sentiment analysis (narrow sentiment
+      interpretation).}
+    \label{tbl:res-narrow}
+  \end{center}
+\end{table*}
+
+\subsubsection{Features}
+As our state features in the classification experiments, we used the
+following types of attributes:
+\begin{itemize}
+\item\emph{Formal}, which included the initial three characters of
+  each token, the last three characters, and the spelling class of the
+  token (e.g. alphanumeric, digit, or punctuation etc.);
+
+\item\emph{Morphological}, which encompassed the PoS tags of the
+  tokens, case and gender of the inflectable PoS types, the degree of
+  comparison for adjectives, and mood, tense, and person form of
+  verbs;
+
+\item\emph{Lexical}, which comprised the form of the
+  token.\footnote{We also considered using neural word embeddings
+    instead of unigrams but this unexpectedly lead to only marginal or
+    no improvement.}  For the German modal verbs \emph{wollen}
+  (\emph{want to}) and \emph{m\"ogen} (\emph{like}), we additionally
+  differentiated whether they were governing another verb or had a
+  noun phrase as their complement.  Finally, we also used the polarity
+  class of the token which we obtained from the Zurich polarity
+  lexicon \cite{Clematide:10};
+
+\item \emph{Syntactic}, which included the dependency relation via
+  which the given token was connected to its parent, the lemma of the
+  parent node as a unigram feature, the PoS tag and the polarity class
+  of the grandparent, and the overall polarity class of all immediate
+  children.  This polarity class was computed by summing up the
+  polarity scores of all child nodes that were found in the sentiment
+  lexicon of \citet{Clematide:10} and checking whether this final sum
+  was negative or positive.
+\end{itemize}
+
+In addition to that, we also used a set of complex lexical-syntactic
+features which combined several semantic and syntactic traits into
+single feature attributes.  These complex features included the
+dependency relation of the previous token in the sentence + the
+dependency relation of the current token, the dependency relation of
+the next word in the sentence + the dependency relation of the current
+token, the lemma of the child node + the dependency relation of this
+child, the pos-tag of the child node + its dependency relation + the
+pos-tag of the current token.
+
+%% the lemma of the child node + the dependency relation of the
+%% child to the current token + the lemma of the current token,
+
+%% dependency relation of the preceding word to its parent + the
+%% dependency relation of the current token, dependency relation of the
+%% next word to its parent + the dependency relation of the current
+%% token, lemma of the child node + the dependency relation of the child
+%% to the current token, lemma of the child node + the dependency
+%% relation of the child to the current token + lemma of the current
+%% token, the pos-tag of the child node + its dependency relation + the
+%% pos-tag of the current token.
+
+We checked the utility of these features by conducting an ablation
+test using the first-order linear-chain and the tree-structured models
+with the broad interpretation scheme.
+%%  All of these attributes proved to increase the classification
+%% accuracy with the lexical and syntactic features being the most useful
+%% ones.
+The relative changes of the classification results on the test set
+that were caused by the removal of each of these feature groups are
+shown in Table \ref{tbl:ablation}.\footnote{Since we did not observe
+  the test data during the feature development stage, some of the
+  features that had lead to classification improvements on the
+  training corpus showed a negative influence on the test data.}
+
+\begin{table}[hb]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep} \small
+    \begin{tabular}{|p{0.2\columnwidth}| % first columm
+        *{5}{>{\centering\arraybackslash}p{0.12\columnwidth}|}} % next five columns
+      \hline
+          \multirow{2}{0.2\columnwidth}{\bfseries Element} &
+          \multicolumn{5}{c|}{\bfseries Removed feature type}\\\cline{2-6}
+          & Form & Morph & Lex & Synt & Cmplx\\\hline
+
+          \multicolumn{6}{|c|}{\cellcolor{cellcolor}1-st order linear-chain CRFs}\\\hline
+
+          Sentiment & -2.12 & -1.41 & -2.7 & -1.32 & -5.25\\
+          Target & -2.62 & -0.7 & -5.24 & -0.47 & -5.49\\
+          Source & -1.94 & -1.91 & -2.49 & -2.92 & -7.83\\\hline
+
+          \multicolumn{6}{|c|}{\cellcolor{cellcolor}Tree-structured CRFs}\\\hline
+
+          Sentiment & -0.05 & -0.09 & +0.02 & -0.65 & -5.59\\
+          Target & -1.4 & +1.11 & +2.71 & +3.87 & -4.28\\
+          Source & -0.63 & +0.12 & +0.15 & +0.65 & -5.72\\\hline
+    \end{tabular}
+    \egroup
+    \caption{Feature ablation tests.}
+    \label{tbl:ablation}
+  \end{center}
+\end{table}
+
+\subsubsection{Experiment I (broad sentiment)}
+In our first set of experiments, we applied the \emph{broad}
+interpretation of sentiments.  With this interpretation, we assigned
+the \textsc{SNT} labels to all tokens that belonged to the sentiment
+spans in our corpus annotation except for the tokens that also were
+labeled as targets or sources of the opinions.  In the latter case, we
+used the \textsc{TRG} and \textsc{SRC} tags respectively.  A
+translated example of such annotation mapping is provided below:
+\begin{example}\label{exmp:3}
+  \noindent\sentiment{\target{Francis} makes a \intensifier{very}
+    \emoexpression{good} impression on \source{me}!
+    \emoexpression{:)}}
+
+  $\rightarrow$
+
+  Francis/TRG makes/SNT a/SNT very/SNT good/SNT impression/SNT on/SNT
+  me/SRC !/SNT :)/SNT
+\end{example}
+After mapping and aligning the annotation from the corpus with the
+automatically pre-processed data, we trained various modifications of
+CRFs on the training set using the l-BFGS algorithm \cite{Liu:89} and
+adjusted the $L1$ and $L2$ regularization parameters using the
+cross-validation data.  Our final classification results for the test
+set are shown in Table \ref{tbl:res-broad}.  For all reported
+evaluations, we used the proportional overlap metric of
+\citet{Johansson:10}.
+
+\subsubsection{Experiment II (narrow sentiment)}
+In the next attempt, we had a different take of the annotation scheme
+and only assigned the label \textsc{SNT} to the tokens that were
+labeled as \textsc{Emo-Expression}s in our corpus.  A translated
+example of this annotation mapping is provided below:
+\begin{example}\label{exmp:4}
+  \noindent\sentiment{\target{Francis} makes a \intensifier{very}
+    \emoexpression{good} impression on \source{me}!
+    \emoexpression{:)}}
+
+  $\rightarrow$
+
+  Francis/TRG makes/NON a/NON very/NON good/SNT impression/NON on/NON
+  me/SRC !/NON :)/SNT
+\end{example}
+\noindent{} The results obtained for this type of interpretation are
+presented in Table \ref{tbl:res-narrow}.
+
+%% \section{Discussion}\label{sec:discussion}
+\subsubsection{Results}
+As can be seen from the tables, classification performance for the
+narrow sentiment spans is almost twice as high as the results obtained
+with the broad interpretation (62.92\% versus 33.09\%).  The broad
+approach, however, leads to better prediction scores for targets and
+sources of the opinions.
+
+For the narrow scheme, classification results for these opinion
+arguments can be improved by increasing the dependency order of the
+linearly structured CRF-models.  This improvement, however, comes at
+the cost of a decreased accuracy for the sentiment spans themselves.
+
+We can also see that, depending on the utilized interpretation scheme,
+sentiment classification notably depends on the graph structure of the
+underlying CRF model: broad sentiments, for example, are best
+processed with the second-order semi-Markov CRFs, while narrow
+opinions are more amenable to the tree-structured model.
+
+\subsubsection{Discussion}\label{sec:discussion}
+We also note that all our obtained results are significantly lower
+than the corresponding figures achieved for other domains and other
+languages.  A closer look into the errors showed us that the main
+reason for such severe accuracy drop was an insufficiently good
+recognition of opinionated words and phrases.  This can be partially
+explained by the creativity of the users in expressing their thoughts
+but also by the lack of appropriate sentiment dictionaries which would
+not only contain standard language expressions but also slang words
+and cusses.
+
+An additional challenge was posed by emoticons which could not only
+convey an evaluative meaning but also serve as politeness expressions
+and were therefore ambiguous sentiment markers.  Furthermore, we
+should also mention that the German language itself is more difficult
+for automatic processing due to its relatively free word order,
+ambiguous inflections, and a rich morphology.  And these problems
+become even more aggravated when dealing with Twitter.
+
+We also saw that the outcomes of our experiments crucially depended on
+the definition of the sentiments that we applied and that different
+CRF variants had different influence on the classification accuracy
+for either interpretation.  Unfortunately, none of these models could
+clearly outperform its rivals, but we could detect some general trends
+for each of the proposed interpretations.  If these trends would also
+hold whe using other feature sets and other corpora is one of the
+questions that we want to address in future research.
+
+\subsection{Fine-grained Sentiment Analysis Using Deep Neural Networks}
+
+\subsection{Related Work}
+\subsubsection{Sentiment Analysis with CRFs}
+%% Admittedly, applications of probabilistic graphical models (such as
+%% hidden Markov models or CRFs) have a relatively rich history of
+%% applications in the sentiment analysis research.
+
+Starting with the work of \citet{Choi:05} who first used a
+linear-chain CRF classifier in conjunction with a weakly supervised
+pattern learner \texttt{AutoSlog-TS} \cite{Riloff:96} to automatically
+detect sources of the opinions, increasingly more researchers turned
+towards using structured prediction methods for the detection of
+sentiment elements.
+
+\citet{Breck:07}, for example, applied CRFs to automatically predict
+opinion expressions in newspaper articles.  The authors trained and
+tested their system on the MPQA corpus of news documents
+\cite{Wiebe:05} in which they attempted to identify \emph{expressive
+  subjective elements} (ESE) and \emph{direct speech events} (DSE) as
+defined by the MPQA annotation scheme.  The $F$-score reported for
+this system run up to 63.43\% for ESEs and 70.6\% for DSEs measured
+with the binary overlap metric.
+
+%% They considerably outperformed the baseline systems of
+%% \citet{Wiebe:05b} and \citet{Wilson:05} reaching an $F$-score of
+%% 70.6\% for DSEs and 63.43\% for ESEs measured with the binary overlap
+%% metric.
+
+%% Next, \citet{Jin:09} applied a first-order lexicalized HMM classifier
+%% in order to predict product features and customer opinions in Amazon
+%% reviews.  Since HMM is a generative model, however, its performace is
+%% usually worse than the results of discriminative classifiers (such as
+%% CRF) due to the inability to cope with highly correlated features
+%% (i.e. features which often co-occur together).
+
+%% \citet{Jakob:10} used CRFs in order to extract sentiment targets from
+%% IMDB movie reviews, technical blog posts, and user comments posted
+%% on \url{epinions.com} in both single- and cross-domain settings.  In
+%% their work, the authors took opinion expressions from the manual
+%% annotation as given features and significantly outperformed the
+%% baseline results of \citet{Zhuang:06}.  The performance of their
+%% system, however, dropped dramatically to 19--30\% $F$-score when the
+%% information about subjective expressions was removed.
+
+\citet{Li:10} compared the results obtained by the linear-chain and
+tree-structured CRFs with the classification accuracy of the
+respective skip-modifications of these models on a corpus of movie and
+product reviews.  The best of their systems (skip-tree CRF) achieved
+an average $F$-score of $\approx$ 78\% for recognizing targets,
+positive and negative opinions.  A notable fact, however, was that
+even a maximum entropy classifier could score impressive 67.8\% on
+this dataset.
+%% Tree-CRFs based on the dependency graphs were also used by
+%% \citet{Nakagawa:10} to predict the overall sentiment polarity of
+%% complete sentences.
+
+\citet{Yang:12} were among the first who applied the semi-Markov CRF
+model to the sentiment analysis task.  The authors used this
+modification for the identification of opinion expressions. Their
+system substantially improved on the results obtained by
+\citet{Breck:07} reaching an $F$-score between 65.7 and 72.3\% on the
+MPQA data.
+
+Later on, \citet{Yang:13} also proposed a joint inference technique
+for simultaneous prediction of opinion expressions and their arguments
+(targets and sources).  The authors first obtained a set of possible
+opinion expression candidates from the $n$-best sequences returned by
+the linear-chain CRF classifier and then applied a log-linear model to
+infer the potential arguments of these expressions.  The outputs of
+these two predictors were linearly combined using an ILP technique.
+The resulting $F$-score of this system amounted to 74.35\% for the
+recognition of opinion expressions and to $\approx$ 65\% for the
+recognition of targets and sources.  The experiments were again
+conducted on the MPQA corpus.
+
+%% Further works on CRFs for sentiment analysis include \citet{Choi:10}
+%% who combined predictions over opinion expressions, their intensity,
+%% and polarity into a single CRF lattice;
+To the best of our knowledge, no attempts have been made so far to
+increase the dependency order of the linear-chain and semi-Markov CRF
+models for the sentiment analysis task.
+
+%% Therefore, we want to address these questions in our work and,
+%% similarly to \citet{Li:10}, also juxtapose these ``horizontal''
+%% extensions to the ``vertical'' modification of CRFs whose structure
+%% is based on the dependency trees of the sentences.  In contrast to
+%% \citet{Li:10}, however, our system relies on an exact inference
+%% approach (belief propagation) instead of using an approximate
+%% algorithm (tree re-parameterization).
+
+%% Furthermore, in contrast to \citet{Li:10} who used an approximate
+%% inference technique for their Tree-CRF model, we confine ourselves to
+%% the exact inference algorithms which we later describe in Section
+%% \ref{sec:models}.
+
+\subsubsection{Sentiment Analysis on Twitter}
+
+With the wide spread of social media services in recent years,
+sentiment researchers also have gradually started changing the focus
+of their work from the analysis of official documents and newspaper
+articles to the classification of user-generated content abounding on
+the Web.
+
+One of the first attempts to analyze sentiments on Twitter was made by
+\citet{Go:09}.  For their experiments, the authors collected a set of
+1,600,000 tweets containing smileys.  Based on these emoticons, they
+automatically derived polarity classes for these messages (positive or
+negative) and used them to train a Na\"{\i}ve Bayes, a MaxEnt, and an
+SVM classifier.  The best $F$-score for this two-class classification
+problem could be achieved by the last system and run up to 82.2\%.
+
+Similar work was done later by \citet{Pak:10} who used a Na\"{\i}ve
+Bayes approach to differentiate between neutral, positive, and
+negative microblogs. \citet{Barbosa:10} also gathered a collection of
+200,000 tweets from three publicly available sentiment web-services
+and then trained an SVM classifier to predict the subjectivity and the
+polarity class of new unseen messages.
+
+Works attempting a more fine-grained sentiment analysis on Twitter
+usually try to derive a common polarity class for each message with
+respect to a particular target that is mentioned in that microblog.
+
+\citet{Jiang:11}, for instance, tried to classify the polarity of
+microblogs pertaining to a predefined set of specific topics, like
+\emph{Obama}, \emph{Google}, \emph{iPad} etc.  To this end, the
+authors manually labeled a corpus of 1,939 messages and trained a
+binary SVM model in order to predict the subjectivity and the polarity
+of the tweets with respect to the given subjects.
+
+%% This classifier could achieve an accuracy of 68.2\% for the
+%% subjectivity classification and 85.6\% for the polarity prediction.
+%% The $F$-score of this system for the latter task could further be
+%% improved from 66\% to 68.3\% by incorporating the information about
+%% the predicted polarity class of the re-tweets, replies, and other
+%% microblogs posted by the same author.
+
+\citet{Mitchell:13} broadened the set of possible targets by allowing
+any named entities found in microblogs to be associated with a
+specific polarity.  For that purpose, the authors combined a CRF-based
+NER system with a sentiment predicting CRF by considering three
+different possibilities of such combination: a pipeline approach, a
+joint multi-layer model, and a single classifier with a combined
+tagset.  The best scores on their corpora of 7,105 Spanish and 2,350
+English tweets could be achieved with the joint and pipeline
+approaches.  The accuracy of recognizing the opinionated named
+entities amounted to 31\% for Spanish and 30.4\% for English.
+
+%% Other notable works in this direction include \citet{Chunping:14} who
+%% first applied a Na\"{\i}ve Bayes classifier to predict the
+%% subjectivity class of microblogs and then sequentially used two CRF
+%% models to predict the particular type of subjectivity (such as anger,
+%% fear, happiness etc.) for message sentences.
+
+%% Other notable works in this direction include \citet{Dong:14} who used
+%% a recurrent neural network to predict the polarity class associated
+%% with the opinion targets.  They, however, assumed the targets of
+%% sentiments to be apriori known and only were interested whether a
+%% positive or a negative judgement was made about them.
+
+%% Except for the work of \citet{Mitchell:13} and to some extent
+%% \citet{Jiang:11}, neither of the approaches attempted to classify
+%% sentiments below the sentence level.  And even in these two works, the
+%% set of possible targets was either restricted to the named entities or
+%% to some pre-defined list of words.  Therefore, the task that we are
+%% addressing here (simultaneous classification of sentiments, source,
+%% and targets) is by far more challenging, more difficult, and,
+%% unfortunately, probably less successful than the work previously done.
+
+Again, to the best of our knowledge, no work on simultaneous
+prediction of sentiment targets, and sources, as well as opinion
+segments has been reported for Twitter so far.
+
+%% and we sincerely hope that our data can at least ease the efforts of
+%% other researches on this field.
+\subsection{Conclusions}
+\newpage
