@@ -1,4 +1,4 @@
-% FILE: sentiment.tex  Version 0.01
+% FILE: sentiment.tex  Version 0.0.1
 % AUTHOR: Uladzimir Sidarenka
 
 % This is a modified version of the file main.tex developed by the
@@ -175,7 +175,7 @@ determinants of emotional states. %% To prove this hypothesis, the
 
 These advances in psychology reinforced by the nascent appraisal
 theory \citep{Arnold:60} had a significant influence on many other
-scientific fields, including but not limited to \emph{literary
+scientific fields, including but not limited to the \emph{literary
   studies}.  Among the greatest pursuers of this research direction in
 narratology, we certainly should name Am\'elie Rorty and Ann Banfield.
 \citet{Rorty:80} suggested that the directive power which emotions
@@ -185,7 +185,7 @@ dramatic or narrative structure \citep[cf.][]{Sousa:14}.
 attitudes could be expressed through direct and indirect speech in
 narratives.
 
-Among the first who applied \citeauthor{Banfield:82}'s theory to the
+One of the first who applied \citeauthor{Banfield:82}'s theory to the
 needs and wants of \emph{computational linguistics} was
 \citet{Wiebe:90a}.  In her work, the author proposed an algorithm for
 identifying characters of narratives whose point of view was
@@ -300,7 +300,7 @@ versus \emph{negative}) were attained by an SVM system which used the
 presence of unigrams as classification features.
 
 Due to its high commercial impact, opinion mining of customer reviews
-soon became one of the most prolific topics in sentiment analysis
+soon became one of the most popular topics in sentiment analysis
 research.  \citet{Dave:03}, for example, attempted to classify C|Net
 and Amazon reviews of movies and electrical appliances as positive or
 negative using the Na\"{\i}ve Bayes and SVM approaches.  \citet{Hu:04}
@@ -387,7 +387,7 @@ data.  Reaching an average $F1$-measure of 68\% on a held-out manually
 labeled dataset, the authors came to the conclusion that
 microblog-specific features (such as the presence or absence of
 intensifiers or the occurrence of abbreviations and emoticons) were
-the most relibale traits for this classification.  This finding,
+the most reliable traits for this classification.  This finding,
 however, was doubted by \citet{Agarwal:11}, who contended that
 POS-specific polarity features and tree-kernel methods were a better
 alternative.
@@ -400,7 +400,7 @@ microblogs' power as online word of mouth.  A manual inspection of
 messages mentioning renowned company brands revealed that almost 20\%
 of these tweets expressed some polar opinions about their products.
 More than a half of these opinionated microblogs were positive
-judgements whereas 35\% of the posts represented negative sentiments.
+judgements, whereas 35\% of the posts represented negative sentiments.
 These findings strongly correlated with the results of an automatic
 analysis, suggesting that social media in general and microblogging in
 particular could be a valuable source of economic evidence.
@@ -409,8 +409,8 @@ An attempt to address sociological problems with SA methods was made
 by \citet{Tumasjan:10}, who analyzed public opinions about federal
 elections in Germany by automatically extracting sentiments from
 users' microblogs.\footnote{We will make a similar analysis in Section
-  \ref{sec:fgsa} but will primarily concentrate on the NLP aspect of
-  this problem.}  For this purpose, the authors had gathered a
+  \ref{sec:snt:fgsa} but will primarily concentrate on the NLP aspect
+  of this problem.}  For this purpose, the authors had gathered a
 collection of nearly 100,000 messages mentioning major political
 parties or prominent German politicians and subsequently translated
 these tweets into English.  The resulting translations were analyzed
@@ -461,7 +461,7 @@ The success of this shared task, which attracted more than 40
 participants, incited the organizers to continue this competition in
 the following years.  With slight modifications (addition of new
 tweets, inclusion of sarcastic microblogs and LiveJournal sentences),
-both subtasks were offered in \citeyear{Rosenthal:14}
+both subtasks were re-offered in \citeyear{Rosenthal:14}
 \cite[cf.][]{Rosenthal:14}.
 
 Here again, the system proposed by \citet{Mohammad:13} with some minor
@@ -490,24 +490,23 @@ Twitter corpus.  These vector representations were then fine-tuned to
 the sentiment analysis task on the dataset of \citet{Go:09}.  Finally,
 the resulting embeddings were passed as input to a two-layer
 convolutional deep neural network and jointly trained on the official
-SemEval dataset.
+SemEval training set.
 
-A much harder subtask, in which only three of seven participants could
-outperform the majority class baseline, proved to be the
-classification of message polarities towards specific topics (track
-C).  The winner of this subtask -- a system proposed by
+A much harder subtask in this run, on which only three of seven
+participants could outperform the majority class baseline, turned out
+to be the classification of message polarities towards specific topics
+(track C).  The winner of this subtask -- a system proposed by
 \citet{Boag:15} -- attained a macro-averaged $F1$-score of 50.51\%.
 This approach again relied on a supervised SVM classifier and used an
-extensive set of carefully designed hand-crafted features, including
-raw and normalized bag-of-words (BOW), the number of positive and
-negative emoticons, the number of question and exclamation marks,
-average and maximum sentiment scores of single words occurring in a
-tweet, and many others.  The BOW features along with the
-lexicon-derived information were found to be the most useful
-classification attributes in these experiments.  A dedicated
-preprocessing pipeline with spelling corrction and Twitter-specific
-tokenization also proved to have a positive effect on the final
-prediction results.
+extensive set of hand-crafted features, including raw and normalized
+bag-of-words (BOW), the number of positive and negative emoticons, the
+number of question and exclamation marks, average and maximum
+sentiment scores of single words occurring in a tweet, and many
+others.  The BOW features along with the lexicon-derived information
+were found to be the most useful classification attributes in these
+experiments.  A dedicated preprocessing pipeline with spelling
+corrction and Twitter-specific tokenization also proved to have a
+positive effect on the final results.
 
 As can be seen from the above, even despite its relatively young age,
 sentiment analysis of Twitter has already received much of attention
@@ -522,23 +521,41 @@ for automatic SA methods, the crucial utility of lexicon features, the
 necessity of preprocessing the input text before passing it to a
 classifier) are equally applicable to German messages too.
 
-We begin by introducing a comprehensive corpus of German tweets that
-have been manually labeled by two human experts with sentiment
-information.  After describing the data gathering procedure used to
-compile this corpus, detailing its annotation scheme, and analyzing
-the inter-rater agreement, we turn our attention to the evaluation and
-analysis of existing sentiment resources used for German.  In Section
-\ref{sec:snt:lex}, we first evaluate three German polar lexica which
-have been semi-automatically translated from English.  We estimate the
-precision and recall of these dictionaries on our corpus and also
-compare with them current state-of-the-art approaches for generating
-such lexica automatically without translation.  After determining the
-best-performing lexicon, we then look how beneficial this lexicon
-information might be for fine-grained SA tasks, such as determining
-sources, targets, and the actual spans of subjective opinions in
-microblogs.  Finally, we summarize our findings and draw further
-conclusions in Section \ref{sec:snt:concl} of this chapter.
+One vital prerequisite for proving or disproving the above hypotheses,
+however, is a substantial labeled genuine corpus for the targeted
+domain.  Since there were no moderately-sized manually annotated
+sentiment data for German Twitter that we were aware of at the time of
+writing this thesis, we had to create our own dataset, which we will
+introduce in the next section of this chapter.
+
+%% However, in order to prove or disprove these hypotheses, a vital
+%% prerequisite that we need is the existence of a substantial labeled
+%% corpus, on which these conjectures could be checked.  Since there were
+%% no moderately-sized manually annotated sentiment data for German that
+%% we were aware of at the time of writing this thesis, we had to create
+%% our own dataset, which we will introduce in the next section of this
+%% chapter.
+
+%% After describing the data gathering procedure used to compile our
+%% corpus, detailing its annotation scheme, and analyzing the inter-rater
+%% agreement, we turn our attention to the evaluation and analysis of
+%% existing sentiment resources used for German.  To do so, we first
+%% evaluate three German polar lexica which have been semi-automatically
+%% obtained from English sources.  We estimate the precision and recall
+%% of these dictionaries on our data and also check whether current
+%% state-of-the-art approaches for generating such lexica without
+%% translation would produce better results.
+
+%% After determining the best-performing lexicon, we look how beneficial
+%% this polarity information might be to fine-grained SA objectives, such
+%% as determining sources, targets, and the actual spans of subjective
+%% opinions in microblogs.  We also evaluate the effects of text
+%% preprocessing on this task. Finally, we summarize our findings and
+%% draw further conclusions in Section \ref{sec:snt:concl} of this
+%% chapter.
+
 \newpage
+
 %% \citet{Sarker:15}, \citet{Dalmia:15}, \citet{Han:15},
 %% \citet{Chikersal:15}, \citet{Hagen:15}, \citet{Fernandez:15}
 
