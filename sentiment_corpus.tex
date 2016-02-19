@@ -11,77 +11,47 @@
 
 \section{Sentiment Corpus}\label{sec:snt:corpus}
 
-With the ever growing role of online social media (SM) in people's
-everyday life, a high-quality automatic analysis of text data shared
-on the SM services becomes a vital necessity.  Unfortunately, despite
-numerous attempts and strenuous efforts, the quality of automatic
-processing of computer-mediated messages is still far inferior to the
-results that are usually obtained on standard language texts.  This
-leeway is partially due to the lack of sufficiently big manually
-annotated corpora.  Indeed, most of the existing popular SM datasets
-\cite{Go:09,Pak:10} have been either created (semi-)automatically
-(thus introducing an additional noise into an already inherently noisy
-domain) or are rather small to be used in data-intensive
-machine-learning (ML) approaches.
+A vital prerequisite for proving or disproving any hypotheses in
+computational liguistics is the existence of sufficiently big manually
+labeled data for the targeted domain, on which the conjectures could
+be tested.  Since there was no corresponding sentiment corpus for
+German Twitter that we were aware of at the time of writing this
+thesis, we had to create our own dataset, which we will introduce in
+this section.
 
-In sentiment analysis, for example, most of the existing popular
-datasets created for Twitter have been either generated
-(semi-)automatically \cite{Go:09,Barbosa:10,Pak:10,Bora:12} or
-concentrate on just one aspect of subjective opinions such as overall
-polarities of microblogs \cite{Diakopoulos:10,Nakov:13} or evaluations
-expressed towards particular predefined targets
-\cite{Jiang:11,Saif:13}.
-
-In this section, we present a novel corpus of German tweets that were
-manually labeled with fine-grained sentiment relations by two human
-experts.  With this dataset we try to overcome both of the above
-limitations: On the one hand, our collection has been manually
-annotated and is sufficiently big, consisting of ${\approx}\,8,000$
-messages, which is just about 75\% of the size of the MPQA corpus
-\cite{Wiebe:05} -- a de facto standard dataset in the sentiment
-analysis field.  On the other hand, a rich annotation scheme that was
-used for labeling our data touches on virtually every aspect of polar
-opinions by providing special markup elements for subjective terms,
-their modifiers and negations, also capturing spans of sentiments
-(subjective evaluations of particular entities) with their respective
-sources and targets.
-
-%% In this paper, we present a novel comprehensive corpus of German
-%% tweets that were manually labeled with fine-grained sentiment
-%% relations by two human experts.  With this corpus we try to overcome
-%% both of the above limitations: On the one hand, our dataset is
-%% sufficiently big, consisting of ${\approx}\,8,000$ tweets, which is
-%% just about 75\% of the size of the MPQA corpus \cite{Wiebe:05} -- a de
-%% facto standard dataset in the sentiment analysis field.  On the other
-%% hand, a high level of inter-annotator agreement reached between the
-%% two experts (cf. Subsection \ref{subsec:snt:iaa}) suggests a high
-%% quality of the coded data.
-
-%% We begin our description with a brief summary of related work done on
-%% annotating sentiment-relevant information in the SM domain so far.  We
-%% then introduce the selection criteria that we used to sample the raw
-%% tweets for our corpus.  After presenting the annotation scheme in
-%% Section \ref{sec:ascheme} and describing the annotation tool and
-%% format in Section \ref{sec:tformat}, we present several
-%% inter-annotator agreement studies which we conducted on our corpus at
-%% different annotation steps (including the initial experiment, the
-%% adjudicating phase, and the final expansion of our dataset).  In the
-%% concluding part, we show statistics on the annotated elements and
-%% investigate how these statistics correlate with the selection criteria
-%% that we applied initially to collect the data.
+We begin with describing the selection criteria and tracking procedure
+we used to initially collect the raw data for our ``tweebank''.  After
+presenting the annotation scheme and detailing the annotation tool and
+format, we turn to a detailed analysis of the inter-annotator
+agreement, which will serve as an upper bound in our later
+experiments.  In Subsection \ref{subsec:snt:iaa}, we propose two new
+versions of the popular $\kappa$ metric, which were specifically
+adjusted to the peculiarities of our annotation task: binary and
+proportional kappa.  With these two variants, we measure the
+inter-coder reliability on annotating spans of subjective opinions,
+their targets, and sources, and also check whether the annotators
+agreed on the polarity and intensity of sentiments, once they agreed
+on their boundaries.  Finally, with statistical means, we investigate
+the correlations between the selection criteria we applied initially
+and the number of annotated elements and disagreements of our experts
+in order to understand which linguistic and extra-linguistic factors
+might significantly influence the distribution of sentiments in the
+corpus and which ones might exacerbate their analysis.
 
 \subsection{Data Collection}
 
-The first question that naturally arises when one starts creating a
-new dataset is that of the selection criteria to use in order to
-collect the data.  For low-level NLP tasks (such as part-of-speech
-tagging or syntactic parsing), it typically suffices to define the
-language domain to sample from (since the phenomena of interest are
-usually ubiquitous and evenly spread within the domain).  For
-semantically demanding tasks, however, one also has to pay attention
-to various in-domain factors as they might significantly skew the
-desired distribution (if, for example, the desired phenomenon only
-occurs when people speak about a particular subject).
+One of the first important questions which arises when one starts
+creating a new dataset is that of the selection criteria to use in
+order to collect the data.  While, for low-level NLP tasks, such as
+part-of-speech tagging or syntactic parsing, it typically suffices to
+define the language domain to sample from (since the phenomena of
+interest are usually frequent and uniformly spread), for semantically
+demanding tasks with many rare phenomena, one also has to pay
+attention to various in-domain factors as they might significantly
+affect the desired distribution, making the resulting corpus either
+utterly sparse or excessively biased.
+
+
 
 For our work, the in-domain factors to consider were the topics and
 the form of tweets.  Since we wanted our corpus to be as
@@ -128,455 +98,455 @@ we then randomly chose 666 messages. This gave us our final dataset of
 3\text{ formal criteria}$).
 
 \subsection{Annotation Scheme}\label{subsec:snt:ascheme}
-In the next step, we defined an annotation scheme for our
-corpus.\footnote{Our complete annotation guidelines and corpus are
-  provided as supplementary material for this paper and will be made
-  available online after review.}  Since our goal was to get a
-maximally full coverage of all sentiment-relevant aspects, we devised
-an extensive list of elements that had to be annotated.  This list
-included:
-\begin{itemize}
-  \item\textbf{emotional expressions} which we defined as words or
-    phrases that unequivocally possessed some evaluative lexical
-    meaning (e.g. \emph{gut} ``good'', \emph{schlecht} ``bad'', or
-    \emph{lieben} ``to love'');
-  \item\textbf{intensifiers} which were specified as elements that
-    increased the expressivity or the polar sense of emotional
-    expressions (for instance, \emph{sehr} ``very'' or
-    \emph{au\ss{}ergew\"ohnlich} ``extraordinarily'');
-  \item\textbf{diminishers} which we described as lexical items that
-    decreased the polar sense of an emotional expression (for example,
-    \emph{wenig} ``little'' or \emph{kaum} ``hardly'');
-  \item and \textbf{negations} which were linguistic means that turned
-    the polarity of an emotional expression to the complete opposite.
+%% In the next step, we defined an annotation scheme for our
+%% corpus.\footnote{Our complete annotation guidelines and corpus are
+%%   provided as supplementary material for this paper and will be made
+%%   available online after review.}  Since our goal was to get a
+%% maximally full coverage of all sentiment-relevant aspects, we devised
+%% an extensive list of elements that had to be annotated.  This list
+%% included:
+%% \begin{itemize}
+%%   \item\textbf{emotional expressions} which we defined as words or
+%%     phrases that unequivocally possessed some evaluative lexical
+%%     meaning (e.g. \emph{gut} ``good'', \emph{schlecht} ``bad'', or
+%%     \emph{lieben} ``to love'');
+%%   \item\textbf{intensifiers} which were specified as elements that
+%%     increased the expressivity or the polar sense of emotional
+%%     expressions (for instance, \emph{sehr} ``very'' or
+%%     \emph{au\ss{}ergew\"ohnlich} ``extraordinarily'');
+%%   \item\textbf{diminishers} which we described as lexical items that
+%%     decreased the polar sense of an emotional expression (for example,
+%%     \emph{wenig} ``little'' or \emph{kaum} ``hardly'');
+%%   \item and \textbf{negations} which were linguistic means that turned
+%%     the polarity of an emotional expression to the complete opposite.
 
-    %% (these were typically represented by the negative particle
-    %% \emph{nicht} ``not'' or the attributive indefinite pronoun
-    %% \emph{kein} ``no'').\footnote{The assignment to parts of speech is
-    %%   done according to the rules of German grammar.}
-\end{itemize}
-It should, however, be noted that these elements did not reflect the
-interrelationship between the polar terms (emotional expressions, in
-our case) and the entities they were evaluating.  To compensate for
-this disadvantage, we additionally introduced the following elements
-to capture these links:
-\begin{itemize}
-  \item\textbf{targets} which we described as objects or events that
-    were being evaluated by sentiment expressions;
-  \item\textbf{sources} which were immediate author(s) or holder(s) of
-    evaluative opinions;
-  \item and actual \textbf{sentiments} which we specified as minimal
-    complete syntactic or discourse-level units in which both target
-    and evaluative expression appeared together.
-\end{itemize}
+%%     %% (these were typically represented by the negative particle
+%%     %% \emph{nicht} ``not'' or the attributive indefinite pronoun
+%%     %% \emph{kein} ``no'').\footnote{The assignment to parts of speech is
+%%     %%   done according to the rules of German grammar.}
+%% \end{itemize}
+%% It should, however, be noted that these elements did not reflect the
+%% interrelationship between the polar terms (emotional expressions, in
+%% our case) and the entities they were evaluating.  To compensate for
+%% this disadvantage, we additionally introduced the following elements
+%% to capture these links:
+%% \begin{itemize}
+%%   \item\textbf{targets} which we described as objects or events that
+%%     were being evaluated by sentiment expressions;
+%%   \item\textbf{sources} which were immediate author(s) or holder(s) of
+%%     evaluative opinions;
+%%   \item and actual \textbf{sentiments} which we specified as minimal
+%%     complete syntactic or discourse-level units in which both target
+%%     and evaluative expression appeared together.
+%% \end{itemize}
 
-\noindent{}A sample tweet annotated according to this scheme is
-provided below:
-\begin{example}
-\upshape\sentiment{\target{Diese Milliardeneinnahmen} sind selbst
-  \source{Sch\"auble} \emoexpression{peinlich}}\\[0.8em]
-\noindent\sentiment{\target{\itshape{}These billions of
-    revenues\upshape{}}\itshape{} are\upshape{}
-  \emoexpression{\itshape{}embarrassing\upshape{}}\itshape{} even for
-  \upshape{}\source{\itshape{}Sch\"auble\upshape{}}}
-\end{example}
-In addition to annotating spans of sentiment-relevant items, our
-experts also set the values of the attributes associated with these
-elements. For emotional expressions and sentiments, they specified the
-polarity and intensity of the respective evaluations.  For sources and
-targets that were expressed by pronouns, our annotators labeled the
-respective antecedents of these pro-forms.  Furthermore, we also
-endowed diminishers and intensifiers with a special attribute
-\texttt{degree} which showed by how much these elements were changing
-the intensity of their respective emotional expressions.
+%% \noindent{}A sample tweet annotated according to this scheme is
+%% provided below:
+%% \begin{example}
+%% \upshape\sentiment{\target{Diese Milliardeneinnahmen} sind selbst
+%%   \source{Sch\"auble} \emoexpression{peinlich}}\\[0.8em]
+%% \noindent\sentiment{\target{\itshape{}These billions of
+%%     revenues\upshape{}}\itshape{} are\upshape{}
+%%   \emoexpression{\itshape{}embarrassing\upshape{}}\itshape{} even for
+%%   \upshape{}\source{\itshape{}Sch\"auble\upshape{}}}
+%% \end{example}
+%% In addition to annotating spans of sentiment-relevant items, our
+%% experts also set the values of the attributes associated with these
+%% elements. For emotional expressions and sentiments, they specified the
+%% polarity and intensity of the respective evaluations.  For sources and
+%% targets that were expressed by pronouns, our annotators labeled the
+%% respective antecedents of these pro-forms.  Furthermore, we also
+%% endowed diminishers and intensifiers with a special attribute
+%% \texttt{degree} which showed by how much these elements were changing
+%% the intensity of their respective emotional expressions.
 
 \subsection{Annotation Tool and Procedure}\label{subsec:snt:tformat}
-All annotations were done using \texttt{MMAX2} -- a freely available
-text markup tool.\footnote{\url{http://mmax2.sourceforge.net/}} Since
-this program relies on a token-oriented stand-off XML format (where
-all annotations are stored separately from the text and only refer to
-the ids of the tokens they are spanning), we first had to split the
-downloaded tweets into tokens in order to create an annotation
-project\footnote{In \texttt{MMAX2}, an annotation project refers to a
-  collection of all XML files pertaining to one corpus, including text
-  data, annotation files, scheme definition etc.}
-for our corpus.  For this purpose, we applied a minimally modified
-version of Christopher Potts' social media
-tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
-which we slightly adjusted to the peculiarities of German spelling (we
-accounted for the capitalized form of German nouns and the dot at the
-end of ordinal numbers).
+%% All annotations were done using \texttt{MMAX2} -- a freely available
+%% text markup tool.\footnote{\url{http://mmax2.sourceforge.net/}} Since
+%% this program relies on a token-oriented stand-off XML format (where
+%% all annotations are stored separately from the text and only refer to
+%% the ids of the tokens they are spanning), we first had to split the
+%% downloaded tweets into tokens in order to create an annotation
+%% project\footnote{In \texttt{MMAX2}, an annotation project refers to a
+%%   collection of all XML files pertaining to one corpus, including text
+%%   data, annotation files, scheme definition etc.}
+%% for our corpus.  For this purpose, we applied a minimally modified
+%% version of Christopher Potts' social media
+%% tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+%% which we slightly adjusted to the peculiarities of German spelling (we
+%% accounted for the capitalized form of German nouns and the dot at the
+%% end of ordinal numbers).
 
-To ease the annotation process and to minimize possible data loss
-during the labeling, we also split our complete dataset into 80
-smaller project files with 99 -- 109 tweets each.
+%% To ease the annotation process and to minimize possible data loss
+%% during the labeling, we also split our complete dataset into 80
+%% smaller project files with 99 -- 109 tweets each.
 
-%% For each such project, we took only tweets pertaining to one
-%% particular topic (elections, conclave, politics, or casual talks)
-%% but made sure that the microblogs from the three bins of that topic
-%% were represented equally in the project.
+%% %% For each such project, we took only tweets pertaining to one
+%% %% particular topic (elections, conclave, politics, or casual talks)
+%% %% but made sure that the microblogs from the three bins of that topic
+%% %% were represented equally in the project.
 
-Finally, we let our experts annotate the data.  The annotation
-procedure was carried out in three steps:
-\begin{itemize}
-  \item first, both annotators labeled one half of the corpus after
-    only minimal training;
-  \item then, we automatically determined the differences between the
-    two annotations and let our experts resolve these discrepancies
-    without communicating with each other;
-  \item eventually, our assistants annotated the rest of the
-    corpus.\footnote{At this step, only one annotator labeled the full
-      dataset, another one labeled 78.8\% of it.}
-\end{itemize}
+%% Finally, we let our experts annotate the data.  The annotation
+%% procedure was carried out in three steps:
+%% \begin{itemize}
+%%   \item first, both annotators labeled one half of the corpus after
+%%     only minimal training;
+%%   \item then, we automatically determined the differences between the
+%%     two annotations and let our experts resolve these discrepancies
+%%     without communicating with each other;
+%%   \item eventually, our assistants annotated the rest of the
+%%     corpus.\footnote{At this step, only one annotator labeled the full
+%%       dataset, another one labeled 78.8\% of it.}
+%% \end{itemize}
 
 \subsection{Corpus Statistics}\label{subsec:snt:stat}
 
-\begin{table}[h]
-  \centering\small
-  \caption[Sentiment corpus statistics]{Statistics on the annotated
-    sentiment corpus.\\ POL = corpus part with discussions about
-    general politic topics; FE = corpus part describing the federal
-    election 2013; PE = corpus part with discussions about the Pope
-    election 2013; GEN = part of the corpus containing tweets with no
-    particular topic}
-  \begin{tabular}{|>{\centering}p{0.15\textwidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
-      >{\centering\bfseries}p{\oosixthClmnWidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
-      >{\centering\bfseries}p{\oosixthClmnWidth}|}
-    \hline
+%% \begin{table}[h]
+%%   \centering\small
+%%   \caption[Sentiment corpus statistics]{Statistics on the annotated
+%%     sentiment corpus.\\ POL = corpus part with discussions about
+%%     general politic topics; FE = corpus part describing the federal
+%%     election 2013; PE = corpus part with discussions about the Pope
+%%     election 2013; GEN = part of the corpus containing tweets with no
+%%     particular topic}
+%%   \begin{tabular}{|>{\centering}p{0.15\textwidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
+%%       >{\centering\bfseries}p{\oosixthClmnWidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
+%%       >{\centering\bfseries}p{\oosixthClmnWidth}|}
+%%     \hline
 
-    \multirow{2}{*}{\parbox{0.13\textwidth}{\centering Markable Type}}
-    & \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{Annotator
-      1} &
-    \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{Annotator
-      2}\tabularnewline\cline{2-11}
+%%     \multirow{2}{*}{\parbox{0.13\textwidth}{\centering Markable Type}}
+%%     & \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{Annotator
+%%       1} &
+%%     \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{Annotator
+%%       2}\tabularnewline\cline{2-11}
 
-    & POL & FE & PE & GEN & Total & POL & FE & PE & GEN &
-    Total\tabularnewline\hline
+%%     & POL & FE & PE & GEN & Total & POL & FE & PE & GEN &
+%%     Total\tabularnewline\hline
 
-    Sentiment & 212 & 222 & 163 & 131 & 728 & 317 & 335 & 314 & 305 & 1271
-    \tabularnewline\hline
+%%     Sentiment & 212 & 222 & 163 & 131 & 728 & 317 & 335 & 314 & 305 & 1271
+%%     \tabularnewline\hline
 
-    Source & 101 & 119 & 68 & 73 & 361 & 114 & 109 & 94 & 85 & 402
-    \tabularnewline\hline
+%%     Source & 101 & 119 & 68 & 73 & 361 & 114 & 109 & 94 & 85 & 402
+%%     \tabularnewline\hline
 
-    Target & 229 & 279 & 184 & 151 & 843 & 342 & 369 & 328 & 324 & 1363
-    \tabularnewline\hline
+%%     Target & 229 & 279 & 184 & 151 & 843 & 342 & 369 & 328 & 324 & 1363
+%%     \tabularnewline\hline
 
-    Emotional Expression & 727 & 689 & 581 & 811 & 2808 & 662 & 669 & 671 & 768 & 2770
-    \tabularnewline\hline
+%%     Emotional Expression & 727 & 689 & 581 & 811 & 2808 & 662 & 669 & 671 & 768 & 2770
+%%     \tabularnewline\hline
 
-    Intensifier & 16 & 32 & 14 & 44 & 106 & 31 & 35 & 31 & 58 & 155
-    \tabularnewline\hline
+%%     Intensifier & 16 & 32 & 14 & 44 & 106 & 31 & 35 & 31 & 58 & 155
+%%     \tabularnewline\hline
 
-    Diminisher & 2 & 4 & 3 & 2 & 11 & 2 & 9 & 4 & 2 & 17
-    \tabularnewline\hline
+%%     Diminisher & 2 & 4 & 3 & 2 & 11 & 2 & 9 & 4 & 2 & 17
+%%     \tabularnewline\hline
 
-    Negation & 18 & 15 & 23 & 14 & 70 & 33 & 33 & 31 & 23 & 120
-    \tabularnewline\hline
-  \end{tabular}
-  \label{table:sentiment-agreement-topics}
-\end{table}
-
-\subsection{Inter-annotator Agreement}\label{subsec:snt:iaa}
-For estimating the inter-annotator agreement of the final dataset, we
-adopted the Cohen's $\kappa$ metric \cite{Cohen:60}.  Following the
-standard practice for computing this metric, we first calculated the
-observed agreement $p_o$ as the ratio of the matching token
-annotations to the total number of tokens:
-\begin{equation*}\textstyle
-  p_o = \frac{T - A_1 + M_1 - A_2 + M_2}{T}
-\end{equation*}
-where $T$ denotes the total number of tokens, $A_1$ and $A_2$ are the
-numbers of tokens annotated with the given class by the first and
-second annotator respectively, and $M_1$ and $M_2$ represent the
-number of tokens with matching annotations for that class.  And we
-then estimated the chance agreement $p_c$ in the usual way as:
-\begin{equation*}\textstyle
-  p_c = c_1 \times c_2 + (1.0 - c_1) \times (1.0 - c_2)
-\end{equation*}
-where $c_1$ and $c_2$ are the proportions of tokens annotated with the
-given class in the first and second annotation respectively, i.e. $c_1
-= \frac{A_1}{T}$ and $c_2 = \frac{A_2}{T}$.
-
-Two questions that arose during this computation were:
-\begin{inparaenum}[\itshape i)\upshape]
-\item if tokens belonging to several overlapping annotation spans of
-  the same class in one annotation had to be counted multiple times
-  when computing the $A$ scores (for instance, if we had to count
-  the words \textit{this}, \textit{nice}, and \textit{book} in
-  Example \ref{exmp:1} twice as sentiments when computing $A_1$ and
-  $A_2$), and
-\item if we had to assume that two annotated spans from different
-  experts agreed on all of their tokens when these spans had at
-  least one token in common or if we rather had to count the actual
-  number of tokens whose annotation was matching (i.e., if we had to
-  consider the annotation of the word \textit{My} in Example
-  \ref{exmp:1} as matching or not considering that the rest of the
-  sentiment spans agreed).
-\end{inparaenum}
-
-\begin{example}\label{exmp:1}
-  \textrm{Annotation 1:}\\ \sentiment{My father hates \sentiment{this
-      nice book}.}\\\\ \textrm{Annotation 2:}\\ My \sentiment{father
-    hates \sentiment{this nice book}.}
-\end{example}
-
-To answer these questions, we introduced two agreement metrics:
-\emph{binary} and \emph{proportional} kappa.  With the former variant,
-we counted tokens belonging to multiple eponymous annotation spans
-multiple times and considered all tokens belonging to the given
-annotation span as matching if this span agreed on at least one token
-with the annotation from the other expert.  With the latter metric,
-every token labeled as sentiment (target or source) was counted only
-once, and we only calculated the actual number of tokens with matching
-annotations when computing the $M$ scores.  The final agreement
-results measured with these two metrics are shown in Table
-\ref{tbl:agrmnt}.
-
-\begin{table*}[bth!]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.4\tabcolsep}\scriptsize
-    \begin{tabular}{|p{0.1\columnwidth}| % first columm
-        *{15}{>{\centering\arraybackslash}p{0.05\columnwidth}|}} % next five columns
-      \hline
-          \multirow{2}{0.2\columnwidth}{\bfseries Element} &
-          \multicolumn{5}{c|}{Initial annotation} & %
-          \multicolumn{5}{c|}{Adjudication step} & %
-          \multicolumn{5}{c|}{Final corpus}\\\cline{2-16}
-          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
-          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
-          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$\\\hline
-
-          \multicolumn{16}{|c|}{\cellcolor{cellcolor}Binary Kappa}\\\hline
-
-          Sentiment & 4,215 & 7,070 & 3,484 & 9,827 & \textbf{38.05} &
-          %
-          8,198 & 8,530 & 8,260 & 14,034 & \textbf{67.92} &%
-          14,748 & 15,929 & 14,969 & 26,047 & \textbf{65.03}\\
-          Target & 1,103 & 1,943 & 1,217 & 4,162 & \textbf{35.48} & %
-          3,088 & 3,407 & 2,814 & 5,303 & \textbf{65.66} &%
-          5,765 & 6,629 & 5,292 & 9,852 & \textbf{64.76}\\
-          Source & 159 & 445 & 156 & 456 & \textbf{34.53} & %
-          573 & 690 & 545 & 837 & \textbf{72.91} & 966 & 1,207 & 910 & 1,619 & \textbf{65.99}\\
-          EExpression & 1,951 & 2,854 & 2,029 & 3,188 & \textbf{64.29} &%
-          3,164 & 3,298 & 3,261 & 4,134 & \textbf{85.68} & 5,574 & 5,989 & 5,659 & 7,419 & \textbf{82.83}\\
-          Intensifier & 57 & 101 & 59 & 123 & \textbf{51.71} &%
-          111 & 219 & 113 & 180 & \textbf{56.01} & 192 & 432 & 194 & 338 & \textbf{49.97}\\
-          Diminisher & 3 & 10 & 3 & 8 & \textbf{33.32} &%
-          9 & 16 & 10 & 16 & \textbf{59.37} & 16 & 30 & 17 & 34 & \textbf{51.55}\\
-          Negation & 21 & 63 & 21 & 83 & \textbf{28.69} &%
-          68 & 84 & 67 & 140 & \textbf{60.21} & 111 & 132 & 110 & 243 & \textbf{58.87}\\\hline
-
-          \multicolumn{16}{|c|}{\cellcolor{cellcolor}Proportional Kappa}\\\hline
-          Sentiment & 3,269 & 6,812 & 3,269 & 9,796 & \textbf{31.21} & %
-          7,435 & 8,243 & 7,435 & 13,714 & \textbf{61.94} & 13,316 & %
-          15,375 & 13,316 & 25,352 & \textbf{58.82}\\
-          Target & 898 & 1,905 & 898 & 4,148 & \textbf{26.85} & 2,554 %
-          & 3,326 & 2,554 & 5,212 & \textbf{57,27} & 4,789 & 6,462 & %
-          4,789 & 9,659 & \textbf{56.61}\\
-          Source & 153 & 439 & 153 & 456 & \textbf{33.75} & 539 & 676 & %
-          539 & 833 & \textbf{71.12} & 898 & 1,180 & 898 & 1,604 & \textbf{64.1}\\
-          EExpression & 1,902 & 2,851 & 1,902 & 3,180 & \textbf{61.36}
-          & %
-          3,097 & 3,290 & 3,097 & 4,121 & \textbf{82.64} & 5,441 & 5,977 & %
-          5,441 & 7,395 & \textbf{80.29}\\
-          Intensifier & 57 & 101 & 57 & 123 & \textbf{50.81} & %
-          111 & 219 & 111 & 180 & \textbf{55.51} & 192 & 432 & 192 & 338 & \textbf{49.71}\\
-          Diminisher & 3 & 10 & 3 & 8 & \textbf{33.32} & %
-          9 & 16 & 9 & 15 & \textbf{58.05} & 16 & 30 & 16 & 33 & \textbf{50.78}\\
-          Negation & 21 & 63 & 21 & 83 & \textbf{28.69} & %
-          67 & 83 & 67 & 140 & \textbf{60.03} & 110 & 131 & 110 & 242 & \textbf{58.92}\\\hline
-    \end{tabular}
-    \egroup
-    \caption{Inter-coder agreement at different annotation
-      stages.\\ {\small ($M1$ -- number of tokens with matching labels
-        in the first annotation, $A1$ -- total number of labeled
-        tokens in the first annotation, $M2$ -- number of tokens with
-        matching labels in the second annotation, $A2$ -- total number
-        of labeled tokens in the second annotation)}}
-    \label{tbl:agrmnt}
-  \end{center}
-\end{table*}
-
-%% \begin{table}
-%%   \begin{center}
-%%     \bgroup \setlength\tabcolsep{0.47\tabcolsep}
-%%     \small
-%%     \begin{tabular}{|p{0.2\columnwidth}| % first columm
-%%         *{5}{>{\centering\arraybackslash}p{0.12\columnwidth}|}} % next five columns
-%%       \hline
-%%           {\bfseries Element} & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\kappa$\\\hline
-
-%%           \multicolumn{6}{|c|}{\cellcolor{cellcolor}Binary Kappa}\\\hline
-
-%%           Sentiment & 14,748 & 15,929 & 14,969 & 26,047 & 65.03\\
-%%           Target & 5,765 & 6,629 & 5,292 & 9,852 & 64.76\\
-%%           Source & 966 & 1,207 & 910 & 1,619 & 65.99\\
-%%           EExpression & 5,574 & 5,989 & 5,659 & 7,419 & 82.83\\\hline
-
-%%           \multicolumn{6}{|c|}{\cellcolor{cellcolor}Proportional Kappa}\\\hline
-
-%%           Sentiment & 13,316 & 15,375 & 13,316 & 25,352 & 58.82\\
-%%           Target & 4,789 & 6,462 & 4,789 & 9,659 & 56.61\\
-%%           Source & 898 & 1,180 & 898 & 1,604 & 64.1\\
-%%           EExpression & 5,441 & 5,977 & 5,441 & 7,395 & 80.29\\\hline
-%%     \end{tabular}
-%%     \egroup
-%%     \caption{Sentiment corpus agreement.\\
-%%       {\small ($M1$ -- number of tokens with matching labels in the
-%%         first annotation, $A1$ -- total number of labeled tokens in
-%%         the first annotation, $M2$ -- number of tokens with matching
-%%         labels in the second annotation, $A2$ -- total number of
-%%         labeled tokens in the second annotation)}}
-%%     \label{tbl:agrmnt}
-%%   \end{center}
+%%     Negation & 18 & 15 & 23 & 14 & 70 & 33 & 33 & 31 & 23 & 120
+%%     \tabularnewline\hline
+%%   \end{tabular}
+%%   \label{table:sentiment-agreement-topics}
 %% \end{table}
 
-\begin{table}[htb]
-  \centering\small
-  \caption[Inter-annotator agreement for the sentiment corpus across
-    topics]{Inter-annotator agreement for the sentiment corpus across
-    topics.\\ POL = corpus part with discussions about general politic
-    topics; FE = corpus part describing the federal election 2013; PE
-    = corpus part with discussions about the Pope election 2013; GEN =
-    part of the corpus containing tweets with no particular topic}
-  \begin{tabular}{|>{\centering}p{0.15\textwidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
-      >{\centering\bfseries}p{\oosixthClmnWidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
-      >{\centering\bfseries}p{\oosixthClmnWidth}|}
-    \hline
+\subsection{Inter-annotator Agreement}\label{subsec:snt:iaa}
+%% For estimating the inter-annotator agreement of the final dataset, we
+%% adopted the Cohen's $\kappa$ metric \cite{Cohen:60}.  Following the
+%% standard practice for computing this metric, we first calculated the
+%% observed agreement $p_o$ as the ratio of the matching token
+%% annotations to the total number of tokens:
+%% \begin{equation*}\textstyle
+%%   p_o = \frac{T - A_1 + M_1 - A_2 + M_2}{T}
+%% \end{equation*}
+%% where $T$ denotes the total number of tokens, $A_1$ and $A_2$ are the
+%% numbers of tokens annotated with the given class by the first and
+%% second annotator respectively, and $M_1$ and $M_2$ represent the
+%% number of tokens with matching annotations for that class.  And we
+%% then estimated the chance agreement $p_c$ in the usual way as:
+%% \begin{equation*}\textstyle
+%%   p_c = c_1 \times c_2 + (1.0 - c_1) \times (1.0 - c_2)
+%% \end{equation*}
+%% where $c_1$ and $c_2$ are the proportions of tokens annotated with the
+%% given class in the first and second annotation respectively, i.e. $c_1
+%% = \frac{A_1}{T}$ and $c_2 = \frac{A_2}{T}$.
 
-    \multirow{2}{*}{\parbox{0.13\textwidth}{\centering Markable Type}}
-    &
-    \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{$\kappa$-Agreement
-      for Binary Overlap} &
-    \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{$\kappa$-Agreement
-      for Proportional Overlap}\tabularnewline\cline{2-11}
+%% Two questions that arose during this computation were:
+%% \begin{inparaenum}[\itshape i)\upshape]
+%% \item if tokens belonging to several overlapping annotation spans of
+%%   the same class in one annotation had to be counted multiple times
+%%   when computing the $A$ scores (for instance, if we had to count
+%%   the words \textit{this}, \textit{nice}, and \textit{book} in
+%%   Example \ref{exmp:1} twice as sentiments when computing $A_1$ and
+%%   $A_2$), and
+%% \item if we had to assume that two annotated spans from different
+%%   experts agreed on all of their tokens when these spans had at
+%%   least one token in common or if we rather had to count the actual
+%%   number of tokens whose annotation was matching (i.e., if we had to
+%%   consider the annotation of the word \textit{My} in Example
+%%   \ref{exmp:1} as matching or not considering that the rest of the
+%%   sentiment spans agreed).
+%% \end{inparaenum}
 
-    & POL & FE & PE & GEN & Total & POL & FE & PE & GEN &
-    Total\tabularnewline\hline
+%% \begin{example}\label{exmp:1}
+%%   \textrm{Annotation 1:}\\ \sentiment{My father hates \sentiment{this
+%%       nice book}.}\\\\ \textrm{Annotation 2:}\\ My \sentiment{father
+%%     hates \sentiment{this nice book}.}
+%% \end{example}
 
-    Sentiment & 0.35 & 0.35 & 0.45 & 0.41 & 0.39 & 0.27 & 0.29 & 0.36 & 0.34 & 0.32
-    \tabularnewline\hline
+%% To answer these questions, we introduced two agreement metrics:
+%% \emph{binary} and \emph{proportional} kappa.  With the former variant,
+%% we counted tokens belonging to multiple eponymous annotation spans
+%% multiple times and considered all tokens belonging to the given
+%% annotation span as matching if this span agreed on at least one token
+%% with the annotation from the other expert.  With the latter metric,
+%% every token labeled as sentiment (target or source) was counted only
+%% once, and we only calculated the actual number of tokens with matching
+%% annotations when computing the $M$ scores.  The final agreement
+%% results measured with these two metrics are shown in Table
+%% \ref{tbl:agrmnt}.
 
-    Source & 0.39 & 0.27 & 0.41 & 0.41 & 0.37 & 0.38 & 0.28 & 0.4 & 0.4 & 0.36
-    \tabularnewline\hline
+%% \begin{table*}[bth!]
+%%   \begin{center}
+%%     \bgroup \setlength\tabcolsep{0.4\tabcolsep}\scriptsize
+%%     \begin{tabular}{|p{0.1\columnwidth}| % first columm
+%%         *{15}{>{\centering\arraybackslash}p{0.05\columnwidth}|}} % next five columns
+%%       \hline
+%%           \multirow{2}{0.2\columnwidth}{\bfseries Element} &
+%%           \multicolumn{5}{c|}{Initial annotation} & %
+%%           \multicolumn{5}{c|}{Adjudication step} & %
+%%           \multicolumn{5}{c|}{Final corpus}\\\cline{2-16}
+%%           & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
+%%           & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
+%%           & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$\\\hline
 
-    Target & 0.32 & 0.38 & 0.4 & 0.39 & 0.38 & 0.26 & 0.28 & 0.31 & 0.32 & 0.3
-    \tabularnewline\hline
+%%           \multicolumn{16}{|c|}{\cellcolor{cellcolor}Binary Kappa}\\\hline
 
-    Emotional Expression & 0.64 & 0.57 & 0.68 & 0.66 & 0.64 & 0.6 & 0.54 & 0.65 & 0.63 & 0.61
-    \tabularnewline\hline
+%%           Sentiment & 4,215 & 7,070 & 3,484 & 9,827 & \textbf{38.05} &
+%%           %
+%%           8,198 & 8,530 & 8,260 & 14,034 & \textbf{67.92} &%
+%%           14,748 & 15,929 & 14,969 & 26,047 & \textbf{65.03}\\
+%%           Target & 1,103 & 1,943 & 1,217 & 4,162 & \textbf{35.48} & %
+%%           3,088 & 3,407 & 2,814 & 5,303 & \textbf{65.66} &%
+%%           5,765 & 6,629 & 5,292 & 9,852 & \textbf{64.76}\\
+%%           Source & 159 & 445 & 156 & 456 & \textbf{34.53} & %
+%%           573 & 690 & 545 & 837 & \textbf{72.91} & 966 & 1,207 & 910 & 1,619 & \textbf{65.99}\\
+%%           EExpression & 1,951 & 2,854 & 2,029 & 3,188 & \textbf{64.29} &%
+%%           3,164 & 3,298 & 3,261 & 4,134 & \textbf{85.68} & 5,574 & 5,989 & 5,659 & 7,419 & \textbf{82.83}\\
+%%           Intensifier & 57 & 101 & 59 & 123 & \textbf{51.71} &%
+%%           111 & 219 & 113 & 180 & \textbf{56.01} & 192 & 432 & 194 & 338 & \textbf{49.97}\\
+%%           Diminisher & 3 & 10 & 3 & 8 & \textbf{33.32} &%
+%%           9 & 16 & 10 & 16 & \textbf{59.37} & 16 & 30 & 17 & 34 & \textbf{51.55}\\
+%%           Negation & 21 & 63 & 21 & 83 & \textbf{28.69} &%
+%%           68 & 84 & 67 & 140 & \textbf{60.21} & 111 & 132 & 110 & 243 & \textbf{58.87}\\\hline
 
-    Intensifier & 0.46 & 0.48 & 0.21 & 0.62 & 0.52 & 0.46 & 0.48 & 0.21 & 0.6 & 0.51
-    \tabularnewline\hline
+%%           \multicolumn{16}{|c|}{\cellcolor{cellcolor}Proportional Kappa}\\\hline
+%%           Sentiment & 3,269 & 6,812 & 3,269 & 9,796 & \textbf{31.21} & %
+%%           7,435 & 8,243 & 7,435 & 13,714 & \textbf{61.94} & 13,316 & %
+%%           15,375 & 13,316 & 25,352 & \textbf{58.82}\\
+%%           Target & 898 & 1,905 & 898 & 4,148 & \textbf{26.85} & 2,554 %
+%%           & 3,326 & 2,554 & 5,212 & \textbf{57,27} & 4,789 & 6,462 & %
+%%           4,789 & 9,659 & \textbf{56.61}\\
+%%           Source & 153 & 439 & 153 & 456 & \textbf{33.75} & 539 & 676 & %
+%%           539 & 833 & \textbf{71.12} & 898 & 1,180 & 898 & 1,604 & \textbf{64.1}\\
+%%           EExpression & 1,902 & 2,851 & 1,902 & 3,180 & \textbf{61.36}
+%%           & %
+%%           3,097 & 3,290 & 3,097 & 4,121 & \textbf{82.64} & 5,441 & 5,977 & %
+%%           5,441 & 7,395 & \textbf{80.29}\\
+%%           Intensifier & 57 & 101 & 57 & 123 & \textbf{50.81} & %
+%%           111 & 219 & 111 & 180 & \textbf{55.51} & 192 & 432 & 192 & 338 & \textbf{49.71}\\
+%%           Diminisher & 3 & 10 & 3 & 8 & \textbf{33.32} & %
+%%           9 & 16 & 9 & 15 & \textbf{58.05} & 16 & 30 & 16 & 33 & \textbf{50.78}\\
+%%           Negation & 21 & 63 & 21 & 83 & \textbf{28.69} & %
+%%           67 & 83 & 67 & 140 & \textbf{60.03} & 110 & 131 & 110 & 242 & \textbf{58.92}\\\hline
+%%     \end{tabular}
+%%     \egroup
+%%     \caption{Inter-coder agreement at different annotation
+%%       stages.\\ {\small ($M1$ -- number of tokens with matching labels
+%%         in the first annotation, $A1$ -- total number of labeled
+%%         tokens in the first annotation, $M2$ -- number of tokens with
+%%         matching labels in the second annotation, $A2$ -- total number
+%%         of labeled tokens in the second annotation)}}
+%%     \label{tbl:agrmnt}
+%%   \end{center}
+%% \end{table*}
 
-    Diminisher & 0.67 & 0.44 & 0.0 & 0.4 & 0.37 & 0.67 & 0.44 & 0.0 & 0.4 & 0.37
-    \tabularnewline\hline
+%% %% \begin{table}
+%% %%   \begin{center}
+%% %%     \bgroup \setlength\tabcolsep{0.47\tabcolsep}
+%% %%     \small
+%% %%     \begin{tabular}{|p{0.2\columnwidth}| % first columm
+%% %%         *{5}{>{\centering\arraybackslash}p{0.12\columnwidth}|}} % next five columns
+%% %%       \hline
+%% %%           {\bfseries Element} & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\kappa$\\\hline
 
-    Negation & 0.44 & 0.1 & 0.36 & 0.21 & 0.28 & 0.44 & 0.1 & 0.36 & 0.21 & 0.28
-    \tabularnewline\hline
-  \end{tabular}
-  \label{table:sentiment-agreement-topics}
-\end{table}
+%% %%           \multicolumn{6}{|c|}{\cellcolor{cellcolor}Binary Kappa}\\\hline
+
+%% %%           Sentiment & 14,748 & 15,929 & 14,969 & 26,047 & 65.03\\
+%% %%           Target & 5,765 & 6,629 & 5,292 & 9,852 & 64.76\\
+%% %%           Source & 966 & 1,207 & 910 & 1,619 & 65.99\\
+%% %%           EExpression & 5,574 & 5,989 & 5,659 & 7,419 & 82.83\\\hline
+
+%% %%           \multicolumn{6}{|c|}{\cellcolor{cellcolor}Proportional Kappa}\\\hline
+
+%% %%           Sentiment & 13,316 & 15,375 & 13,316 & 25,352 & 58.82\\
+%% %%           Target & 4,789 & 6,462 & 4,789 & 9,659 & 56.61\\
+%% %%           Source & 898 & 1,180 & 898 & 1,604 & 64.1\\
+%% %%           EExpression & 5,441 & 5,977 & 5,441 & 7,395 & 80.29\\\hline
+%% %%     \end{tabular}
+%% %%     \egroup
+%% %%     \caption{Sentiment corpus agreement.\\
+%% %%       {\small ($M1$ -- number of tokens with matching labels in the
+%% %%         first annotation, $A1$ -- total number of labeled tokens in
+%% %%         the first annotation, $M2$ -- number of tokens with matching
+%% %%         labels in the second annotation, $A2$ -- total number of
+%% %%         labeled tokens in the second annotation)}}
+%% %%     \label{tbl:agrmnt}
+%% %%   \end{center}
+%% %% \end{table}
+
+%% \begin{table}[htb]
+%%   \centering\small
+%%   \caption[Inter-annotator agreement for the sentiment corpus across
+%%     topics]{Inter-annotator agreement for the sentiment corpus across
+%%     topics.\\ POL = corpus part with discussions about general politic
+%%     topics; FE = corpus part describing the federal election 2013; PE
+%%     = corpus part with discussions about the Pope election 2013; GEN =
+%%     part of the corpus containing tweets with no particular topic}
+%%   \begin{tabular}{|>{\centering}p{0.15\textwidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
+%%       >{\centering\bfseries}p{\oosixthClmnWidth}|*{4}{>{\centering}p{\oosixthClmnWidth}|}
+%%       >{\centering\bfseries}p{\oosixthClmnWidth}|}
+%%     \hline
+
+%%     \multirow{2}{*}{\parbox{0.13\textwidth}{\centering Markable Type}}
+%%     &
+%%     \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{$\kappa$-Agreement
+%%       for Binary Overlap} &
+%%     \multicolumn{5}{>{\centering}p{7\oosixthClmnWidth}|}{$\kappa$-Agreement
+%%       for Proportional Overlap}\tabularnewline\cline{2-11}
+
+%%     & POL & FE & PE & GEN & Total & POL & FE & PE & GEN &
+%%     Total\tabularnewline\hline
+
+%%     Sentiment & 0.35 & 0.35 & 0.45 & 0.41 & 0.39 & 0.27 & 0.29 & 0.36 & 0.34 & 0.32
+%%     \tabularnewline\hline
+
+%%     Source & 0.39 & 0.27 & 0.41 & 0.41 & 0.37 & 0.38 & 0.28 & 0.4 & 0.4 & 0.36
+%%     \tabularnewline\hline
+
+%%     Target & 0.32 & 0.38 & 0.4 & 0.39 & 0.38 & 0.26 & 0.28 & 0.31 & 0.32 & 0.3
+%%     \tabularnewline\hline
+
+%%     Emotional Expression & 0.64 & 0.57 & 0.68 & 0.66 & 0.64 & 0.6 & 0.54 & 0.65 & 0.63 & 0.61
+%%     \tabularnewline\hline
+
+%%     Intensifier & 0.46 & 0.48 & 0.21 & 0.62 & 0.52 & 0.46 & 0.48 & 0.21 & 0.6 & 0.51
+%%     \tabularnewline\hline
+
+%%     Diminisher & 0.67 & 0.44 & 0.0 & 0.4 & 0.37 & 0.67 & 0.44 & 0.0 & 0.4 & 0.37
+%%     \tabularnewline\hline
+
+%%     Negation & 0.44 & 0.1 & 0.36 & 0.21 & 0.28 & 0.44 & 0.1 & 0.36 & 0.21 & 0.28
+%%     \tabularnewline\hline
+%%   \end{tabular}
+%%   \label{table:sentiment-agreement-topics}
+%% \end{table}
 
 \subsection{Analysis of Disagreements}
 
 \subsection{Related Work}
-The presumably first reported attempt at creating a labeled sentiment
-dataset for Twitter was made by \citet{Go:09}.  Drawing on the work of
-\citet{Read:05}, the authors gathered a large collection of 1.6~M
-microblogs by downloading messages which contained positive or
-negative smileys and then automatically assigned polarity labels
-(positive or negative) to the collected tweets based on these
-emoticons.  In the same vein, \citet{Pak:10} compiled a corpus of
-300~K short messages by retrieving microblogs with emotionally charged
-smileys and then expanded this collection with objective tweets
-obtained from Twitter accounts of popular newswires.
+%% The presumably first reported attempt at creating a labeled sentiment
+%% dataset for Twitter was made by \citet{Go:09}.  Drawing on the work of
+%% \citet{Read:05}, the authors gathered a large collection of 1.6~M
+%% microblogs by downloading messages which contained positive or
+%% negative smileys and then automatically assigned polarity labels
+%% (positive or negative) to the collected tweets based on these
+%% emoticons.  In the same vein, \citet{Pak:10} compiled a corpus of
+%% 300~K short messages by retrieving microblogs with emotionally charged
+%% smileys and then expanded this collection with objective tweets
+%% obtained from Twitter accounts of popular newswires.
 
-A slightly different way of automatically bootstrapping corpus labels
-was proposed by \citet{Barbosa:10} who fetched 200~K microblogs along
-with their subjectivity classes and ${\approx}\,150$~K Twitter posts
-along with their polarity scores from three publicly available
-sentiment web-services and used the majority votes of these services
-as gold tags for their data.
+%% A slightly different way of automatically bootstrapping corpus labels
+%% was proposed by \citet{Barbosa:10} who fetched 200~K microblogs along
+%% with their subjectivity classes and ${\approx}\,150$~K Twitter posts
+%% along with their polarity scores from three publicly available
+%% sentiment web-services and used the majority votes of these services
+%% as gold tags for their data.
 
-As already mentioned previously, all of these datasets were created in
-an unsupervised manner and therefore cannot serve as a reliable source
-of information.  An attempt to alleviate this problem was made by
-\citet{Nakov:13} as part of the SemEval competition.  The SemEval
-corpus -- the supposedly largest hand labeled sentiment collection of
-microblogs to date -- consists of more than 15~K tweets which were
-manually annotated with their overall polarities and subjective
-expressions by five experts using Amazon Mechanical Turk
-(cf. \citet{Diakopoulos:10} for a similar crowdsourcing
-experiment). These annotations, however, did not capture the relation
-between the polarity expressed by tweet and the particular entity that
-this tweet was evaluating.
+%% As already mentioned previously, all of these datasets were created in
+%% an unsupervised manner and therefore cannot serve as a reliable source
+%% of information.  An attempt to alleviate this problem was made by
+%% \citet{Nakov:13} as part of the SemEval competition.  The SemEval
+%% corpus -- the supposedly largest hand labeled sentiment collection of
+%% microblogs to date -- consists of more than 15~K tweets which were
+%% manually annotated with their overall polarities and subjective
+%% expressions by five experts using Amazon Mechanical Turk
+%% (cf. \citet{Diakopoulos:10} for a similar crowdsourcing
+%% experiment). These annotations, however, did not capture the relation
+%% between the polarity expressed by tweet and the particular entity that
+%% this tweet was evaluating.
 
-Target-oriented sentiment annotation was attempted by \citet{Jiang:11}
-and \citet{Saif:13}.  The former authors collected a corpus of 1,939
-messages pertaining to one of a predefined set of five entities
-(\emph{Obama}, \emph{Google}, \emph{iPad}, \emph{Lakers}, and
-\emph{Lady Gaga}).\footnote{Similar work was done by Sanders group
-  (cf. \url{http://www.sananalytics.com/lab/twitter-sentiment/}).} The
-latter group obtained a short list of 28 popular targets that were
-frequenty metioned on Twitter and then randomly sampled 3,000
-microblogs related to one of these topics.  Both annotations were
-again done manually.
+%% Target-oriented sentiment annotation was attempted by \citet{Jiang:11}
+%% and \citet{Saif:13}.  The former authors collected a corpus of 1,939
+%% messages pertaining to one of a predefined set of five entities
+%% (\emph{Obama}, \emph{Google}, \emph{iPad}, \emph{Lakers}, and
+%% \emph{Lady Gaga}).\footnote{Similar work was done by Sanders group
+%%   (cf. \url{http://www.sananalytics.com/lab/twitter-sentiment/}).} The
+%% latter group obtained a short list of 28 popular targets that were
+%% frequenty metioned on Twitter and then randomly sampled 3,000
+%% microblogs related to one of these topics.  Both annotations were
+%% again done manually.
 
-The dataset presented in this paper significantly outperforms current
-state of the art in many noticeable regards: First of all, except for
-SemEval, the size of our corpus substantially surpasses any existing
-manually labeled sentiment collections created for Twitter.  Secondly,
-our annotation scheme is considerably richer than the one applied by
-Nakov et al. (It not only captures polarities of subjective terms but
-also reflects their intensities, possible negations, and modifiers as
-well as polarities and intensities of complete opinions, also
-capturing their respective sources and targets.) Last but not least,
-our corpus was created for German -- a language segment that only
-marginally was touched on in Twitter literature.
+%% The dataset presented in this paper significantly outperforms current
+%% state of the art in many noticeable regards: First of all, except for
+%% SemEval, the size of our corpus substantially surpasses any existing
+%% manually labeled sentiment collections created for Twitter.  Secondly,
+%% our annotation scheme is considerably richer than the one applied by
+%% Nakov et al. (It not only captures polarities of subjective terms but
+%% also reflects their intensities, possible negations, and modifiers as
+%% well as polarities and intensities of complete opinions, also
+%% capturing their respective sources and targets.) Last but not least,
+%% our corpus was created for German -- a language segment that only
+%% marginally was touched on in Twitter literature.
 
-%% \citet{Kouloumpis:11}
-%% \citet{Villena-Roman:13}1
+%% %% \citet{Kouloumpis:11}
+%% %% \citet{Villena-Roman:13}1
 
-\subsection{Conclusions}
-As can be seen from the table, recognizing subjective evaluations of
-particular entities (sentiments) poses a considerable problem to human
-experts.  Even with detailed guidelines but practically no training at
-the beginning, their mutual agreement only reached 38.05~\% when
-measured with the less conservative binary $\kappa$ metric.  This
-problem, however, could be alleviated by letting annotators unify
-their judgments.  Once the differences were resolved, the experts
-could proceed with the annotation without loosing their high level of
-reliability (compare columns $\kappa$ for the adjudication step and
-final corpus).
+%% \subsection{Conclusions}
+%% As can be seen from the table, recognizing subjective evaluations of
+%% particular entities (sentiments) poses a considerable problem to human
+%% experts.  Even with detailed guidelines but practically no training at
+%% the beginning, their mutual agreement only reached 38.05~\% when
+%% measured with the less conservative binary $\kappa$ metric.  This
+%% problem, however, could be alleviated by letting annotators unify
+%% their judgments.  Once the differences were resolved, the experts
+%% could proceed with the annotation without loosing their high level of
+%% reliability (compare columns $\kappa$ for the adjudication step and
+%% final corpus).
 
-The low inter-coder agreement for sources and targets at the initial
-stage, however, can be considered as a consequential error of
-diverging sentiment concepts, i.e., when the annotators marked
-different sentiments in the corpus, they automatically associated
-different sources and targets with these evaluations.  But this,
-again, could be corrected during the adjudication (after the
-unification, binary $\kappa$ increased from $\approx\,35\%$ to more
-than $65\%$ and remained high in the final corpus).
+%% The low inter-coder agreement for sources and targets at the initial
+%% stage, however, can be considered as a consequential error of
+%% diverging sentiment concepts, i.e., when the annotators marked
+%% different sentiments in the corpus, they automatically associated
+%% different sources and targets with these evaluations.  But this,
+%% again, could be corrected during the adjudication (after the
+%% unification, binary $\kappa$ increased from $\approx\,35\%$ to more
+%% than $65\%$ and remained high in the final corpus).
 
-In contrast to sentiments, which always pertain to some objects and
-are apparently difficult to agree on, independent emotional
-expressions are seemingly easier to recognize.  As we can see from the
-statistics, even in the initial step, our experts reached notable
-64.29~\%, which, according to \citet{Landis:77}, means a substantial
-agreement.
+%% In contrast to sentiments, which always pertain to some objects and
+%% are apparently difficult to agree on, independent emotional
+%% expressions are seemingly easier to recognize.  As we can see from the
+%% statistics, even in the initial step, our experts reached notable
+%% 64.29~\%, which, according to \citet{Landis:77}, means a substantial
+%% agreement.
 
-The agreement figures for diminishers and negations at the first stage
-were admittedly low though.  But this was mostly due to the low number
-of these elements rather than contradicting interpretations of our
-experts and also could be corrected in the later steps.
+%% The agreement figures for diminishers and negations at the first stage
+%% were admittedly low though.  But this was mostly due to the low number
+%% of these elements rather than contradicting interpretations of our
+%% experts and also could be corrected in the later steps.
 
-In general, our annotators reached a high agreement level of more than
-50~\% on almost all annotated elements (except for intensifiers) in
-the final version of our corpus.  Regarding the moderately big size of
-our data and the diversity of annotated items, we believe that our
-dataset could thus be a valuable contribution to the broad scientific
-community, fostering further research and providing more insight into
-the ways how people express their opinions on the Web.
+%% In general, our annotators reached a high agreement level of more than
+%% 50~\% on almost all annotated elements (except for intensifiers) in
+%% the final version of our corpus.  Regarding the moderately big size of
+%% our data and the diversity of annotated items, we believe that our
+%% dataset could thus be a valuable contribution to the broad scientific
+%% community, fostering further research and providing more insight into
+%% the ways how people express their opinions on the Web.
 \newpage
