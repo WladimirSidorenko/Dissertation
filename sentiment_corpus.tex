@@ -13,21 +13,21 @@
 
 A vital prerequisite for proving or disproving any hypotheses in
 computational liguistics is the existence of sufficiently big manually
-labeled data for the targeted domain, on which the conjectures could
-be tested.  Since there was no corresponding sentiment corpus for
-German Twitter that we were aware of at the time of writing this
+labeled data for the targeted domain, on which the made conjectures
+could be tested.  Since there was no corresponding sentiment corpus
+for German Twitter that we were aware of at the time of writing this
 thesis, we had to create our own dataset, which we will introduce in
 this section.
 
-We begin with describing the selection criteria and tracking procedure
-we used to initially collect the raw data for our ``tweebank''.  After
-presenting the annotation scheme and detailing the annotation tool and
-format, we turn to a detailed analysis of the inter-annotator
-agreement, which will serve as an upper bound in our later
-experiments.  In Subsection \ref{subsec:snt:iaa}, we propose two new
-versions of the popular $\kappa$ metric, which were specifically
+We begin our introduction by describing the selection criteria and
+tracking procedure we used to initially collect the raw data for our
+``tweebank''.  After presenting the annotation scheme and detailing
+the annotation tool and format, we turn to a detailed analysis of the
+inter-annotator agreement, which will serve as an upper bound in our
+later experiments.  In Subsection \ref{subsec:snt:iaa}, we propose two
+new versions of the popular $\kappa$ metric, which were specifically
 adjusted to the peculiarities of our annotation task: binary and
-proportional kappa.  With these two variants, we measure the
+proportional kappa.  With these two measures, we estimate the
 inter-coder reliability on annotating spans of subjective opinions,
 their targets, and sources, and also check whether the annotators
 agreed on the polarity and intensity of sentiments, once they agreed
@@ -35,62 +35,113 @@ on their boundaries.  Finally, with statistical means, we investigate
 the correlations between the selection criteria we applied initially
 and the number of annotated elements and disagreements of our experts
 in order to understand which linguistic and extra-linguistic factors
-might significantly influence the distribution of sentiments in the
-corpus and which ones might exacerbate their analysis.
+might have significantly influenced the distribution of sentiments in
+the corpus and which ones exacerbated their analysis.
 
 \subsection{Data Collection}
 
-One of the first important questions which arises when one starts
-creating a new dataset is that of the selection criteria to use in
-order to collect the data.  While, for low-level NLP tasks, such as
-part-of-speech tagging or syntactic parsing, it typically suffices to
-define the language domain to sample from (since the phenomena of
-interest are usually frequent and uniformly spread), for semantically
-demanding tasks with many rare phenomena, one also has to pay
-attention to various in-domain factors as they might significantly
-affect the desired distribution, making the resulting corpus either
-utterly sparse or excessively biased.
+An important problem that one has to solve prior to creating a new
+dataset is that of the selection criteria to use in order to collect
+the data.  While, for low-level NLP tasks, such as part-of-speech
+tagging or syntactic parsing, it typically suffices to define the
+language domain to sample from (since the phenomena of interest are
+usually frequent and uniformly spread), for semantically demanding
+tasks with many rare diverse phenomena, one also has to pay attention
+to various in-domain factors as they might significantly affect the
+desired distribution, making the resulting corpus either utterly
+sparse or excessively biased.
 
+To minimize both of these risks -- scarceness and bias, we decided to
+use a compromise approach by gathering one part of the dataset from
+tweets which were a priori more likely to bear sentiments, and
+sampling the rest of the corpus from a big collection of messages
+uniformly at random.  That way, we hoped to increase the recall by
+using the former strategy and mitigate the introduced bias with the
+latter method.
 
+As criteria which could help us find more opinion-laden microblogs, we
+considered topic and form of tweets.  Our motivation was that some
+political or social issues by themselves might incite people to be
+more subjective in their judgements.  Therefore, including such topics
+in our corpus would automatically increase the recall.  On the other
+hand, opinions also need to be expressed by some linguistic means,
+therefore their mere form can also suggest whether it is likely to be
+sentimental or not.
 
-For our work, the in-domain factors to consider were the topics and
-the form of tweets.  Since we wanted our corpus to be as
-representative as possible, we had to make sure that the topics we
-choose for sampling lend themselves as fruitful opinion sources.  At
-the same time, we did not want automatically generated ad and news
-tweets to spoil our data and also introduced additional formal
-criteria (described below) that the tweets had to satisfy in order to
-be chosen.  But then again, applying these restriction might make the
-dataset excessively biased, so we did allow for a certain proportion
-of tweets being selected even if they did not conform to our
-constraints.
+Since we started creating the corpus by the end of 2013, obvious
+choices for subjectively rich topics to us were the \emph{federal
+  elections in Germany}, which were held in autumn 2013, and the
+\emph{papal conclave}, which took place in the same year.  Because
+both of these events implied to some sort of voting, we decided to
+include \emph{general discussions about political issues} as a third
+topic in order to counterbalance the election specifics.  Finally, to
+obey our second objective, i.e., to keep the bias of our corpus low,
+we considered \emph{casual everyday conversations} not pertaining to
+any particular topic as the last source of the new data.
 
-For the purpose of our experiments, we created a dataset consisting of
-7,992 German tweets.  These microblogs were tracked between March and
-September 2013 on the basis of extensive keyword lists for four
-different topics, including:
+To collect tweets for the first three topics, we created extensive
+keyword lists (with several dozens entries each) for each of these
+subjects.  Based on these lists, we subsequently were tracking
+microblogs between March and September 2013 using the public Twitter
+API.\footnote{\url{https://pypi.python.org/pypi/tweetstream}} We
+additionally enriched the data on federal elections with messages we
+obtained from the University of M\"unster, who were concurrently
+working on related problems within the joint FMER project ``Discourse
+Analysis of Social Media''.  Finally, for the fourth topic, we used
+the German Twitter snapshot of \citet{Scheffler:14}, which comprises
+all German microblogs posted in April 2013.
+
+%% For our work, the in-domain factors to consider were the topics and
+%% the form of tweets.  Since we wanted our corpus to be as
+%% representative as possible, we had to make sure that the topics we
+%% choose for sampling lend themselves as fruitful opinion sources.  At
+%% the same time, we did not want automatically generated ad and news
+%% tweets to spoil our data and also introduced additional formal
+%% criteria (described below) that the tweets had to satisfy in order to
+%% be chosen.  But then again, applying these restriction might make the
+%% dataset excessively biased, so we did allow for a certain proportion
+%% of tweets being selected even if they did not conform to our
+%% constraints.
+
+%% Politics: 59,531 messages, keywords: Altmaier, Wowereit, Minister,
+%% Bundeskanzleramt, Schwarz-Gelb
+
+%% Papst: 51,579 messages, keywords: papst, pabst, konklave, Vatikan
+%% General Tweets: 51,579 messages, keywords: papst, pabst, konklave, Vatikan
+
+%% Federal Elections: 3,131,315 messages, keywords:
+
+%% General: 24,179,871 messages, keywords:
+
+After obtaining a total of 27.4 million messages using this tracking
+procedure, we next applied formal criteria to the collected data.  For
+this purpose, we divided all downloaded tweets pertaining to the same
+topic into three bins:
 \begin{itemize}
-\item the federal elections in Germany in 2013,
-\item the papal conclave 2013,
-\item discussions of general political issues,
-\item and casual everyday conversations.\footnote{For this part, we took
-  the German Twitter snapshot of \citet{Scheffler:14}.}
+\item We put tweets that contained at least one polar term from the
+  sentiment lexicon \texttt{SentiWS} \cite{Remus:10} into the first
+  bin;
+\item Tweets which did not satisfy the first criterion but had at
+  least one emoticon or an exclamation mark were put into the second
+  bin;
+\item All remaining tweets were allocated to the third bin of their
+  respective topic.
 \end{itemize}
 
-This tracking procedure gave us a set of 94.4 million messages.  In
-order to obtain a representative excerpt from this set that, on the
-one hand, would contain as many evaluative opinions as possible but,
-on the other hand, would not be excessively biased, we then applied
-three formal selection criteria to distribute the tweets of each topic
-into three bins:
-\begin{enumerate}
-\item tweets that
-  contain at least one polar term from the sentiment polarity
-  lexicon `SentiWS' \cite{Remus:10};
-\item tweets that fail the first criterion but have at
-  least one emoticon or an exclamation mark;
-\item all remaining tweets (for this topic).
-\end{enumerate}
+A detailed breakdown of the resulting distribution of tweets among
+
+\begin{table}[hbt!]
+  \begin{tabular}{|l|*{3}{>{\centering\arraybackslash}p{0.16\columnwidth}|}c|}
+    \hline
+
+    \multirow{2}{0.2\columnwidth}{\bfseries Topic} &
+    \multicolumn{3}{c|}{Formal Criterion} &
+    \multirow{2}{0.2\columnwidth}{\centering Total} \\\cline{2-4}
+
+    & Polar Terms & Emoticons and Exclamations & Rest & \\
+    \hline
+  \end{tabular}
+\end{table}
 
 From each of the four topics and each of their three respective bins,
 we then randomly chose 666 messages. This gave us our final dataset of
