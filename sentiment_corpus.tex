@@ -21,22 +21,23 @@ this section.
 
 We begin our introduction by describing the selection criteria and
 tracking procedure we used to initially collect the raw data for our
-``tweebank''.  After presenting the annotation scheme and detailing
-the annotation tool and format, we turn to a detailed analysis of the
-inter-annotator agreement, which will serve as an upper bound in our
-later experiments.  In Subsection \ref{subsec:snt:iaa}, we propose two
-new versions of the popular $\kappa$ metric, which were specifically
-adjusted to the peculiarities of our annotation task: binary and
-proportional kappa.  With these two measures, we estimate the
-inter-coder reliability on annotating spans of subjective opinions,
-their targets, and sources, and also check whether the annotators
-agreed on the polarity and intensity of sentiments, once they agreed
-on their boundaries.  Finally, with statistical means, we investigate
-the correlations between the selection criteria we applied initially
-and the number of annotated elements and disagreements of our experts
-in order to understand which linguistic and extra-linguistic factors
-might have significantly influenced the distribution of sentiments in
-the corpus and which ones exacerbated their analysis.
+``tweebank''.  After presenting the utilized annotation tool and
+detailing the annotation scheme, we turn to an extensive analysis of
+the inter-annotator agreement, which will serve as an upper bound in
+our later experiments.  In Subsection \ref{subsec:snt:iaa}, we propose
+two new versions of the popular $\kappa$ metric, which were
+specifically adjusted to the peculiarities of our annotation task:
+binary and proportional kappa.  With these two measures, we estimate
+the inter-coder reliability on annotating spans of subjective
+opinions, their targets, and sources, and also check whether the
+annotators agreed on the polarity and intensity of sentiments, once
+they agreed on their boundaries.  Finally, with statistical means, we
+investigate the correlations between the selection criteria we applied
+initially and the number of annotated elements and disagreements of
+our experts in order to understand which linguistic and
+extra-linguistic factors might have significantly influenced the
+distribution of sentiments in the corpus and which ones exacerbated
+their analysis.
 
 \subsection{Data Collection}
 
@@ -53,42 +54,42 @@ sparse or excessively biased.
 
 To minimize both of these risks -- scarceness and bias, we decided to
 use a compromise approach by gathering one part of the dataset from
-tweets which were a priori more likely to bear sentiments, and
+tweets which were a priori more likely to contain sentiments, and
 sampling the rest of the corpus from a big collection of messages
 uniformly at random.  That way, we hoped to increase the recall by
 using the former strategy and mitigate the introduced bias with the
 latter method.
 
 As criteria which could help us find more opinion-laden microblogs, we
-considered topic and form of tweets.  Our motivation was that some
+considered topics and forms of tweets.  Our motivation was that some
 political or social issues by themselves might incite people to be
 more subjective in their judgements.  Therefore, including such topics
 in our corpus would automatically increase the recall.  On the other
-hand, opinions also need to be expressed by some linguistic means,
-therefore their mere form can also suggest whether it is likely to be
-sentimental or not.
+hand, sentiments also need to be expressed by some linguistic means,
+therefore the mere form of a message can also suggest whether it is
+likely to be opinionated or not.
 
 Since we started creating the corpus by the end of 2013, obvious
 choices for subjectively rich topics to us were the \emph{federal
   elections in Germany}, which were held in autumn 2013, and the
 \emph{papal conclave}, which took place in the same year.  Because
 both of these events implied to some sort of voting, we decided to
-include \emph{general discussions about political issues} as a third
+include \emph{general discussions of political issues} as a third
 topic in order to counterbalance the election specifics.  Finally, to
-obey our second objective, i.e., to keep the bias of our corpus low,
+obey our second objective, i.e., to keep the bias of the corpus low,
 we considered \emph{casual everyday conversations} not pertaining to
-any particular topic as the last source of the new data.
+any specific topic as the last source of the new data.
 
 To collect tweets for the first three topics, we created extensive
 keyword lists (with several dozens entries each) for each of these
 subjects.  Based on these lists, we subsequently were tracking
 microblogs between March and September 2013 using the public Twitter
 API.\footnote{\url{https://pypi.python.org/pypi/tweetstream}} We
-additionally enriched the data on federal elections with messages we
-obtained from the University of M\"unster, who were concurrently
+additionally enriched the data on federal elections with the messages
+we obtained from the University of M\"unster, who were concurrently
 working on related problems within the joint FMER project ``Discourse
-Analysis of Social Media''.  Finally, for the fourth topic, we used
-the German Twitter snapshot of \citet{Scheffler:14}, which comprises
+Analysis of Social Media''.  For sampling the fourth topic, we used
+the German Twitter snapshot of \citet{Scheffler:14}, which comprised
 all German microblogs posted in April 2013.
 
 %% For our work, the in-domain factors to consider were the topics and
@@ -113,40 +114,90 @@ all German microblogs posted in April 2013.
 
 %% General: 24,179,871 messages, keywords:
 
-After obtaining a total of 27.4 million messages using this tracking
-procedure, we next applied formal criteria to the collected data.  For
-this purpose, we divided all downloaded tweets pertaining to the same
-topic into three bins:
+This tracking procedure gave us a total of 27.4 M messages with the
+Twitter snapshot being by far the most prolific source of the data.
+In the next step, we separated all tweets pertaining to the same topic
+into three bins based on the following formal criteria:
 \begin{itemize}
-\item We put tweets that contained at least one polar term from the
+\item We put messages that contained at least one polar term from the
   sentiment lexicon \texttt{SentiWS} \cite{Remus:10} into the first
   bin;
-\item Tweets which did not satisfy the first criterion but had at
-  least one emoticon or an exclamation mark were put into the second
-  bin;
-\item All remaining tweets were allocated to the third bin of their
-  respective topic.
+\item Microblogs which did not satisfy the first criterion but
+  featured at least one emoticon or exclamation mark were put into the
+  second bin;
+\item Eventually, all remaining tweets were allocated to the third bin
+  of their respective topic.
 \end{itemize}
+The reason for choosing this strategy was that messages containing
+known polar terms were by default more probable to express polar
+opnions as well.  Therefore, we used one of the three major German
+sentiment lexica.  In this case, we opted for \texttt{SentiWS}
+\cite{Remus:10} due to its moderate size, acceptably high precision,
+and the availability of flectional forms of the etries.  Since no
+sentiment lexicon is guaranteed to provide for the full coverage of
+opinionated terms and, moreover, because Twitter users are very
+creative in their ways of expressing opinions, we decided to use
+emoticons and exclamation marks as an alternative source of
+sentiment-laden messages.  Finally, the rest of the tweets, which did
+not fulfill the two above criteria, was thrown together into the third
+group, since we did not make any assumption about the likelihood of
+sentiments in these messages.
 
-A detailed breakdown of the resulting distribution of tweets among
-
+A detailed breakdown of the resulting distribution of tweets across
+the four topics and their formal groups is given in
+Table~\ref{snt:tbl:corp:topic-bins}:
 \begin{table}[hbt!]
-  \begin{tabular}{|l|*{3}{>{\centering\arraybackslash}p{0.16\columnwidth}|}c|}
+  \begin{tabular}{|l|*{4}{>{\centering\arraybackslash}p{0.15\textwidth}|}}
     \hline
 
-    \multirow{2}{0.2\columnwidth}{\bfseries Topic} &
+    \multirow{2}{0.2\columnwidth}{\centering\bfseries Topic} &
     \multicolumn{3}{c|}{Formal Criterion} &
-    \multirow{2}{0.2\columnwidth}{\centering Total} \\\cline{2-4}
+    \multirow{2}{0.15\textwidth}{\centering Sample\\ Tracking\\ Keywords}\\\cline{2-4}
 
-    & Polar Terms & Emoticons and Exclamations & Rest & \\
+    & Polar Terms & Emoticons and Exclamations & Rest &\\\hline
+
+    Federal Elections &  &  &  & \\
+    Papal Conclave &  &  &  & \\
+    Political Discussions &  &  &  & \\
+    General Conversations &  &  &  & \\
     \hline
   \end{tabular}
+  \caption{Distribution of the downloaded messages across the topics
+    and formal groups.\label{snt:tbl:corp:topic-bins}}
 \end{table}
 
-From each of the four topics and each of their three respective bins,
-we then randomly chose 666 messages. This gave us our final dataset of
-7,992 microblogs ($666\text{ tweets} \times 4\text{ topics} \times
-3\text{ formal criteria}$).
+Finally, for generating the final corpus, we randomly sampled 666
+messages from each of the three bins of each of the four topics. This
+gave us our final dataset of 7,992 microblogs: $666\text{ tweets}
+\times 4\text{ topics} \times 3\text{ formal criteria}$.
+
+\subsection{Annotation Tool and Procedure}\label{subsec:snt:tformat}
+
+All annotations were done using \texttt{MMAX2} -- a freely available
+text markup tool.\footnote{\url{http://mmax2.sourceforge.net/}} Since
+this program relies on a token-oriented stand-off XML format where all
+annotations are stored separately from the text and only refer to the
+ids of the tokens they are spanning, we first had to split the
+downloaded tweets into tokens in order to create an annotation
+project\footnote{In \texttt{MMAX2}, an annotation project refers to a
+  collection of all XML files pertaining to one corpus, including text
+  data, annotation files, scheme definition etc.}  for our corpus.
+For this purpose, we applied a minimally modified version of
+Christopher Potts' social media
+tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+which we slightly adjusted to the peculiarities of German spelling (we
+accounted for the capitalized form of German nouns and the dot at the
+end of ordinal numbers).
+
+To ease the annotation process and to minimize possible data loss
+during the labeling, we also split our complete dataset into 80
+smaller project files with 99 -- 109 tweets each.
+
+%% For each such project, we took only tweets pertaining to one
+%% particular topic (elections, conclave, politics, or casual talks)
+%% but made sure that the microblogs from the three bins of that topic
+%% were represented equally in the project.
+
 
 \subsection{Annotation Scheme}\label{subsec:snt:ascheme}
 %% In the next step, we defined an annotation scheme for our
@@ -211,31 +262,6 @@ we then randomly chose 666 messages. This gave us our final dataset of
 %% \texttt{degree} which showed by how much these elements were changing
 %% the intensity of their respective emotional expressions.
 
-\subsection{Annotation Tool and Procedure}\label{subsec:snt:tformat}
-%% All annotations were done using \texttt{MMAX2} -- a freely available
-%% text markup tool.\footnote{\url{http://mmax2.sourceforge.net/}} Since
-%% this program relies on a token-oriented stand-off XML format (where
-%% all annotations are stored separately from the text and only refer to
-%% the ids of the tokens they are spanning), we first had to split the
-%% downloaded tweets into tokens in order to create an annotation
-%% project\footnote{In \texttt{MMAX2}, an annotation project refers to a
-%%   collection of all XML files pertaining to one corpus, including text
-%%   data, annotation files, scheme definition etc.}
-%% for our corpus.  For this purpose, we applied a minimally modified
-%% version of Christopher Potts' social media
-%% tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
-%% which we slightly adjusted to the peculiarities of German spelling (we
-%% accounted for the capitalized form of German nouns and the dot at the
-%% end of ordinal numbers).
-
-%% To ease the annotation process and to minimize possible data loss
-%% during the labeling, we also split our complete dataset into 80
-%% smaller project files with 99 -- 109 tweets each.
-
-%% %% For each such project, we took only tweets pertaining to one
-%% %% particular topic (elections, conclave, politics, or casual talks)
-%% %% but made sure that the microblogs from the three bins of that topic
-%% %% were represented equally in the project.
 
 %% Finally, we let our experts annotate the data.  The annotation
 %% procedure was carried out in three steps:
