@@ -29,7 +29,7 @@ two new versions of the popular $\kappa$ metric, which were
 specifically adjusted to the peculiarities of our annotation task:
 binary and proportional kappa.  With these two measures, we estimate
 the inter-coder reliability on annotating spans of subjective
-opinions, their targets, and sources, and also check whether the
+opinions, their targets, and sources, also checking whether the
 annotators agreed on the polarity and intensity of sentiments, once
 they agreed on their boundaries.  Finally, with statistical means, we
 investigate the correlations between the selection criteria we applied
@@ -47,8 +47,8 @@ the data.  While, for low-level NLP tasks, such as part-of-speech
 tagging or syntactic parsing, it typically suffices to define the
 language domain to sample from (since the phenomena of interest are
 usually frequent and uniformly spread), for semantically demanding
-tasks with many rare diverse phenomena, one also has to pay attention
-to various in-domain factors as they might significantly affect the
+tasks with many diverse ways of expressions, one also has to pay
+attention to in-domain factors as they might significantly affect the
 desired distribution, making the resulting corpus either utterly
 sparse or excessively biased.
 
@@ -61,36 +61,36 @@ using the former strategy and mitigate the introduced bias with the
 latter method.
 
 As criteria which could help us find more opinion-laden microblogs, we
-considered topics and forms of tweets.  Our motivation was that some
+considered the topic and form of tweets.  Our motivation was that some
 political or social issues by themselves might incite people to be
 more subjective in their judgements.  Therefore, including such topics
-in our corpus would automatically increase the recall.  On the other
-hand, sentiments also need to be expressed by some linguistic means,
-therefore the mere form of a message can also suggest whether it is
-likely to be opinionated or not.
+in our corpus would automatically increase the coverage of sentiment
+expressions.  On the other hand, opinions also need to be expressed by
+some linguistic means, therefore the mere form of a message can also
+suggest whether it is likely to be emotional or not.
 
-Since we started creating the corpus by the end of 2013, obvious
-choices for subjectively rich topics to us were the \emph{federal
-  elections in Germany}, which were held in autumn 2013, and the
-\emph{papal conclave}, which took place in the same year.  Because
+As we started creating the corpus in the spring 2013, obvious choices
+for subjectively rich topics to us were the \emph{papal conclave},
+which took place in March of that year, and the \emph{federal
+  elections in Germany}, which were to be held in autumn.  Because
 both of these events implied to some sort of voting, we decided to
 include \emph{general discussions of political issues} as a third
-topic in order to counterbalance the election specifics.  Finally, to
-obey our second objective, i.e., to keep the bias of the corpus low,
-we considered \emph{casual everyday conversations} not pertaining to
-any specific topic as the last source of the new data.
+topic in our dataset in order to counterbalance the election
+specifics.  Finally, to obey the second objective, i.e., to keep the
+corpus bias low, we considered \emph{casual everyday conversations}
+without any pre-filtering as the last source of the new data.
 
 To collect tweets for the first three topics, we created extensive
 keyword lists (with several dozens entries each) for each of these
 subjects.  Based on these lists, we subsequently were tracking
 microblogs between March and September 2013 using the public Twitter
-API.\footnote{\url{https://pypi.python.org/pypi/tweetstream}} We
-additionally enriched the data on federal elections with the messages
-we obtained from the University of M\"unster, who were concurrently
-working on related problems within the joint FMER project ``Discourse
-Analysis of Social Media''.  For sampling the fourth topic, we used
-the German Twitter snapshot of \citet{Scheffler:14}, which comprised
-all German microblogs posted in April 2013.
+API.\footnote{\url{https://pypi.python.org/pypi/tweetstream}}
+Afterwards, we additionally enriched the federal elections data with
+the messages we obtained from the University of M\"unster, who were
+concurrently working on related problems within the joint FMER project
+``Discourse Analysis of Social Media''.  For sampling the fourth
+topic, we used the German Twitter snapshot of \citet{Scheffler:14},
+which comprised all German microblogs posted in April 2013.
 
 %% For our work, the in-domain factors to consider were the topics and
 %% the form of tweets.  Since we wanted our corpus to be as
@@ -115,56 +115,88 @@ all German microblogs posted in April 2013.
 %% General: 24,179,871 messages, keywords:
 
 This tracking procedure gave us a total of 27.4 M messages with the
-Twitter snapshot being by far the most prolific source of the data.
-In the next step, we separated all tweets pertaining to the same topic
-into three bins based on the following formal criteria:
+M\"unster corpus and Scheffler's snapshot being by far the most
+prolific sources of the data.  In the next step, we separated all
+tweets pertaining to the same topic into three groups based on the
+following formal criteria:
 \begin{itemize}
 \item We put messages that contained at least one polar term from the
-  sentiment lexicon \texttt{SentiWS} \cite{Remus:10} into the first
-  bin;
+  sentiment lexicon SentiWS \cite{Remus:10} into the first group;
 \item Microblogs which did not satisfy the first criterion but
   featured at least one emoticon or exclamation mark were put into the
-  second bin;
-\item Eventually, all remaining tweets were allocated to the third bin
-  of their respective topic.
+  second set;
+\item Eventually, all remaining tweets were allocated to the third
+  category of their respective topic.
 \end{itemize}
 The reason for choosing this strategy was that messages containing
-known polar terms were by default more probable to express polar
-opnions as well.  Therefore, we used one of the three major German
-sentiment lexica.  In this case, we opted for \texttt{SentiWS}
-\cite{Remus:10} due to its moderate size, acceptably high precision,
-and the availability of flectional forms of the etries.  Since no
-sentiment lexicon is guaranteed to provide for the full coverage of
-opinionated terms and, moreover, because Twitter users are very
-creative in their ways of expressing opinions, we decided to use
-emoticons and exclamation marks as an alternative source of
-sentiment-laden messages.  Finally, the rest of the tweets, which did
-not fulfill the two above criteria, was thrown together into the third
-group, since we did not make any assumption about the likelihood of
-sentiments in these messages.
+known polar terms were by default more probable to express some
+subjective opinions.  To find such terms, we considered three major
+German sentiment lexica: SentiWS \cite{Remus:10}, German Polarity
+Clues \cite{Waltinger:10}, and Zurich Sentiment Lexicon
+\cite{Clematide:10}, eventually choosing the first one due to its
+moderate size, acceptably high precision, and the availability of
+inflection forms of its etries.
 
-A detailed breakdown of the resulting distribution of tweets across
+Since no polar lexicon, however, is guaranteed to provide for the full
+coverage of opinionated phrases and, moreover, because Twitter users
+are renowned for their creativity in instantly inventing new language
+forms, we also applied a bail-out approach by separately collecting
+messages which did not have any lexicon terms but did contain a smiley
+or exclamation point.  Our assumption was that either these elements
+alone would suffice to express subjective opinions or that they would
+reinforce the meaning of accidentally missed polar words.
+
+Finally, as we did not make any hypotheses about the distribution of
+sentiments in the rest of the tweets, we allocated all remaining
+microblogs to the same group, hoping that a uniform sampling would
+provide us with further positive and negative opinion examples.  A
+detailed breakdown of the resulting distribution of messages across
 the four topics and their formal groups is given in
 Table~\ref{snt:tbl:corp:topic-bins}:
-\begin{table}[hbt!]
-  \begin{tabular}{|l|*{4}{>{\centering\arraybackslash}p{0.15\textwidth}|}}
+\begin{table}[hbt!]\small
+  \begin{tabular}{|l|*{5}{>{\centering\arraybackslash}p{0.12\textwidth}|}}
     \hline
 
-    \multirow{2}{0.2\columnwidth}{\centering\bfseries Topic} &
-    \multicolumn{3}{c|}{Formal Criterion} &
-    \multirow{2}{0.15\textwidth}{\centering Sample\\ Tracking\\ Keywords}\\\cline{2-4}
+    \cellcolor{cellcolor}& \multicolumn{4}{c|}{{\cellcolor{cellcolor}}
+      Formal Criterion} &
+    \cellcolor{cellcolor}\\\hhline{|>{\arrayrulecolor{gray76}}-*{4}{>{\arrayrulecolor{black}}|-}|>{\arrayrulecolor{gray76}}-|}\arrayrulecolor{black}
 
-    & Polar Terms & Emoticons and Exclamations & Rest &\\\hline
+    \multirow{-2}{0.2\columnwidth}{\centering\bfseries\cellcolor{cellcolor}
+      Topic} & {\cellcolor{cellcolor}} Polar Terms &{\cellcolor{cellcolor}}
+    Emoticons and Exclamations &{\cellcolor{cellcolor}} Rest &
+    {\cellcolor{cellcolor}}Total
+    &\multirow{-2}{0.12\textwidth}{\centering\cellcolor{cellcolor}
+      Sample\\ Tracking\\ Keywords}\\\hline
 
-    Federal Elections &  &  &  & \\
-    Papal Conclave &  &  &  & \\
-    Political Discussions &  &  &  & \\
-    General Conversations &  &  &  & \\
+    Federal Elections & 537,083 (22.38\%) & 50,567 (2.1\%) & 1,811,742
+    (75.5\%) & 2,399,392 & \tiny\emph{Abgeordnete}
+    (\emph{representative}), \emph{Bundesregierung}
+    (\emph{federal government})\\\hline
+
+    Papal Conclave & 7,859 (15.11\%) & 1,260 (2.42\%) & 42,879
+    (82.46\%) & 51,998 & \tiny\emph{Papst} (\emph{pope}), \emph{Pabst} (\emph{pobe})\\\hline
+
+    Political Discussions & 10,552 (25.8\%) & 777\newline (1.9\%) & 29,555
+    (72.29\%) & 40,884 &\tiny\emph{Politik} (\emph{politics}),
+    \emph{Minister} (\emph{minister})\\\hline
+
+    General Conversations &  &  &  & & \tiny\emph{den} (\emph{the}),
+    \emph{sie} (\emph{she})\\
     \hline
   \end{tabular}
   \caption{Distribution of the downloaded messages across the topics
-    and formal groups.\label{snt:tbl:corp:topic-bins}}
+    and formal groups.\newline (percentage numbers are given with
+    respect to the topic)\label{snt:tbl:corp:topic-bins}}
 \end{table}
+
+As can be seen from the table, the vast majority of tweets in each
+topic fall into the third category, i.e., the one where neither polar
+terms no common emoticons exist.  The average expected proportion of
+such tweets $\mu$ is , and the standard deviation $\sigma$ from this
+proportion runs up to .
+
+The second biggest set is that of microblogs containing emotional
+terms ($\mu=, \sigma=$).
 
 Finally, for generating the final corpus, we randomly sampled 666
 messages from each of the three bins of each of the four topics. This
