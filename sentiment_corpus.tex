@@ -189,47 +189,120 @@ Table~\ref{snt:tbl:corp:topic-bins}:
     respect to the topic)\label{snt:tbl:corp:topic-bins}}
 \end{table}
 
-As can be seen from the table, the vast majority of tweets in each
+As can be seen from the table, the vast majority of the tweets in each
 topic fall into the third category, i.e., the one where neither polar
-terms no common emoticons exist.  The average expected proportion of
-such tweets $\mu$ is , and the standard deviation $\sigma$ from this
-proportion runs up to .
+terms no common emoticons exist.  The average expected proportion
+$\mu$ of such tweets is , and the standard deviation $\sigma$ from
+this proportion runs up to .  The second biggest set is that of
+microblogs containing emotional terms ($\mu=, \sigma=$).
 
-The second biggest set is that of microblogs containing emotional
-terms ($\mu=, \sigma=$).
+To generate the final corpus, we eventually randomly sampled 666
+messages from each of the three formal groups of each of the four
+topics. This gave us our final dataset of 7,992 microblogs: $666\text{
+  tweets} \times 4\text{ topics} \times 3\text{ formal criteria}$.
 
-Finally, for generating the final corpus, we randomly sampled 666
-messages from each of the three bins of each of the four topics. This
-gave us our final dataset of 7,992 microblogs: $666\text{ tweets}
-\times 4\text{ topics} \times 3\text{ formal criteria}$.
+\subsection{Annotation Tool and Format}\label{subsec:snt:tformat}
 
-\subsection{Annotation Tool and Procedure}\label{subsec:snt:tformat}
+For annotating the collected dataset, we used \texttt{MMAX2} -- a
+freely available text markup
+tool.\footnote{\url{http://mmax2.sourceforge.net/}} Since this program
+relies on a token-oriented stand-off XML format, where all annotations
+are stored separately from text and only refer to the ids of the words
+they are spanning, we first had to split the downloaded tweets into
+tokens in order to create an annotation project\footnote{In
+  \texttt{MMAX2}, an annotation project refers to a collection of all
+  XML files pertaining to the same corpus, including its text data,
+  annotation files, scheme definition etc.} for our data.  To that
+end, we applied a minimally modified version of Christopher Potts'
+social media
+tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+which we slightly adjusted to the peculiarities of the German spelling
+(we accounted for the capitalized form of German nouns and the dot at
+the end of ordinal numbers).
 
-All annotations were done using \texttt{MMAX2} -- a freely available
-text markup tool.\footnote{\url{http://mmax2.sourceforge.net/}} Since
-this program relies on a token-oriented stand-off XML format where all
-annotations are stored separately from the text and only refer to the
-ids of the tokens they are spanning, we first had to split the
-downloaded tweets into tokens in order to create an annotation
-project\footnote{In \texttt{MMAX2}, an annotation project refers to a
-  collection of all XML files pertaining to one corpus, including text
-  data, annotation files, scheme definition etc.}  for our corpus.
-For this purpose, we applied a minimally modified version of
-Christopher Potts' social media
-tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
-which we slightly adjusted to the peculiarities of German spelling (we
-accounted for the capitalized form of German nouns and the dot at the
-end of ordinal numbers).
+To ease the annotation process and minimize possible data losses, we
+split the complete corpus into 80 smaller project files with 99 -- 109
+tweets each.  In each such file, we put microblogs pertaining to the
+same topic, making sure that the formal groups of that topic were
+represented in equal proportions.  After defining an annotation
+scheme, which will be described in the next subsection, we finally
+created the corresponding scheme and customization files, which
+specified what kinds of elements with which attributes were to be
+annotated by the experts, and how these elements had to look like.
+The resulting folder structure of our dataset is shown in Figure
+\ref{fig:snt:corpus}.
 
-To ease the annotation process and to minimize possible data loss
-during the labeling, we also split our complete dataset into 80
-smaller project files with 99 -- 109 tweets each.
+\begin{figure}[hbt!]
+  \tiny
+  \dirtree{%
+    .1 corpus/.
+    .2 annotator-1/.
+    .2 annotator-2/.
+      .4 1.general.mmax.
+      .4 ....
+      .4 markables/.
+        .5 1.general\_diminisher\_level.xml.
+        .5 1.general\_emo-expression\_level.xml.
+        .5 1.general\_intensifier\_level.xml.
+        .5 1.general\_negation\_level.xml.
+        .5 1.general\_sentiment\_level.xml.
+        .5 1.general\_source\_level.xml.
+        .5 1.general\_target\_level.xml.
+        .5 ....
+    .2 basedata/.
+      .3 1.general.words.xml.
+      .3 ....
+    .2 custom/.
+      .3 emo-expression\_customization.xml.
+      .3 ....
+    .2 scheme/.
+      .3 emo-expression\_scheme.xml.
+      .3 ....
+    .2 source/.
+      .3 1.general.xml.
+      .3 ....
+    .2 style/.
+    .1 docs/.
+    .2 annotation\_guidelines.pdf.
+    .2 ....
+    .1 scripts/.
+    .2 ....
+  }
+\caption{Directory structure of the sentiment
+  corpus.\label{fig:snt:corpus}}
+\end{figure}
+As can be seen from the figure, the top-level level structure of our
+project comprises three main folders:
+\begin{itemize}
+  \item\texttt{corpus/}, which includes the actual annotation files;
 
-%% For each such project, we took only tweets pertaining to one
-%% particular topic (elections, conclave, politics, or casual talks)
-%% but made sure that the microblogs from the three bins of that topic
-%% were represented equally in the project.
+  \item\texttt{docs/}, in which we placed the annotation guidelines
+    and various supplementary documents, such as annotation tests for
+    new coders; and
 
+  \item\texttt{scripts/}, which comprises auxiliary scripts for
+    estimating the inter-annotator agreement and aligning the corpus
+    data with automatically parsed corpus sentences.
+\end{itemize}
+The \texttt{corpus/} directory is further subdivided into the
+following folders:
+\begin{itemize}
+  \item\texttt{annotator-X/}, where X stands for the annotator's id.
+    This directory includes the main project files (the ones which
+    specify the actual paths, e.g., \texttt{1.general.mmax}) and the
+    subfolder \texttt{markables/} which comprises the actual
+    annotation data;
+
+  \item\texttt{basedata/}, in which tokenized messages are stored;
+  \item\texttt{custom/}, which comprises customization settings (e.g.,
+    back- and foreground colors);
+  \item\texttt{scheme/};
+  \item\texttt{source/}; and
+  \item\texttt{style/}.
+\end{itemize}
+
+The tokenized base data were put into a separate shared directory to
+guarantee that each annotator used the same underlying word splitting.
 
 \subsection{Annotation Scheme}\label{subsec:snt:ascheme}
 %% In the next step, we defined an annotation scheme for our
