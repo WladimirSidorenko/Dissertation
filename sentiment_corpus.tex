@@ -159,7 +159,7 @@ Table~\ref{snt:tbl:corp:topic-bins}:
 
     \cellcolor{cellcolor}& \multicolumn{4}{c|}{{\cellcolor{cellcolor}}
       Formal Criterion} &
-    \cellcolor{cellcolor}\\\hhline{|>{\arrayrulecolor{gray76}}-*{4}{>{\arrayrulecolor{black}}|-}|>{\arrayrulecolor{gray76}}-|}\arrayrulecolor{black}
+    \cellcolor{cellcolor}\\\hhline{|>{\arrayrulecolor{cellcolor}}-*{4}{>{\arrayrulecolor{black}}|-}|>{\arrayrulecolor{cellcolor}}-|}\arrayrulecolor{black}
 
     \multirow{-2}{0.2\columnwidth}{\centering\bfseries\cellcolor{cellcolor}
       Topic} & {\cellcolor{cellcolor}} Polar Terms &{\cellcolor{cellcolor}}
@@ -180,26 +180,49 @@ Table~\ref{snt:tbl:corp:topic-bins}:
     (72.29\%) & 40,884 &\tiny\emph{Politik} (\emph{politics}),
     \emph{Minister} (\emph{minister})\\\hline
 
-    General Conversations &  &  &  & & \tiny\emph{den} (\emph{the}),
+    General Conversations & 3,201,847 (18.7\%) & 813,478 (4.7\%) &
+    13,088,008 (76.5\%) & 17,103,333 & \tiny\emph{den} (\emph{the}),
     \emph{sie} (\emph{she})\\
+
+
     \hline
   \end{tabular}
   \caption{Distribution of the downloaded messages across the topics
     and formal groups.\newline (percentage numbers are given with
-    respect to the topic)\label{snt:tbl:corp:topic-bins}}
+    respect to the total number of tweets in the
+    topic)\label{snt:tbl:corp:topic-bins}}
 \end{table}
 
 As can be seen from the table, the vast majority of the tweets in each
 topic fall into the third category, i.e., the one where neither polar
 terms no common emoticons exist.  The average expected proportion
-$\mu$ of such tweets is , and the standard deviation $\sigma$ from
-this proportion runs up to .  The second biggest set is that of
-microblogs containing emotional terms ($\mu=, \sigma=$).
+$\mu$ of such tweets is 76,69\%, and the standard deviation $\sigma$
+from this proportion runs up to 4.25\%.  The second biggest set, whose
+$\mu$ is equal to 20.5\% and $\sigma$ amounts to $4.62\%$, is that of
+microblogs containing emotional terms.  Finally, the group comprising
+messages with smileys but supposedly no polar terms is the smallest
+one in each topic category.  The expected proportion of this group
+only attains $2.78\%$, deviating by $1.3\%$.
 
-To generate the final corpus, we eventually randomly sampled 666
-messages from each of the three formal groups of each of the four
-topics. This gave us our final dataset of 7,992 microblogs: $666\text{
-  tweets} \times 4\text{ topics} \times 3\text{ formal criteria}$.
+Another interesting observation is that the relative numbers of the
+microblog groups pertaining to the federal elections and political
+discussions are approximately the same, while general conversations
+are apparently more biased towards containing polar terms, and tweets
+about the papal conclave are rather suposed to be objectve.  We will
+check later in Subsection \ref{subsec:snt:stat} whether the
+distribution of the annotated sentiment elements correltes with these
+(dis-)similarities in the distribution of groups and topics.
+
+To generate our final corpus, we randomly chose 666 messages from each
+of the three formal groups of each of the four subjects uniformly at
+random, getting a total of 7,992 microblogs: $666\text{ tweets} \times
+4\text{ topics} \times 3\text{ formal criteria}$.  Although this quota
+sampling addmitedly violates the uniformity principle (i.e., does not
+get the samples uniformly at random from the complete population), we
+justify it with the wish to increase the recall of the phenomena in
+question and point out to the possibility of restoring the original
+distribution parameters by multiplying the resulting statistics with
+the proportion coefficients presented above.
 
 \subsection{Annotation Tool and Format}\label{subsec:snt:tformat}
 
@@ -233,46 +256,50 @@ The resulting folder structure of our dataset is shown in Figure
 \ref{fig:snt:corpus}.
 
 \begin{figure}[hbt!]
-  \tiny
-  \dirtree{%
-    .1 corpus/.
-    .2 annotator-1/.
-    .2 annotator-2/.
+  \scalebox{0.75}{%
+    \small
+    \begin{minipage}[t]{0.3\linewidth}
+    \dirtree{%
+      .1 corpus/.
+      .2 annotator-1/.
+      .2 annotator-2/.
       .4 1.general.mmax.
       .4 ....
       .4 markables/.
-        .5 1.general\_diminisher\_level.xml.
-        .5 1.general\_emo-expression\_level.xml.
-        .5 1.general\_intensifier\_level.xml.
-        .5 1.general\_negation\_level.xml.
-        .5 1.general\_sentiment\_level.xml.
-        .5 1.general\_source\_level.xml.
-        .5 1.general\_target\_level.xml.
-        .5 ....
-    .2 basedata/.
+      .5 1.general\_diminisher\_level.xml.
+      .5 1.general\_emo-expression\_level.xml.
+      .5 1.general\_intensifier\_level.xml.
+      .5 1.general\_negation\_level.xml.
+      .5 1.general\_sentiment\_level.xml.
+      .5 1.general\_source\_level.xml.
+      .5 1.general\_target\_level.xml.
+      .5 ....
+      .2 basedata/.
       .3 1.general.words.xml.
       .3 ....
-    .2 custom/.
+      .2 custom/.
       .3 emo-expression\_customization.xml.
       .3 ....
-    .2 scheme/.
+      .2 scheme/.
       .3 emo-expression\_scheme.xml.
       .3 ....
-    .2 source/.
+      .2 source/.
       .3 1.general.xml.
       .3 ....
-    .2 style/.
-    .1 docs/.
-    .2 annotation\_guidelines.pdf.
-    .2 ....
-    .1 scripts/.
-    .2 ....
-  }
+      .2 style/.
+      .1 docs/.
+      .2 annotation\_guidelines.pdf.
+      .2 ....
+      .1 scripts/.
+      .2 ....
+    }%
+    \end{minipage}
+  }%
 \caption{Directory structure of the sentiment
   corpus.\label{fig:snt:corpus}}
 \end{figure}
 As can be seen from the figure, the top-level level structure of our
-project comprises three main folders:
+project consists of three main folders:
 \begin{itemize}
   \item\texttt{corpus/}, which includes the actual annotation files;
 
@@ -281,28 +308,35 @@ project comprises three main folders:
     new coders; and
 
   \item\texttt{scripts/}, which comprises auxiliary scripts for
-    estimating the inter-annotator agreement and aligning the corpus
-    data with automatically parsed corpus sentences.
+    estimating the inter-annotator agreement and aligning corpus
+    annotations with automatically parsed corpus sentences.
 \end{itemize}
-The \texttt{corpus/} directory is further subdivided into the
-following folders:
+The \texttt{corpus/} directory is further subdivided into the folders:
 \begin{itemize}
   \item\texttt{annotator-X/}, where X stands for the annotator's id.
     This directory includes the main project files (the ones which
-    specify the actual paths, e.g., \texttt{1.general.mmax}) and the
-    subfolder \texttt{markables/} which comprises the actual
-    annotation data;
+    specify the actual paths to the annotation directory, tokenization
+    file, appearance settings etc.) and the subfolder
+    \texttt{markables/}, which comprises the corresponding annotation
+    data (as specified by the project files);
 
-  \item\texttt{basedata/}, in which tokenized messages are stored;
-  \item\texttt{custom/}, which comprises customization settings (e.g.,
-    back- and foreground colors);
-  \item\texttt{scheme/};
-  \item\texttt{source/}; and
-  \item\texttt{style/}.
+  \item\texttt{basedata/}, which contains files with the message's
+    tokens;
+
+  \item\texttt{custom/}, which provides customization settings for the
+    annotation elements (e.g., their back- and foreground colors, font
+    types and size etc.);
+
+  \item\texttt{scheme/}, which includes the definitions of the
+    annotation markables,\footnote{In the \texttt{MMAX} terminology,
+      an annotation markable is a synonym for an annotation element.}
+    their attributes, and attributes' values;
+
+  \item\texttt{source/}, where we put the original untokenized
+    microblogs; and, finally,
+  \item\texttt{style/}, which is the standard \texttt{MMAX} directory
+    for storing default appearance settings.
 \end{itemize}
-
-The tokenized base data were put into a separate shared directory to
-guarantee that each annotator used the same underlying word splitting.
 
 \subsection{Annotation Scheme}\label{subsec:snt:ascheme}
 %% In the next step, we defined an annotation scheme for our
