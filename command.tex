@@ -25,22 +25,35 @@
 \providecommand{\shortcite}[1]{\cite{#1}}
 \newcommand{\texample}[1]{``\textit{#1}''}
 
-\newcommand{\mtag}[2]{{\upshape[\emph{#2}\upshape]$_{\textrm{\bfseries\emph{\tiny
+\newcommand{\mtag}[3]{{[\ifstrempty{#3}{#2}{\textcolor{#3}{#2}}]$_{\textrm{\bfseries\emph{\tiny
           #1}}}$}}
-\newcommand{\sentiment}[2][]{\mtag{sen\-ti\-ment\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\source}[2][]{\mtag{source\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\target}[2][]{\mtag{tar\-get\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\emoexpression}[2][]{\mtag{emo-\-ex\-pression\ifstrempty{#1}{}{:#1}}{#2}}
-\newcommand{\intensifier}[2][]{\mtag{in\-ten\-si\-fier\ifstrempty{#1}{}{:#1}}{#2}}
+\newcommand{\sentiment}[2][]{\mtag{sen\-ti\-ment\ifstrempty{#1}{}{:#1}}{#2}{}}
+\newcommand{\source}[2][]{\mtag{source\ifstrempty{#1}{}{:#1}}{#2}{darkgoldenrod4}}
+\newcommand{\target}[2][]{\mtag{tar\-get\ifstrempty{#1}{}{:#1}}{#2}{darkslateblue}}
+\newcommand{\emoexpression}[2][]{\mtag{emo-\-ex\-pression\ifstrempty{#1}{}{:#1}}{#2}{red}}
+\newcommand{\intensifier}[2][]{\mtag{in\-ten\-si\-fier\ifstrempty{#1}{}{:#1}}{#2}{}}
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\stddev}[1]{{\tiny$^{\pm#1}$}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Environments
+\newtheoremstyle{break}
+  {\topsep}{\topsep}%
+  {\itshape}{}%
+  {\bfseries}{}%
+  {\newline}{}%
+\theoremstyle{break}
 \newtheorem{example}{Example}[section]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Colors
+\definecolor{darkgoldenrod4}{RGB}{139,101,8}
+\definecolor{darkslateblue}{RGB}{72,61,139}
+\definecolor{deeppink4}{RGB}{139,10,80}
+\definecolor{gray69}{RGB}{176,176,176}
 \definecolor{gray76}{RGB}{194,194,194}
 \definecolor{gray84}{RGB}{214,214,214}
+\definecolor{lightcyan4}{RGB}{122,139,139}
+\definecolor{midnightblue}{RGB}{25,25,112}
+\definecolor{violetred4}{RGB}{139,34,82}
 \colorlet{cellcolor}{gray84}

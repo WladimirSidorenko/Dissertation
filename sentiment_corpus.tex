@@ -20,37 +20,36 @@ of writing this thesis, we had to create our own dataset, which we
 will introduce in this section.
 
 We begin our introduction by describing the selection criteria and
-tracking procedure we used to initially collect the raw data for our
-``tweebank''.  After presenting the utilized annotation tool and
-detailing the annotation scheme, we turn to an extensive analysis of
-the inter-annotator agreement, which will serve as an upper bound in
-our later experiments.  In Subsection \ref{subsec:snt:iaa}, we propose
-two new versions of the popular $\kappa$ metric, which were
-specifically adjusted to the peculiarities of our annotation task:
-binary and proportional kappa.  With these two measures, we estimate
-the inter-coder reliability of the annotated spans of subjective
-opinions, their targets, and sources, also checking whether the
-annotators agreed on the polarity and intensity of sentiments and
-polar terms, once they agreed on their boundaries.  Finally, with
-statistical means, we investigate the correlations between the
-selection criteria we applied initially and the number of annotated
-elements and disagreements of our experts in the corpus.  That way, we
-hope to get a better understanding of which linguistic and
-extra-linguistic factors might significantly influence the
-distribution of sentiments, and which ones might notably exacerbate
-their analysis.
+tracking procedure we used initially to collect the raw data for our
+``tweebank''.  After detailing the annotation scheme and presenting
+the utilized annotation tool, we turn to an extensive analysis of the
+inter-annotator agreement, which will serve as an upper bound in our
+later experiments.  In Subsection \ref{subsec:snt:iaa}, we propose two
+new versions of the popular $\kappa$ metric, which were specifically
+adjusted to the peculiarities of our annotation task: binary and
+proportional kappa.  With these two measures, we estimate the
+inter-coder reliability of the annotated spans of subjective opinions,
+their targets, and sources, also checking whether the annotators
+agreed on the polarity and intensity of sentiments and polar terms,
+once they agreed on their boundaries.  Finally, with statistical
+means, we investigate the correlations between the selection criteria
+we applied initially and the number of annotated elements and
+disagreements of our experts in the corpus.  That way, we hope to get
+a better understanding of which linguistic and extra-linguistic
+factors might significantly influence the distribution of sentiments,
+and which ones might notably exacerbate their analysis.
 
 \subsection{Data Collection}
 
 An important problem that one has to solve prior to creating a new
 dataset is that of the selection criteria to use in order to collect
-the data.  While, for low-level NLP tasks, such as part-of-speech
-tagging or syntactic parsing, it typically suffices to define the
-language domain to sample from (since the phenomena of interest are
-usually frequent and uniformly spread), for semantically demanding
-tasks with many diverse ways of expressions, one also has to pay
-attention to in-domain factors as they might considerably affect the
-desired distribution, making the resulting corpus either utterly
+the initial corpus data.  While, for low-level NLP tasks, such as
+part-of-speech tagging or syntactic parsing, it typically suffices to
+define the language domain to sample from (since the phenomena of
+interest are usually frequent and uniformly spread), for semantically
+demanding tasks with many diverse ways of expressions, one also has to
+pay attention to in-domain factors as they might considerably affect
+the desired distribution, making the resulting corpus either utterly
 sparse or excessively biased.
 
 To minimize both of these risks -- scarceness and bias -- when
@@ -63,12 +62,12 @@ the introduced bias with the latter method.
 
 As criteria which could help us find more opinionated microblogs, we
 considered the topic and form of tweets.  Our motivation was that some
-subjects, such as political or social issues, by themselves might
+subjects, such as political or social issues, by themselves could
 incite people to be more subjective in their judgements.  Therefore,
 including such topics in our corpus would automatically increase the
 coverage of sentiment expressions.  On the other hand, opinions also
 need to be expressed by some linguistic means, consequently, the mere
-form of a message can also suggest whether it is likely to be
+form of a message might also suggest whether it is likely to be
 emotional or not.
 
 Since we started creating the corpus in the spring 2013, obvious
@@ -76,7 +75,7 @@ choices of subjectively rich topics to us were the \emph{papal
   conclave}, which took place in March of that year, and the
 \emph{federal elections in Germany}, which were to be held in autumn.
 Because both of these events implied some sort of voting, we decided
-to include \emph{general discussions of political issues} as a third
+to include \emph{general discussions of political issues} as another
 topic in our dataset in order to counterbalance the election
 specifics.  Finally, to obey the second objective, i.e., to keep the
 corpus bias low, we considered \emph{casual everyday conversations}
@@ -128,12 +127,12 @@ following formal features:
 \item Microblogs which did not satisfy the first criterion but
   featured at least one emoticon or exclamation mark were put into the
   second set;
-\item Eventually, all remaining tweets were allocated to the third
-  formal category of their respective topic.
+\item Finally, all remaining tweets were allocated to the third formal
+  category of their respective topic.
 \end{itemize}
 The reason for choosing this strategy was that messages containing
-known polar phrases were by default more probable to express some
-subjective opinions.  To find such terms, we considered three major
+known polar phrases were by default more probable to express some sort
+of subjective opinions.  To find such terms, we considered three major
 German sentiment lexica: SentiWS \cite{Remus:10}, German Polarity
 Clues \cite{Waltinger:10}, and Zurich Sentiment Lexicon
 \cite{Clematide:10}, eventually choosing the first one due to its
@@ -153,8 +152,9 @@ of some accidentally missed polar words.
 Finally, as we did not make any hypotheses about the distribution of
 sentiments in the rest of the tweets, we allocated all remaining
 microblogs to the same group, hoping that a uniform sampling would
-provide us with further positive and negative opinion examples.  A
-detailed breakdown of the resulting distribution of messages across
+provide us with further positive and negative opinion examples.
+
+A detailed breakdown of the resulting distribution of messages across
 the four topics and their formal groups is given in
 Table~\ref{snt:tbl:corp:topic-bins}:
 \begin{table}[hbt!]\small
@@ -206,38 +206,37 @@ $\sigma$ from this proportion comes to 4.25\%.  The second biggest
 set, whose $\mu$ is equal to 20.5\% and $\sigma$ amounts to $4.62\%$,
 is that of microblogs containing emotional terms.  Finally, the group
 comprising messages with smileys but supposedly no polar terms is the
-smallest one for each topic category.  The expected proportion of this
-group only attains $2.78\%$, deviating by $1.3\%$.
+smallest one for each topic.  The expected proportion of this group
+only attains $2.78\%$, deviating by $1.3\%$.
 
 Furthermore, as one also can observe, the relative proportions of the
-formal tweet groups for federal elections and political discussions
-are approximately the same, while general conversations are apparently
-more biased towards containing polar terms, whereas tweets about the
-papal conclave are rather suposed to be objectve.  We will check later
-in Subsection \ref{subsec:snt:stat} whether the distribution of the
-annotated sentiment elements correlates with this proportional split
-of groups and topics.
+formal tweet groups for the federal elections and political
+discussions are approximately the same, while general conversations
+are apparently more biased towards containing polar terms, whereas
+tweets about the papal conclave, on the contrary, are rather suposed
+to be objectve.  We will check later in Subsection
+\ref{subsec:snt:iaa} whether the distribution of the annotated
+sentiment elements correlates with this proportional split of groups
+and topics.
 
 Eventually, to generate our final corpus, we randomly chose 666
 messages from each of the three formal groups of each of the four
 subjects, getting a total of 7,992 microblogs: $666\text{ tweets}
 \times 4\text{ topics} \times 3\text{ formal criteria}$.  Although
 this quota sampling admittedly violates the uniformity principle,
-which states that the samples have to be uniformly selected from the
-complete population, we justify this with the wish to increase the
-recall of the phenomena in question and point out to the possibility
-of restoring the original distribution parameters by multiplying the
-resulting statistics with the proportion coefficients from
-Table~\ref{snt:tbl:corp:topic-bins}.
+which states that the analyzed examples have to be chosen uniformly
+from the complete population, we justify this with the wish to
+increase the recall of the phenomena in question and point out to the
+possibility of restoring the original distribution parameters by
+multiplying the resulting statistics with the proportion coefficients
+from Table~\ref{snt:tbl:corp:topic-bins}.
 
 \subsection{Annotation Scheme}\label{subsec:snt:ascheme}
-In the next step, we defined an annotation scheme for our
-corpus.\footnote{Our annotation guidelines and corpus are available
-  online at
-  {\scriptsize\url{https://github.com/WladimirSidorenko/PotTS}}} Since
-our goal was to get a maximally full coverage of all
-sentiment-relevant aspects, we devised an extensive list of elements
-that had to be annotated by the experts.  This list included:
+In the next step after collecting the raw data, we defined an
+annotation scheme for our corpus. Since our goal was to get a
+maximally full coverage of all sentiment-relevant aspects, we devised
+an extensive list of elements that had to be annotated by the experts.
+This list included:
 \begin{itemize}
   \item\textbf{emotional expressions}, which we defined as words or
     phrases that unequivocally possessed some evaluative lexical
@@ -254,17 +253,17 @@ that had to be annotated by the experts.  This list included:
     turned the polarity of an emotional expression to the complete
     opposite.
 \end{itemize}
-As noted by one of the reviewers and as also confirmed in our later
-experiments, this definition of emotional expressions turned out to be
-not ideal though.  Because we outlined these elements as
-\emph{evaluative} lexical items, our experts annotated cases like
-``Held'' (\emph{hero}), ``m\"ogen'' (\emph{to like}), or ``toll''
-(\emph{awesome}) with this tag, but occasionally omitted emotionally
-connoted entities, such as ``Erfolg'' (\emph{success}), ``misslingen''
-(\emph{to fail}), or ``grimmig'' (\emph{grim}), since these did not
-appraise anything in particular but rather described general states of
-feeling.\footnote{We are currently revising these cases, planning to
-  release the first updated version of the corpus by June 2016.}
+%% As noted by one of the reviewers and as also confirmed in our later
+%% experiments, this definition of emotional expressions turned out to be
+%% not ideal though.  Because we outlined these elements as
+%% \emph{evaluative} lexical items, our experts annotated cases like
+%% ``Held'' (\emph{hero}), ``m\"ogen'' (\emph{to like}), or ``toll''
+%% (\emph{awesome}) with this tag, but occasionally omitted emotionally
+%% connoted entities, such as ``Erfolg'' (\emph{success}), ``misslingen''
+%% (\emph{to fail}), or ``grimmig'' (\emph{grim}), since these did not
+%% appraise anything in particular but rather described general states of
+%% feeling.\footnote{We are currently revising these cases, planning to
+%%   release the first updated version of the corpus by June 2016.}
 
 Additionally, in order to capture the interrelationship between the
 polar terms (emotional expressions in our case) and the entities they
@@ -286,6 +285,7 @@ provided below:
 {
   \renewcommand{\thesection}{\arabic{section}}
   \begin{example}
+
     \upshape\sentiment{\target{Diese Milliardeneinnahmen} sind selbst
       \source{Sch\"auble} \emoexpression{peinlich}}\\[0.8em]
     \noindent\sentiment{\target{\itshape{}These billions of
@@ -324,13 +324,14 @@ tool.\footnote{\url{http://mmax2.sourceforge.net/}} The
 primary reasons for choosing this program were
 \begin{inparaenum}[\itshape a\upshape)]
  \item its non-commercial license,
- \item its portability to a wide variety of platforms, and
+ \item the portability to a wide variety of platforms, and
  \item a mature set of annotation features, such as possibility to
    create link attributes (used for coreference), mark overlapping
    elements, and assign multiple annotations of the same class to one
    token (which was heavily used by our experts for the cases when one
-   sentiment statement was included into another opinion, e.g., ``Sie
-   mag diese h\"assliche Jacke'' \emph{She likes this ugly jacket}).
+   sentiment statement was included into another opinion, e.g.,
+   \emph{Sie mag diese h\"assliche Jacke} ``She likes this ugly
+   jacket'').
 \end{inparaenum}
 
 Since \texttt{MMAX2} relies on a token-oriented stand-off XML format,
@@ -347,18 +348,20 @@ which we slightly adjusted to the peculiarities of the German spelling
 (we accounted for the capitalized form of German nouns and the dot at
 the end of ordinal numbers).
 
-To ease the annotation process and minimize possible data loss, we
-split the complete corpus into 80 smaller project files with 99 -- 109
-tweets each.  In each such file, we put microblogs pertaining to the
-same topic, making sure that the formal groups of that topic were
-represented in equal proportions.
+To ease the annotation process and minimize possible data loss during
+labeling, we split the complete corpus into 80 smaller project files
+with 99 -- 109 tweets each.  In each such file, we put microblogs
+pertaining to the same topic, making sure that the formal groups of
+that topic were represented in equal proportions.
 
 After defining an annotation scheme, which will be described in the
 next subsection, we finally created the corresponding scheme and
 customization files, which specified what kinds of elements with which
 attributes were to be annotated by the human experts, and how these
-elements had to look like.  The resulting folder structure of our
-dataset is shown in Figure \ref{fig:snt:corpus}.
+elements had to look like.
+
+The resulting folder structure of our dataset is shown in Figure
+\ref{fig:snt:corpus}.
 
 \begin{wrapfigure}{R}{0.5\textwidth}
   \begin{minipage}[t][24.5em]{0.5\textwidth}%
