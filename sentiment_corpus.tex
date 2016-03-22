@@ -53,22 +53,22 @@ the desired distribution, making the resulting corpus either utterly
 sparse or excessively biased.
 
 To minimize both of these risks -- scarceness and bias -- when
-preparing our dataset, we decided to use a compromise approach by
+preparing our data, we decided to use a compromise approach by
 gathering one part of the corpus from tweets which were a priori more
 likely to contain sentiments and sampling the rest of the microblogs
 from a big collection of messages uniformly at random.  By doing so,
-we hoped to increase the recall with the former strategy and mitigate
-the introduced bias with the latter method.
+we hoped to increase the recall with the former strategy, while
+mitigating the introduced bias with the latter method.
 
 As criteria which could help us find more opinionated microblogs, we
 considered the topic and form of tweets.  Our motivation was that some
 subjects, such as political or social issues, by themselves could
 incite people to be more subjective in their judgements.  Therefore,
 including such topics in our corpus would automatically increase the
-coverage of sentiment expressions.  On the other hand, opinions also
-need to be expressed by some linguistic means, consequently, the mere
-form of a message might also suggest whether it is likely to be
-emotional or not.
+coverage of sentiments.  On the other hand, opinions also need to be
+expressed by some linguistic means, consequently, the mere form of a
+message might also suggest whether it is likely to be emotional or
+not.
 
 Since we started creating the corpus in the spring 2013, obvious
 choices of subjectively rich topics to us were the \emph{papal
@@ -119,8 +119,8 @@ microblogs posted in April 2013.
 This tracking procedure gave us a total of 27.4 M messages with the
 M\"unster corpus and Scheffler's collection being by far the most
 prolific sources of the data.  In the next step, we separated all
-tweets pertaining to the same topic into three groups based on the
-following formal features:
+tweets of the same topic into three groups based on the following
+formal features:
 \begin{itemize}
 \item We put messages that contained at least one polar term from the
   sentiment lexicon SentiWS \cite{Remus:10} into the first group;
@@ -130,14 +130,17 @@ following formal features:
 \item Finally, all remaining tweets were allocated to the third formal
   category of their respective topic.
 \end{itemize}
-The reason for choosing this strategy was that messages containing
-known polar phrases were by default more probable to express some sort
-of subjective opinions.  To find such terms, we considered three major
-German sentiment lexica: SentiWS \cite{Remus:10}, German Polarity
-Clues \cite{Waltinger:10}, and Zurich Sentiment Lexicon
-\cite{Clematide:10}, eventually choosing the first one due to its
+With this stratification, we, again, hoped to increase the recall of
+sentiments by separately analyzing messages with already known polar
+terms, which were indirectly more likely to contain subjective
+opinions as well.
+
+In order to find such terms, we considered three major German polarity
+lists: SentiWS \cite{Remus:10}, German Polarity Clues
+\cite{Waltinger:10}, and the Zurich Sentiment Lexicon of
+\citet{Clematide:10}, choosing in the end the first one due to its
 moderate size, acceptably high precision, and the availability of
-inflection forms of its etries.
+inflection forms of its entries.
 
 Since no polar lexicon, however, is guaranteed to provide for the full
 coverage of opinionated expressions and, moreover, because Twitter
@@ -194,7 +197,7 @@ Table~\ref{snt:tbl:corp:topic-bins}:
   \end{tabular}
   \caption{Distribution of the downloaded messages across the topics
     and formal groups.\newline (percentage numbers are given with
-    respect to the total number of tweets in the
+    respect to the total number of tweets pertaining the
     topic)\label{snt:tbl:corp:topic-bins}}
 \end{table}
 
@@ -213,11 +216,11 @@ Furthermore, as one also can observe, the relative proportions of the
 formal tweet groups for the federal elections and political
 discussions are approximately the same, while general conversations
 are apparently more biased towards containing polar terms, whereas
-tweets about the papal conclave, on the contrary, are rather suposed
+tweets about the papal conclave, on the contrary, are rather supposed
 to be objectve.  We will check later in Subsection
 \ref{subsec:snt:iaa} whether the distribution of the annotated
-sentiment elements correlates with this proportional split of groups
-and topics.
+sentiments correlates with this proportional split of groups and
+topics.
 
 Eventually, to generate our final corpus, we randomly chose 666
 messages from each of the three formal groups of each of the four
@@ -225,8 +228,8 @@ subjects, getting a total of 7,992 microblogs: $666\text{ tweets}
 \times 4\text{ topics} \times 3\text{ formal criteria}$.  Although
 this quota sampling admittedly violates the uniformity principle,
 which states that the analyzed examples have to be chosen uniformly
-from the complete population, we justify this with the wish to
-increase the recall of the phenomena in question and point out to the
+from the whole population, we justify this with the wish to increase
+the recall of the phenomena in question and point out to the
 possibility of restoring the original distribution parameters by
 multiplying the resulting statistics with the proportion coefficients
 from Table~\ref{snt:tbl:corp:topic-bins}.
@@ -348,21 +351,6 @@ which we slightly adjusted to the peculiarities of the German spelling
 (we accounted for the capitalized form of German nouns and the dot at
 the end of ordinal numbers).
 
-To ease the annotation process and minimize possible data loss during
-labeling, we split the complete corpus into 80 smaller project files
-with 99 -- 109 tweets each.  In each such file, we put microblogs
-pertaining to the same topic, making sure that the formal groups of
-that topic were represented in equal proportions.
-
-After defining an annotation scheme, which will be described in the
-next subsection, we finally created the corresponding scheme and
-customization files, which specified what kinds of elements with which
-attributes were to be annotated by the human experts, and how these
-elements had to look like.
-
-The resulting folder structure of our dataset is shown in Figure
-\ref{fig:snt:corpus}.
-
 \begin{wrapfigure}{R}{0.5\textwidth}
   \begin{minipage}[t][24.5em]{0.5\textwidth}%
     \hspace{3em}
@@ -414,22 +402,36 @@ The resulting folder structure of our dataset is shown in Figure
   \end{minipage}
 \end{wrapfigure}
 
-As can be seen from the figure, the top-level level structure of our
-project consists of three main folders:
-\begin{itemize}
-\item\texttt{corpus/}, which includes the actual annotation data;
+To ease the annotation process and minimize possible data loss during
+labeling, we split the complete corpus into 80 smaller project files
+with 99 -- 109 tweets each.  In each such file, we put microblogs
+pertaining to the same topic, making sure that the formal groups of
+that topic were represented in equal proportions.
 
-\item\texttt{docs/}, in which we placed the annotation guidelines and
-  various supplementary documents, such as annotation tests for new
-  coders; and, finally,
+In the last preparation step, we finally created the corresponding
+scheme and customization files, which specified what kinds of elements
+with which attributes were to be annotated by the human coders, and
+how these elements had to look like.
 
-\item\texttt{scripts/}, which comprises auxiliary scripts for
-  estimating the inter-annotator agreement and aligning corpus
-  annotations with automatically parsed corpus sentences.
-\end{itemize}
+The resulting folder hierarchy of our dataset is shown in Figure
+\ref{fig:snt:corpus}.  As can be seen from the listing, the top-level
+level structure of our project consists of three main directories: {
+  \setlength{\linewidth}{\textwidth}
+  \begin{itemize}
+  \item\texttt{corpus/}, which includes the actual annotation data;
+
+  \item\texttt{docs/}, in which we placed the annotation guidelines and
+    various supplementary documents, such as annotation tests for new
+    coders; and, finally,
+
+  \item\texttt{scripts/}, which comprises auxiliary scripts for
+    estimating the inter-annotator agreement and aligning corpus
+    annotations with automatically parsed corpus sentences.
+  \end{itemize}
+}
 
 The \texttt{corpus/} folder is further subdivided into the
-subdirectories: { \setlength{\linewidth}{\textwidth}
+subdirectories:
 \begin{itemize}
 \item\texttt{annotator-X/}, where X stands for the annotator's id.
   This directory includes the main project files (the ones which
@@ -454,7 +456,6 @@ subdirectories: { \setlength{\linewidth}{\textwidth}
 \item\texttt{style/}, which is the standard \texttt{MMAX} directory
   for storing default settings.
 \end{itemize}
-}
 
 Examples of an actual annotation file and the underlying tokenization
 data are given in Figures \ref{fig:snt:annofile} and
@@ -462,7 +463,8 @@ data are given in Figures \ref{fig:snt:annofile} and
 
 \begin{minipage}[t]{\textwidth}
   \begin{minipage}[t]{0.45\textwidth}
-    \begin{lstlisting}[basicstyle=\tiny]
+    \lstset{language=XML}
+    \begin{lstlisting}
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE markables SYSTEM "markables.dtd">
 <markables xmlns="www.eml.org/NameSpaces/sentiment">
@@ -474,11 +476,11 @@ intensity="medium" />
 span="word_1056..word_1071" sarcasm="false"
 mmax_level="sentiment"  polarity="negative"
 intensity="medium" />
-<markable id="markable_70"
 <markable id="markable_132"
 span="word_1126..word_1139" sarcasm="false"
 mmax_level="sentiment"  polarity="positive"
 intensity="medium" />
+<markable id="markable_70"
 span="word_592..word_596" sarcasm="false"
 mmax_level="sentiment"  polarity="positive"
 intensity="strong" />
@@ -489,6 +491,7 @@ intensity="strong" />
   \end{minipage}\hfill%
   %
   \begin{minipage}[t]{0.45\textwidth}%
+    \lstset{language=XML}
     \begin{lstlisting}[basicstyle=\tiny]
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE words SYSTEM "words.dtd">
