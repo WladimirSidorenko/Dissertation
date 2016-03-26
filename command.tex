@@ -18,6 +18,9 @@
 \newlength{\oosixthClmnWidth}
 \setlength{\oosixthClmnWidth}{0.055\textwidth}
 
+\newlength{\clmnwidth}
+\setlength{\clmnwidth}{0.65\textwidth}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Commands
 \renewcommand{\cite}{\citep}
@@ -25,13 +28,15 @@
 \providecommand{\shortcite}[1]{\cite{#1}}
 \newcommand{\texample}[1]{``\textit{#1}''}
 
-\newcommand{\mtag}[3]{{[\ifstrempty{#3}{#2}{\textcolor{#3}{#2}}]$_{\textrm{\bfseries\emph{\tiny
-          #1}}}$}}
+\newcommand{\mtag}[3]{{{\upshape[}\ifstrempty{#3}{#2}{\textcolor{#3}{#2}}{\upshape]$_{\textrm{\bfseries\emph{\tiny
+          #1}}}$}}}
 \newcommand{\sentiment}[2][]{\mtag{sen\-ti\-ment\ifstrempty{#1}{}{:#1}}{#2}{}}
 \newcommand{\source}[2][]{\mtag{source\ifstrempty{#1}{}{:#1}}{#2}{darkgoldenrod4}}
 \newcommand{\target}[2][]{\mtag{tar\-get\ifstrempty{#1}{}{:#1}}{#2}{darkslateblue}}
 \newcommand{\emoexpression}[2][]{\mtag{emo-\-ex\-pression\ifstrempty{#1}{}{:#1}}{#2}{red}}
 \newcommand{\intensifier}[2][]{\mtag{in\-ten\-si\-fier\ifstrempty{#1}{}{:#1}}{#2}{}}
+\newcommand{\diminisher}[2][]{\mtag{di\-mi\-ni\-sher\ifstrempty{#1}{}{:#1}}{#2}{}}
+\newcommand{\negation}[2][]{\mtag{ne\-ga\-tion\ifstrempty{#1}{}{:#1}}{#2}{}}
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\stddev}[1]{{\tiny$^{\pm#1}$}}
 
