@@ -13,14 +13,14 @@
 
 A crucial prerequisite for proving or disproving any hypotheses in
 computational liguistics is the existence of sufficiently big manually
-labeled data for the targeted domain, on which these conjectures could
-be tested.  Since there was no corresponding manually annotated
+labeled data for the targeted domain, on which the made conjectures
+could be tested.  Since there was no corresponding manually annotated
 sentiment corpus for German Twitter that we were aware of at the time
 of writing this thesis, we had to create our own dataset, which we
 will introduce in this section.
 
 We begin our introduction by describing the selection criteria and
-tracking procedure we used initially to collect the raw data for our
+tracking procedure we used to collect the initial raw data for our
 ``tweebank''.  After detailing the annotation scheme and presenting
 the utilized annotation tool, we turn to an extensive analysis of the
 inter-annotator agreement, which will serve as an upper bound in our
@@ -42,15 +42,15 @@ their analysis.
 
 \subsection{Data Collection}
 
-A common question that typically arises when creating a new dataset is
-that of the selection criteria to use in order to collect the initial
-corpus data.  While, for low-level NLP tasks, such as part-of-speech
-tagging or syntactic parsing, it typically suffices to define the
-language domain to sample from (since the phenomena of interest are
-usually frequent and uniformly spread), for semantically demanding
-tasks with many diverse ways of expressions, one also has to pay
-attention to various in-domain factors as they might considerably
-affect the desired distribution, making the resulting corpus either
+A common question, which typically arises when one starts creating a
+new dataset, is that of the selection criteria to use in order to
+collect the initial corpus data.  While, for low-level NLP tasks, such
+as part-of-speech tagging or syntactic parsing, it typically suffices
+to define the language domain to sample from (since the phenomena of
+interest are usually frequent and uniformly spread), for semantically
+demanding tasks with many diverse ways of expressions, one also has to
+pay attention to various in-domain factors as they might considerably
+affect the final distribution, making the resulting corpus either
 utterly sparse or excessively biased.
 
 To minimize both of these risks -- scarceness and bias -- when
@@ -68,7 +68,7 @@ incite people to be more subjective in their judgements.  Therefore,
 including such topics in our corpus would automatically increase the
 coverage of sentiments.  On the other hand, opinions also need to be
 expressed by some linguistic means, consequently, the mere form of a
-message might also suggest whether it is likely to be emotional or
+message could also suggest whether it was likely to be emotional or
 not.
 
 Since we started creating the corpus in the spring 2013, obvious
@@ -92,8 +92,8 @@ enriched with additional messages, which we obtained from the
 University of M\"unster, who were concurrently working on related
 problems within the joint FMER project ``Discourse Analysis of Social
 Media''.  For sampling the fourth topic, we used the German Twitter
-snapshot of \citet{Scheffler:14}, which comprised all German
-microblogs posted in April 2013.
+snapshot of \citet{Scheffler:14}, which comprised $\approx97$ percent
+of German microblogs posted in April 2013.
 
 %% For our work, the in-domain factors to consider were the topics and
 %% the form of tweets.  Since we wanted our corpus to be as
@@ -121,11 +121,11 @@ This tracking procedure gave us a total of 27.4 M messages with the
 M\"unster corpus and Scheffler's collection being by far the most
 prolific sources of the data.  In the next step, we separated all
 tweets of the same topic into three groups based on the following
-formal features:
+formal criteria:
 \begin{itemize}
 \item We put messages that contained at least one polar term from the
   sentiment lexicon SentiWS \cite{Remus:10} into the first group;
-\item Microblogs which did not satisfy the first criterion but
+\item Microblogs which did not satisfy the first condition but
   featured at least one emoticon or exclamation mark were put into the
   second set;
 \item Finally, all remaining tweets were allocated to the third formal
@@ -154,11 +154,12 @@ of some accidentally missed polar words.
 
 Finally, as we did not make any hypotheses about the distribution of
 sentiments in the rest of the tweets, we allocated all remaining
-microblogs to the same group, hoping that a uniform sampling would
-provide us with further positive and negative opinion examples.
+microblogs to the same group, hoping that a uniform sampling from this
+set would provide us with further positive and negative opinion
+examples.
 
 A detailed breakdown of the resulting distribution of messages across
-the four topics and their formal groups is given in
+the four topics and their three formal groups is given in
 Table~\ref{snt:tbl:corp:topic-bins}:
 \begin{table}[hbt!]\small
   \begin{tabular}{|l|*{5}{>{\centering\arraybackslash}p{0.12\textwidth}|}}
@@ -195,9 +196,9 @@ Table~\ref{snt:tbl:corp:topic-bins}:
 
     \hline
   \end{tabular}
-  \caption{Distribution of the downloaded messages across the topics
-    and formal groups.\newline (percentage numbers are given with
-    respect to the total number of tweets pertaining the
+  \caption{Distribution of the downloaded messages across topics and
+    formal groups.\newline (percentage numbers are given with respect
+    to the total number of tweets pertaining the given
     topic)\label{snt:tbl:corp:topic-bins}}
 \end{table}
 
@@ -213,14 +214,13 @@ smallest one for each topic.  The expected proportion of this group
 only attains $2.78\%$, deviating by $1.3\%$.
 
 Furthermore, as one also can observe, the relative proportions of the
-formal tweet groups for the federal elections and political
-discussions are approximately the same, while general conversations
-are apparently more biased towards containing polar terms, whereas
-tweets about the papal conclave, on the contrary, are rather supposed
-to be objectve.  We will check later in Subsection
-\ref{subsec:snt:iaa} whether the distribution of the annotated
-sentiments correlates with this proportional split of groups and
-topics.
+formal tweets for the federal elections and political discussions are
+approximately the same, while general conversations are apparently
+more biased towards containing polar terms, whereas tweets about the
+papal conclave, on the contrary, are rather supposed to be objectve.
+We will check later in Subsection \ref{subsec:snt:iaa} whether the
+distribution of the annotated sentiments correlates with this
+proportional split of groups and topics.
 
 Eventually, to generate our final corpus, we randomly chose 666
 messages from each of the three formal groups of each of the four
@@ -239,60 +239,80 @@ In the next step after collecting the raw data, we defined an
 annotation scheme for our corpus. Since our goal was to get a
 maximally full coverage of all sentiment-relevant aspects, we devised
 an extensive list of elements that had to be annotated by the experts.
-This list included the following annotation entities:
+This list included:
 
 \begin{itemize}
 \item
   \textbf{sentiments}, which we specified as polar subjective
-  evaluative opinions about people, subjects, or events.  Three
-  important constraints that a potential subjective statement had to
-  satisfy in order to be considered as a sentiment in our corpus were:
+  evaluative opinions about people, subjects, or events. According to
+  this definition, three important constraints that a potential
+  subjective statement had to satisfy in order to be considered as a
+  sentiment in our dataset were:
   \begin{inparaenum}[\itshape a\upshape)]
   \item \textit{polarity}, i.e., the statement in question had to
-    reflect either positive or negative attitude;
+    reflect an either positive or negative attitude;
   \item \textit{subjectivity}, i.e., the expressed opinion had to be a
-    personal attitude, not verifiable by any objective means; and,
+    personal belief not verifiable by any objective means; and,
     finally,
-  \item an \textit{evaluative} nature, i.e., the judgment had to refer
-    to some clearly discernable target from its surrounding context.
+  \item an \textit{evaluative} nature, i.e., the opinionated
+    proposition had to refer to some clearly discernable target from
+    its surrounding context.
   \end{inparaenum}
 
-  Following \citet{Jindal:06a,Jindal:06b}, we explicitly addressed the
-  cases of comparisons, considering them as a special type of
-  sentiment \emph{polarity} in addition to regular positive and
-  negative opinions and providing a corresponding value for this
-  attribute.  Further attributes associated with the sentiment
-  elements included \emph{intensity} with the possible values ranging
-  over weak, medium, and strong; and the boolean attribute
-  \emph{sarcasm}, with which our annotators marked opinions whose
-  actual polarity was the opposite of their apparent form, e.g.,
-  ``Mein j\"ungerer Bruder ist in der Pr\"ufung durchgefallen.
-  Klasse!''  (\textit{My younger brother has failed his exam.  Well
-    done!});
+  With this element we associated the following types of attributes:
+  \begin{itemize}
+    \item
+      \emph{polarity}, which reflected the attitude of the holder
+      towards the evaluated target.  Following
+      \citet{Jindal:06a,Jindal:06b}, we not only distinguished between
+      the traditional values for this attribute -- \emph{positive} and
+      \emph{negative} -- but also considered \emph{comparison} as a
+      separate polarity type, since comparative opinions typically
+      showed only relative preferences of the user but did not imply
+      her general affectionate or averse penchant for any of the
+      juxtaposed objects;
+    \item
+      \emph{intensity}, which showed the emotionality strength of the
+      expressed sentiment.  Possible values for this property were:
+      \emph{weak}, \emph{medium}, and \emph{strong};
+    \item
+      following \citet{Bosco:13} and \citet{Rosenthal:14}, we also
+      explicitly addressed the cases of \emph{sarcasm} by providing an
+      eponymous boolean attribute for ironically meant opinions;
+  \end{itemize}
 
 \item
-  another annotation element closely related to sentiments were the
-  \textbf{targets}, which we defined as objects or events being
-  evaluated by sentiment expressions.  For this element, we introduced
-  two types of attributes: the boolean feature \emph{preferred} and
-  the link attributes \emph{anaphref} and \emph{sentiment-ref}.  The
-  first feature was used for comparative opinions to distinguish
-  targets which were given preference in the given comparison from the
-  dispreferred objects.  The \emph{anaphref} attribute was used for
-  elements expressed by pronouns and pointed to the respective
-  antecedents of these proforms (cf. \citet{Stoyanov:06} and
-  \citet{Ding:10} on the importance of coreference resolution in
-  opinion mining).  Finally, the \emph{sentiment-ref} edges were
-  pointing from a target to its respective sentiment in the cases when
-  the target was locate outside of the corresponding opinion or vice
-  versa on the intersection of two sentiments;
+  another annotation element which was closely related to sentiments
+  were \textbf{targets}, which we defined as objects or events being
+  evaluated by sentiment expressions.
+
+  For this element, we introduced three types of attributes:
+  \begin{itemize}
+    \item
+      the boolean property \emph{preferred}, which was used only in
+      comprataive opinions to distinguish between the favored objects
+      and the rest of the entities being compared;
+    \item
+      the link attributes \emph{anaphref}, which was pointing from
+      targets expressed by pronouns to the respective antecedents of
+      these proforms (cf. \citet{Stoyanov:06} and \citet{Ding:10} on
+      the importance of coreference resolution in opinion mining);
+    \item
+      and, finally, another edge feature -- \emph{sentiment-ref},
+      which was drawn between the target and its respective sentiment
+      in cases when the target element was located outside of its
+      opinion or on the intersection of two evaluative statements.
+      This attribute was supposed to help us disambiguate the
+      interrelationship between targets and sentiments in ambiguous
+      situations;
+  \end{itemize}
 
 \item
-  the second crucial component of sentiments next to targets were the
-  \textbf{sources} of the opinions, which denoted immediate author(s)
-  or holder(s) of evaluative judgments.  The only attribute associated
-  with this element was the link attribute \emph{sentiment-ref}, which
-  was defined in the same as it was specified for targets.
+  the second crucial component of opinions next to targets were
+  \textbf{sources}, which denoted the immediate author(s) or holder(s)
+  of evaluative statements.  The only property associated with this
+  element was the link attribute \emph{sentiment-ref}, which was
+  defined in the same as it was specified for targets.
 \end{itemize}
 
 To help our experts identify the text spans of the above elements, we
