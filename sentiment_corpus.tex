@@ -56,7 +56,7 @@ utterly sparse or excessively biased.
 To minimize both of these risks -- scarceness and bias -- when
 preparing our data, we decided to use a compromise approach by
 gathering one part of the new corpus from tweets which were a priori
-more likely to contain sentiments and sampling the rest of the
+more likely to contain sentiments, and sampling the rest of the
 microblogs from a big collection of messages uniformly at random.  By
 doing so, we hoped to increase the recall with the former strategy,
 while mitigating the introduced bias with the latter method.
@@ -210,17 +210,17 @@ $\sigma$ from this proportion comes to 4.25\%.  The second biggest
 set, whose $\mu$ is equal to 20.5\% and $\sigma$ amounts to $4.62\%$,
 is that of microblogs containing emotional terms.  Finally, the group
 comprising messages with smileys but supposedly no polar terms is the
-smallest one for each topic.  The expected proportion of this group
-only attains $2.78\%$, deviating by $1.3\%$.
+smallest one for each topic.  The expected share of this group only
+attains $2.78\%$, deviating by $1.3\%$.
 
-Furthermore, as one also can observe, the relative proportions of the
-formal tweets for the federal elections and political discussions are
-approximately the same, while general conversations are apparently
-more biased towards containing polar terms, whereas tweets about the
-papal conclave, on the contrary, are rather supposed to be objectve.
-We will check later in Subsection \ref{subsec:snt:iaa} whether the
-distribution of the annotated sentiments correlates with this
-proportional split of groups and topics.
+%% Furthermore, as one also can observe, the relative proportions of the
+%% formal tweets for the federal elections and political discussions are
+%% approximately the same, while general conversations are apparently
+%% more biased towards containing polar terms, whereas tweets about the
+%% papal conclave, on the contrary, are rather supposed to be objectve.
+%% We will check later in Subsection \ref{subsec:snt:iaa} whether the
+%% distribution of the annotated sentiments correlates with this
+%% proportional split of groups and topics.
 
 Eventually, to generate our final corpus, we randomly chose 666
 messages from each of the three formal groups of each of the four
@@ -244,10 +244,11 @@ This list included:
 \begin{itemize}
 \item
   \textbf{sentiments}, which we specified as polar subjective
-  evaluative opinions about people, subjects, or events. According to
-  this definition, three important constraints that a potential
-  subjective statement had to satisfy in order to be considered as a
-  sentiment in our dataset were:
+  evaluative opinions about people, subjects, or events.
+
+  According to this definition, three important constraints that a
+  potential subjective statement had to satisfy in order to be
+  considered as a sentiment in our dataset were:
   \begin{inparaenum}[\itshape a\upshape)]
   \item \textit{polarity}, i.e., the statement in question had to
     reflect an either positive or negative attitude;
@@ -262,49 +263,50 @@ This list included:
   With this element we associated the following types of attributes:
   \begin{itemize}
     \item
-      \emph{polarity}, which reflected the attitude of the holder
-      towards the evaluated target.  Following
+      \emph{polarity}, which reflected the attitude of the opinion's
+      holder towards the evaluated object.  Following
       \citet{Jindal:06a,Jindal:06b}, we not only distinguished between
       the traditional values for this attribute -- \emph{positive} and
       \emph{negative} -- but also considered \emph{comparison} as a
       separate polarity type, since comparative opinions typically
-      showed only relative preferences of the user but did not imply
+      only showed relative preferences of the user but did not imply
       her general affectionate or averse penchant for any of the
       juxtaposed objects;
     \item
-      \emph{intensity}, which showed the emotionality strength of the
+      \emph{intensity}, which showed the emotional strength of the
       expressed sentiment.  Possible values for this property were:
       \emph{weak}, \emph{medium}, and \emph{strong};
     \item
-      following \citet{Bosco:13} and \citet{Rosenthal:14}, we also
-      explicitly addressed the cases of \emph{sarcasm} by providing an
-      eponymous boolean attribute for ironically meant opinions;
+      finally, following \citet{Bosco:13} and \citet{Rosenthal:14}, we
+      also explicitly addressed the cases of \emph{sarcasm} by
+      providing an eponymous boolean attribute for ironically meant
+      opinions;
   \end{itemize}
 
 \item
-  another annotation element which was closely related to sentiments
-  were \textbf{targets}, which we defined as objects or events being
-  evaluated by sentiment expressions.
-
-  For this element, we introduced three types of attributes:
+  another element which was closely related to sentiments were
+  \textbf{targets}, which we defined as objects or events being
+  evaluated by opinion expressions.  For this annotation item, we
+  introduced the following three attributes:
   \begin{itemize}
     \item
-      the boolean property \emph{preferred}, which was used only in
-      comprataive opinions to distinguish between the favored objects
+      the boolean property \emph{preferred}, which was used in
+      comparative opinions to distinguish between the favored objects
       and the rest of the entities being compared;
     \item
-      the link attributes \emph{anaphref}, which was pointing from
-      targets expressed by pronouns to the respective antecedents of
-      these proforms (cf. \citet{Stoyanov:06} and \citet{Ding:10} on
-      the importance of coreference resolution in opinion mining);
+      the link attribute \emph{anaphref}, which was used for
+      pronominal targets and had to point to the respective
+      antecedents of these proforms (cf. \citet{Stoyanov:06} and
+      \citet{Ding:10} on the importance of coreference resolution in
+      opinion mining);
     \item
-      and, finally, another edge feature -- \emph{sentiment-ref},
-      which was drawn between the target and its respective sentiment
-      in cases when the target element was located outside of its
-      opinion or on the intersection of two evaluative statements.
-      This attribute was supposed to help us disambiguate the
-      interrelationship between targets and sentiments in ambiguous
-      situations;
+      and, finally, another edge feature -- \emph{sentiment-ref} --
+      which was drawn between a target and its respective sentiment in
+      cases when the target element was located outside of its opinion
+      or on the intersection of two sentiment spans.  This attribute
+      had to help us disambiguate the assignment of evaluated objects
+      to their pertaining appraisals when this association was not
+      immediately obvious from the context;
   \end{itemize}
 
 \item
@@ -318,7 +320,8 @@ This list included:
 To help our experts identify the text spans of the above elements, we
 explicitly defined these entities as \emph{minimal complete syntactic
   or discourse-level units}, i.e., noun phrases or clauses with all
-their dependent grammatical and text-level complements and adjuncts.
+their dependent grammatical and text-level adjuncts and complements.
+
 A sample tweet annotated according to our definitions is shown in
 Example~\ref{snt:exmp:sent-anno}.
 
@@ -330,67 +333,81 @@ Example~\ref{snt:exmp:sent-anno}.
     \upshape{}\source{\itshape{}Sch\"auble\upshape{}}}
 \end{example}
 
-In this example, our annotators labeled the complete sentence as a
-sentiment, since this syntactic unit is the minimal constituent, which
-simultaneously comprises both the target of the evaluation
-(``Milliardeneinnahmen'', \emph{billions of revenue}) and the
-evaluative term (``peinlich'', \emph{embarrassing}).  Following our
-guidelines, the experts also included the complete noun phrase ``diese
-Milliardeneinnahmen'' (\emph{these billions of revenue}) along with
-the demonstrative pronoun ``diese'' (\emph{these}) into the target
-tags, since this pronoun was a part of the whole noun phrase.
+In this sentence, our annotators labeled the complete clause as a
+sentiment, since this syntactic unit was the minimal constituent,
+which simultaneously comprised both the target of the evaluation
+(``Milliardeneinnahmen'', \emph{billions of revenue}) and its
+respective evaluative term (``peinlich'', \emph{embarrassing}).
+Furthermore, following our guidelines, the experts also included the
+complete noun phrase ``diese Milliardeneinnahmen'' (\emph{these
+  billions of revenue}) along with the indefinite pronoun ``diese''
+(\emph{these}) into the annotated target span, since the pronoun was
+syntactically dependent on the main evaluated entity --
+``Milliardeneinnahmen'' (\emph{billions of revenue}).
 
-In addition to the main sentiment entities, our coders also were asked
-to label supplementary elements, which could significantly influence
-the intensity and polarity of opinions, viz.:
+In addition to the main opinion components (sentiments, sources, and
+targets), our coders also had to label supplementary elements, which
+could significantly influence the intensity and polarity of
+evaluations.  These elements included:
 
 \begin{itemize}
 \item
   \textbf{emotional expressions}, which we defined as lexical items
-  (i.e., words or idioms) that had a clearly distinguishable polar
-  subjective lexical meaning.  Examples of such expressions entities
-  included words such as ``ekelhaft'' (\emph{disgusting}), ``lieben''
-  (\emph{to love}), ``Held'' (\emph{hero}) etc.
+  (words or idioms) that had a clearly distinguishable polar
+  subjective lexical meaning.  Typical examples of such expressions
+  were lexemes and set phrases such as ``ekelhaft''
+  (\emph{disgusting}), ``lieben'' (\emph{to love}), ``Held''
+  (\emph{hero}), ``wie die Pest meiden'' (\emph{to avoid like the
+    pest}) etc.
 
-  In contrast to targets and sources, emotional expressions were
-  always to be annotated in the text, regardless whether a
-  target-oriented sentiment was present or not.
+  In contrast to targets and sources, which only could exist in the
+  presence of a sentiment, emotional expressions were always to be
+  marked in text regardless of whether there was a target-oriented
+  opinion or not.
 
   Main attributes of emotional expressions (\emph{polarity},
   \emph{intensity}, and \emph{sarcasm}) largely coincided with the
-  attributes of sentiments with the only difference that, in the
-  former case, the values of these features reflected the lexical
-  meaning of the opinionated terms without taking into account their
-  surrounding context (i.e., prior polarities and intensities),
-  whereas sentiments' attributes showed the compositional meaning of
-  the whole opinion (i.e., contextual polarities and intensities of
+  attributes defined for sentiments with the only difference that, in
+  the former case, the values of these features had to reflect the
+  lexical meaning of the opinionated terms without taking into account
+  their context (i.e., prior polarities and intensities), whereas
+  sentiments' attributes showed the compositional meaning of the whole
+  opinion (i.e., contextual polarities and intensities of
   evaluations).
 
   In addition to these common attributes, emotional expressions also
-  had element-specific features: the boolean attributes
+  had element-specific properties: the boolean features
   \emph{subjective-fact} and \emph{uncertain} and the link attribute
   \emph{sentiment-ref}.  The first property showed whether a polar
   term denoted an objective event with a clear polar association,
   e.g., ``Atombombe'' (\emph{A-bomb}) or ``Naturschutz''
-  (\emph{conservation}).  The second attribute was used for cases when
+  (\emph{conservation}).  The second feature was used in cases when
   the annotators were uncertain about their decisions.  Finally, the
-  last feature was defined in the same way as it was specified for
-  targets and sources;
+  last attribute was defined in the same way as it was specified for
+  targets and sources and had to point from the emotional expression
+  to its respective sentiment when an unambiguous assignment was
+  impossible;
 
 \item
-  possible modifiers of emotional expressions were
-  \textbf{intensifiers}, which we specified as elements that increased
-  thed expressivity and polar sense of an opinionated term, e.g.,
-  ``sehr'' (\emph{very}), ``super'' (\emph{super}), ``stark''
-  (\emph{strongly}) etc.;
+  elements which increased the expressivity and polar sense of
+  opinionated terms were specified as \textbf{intensifiers} in our
+  annotation scheme.  Typical examples of such elements were adverbial
+  modifiers, e.g., ``sehr'' (\emph{very}), ``super'' (\emph{super}),
+  ``stark'' (\emph{strongly}) etc.;
 
 \item
-  words or phrases which, on the contrary, decreased the polar lexical
-  sense of emotional expressions were specified as
-  \textbf{diminishers} in our guidelines.  Typical examples of such
-  elements were adverbials and adverbial phrases such as ``weniger''
-  (\emph{less}), ``kaum'' (\emph{hardly}), ``fast'' (\emph{almost})
-  etc.;
+  \textbf{diminishers}, on the contrary, were words or phrases which
+  decreased the polar lexical sense of emotional expressions.
+  Similarly to intensifiers, these elements were usually expressed by
+  adverbs, such as ``weniger'' (\emph{less}), ``kaum''
+  (\emph{hardly}), ``fast'' (\emph{almost}) etc.
+
+  Both of these elements (intensifiers and diminishers) only had two
+  types of possible properties: the ordinal feature \emph{degree} with
+  two possible values -- \emph{medium} and \emph{strong} -- and the
+  link attribute \emp{emo-expression-ref}, which had to point from the
+  modifying element to the respective opinionated term being
+  intensified or dampened;
 
 \item
   the final element -- \textbf{negations} -- was defined as
