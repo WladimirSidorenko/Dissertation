@@ -503,12 +503,12 @@ split the downloaded tweets into tokens in order to create an
 annotation project\footnote{In \texttt{MMAX2}, an annotation project
   refers to a collection of all XML files pertaining to the same
   corpus, including its text data, annotation files, scheme definition
-  etc.} for our data.  To that end, we applied a minimally modified
+  etc.} for our data.  To this end, we applied a minimally modified
 version of Christopher Potts' social media
 tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
-which we slightly adjusted to the peculiarities of the German spelling
-(we accounted for the capitalized form of German nouns and the dot at
-the end of ordinal numbers).
+which was slightly adjusted to the peculiarities of the German
+spelling (we accounted for the capitalized form of German nouns and
+the dot at the end of ordinal numbers).
 
 \begin{wrapfigure}{R}{0.5\textwidth}
   \begin{minipage}[t][24.5em]{0.5\textwidth}%
@@ -568,9 +568,9 @@ pertaining to the same topic, making sure that the formal groups of
 that topic were represented in equal proportions.
 
 In the last preparation step, we finally created the corresponding
-scheme and customization files, which specified what kinds of elements
-with which attributes were to be annotated by the human coders, and
-how these elements had to look like.
+scheme and customization settings, which specified what kinds of
+elements with which attributes were to be annotated by the human
+coders, and how these elements had to look like.
 
 The resulting folder hierarchy of our dataset is shown in Figure
 \ref{fig:snt:corpus}.  As can be seen from the listing, the top-level
@@ -581,11 +581,11 @@ level structure of our project consists of three main directories: {
 
   \item\texttt{docs/}, in which we placed the annotation guidelines and
     various supplementary documents, such as annotation tests for new
-    coders; and, finally,
+    coders;
 
-  \item\texttt{scripts/}, which comprises auxiliary scripts for
-    estimating the inter-annotator agreement and aligning corpus
-    annotations with automatically parsed corpus sentences.
+  \item and, finally, \texttt{scripts/}, which comprises auxiliary
+    scripts for estimating the inter-annotator agreement and aligning
+    corpus annotations with automatically parsed corpus sentences.
   \end{itemize}
 }
 
@@ -604,6 +604,8 @@ subdirectories:
   annotation elements (e.g., their back- and foreground colors, font
   types and size etc.);
 
+  %% {
+  %% \setlength{\linewidth}{\textwidth}
 \item\texttt{scheme/}, which includes the definitions of the
   annotation markables,\footnote{In the \texttt{MMAX} terminology, an
     annotation markable is a synonym for an annotation element.}
@@ -614,6 +616,7 @@ subdirectories:
 
 \item\texttt{style/}, which is the standard \texttt{MMAX} directory
   for storing default settings.
+  %% }
 \end{itemize}
 
 Examples of an actual annotation file and the underlying tokenization
@@ -721,7 +724,7 @@ Two questions that arose during this computation, however, were
 \begin{example}\label{example:1}
 \upshape \textup{Annotation 1:}\\\sentiment{\itshape My father hates
   \upshape\sentiment{\itshape this nice
-    book\upshape}.}\\\\ \textup{Annotation 2:}\\\itshape My\upshape
+    book\upshape}.}\\\\ \textup{Annotation 2:}\\\itshape My \upshape
 \sentiment{\itshape{}father hates \upshape\sentiment{\itshape this
     nice book\upshape}.}
 \end{example}
