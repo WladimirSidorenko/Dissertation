@@ -225,7 +225,7 @@ attains $2.78\%$, deviating by $1.3\%$.
 Eventually, to generate our final corpus, we randomly chose 666
 messages from each of the three formal groups of each of the four
 subjects, getting a total of 7,992 microblogs: $666\text{ tweets}
-\times 4\text{ topics} \times 3\text{ formal criteria}$.  Although
+\times 4\text{ topics} \times 3\text{formal criteria}$.  Although
 this quota sampling admittedly violates the uniformity principle,
 which states that the analyzed examples have to be chosen uniformly
 from the whole population, we justify this with the wish to increase
@@ -247,8 +247,8 @@ This list included:
   evaluative opinions about people, subjects, or events.
 
   According to this definition, three important constraints that a
-  potential subjective statement had to satisfy in order to be
-  considered as a sentiment in our dataset were:
+  potential subjective statement had to satisfy in order to be marked
+  as sentiment in our dataset were:
   \begin{inparaenum}[\itshape a\upshape)]
   \item \textit{polarity}, i.e., the statement in question had to
     reflect an either positive or negative attitude;
@@ -280,7 +280,7 @@ This list included:
       finally, following \citet{Bosco:13} and \citet{Rosenthal:14}, we
       also explicitly addressed the cases of \emph{sarcasm} by
       providing an eponymous boolean attribute for ironically meant
-      opinions;
+      comments;
   \end{itemize}
 
 \item
@@ -294,14 +294,14 @@ This list included:
       comparative opinions to distinguish between the favored objects
       and the rest of the entities being compared;
     \item
-      the link attribute \emph{anaphref}, which was used for
-      pronominal targets and had to point to the respective
+      the link attribute \emph{anaphref}, which was used for targets
+      expressed by pronouns and had to point to the respective
       antecedents of these proforms (cf. \citet{Stoyanov:06} and
       \citet{Ding:10} on the importance of coreference resolution in
       opinion mining);
     \item
       and, finally, another edge feature -- \emph{sentiment-ref} --
-      which was drawn between a target and its respective sentiment in
+      which was drawn from the target to its respective sentiment in
       cases when the target element was located outside of its opinion
       or on the intersection of two sentiment spans.  This attribute
       had to help us disambiguate the assignment of evaluated objects
@@ -323,9 +323,9 @@ explicitly defined these entities as \emph{minimal complete syntactic
 their dependent grammatical and text-level adjuncts and complements.
 
 A sample tweet annotated according to our definitions is shown in
-Example~\ref{snt:exmp:sent-anno}.
+Example~\ref{snt:exmp:sent-anno1}.
 
-\begin{example}\label{snt:exmp:sent-anno}
+\begin{example}\label{snt:exmp:sent-anno1}
   \upshape\sentiment{\target{Diese Milliardeneinnahmen} sind selbst
     \source{Sch\"auble} peinlich}\\[0.8em]
   \noindent\sentiment{\target{\itshape{}These billions of
@@ -333,17 +333,16 @@ Example~\ref{snt:exmp:sent-anno}.
     \upshape{}\source{\itshape{}Sch\"auble\upshape{}}}
 \end{example}
 
-In this sentence, our annotators labeled the complete clause as a
-sentiment, since this syntactic unit was the minimal constituent,
-which simultaneously comprised both the target of the evaluation
+In this sentence, our annotators labeled the complete clause as
+sentiment, since this unit was the minimal syntactic constituent which
+simultaneously comprised both the target of the evaluation
 (``Milliardeneinnahmen'', \emph{billions of revenue}) and its
-respective evaluative term (``peinlich'', \emph{embarrassing}).
-Furthermore, following our guidelines, the experts also included the
-complete noun phrase ``diese Milliardeneinnahmen'' (\emph{these
-  billions of revenue}) along with the indefinite pronoun ``diese''
-(\emph{these}) into the annotated target span, since the pronoun was
-syntactically dependent on the main evaluated entity --
-``Milliardeneinnahmen'' (\emph{billions of revenue}).
+respective evaluative expression (``peinlich'', \emph{embarrassing}).
+Following our guidelines, the experts also included the complete noun
+phrase ``diese Milliardeneinnahmen'' (\emph{these billions of
+  revenue}) along with the indefinite pronoun ``diese'' (\emph{these})
+into the annotated target span, since the pronoun was syntactically
+dependent on the main evaluated term.
 
 In addition to the main opinion components (sentiments, sources, and
 targets), our coders also had to label supplementary elements, which
@@ -360,76 +359,124 @@ evaluations.  These elements included:
   (\emph{hero}), ``wie die Pest meiden'' (\emph{to avoid like the
     pest}) etc.
 
-  In contrast to targets and sources, which only could exist in the
-  presence of a sentiment, emotional expressions were always to be
-  marked in text regardless of whether there was a target-oriented
-  opinion or not.
+  In contrast to targets and sources, which only could occur in the
+  context of an annotated sentiment, emotional expressions were always
+  to be marked in text regardless of whether a target-oriented opinion
+  was present or not.
 
   Main attributes of emotional expressions (\emph{polarity},
   \emph{intensity}, and \emph{sarcasm}) largely coincided with the
   attributes defined for sentiments with the only difference that, in
-  the former case, the values of these features had to reflect the
-  lexical meaning of the opinionated terms without taking into account
-  their context (i.e., prior polarities and intensities), whereas
-  sentiments' attributes showed the compositional meaning of the whole
-  opinion (i.e., contextual polarities and intensities of
+  the case of opinionated terms, the values of these features
+  reflected the lexical meaning of the labeled words without taking
+  into account their context (i.e., prior polarities and intensities),
+  whereas sentiments' attributes showed the compositional meaning of
+  the whole opinions (i.e., contextual polarities and intensitis of
   evaluations).
 
   In addition to these common attributes, emotional expressions also
   had element-specific properties: the boolean features
-  \emph{subjective-fact} and \emph{uncertain} and the link attribute
+  \emph{subjective-fact} and \emph{uncertain}, and the link attribute
   \emph{sentiment-ref}.  The first property showed whether a polar
-  term denoted an objective event with a clear polar association,
+  term denoted an objective event with a clear emotional association,
   e.g., ``Atombombe'' (\emph{A-bomb}) or ``Naturschutz''
-  (\emph{conservation}).  The second feature was used in cases when
-  the annotators were uncertain about their decisions.  Finally, the
-  last attribute was defined in the same way as it was specified for
-  targets and sources and had to point from the emotional expression
-  to its respective sentiment when an unambiguous assignment was
-  impossible;
+  (\emph{conservation}).  The second feature was used in the cases
+  when the annotators were uncertain about their decisions.  Finally,
+  the last attribute was defined in the same way as it was specified
+  for targets and sources and had to point from the emotional
+  expression to its respective sentiment when an unambiguous
+  assignment of the former was impossible;
 
 \item
   elements which increased the expressivity and polar sense of
   opinionated terms were specified as \textbf{intensifiers} in our
-  annotation scheme.  Typical examples of such elements were adverbial
-  modifiers, e.g., ``sehr'' (\emph{very}), ``super'' (\emph{super}),
-  ``stark'' (\emph{strongly}) etc.;
+  annotation scheme.  Typical examples of such expressions were
+  adverbial modifiers, e.g., ``sehr'' (\emph{very}), ``super''
+  (\emph{super}), ``stark'' (\emph{strongly}) etc.;
 
 \item
   \textbf{diminishers}, on the contrary, were words or phrases which
   decreased the polar lexical sense of emotional expressions.
   Similarly to intensifiers, these elements were usually expressed by
-  adverbs, such as ``weniger'' (\emph{less}), ``kaum''
-  (\emph{hardly}), ``fast'' (\emph{almost}) etc.
+  adverbs such as ``weniger'' (\emph{less}), ``kaum'' (\emph{hardly}),
+  ``fast'' (\emph{almost}) etc.
 
   Both of these elements (intensifiers and diminishers) only had two
   types of possible properties: the ordinal feature \emph{degree} with
-  two possible values -- \emph{medium} and \emph{strong} -- and the
-  link attribute \emp{emo-expression-ref}, which had to point from the
-  modifying element to the respective opinionated term being
-  intensified or dampened;
+  two possible values: \emph{medium} and \emph{strong}; and the link
+  attribute \emph{emo-expression-ref}, which had to point from the
+  modifying element to its pertaining opinionated term;
 
 \item
-  the final element -- \textbf{negations} -- was defined as
-  grammatical or lexical which turned the polarity of an emotional
-  expression to the complete opposite.  These were typically
+  the final element -- \textbf{negations} -- was defined as a
+  grammatical or lexical means which turned the polarity of an
+  emotional expression to the complete opposite.  These were typically
   represented by the negative particle ``nicht'' (\emph{not}) or the
   indefinite pronoun ``keine'' (\emph{no}).
 
-  The only attribute we specified for negations was the mandatory link
-  \emph{emo-expression-ref}, which had to point from the negation in
-  question to the emotional expression being negated by this element.
+  The only attribute associated with this element was the mandatory
+  link \emph{emo-expression-ref}, which had to point from the negation
+  in question to the emotional expression whose meaning was being
+  reversed.
 \end{itemize}
 
-In contrast to opinion-level entities (sentiments, sources, and
-targets), which primarily encompassed syntactic or discourse units,
-emotional expressions and their modifiers were specified as lexical
-elements.  Consequently, their text spans only had to include single
-words or discernable idioms without syntactic attributes.
+In contrast to opinion-level entities, which primarily encompassed
+syntactic or discourse-level units, emotional expressions and their
+modifiers were explicitly specified as lexical items.  Consequently,
+their text spans only had to include single words or discernable
+idioms, ignoring their possible syntactic attributes.
 
-The complete list of the annotation elements and their attributes can
-be found in the original annotation guidelines provided in
-Appendix~\ref{chap:apdx:sent}.
+A complete annotation example with both sentiment- and
+polar-term-level annotations is shown below:
+\begin{example}\label{snt:exmp:sent-anno2}
+  \tikzstyle{every picture}+=[remember picture]
+  \tikzstyle{na} = [shape=rectangle,inner sep=0pt]
+  \upshape\sentiment{\target{Die Nazi-Vergangenheit} ist auch
+    \negation{\tikz\node[na](word0){nicht};}
+    \intensifier{\tikz\node[na](word1){sehr};}
+    \emoexpression{\tikz\node[na](word2){r\"uhmlich};}}\\[2.2em]
+  \noindent\sentiment{\target{\itshape{}The Nazi
+      history\upshape{}}\itshape{} is also
+    \negation{\tikz\node[na](word3){not};}
+    \upshape{}\intensifier{\tikz\node[na](word4){very};}
+    \upshape{}
+    \emoexpression{\itshape{}\tikz\node[na](word5){laudable};\upshape{}}}
+
+  \begin{tikzpicture}[overlay]
+    \path[->,deeppink4,thick](word0) edge [in=145, out=35] node
+         [above] {\tiny emo-expression-ref} (word2);
+    \path[->,cyan,thick](word1) edge [in=145, out=30] node
+         [above] {\tiny emo-expression-ref} (word2);
+
+    \path[->,deeppink4,thick](word3) edge [in=145, out=35] node
+         [above] {\tiny emo-expression-ref} (word5);
+    \path[->,cyan,thick](word4) edge [in=145, out=30] node
+         [above] {\tiny emo-expression-ref} (word5);
+  \end{tikzpicture}
+\end{example}
+In this case, again, the complete sentence is annotated as sentiment,
+since only the main verb phrase simultaneously comprises both the
+target ``Die Nazi-Vergangenheit'' (\emph{The Nazi history}) and its
+respective evaluation -- ``nicht sehr r\"uhmlich'' (\emph{not very
+  laudable}).  The boundaries of these two elements -- sentiment and
+target -- are determined on the syntactic level, spanning the whole
+clause in the former case and encompassing the complete noun phrase
+for the latter element.  The polarity attribute of the opinion is set
+to \emph{negative}, and its intensity is specified as \emph{medium}.
+
+The emotional expression ``r\"uhmlich'' (\emph{laudable}), its
+intensifier, and negation, on the other hand, only comprise single
+words without their syntactic attributes.  The polarity of the
+opinionated term is \emph{positive}, since this is the primarily
+expressed attitude of this term outside of the context.  Both the
+intensity of the emotional expression and the degree of its
+intensifier ``sehr'' (\emph{very}) are set to \emph{medium}, and the
+link attribute \emph{emo-expression-ref} unequivocally points to the
+element being modified by the negation and intensifying
+item.\footnote{A more detailed description of the annotation elements
+  and their possible attributes along with the examples of ambiguous
+  cases can be found in the original annotation guidelines provided in
+  Appendix~\ref{chap:apdx:sent} of this thesis.}
 
 \subsection{Annotation Tool and Format}\label{subsec:snt:tformat}
 
