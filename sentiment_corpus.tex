@@ -93,7 +93,10 @@ University of M\"unster, who were concurrently working on related
 problems within the joint FMER project ``Discourse Analysis of Social
 Media''.  For sampling the fourth topic, we used the German Twitter
 snapshot of \citet{Scheffler:14}, which comprised $\approx97$ percent
-of German microblogs posted in April 2013.
+of German microblogs posted in April 2013.  This tracking procedure
+gave us a total of 27.4 M messages with the M\"unster corpus and
+Scheffler's collection being by far the most prolific sources of the
+data.
 
 %% For our work, the in-domain factors to consider were the topics and
 %% the form of tweets.  Since we wanted our corpus to be as
@@ -117,11 +120,8 @@ of German microblogs posted in April 2013.
 
 %% General: 24,179,871 messages, keywords:
 
-This tracking procedure gave us a total of 27.4 M messages with the
-M\"unster corpus and Scheffler's collection being by far the most
-prolific sources of the data.  In the next step, we separated all
-tweets of the same topic into three groups based on the following
-formal criteria:
+In the next step, we separated all tweets of the same topic into three
+groups based on the following formal criteria:
 \begin{itemize}
 \item We put messages that contained at least one polar term from the
   sentiment lexicon SentiWS \cite{Remus:10} into the first group;
@@ -132,8 +132,8 @@ formal criteria:
   category of their respective topic.
 \end{itemize}
 With this split, we, again, hoped to increase the recall of sentiments
-by separately analyzing messages with already known polar terms, which
-were indirectly more likely to contain subjective opinions as well.
+by separately analyzing messages with already known polar words, which
+were also indirectly more likely to contain subjective opinions.
 
 In order to find such terms, we considered three major German polarity
 lists: SentiWS \cite{Remus:10}, German Polarity Clues
@@ -222,17 +222,17 @@ attains $2.78\%$, deviating by $1.3\%$.
 %% distribution of the annotated sentiments correlates with this
 %% proportional split of groups and topics.
 
-Eventually, to generate our final corpus, we randomly chose 666
+In order to generate our final corpus, we eventually chose 666 random
 messages from each of the three formal groups of each of the four
 subjects, getting a total of 7,992 microblogs: $666\text{ tweets}
-\times 4\text{ topics} \times 3\text{formal criteria}$.  Although
-this quota sampling admittedly violates the uniformity principle,
-which states that the analyzed examples have to be chosen uniformly
-from the whole population, we justify this with the wish to increase
-the recall of the phenomena in question and point out to the
-possibility of restoring the original distribution parameters by
-multiplying the resulting statistics with the proportion coefficients
-from Table~\ref{snt:tbl:corp:topic-bins}.
+\times 4\text{ topics} \times 3\text{formal criteria}$.  Although this
+quota sampling admittedly violates the uniformity principle, which
+states that the analyzed instances have to be chosen uniformly from
+the whole population, we justify this with the wish to increase the
+recall of the phenomena in question and point out to the possibility
+of restoring the original distribution parameters by multiplying the
+resulting statistics with the proportion coefficients from
+Table~\ref{snt:tbl:corp:topic-bins}.
 
 \subsection{Annotation Scheme}\label{subsec:snt:ascheme}
 In the next step after collecting the raw data, we defined an
@@ -247,7 +247,7 @@ This list included:
   evaluative opinions about people, subjects, or events.
 
   According to this definition, three important constraints that a
-  potential subjective statement had to satisfy in order to be marked
+  potential subjective statement had to satisfy in order to be labeled
   as sentiment in our dataset were:
   \begin{inparaenum}[\itshape a\upshape)]
   \item \textit{polarity}, i.e., the statement in question had to
@@ -270,8 +270,8 @@ This list included:
       \emph{negative} -- but also considered \emph{comparison} as a
       separate polarity type, since comparative opinions typically
       only showed relative preferences of the user but did not imply
-      her general affectionate or averse penchant for any of the
-      juxtaposed objects;
+      her general fondness or reluctance to any of the juxtaposed
+      objects;
     \item
       \emph{intensity}, which showed the emotional strength of the
       expressed sentiment.  Possible values for this property were:
@@ -291,11 +291,11 @@ This list included:
   \begin{itemize}
     \item
       the boolean property \emph{preferred}, which was used in
-      comparative opinions to distinguish between the favored objects
-      and the rest of the entities being compared;
+      comparative opinions to distinguish between favored objects and
+      the rest of the entities being compared;
     \item
-      the link attribute \emph{anaphref}, which was used for targets
-      expressed by pronouns and had to point to the respective
+      the link attribute \emph{anaphref}, which was used for
+      pronominal targets and had to point to the respective
       antecedents of these proforms (cf. \citet{Stoyanov:06} and
       \citet{Ding:10} on the importance of coreference resolution in
       opinion mining);
@@ -320,7 +320,7 @@ This list included:
 To help our experts identify the text spans of the above elements, we
 explicitly defined these entities as \emph{minimal complete syntactic
   or discourse-level units}, i.e., noun phrases or clauses with all
-their dependent grammatical and text-level adjuncts and complements.
+their dependent grammatical and text-level attributes.
 
 A sample tweet annotated according to our definitions is shown in
 Example~\ref{snt:exmp:sent-anno1}.
@@ -342,7 +342,8 @@ Following our guidelines, the experts also included the complete noun
 phrase ``diese Milliardeneinnahmen'' (\emph{these billions of
   revenue}) along with the indefinite pronoun ``diese'' (\emph{these})
 into the annotated target span, since the pronoun was syntactically
-dependent on the main evaluated term.
+dependent on the main evaluated term -- ``Milliardeneinnahmen''
+(\emph{billions of revenue}).
 
 In addition to the main opinion components (sentiments, sources, and
 targets), our coders also had to label supplementary elements, which
@@ -370,9 +371,9 @@ evaluations.  These elements included:
   the case of opinionated terms, the values of these features
   reflected the lexical meaning of the labeled words without taking
   into account their context (i.e., prior polarities and intensities),
-  whereas sentiments' attributes showed the compositional meaning of
-  the whole opinions (i.e., contextual polarities and intensitis of
-  evaluations).
+  whereas sentiment's attributes showed the compositional meaning of
+  the whole opinion (i.e., contextual polarity and intensity of the
+  evaluation).
 
   In addition to these common attributes, emotional expressions also
   had element-specific properties: the boolean features
@@ -424,7 +425,7 @@ In contrast to opinion-level entities, which primarily encompassed
 syntactic or discourse-level units, emotional expressions and their
 modifiers were explicitly specified as lexical items.  Consequently,
 their text spans only had to include single words or discernable
-idioms, ignoring their possible syntactic attributes.
+idioms, ignoring their possible syntactic adjuncts.
 
 A complete annotation example with both sentiment- and
 polar-term-level annotations is shown below:
@@ -465,17 +466,18 @@ for the latter element.  The polarity attribute of the opinion is set
 to \emph{negative}, and its intensity is specified as \emph{medium}.
 
 The emotional expression ``r\"uhmlich'' (\emph{laudable}), its
-intensifier, and negation, on the other hand, only comprise single
-words without their syntactic attributes.  The polarity of the
-opinionated term is \emph{positive}, since this is the primarily
-expressed attitude of this term outside of the context.  Both the
-intensity of the emotional expression and the degree of its
-intensifier ``sehr'' (\emph{very}) are set to \emph{medium}, and the
-link attribute \emph{emo-expression-ref} unequivocally points to the
-element being modified by the negation and intensifying
-item.\footnote{A more detailed description of the annotation elements
-  and their possible attributes along with the examples of ambiguous
-  cases can be found in the original annotation guidelines provided in
+intensifier ``sehr'' (\emph{very}), and the negation ``nicht''
+(\emph{not}), on the other hand, only comprise single words without
+their grammatical attributes.  The polarity of the opinionated term is
+\emph{positive}, since this is the primarily expressed attitude of
+this term disregarding the context.  Both the intensity of the
+emotional expression and the degree of its intensifier are set to
+\emph{medium}, and the link attribute \emph{emo-expression-ref}
+unequivocally shows which opinionated term is being reversed by the
+negation and amplified by the intensifying item.\footnote{A more
+  detailed description of the annotation elements and their possible
+  attributes along with the examples of ambiguous cases can be found
+  in the original annotation guidelines provided in
   Appendix~\ref{chap:apdx:sent} of this thesis.}
 
 \subsection{Annotation Tool and Format}\label{subsec:snt:tformat}
@@ -487,13 +489,12 @@ primary reasons for choosing this program were
 \begin{inparaenum}[\itshape a\upshape)]
  \item its non-commercial license,
  \item the portability to a wide variety of platforms, and
- \item a mature set of annotation features, such as possibility to
+ \item a mature set of annotation features such as possibility to
    create link attributes (used for coreference), mark overlapping
    elements, and assign multiple annotations of the same class to one
    token (which was heavily used by our experts for the cases when one
-   sentiment statement was included into another opinion, e.g.,
-   \emph{Sie mag diese h\"assliche Jacke} ``She likes this ugly
-   jacket'').
+   sentiment statement was included into another opinion, e.g., ``Sie
+   mag diese h\"assliche Jacke'', \emph{She likes this ugly jacket}).
 \end{inparaenum}
 
 Since \texttt{MMAX2} relies on a token-oriented stand-off XML format,
@@ -565,17 +566,18 @@ To ease the annotation process and minimize possible data loss during
 labeling, we split the complete corpus into 80 smaller project files
 with 99 -- 109 tweets each.  In each such file, we put microblogs
 pertaining to the same topic, making sure that the formal groups of
-that topic were represented in equal proportions.
+that topic were distributed in equal proportions.
 
 In the last preparation step, we finally created the corresponding
-scheme and customization settings, which specified what kinds of
-elements with which attributes were to be annotated by the human
-coders, and how these elements had to look like.
+scheme and customization settings for the project, which specified
+what kinds of elements with which attributes were to be annotated by
+the human coders, and how these elements had to look like.
 
 The resulting folder hierarchy of our dataset is shown in Figure
-\ref{fig:snt:corpus}.  As can be seen from the listing, the top-level
-level structure of our project consists of three main directories: {
-  \setlength{\linewidth}{\textwidth}
+\ref{fig:snt:corpus}.
+
+As can be seen from the listing, the top-level level structure of our
+project consists of three main directories:
   \begin{itemize}
   \item\texttt{corpus/}, which includes the actual annotation data;
 
@@ -583,41 +585,43 @@ level structure of our project consists of three main directories: {
     various supplementary documents, such as annotation tests for new
     coders;
 
-  \item and, finally, \texttt{scripts/}, which comprises auxiliary
-    scripts for estimating the inter-annotator agreement and aligning
-    corpus annotations with automatically parsed corpus sentences.
+  \item and \texttt{scripts/}, which comprises auxiliary scripts for
+    estimating the inter-annotator agreement and aligning corpus
+    annotations with automatically parsed corpus sentences.
+  \end{itemize}
+
+{
+  \setlength{\linewidth}{\textwidth}
+  The \texttt{corpus/} folder is further subdivided into the
+  subdirectories:
+  \begin{itemize}
+  \item\texttt{annotator-X/}, where X stands for the annotator's id.
+    This directory includes the main project files (the ones which
+    specify the paths to the annotation directory, tokenization data,
+    appearance settings etc.) and the subfolder \texttt{markables/},
+    which comprises the actual annotations;
+
+  \item\texttt{basedata/}, which contains files with tokenized messages;
+
+  \item\texttt{custom/}, which provides customization settings for the
+    annotation elements (e.g., their back- and foreground colors, font
+    types and size etc.);
+
+    %% {
+    %% \setlength{\linewidth}{\textwidth}
+  \item\texttt{scheme/}, which includes the definitions of the
+    annotation markables,\footnote{In the \texttt{MMAX} terminology, an
+      annotation markable is a synonym for an annotation element.}
+    their attributes, and possible attributes' values;
+
+  \item\texttt{source/}, where we put the original untokenized
+    microblogs; and, eventually,
+
+  \item\texttt{style/}, which is the standard \texttt{MMAX} directory
+    for storing default settings.
+    %% }
   \end{itemize}
 }
-
-The \texttt{corpus/} folder is further subdivided into the
-subdirectories:
-\begin{itemize}
-\item\texttt{annotator-X/}, where X stands for the annotator's id.
-  This directory includes the main project files (the ones which
-  specify the paths to the annotation directory, tokenization file,
-  appearance settings etc.) and the subfolder \texttt{markables/},
-  which comprises the actual annotation data;
-
-\item\texttt{basedata/}, which contains files with tokenized messages;
-
-\item\texttt{custom/}, which provides customization settings for the
-  annotation elements (e.g., their back- and foreground colors, font
-  types and size etc.);
-
-  %% {
-  %% \setlength{\linewidth}{\textwidth}
-\item\texttt{scheme/}, which includes the definitions of the
-  annotation markables,\footnote{In the \texttt{MMAX} terminology, an
-    annotation markable is a synonym for an annotation element.}
-  their attributes, and possible attributes' values;
-
-\item\texttt{source/}, where we put the original untokenized
-  microblogs; and, eventually,
-
-\item\texttt{style/}, which is the standard \texttt{MMAX} directory
-  for storing default settings.
-  %% }
-\end{itemize}
 
 Examples of an actual annotation file and the underlying tokenization
 data are given in Figures \ref{fig:snt:annofile} and
@@ -680,18 +684,23 @@ intensity="strong" />
   \end{minipage}
 \end{minipage}
 
-\subsection{Inter-annotator Agreement}\label{subsec:snt:iaa}
+\subsection{Inter-annotator Agreement Metrics}\label{subsec:snt:iaa}
 
 For estimating the inter-annotator agreement (IAA), we adopted the
-Cohen's $\kappa$ metric \cite{Cohen:60}.  Following the standard
-practice for computing this term, we calculated the observed agreement
-$p_o$ as the ratio of tokens with matching annotations to the total
-number of tokens:
-\begin{equation*}\textstyle
+Cohen's $\kappa$ measure \cite{Cohen:60}.  Following the standard
+practice for computing this term as:
+\begin{equation*}
+  \kappa = \frac{p_o - p_c}{1 - p_c},
+\end{equation*}
+with $p_o$ denoting the observed agreement and $p_c$ meaning the
+agreement by chance, we calculated the observed reliability as the
+ratio of tokens with matching annotations to the total number of
+tokens:
+\begin{equation*}
   p_o = \frac{T - A_1 + M_1 - A_2 + M_2}{T},
 \end{equation*}
-where $T$ denotes the total number of tokens, $A_1$ and $A_2$ are the
-numbers of tokens annotated with the given class by the first and
+where $T$ stands for the total number of tokens, $A_1$ and $A_2$ are
+the numbers of tokens annotated with the given class by the first and
 second annotators respectively, and $M_1$ and $M_2$ represent the
 number of tokens with matching annotations for that class.
 
@@ -708,24 +717,29 @@ Two questions that arose during this computation, however, were
   \item whether tokens belonging to several overlapping annotation
     spans of the same class in one annotation had to be counted
     multiple times when computing the $A$ scores (for instance, if we
-    had to count the words \textit{this}, \textit{nice}, and
-    \textit{book} in Example \ref{example:1} twice as sentiments when
-    computing $A_1$ and $A_2$), and
+    had to count the words ``dieses'' (\textit{this}), ``sch\"one''
+    (\textit{nice}), and ``Buch'' (\textit{book}) in Example
+    \ref{example:snt:iaa} twice as sentiments when computing $A_1$ and
+    $A_2$), and
   \item whether we had to assume that two annotated spans from
     different experts agreed on all of their tokens when these spans
     had at least one word in common (e.g., if we had to consider the
-    annotation of the token \textit{My} in Example \ref{example:1} as
-    matching, regarding that the rest of the corresponding sentiment
-    spans agreed).
+    annotation of the token ``Mein'' (\textit{My}) in the following
+    example as matching, regarding that the rest of the corresponding
+    sentiment spans agreed).
 \end{inparaenum}
 
 {
 \renewcommand{\thesection}{\arabic{section}}
-\begin{example}\label{example:1}
-\upshape \textup{Annotation 1:}\\\sentiment{\itshape My father hates
-  \upshape\sentiment{\itshape this nice
-    book\upshape}.}\\\\ \textup{Annotation 2:}\\\itshape My \upshape
-\sentiment{\itshape{}father hates \upshape\sentiment{\itshape this
+\begin{example}\label{example:snt:iaa}
+\upshape \textup{\textcolor{red}{\bfseries Annotation 1:}}\\
+\sentiment{Mein Vater hasst \sentiment{dieses sch\"one Buch}.}\\
+\sentiment{\itshape My father hates \upshape\sentiment{\itshape this
+    nice book\upshape}.}
+
+\noindent\textup{\textcolor{darkslateblue}{\bfseries Annotation 2:}}\\
+Mein \sentiment{Vater hasst \sentiment{dieses sch\"one Buch}.}\\
+\itshape My \upshape\sentiment{\itshape{}father hates \upshape\sentiment{\itshape this
     nice book\upshape}.}
 \end{example}
 }
@@ -733,12 +747,73 @@ Two questions that arose during this computation, however, were
 To address these issues, we introduced two separate agreement metrics:
 \emph{binary} and \emph{proportional} kappa.  With the former variant,
 we counted tokens belonging to multiple eponymous annotation spans
-multiple times and considered all tokens belonging to the given
-annotation instance as matching if this span agreed on at least one
-token with the annotation from the other expert.  With the latter
-metric, every labeled token was counted only once, and we only
-calculated the actual number of tokens with matching annotations when
-computing the $M$ scores.
+multiple times (i.e., $A_1$ and $A_2$ would amount to $10$ and $9$
+respectively in the above sample tweet) and considered all tokens
+belonging to the given annotation instance as matching if this span
+agreed on at least one token with the annotation from the other expert
+(i.e., $M_1$ and $M_2$ would have the same values as $A_1$ and $A_2$
+in that case).  With the latter metric, every labeled token was
+counted only once (i.e., the numbers of the labeled words in the first
+and second annotation would then be equal to $7$ and $6$
+respectively), and we only calculated the actual number of tokens with
+matching labels when computing the $M$ scores (i.e., both $M_1$ and
+$M_2$ would come to $6$ with this metric).  The exact values of the
+binary and proportional kappa for Example~\ref{example:snt:iaa} would
+then correspondingly run up to 1.0 and 0.0, since the binary metric
+would consider both annotations as perfectly matched because every
+labeled sentiment instance agreed on at least one token, whereas the
+proportional measure would have the opposite view, stating that the
+observed agreement $p_o$ was the same as the agreement by chance $p_c$
+and therefore completely unreliable.
+
+\subsection{Annotation Procedure}\label{sec:astages}
+After setting up the agreement metrics, we finally let our experts
+annotate the data.  The annotation procedure was carried out in three
+steps:
+\begin{itemize}
+  \item First, both annotators labeled one half of the corpus after
+    only minimal training.  Unfortunately, their mutual agreement at
+    this stage was relatively low, reaching only 38.05\% for
+    sentiments (measured with binary $\kappa$) and being
+    consequentially even lower for their corresponding targets and
+    sources (amounting to 35.48 and 34.53\% respectively).  A notable
+    fact, however, is that the consensus about emotional expressions
+    at this time was notably higher, attaining 64.29\%, which,
+    according to \citet{Landis:77}, already suggests a substantial
+    result;
+  \item In the second step, in order to improve the inter-rater
+    reliability, we automatically determined the differences between
+    the two annotations, adding and highlighting unmatched elements as
+    a separate class of labelings. We subsequently let our experts
+    resolve these discrepancies by either correcting their own
+    decisions or rejecting the alternative annotations of the other
+    coder.  As in the previous stage, we allowed the annotators to
+    consult the supervisor (the author of this paper) about dealing
+    with ambiguous cases, but did not let our assistants communicate
+    with each other directly.  This adjudication has lead to
+    significant improvements on all annotation levels: The agreement
+    on sentiments has improved by 29.87 percentage points, reaching
+    67.92\%.  Similar effects were also observed for targets, sources,
+    emotional expressions, and their modifiers, resulting in an
+    average IAA increase of 25.96 percent;
+  \item Finally, after the adjudication was complete, our assistants
+    proceeded with the annotation of the remaining files.  Working
+    completely independently, one of the experts has annotated 78.8
+    percent of the full corpus, whereas another coder has labeled the
+    complete dataset.
+\end{itemize}
+
+\subsection{Evaluation}\label{sec:eval}
+The agreement results for each annotation stage computed with the two
+adjusted $\kappa$-metrics are shown in Table~\ref{tbl:snt:agrmnt}.  As can
+be seen from the table, the inter-rater reliability of sentiments
+strongly correlates with the inter-annotator agreement on sources and
+targets, where higher sentiment figures inevitably lead to a better
+consensus about the holders and subjects of the opinions and vice
+versa.  The same applies to the correlation between the emotional
+expressions and their modifiers. The latter elements, however, show
+generally lower scores apparently due to their smaller number in the
+corpus.
 
 \begin{table*}[thb!]
   \begin{center}
@@ -802,57 +877,8 @@ computing the $M$ scores.
       tokens in the first annotation, $M2$ -- number of tokens with
       matching labels in the second annotation, $A2$ -- total number
       of labeled tokens in the second annotation)}}
-  \label{tbl:agrmnt}
+  \label{tbl:snt:agrmnt}
 \end{table*}
-
-\subsection{Annotation Procedure}\label{sec:astages}
-After setting up the agreement metrics, we finally let our experts
-annotate the data.  The annotation procedure was carried out in three
-steps:
-\begin{itemize}
-  \item First, both annotators labeled one half of the corpus after
-    only minimal training.  Unfortunately, their mutual agreement at
-    this stage was relatively low, reaching only 38.05\% for
-    sentiments (measured with binary $\kappa$) and being
-    consequentially even lower for their corresponding targets and
-    sources (amounting to 35.48 and 34.53\% respectively).  A notable
-    fact, however, is that the consensus about emotional expressions
-    at this time was notably higher, attaining 64.29\%, which,
-    according to \citet{Landis:77}, already suggests a substantial
-    result;
-  \item In the second step, in order to improve the inter-rater
-    reliability, we automatically determined the differences between
-    the two annotations, adding and highlighting unmatched elements as
-    a separate class of labelings. We subsequently let our experts
-    resolve these discrepancies by either correcting their own
-    decisions or rejecting the alternative annotations of the other
-    coder.  As in the previous stage, we allowed the annotators to
-    consult the supervisor (the author of this paper) about dealing
-    with ambiguous cases, but did not let our assistants communicate
-    with each other directly.  This adjudication has lead to
-    significant improvements on all annotation levels: The agreement
-    on sentiments has improved by 29.87 percentage points, reaching
-    67.92\%.  Similar effects were also observed for targets, sources,
-    emotional expressions, and their modifiers, resulting in an
-    average IAA increase of 25.96 percent;
-  \item Finally, after the adjudication was complete, our assistants
-    proceeded with the annotation of the remaining files.  Working
-    completely independently, one of the experts has annotated 78.8
-    percent of the full corpus, whereas another coder has labeled the
-    complete dataset.
-\end{itemize}
-
-\subsection{Evaluation}\label{sec:eval}
-The agreement results for each annotation stage computed with the two
-adjusted $\kappa$-metrics are shown in Table~\ref{tbl:agrmnt}.  As can
-be seen from the table, the inter-rater reliability of sentiments
-strongly correlates with the inter-annotator agreement on sources and
-targets, where higher sentiment figures inevitably lead to a better
-consensus about the holders and subjects of the opinions and vice
-versa.  The same applies to the correlation between the emotional
-expressions and their modifiers. The latter elements, however, show
-generally lower scores apparently due to their smaller number in the
-corpus.
 
 Regarding the annotation stages, one can observe that the peak of the
 annotators' agreement is reached upon the adjudication.  Even though
@@ -899,7 +925,7 @@ more conservative and did not regard this message as a sentiment case.
   \end{example}
 }
 
-As confirmed by our statistics (cf. Table~\ref{tbl:agrmnt}) and as
+As confirmed by our statistics (cf. Table~\ref{tbl:snt:agrmnt}) and as
 also shown in Example~\ref{example:emo-disagr}, the second annotator
 generally preferred annotating more opinions and emotional expressions
 than the first one.  This also involved cases of emotionally connoted
