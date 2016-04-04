@@ -804,81 +804,144 @@ steps:
 \end{itemize}
 
 \subsection{Evaluation}\label{sec:eval}
-The agreement results for each annotation stage computed with the two
-adjusted $\kappa$-metrics are shown in Table~\ref{tbl:snt:agrmnt}.  As can
-be seen from the table, the inter-rater reliability of sentiments
-strongly correlates with the inter-annotator agreement on sources and
-targets, where higher sentiment figures inevitably lead to a better
-consensus about the holders and subjects of the opinions and vice
-versa.  The same applies to the correlation between the emotional
-expressions and their modifiers. The latter elements, however, show
-generally lower scores apparently due to their smaller number in the
-corpus.
+The agreement results for the initial annotation stage computed with
+the two adjusted $\kappa$-metrics are shown in
+Table~\ref{tbl:snt:agrmnt-init}.
 
 \begin{table*}[thb!]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.35\tabcolsep} \scriptsize
-    \begin{tabular}{|p{0.1\textwidth}| % first columm
-        *{15}{>{\centering\arraybackslash}p{0.05\textwidth}|}} % next five columns
+    \bgroup \setlength\tabcolsep{0.7\tabcolsep} \scriptsize
+    \begin{tabular}{|p{0.15\textwidth}| % first columm
+        *{10}{>{\centering\arraybackslash}p{0.05\textwidth}|}} % next ten columns
       \hline
           \multirow{2}{0.2\textwidth}{\bfseries Element} &
-          \multicolumn{5}{c|}{Initial annotation} & %
-          \multicolumn{5}{c|}{Adjudication step} & %
-          \multicolumn{5}{c|}{Final corpus}\\\cline{2-16}
-          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
+          \multicolumn{5}{c|}{Binary $\kappa$} & %
+          \multicolumn{5}{c|}{Proportional $\kappa$}\\\cline{2-11}
           & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
           & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$\\\hline
 
-          \multicolumn{16}{|c|}{\cellcolor{cellcolor}Binary Kappa}\\\hline
-
           Sentiment & 4,215 & 7,070 & 3,484 & 9,827 & \textbf{38.05} &
-          %
-          8,198 & 8,530 & 8,260 & 14,034 & \textbf{67.92} &%
-          14,748 & 15,929 & 14,969 & 26,047 & \textbf{65.03}\\
-          Target & 1,103 & 1,943 & 1,217 & 4,162 & \textbf{35.48} & %
-          3,088 & 3,407 & 2,814 & 5,303 & \textbf{65.66} &%
-          5,765 & 6,629 & 5,292 & 9,852 & \textbf{64.76}\\
-          Source & 159 & 445 & 156 & 456 & \textbf{34.53} & %
-          573 & 690 & 545 & 837 & \textbf{72.91} & 966 & 1,207 & 910 & 1,619 & \textbf{65.99}\\
-          EExpression & 1,951 & 2,854 & 2,029 & 3,188 & \textbf{64.29} &%
-          3,164 & 3,298 & 3,261 & 4,134 & \textbf{85.68} & 5,574 & 5,989 & 5,659 & 7,419 & \textbf{82.83}\\
-          Intensifier & 57 & 101 & 59 & 123 & \textbf{51.71} &%
-          111 & 219 & 113 & 180 & \textbf{56.01} & 192 & 432 & 194 & 338 & \textbf{49.97}\\
-          Diminisher & 3 & 10 & 3 & 8 & \textbf{33.32} &%
-          9 & 16 & 10 & 16 & \textbf{59.37} & 16 & 30 & 17 & 34 & \textbf{51.55}\\
-          Negation & 21 & 63 & 21 & 83 & \textbf{28.69} &%
-          68 & 84 & 67 & 140 & \textbf{60.21} & 111 & 132 & 110 & 243 & \textbf{58.87}\\\hline
-
-          \multicolumn{16}{|c|}{\cellcolor{cellcolor}Proportional Kappa}\\\hline
-          Sentiment & 3,269 & 6,812 & 3,269 & 9,796 & \textbf{31.21} & %
-          7,435 & 8,243 & 7,435 & 13,714 & \textbf{61.94} & 13,316 & %
-          15,375 & 13,316 & 25,352 & \textbf{58.82}\\
-          Target & 898 & 1,905 & 898 & 4,148 & \textbf{26.85} & 2,554 %
-          & 3,326 & 2,554 & 5,212 & \textbf{57.27} & 4,789 & 6,462 & %
-          4,789 & 9,659 & \textbf{56.61}\\
-          Source & 153 & 439 & 153 & 456 & \textbf{33.75} & 539 & 676 & %
-          539 & 833 & \textbf{71.12} & 898 & 1,180 & 898 & 1,604 & \textbf{64.1}\\
-          EExpression & 1,902 & 2,851 & 1,902 & 3,180 & \textbf{61.36}
-          & %
-          3,097 & 3,290 & 3,097 & 4,121 & \textbf{82.64} & 5,441 & 5,977 & %
-          5,441 & 7,395 & \textbf{80.29}\\
-          Intensifier & 57 & 101 & 57 & 123 & \textbf{50.81} & %
-          111 & 219 & 111 & 180 & \textbf{55.51} & 192 & 432 & 192 & 338 & \textbf{49.71}\\
-          Diminisher & 3 & 10 & 3 & 8 & \textbf{33.32} & %
-          9 & 16 & 9 & 15 & \textbf{58.05} & 16 & 30 & 16 & 33 & \textbf{50.78}\\
-          Negation & 21 & 63 & 21 & 83 & \textbf{28.69} & %
-          67 & 83 & 67 & 140 & \textbf{60.03} & 110 & 131 & 110 & 242 & \textbf{58.92}\\\hline
+          3,269 & 6,812 & 3,269 & 9,796 & \textbf{31.21}\\
+          Target & 1,103 & 1,943 & 1,217 & 4,162 & \textbf{35.48} &
+          898 & 1,905 & 898 & 4,148 & \textbf{26.85}\\
+          Source & 159 & 445 & 156 & 456 & \textbf{34.53} &
+          153 & 439 & 153 & 456 & \textbf{33.75}\\
+          EExpression & 1,951 & 2,854 & 2,029 & 3,188 & \textbf{64.29} &
+          1,902 & 2,851 & 1,902 & 3,180 & \textbf{61.36}\\
+          Intensifier & 57 & 101 & 59 & 123 & \textbf{51.71} &
+          57 & 101 & 57 & 123 & \textbf{50.81}\\
+          Diminisher & 3 & 10 & 3 & 8 & \textbf{33.32} &
+          3 & 10 & 3 & 8 & \textbf{33.32}\\
+          Negation & 21 & 63 & 21 & 83 & \textbf{28.69} &
+          21 & 63 & 21 & 83 & \textbf{28.69}\\\hline
     \end{tabular}
     \egroup
   \end{center}
-  \captionof{table}{Inter-coder agreement at different annotation
-    stages.\\ {\small ($M1$ -- number of tokens with matching labels
-      in the first annotation, $A1$ -- total number of labeled
-      tokens in the first annotation, $M2$ -- number of tokens with
-      matching labels in the second annotation, $A2$ -- total number
-      of labeled tokens in the second annotation)}}
-  \label{tbl:snt:agrmnt}
+  \captionof{table}{Inter-annotator agreement after the initial annotation
+    stage.\\ {\small ($M1$ -- number of tokens with matching labels in
+      the first annotation, $A1$ -- total number of labeled tokens in
+      the first annotation, $M2$ -- number of tokens with matching
+      labels in the second annotation, $A2$ -- total number of labeled
+      tokens in the second annotation)}}
+  \label{tbl:snt:agrmnt-init}
 \end{table*}
+
+\begin{table*}[thb!]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.7\tabcolsep} \scriptsize
+    \begin{tabular}{|p{0.15\textwidth}| % first columm
+        *{10}{>{\centering\arraybackslash}p{0.05\textwidth}|}} % next ten columns
+      \hline
+          \multirow{2}{0.2\textwidth}{\bfseries Element} &
+          \multicolumn{5}{c|}{Binary $\kappa$} & %
+          \multicolumn{5}{c|}{Proportional $\kappa$}\\\cline{2-11}
+          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
+          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$\\\hline
+
+          Sentiment & 8,198 & 8,530 & 8,260 & 14,034 & \textbf{67.92} &
+          7,435 & 8,243 & 7,435 & 13,714 & \textbf{61.94}\\
+
+          Target & 3,088 & 3,407 & 2,814 & 5,303 & \textbf{65.66} &
+          2,554 & 3,326 & 2,554 & 5,212 & \textbf{57.27}\\
+
+          Source & 573 & 690 & 545 & 837 & \textbf{72.91} &
+          539 & 676 & 539 & 833 & \textbf{71.12}\\
+
+          EExpression & 3,164 & 3,298 & 3,261 & 4,134 & \textbf{85.68} &
+          3,097 & 3,290 & 3,097 & 4,121 & \textbf{82.64}\\
+
+          Intensifier & 111 & 219 & 113 & 180 & \textbf{56.01} &
+          111 & 219 & 111 & 180 & \textbf{55.51}\\
+
+          Diminisher & 9 & 16 & 10 & 16 & \textbf{59.37} &
+          9 & 16 & 9 & 15 & \textbf{58.05}\\
+
+          Negation & 68 & 84 & 67 & 140 & \textbf{60.21} &
+          67 & 83 & 67 & 140 & \textbf{60.03}\\\hline
+    \end{tabular}
+    \egroup
+  \end{center}
+  \captionof{table}{Inter-annotator agreement after the adjudication
+    step.\\ {\small ($M1$ -- number of tokens with matching labels in
+      the first annotation, $A1$ -- total number of labeled tokens in
+      the first annotation, $M2$ -- number of tokens with matching
+      labels in the second annotation, $A2$ -- total number of labeled
+      tokens in the second annotation)}}
+  \label{tbl:snt:agrmnt-adjud}
+\end{table*}
+
+\begin{table*}[thb!]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.7\tabcolsep} \scriptsize
+    \begin{tabular}{|p{0.15\textwidth}| % first columm
+        *{10}{>{\centering\arraybackslash}p{0.05\textwidth}|}} % next ten columns
+      \hline
+          \multirow{2}{0.2\textwidth}{\bfseries Element} &
+          \multicolumn{5}{c|}{Binary $\kappa$} & %
+          \multicolumn{5}{c|}{Proportional $\kappa$}\\\cline{2-11}
+          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
+          & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$\\\hline
+
+          Sentiment & 14,748 & 15,929 & 14,969 & 26,047 & \textbf{65.03} &
+          13,316 & 15,375 & 13,316 & 25,352 & \textbf{58.82}\\
+
+          Target & 5,765 & 6,629 & 5,292 & 9,852 & \textbf{64.76} &
+          4,789 & 6,462 & 4,789 & 9,659 & \textbf{56.61}\\
+
+          Source & 966 & 1,207 & 910 & 1,619 & \textbf{65.99} &
+          898 & 1,180 & 898 & 1,604 & \textbf{64.1}\\
+
+          EExpression & 5,574 & 5,989 & 5,659 & 7,419 & \textbf{82.83} &
+          5,441 & 5,977 & 5,441 & 7,395 & \textbf{80.29}\\
+
+          Intensifier & 192 & 432 & 194 & 338 & \textbf{49.97} & 192 &
+          432 & 192 & 338 & \textbf{49.71}\\
+
+          Diminisher & 16 & 30 & 17 & 34 & \textbf{51.55} & 16 & 30 &
+          16 & 33 & \textbf{50.78}\\
+
+          Negation & 111 & 132 & 110 & 243 & \textbf{58.87} & 110 &
+          131 & 110 & 242 & \textbf{58.92}\\\hline
+    \end{tabular}
+    \egroup
+  \end{center}
+  \captionof{table}{Inter-annotator agreement of the final
+    corpus.\\ {\small ($M1$ -- number of tokens with matching labels
+      in the first annotation, $A1$ -- total number of labeled tokens
+      in the first annotation, $M2$ -- number of tokens with matching
+      labels in the second annotation, $A2$ -- total number of labeled
+      tokens in the second annotation)}}
+  \label{tbl:snt:agrmnt-final}
+\end{table*}
+
+As can be seen from the table, the
+inter-rater reliability of sentiments strongly correlates with the
+inter-annotator agreement on sources and targets, where higher
+sentiment figures inevitably lead to a better consensus about the
+holders and subjects of the opinions and vice versa.  The same applies
+to the correlation between the emotional expressions and their
+modifiers. The latter elements, however, show generally lower scores
+apparently due to their smaller number in the corpus.
 
 Regarding the annotation stages, one can observe that the peak of the
 annotators' agreement is reached upon the adjudication.  Even though
