@@ -732,12 +732,12 @@ Two questions that arose during this computation, however, were
 {
 \renewcommand{\thesection}{\arabic{section}}
 \begin{example}\label{example:snt:iaa}
-\upshape \textup{\textcolor{red}{\bfseries Annotation 1:}}\\
-\sentiment{Mein Vater hasst \sentiment{dieses sch\"one Buch}.}\\
+\textcolor{red}{\textbf{Annotation 1:}}\\
+\upshape\sentiment{Mein Vater hasst \sentiment{dieses sch\"one Buch}.}\\
 \sentiment{\itshape My father hates \upshape\sentiment{\itshape this
     nice book\upshape}.}
 
-\noindent\textup{\textcolor{darkslateblue}{\bfseries Annotation 2:}}\\
+\noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation 2:}}\\
 Mein \sentiment{Vater hasst \sentiment{dieses sch\"one Buch}.}\\
 \itshape My \upshape\sentiment{\itshape{}father hates \upshape\sentiment{\itshape this
     nice book\upshape}.}
@@ -804,7 +804,7 @@ steps:
 \end{itemize}
 
 \subsection{Evaluation}\label{sec:eval}
-The agreement results for the initial annotation stage computed with
+The agreement results after the initial annotation stage computed with
 the two adjusted $\kappa$-metrics are shown in
 Table~\ref{tbl:snt:agrmnt-init}.
 
@@ -837,16 +837,64 @@ Table~\ref{tbl:snt:agrmnt-init}.
     \end{tabular}
     \egroup
   \end{center}
-  \captionof{table}{Inter-annotator agreement after the initial annotation
-    stage.\\ {\small ($M1$ -- number of tokens with matching labels in
-      the first annotation, $A1$ -- total number of labeled tokens in
-      the first annotation, $M2$ -- number of tokens with matching
-      labels in the second annotation, $A2$ -- total number of labeled
-      tokens in the second annotation)}}
+  \captionof{table}{Inter-annotator agreement after the initial
+    annotation stage.\\ {\small ($M1$ -- number of tokens with
+      matching labels in the first annotation, $A1$ -- total number of
+      tokens labeled with that class in the first annotation, $M2$ --
+      number of tokens with matching labels in the second annotation,
+      $A2$ -- total number of tokens labeled with that class in the
+      second annotation)}}
   \label{tbl:snt:agrmnt-init}
 \end{table*}
 
-\begin{table*}[thb!]
+As can be seen from the table, the inter-rater reliability of
+sentiments strongly correlates with the inter-annotator agreement on
+sources and targets, setting an upper bound for these elements in the
+binary kappa case.  With the proportional metric, however, the
+reliability of sources notably outperforms the respecitive figures for
+opinions and their subjects, reaching a total of $33.75\%$ while only
+amounting to $31.21\%$ and $26.85\%$ for the last two entities.  We
+explain this difference by the fact, that opinions' holders are
+typically expressed by pronouns, which rarely accept syntactic
+attributes and whose boundaries are therefore easier to determine.
+Sentiments and targets, on the other hand, are usually represented by
+discourse-level or syntactic constituents -- sentences or noun phrases
+-- and, even though the experts might agree on the presence of these
+elements more often (as suggested by the binary kappa measure),
+reaching a consensus about the exact boundaries of these entities
+turns out to be a challenging task despite an explicit clarification
+of this problem in the guidelines.  However, even with the binary
+metric, the agreement level for all opinion-level elements is
+significantly below the $40\%$ threshold, which means only a slight
+reliability according to the \citeauthor{Landis:77} scale
+\cite{Landis:77}.
+
+A different situation is observed for emotional expressions and their
+intensifiers though.  The inter-annotator agreement on these elements
+is above 60 and 50 percent respectively, for both variants of the
+proposed $\kappa$ metric.  Obviously, defining these entities as
+lexical units has significantly eased the task of determining their
+boundaries.  This effect becomes even more evident when looking at the
+diminishers and negations, where the $A$ and $M$ token scores are
+absolutely identical for both measures.  This means that there was no
+single case in the labeled data in which the annotation spans of these
+two elements were overlapping or disagreed on their boundaries once
+the annotators were at one about their presence.  Unortunately, due to
+a rather small number of these entities in our corpus -- with only 3
+cases of diminishers and 21 cases of negations -- the overall
+agreement on these elements is relatively small too, amounting to only
+$33.32\%$ and $28.69\%$.
+
+Since, these results were unacceptable for running further
+experiments, we decided to revise diverging annotations by letting our
+experts recheck each others' decisions.  To this end, we automatically
+determined conflicting labelings and highlighted them in the annotated
+\texttt{MMAX2} files.  Afterwards, the coders had to decide whether to
+ignore the highlighted discrepancies or to change ther own decisions.
+The results of this adjudication step are shown in
+Table~\ref{tbl:snt:agrmnt-adjud}.
+
+\begin{table*}[htb!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.7\tabcolsep} \scriptsize
     \begin{tabular}{|p{0.15\textwidth}| % first columm
@@ -889,6 +937,57 @@ Table~\ref{tbl:snt:agrmnt-init}.
       tokens in the second annotation)}}
   \label{tbl:snt:agrmnt-adjud}
 \end{table*}
+
+As can be seen from the table, this procedure has significantly
+improved the inter-rater reliability on all annotation levels.  For
+the opinion-constituting entities, the lowest scores (65.66\% and
+57.27\% with the binary and proportional metric respectively) are
+observed for targets.  Better figures (with up to 4.67\% and 13.85\%
+higher proportional scores) are obtained for sentiments and sources.
+The source elements, again, achieve the highest proportional ranks as
+compared to the other opinion-level entities.
+
+In general, however, we can see that the second annotator tended to
+label almost twice as many sentiments and targets as the first expert:
+the proportional $A_1$ scores of these two entities amount to 8,243
+and 3,326 respectively, whereas the corresponding $A_2$ figures run up
+to 13,714 and 5,212.  A better consistency in this regard is achieved
+by sources, where the number of the labeled words in the two
+annotations differs only by a factor of 1.2.
+
+Similar to the previous step, the highest agreement scores are
+attained by emotional expressions, whose annotators' reliability
+significantly outperforms the 80\% benchmark, achievening an almost
+perfect IAA level.  Interestingly enough, only 193 out of 3,290
+opinionated terms annotated by the first expert do not match the
+labelings of the second coder, who again tended to mark more elements
+in general than the first assistant.  Furthermore, the divergence
+between the binary and proportional scores for the emotional
+expressions only comes to 3.04\%, suggesting that the annotators could
+unproblematically determine the boundaries of these terms in most of
+the cases.
+
+Somewhat surprisingly, the agreement improvement on intensifiers was
+notably smaller than the reliability increases observed for sentiments
+and emotional expressions.  The resulting figures for the intensifying
+elements were, in fact, even worse than the scores attained by other
+modifiers -- diminishers and negations, though the opposite situation
+was seen after the first annotation run.  A closer look at the
+diverging cases has revealed the fact that the majority of these
+disagreements stemmed from a different treatment of exclamation marks:
+the first expert was skipping these entities during the annotation,
+whereas the second coder regarded them as valid intensifier cases.
+Nevertheless, even despite these diverging interpretations, the
+reliability of all labeled elements was above the $55\%$ threshold,
+reaching (and often surpassing) a moderate level of agreement.
+
+After ensuring an acceptable quality of the annotation, we finally let
+our experts label the remaining part of the data (in the first two
+stages, only one half of the corpus was presented to them).  In this
+step, the first assistant has annotated $78.8\%$ of the full dataset,
+whereas the second coder has analyzed all corpus files.  The agreement
+results of this stage computed on the the subset labeled by both
+experts are given in Table~\ref{tbl:snt:agrmnt-final}.
 
 \begin{table*}[thb!]
   \begin{center}
@@ -934,37 +1033,25 @@ Table~\ref{tbl:snt:agrmnt-init}.
   \label{tbl:snt:agrmnt-final}
 \end{table*}
 
-As can be seen from the table, the
-inter-rater reliability of sentiments strongly correlates with the
-inter-annotator agreement on sources and targets, where higher
-sentiment figures inevitably lead to a better consensus about the
-holders and subjects of the opinions and vice versa.  The same applies
-to the correlation between the emotional expressions and their
-modifiers. The latter elements, however, show generally lower scores
-apparently due to their smaller number in the corpus.
+This time, we can observe a slight decrease in the results: the
+proportional score for sentiments drops by $3.12\%$, whereas the
+reliability of sources deteriorates even more dramatically, sinking by
+$7.02\%$.  The smallest changes are noticed for targets, whose
+proportional rank loses only 0.66 percentage points, going down from
+$57.27\%$ after the adjudictaion step to $56.61\%$ in the final run.
+Unfortunately, despite this consistency, the target elements, again,
+show the lowest agreement figures among the opinion-level entities.
 
-Regarding the annotation stages, one can observe that the peak of the
-annotators' agreement is reached upon the adjudication.  Even though
-it decreases afterwards in the final step, this drop is not dramatic
-(typically amounting to only a couple of percentage points), and the
-average reliability is still almost two times better than the results
-obtained in the initial run.
+As before, the reliability of the emotional expressions is in the
+ballpark of almost perfect scores \cite[cf.][]{Landis:77}.  Their
+modifying elements, however, show a decrease: the agreement on
+intensifiers deteriorates by 5.8\% to 49.71\% proportional kappa.  A
+similar situation is observed for diminishers, whose $\kappa$ rank
+worsens from $58.05\%$ to $50.78\%$.  A more persistent quality is
+shown by negations, whose quality drop only amounts to $1.11\%$, which
+can be considered as a very good result, regarding the generally small
+number of these elements in our corpus.
 
-As to the different variants of the $\kappa$-measure, we clearly can
-see that the binary metric has a direct relation to the proportional
-$\kappa$.  The biggest difference between the two scores is noticed
-for sentiments and targets, reaching an average delta of
-$7.18^{\pm1.37}$ in the final annotation, whereas, for the rest of the
-elements, it only runs up to $1.1^{\pm1.07}$ percentage points.  We
-explain this divergence by the fact that opinions and their targets
-are typically expressed by syntactic or discourse units (nominal
-phrases or clauses), whose boundaries are difficult to determine
-exactly because of their possible adjuncts.  Sources, on the other
-hand, are most commonly represented by pronouns, which are much easier
-to spot as they usually lack any syntactic attributes.  The same claim
-is true for emotional expressions and their supplementary elements,
-which are explicitly defined in our guidelines as \emph{lexical}
-items, i.e., single words or clearly discernable idioms.
 
 A sample case of diverging sentiment annotations is provided in
 Example \ref{example:sent-disagr}.  As can be seen from the labels, the
