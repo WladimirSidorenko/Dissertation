@@ -92,8 +92,8 @@ enriched with additional messages, which we obtained from the
 University of M\"unster, who were concurrently working on related
 problems within the joint FMER project ``Discourse Analysis of Social
 Media''.  For sampling the fourth topic, we used the German Twitter
-snapshot of \citet{Scheffler:14}, which comprised $\approx97$ percent
-of German microblogs posted in April 2013.
+snapshot of \citet{Scheffler:14}, which comprised $\approx97\%$ of
+German microblogs posted in April 2013.
 
 This tracking procedure gave us a total of 27.4 M messages with the
 M\"unster corpus and Scheffler's collection being by far the most
@@ -209,9 +209,9 @@ proportion $\mu$ of such tweets is 76,69\%, and the standard deviation
 $\sigma$ from this proportion comes to 4.25\%.  The second biggest
 set, whose $\mu$ is equal to 20.5\% and $\sigma$ amounts to $4.62\%$,
 is that of microblogs containing emotional terms.  Finally, the group
-comprising messages with smileys but supposedly no polar terms is the
-smallest one for each topic.  The expected share of this group only
-attains $2.78\%$, deviating by $1.3\%$.
+comprising messages with smileys but supposedly no polar expressions
+is the smallest one for each topic.  The expected share of this group
+only attains $2.78\%$, deviating by $1.3\%$.
 
 %% Furthermore, as one also can observe, the relative proportions of the
 %% formal tweets for the federal elections and political discussions are
@@ -225,20 +225,20 @@ attains $2.78\%$, deviating by $1.3\%$.
 In order to generate our final corpus, we eventually chose 666 random
 messages from each of the three formal groups of each of the four
 subjects, getting a total of 7,992 microblogs: $666\text{ tweets}
-\times 4\text{ topics} \times 3\text{formal criteria}$.  Although this
-quota sampling admittedly violates the uniformity principle, which
-states that the analyzed instances have to be chosen uniformly from
-the whole population, we justify this with the wish to increase the
-recall of the phenomena in question and point out to the possibility
-of restoring the original distribution parameters by multiplying the
-resulting statistics with the proportion coefficients from
-Table~\ref{snt:tbl:corp:topic-bins}.
+\times 4\text{ topics} \times 3\text{ formal criteria}$.  Although
+this quota sampling admittedly violates the uniformity principle,
+which states that the analyzed instances have to be chosen uniformly
+from the whole population, we justify this with the wish to increase
+the recall of the phenomena in question and point out to the
+possibility of restoring the original distribution parameters by
+multiplying the resulting statistics with the proportion coefficients
+from Table~\ref{snt:tbl:corp:topic-bins}.
 
 \subsection{Annotation Scheme}\label{subsec:snt:ascheme}
 In the next step after collecting the raw data, we defined an
 annotation scheme for our corpus. Since our goal was to get a
 maximally full coverage of all sentiment-relevant aspects, we devised
-an extensive list of elements that had to be annotated by the experts.
+an extensive list of elements that had to be annotated by our experts.
 This list included:
 
 \begin{itemize}
@@ -248,7 +248,7 @@ This list included:
 
   According to this definition, three important constraints that a
   potential subjective statement had to satisfy in order to be labeled
-  as sentiment in our dataset were:
+  as a sentiment in our dataset were:
   \begin{inparaenum}[\itshape a\upshape)]
   \item \textit{polarity}, i.e., the statement in question had to
     reflect an either positive or negative attitude;
@@ -269,7 +269,7 @@ This list included:
       the traditional values for this attribute -- \emph{positive} and
       \emph{negative} -- but also considered \emph{comparison} as a
       separate polarity type, since comparative opinions typically
-      only showed relative preferences of the user but did not imply
+      only showed relative preferences of the user without implying
       her general fondness or reluctance to any of the juxtaposed
       objects;
     \item
@@ -391,7 +391,7 @@ polarity of evaluations.  These elements included:
 \item
   elements which increased the expressivity and polar sense of
   opinionated terms were specified as \textbf{intensifiers} in our
-  annotation scheme.  Typical examples of such expressions were
+  annotation guidelines.  Typical examples of such expressions were
   adverbial modifiers such as ``sehr'' (\emph{very}), ``super''
   (\emph{super}), ``stark'' (\emph{strongly}) etc.;
 
@@ -417,7 +417,7 @@ polarity of evaluations.  These elements included:
 
   The only attribute associated with this element was the mandatory
   link \emph{emo-expression-ref}, which had to point from the negation
-  in question to the emotional expression whose meaning was being
+  in question to the opinionated term whose meaning was being
   reversed.
 \end{itemize}
 
@@ -425,7 +425,7 @@ In contrast to opinion-level entities, which primarily encompassed
 syntactic or discourse-level units, emotional expressions and their
 modifiers were explicitly specified as lexical items.  Consequently,
 their text spans only had to include single words or discernable
-idioms, ignoring their possible syntactic adjuncts.
+idioms without their possible syntactic adjuncts.
 
 A complete example annotated with both sentiment- and term-level
 elements is shown below:
@@ -462,8 +462,9 @@ respective evaluation ``nicht sehr r\"uhmlich'' (\emph{not very
   laudable}).  The boundaries of these two elements -- sentiment and
 target -- are determined on the syntactic level, spanning the whole
 clause in the former case and encompassing the complete noun phrase
-for the latter element.  The polarity attribute of the opinion is set
-to \emph{negative}, and its intensity is specified as \emph{medium}.
+for the latter element.  The polarity attribute of the whole opinion
+is set to \emph{negative}, and its intensity is specified as
+\emph{medium}.
 
 The emotional expression ``r\"uhmlich'' (\emph{laudable}), its
 intensifier ``sehr'' (\emph{very}), and the negation ``nicht''
@@ -617,7 +618,7 @@ project consists of three main directories:
   \item\texttt{source/}, where we put the original untokenized
     microblogs;
 
-  \item and, finally,\texttt{style/}, which is the standard
+  \item and, finally, \texttt{style/}, which is the standard
     \texttt{MMAX} directory for storing default settings.
     %% }
   \end{itemize}
@@ -729,10 +730,8 @@ Two questions that arose during this computation, however, were
     sentiment spans agreed).
 \end{inparaenum}
 
-{
-\renewcommand{\thesection}{\arabic{section}}
 \begin{example}\label{example:snt:iaa}
-\textcolor{red}{\textbf{Annotation 1:}}\\
+\textcolor{red3}{\textbf{Annotation 1:}}\\
 \upshape\sentiment{Mein Vater hasst \sentiment{dieses sch\"one Buch}.}\\
 \sentiment{\itshape My father hates \upshape\sentiment{\itshape this
     nice book\upshape}.}
@@ -742,7 +741,6 @@ Mein \sentiment{Vater hasst \sentiment{dieses sch\"one Buch}.}\\
 \itshape My \upshape\sentiment{\itshape{}father hates \upshape\sentiment{\itshape this
     nice book\upshape}.}
 \end{example}
-}
 
 To address these issues, we introduced two separate agreement metrics:
 \emph{binary} and \emph{proportional} kappa.  With the former variant,
@@ -752,7 +750,7 @@ respectively in the above sample tweet) and considered all tokens
 belonging to the given annotation instance as matching if this span
 agreed on at least one token with the annotation from the other expert
 (i.e., $M_1$ and $M_2$ would have the same values as $A_1$ and $A_2$
-in that case).  With the latter metric, every labeled token was
+in this case).  With the latter metric, every labeled token was
 counted only once (i.e., the numbers of the labeled words in the first
 and second annotation would correspondingly be equal to $7$ and $6$),
 and we only calculated the actual number of tokens with matching
@@ -762,9 +760,10 @@ proportional kappa for Example~\ref{example:snt:iaa} would
 consequently run up to 1.0 and 0.0 respectively, since the binary
 metric would consider both annotations as perfectly matched because
 every labeled sentiment instance agreed on at least one token with the
-annotation from the other expert, whereas the proportional measure
+annotation from the other coder, whereas the proportional measure
 would stress the fact that the observed agreement $p_o$ was the same
-as the agreement by chance $p_c$ and therefore unreliable.
+as the agreement by chance $p_c$ and the whole labeling would
+therefore be deemed unreliable.
 
 \subsection{Annotation Procedure}\label{sec:astages}
 After setting up the agreement metrics, we finally let our experts
@@ -777,10 +776,10 @@ steps:
     sentiments (measured with binary $\kappa$) and being
     consequentially even lower for their corresponding targets and
     sources (amounting to 35.48 and 34.53\% respectively).  A notable
-    fact, however, is that the consensus about emotional expressions
-    at this time was notably higher, attaining 64.29\%, which,
-    according to \citet{Landis:77}, already suggested a substantial
-    result;
+    fact, however, is that the consensus about the emotional
+    expressions at this time was notably higher, attaining 64.29\%,
+    which, according to \citet{Landis:77}, already suggested a
+    substantial result;
   \item In the second step, in order to improve the inter-rater
     reliability, we automatically determined the differences between
     the two annotations, adding and highlighting unmatched elements as
@@ -879,18 +878,19 @@ diminishers and negations, where the $A$ and $M$ token scores are
 absolutely identical for both measures.  This means that there was no
 single case in the labeled data in which the annotation spans of these
 two elements were overlapping or disagreed on their boundaries once
-the annotators were at one about their presence.  Unortunately, due to
-a rather small number of these entities in our corpus -- with only 3
-cases of diminishers and 21 cases of negations -- the overall
+the annotators were at one about their presence.  Unfortunately, due
+to a rather small number of these entities in the corpus -- with only
+3 cases of diminishers and 21 cases of negations -- the overall
 agreement on these elements is relatively small too, amounting to only
 $33.32\%$ and $28.69\%$.
 
 Since, these results were unacceptable for running further
 experiments, we decided to revise diverging annotations by letting our
-experts recheck each others' decisions.  To this end, we automatically
-determined conflicting labelings and highlighted them in the annotated
-\texttt{MMAX2} files.  Afterwards, the coders had to decide whether to
-ignore the highlighted discrepancies or to change ther own decisions.
+experts recheck each others' decisions.
+%% To this end, we automatically determined conflicting labelings and
+%% highlighted them in the annotated \texttt{MMAX2} files.
+%% Afterwards, the coders had to decide whether to ignore the
+%% highlighted discrepancies or to change ther own decisions.
 The results of this adjudication step are shown in
 Table~\ref{tbl:snt:agrmnt-adjud}.
 
@@ -941,11 +941,11 @@ Table~\ref{tbl:snt:agrmnt-adjud}.
 As can be seen from the table, this procedure has significantly
 improved the inter-rater reliability on all annotation levels.  For
 the opinion-constituting entities, the lowest scores (65.66\% and
-57.27\% with the binary and proportional metric respectively) are
-observed for targets.  Better figures (with up to 4.67\% and 13.85\%
-higher proportional scores) are obtained for sentiments and sources.
-The source elements, again, achieve the highest proportional ranks as
-compared to the other opinion-level entities.
+57.27\% measured with the binary and proportional metric respectively)
+are observed for targets.  Better figures (with up to 4.67\% and
+13.85\% higher proportional scores) are obtained for sentiments and
+sources.  The source elements, again, achieve the highest proportional
+ranks as compared to the other opinion-level entities.
 
 In general, however, we can see that the second annotator tended to
 label almost twice as many sentiments and targets as the first expert:
@@ -955,39 +955,39 @@ to 13,714 and 5,212.  A better consistency in this regard is achieved
 by sources, where the number of the labeled words in the two
 annotations differs only by a factor of 1.2.
 
-Similar to the previous step, the highest agreement scores are
-attained by emotional expressions, whose annotators' reliability
-significantly outperforms the 80\% benchmark, achievening an almost
-perfect IAA level.  Interestingly enough, only 193 out of 3,290
-opinionated terms annotated by the first expert do not match the
-labelings of the second coder, who again tended to mark more elements
-in general than the first assistant.  Furthermore, the divergence
+As before, the highest agreement scores are attained by emotional
+expressions, whose annotators' reliability significantly outperforms
+the 80\% benchmark, achievening an almost perfect IAA level.
+Interestingly enough, only 193 out of 3,290 opinionated terms
+annotated by the first expert do not match the labelings of the second
+coder, who again tended to mark more elements in general than the
+first assistant.  Another notable observation is that the difference
 between the binary and proportional scores for the emotional
-expressions only comes to 3.04\%, suggesting that the annotators could
-unproblematically determine the boundaries of these terms in most of
-the cases.
+expressions only comes to 3.04\%, which suggests that the annotators
+could unproblematically determine the boundaries of these terms in
+most of the cases.
 
 Somewhat surprisingly, the agreement improvement on intensifiers was
-notably smaller than the reliability increases observed for sentiments
-and emotional expressions.  The resulting figures for the intensifying
-elements were, in fact, even worse than the scores attained by other
-modifiers -- diminishers and negations, though the opposite situation
-was seen after the first annotation run.  A closer look at the
-diverging cases has revealed the fact that the majority of these
-disagreements stemmed from a different treatment of exclamation marks:
-the first expert was skipping these entities during the annotation,
-whereas the second coder regarded them as valid intensifier cases.
-Nevertheless, even despite these diverging interpretations, the
-reliability of all labeled elements was above the $55\%$ threshold,
-reaching (and often surpassing) a moderate level of agreement.
+notably smaller than the reliability increases obtained for sentiments
+and opinionated expressions.  The resulting figures of the
+intensifying elements were, in fact, even worse than the scores
+attained by other modifiers -- diminishers and negations, though the
+opposite situation was seen after the first annotation run.  A closer
+look at the diverging cases has revealed the fact that the majority of
+these disagreements stemmed from a different treatment of exclamation
+marks: the first expert was skipping these entities during the
+annotation, whereas the second coder regarded them as valid
+intensifier cases.  Nevertheless, even despite these diverging
+interpretations, the reliability of all labeled elements was above the
+$55\%$ threshold, reaching (and often surpassing) a moderate level of
+agreement.
 
-After ensuring an acceptable quality of the annotation, we finally let
-our experts label the remaining part of the data (in the first two
-stages, only one half of the corpus was presented to them).  In this
-step, the first assistant has annotated $78.8\%$ of the full dataset,
-whereas the second coder has analyzed all corpus files.  The agreement
-results of this stage computed on the the subset labeled by both
-experts are given in Table~\ref{tbl:snt:agrmnt-final}.
+After ensuring that our annotators could reach an acceptable quality
+of coding, we finally let them label the remaining part of the data.
+In this step, the first assistant has annotated $78.8\%$ of the full
+dataset, whereas the second coder has analyzed the whole corpus.  The
+agreement results of this stage computed on the the subset of files
+labeled by both experts are given in Table~\ref{tbl:snt:agrmnt-final}.
 
 \begin{table*}[thb!]
   \begin{center}
@@ -1036,47 +1036,72 @@ experts are given in Table~\ref{tbl:snt:agrmnt-final}.
 This time, we can observe a slight decrease in the results: the
 proportional score for sentiments drops by $3.12\%$, whereas the
 reliability of sources deteriorates even more dramatically, sinking by
-$7.02\%$.  The smallest changes are noticed for targets, whose
+$7.02\%$.  The smallest changes are noticed on targets, whose
 proportional rank loses only 0.66 percentage points, going down from
-$57.27\%$ after the adjudictaion step to $56.61\%$ in the final run.
-Unfortunately, despite this consistency, the target elements, again,
-show the lowest agreement figures among the opinion-level entities.
+$57.27\%$ to $56.61\%$.  Unfortunately, despite this better
+consistency, the target elements, again, show the lowest agreement
+figures among the opinion-level entities.
 
-As before, the reliability of the emotional expressions is in the
-ballpark of almost perfect scores \cite[cf.][]{Landis:77}.  Their
-modifying elements, however, show a decrease: the agreement on
+Similar to the previous step, the reliability of emotional expressions
+is in the ballpark of almost perfect scores \cite[cf.][]{Landis:77}.
+Their modifying elements, however, show a decrease: the agreement on
 intensifiers deteriorates by 5.8\% to 49.71\% proportional kappa.  A
 similar situation is observed for diminishers, whose $\kappa$ rank
-worsens from $58.05\%$ to $50.78\%$.  A more persistent quality is
-shown by negations, whose quality drop only amounts to $1.11\%$, which
-can be considered as a very good result, regarding the generally small
-number of these elements in our corpus.
+worsens from $58.05\%$ to $50.78\%$.  The best persistence in this
+regard is shown by negations, whose quality drop only amounts to
+$1.11\%$, which can be considered as a very good result, regarding the
+generally small number of these elements in the dataset.
 
+In general, we can see that the agreement level of all elements in the
+final corpus is at least moderate, with emotional expressions being
+the most reliably labeled entities ($\kappa_{\textrm{p}}=80.29\%$) and
+intensifiers setting the lower boundary of the agreement scores
+($\kappa_{\textrm{p}}=49.71\%$).
 
 A sample case of diverging sentiment annotations is provided in
-Example \ref{example:sent-disagr}.  As can be seen from the labels, the
-second coder correctly interpreted the emoticon \emph{:)} at the end
-of the tweet as an evaluative expression with respect to the complete
-content of the sentence.  The first expert, on the other hand, stayed
-more conservative and did not regard this message as a sentiment case.
+Example \ref{snt:exmp:sent-disagr}.
+\begin{example}\label{snt:exmp:sent-disagr}
+  \textcolor{red3}{\textbf{Annotation 1:}}\\ \upshape{}@TinaPannes
+  immerhin ist die \#afd nicht dabei :)\\[0.8em]\itshape
+  \noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation
+      2:}}\\ \upshape{}@TinaPannes
+  \sentiment{\textcolor{red}{immerhin ist die \#afd nicht
+      dabei :)}}\\[0.8em]
+  \noindent\itshape{}@TinaPannes
+  \upshape\sentiment{\textcolor{red}{\itshape{}anyway the \#afd is
+      not there :)}\upshape{}}
+\end{example}
+As can be seen from the labels, the second coder correctly interpreted
+the emoticon \emph{:)} at the end of the tweet as a subjective
+statement which evaluated the content of the preceding sentence.  The
+first expert, however, stayed more conservative and did not regard
+this message as an opinion case.
 
-{
-  \renewcommand{\thesection}{\arabic{section}}
-  \begin{example}\label{example:sent-disagr}
-    \textbf{Annotator 1:}\\
-    \upshape{}@TinaPannes immerhin ist die \#afd nicht
-      dabei :)\\[0.8em]\itshape
-    \textbf{Annotator 2:}\\
-    \upshape{}@TinaPannes \sentiment{\textcolor{red}{immerhin ist die
-        \#afd nicht dabei :)}}\\[0.8em]
-    \noindent\itshape{}@TinaPannes
-    \upshape\sentiment{\textcolor{red}{\itshape{}anyway the \#afd is
-        not there :)}\upshape{}}
-  \end{example}
-}
+As we already noted previously, the situation when the second
+assistant annotated more elements than the first one was
+characteristic for all elements in the corpus, not only sentiments.
+Regarding emotional expressions, a particular difficulty to our
+annotators was caused by subjective facts, where the notions of our
+assistants disagreed once again.  An example of such diverging
+treatment is shown below:
 
-As confirmed by our statistics (cf. Table~\ref{tbl:snt:agrmnt}) and as
-also shown in Example~\ref{example:emo-disagr}, the second annotator
+\begin{example}\label{example:emo-disagr}
+  \textcolor{red3}{\textbf{Annotation 1:}}\\
+  \upshape{}Syrien vor der Angriff -- bringen diese Bomben den Frieden?\\[0.8em]\itshape
+  \noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation
+      2:}}\\
+  \upshape{}Syrien vor der \emoexpression{\textcolor{red}{Angriff}}
+  -- bringen diese \emoexpression{\textcolor{red}{Bomben}} den
+  \emoexpression{\textcolor{red}{Frieden}}?\\[0.3em]
+  \noindent\itshape{}Syria facing an
+  \upshape\emoexpression{\textcolor{red}{\itshape{}attack}\upshape}\itshape{}
+  -- will these
+  \upshape\emoexpression{\textcolor{red}{\itshape{}bombs}\upshape}\itshape{}
+  bring
+  \upshape\emoexpression{\textcolor{red}{\itshape{}peace}\upshape}\itshape{}?
+\end{example}
+
+As shown in Example~\ref{example:emo-disagr}, the second annotator
 generally preferred annotating more opinions and emotional expressions
 than the first one.  This also involved cases of emotionally connoted
 but non-evaluative terms mentioned previously. In the following
@@ -1084,24 +1109,6 @@ example, for instance, the second expert considered three polar facts
 (\emph{Angriff} ``attack'', \emph{Bombe} ``bomb'', and \emph{Frieden}
 ``peace'') as emotional expressions, whereas the first assistant did
 not include these words in his annotation.
-
-{ \renewcommand{\thesection}{\arabic{section}}
-  \begin{example}\label{example:emo-disagr}
-    \textbf{Annotator 1:}\\
-    \upshape{}Syrien vor der Angriff -- bringen diese Bomben den Frieden?\\[0.8em]\itshape
-    \textbf{Annotator 2:}\\
-    \upshape{}Syrien vor der \emoexpression{\textcolor{red}{Angriff}}
-    -- bringen diese \emoexpression{\textcolor{red}{Bomben}} den
-    \emoexpression{\textcolor{red}{Frieden}}?\\[0.8em]
-
-    \noindent\itshape{}Syria facing an
-    \upshape\emoexpression{\textcolor{red}{\itshape{}attack}\upshape}\itshape{}
-    -- will these
-    \upshape\emoexpression{\textcolor{red}{\itshape{}bombs}\upshape}\itshape{}
-    bring
-    \upshape\emoexpression{\textcolor{red}{\itshape{}peace}\upshape}\itshape{}?
-  \end{example}
-}
 
 This difference of interpretations is partially due to the
 adjudication procedure that we applied, because a closer analysis of
