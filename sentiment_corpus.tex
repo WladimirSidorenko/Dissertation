@@ -873,7 +873,7 @@ absolutely identical for both measures.  It means that there was no
 single case in the labeled dataset where the annotation spans of these
 two elements were overlapping or disagreed on their boundaries once
 the annotators were at one about their presence.  Unfortunately, due
-to a rather small number of these entities in the corpus -- with only
+to a rather small number of these entities in our corpus -- with only
 3 cases of diminishers and 21 cases of negations in total -- the
 overall agreement on these elements was relatively small too,
 amounting to only $33.32\%$ and $28.69\%$.
@@ -945,8 +945,8 @@ and $37.37\%$, running up to $57.27$ and $71.12$ percent respectively.
 
 In general, however, we can see that the second annotator tended to
 label almost twice as many sentiments and targets as the first expert:
-the proportional $A_1$ scores of these two entities come to 8,243 and
-3,326 tokens, whereas the corresponding $A_2$ figures amount up to
+the proportional $A_1$ scores of these two entity types come to 8,243
+and 3,326 tokens, whereas the corresponding $A_2$ figures amount up to
 13,714 and 5,212 words.  A better consistency in this regard is
 achieved by sources, where the number of the labeled items in both
 annotations differs only by a factor of 1.2.
@@ -967,15 +967,15 @@ Somewhat surprisingly, the agreement improvement on intensifiers was
 notably smaller than the reliability increases obtained for sentiments
 and polar terms.  The resulting figures of the intensifying elements
 were, in fact, even worse than the scores attained by other modifiers
--- diminishers and negations, though the opposite situation was seen
-after the first annotation run.  A closer look at the diverging cases
-revealed the fact that the majority of these disagreements stemmed
-from a different treatment of exclamation marks: the first expert had
-been skipping these entities during the annotation, whereas the second
-coder had regarded them as valid intensifier cases.  Nevertheless,
-even despite these diverging interpretations, the reliability on
-intensifying elements was above the $55\%$ threshold, reaching a
-moderate agreement level.
+-- diminishers and negations, even though the opposite situation was
+seen after the first annotation run.  A closer look at the diverging
+cases revealed the fact that the majority of these disagreements
+stemmed from a different treatment of exclamation marks: the first
+expert had been skipping these entities during the annotation, whereas
+the second coder had regarded them as valid intensifier cases.
+Nevertheless, even despite these diverging interpretations, the
+reliability on intensifying elements was above the $55\%$ threshold,
+reaching a moderate agreement level.
 
 After ensuring that our annotators could reach an acceptable quality
 of coding, we finally let them label the remaining part of the data.
@@ -1029,12 +1029,12 @@ both experts are given in Table~\ref{tbl:snt:agrmnt-final}.
 This time, we can observe a slight decrease of the results: the
 proportional score for sentiments drops by $3.12\%$, whereas the
 agreement figures for targets stay more persistent and lose only 0.66
-percents, going down from $57.27\%$ to $56.61\%$.  The most dramatic
+percent, going down from $57.27\%$ to $56.61\%$.  The most dramatic
 changes occur for sources, whose proportional value deteriorates by
 notable $7.02$ percentage points, sinking to $64.1\%$.  Nonetheless,
 the average proportional agreement of all these elements is around 60
 percent, which is almost twice as high as the mean reliability
-achieved after the first stage.
+achieved after the first step.
 
 As before, the scores of emotional expressions are in the ballpark of
 almost perfect results \cite[cf.][]{Landis:77}.  Their modifying
@@ -1042,69 +1042,110 @@ elements, however, show a decrease: the agreement on intensifiers
 deteriorates by 5.8\% to 49.71\% proportional kappa.  A similar
 situation is observed for diminishers, whose $\kappa$ rank worsens
 from $58.05\%$ to $50.78\%$.  The best persistence in this regard is
-shown by negations, whose quality drops only by $1.11\%$, which can be
-considered as a very good result, regarding the generally small number
-of these elements in our corpus.
+shown by negations, where the quality drops only by $1.11\%$, which
+can be considered as a very good result, regarding the generally small
+number of these elements in our corpus.
 
 In general, we can see that the reliability of all elements in the
-final corpus is at least moderate, with emotional expressions being
+final dataset is at least moderate, with emotional expressions being
 the most dependably labeled entities ($\kappa_{\textrm{p}}=80.29\%$)
 and intensifiers setting the lower boundary of the agreement scores
 ($\kappa_{\textrm{p}}=49.71\%$).
 
-After the quantitative evaluation of the annotations, we turned to a
-qualitative inspection of diverging cases.  A sample tweet with
-diverging sentiment analyses from the final corpus is shown below:
+With these figures in mind, we turned to a qualitative inspection of
+diverging cases.  In doing so, we first looked at disagreeing
+labelings of our experts, trying to understand the reasons for their
+different interpretations, and then analyzed the agreement on the
+attributes of the annotated items in order to see whether our
+assistants could similarly perceive the properties of the elements
+they were labeling.
+
+Below, we provide a couple of examples with contradicting analyses
+taken from our final corpus.  A sample sentence with diverging takes
+of sentiments is shown in the following message:
 \begin{example}\label{snt:exmp:sent-disagr}
   \textcolor{red3}{\textbf{Annotation 1:}}\\ \upshape{}@TinaPannes
-  immerhin ist die \#afd nicht dabei :)\\[0.8em]\itshape
+  immerhin ist die \#afd nicht dabei \smiley{}\\[0.8em]\itshape
   \noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation
       2:}}\\ \upshape{}@TinaPannes
   \sentiment{\textcolor{red}{immerhin ist die \#afd nicht
-      dabei :)}}\\[0.8em]
+      dabei \smiley{}}}\\[0.8em]
   \noindent\itshape{}@TinaPannes
   \upshape\sentiment{\textcolor{red}{\itshape{}anyway the \#afd is
-      not there :)}\upshape{}}
+      not there \smiley{}}\upshape{}}
 \end{example}
-As can be seen from the example, the first coder erroneously
-overlooked the emoticon \emph{:)} at the end of the tweet, whereas the
+As can be seen from this analysis, the first coder erroneously
+overlooked the emoticon \smiley{} at the end of the tweet, whereas the
 second expert correctly recognized this smiley as an evaluation of the
-content stated in the preceding clause.  Since the annotators had
-different opinions about the presence of a sentiment in this case,
-they trivially disagreed on the annotation of the target element too,
-which, in this case, was the verb phrase ``immerhin ist die \#afd
-nicht dabei'' (\emph{anyway the \#afd is not there}).  Alternatively,
-it also would be possible to consider the noun phrase ``die \#afd''
-(\emph{the \#afd}) as the object of the evaluation.  We, however,
-advised our annotators in the guidelines to be as specific as possible
-when determining the targets of the opinions. So, if an evaluation was
-related to a particular action performed by some agent, they had to
-label the pertaining verb phrase rather than the subject of the the
-evaluated clause.  This rule was supposed to help us distinguish
-targets in sentences such as ``immerhin hat die \#afd das Gesetz
-verabschiedet :)'' (\emph{anyway the \#afd has adopted this law :)})
-and ``immerhin hat die \#afd das Gesetz abgelehnt :)'' (\emph{anyway
-  the \#afd has rejected this law :)}), which are clearly related to
-two completely different events so that labeling the same target --
-``die \#afd'' (\emph{the \#afd}) -- would be unequivocally erroneous
-in this case.
+content set forth in the preceding clause.  Since our annotators had
+different opinions about the presence of a sentiment in this
+microblog, they trivially disagreed on the annotation of the target
+element too, which, in this case, was the verb phrase ``immerhin ist
+die \#afd nicht dabei'' (\emph{anyway the \#afd is not there}).
 
+Additionally, we should note that it also was possible to consider
+only the noun phrase ``die \#afd'' (\emph{the \#afd}) as the object of
+the evaluation in this message.  We, however, advised the assistants
+to be as specific as possible when determining the targets of the
+opinions. So, if a sentiment was related to a particular action
+performed by an agent (which, in this case, was the fact of afd's
+being somewhere) rather than the agent herself, they better had to
+label the complete verb phrase and not only the acting subject of that
+clause.  With this rule, we hoped to better distinguish targets in
+sentences like ``die Partei das Gesetz verabschiedet \smiley{}''
+(\emph{the party has adopted this law \smiley{}}) from the objects of
+evaluations in microblogs like ``die Partei das Gesetz abgelehnt
+\smiley{}'' (\emph{the party has rejected this law \smiley{}}), which
+were clearly describing two completely different events so that
+labeling the same target span, e.g., ``die Partei'' (\emph{the
+  party}), in both of these messages would be unequivocally wrong in
+that case.
 
-As we already noted previously, the situation when the second
-assistant annotated more elements than the first one was
-characteristic for all elements in the corpus, not only sentiments.
-Regarding emotional expressions, a particular difficulty to our
-annotators was caused by subjective facts, where the notions of our
-assistants disagreed once again.  An example of such diverging
-treatment is shown below:
+A much rarer case of diverging target annotations occurred when the
+experts actually agreed on the sentiment spans.  An example of such
+situation is shown in the following message:
+\begin{example}\label{snt:exmp:targt-disagr}
+  \textcolor{red3}{\textbf{Annotation
+      1:}}\\
+  \upshape{}\sentiment{Koalition wirft der SPD
+    \target{\textcolor{red}{Blockadehaltung}} vor}\\[0.5em]
+  \noindent\itshape{}\sentiment{Coalition accuses the SPD of
+    \target{\textcolor{red}{blocking politics}}}\\[0.6em]\itshape
 
-\begin{example}\label{example:emo-disagr}
-  \textcolor{red3}{\textbf{Annotation 1:}}\\
-  \upshape{}Syrien vor der Angriff -- bringen diese Bomben den Frieden?\\[0.8em]\itshape
   \noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation
       2:}}\\
-  \upshape{}Syrien vor der \emoexpression{\textcolor{red}{Angriff}}
-  -- bringen diese \emoexpression{\textcolor{red}{Bomben}} den
+  \upshape{}\sentiment{Koalition wirft \target{\textcolor{red}{der SPD}}
+    Blockadehaltung vor}\\[0.5em]
+  \noindent\itshape{}\sentiment{Coalition accuses
+    \target{\textcolor{red}{the SPD}} of blocking politics}
+\end{example}
+
+In this sentence, the first coder considered the reproached fact of
+\emph{blocking politics} as the evaluated object, whereas the second
+expert regarded the political party being accused of such behavior as
+the target of the sentiment.  In our opinion, both of these options
+were valid in this case and, ideally, two sentiments had to be labeled
+in this message: the one with the target ``Blockadehaltung''
+(\emph{blocking politics}) and another one with the target ``die SPD''
+(\emph{the SPD}).
+
+Even though our assistants were much more consistent when labeling
+emotional expressions than when analyzing opinion-level elements, we
+decided to have a look at diverging annotations of these entities too,
+in order to understand the reasons for the remaining conflicts.  A
+sample case of diverging interpretations of polar terms is shown in
+Example~\ref{snt:exmp:emo-disagr}
+
+\begin{example}\label{snt:exmp:emo-disagr}
+  \textcolor{red3}{\textbf{Annotation 1:}}\\ \upshape{}Syrien vor dem
+  Angriff -- bringen diese Bomben den Frieden?\\[0.3em]\itshape
+  \noindent\itshape{}Syria facing an attack -- will these bombs bring
+  peace?\\
+
+  \noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation
+      2:}}\\ \upshape{}Syrien vor dem
+  \emoexpression{\textcolor{red}{Angriff}} -- bringen diese
+  \emoexpression{\textcolor{red}{Bomben}} den
   \emoexpression{\textcolor{red}{Frieden}}?\\[0.3em]
   \noindent\itshape{}Syria facing an
   \upshape\emoexpression{\textcolor{red}{\itshape{}attack}\upshape}\itshape{}
@@ -1114,39 +1155,38 @@ treatment is shown below:
   \upshape\emoexpression{\textcolor{red}{\itshape{}peace}\upshape}\itshape{}?
 \end{example}
 
-As shown in Example~\ref{example:emo-disagr}, the second annotator
-generally preferred annotating more opinions and emotional expressions
-than the first one.  This also involved cases of emotionally connoted
-but non-evaluative terms mentioned previously. In the following
-example, for instance, the second expert considered three polar facts
-(\emph{Angriff} ``attack'', \emph{Bombe} ``bomb'', and \emph{Frieden}
-``peace'') as emotional expressions, whereas the first assistant did
-not include these words in his annotation.
+Apparently, in this sentence, the renowned subjective facts were the
+primary source of annotators' confusion: the first coder skipped the
+words ``Angriff'' (\emph{attack}), ``Bombe'' (\emph{bomb}), and
+``Frieden'' (\emph{peace}), whereas the second expert regarded them as
+valid opinionated terms.  Even though our original guidelines were
+underspecified in this case (we only imposed the subjectivity
+constraint on sentiments), in our later experiments
+(cf.~Section~\ref{sec:snt:lex}), labeling such items turned out to be
+a better solution when comparing the corpus annotation with the
+existing sentiment lexica.
 
-This difference of interpretations is partially due to the
-adjudication procedure that we applied, because a closer analysis of
-these cases revealed that, at the initial stage, our experts had had
-opposite preferences regarding the non-evaluative polar terms (viz.,
-the first annotator had typically annotated them, whereas the second
-coder had usually skipped these entities).  During the adjudication,
-both assistants interpreted their decisions as false, and both changed
-their minds.  Even though the rest of their changes made in that step
-has still lead to significant improvements, the possibility of mutual
-concessions during adjudication needs to be kept in mind when applying
-this method in future.
+In addition, we should say that these different takes of subjective
+facts were also partially due to the adjudication procedure that we
+applied: a closer analysis of these cases revealed that, at the
+initial stage, our experts had had opposite preferences regarding the
+non-evaluative polar terms (viz., the first annotator had typically
+annotated them, whereas the second coder had usually skipped these
+words).  During the second annotations stage, both assistants
+interpreted their decisions as false, and both changed their minds.
+Even though the rest of their changes made in that step has still lead
+to significant improvements, the possibility of mutual concessions
+needs to be kept in mind when applying the adjudication method in
+future.
 
-Nevertheless, even despite these deviating annotation cases, polar
-terms are still the most reliably labeled entities, having an
-agreement of more than $80\%$, which means an almost perfect score
-according to the scale of \citet{Landis:77}.  The second best result
-(65.99\%) is attained by sources.  Intensifiers, on the other hand,
-show the lowest reliability (totaling 49.97 and 49.71\% when measured
-with the binary and proportional $\kappa$ respectively).  However,
-after manually inspecting these disagreements, we came to the
-conclusion that the prevailing majority of these differences could be
-explained by the simple fact that the second annotator had considered
-exclamation marks as intensifying elements, whereas the first expert
-had only marked pure lexical items with this tag.
+In order to see whether our experts also agreed on the attributes once
+they were at one about the elements, we additionally computed the
+Cohen's $\kappa$ and Krippendorff's $\alpha$ \cite{Krippendorff:07}
+for the polarities and intensities of agreeing opinions and polar
+expressions.  For estimating the latter term, we used the ordinal
+distance measure, interpreting weak, medium, and strong intensities as
+zero, one, and two respectively.  The results of these computations
+are shown in Table~\ref{tbl:attr-agrmnt}.
 
 \begin{table}[thb!]
   \begin{center}
@@ -1165,14 +1205,6 @@ had only marked pure lexical items with this tag.
     \label{tbl:attr-agrmnt}
   \end{center}
 \end{table}
-In order to see whether our experts also agreed on the attributes once
-they were at one about the elements, we additionally computed the
-Cohen's $\kappa$ and Krippendorff's $\alpha$ \cite{Krippendorff:07}
-for the polarities and intensities of agreeing opinions and polar
-expressions.  For estimating the latter term, we used the ordinal
-distance measure, interpreting weak, medium, and strong intensities as
-zero, one, and two respectively.  The results of these computations
-are shown in Table~\ref{tbl:attr-agrmnt}.
 
 \begin{figure*}[htbp!]
 {
