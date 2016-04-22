@@ -1158,38 +1158,38 @@ existing sentiment lexica.
 
 In addition, we should admit that these different takes of subjective
 facts were to some extent due to the adjudication procedure that we
-applied in step two: a closer analysis of these cases revealed that,
-at the initial stage, our experts had had opposite preferences
-regarding subjective facts (viz., the first annotator had typically
-annotated them, whereas the second coder had usually skipped these
-words).  During the revision run, however, both assistants interpreted
-their decisions as false, and both changed their minds.  Even though
-the rest of their changes made in that step has still lead to
-significant improvements, the possibility of mutual concessions needs
-to be kept in mind when applying the adjudication method in future.
+applied in step two of the annotation: a closer analysis of these
+cases revealed that, at the initial stage, our experts had had
+opposite preferences regarding subjective facts (viz., the first
+annotator had typically annotated them, whereas the second coder had
+usually skipped these words).  During the revision, however, both
+assistants interpreted their decisions as false, and both changed
+their minds.  Even though the rest of their changes made in that step
+has still lead to significant improvements, the possibility of mutual
+concessions needs to be kept in mind when applying the adjudication
+method in future.
 
 In order to see whether our experts also agreed on the attributes of
-the annotated items, we additionally computed the Cohen's $\kappa$ and
-Krippendorff's $\alpha$ \cite{Krippendorff:07} of the polarities and
-intensities of matching sentiments and emotional expressions.  The
-reason for choosing two different metrics to assess the quality of the
-agreement of these two elements, was that the polarity feature was a
-binary attribute so that it only sufficed to estimate whether its
-values were equal or not.  Intensity, on the other hand, was a
-categorial trait with its values were ranging from weak (0) to strong
-(2) and, therefore, disagreements which were far apart had to be
-penalized more than divergencies that were nearby.
-
-For estimating the latter term, we used the ordinal distance measure,
-interpreting weak, medium, and strong intensities as zero, one, and
-two respectively.  The results of these computations are shown in
-Table~\ref{tbl:attr-agrmnt}.
+the items they labeled, we additionally computed the Cohen's $\kappa$-
+and Krippendorff's $\alpha$-metrics \cite{Krippendorff:07} on the
+polarities and intensities of matching sentiments and emotional
+expressions.  The reason for choosing two different measures to assess
+the annotation quality of these features was that the polarity was a
+binary attribute, for which it only sufficed to estimate the number of
+cases where its values were equal -- therefore, we applied the
+$\kappa$-coefficient to estimate its reliability.  Intensity, on the
+other hand, was a categorial trait whose values were ranging from zero
+(weak) to two (strong).  Since disagreements which were far apart on
+the scale were to be penalized more than divergencies which were close
+to each other, we opted for the Krippendorff's $\alpha$-metric as it
+allowed for making such distinctions.  The results of these
+computations are shown in Table~\ref{tbl:attr-agrmnt}.
 
 \begin{table}[thb!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.47\tabcolsep} \scriptsize
-    \begin{tabular}{|p{0.33\columnwidth}|%
-          *{2}{>{\centering\arraybackslash}p{0.3\columnwidth}|}} % next five columns
+    \begin{tabular}{|p{0.23\columnwidth}|%
+          *{2}{>{\centering\arraybackslash}p{0.2\columnwidth}|}} % next five columns
       \hline
           {\bfseries Element} & Polarity $\kappa$ & Intensity $\alpha$\\\hline
           Sentiment & 58.8 & 73.54\\
@@ -1202,6 +1202,41 @@ Table~\ref{tbl:attr-agrmnt}.
     \label{tbl:attr-agrmnt}
   \end{center}
 \end{table}
+
+As can be seen from the scores, reaching a consensus about the
+polarities of emotional terms was much easier than agreeing on the
+value of this attribute for complete sentiments.  Similar to
+Example~\ref{snt:exmp:sent-disagr}, one of the main reasons for these
+disagreements were subjective opinions containing smileys, especially
+in cases when the polarity of the emoticon contradicted the polarity
+of its preceding sentence, e.g., ``Ich hasse die Piratenpartei
+\smiley{}'' (\emph{I hate the Pirate Party {\upshape \smiley{}}}).
+
+Interestingly enough, the ordinal inter-rater agreement on the
+intensities of sentiments ($\alpha = 73.54$) is notably higher than
+the corresponding figures for the binary reliability of their
+polarities ($\kappa = 58.8$).  The opposite situation is observed for
+the emotional expressions though: the $\alpha$-value for the
+intensities of these items ($78.79$) is almost ten percent lower than
+the corresponding $\kappa$-results for their binary polarities
+(87.12).
+
+For the sake of completeness, we also compared these figures with the
+scores obtained on the MPQA corpus \cite[cf.][pp. 38, 80]{Wilson:07}.
+The average $\alpha$-agreement on the intensity of direct subjective
+and objective speech events (a rough counterpart of our sentiments) on
+this dataset was around 79\%.  The corresponding results for the
+intensity of expressive subjective elements (emotional expressions in
+our case) were much worse though, only amounting to 46\%, even though
+the respective $\kappa$-value for their polarity attained considerable
+72\%.  It means that the reliability results of our corpus
+outperformed all but the sentiment intensity scores of MPQA.  We
+should, however, note that the annotation scheme used for the latter
+dataset did not provide a specific attribute for the polarity of
+sentiments, but specified the polarity of opinionated terms as
+contextual valence, i.e., polarity of the respective term after
+possible modifications from the context, instead.
+
 
 \begin{figure*}[htbp!]
 {
@@ -1238,16 +1273,6 @@ Table~\ref{tbl:attr-agrmnt}.
 \caption{Inter-annotators agreement on sentiments and emotional
   expressions across topics and formal categories.}\label{fig:distr}
 \end{figure*}
-
-As can be seen from the scores, reaching a consensus about the
-polarities of emotional terms was much easier than agreeing on the
-value of this attribute for complete opinions.  Similar to
-Example~\ref{example:sent-disagr}, one of the main reasons for these
-disagreements were subjective opinions containing smileys, especially
-in the cases when the polarity of the emoticon contradicted the
-polarity of its preceding sentence, e.g., ``Ich hasse die
-Piratenpartei \smiley{}'' (\emph{I hate the Pirate Party {\upshape
-    \smiley{}}}).
 
 Finally, to check how the selection criteria that we applied initially
 for sampling our corpus affected the final distribution of sentiments
