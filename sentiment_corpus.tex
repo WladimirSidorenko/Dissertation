@@ -12,7 +12,7 @@
 \section{Sentiment Corpus}\label{sec:snt:corpus}
 
 A crucial prerequisite for proving or disproving any hypotheses in
-computational liguistics is the existence of sufficiently big manually
+computational linguistics is the existence of sufficiently big manually
 labeled data for the targeted domain, on which the made conjectures
 could be tested.  Since there was no corresponding manually annotated
 sentiment corpus for German Twitter that we were aware of at the time
@@ -146,12 +146,12 @@ inflection forms of its entries.
 Since no polar lexicon, however, was guaranteed to provide for the
 full coverage of opinionated expressions and, moreover, because
 Twitter users were renowned for their creativity in instantly
-inventing new language forms \cite{Eisenstein:13}, we also applied a
-bail-out approach by separately collecting messages which did not have
-any lexicon terms but did contain a smiley or exclamation point.  Our
-assumption was that either these elements alone would suffice to
-express subjective opinions or that they would reinforce the meaning
-of some accidentally missed polar words.
+inventing new language forms \cite[cf.][]{Eisenstein:13}, we also
+applied a bail-out approach by separately collecting messages which
+did not have any lexicon terms but did contain a smiley or exclamation
+point.  Our assumption was that either these elements alone would
+suffice to express subjective opinions or that they would reinforce
+the meaning of some accidentally missed polar words.
 
 Finally, as we did not make any hypotheses about the distribution of
 sentiments in the rest of the tweets, we allocated all remaining
@@ -224,8 +224,8 @@ subjects, getting a total of 7,992 microblogs: $666\text{ tweets}
 \times 4\text{ topics} \times 3\text{ formal criteria}$.  Although
 this quota sampling admittedly violates the uniformity principle,
 which states that the analyzed instances have to be chosen uniformly
-from the whole population, we justify this with the wish to increase
-the recall of the phenomena in question and point out to the
+at random from the whole population, we justify this with the wish to
+increase the recall of the phenomena in question and point out to the
 possibility of restoring the original distribution parameters by
 multiplying the resulting statistics with the proportion coefficients
 from Table~\ref{snt:tbl:corp:topic-bins}.
@@ -263,13 +263,13 @@ that had to be annotated by our experts.  This list included:
       \citet{Jindal:06a,Jindal:06b}, we not only distinguished between
       the traditional values for this attribute -- \emph{positive} and
       \emph{negative} -- but also considered \emph{comparison} as a
-      separate polarity type, since comparative opinions typically
+      separate polarity type, since comparative sentiments typically
       only showed relative preferences of the user without implying
       her general fondness or reluctance to any of the juxtaposed
       objects;
     \item
       \emph{intensity}, which showed the emotional strength of the
-      expressed sentiment.  Possible values for this property were:
+      expressed opinion.  Possible values for this property were:
       \emph{weak}, \emph{medium}, and \emph{strong};
     \item
       finally, following \citet{Bosco:13} and \citet{Rosenthal:14}, we
@@ -286,8 +286,8 @@ that had to be annotated by our experts.  This list included:
   \begin{itemize}
     \item
       the boolean property \emph{preferred}, which was used in
-      comparative opinions to distinguish between favored objects and
-      the rest of the entities being compared;
+      comparative sentiments to distinguish between favored objects
+      and the rest of the entities being compared;
     \item
       the link attribute \emph{anaphref}, which was used for
       pronominal targets and had to point to the respective
@@ -296,12 +296,12 @@ that had to be annotated by our experts.  This list included:
       opinion mining);
     \item
       and, finally, another edge feature -- \emph{sentiment-ref} --
-      which had to be drawn from a target to its respective sentiment
-      in cases when the target element was located outside of its
-      opinion or on the intersection of two sentiment spans.  This
+      which had to be drawn from a target to its respective opinion in
+      cases when the target element was located outside of its
+      sentiment or on the intersection of two opinion spans.  This
       attribute was to help us disambiguate the assignment of the
       evaluated objects to their pertaining appraisals when this
-      association was not immediately obvious from the immediate
+      association was not immediately obvious from the surrounding
       context;
   \end{itemize}
 
@@ -572,7 +572,7 @@ the human coders, and how these elements had to look like.
 The resulting folder hierarchy of our dataset is shown in Figure
 \ref{fig:snt:corpus}.
 
-As can be seen from the listing, the top-level level structure of our
+As can be seen from this listing, the top-level level structure of our
 project consists of three main directories:
   \begin{itemize}
   \item\texttt{corpus/}, which includes the actual annotation data;
@@ -741,24 +741,24 @@ To address these issues, we introduced two separate agreement metrics:
 \emph{binary} and \emph{proportional} kappa.  With the former variant,
 we counted tokens belonging to multiple eponymous annotation spans
 multiple times (i.e., $A_1$ and $A_2$ would amount to $10$ and $9$
-respectively in the above sample tweet) and considered all tokens
-belonging to the given annotation instance as matching if this span
-agreed on at least one token with the annotation from the other expert
-(i.e., $M_1$ and $M_2$ would have the same values as $A_1$ and $A_2$
-in this case).  With the latter metric, every labeled token was
-counted only once (i.e., the numbers of the labeled words in the first
-and second annotation would correspondingly run up to $7$ and $6$),
-and we only calculated the actual number of tokens with matching
-labels when computing the $M$ scores (i.e., both $M_1$ and $M_2$ would
-come to $6$ with this metric).  The final values of the binary and
-proportional kappa for Example~\ref{example:snt:iaa} would
-consequently be equal to 1.0 and 0.0 respectively, since the binary
-metric would consider both annotations as perfectly matched because
-every labeled sentiment instance agreed on at least one token with the
-annotation from the other coder, whereas the proportional measure
-would stress the fact that the observed agreement $p_o$ was the same
-as the agreement by chance $p_c$ and the whole labeling would
-therefore be deemed unreliable.
+respectively in the above tweet) and considered all tokens belonging
+to the given annotation instance as matching if this span agreed on at
+least one token with the annotation from the other expert (i.e., $M_1$
+and $M_2$ would have the same values as $A_1$ and $A_2$ in this case).
+With the latter metric, every labeled token was counted only once
+(i.e., the numbers of the labeled words in the first and second
+annotation would correspondingly run up to $7$ and $6$), and we only
+calculated the actual number of tokens with matching labels when
+computing the $M$ scores (i.e., both $M_1$ and $M_2$ would come to $6$
+with this metric).  The final values of the binary and proportional
+kappa for Example~\ref{example:snt:iaa} would consequently be equal to
+1.0 and 0.0 respectively, since the binary metric would consider both
+annotations as perfectly matched because every labeled sentiment
+instance agreed on at least one token with the annotation from the
+other coder, whereas the proportional measure would stress the fact
+that the observed agreement $p_o$ was the same as the agreement by
+chance $p_c$ and the whole labeling would therefore be deemed
+unreliable.
 
 \subsection{Annotation Procedure}\label{sec:astages}
 After setting up the agreement metrics, we finally let our experts
@@ -932,8 +932,8 @@ improved the inter-rater reliability on all annotation levels: the
 binary scores of sentiments and targets have increased by $29.87\%$
 and $30.18\%$ respectively.  An even greater improvement occurs for
 sources, whose binary kappa has risen by remarkable $38.38\%$.  A
-similar tendency can be observed in terms of the proportional metric:
-here, the agreement on sentiments has gained 30.73 percentage points,
+similar tendency can be observed for the proportional metric: here,
+the agreement on sentiments has gained 30.73 percentage points,
 reaching $61.94\%$.  Likewise, the reliability of opinion subjects and
 holders has improved by $30.42\%$ and $37.37\%$, running up to $57.27$
 and $71.12$ percent respectively.
@@ -948,7 +948,7 @@ in both annotations differs only by a factor of 1.2.
 
 As in the previous step, the highest agreement scores are attained by
 emotional expressions, whose reliability significantly surpasses the
-80\% benchmark, achievening an almost perfect level.  Interestingly
+80\% benchmark, achieving an almost perfect level.  Interestingly
 enough, only 193 out of 3,290 opinionated terms annotated by the first
 expert did not match the labelings of the second coder, who again
 tended to mark generally more elements than the first assistant.
@@ -1176,7 +1176,7 @@ cases where its values were equal.  Therefore, we applied the
 $\kappa$-coefficient to estimate its reliability.  Intensity, on the
 other hand, was a categorial trait whose values were ranging from zero
 (weak) to two (strong).  Since disagreements which were far apart on
-the scale were to be penalized more than close divergencies, we opted
+the scale were to be penalized more than close divergences, we opted
 for the Krippendorff's $\alpha$-metric as it by default allowed for
 such distinctions.  The results of these computations are shown in
 Table~\ref{tbl:attr-agrmnt}.
@@ -1229,7 +1229,7 @@ the respective $\kappa$-value of their polarity attained considerable
 outperformed all but the sentiment intensity scores of MPQA.  We
 should, however, note that the annotation scheme used for the latter
 dataset did not provide a specific attribute for the polarity of
-sentiments, specifiying the polarity of opinionated terms as their
+sentiments, specifying the polarity of opinionated terms as their
 contextual valence instead, i.e., the polarity of the respective terms
 with their possible modifications from the surrounding context.
 
@@ -1378,7 +1378,7 @@ reach remarkable 0.452 and 0.615 points.
 In general, we can say that, to a greater or lesser extent, virtually
 every annotation aspect of the resulting corpus except for the
 sentiment agreement is correlated with the topic or form of the tweets
-being analyzed.  As to the reliability of sentiments, we hypothesize
+being labeled.  As to the reliability of sentiments, we hypothesize
 that the mere task of recognizing subjective opinions in microblogs
 was so challenging to the human experts (which was also confirmed by
 our initial annotation experiments) that the difficulties with
@@ -1388,7 +1388,7 @@ and posed much bigger problems to the coders than the particular
 specifics of topical and formal groups.
 
 Notwithstanding the last fact, the agreement scores achieved in the
-last stage and the rest of the statstics presented in this chapter
+last stage and the rest of the statistics presented in this section
 suggest that our assistants could eventually agree not only on the
 boundaries of sentiment elements but also on the text spans of their
 respective sources and targets as well as pertaining opinionated
@@ -1404,39 +1404,40 @@ final composition and agreement level of the final corpus.
 As we already mentioned in the previous section, most of today's
 resources for sentiment analysis on Twitter have been either created
 fully automatically or obtained in a semi-supervised way.  In this
-category fall the popular datasets of \citet{Go:09},
+category also fall the popular datasets of \citet{Go:09},
 \citet{Barbosa:10} as well as \citet{Pak:10}, whose message-polarity
-labels were obtained either using the emoticons contained in the
+labels were obtained either based on the emoticons contained in the
 downloaded messages or taking the majority vote of third-party opinion
 mining solutions.  Even though these corpora represent valuable
-sources for developing new classification systems, the possibility of
-using these data for training is only due to the large size of the
-collections rather than the quality of their annotations.  Moreover,
-the coarse-grained nature of the annotation scheme and the inherent
-noisiness of the labels prevents researchers from properly analyzing
-linguistic phenomena in those tweets.
+sources for developing new classifiers, the possibility of using these
+data for training is only due to the large size of the collections
+rather than the quality of their annotations.  Moreover, the
+coarse-grained nature of the annotation schemes and the inherent
+noisiness of the labels prevents the researchers from properly
+analyzing linguistic phenomena in these collections.
 
 A notable exception to these works constitutes the SemEval dataset of
-\citet{Nakov:13} -- a collection of 15,000 microblogs which were
-manually analyzed by human experts on the Amazon Mechanical Turk
-platform.  Even though this corpus is one of the biggest manually
-labeled tweet collections to date, its data still have some potential
-drawbacks: First of all, all messages included in this tweebank were
-prefiltered through the SentiWordNet lexicon~\cite{Esuli:06b}, leaving
-out tweets which did not contain any terms from this resource.  As
-confirmed by the evalaution part of this sections, introducing such
-bias in the corpus might significantly skew the resulting
-distribution.  Furthermore, the annotation scheme used for this set
-only accounts for the polarity of single lexical items or complete
-messages, losing valuable information about objects of evaluation,
-opinion holders, and modifying elements of opinion expressions.
+\citet{Nakov:13} -- a set of 15,000 microblogs which were manually
+analyzed by human experts on the Amazon Mechanical Turk platform.
+Even though this corpus is one of the biggest manually labeled tweet
+collections to date, its data still have some potential drawbacks:
+First of all, all messages included in this tweebank were prefiltered
+through the SentiWordNet lexicon~\cite{Esuli:06b}, leaving out tweets
+which did not contain any terms from this resource.  As shown in the
+evaluation part of this section, introducing such bias in the sampled
+data might significantly affect the resulting distribution, omitting
+many relevant phenomena of interest.  Furthermore, the annotations of
+this dataset only provide information about the polarity of single
+lexical items or complete microblogs, losing valuable details about
+targets, holders of opinions, and compositionality effects of
+modifying elements.
 
-This problematic situation becomes even more difficult when speaking
-about sentiment resources for non-English languages.  A few attempts
-at creating opnion corpora for Twitter that we are aware of are the
-sentiment subset of the TWITA corpus \cite{Basile:13} and the
-Senti-TUT corpus of \citet{Bosco:13} created for Italian, as well as
-the TASS shared task data \cite{Villena-Roman:13} developed for
+This scarceness of suitable resources becomes even more aggravated
+when speaking about Twitter corpora for non-English languages.  A few
+attempts at creating opinion datasets for microblogs that we are aware
+of are the sentiment subset of the TWITA corpus \cite{Basile:13} and
+the Senti-TUT corpus of \citet{Bosco:13} created for Italian, as well
+as the TASS shared task data \cite{Villena-Roman:13} developed for
 Spanish.
 
 The TWITA collection was used to create a smaller subset of 2,000
@@ -1444,11 +1445,10 @@ tweets, which were subsequently manually labeled with their
 message-level polarities by three human coders.  The Senti-TUT
 tweebank comprises 3,288 microblogs pertaining to the election of
 Mario Monti and 1,159 messages obtained from the Twitter section of
-the popular Italian web portal
-{\footnotesize\url{http://www.spinoza.it}}, which were labeled by five
-annotators with the following message-level sentiment classes:
+the popular Italian web portal \url{http://www.spinoza.it}, which were
+labeled by five annotators with the message-level polarity classes:
 positive, negative, ironic, mixed, or none.  A different set of
-polarity categories (viz., strong negative, negative, neutral,
+sentiment valences (viz., strong negative, negative, neutral,
 positive, and strong positive) was used for 70,000 messages of the
 Spanish TASS corpus.
 
@@ -1461,54 +1461,115 @@ translated into English and annotated with 12 psychological categories
 emotions, sadness, anxiety, anger, etc.) using the LIWC program
 \cite[Linguistic Inquiry and Word Count;][]{Pannebaker:07}.
 
-That way, we can see that our presented corpus makes a valuable
-contribution to the ecosystem of sentiment analysis data, not only
-filling the gap of missing manual Twitter corpora with rich annotation
-schemes but also providing a unique resource for developing new
-opinion mining systems for German social media texts.  A detailed
-inter-annotator agreement study proesented in this section proves that
-our experts have reliably annotated the sentiment phenomena in
-question.  Furthermore, a detailed breakdown of different topical and
-formal tweet categories unequivocally shows which groups are more
-likely to contain evaluative subjective judgements and which of these
-judgements might be more difficult to agree on than the others.
+In this regard, our presented corpus makes a valuable contribution to
+the ecosystem of sentiment analysis data, not only filling the gap of
+missing manual Twitter corpora with rich annotation schemes but also
+providing a unique resource for developing new opinion mining systems
+for German.  %% A detailed inter-annotator agreement study proesented
+%% in this section proves that our experts could reliably annotate the
+%% sentiment phenomena in question.  Furthermore, a detailed breakdown
+%% of different topical and formal tweet categories unequivocally
+%% shows which groups are more likely to contain evaluative subjective
+%% judgements and which of these judgements might be more difficult to
+%% agree on than the others.
 
 \subsection{Summary and Conclusion}
-Summarizing all of the above, we want to remind the reader that in
-this chapter we have presented a comprehensive corpus of 7,996 German
-tweets that had been annotated by two human experts with fine-grained
-opinion relations.
+Summarizing all of the above, we want to remind the reader that, in
+this section, we have presented a comprehensive corpus of 7,996 German
+tweets which had been manually annotated by two human experts with
+fine-grained opinion relations.
 
-To collect the initial raw data for this dataset, we have been
-tracking tweets pertaining to the German federal elections 2013, papal
-conclave as well as general political topics and casual everyday
-conversations.
+To collect the initial raw data for our dataset, we were tracking
+microblogs pertaining to the German federal elections, papal conclave,
+discussions of general political topics, and casual everyday
+conversations among users between spring and autumn 2013.  From these
+messages, we generated groups of microblogs containing polar terms,
+emoticons, and none of these entities, sampling in the end 666 posts
+from each of these categories for each of the four topics.
 
-A detailed annotation scheme we devised for this corpus featured such
-opinion-specific elements as sentiment text spans as well as text
-spans of opinion targets and holders.  In addition to that, our
-experts also had to annotate polar lexical items (emotional
-expressions) and modifying elemnts (intensifiers, diminishers, and
-negations) that could significantly change the intensity and polarity
-of these terms.  With all of these elements, we have associated
-extensive sets of attributes, such as polarity, intensity, sarcasm
-etc.
+A rich annotation scheme used for our dataset featured such
+sentiment-relevant elements as opinion spans, text spans of their
+respective sources and targets, emotionally laden terms with their
+possible contextual negations and modifiers.  With all of these
+elements, we associated extensive sets of attributes, such as
+polarity, intensity, sarcasm etc., whose values also were to be
+specified by our experts during the labeling.
 
-The annotation procedure itself was carried out in three steps: first,
+The annotation process itself was carried out in three steps: first,
 we let the coders label one half of the data after only minimal
-training; second, to improve the inter-annotator agreement, we
+training; second, to improve the inter-coder reliability, we
 automatically highlighted the differences in the analysis and asked
-our assistants to resolve these confilcts; finally, in the last stage,
-our experts proceeded with the annotation of the full corpus keeping
-their high level of mutual agreement.
+the assistants to resolve these conflicts; finally, in the last stage,
+our experts proceeded with the annotation of the full corpus, staying
+at a relatively high level of mutual agreement.
 
-To estimate the inter-rater reliability of our assistants, we
-introduced two modified versions of the established Cohen's
-$\kappa$-metric -- binary and proportional kappa -- which differed in
-the way of treating double and overlapping annotations.  With these
-two measures, we computated the inter-annotator agreement of our
-experts at different stages of their work.
+To estimate the inter-rater reliability of the labels, we introduced
+two modified versions of the established Cohen's $\kappa$-metric --
+binary and proportional kappa -- which differed in the way of treating
+double and overlapping annotations.  With these two measures, we
+computed the inter-annotator agreement of our coders at different
+stages of their work on the data.
 
-This study showed that
+An extensive IAA study presented in the final part of this section
+showed that, initially, the experts had had major difficulties to
+agree on the mere notion of subjective evaluative judgements.
+Consequently, the $\kappa$-scores of the annotated sentiments, their
+sources, and targets had been relatively low either.  The agreement on
+the emotional expressions and their intensifiers had been rather high
+though, amounting to notable 61.36\% proportional kappa.
+
+The initial disagreements of our experts could largely be resolved
+with the adjudication procedure that we applied in stage two.  In this
+step, the average inter-rater reliability of all elements increased by
+28.5 percent.  The smallest improvement was shown by intensifiers and
+was largely due to the diverging treatment of exclamation marks: the
+first expert was skipping these entities during the annotation,
+whereas the second coder regarded them as valid intensifying terms.
+
+At the final stage, we observed a small decrease of the IAA scores as
+compared to the previous step.  This drop, however, was mainly
+insignificant, and the resulting $\kappa$-figures were still in the
+ballpark of at least moderate agreement with the emotional expressions
+being the most dependably annotated items ($\kappa_\textrm{p}=80.29$)
+and intensifiers setting the lower boundary of the reliability results
+($\kappa_{\textrm{p}}=49.71\%$).
+
+After computing these metrics, we showed that our experts could
+unproblematically agree on the values of the main attributes of
+sentiments and emotional expressions (polarity and intensity) once
+they were at one about the presence and boundaries of these elements:
+The polarity kappa on sentiments achieved 58.8\%, whereas the
+corresponding scores for polar terms reached remarkable 87.12\%.  The
+Krippendorff's alpha for the intensity of these items run up to
+73.54\% and 78.79\% respectively, which, according to
+\citet{Krippendorff:07}, already allows for tentative conclusions,
+being quite close to the boundary of nearly perfect scores.
+
+In the concluding steps of our study, we computed a detailed breakdown
+of the number and reliability level of the annotated sentiments and
+polar expressions.  The results of this computation are presented in
+Figures~\ref{snt:fig:crp-sent-emo-distr}
+and~\ref{snt:fig:crp-sent-emo-agr} respectively.  Furthermore,
+Table~\ref{sent:tbl:corr-coeff} provides exact correlation
+coefficients for the distribution and agreement level of sentiments
+and polar terms on the one hand and topical and formal categories of
+the microblogs in our corpus on the other.
+
+That way, we not only have contributed to the inventory of available
+sentiment and social media resources for German but also provided
+helpful insights into the sampling methods one might use to generate
+opinion corpora, also describing the consequences of using such
+methods in practice.  Our detailed inter-annotator agreement study
+showed precisely which types of sampling constraints could yield most
+subjective opinions (general tweets and microblogs about the federal
+elections) and which groups of messages were especially difficult to
+analyze by human experts (tweets containing emoticons and microblogs
+without smileys or known polar terms).  Even though we tried to make
+our analysis as comprehensive as possible, our dataset still provides
+a valuable source of additional information for further linguistic,
+sociolinguistic, and psychological studies.  We, however, should
+concentrate on more practical aspects in the following sections by
+checking whether the obtained corpus could serve as a basis for
+building and evaluating automated opinion mining modules and systems.
 
 \newpage
