@@ -11,11 +11,11 @@
 
 \section{Sentiment Lexica}\label{sec:snt:lex}
 
-The first avenue we are going to explore with the help of the obtained
-corpus data is that of the automatic prediction of polar lexical terms
-or, in other words, emotional expressions.  To this end, we will first
-estimate the recall, precision, and $F1$-score of the sentiment lexica
-that currently exist German.  Since all of these resources were
+The first avenue that we are going to explore with the help of the
+obtained corpus data is the automatic prediction of polar lexical
+terms or, in other words, emotional expressions.  To this end, we will
+first estimate the recall, precision, and $F1$-score of the sentiment
+lexica that currently exist German.  Since all of these resources were
 created in a semi-supervised way by automatically translating lists of
 opinionated English terms and then manually revising these
 translations, we will also recheck whether the original methods that
@@ -154,7 +154,7 @@ intersection of their entries would yield competitive results.
     \caption{Classification results.\\ {\small (GPC -- German Polarity
         Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
         -- Zurich Polarity Lexicon \cite{Clematide:10})}}
-    \label{tbl:results}
+    \label{snt-lex:tbl:gsl-res}
   \end{center}
 \end{table}
 
@@ -172,7 +172,7 @@ of the authors of SentiWordNet and applied it to the German equivalent
 of the English WordNet \cite{Miller:95} -- the GermaNet database
 \cite{Hamp:97}.
 
-The results of this method are shown in Table~\ref{snt-lex:tbl:swn}.
+The results of this method are shown in Table~\ref{snt-lex:tbl:swn-res}.
 
 \begin{table}[h]
   \begin{center}
@@ -200,11 +200,11 @@ The results of this method are shown in Table~\ref{snt-lex:tbl:swn}.
     \caption{Classification results.\\ {\small (GPC -- German Polarity
         Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
         -- Zurich Polarity Lexicon \cite{Clematide:10})}}
-    \label{snt-lex:tbl:swn}
+    \label{snt-lex:tbl:swn-res}
   \end{center}
 \end{table}
 
-\subsection{Corpus-based Lexicon Generation}
+\subsection{Corpus-based Lexicon Induction}
 
 Another popular alternative to the Ontology-based methods is lexicon
 induction on the basis of actual corpus data.  Considering that
@@ -219,7 +219,7 @@ of \citet{Takamura:05} -- one of the arguably most competitive methods
 for unsupervised lexicon induction -- and applied it to the German
 Twitter snapshot of \cite{Scheffler:14}.
 
-The results of this method are shown in Table~\ref{snt-lex:tbl:ispn}.
+The results of this method are shown in Table~\ref{snt-lex:tbl:ispn-res}.
 
 \begin{table}[h]
   \begin{center}
@@ -245,11 +245,17 @@ The results of this method are shown in Table~\ref{snt-lex:tbl:ispn}.
     \caption{Classification results.\\ {\small (GPC -- German Polarity
         Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
         -- Zurich Polarity Lexicon \cite{Clematide:10})}}
-    \label{snt-lex:tbl:ispn}
+    \label{snt-lex:tbl:ispn-res}
   \end{center}
 \end{table}
 
-\subsection{Lexicon Induction Using Neural Word Embeddings}
+\subsection{Lexicon Generation Using Neural Word Embeddings}
+
+A new family of lexicon induction methods builds on learned vector
+representations of words -- the neural word embeddings
+\cite{Mikolov:13}.
+
+The results of this method are shown in Table~\ref{snt-lex:tbl:w2v}.
 
 \begin{table}[h]
   \begin{center}
@@ -280,7 +286,7 @@ The results of this method are shown in Table~\ref{snt-lex:tbl:ispn}.
     \caption{Classification results.\\ {\small (GPC -- German Polarity
         Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
         -- Zurich Polarity Lexicon \cite{Clematide:10})}}
-    \label{tbl:results}
+    \label{snt-lex:tbl:w2v}
   \end{center}
 \end{table}
 
@@ -389,6 +395,21 @@ model then tried to find an approximation of the most likely polarity
 combination of all terms in the graph over all possible polarity
 assignments.
 
+\subsubsection{Domain-Specific Sentiment Lexica}
+
+\citet{Chetviorkin:14} obtained a set of possible subjective terms
+from English and Russian microblogs by using an ensemble of supervised
+machine learning classifiers that had previously been trained on a
+manually annotated corpus of movie reviews.  In order to determine the
+prior polarity of the extracted terms, the authors first calculated
+approximate polarity scores of the processed messages using general
+polarity lexicons and then took these rough estimates as prior
+polarity expectations of the candidate expressions.  The posterior
+scores of these expressions were computed using the Ising spin model
+in a similar way to the approach proposed by \citet{Takamura:05}.  The
+resulting lexicon comprised 2,772 words for Russian and 2,786 lexical
+items for English.
+
 \subsubsection{Sentiment Lexica for German}
 
 One of the first attempts to create a sentiment dictionary for German
@@ -430,21 +451,55 @@ this pruned set of new adjectives to their original lexicon.  The
 total size of this final dictionary run up to 7,432 entries, 2,779 of
 which were positive.
 
-\subsubsection{Domain-Specific Sentiment Lexica}
+\subsection{Summary and Conclusions}
 
-\citet{Chetviorkin:14} obtained a set of possible subjective terms
-from English and Russian microblogs by using an ensemble of supervised
-machine learning classifiers that had previously been trained on a
-manually annotated corpus of movie reviews.  In order to determine the
-prior polarity of the extracted terms, the authors first calculated
-approximate polarity scores of the processed messages using general
-polarity lexicons and then took these rough estimates as prior
-polarity expectations of the candidate expressions.  The posterior
-scores of these expressions were computed using the Ising spin model
-in a similar way to the approach proposed by \citet{Takamura:05}.  The
-resulting lexicon comprised 2,772 words for Russian and 2,786 lexical
-items for English.
+In this section, we presented the first attempt of a practical
+evaluation of our corpus.  In doing so, we addressed the task of
+automatic prediction of polar terms (emotional expressions) with the
+help of sentiment dictionaries.  To obtain a rough baseline estimate,
+we first evaluated the quality of the existing sentiment lists for
+German: German Polarity Clues~\cite{Waltinger:10},
+SentiWS~\cite{Remus:10}, and Zurich Polarity List~\cite{Clematide:10}.
+We showed that \ldots achieved the best quality, reaching an average
+$F1$-score of \cdots on recognizing positive expressions and \cdots on
+predicting negative polar terms.
 
+In the next step, we analyzed whether the methods that were used for
+creating the original English resources whose translations formed the
+basis of the German lexica could yield better results than the
+manually revised tranlated lists when applied to German data directly.
 
-\subsection{Conclusions}
+The first family of lexicon generation methods that we looked into
+used Ontology information about lexical items: words' definitions,
+examples, and lexical links, to find subjectively connotated terms.
+In particular, we reimplemented the original method of
+\citet{Esuli:06b} and applied it to the German lexical database --
+GermaNet \cite{Hamp:97}.  The results of this approach turned out to
+be relatively low, only achievening \cdots for positive expressions
+and \cdots for negative polar terms.  These rather low scores can be
+explained by the scarceness of GermaNet definitions on the one hand
+and the unconventional vocabulary used on Twitter.
+
+Another popular approach to an unsupervised induction of sentiment
+lexica relies on the cooccurrence information about the words taken
+directly from corpus.  One of the most popular methods from this
+category is the Ising spin model adopted from the statistical
+mechanics which interprets words as magnetic spins in a crystal grid
+and tries to derive the most probable orientation of these spins in a
+magnetic field.  This model was first applied to the needs of
+computational linguistics by \citet{Takamura:05}, who induced a
+sentiment lexicon for English using \cdots corpus data.  We have
+reimplemented this approach in our program suite and applied to the
+German Twitter snapshop of \citet{Scheffler:14}.  The results of this
+approach are shown in Table~\ref{snt-lex:tbl:ispn-res}.
+
+A different way of incorporating corpus data is to encode the
+cooccurrence statistics directly into word information, representing
+the latter as vectors.  We explored this direction in the final part
+of this section, first obtaining word2vec embeddings for tokens from
+the aforementioned snapshot and then applying clustering algorithms to
+these representations.
+
+Our results show that \cdots.
+
 \newpage
