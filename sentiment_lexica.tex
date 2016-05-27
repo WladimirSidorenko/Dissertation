@@ -12,22 +12,30 @@
 \section{Sentiment Lexica}\label{sec:snt:lex}
 
 The first avenue that we are going to explore with the help of the
-obtained corpus data is the automatic prediction of polar lexical
-terms or, in other words, emotional expressions.  To this end, we will
-first estimate the recall, precision, and $F1$-score of the sentiment
-lexica that currently exist German.  Since all of these resources were
-created in a semi-supervised way by automatically translating lists of
-opinionated English terms and then manually revising these
-translations, we will also recheck whether the original methods that
-were initially used for creating the English sources would yield
-better results when applied to German data directly.  In the
-concluding step, we will finally investigate whether one of the most
-popular machine learning trends of the the recent time -- the neural
-word embeddings \cite{Mikolov:13} -- would provide a valuable basis
-for obtaining domain-specific sentiment lexica for a new language
-automatically.
+obtained corpus data is an automatic prediction of polar words or,
+speaking in terms of our guidelines, emotional expressions.  To this
+end, we will first present an updated version of our dataset in
+Subsection~\ref{subsec:snt-lex:data} in which our experts revised the
+annotations of words and idioms that were present in the existing
+German sentiment lexica (GSL), but were not marked as emo-expressions
+in our data, and, vice versa, were annotated as polar terms in the
+corpus but were missing in the analyzed polarity lists.  Afterwards,
+we will evaluate the aforementioned sentiment resources on the updated
+data in order to obtain a baseline for our subsequent experiments.
+Since literally all the current GSL were created using an automatic
+translation of English opinion lexica with a manual post-editing of
+the translated entries, we will then investigate whether the original
+methods that were used initially for creating the English sources
+would yield better results when applied to German data directly.
+Finally, in the concluding step, we will analyze whether one of most
+popular areas of research in contemporary CL---distributed vector
+representations of words \cite{Mikolov:13}---could be a perspective
+way for deriving new domain-specific polarity lists without labeled
+data.  We will summarize and draw conclusions from our experiments in
+the last part of this section, also discussing which of the presented
+methods performed best on our corpus.
 
-\subsection{Data}
+\subsection{Data}\label{subsec:snt-lex:data}
 
 In the following experiments, we will use version 0.1.0 of the Potsdam
 Twitter Sentiment Corpus (PotTS) presented in the previous section.
@@ -461,7 +469,7 @@ we first evaluated the quality of the existing sentiment lists for
 German: German Polarity Clues~\cite{Waltinger:10},
 SentiWS~\cite{Remus:10}, and Zurich Polarity List~\cite{Clematide:10}.
 We showed that \ldots achieved the best quality, reaching an average
-$F1$-score of \cdots on recognizing positive expressions and \cdots on
+$F1$-score of \ldots on recognizing positive expressions and \ldots on
 predicting negative polar terms.
 
 In the next step, we analyzed whether the methods that were used for
@@ -475,8 +483,8 @@ examples, and lexical links, to find subjectively connotated terms.
 In particular, we reimplemented the original method of
 \citet{Esuli:06b} and applied it to the German lexical database --
 GermaNet \cite{Hamp:97}.  The results of this approach turned out to
-be relatively low, only achievening \cdots for positive expressions
-and \cdots for negative polar terms.  These rather low scores can be
+be relatively low, only achievening \ldots for positive expressions
+and \ldots for negative polar terms.  These rather low scores can be
 explained by the scarceness of GermaNet definitions on the one hand
 and the unconventional vocabulary used on Twitter.
 
@@ -488,7 +496,7 @@ mechanics which interprets words as magnetic spins in a crystal grid
 and tries to derive the most probable orientation of these spins in a
 magnetic field.  This model was first applied to the needs of
 computational linguistics by \citet{Takamura:05}, who induced a
-sentiment lexicon for English using \cdots corpus data.  We have
+sentiment lexicon for English using \ldots corpus data.  We have
 reimplemented this approach in our program suite and applied to the
 German Twitter snapshop of \citet{Scheffler:14}.  The results of this
 approach are shown in Table~\ref{snt-lex:tbl:ispn-res}.
@@ -500,6 +508,6 @@ of this section, first obtaining word2vec embeddings for tokens from
 the aforementioned snapshot and then applying clustering algorithms to
 these representations.
 
-Our results show that \cdots.
+Our results show that \ldots.
 
 \newpage
