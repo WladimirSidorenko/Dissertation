@@ -1,4 +1,3 @@
-Dissertation
-============
+# Dissertation
 
-Dissertation thesis of Uladzimir Sidarenka.
+Thesis of Wladimir Sidorenko (Uladzimir Sidarenka).
