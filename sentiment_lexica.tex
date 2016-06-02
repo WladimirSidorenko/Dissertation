@@ -73,10 +73,10 @@ entries); and, finally, numerous borderline cases which were difficult
 to resolve even in group discussions.  Examples of such challenging
 cases were words and idioms such as ``verbieten'' (\emph{to
   prohibit}), ``verwechseln'' (\emph{to confuse}), ``Hauen und
-Stechen'' (\emph{}).  To address this issue, we again introduced an
-additional attribute, called \emph{uncertain}, into the annotation
-scheme of emotional expressions and asked our experts to mark such
-borderline instances with this attribute.
+Stechen'' (\emph{hewing and stabbing}).  To address this issue, we
+again introduced an additional attribute, called \emph{uncertain},
+into the annotation scheme of emotional expressions and asked our
+experts to mark such borderline instances with this attribute.
 
 The statistics on the total number of the labeled elements and their
 agreement in the updated version are shown in
@@ -110,71 +110,109 @@ Table~\ref{tbl:snt-lex:ucrp-agrmnt}:
 
 \subsection{Baseline: Existing German Lexica}
 
-To obtain a raw estimate of the expected scores for the recognition of
-subjective expressions, we will first evaluate the quality of the
-existing sentiment resources for German on our corpus.  The most
-prominent of these resources are:
+To obtain a raw estimate of the expected scores for the prediction of
+subjective expressions, we will first evaluate existing sentiment
+lexica for German on our corpus.  The most prominent of these
+resources are:
+\begin{itemize}
+\item the \textbf{German Polarity Clues} (GPC) list of
+  \citet{Waltinger:10}, which comprises 10,141 subjective entries
+  automatically translated from the English lexica \emph{Subjectivity
+    Clues} \cite{Wilson:05} and \emph{SentiSpin} \cite{Takamura:05}
+  with a subsequent manual rechecking of these translations and
+  addition of more synonymous and negated terms;
 
-The German Polarity Clues of \citet{Waltinger:10}
+\item the \textbf{SentiWS} (SWS) lexicon introduced by
+  \citet{Remus:10}, which includes 1,818 positively and 1,650
+  negatively connotated terms, also providing their part-of-speech
+  tags and inflection forms.  Similarly to GPC, the authors used an
+  English sentiment resource---the \emph{General Inquirer} polarity
+  set of \citet{Stone:66}--- to bootstrap the entries for their list,
+  manually revising these automatic translations afterwards.  In
+  addition to that, \citet{Remus:10} also expanded their set with
+  words and phrases frequently co-occurring with positive and negative
+  seed lexemes using collocation information obtained from a corpus of
+  10,200 customer reviews or extracted from the German Collocation
+  Dictionary \cite{Quasthoff:10};
 
-The SentiWS Lexicon of \citet{Remus:10}
+\item and, finally, the \textbf{Zurich Polarity List} proposed by
+  \citet{Clematide:10}, which comprises 8,000 subjective entries taken
+  from GermaNet synsets \cite{Hamp:97}.  These synsets were manually
+  annotated with their prior polarities by human experts.  Since the
+  authors, however, found the number of polar adjectives predicted
+  that way insufficient for running further classification experiments
+  on literary corpora, they automatically enriched their lexicon with
+  more attributive terms by analyzing conjoined collocations as it was
+  done by \citet{Hatzivassi:97}.
+\end{itemize}
 
-The Zurich Polarity Word List of \citet{Clematide:10}
+In order to evaluate these resources on our dataset, we represented
+each of the above lexicons as a trie \cite{Knuth:73} with the lexicon
+entries forming the paths in that graph and the polarity class(es) of
+these entries stored at the respective terminal leaf nodes of the
+paths.  We then applied the standard match operation by checking the
+trie against the lemmatized corpus tokens.  All lemmatizations were
+done using the \texttt{TreeTagger} \cite{Schmid:95}, and the match was
+performed in a case-insensitive mode.  Since all analyzed lexica only
+included plain word terms, we were also ignoring emoticons during this
+comparison to make the evaluation fairer.
 
-Since all of these lexica were created in a similar way but from
-different sources we also decided to check whether the union or the
-intersection of their entries would yield competitive results.
+In this vein, we estimated the precision, recall, and $F1$-score of
+the positive and negative polarity classes of each lexicon, separately
+computing these figures for each corpus file (99--109 tweets) and
+calculating the mean and standard deviation of these results at the
+end.  The results of this computation are shown in
+Table~\ref{snt-lex:tbl:gsl-res}:\footnote{For the sake of these
+  experiments, we have excluded the auxiliary words ``aus''
+  (\emph{from}), ``der'' (\emph{the}), ``keine'' (\emph{no}),
+  ``nicht'' (\emph{not}), ``sein'' (\emph{to be}), ``was''
+  (\emph{what}), and ``wer'' (\emph{who}) as well as their inflection
+  forms from the German Polarity Clues lexicon as these entries
+  significantly worsened the evaluation results.}
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
-    \begin{tabular}{|p{0.21\columnwidth}| % first columm
-        *{8}{>{\centering\arraybackslash}m{0.1\columnwidth}|}} % next nine columns
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{|p{0.165\columnwidth}| % first columm
+        *{9}{>{\centering\arraybackslash}p{0.07\columnwidth}|} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.085\columnwidth}|}} % last two columns
       \hline
-          \multirow{2}*{\bfseries Element} & \multicolumn{3}{c|}{Positive
-        Expressions} & %
-      \multicolumn{3}{c|}{Negative Expressions} & %
-      \multirow{2}*{Macro-$F1$} & %
-      \multirow{2}*{Micro-$F1$}\\\cline{2-7}
+          \multirow{2}*{\bfseries Lexicon} & %
+          \multicolumn{3}{c|}{Positive Expressions} & %
+          \multicolumn{3}{c|}{Neutral Terms} & %
+          \multicolumn{3}{c|}{Negative Expressions} & %
+          \multirow{2}{0.09\columnwidth}{\centering Overall\newline Macro-$F1$} & %
+          \multirow{2}{0.09\columnwidth}{\centering Overall\newline Micro-$F1$}\\\cline{2-10}
 
-      & Precision & Recall & $F1$ & Precision & Recall & $F1$ & & \\\hline
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+          & Precision & Recall & $F1$ & %
+          Precision & Recall & $F1$ & %
+          Precision & Recall & $F1$ & & \\\hline
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
-      GPC & 17.7\stddev{6.07} & 48.35\stddev{13.26} &%
-      12.66\stddev{3.59} & 9.42\stddev{4.37} & 45.99\stddev{15.58} &
-      7.6\stddev{3.12} & 22.51\stddev{1.9} & 89.56\stddev{1.28}\\
+      GPC & 21.8\stddev{6.9} & 50.2\stddev{11.2} & 29.9\stddev{7.7} & %
+      98.1\stddev{0.5} & 93.1\stddev{1.1} & 95.6\stddev{0.5} & %
+      19.7\stddev{7} & 43.1\stddev{10.7} & 26.5\stddev{7.7} & %
+      50.7\stddev{4.5} & 91.3\stddev{1}\\
 
-      SWS & 29.26\stddev{11.3} & 29.26\stddev{11.3} &
-      16.39\stddev{4.95} & 36.03\stddev{14.42} & 36.45\stddev{15.29} &
-      \textbf{17.16}\stddev{5.49} & 27.48\stddev{2.95} &
-      95.61\stddev{0.78}\\
+      SWS & 35.6\stddev{12.8} & 41.7\stddev{11.3} & 37.3\stddev{9.9} & %
+      97.6\stddev{0.5} & 97.7\stddev{1} & 97.6\stddev{0.5} & %
+      48.5\stddev{17.1} & 32\stddev{11.3} & 37.6\stddev{11.9} & %
+      57.5\stddev{6.3} & 95.3\stddev{0.9}\\
 
-      ZPL & 33.00\stddev{11.69} & 31.14\stddev{10.53} &
-      15.60\stddev{4.81} & 23.68\stddev{12.12} & 25.15\stddev{11.85} &
-      11.76\stddev{5.37} & 25.45\stddev{2.71} & 95.93\stddev{0.66}\\
+      ZPL & 39.5\stddev{11.8} & 31.9\stddev{9} & 34.7\stddev{9} & %
+      97.3\stddev{0.6} & 98.4\stddev{0.4} & 97.8\stddev{0.3} & %
+      37.4\stddev{14.7} & 25.6\stddev{9.5} & 29.8\stddev{10.7} & %
+      54.1\stddev{5.1} & 95.6\stddev{0.6}\\
 
-      GPC $\cap$ SWS $\cap$ ZPL & \textbf{46.22}\stddev{13.44} &
-      36.43\stddev{13.46} & \textbf{19.77}\stddev{5.87} &
-      \textbf{48.06}\stddev{17.22} & 26.93\stddev{12.99} &
-      16.35\stddev{5.96} & \textbf{28.45}\stddev{3.16} &
-      \textbf{96.94}\stddev{0.6}\\
+      GPC $\cap$ SWS $\cap$ ZPL & 53.5\stddev{12.6} & 35.4\stddev{10.5} & 41.7\stddev{9.9} & %
+      97.3\stddev{0.6} & 99.2\stddev{0.3} & 98.2\stddev{0.3} & %
+      61.2\stddev{17.7} & 22\stddev{9.2} & 31.5\stddev{11.4} & %
+      57.1\stddev{5.6} & 96.4\stddev{0.6}\\
 
-      GPC $\cup$ SWS $\cup$ ZPL & 16.89\stddev{5.77} &
-      \textbf{49.98}\stddev{12.96} & 12.35\stddev{3.49} &
-      9.36\stddev{4.4} & \textbf{49.05}\stddev{15.9} &
-      7.66\stddev{3.18} & 22.37\stddev{1.91} &
-      88.97\stddev{1.26}\\\hline
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}State-of-the-art Approaches}\\\hline
-
-      SentiWordNet$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
-      14.74\stddev{7.79} & 11.73\stddev{5.59} & 4.57\stddev{4.57} &
-      5.88\stddev{5.4} & 2.48\stddev{2.37} & 21.08\stddev{2.15} &
-      96.04\stddev{0.72}\\
-
-      Ising Spin Model & \stddev{} & \stddev{} & \stddev{} & \stddev{}
-      & \stddev{} & \stddev{} & \stddev{} & \stddev{}\\\hline
-
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Our Method}\\\hline
+      GPC $\cup$ SWS $\cup$ ZPL & 21\stddev{6.5} & 52.5\stddev{11.1} & 29.6\stddev{7.6} & %
+      98.3\stddev{0.5} & 92.6\stddev{1.1} & 95.4\stddev{0.5} & %
+      20\stddev{7.3} & 48.3\stddev{10.8} & 27.7\stddev{8.3} & %
+      50.9\stddev{4.6} & 90.9\stddev{1}\\\hline
     \end{tabular}
     \egroup
     \caption{Classification results.\\ {\small (GPC -- German Polarity
