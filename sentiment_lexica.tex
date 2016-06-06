@@ -242,16 +242,17 @@ it is outperformed by the union of the three resources.  Not
 surpisingly, the union also shows the highest recall of positive and
 negative terms among all compared polarity sets.
 
-As to the figures attained by the individual lexica, the best results
-here are achieved by the SentiWS polarity list \cite{Remus:10}, which
-not only shows the highest $F1$-score at recognizing negative
-expressions but also achieves the best micro-averaged $F1$-result for
-all classes.
+Regarding the figures attained by the individual lexica, the best
+results here are achieved by the SentiWS polarity list
+\cite{Remus:10}, which not only shows the highest $F1$-score at
+recognizing negative expressions but also achieves the best
+micro-averaged $F1$-result for all classes.
 
-At the same time, we alco can see that the deviation of all scores on
-different files is relativel high.  In order to alleviate this
-problem, we additionally recomputed all scores on the whole corpus.
-The updated results are shown in Table~\ref{snt-lex:tbl:gsl-res-full}.
+At the same time, we alco can observe that the deviation of the scores
+on different files is relatively high.  In order to see whether this
+skewness of the distribution had significantly affected the net
+outcome, we additionally recomputed all results on the whole corpus.
+The updated figures are shown in Table~\ref{snt-lex:tbl:gsl-res-full}.
 
 \begin{table}[h]
   \begin{center}
@@ -272,40 +273,53 @@ The updated results are shown in Table~\ref{snt-lex:tbl:gsl-res-full}.
           Precision & Recall & $F1$ & & \\\hline
       %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
-      GPC &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      GPC & 21.71 & 50.56 & 30.38 & %
+       20.1 & 43.13 & 27.42 & %
+       98.14 & 93.12 & 95.56 & %
+       51.12 & 91.32\\
 
-      SWS &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      SWS & 34.3 & 42.24 & 37.86 & %
+       49.06 & 32.32 & \textbf{38.96} & %
+       97.61 & 97.69 & 97.65 & %
+       \textbf{58.16} & 95.33\\
 
-      ZPL &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      ZPL & 39.76 & 31.9 & 35.4 & %
+       38 & 25.95 & 30.84 & %
+       97.27 & 98.36 & 97.8 & %
+       54.68 & 95.59\\
 
-      GPC $\cap$ SWS $\cap$ ZPL &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      GPC $\cap$ SWS $\cap$ ZPL & \textbf{54.04} & 35.57 & \textbf{42.9} & %
+       \textbf{62.22} & 22.15 & 32.7 & %
+       97.27 & \textbf{99.14} & \textbf{98.2} & %
+       57.92 & \textbf{96.41}\\
 
-      GPC $\cup$ SWS $\cup$ ZPL &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\\hline
+      GPC $\cup$ SWS $\cup$ ZPL & 20.92 & \textbf{52.8} & 29.96 & %
+       20.36 & \textbf{48.63} & 28.7 & %
+       \textbf{98.3} & 92.61 & 95.37 & %
+       51.35 & 90.88\\\hline
     \end{tabular}
     \egroup
-    \caption{Evaluation of the existing German sentiment lexica on the complete corpus.\\ {\small (GPC -- German Polarity
-        Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
-        -- Zurich Polarity Lexicon \cite{Clematide:10})}}
+    \caption{Evaluation of the existing German sentiment lexica on the
+      complete corpus.\\ {\small (GPC -- German Polarity Clues
+        \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL --
+        Zurich Polarity Lexicon \cite{Clematide:10})}}
     \label{snt-lex:tbl:gsl-res-full}
   \end{center}
 \end{table}
 
-\subsection{Ontology-based Lexicon Generation}
+As we can see from the table, the relative placement of the
+best-performing systems is the same as in
+Table~\ref{snt-lex:tbl:gsl-res}.  Moreover, the absolute scores are
+only minimally higher (zero to one percent) than the mean estimates
+computed in the previous step.  Thus, even despite their high
+variance, the averages of the results computed on single files are
+still reliable indicators of the quality of recognized opinionated
+terms.  For the sake of brevity, we will therefore only compute the
+former metric (mean and standard deviation of the scores on single
+files), refraining from estimating the latter scores (i.e., total
+statistics on the corpus as a whole).
+
+\subsection{Lexicon Generation Using a Lexical Database}
 
 Since SentiWS \cite{Remus:10} was the best compared stand-alone
 lexicon, a natural question that arises in this case is whether the
