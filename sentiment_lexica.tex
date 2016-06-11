@@ -18,22 +18,22 @@ end, we will first present an updated version of our dataset in
 Subsection~\ref{subsec:snt-lex:data} in which our experts revised the
 annotations of words and idioms that were present in the existing
 German sentiment lexica (GSL), but were not marked as emo-expressions
-in our data, and, vice versa, were annotated as polar terms in the
-corpus but absent in the analyzed polarity lists.  Afterwards, we will
-evaluate the aforementioned lexical resources on the updated corpus
-data in order to obtain a baseline for our subsequent experiments.
-Since literally all of the current GSL were created using an automatic
-translation of English opinion lists with a manual post-editing of
-translated entries, we will then look whether the original methods
-that were used initially for creating the English source files would
-yield better results when applied to German data directly.  Finally,
-in the concluding step, we will analyze if one of most popular areas
-of research in contemporary CL---distributed vector representations of
-words \cite{Mikolov:13}---could be a perspective way for deriving new
-domain-specific polarity lists without labeled data.  We will
-summarize and draw conclusions in the last part of this section, also
-discussing which of the presented methods performed best on our
-corpus.
+in our data and, vice versa, were annotated as polar terms in the
+corpus, but absent in the analyzed polarity lists.  Afterwards, we
+will evaluate the aforementioned lexical resources on the updated
+corpus data in order to obtain a baseline for our subsequent
+experiments.  Since literally all of the current GSL were created
+using an automatic translation of English opinion lists with a manual
+post-editing of the translated entries, we will then look whether the
+original methods that were used initially for creating the English
+source files would yield better results when applied to German data
+directly.  Finally, in the concluding step, we will analyze if one of
+most popular areas of research in contemporary CL---distributed vector
+representations of words \cite{Mikolov:13}---could be a perspective
+way for deriving new domain-specific polarity lists without labeled
+data.  We will summarize and draw conclusions in the last part of this
+section, also discussing which of the presented methods performed best
+on our corpus and what the reasons for this success could be.
 
 \subsection{Data}\label{subsec:snt-lex:data}
 
@@ -55,25 +55,27 @@ Similarly to the adjudication procedure used earlier, we automatically
 highlighted the differences between the corpus labels and the entries
 of these resources, letting our experts resolve the emerged conflicts.
 
-As it turned out, many of the contradicting cases stemmed from the
-missing annotations of subjective facts, such as ``Tod''
-(\emph{death}), ``Anstieg'' (\emph{surge}), ``duften'' (\emph{to
-  scent}) etc., in our dataset and the presence of these entities in
-the analyzed polarity lists.  As a golden-mean solution to this
-discrepancy, we added a special feature \emph{subjective-fact} to the
-attribute set of emotional expressions and explicitly asked our coders
-to annotate subjectively connotated facts as emotional expressions,
-setting the value of the introduced attribute to \texttt{true}.
+As it turned out, many of the contradicting cases stemmed from a
+different treatment of polar facts, such as ``Tod'' (\emph{death}),
+``Anstieg'' (\emph{surge}), ``duften'' (\emph{to scent}) etc.: these
+entities were not labeled as emo-expressions in the full annotation of
+our dataset, but were still present as opinionated terms in the
+analyzed polarity lists.  Since these words represented a special
+class of polar clues due to their unequivocal objective nature, we
+decided to introduce a special feature called \emph{subjective-fact}
+into the attribute set of emotional expressions, explicitly asking our
+coders to annotate such terms with the emo-expression tag, but setting
+the value of the newly added attribute to \texttt{true}.
 
 The remaining differences were mainly due to polysemous words whose
 meaning in the corpus was not always subjective; errors in the lexica
-(GPC, for example, featured such auxiliary words as ``sein'' (\emph{to
-  be}), ``wer'' (\emph{who}), or ``aus'' (\emph{from}) as polar
+(GPC, for example, featured such auxiliary terms as ``sein'' (\emph{to
+  be}), ``wer'' (\emph{who}), or ``aus'' (\emph{from}) as opinionated
 entries); and, finally, numerous borderline cases which were difficult
 to resolve even in group discussions.  Examples of such challenging
 cases were words and idioms such as ``verbieten'' (\emph{to
   prohibit}), ``verwechseln'' (\emph{to confuse}), ``Hauen und
-Stechen'' (\emph{hewing and stabbing}).  To address the last issue, we
+Stechen'' (\emph{hewing and stabbing}).  To address this issue, we
 again introduced an additional attribute, called \emph{uncertain},
 into the annotation scheme of emotional expressions and asked our
 experts to mark such borderline instances with this attribute.
@@ -108,25 +110,26 @@ Table~\ref{tbl:snt-lex:ucrp-agrmnt}:
   \label{tbl:snt-lex:ucrp-agrmnt}
 \end{table*}
 
-\subsection{Baseline: Existing German Lexica}
+\subsection{Baseline I: Existing German Lexica}
 
-To obtain a raw estimate of the expected scores for the prediction of
-subjective expressions, we then evaluated existing sentiment lexica
-for German on the updated corpus data.  The most prominent of these
-resources are:
+In order to obtain a raw estimate of the expected scores for the
+prediction of subjective expressions, we then evaluated existing
+sentiment lexica for German on the updated corpus data.  The most
+prominent of these resources are:
 \begin{itemize}
 \item the \textbf{German Polarity Clues} (GPC) list of
   \citet{Waltinger:10}, which comprises 10,141 subjective entries
-  automatically translated from the English lexica \emph{Subjectivity
-    Clues} \cite{Wilson:05} and \emph{SentiSpin} \cite{Takamura:05}
-  with a subsequent manual rechecking of these translations and
-  several synonyms and negated terms added by the authors;
+  automatically translated from the English sentiment lexica
+  \emph{Subjectivity Clues} \cite{Wilson:05} and \emph{SentiSpin}
+  \cite{Takamura:05} with a subsequent manual rechecking of these
+  translations and several synonyms and negated terms added by the
+  authors;
 
 \item the \textbf{SentiWS} (SWS) lexicon introduced by
   \citet{Remus:10}, which includes 1,818 positively and 1,650
   negatively connotated entries, also providing their part-of-speech
-  tags and inflection forms (resulting in a total of 32,734 word
-  forms).  Similarly to the GPC, the authors used an English sentiment
+  tags and inflections (resulting in a total of 32,734 word forms).
+  Similarly to the GPC, the authors used an English sentiment
   resource---the \emph{General Inquirer} list of \citet{Stone:66}---
   to bootstrap the entries for their lexicon, manually revising these
   automatic translations afterwards.  In addition to that,
@@ -152,27 +155,27 @@ each of the above lexicons as a trie \cite{Knuth:73} with the lexicon
 entries corresponding to paths in that graph and the polarity
 class(es) of these entries stored at the respective terminal leaf
 nodes of the paths.  We then applied the standard match operation by
-checking the trie against the lemmatized corpus tokens.  All
-lemmatizations were done using the \texttt{TreeTagger}
-\cite{Schmid:95}, and the match was performed in a case-insensitive
-mode.  Moreover, since all analyzed lexica only included plain lexical
-terms, we also ignored smileys during this comparison, concentrating
-on the evaluation of standard vocabulary words instead.
+simultaneously checking the trie against contiguous runs of both
+original and lemmatized corpus tokens.  All lemmatizations were done
+using the \texttt{TreeTagger} \cite{Schmid:95}, and the match
+operation was made case-insensitive.  Furthermore, since all analyzed
+lexica only included plain textual terms, we also ignored smileys
+during this comparison, solely concentrating on common lexical terms.
 
-That way, we estimated the precision, recall, and $F1$-score of the
+In this way, we estimated the precision, recall, and $F1$-score of the
 positive, negative, and neutral polarity classes of each lexicon by
 separately computing these figures on each corpus file (99--109
 tweets) and then obtaining the mean and standard deviation of these
-scores over all files at the end.  In addition to that, we also
-calculated the macro- and micro-averaged $F1$-scores over all three
+scores over all files of the dataset.  In addition to that, we also
+calculated the macro- and micro-averaged results over all polarity
 classes.  Following the standard practice for computing these terms,
-we estimated the macro-average as the mean of the $F1$-scores for all
-three classes, and obtained the micro-average by taking the harmonic
-mean of the micro-averaged precision and recall calculated over all
-true positives, false positives, and false negatives.  The results of
-these computations are shown in
-Table~\ref{snt-lex:tbl:gsl-res}.\footnote{For the sake of these
-  experiments, we have excluded the auxiliary words ``aus''
+we estimated the macro-average as the mean of the $F1$-scores over all
+three types (positive, negative, and neutral), and obtained the
+micro-average by taking the harmonic mean of precision and recall
+calculated over all true positives, false positives, and false
+negatives found in the corpus.  The results of these computations are
+shown in Table~\ref{snt-lex:tbl:gsl-res}.\footnote{For the sake of
+  these experiments, we have excluded the auxiliary words ``aus''
   (\emph{from}), ``der'' (\emph{the}), ``keine'' (\emph{no}),
   ``nicht'' (\emph{not}), ``sein'' (\emph{to be}), ``was''
   (\emph{what}), and ``wer'' (\emph{who}) as well as their inflection
@@ -243,14 +246,13 @@ surpisingly, the union also shows the highest recall of positive and
 negative terms among all compared polarity sets.
 
 Regarding the figures attained by the individual lexica, the best
-results here are achieved by the SentiWS polarity list
-\cite{Remus:10}, which not only shows the highest $F1$-score at
-recognizing negative expressions but also achieves the best
-micro-averaged $F1$-result for all classes.
+results here are achieved by the SentiWS list \cite{Remus:10}, which
+not only shows the highest $F1$-score for negative expressions but
+also achieves the best micro-averaged $F1$-result on all classes.
 
 At the same time, we alco can observe that the deviation of the scores
 on different files is relatively high.  In order to see whether this
-skewness of the distribution had significantly affected the net
+skewness of the distribution could significantly affect the net
 outcome, we additionally recomputed all results on the whole corpus.
 The updated figures are shown in Table~\ref{snt-lex:tbl:gsl-res-full}.
 
@@ -307,26 +309,18 @@ The updated figures are shown in Table~\ref{snt-lex:tbl:gsl-res-full}.
   \end{center}
 \end{table}
 
-As we can see from the table, the relative placement of the
-best-performing systems is the same as in
-Table~\ref{snt-lex:tbl:gsl-res}.  Moreover, the absolute scores are
-only minimally higher (zero to one percent) than the mean estimates
-computed in the previous step.  Thus, even despite their high
-variance, the averages of the results computed on single files are
-still reliable indicators of the quality of recognized opinionated
-terms.  For the sake of brevity, we will therefore only compute the
-former metric (mean and standard deviation of the scores on single
-files), refraining from estimating the latter scores (i.e., total
-statistics on the corpus as a whole).
+As we can see, the relative placement of the best-performing systems
+is the same as in the previous evaluation.  Moreover, the absolute
+results are only minimally higher (by typically at most one percent)
+than the mean scores computed in the previous step.  Thus, even
+despite their high variance, the average figures computed over single
+corpus files are still a reliable indicator of the quality of the
+recognized opinionated terms.  For the sake of brevity, we will
+therefore only present the former metric (the mean and standard
+deviation of the scores estimated over individual files), refraining
+from computing the statistics on the whole corpus at once.
 
-\subsection{Lexicon Generation Using a Lexical Database}
-
-Since SentiWS \cite{Remus:10} was the best compared stand-alone
-lexicon, a natural question that arises in this case is whether the
-original method used for creating its underlying Engish source data --
-the SentiWordNet lexicon of \citet{Esuli:06b} -- would also produce a
-comparatively good polar term list when applied to German data
-directly.
+\subsection{Baseline II: Lexicon Generation Using Lexical Database}
 
 To check this hypothesis, we have re-implemented the original system
 of the authors of SentiWordNet and applied it to the German equivalent
