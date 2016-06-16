@@ -133,11 +133,11 @@ prominent of these resources are:
   resource---the \emph{General Inquirer} list of \citet{Stone:66}---
   to bootstrap the entries for their lexicon, manually revising these
   automatic translations afterwards.  In addition to that,
-  \citet{Remus:10} also expanded their set with words and phrases
-  frequently co-occurring with positive and negative seed lexemes
-  using collocation information obtained from a corpus of 10,200
-  customer reviews or extracted from the German Collocation Dictionary
-  \cite{Quasthoff:10};
+  \citet{Remus:10} also expanded their polarity set with words and
+  phrases frequently co-occurring with positive and negative seed
+  lexemes using collocation information obtained from a corpus of
+  10,200 customer reviews or extracted from the German Collocation
+  Dictionary \cite{Quasthoff:10};
 
 \item finally, the \textbf{Zurich Polarity List} proposed by
   \citet{Clematide:10}, which comprises 8,000 subjective entries taken
@@ -151,11 +151,11 @@ prominent of these resources are:
 \end{itemize}
 
 In order to evaluate these resources on our dataset, we represented
-each of the above lexicons as a trie \cite{Knuth:73} with the lexicon
-entries corresponding to paths in that graph and the polarity
-class(es) of these entries stored at the respective terminal leaf
-nodes of the paths.  We then applied the standard match operation by
-simultaneously checking the trie against contiguous runs of both
+each of the above lexicons as a trie \cite[pp. 492--512]{Knuth:98}
+with the lexicon entries corresponding to paths in that graph and the
+polarity class(es) of these entries stored at the respective terminal
+leaf nodes of the paths.  We then applied the standard match operation
+by simultaneously checking the trie against contiguous runs of both
 original and lemmatized corpus tokens.  All lemmatizations were done
 using the \texttt{TreeTagger} \cite{Schmid:95}, and the match
 operation was made case-insensitive.  Furthermore, since all analyzed
@@ -166,7 +166,7 @@ In this way, we estimated the precision, recall, and $F1$-score of the
 positive, negative, and neutral polarity classes of each lexicon by
 separately computing these figures on each corpus file (99--109
 tweets) and then obtaining the mean and standard deviation of these
-scores over all files of the dataset.  In addition to that, we also
+scores over all files in the dataset.  In addition to that, we also
 calculated the macro- and micro-averaged results over all polarity
 classes.  Following the standard practice for computing these terms,
 we estimated the macro-average as the mean of the $F1$-scores over all
@@ -201,47 +201,48 @@ shown in Table~\ref{snt-lex:tbl:gsl-res}.\footnote{For the sake of
           Precision & Recall & $F1$ & & \\\hline
       %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
-      GPC & 24.03\stddev{7.91} & 46.39\stddev{11.22} & 31.08\stddev{8.24} & %
-      21.95\stddev{8.06} & 41.64\stddev{10.62} & 28.09\stddev{8.27} & %
-      98.01\stddev{0.51} & 94.26\stddev{1.03} & 96.09\stddev{0.49} & %
-      51.75\stddev{4.71} & 92.3\stddev{0.92}\\
+      GPC & 24\stddev{7.9} & 46.4\stddev{11.2} & 31.1\stddev{8.2} & %
+      22\stddev{8.1} & 41.6\stddev{10.6} & 28.1\stddev{8.3} & %
+      98\stddev{0.5} & 94.3\stddev{1} & 96.1\stddev{0.5} & %
+      51.8\stddev{4.7} & 92.3\stddev{0.9}\\
 
-      SWS & 35.85\stddev{13.18} & 38.69\stddev{11.58} & 35.96\stddev{9.93} & %
-      49.02\stddev{17.06} & 31.31\stddev{10.94} & \textbf{37.18}\stddev{11.55} & %
-      97.51\stddev{0.54} & 97.84\stddev{1} & 97.67\stddev{0.48} & %
-      \textbf{56.94}\stddev{6.2} & 95.38\stddev{0.89}\\
+      SWS & 35.9\stddev{13.2} & 38.7\stddev{11.6} & 36\stddev{9.9} & %
+      49\stddev{17.1} & 31.3\stddev{10.9} & \textbf{37.2}\stddev{11.6} & %
+      97.5\stddev{0.5} & 97.8\stddev{1} & 97.7\stddev{0.5} & %
+      \textbf{56.9}\stddev{6.2} & 95.4\stddev{0.9}\\
 
-      ZPL & 36.38\stddev{12.3} & 21.3\stddev{7.16} & 26.3\stddev{8.02} & %
-      41.05\stddev{15.55} & 23.27\stddev{8.66} & 29.03\stddev{10} & %
-      96.96\stddev{0.64} & 98.73\stddev{0.33} & 97.84\stddev{0.34} & %
-      51.06\stddev{4.4} & 95.67\stddev{0.64}\\
+      ZPL & 36.4\stddev{12.3} & 21.3\stddev{7.2} & 26.3\stddev{8} & %
+      41.1\stddev{15.6} & 23.3\stddev{8.7} & 29\stddev{10} & %
+      97\stddev{0.6} & 98.7\stddev{0.3} & 97.8\stddev{0.3} & %
+      51.1\stddev{4.4} & 95.7\stddev{0.6}\\
 
-      GPC $\cap$ SWS $\cap$ ZPL & \textbf{54}\stddev{12.79} & %
-      30.56\stddev{10.48} & \textbf{38.06}\stddev{10.14} & %
+      GPC $\cap$ SWS $\cap$ ZPL & \textbf{54}\stddev{12.8} & %
+      30.6\stddev{10.5} & \textbf{38.1}\stddev{10.1} & %
 
-      \textbf{61.66}\stddev{17.84} & 21.59\stddev{9.12} & 31.16\stddev{11.3} & %
-      97.13\stddev{0.62} & \textbf{99.25}\stddev{0.29} & \textbf{98.18}\stddev{0.32} & %
-      55.8\stddev{5.43} & \textbf{96.39}\stddev{0.62}\\
+      \textbf{61.7}\stddev{17.8} & 21.6\stddev{9.1} & 31.2\stddev{11.3} & %
+      97.1\stddev{0.6} & \textbf{99.3}\stddev{0.3} & \textbf{98.2}\stddev{0.3} & %
+      55.8\stddev{5.4} & \textbf{96.4}\stddev{0.6}\\
 
-      GPC $\cup$ SWS $\cup$ ZPL & 23.29\stddev{7.61} & \textbf{48.45}\stddev{11.24} & %
-      30.9\stddev{8.16} & %
+      GPC $\cup$ SWS $\cup$ ZPL & 23.3\stddev{7.6} & \textbf{48.5}\stddev{11.2} & %
+      30.9\stddev{8.2} & %
 
-      22.01\stddev{8.03} & \textbf{46.07}\stddev{10.81} & 29.14\stddev{8.5} & %
-      \textbf{98.14}\stddev{0.49 & 93.87\stddev{1.01} & 95.95\stddev{0.48} & %
-      52\stddev{4.77} & 91.98\stddev{0.9}\\\hline
+      22\stddev{8} & \textbf{46.1}\stddev{10.8} & 29.1\stddev{8.5} & %
+      \textbf{98.1}\stddev{0.5} & 93.9\stddev{1} & 96\stddev{0.5} & %
+      52\stddev{4.8} & 92\stddev{0.9}\\\hline
     \end{tabular}
     \egroup
-    \caption{Evaluation of the existing German sentiment lexica.\\ {\small (GPC -- German Polarity
-        Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
-        -- Zurich Polarity Lexicon \cite{Clematide:10})}}
+    \caption{Evaluation of the existing German sentiment lexica.\\
+      {\small (GPC -- German Polarity Clues \cite{Waltinger:10}, SWS
+        -- SentiWS \cite{Remus:10}, ZPL -- Zurich Polarity Lexicon
+        \cite{Clematide:10})}}
     \label{snt-lex:tbl:gsl-res}
   \end{center}
 \end{table}
 
 As can be seen from the table, the intersection of all three lexica
 achieves the best results on both positive and neutral classes, also
-yielding the best scores in terms of the macro-averaged $F$-measure.
-One of the main reasons for this success is the relatively high
+yielding the best scores in terms of the micro-averaged $F$-measure.
+One of the main reasons for this success is a relatively high
 precision of this list for all but the neutral polarity class, where
 it is outperformed by the union of the three resources.  Not
 surpisingly, the union also shows the highest recall of positive and
@@ -250,9 +251,9 @@ negative terms among all compared polarity sets.
 Regarding the figures attained by the individual lexica, the best
 results here are achieved by the SentiWS list \cite{Remus:10}, which
 not only shows the highest $F1$-score for negative expressions but
-also achieves the best micro-averaged $F1$-result on all classes.
+also achieves the best macro-averaged $F1$-result on all classes.
 
-At the same time, we alco can observe that the deviation of the scores
+At the same time, we also can observe that the deviation of the scores
 on different files is relatively high.  In order to see whether this
 skewness of the distribution could significantly affect the net
 outcome, we additionally recomputed all results on the whole corpus.
@@ -311,51 +312,56 @@ The updated figures are shown in Table~\ref{snt-lex:tbl:gsl-res-full}.
   \end{center}
 \end{table}
 
-As we can see, the relative placement of the best-performing systems
-is the same as in the previous evaluation.  Moreover, the absolute
-results are only minimally higher (by typically at most one percent)
-than the mean scores computed in the previous step.  Thus, even
-despite their high variance, the average figures computed over single
-corpus files are still a reliable indicator of the quality of the
-recognized opinionated terms.  For the sake of brevity, we will
-therefore only present the former metric (the mean and standard
-deviation of the scores estimated over individual files), refraining
-from computing the statistics on the whole corpus at once.
+As we can see from the figures, the relative placement of the
+best-performing systems is the same as in the previous evaluation.
+Moreover, the absolute results are only minimally higher (by typically
+at most one percent) than the mean scores computed in the previous
+step.  Thus, even despite their high variance, the average figures
+computed over single corpus files are still a reliable indicator of
+the quality of the recognized opinionated terms.  For the sake of
+brevity, we will therefore only present the former metric (the mean
+and standard deviation of the scores estimated over individual files),
+refraining from computing the statistics on the whole corpus at once.
 
 \subsection{Baseline II: Automatic Lexicon Generation}
 
-All of the presented works fall into the category of semi-supervised
-approaches.
+Since all of the presented works rely on a machine translation step
+with a manual correction of the entries, they clearly fall into the
+category of semi-automatic approaches.  Unlike fully automated
+methods, such systems typically yield more precise results, which,
+however, come at the cost of tedious human efforts.  In order to see
+to which extent these efforts really pay off in practice on the
+lexicon generation (LG) task at hand, we additionally decided to
+evaluate the most popular lexicon induction approaches that work
+completely automatically without any assistance from human experts.
 
-% Since all available sentiment lexica available for German involved an
-% automatic translation with a subsequent manual revision and
-% (optionally) some sort of heuristic extension, we decided to check
-% whether the most popular methods for an automatic lexicon generation
-% used for English could be a viable alternative to these approaches.
+According to \citet[p. 79]{Liu:12}, most of such automatic LG systems
+can be divided into dictionary- and corpus-based ones.  The former
+methods try to derive polarity lists using monolingual thesauri or
+lexical databases such as the Macquarie Dictionary \cite{Bernard:86}
+or WordNet \cite{Miller:95}.  A clear advantage of these approaches is
+their relatively good precision as they operate on carefully verified
+data enriched with hand-crafted meta information.  At the same time,
+this verification can become a drawback for the recall on the domains
+where the language changes occur very rapidly, and new terms are being
+coined in a flash.
 
-Other possible alternatives to these methods are fully automatic
-systems.  The most prominent paradigms here are dictionary- and
-corpus-based approaches.
+An opposite situation is observed with the corpus-based approaches:
+These methods typically rely on inherently noisy datasets and,
+consequently, suffer from a low precision.  This disadvantage,
+however, is more than compensated for by the abundance of training
+material available to these methods and the persistent up-to-date
+state of these data, which can hugely boost the recall.
 
-An obvious advantage of dictionary-based methods is a relatively high
-quality of the source data and consequently better precision of the
-relatung automatically generated lexica.  A disadvantage of this
-approach, however, is the limitedness of the vocabulary covered by the
-most contemporary dictionaries, which might play an especially crucial
-role for colloquial domains.
+In order to see which of the above paradigms bears more potential for
+generating high-quality polarity lists for Twitter---the
+dictionary-based methods with a supposedly higher precision or the
+corpus-based approaches with an allegedly better recall---we decided
+to re-implement the most popular systems from both families and to
+evaluate them on our corpus.  The results of these computations are
+presented in the following parts.
 
-An opposite situation is observed for the corpus-based approaches.
-Here, the noiciness of the data appears to play a much more negative
-role than in dictionary-based method. This blow, however, is returned
-with interest by the abundance of the data and a permanent up-to-date
-status of the vocabulary used in these data.
-
-In order to see how both these paradigms pay off on Twitter and
-whether advantages outweigh their drawbacks on this domain, we decided
-to re-implement the most popular approaches from both of these two
-camps and to evaulate them on our data.
-
-\subsubsection{Lexicon Generation Using Lexical Database}
+\subsubsection{Dictionary-Based Lexicon Generation}
 
 The results of this method are shown in Table~\ref{snt-lex:tbl:swn-res}.
 
