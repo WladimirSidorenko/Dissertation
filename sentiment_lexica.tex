@@ -359,9 +359,63 @@ dictionary-based methods with a supposedly higher precision or the
 corpus-based approaches with an allegedly better recall---we decided
 to re-implement the most popular systems from both families and to
 evaluate them on our corpus.  The results of these computations are
-presented in the following parts.
+presented in the following sections.
 
 \subsubsection{Dictionary-Based Lexicon Generation}
+
+The presumably first dictionary-based approach was proposed by
+\citet{Hu:04}.  In their work on sentiment classification and
+summarization of cutomer reviews, the authors determined semantic
+orientation of adjectives (which were supposed to be the most relevant
+part-of-speech class for mining opinions) by taking a seed set of
+words with known subjective polarities and propagationg these values
+to the synonyms of these terms found in WordNet \cite{Miller:95}.  A
+similar procedure was applied to antonymic relations too.  However, in
+this case, the polarity orientation was reversed during the
+propagation.  This expansion continued until no more adjective could
+be reached via the synonymy-antonymy (SA) links, thus covering all
+stronly-connected SA components around the seed words in the WordNet
+graph.  Unfortunately, no intrinsic evaluation of the resulting
+lexicon was performed in this work---the authors only report their
+results on recognizing subjective sentences and classifying their
+polarity, where they attain an average \F-score of 0.667 and 0.842
+respectively.
+
+With various modifications, the core idea of propagating the semantic
+orientation through a graph was adopted in almost all of the following
+dictionary-based works:
+
+\cite{Kim:06}
+
+An alternative way of bootstrapping polarities for open-class words
+was proposed by \cite{Kamps:04}.  The authors estimated the
+orientation of the given term by computing the difference between the
+shortest path lengths of this word to the prototypic positive and
+negative lexemes.  For example, the orientation of an adjective was
+computed as
+\begin{equation*}
+  POL(w) = \frac{d(w, \textrm{bad}) - d(w, \textrm{good})}%
+  {d(\textrm{bad}, \textrm{good})},
+\end{equation*}
+where $d(w_1, w_2)$ denotes the length of the shortest synonym path
+between the words $w_1$ and $w_2$ found in WordNet.  \cite{Kamps:04}
+evaluated the accuracy of their method on the General Inquirer lexicon
+\cite{Stone:66} by comparing the terms with non-zero scores to the
+entries from this resource, getting 68.19\% of correct predictions on
+a set of 349 terms.
+
+\cite{Esuli:06b}
+
+
+\cite{Blair-Goldensohn:08}
+
+\cite{Mohammad:09}
+
+\cite{Rao:09}
+
+\cite{Hassan:10}
+
+\cite{Dragut:10}
 
 The results of this method are shown in Table~\ref{snt-lex:tbl:swn-res}.
 
@@ -568,6 +622,28 @@ word being polar with the growing path length from a seed term.
 %% comparable to the figures obtained by \citet{Turney:03} in their
 %% method (82.84\%) and significantly outperformed the precision of
 %% the approach proposed by \citet{Kamps:04} (73.4 versus 70.8).
+
+\citet{Kim:04} used a similar approach to determine the polarity of
+new words (adjectives, nouns, and verbs), given a small seed set of
+terms with known orientation.  More precisely, the likelihood of a
+word $w$ belonging to the polarity class $c \in {\textrm{postive},
+  \textrm{negative}, \textrm{neutral}}$ was computed as:
+\begin{equation*}
+  P(c|w) = \argmax_{c}P(c)\prod_{k=1}^{m}{P(f_k|c)^{\textrm{count}(f_k,\textrm{synset}(w))}},
+\end{equation*}
+where $f_k$ stands for the $k$-th feature (seed word) of sentiment
+class $c$ which is also a member of the synonym set of $w$, and
+$\textrm{count}(f_k,\textrm{synset}(w))$ means the total number of
+occurrences of $f_k$ in the synonym set of $w$.  $P(c)$ is the number
+of words in class $c$ divided by the total number of words considered.
+The authors, however, did not attempt to generate a lexicon with this
+method but only used it to classify new words encountered in reviews.
+
+Another lexical sentiment resource (WordNet-Affect) was proposed by
+\citet{Strapparava:04} who manually compiled a list of 1,903
+subjective terms and projected these polarities to the respective
+synononyms set in WordNet.  The resulting database included 2,874
+synsets with a total of 4,787 words.
 
 Another purely dictionary-based method was described by
 \citet{Esuli:06b}.  The authors automatically assigned positive,
