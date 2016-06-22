@@ -339,12 +339,12 @@ According to \citet[p. 79]{Liu:12}, most of such automatic LG systems
 can be divided into dictionary- and corpus-based ones.  The former
 methods try to derive polarity lists using monolingual thesauri or
 lexical databases such as the Macquarie Dictionary \cite{Bernard:86}
-or WordNet \cite{Miller:95}.  A clear advantage of these approaches is
-their relatively good precision as they operate on carefully verified
-data enriched with hand-crafted meta information.  At the same time,
-this verification can become a drawback for the recall on the domains
-where the language changes occur very rapidly, and new terms are being
-coined in a flash.
+or \textsc{WordNet} \cite{Miller:95}.  A clear advantage of these
+approaches is their relatively good precision as they operate on
+carefully verified data enriched with hand-crafted meta information.
+At the same time, this verification can become a drawback for the
+recall on the domains where the language changes occur very rapidly,
+and new terms are being coined in a flash.
 
 An opposite situation is observed with the corpus-based approaches:
 These methods typically rely on inherently noisy datasets and,
@@ -367,51 +367,108 @@ The presumably first dictionary-based approach was proposed by
 \citet{Hu:04}.  In their work on sentiment classification and
 summarization of cutomer reviews, the authors determined semantic
 orientation of adjectives (which were supposed to be the most relevant
-part-of-speech class for mining opinions) by taking a seed set of
-words with known subjective polarities and propagationg these values
-to the synonyms of these terms found in WordNet \cite{Miller:95}.  A
-similar procedure was applied to antonymic relations too.  However, in
-this case, the polarity orientation was reversed during the
-propagation.  This expansion continued until no more adjective could
-be reached via the synonymy-antonymy (SA) links, thus covering all
-stronly-connected SA components around the seed words in the WordNet
-graph.  Unfortunately, no intrinsic evaluation of the resulting
-lexicon was performed in this work---the authors only report their
-results on recognizing subjective sentences and classifying their
-polarity, where they attain an average \F-score of 0.667 and 0.842
-respectively.
+part of speech for mining people's opinions) by taking a seed set of
+words with known polarities and propagating these values to the
+synonyms of these terms that were found in \textsc{WordNet}
+\cite{Miller:95}.  A similar procedure was applied to antonymic
+relations too with the polarity orientation being reversed in this
+case.  This expansion continued until no more adjective could be
+reached via the synonymy-antonymy links.  Unfortunately, no intrinsic
+evaluation of the resulting lexicon was performed in this work---the
+authors only report their results on recognizing subjective sentences
+and classifying their polarity, where they attain an average \F-score
+of 0.667 and 0.842 respectively.
 
-With various modifications, the core idea of propagating the semantic
-orientation through a graph was adopted in almost all of the following
-dictionary-based works:
+With various modifications, the core idea of propagating the polarity
+classes through a semantic graph was adopted in almost all of the
+following dictionary-based works: \citet{Kim:04}, for instance, used a
+similar approach for determining the polarity of adjectives and verbs
+given a small seed set of terms with known orientation.  In
+particular, the likelihood of a new word $w$ belonging to the class $c
+\in \{\textrm{postive}, \textrm{negative}, \textrm{neutral}\}$ was
+computed as:
+\begin{equation*}
+  P(c|w) = \argmax_{c}P(c)\prod_{k=1}^{m}{P(f_k|c)^{\textrm{count}(f_k,\textrm{synset}(w))}},
+\end{equation*}
+where $P(c)$ is the prior probability of the polar class computed as
+the number of words with the orientation $c$ divided by the total
+number of terms considered, $f_k$ stands for the $k$-th seed word of
+the $c$-class which is also a member of the synonym set of $w$, and
+$\textrm{count}(f_k,\textrm{synset}(w))$ means the total number of
+occurrences of $f_k$ in the synsets of $w$.
+
+Starting from a seed set of 34 adjectives and 44 verbs, the authors
+expanded their lexicon to a list of 18,192 terms and evaluated it on a
+manually labeled collection of 462 adjectives and 502 verbs taken from
+the TOEFL test and analyzed by two human experts.  The reported
+average accuracy for this method run up to 68.48\% for adjectives and
+74.28\% for verbs with their recall being equal to 93.07\% and 83.27\%
+respectively.  It should, however, be noted that \citet{Kim:04} used a
+lenient metric for their computation by considering neutral and
+positive terms as the same class which can significantly boost the
+results as we saw in the previous evaluation.
+
+An alternative way of bootstrapping polarities for adjectives was
+proposed by \citet{Kamps:04}.  The authors estimated the orientation
+of the given term by computing the difference between the shortest
+path lengths of this word to the prototypic positive and negative
+lexemes---``good'' and ``bad''.  For example, the polarity score of
+the adjective ``honest'' was computed as
+\begin{equation*}
+  POL(w) = \frac{d(\textrm{honest}, \textrm{bad}) - d(\textrm{honest}, \textrm{good})}%
+  {d(\textrm{bad}, \textrm{good})} = \frac{6 - 2}{4} = 1,
+\end{equation*}
+where $d(w_1, w_2)$ means the geodesic (shortest-path) distance
+between the words $w_1$ and $w_2$ in the \textsc{WordNet} graph.  The
+respective orientation of this term was then correspondingly set to
+\texttt{positive} according to the sign of the obtained
+$POL$-term. \citet{Kamps:04} evaluated the accuracy of their method on
+the General Inquirer lexicon \cite{Stone:66} by comparing the terms
+with non-zero scores to the entries from this resource, getting
+68.19\% of correct predictions on a set of 349 adjectives.
+
+One of the most popular dictionary-based approaches to date, however,
+was proposed by \citet{Esuli:06c}.  Starting with the positive and
+negative seed sets used by \citet{Turney:03} and considering the rest
+of the terms as objective if these words neither appeared in the
+aforemention seed lists nor had a subjective tag in the General
+Inquirer lexicon \cite{Stone:66}, the authors successively expanded
+these polar sets for $k \in \{0, 2, 4, 6\}$ iterations by following
+the synonymity-antonymity links similarly to the method defined by
+\citet{Hu:04}.\footnote{More precisely, following the work of
+  \citet{Strapparava:04}, the authors propagated the same polarity
+  values via the relations \emph{similarity}, \emph{derived-from},
+  \emph{pertains-to}, and \emph{also-see}, and changed these values to
+  the opposite when spreading them over the \emph{direct-antonymy}
+  links.}  In each of these steps, they trained two types of ternary
+classifiers---Rocchio and SVM, using tfidf-vectors of the training
+glosses (whose amount was different in each iteration) as input
+features.  \citet{Esuli:06c} experimented with two different ways of
+obtaining the ternary decissions---using a committee of binary
+classifiers (called Mathod~A) and by directly training a ternary
+predictor (called Method~B); finding that the latter option produced
+slightly better results.  This time, the evaluation was run on both
+the intersection with the GI~lexicon~\cite{Stone:66} and a manually
+annotated subset of \textsc{WordNet} synsets, yielding 66\% accuracy
+for the former metric.\footnote{Note that different publications on
+  \textsc{SentiWordNet} report different configuration settings,
+  cf. \cite{Esuli:05}, \citet{Esuli:06a}, \citet{Esuli:06b},
+  \citet{Esuli:06c}.  In our experiments, we will rely on the setup
+  described in last paper as the most recent description of this
+  approach.}
+
 
 \cite{Kim:06}
 
-An alternative way of bootstrapping polarities for open-class words
-was proposed by \cite{Kamps:04}.  The authors estimated the
-orientation of the given term by computing the difference between the
-shortest path lengths of this word to the prototypic positive and
-negative lexemes.  For example, the orientation of an adjective was
-computed as
-\begin{equation*}
-  POL(w) = \frac{d(w, \textrm{bad}) - d(w, \textrm{good})}%
-  {d(\textrm{bad}, \textrm{good})},
-\end{equation*}
-where $d(w_1, w_2)$ denotes the length of the shortest synonym path
-between the words $w_1$ and $w_2$ found in WordNet.  \cite{Kamps:04}
-evaluated the accuracy of their method on the General Inquirer lexicon
-\cite{Stone:66} by comparing the terms with non-zero scores to the
-entries from this resource, getting 68.19\% of correct predictions on
-a set of 349 terms.
+\cite{Rao:09}
 
-\cite{Esuli:06b}
+GermaNet \cite{Hamp:97}
 
 
 \cite{Blair-Goldensohn:08}
 
 \cite{Mohammad:09}
 
-\cite{Rao:09}
 
 \cite{Hassan:10}
 
@@ -420,9 +477,9 @@ a set of 349 terms.
 The results of this method are shown in Table~\ref{snt-lex:tbl:swn-res}.
 
 To check this hypothesis, we have re-implemented the original system
-of the authors of SentiWordNet and applied it to the German equivalent
-of the English WordNet \cite{Miller:95} -- the GermaNet database
-\cite{Hamp:97}.
+of the authors of \textsc{SentiWordNet} and applied it to the German
+equivalent of the English \textsc{WordNet} \cite{Miller:95} -- the
+\textsc{GermaNet} database \cite{Hamp:97}.
 
 
 \begin{table}[h]
@@ -440,7 +497,7 @@ of the English WordNet \cite{Miller:95} -- the GermaNet database
       & Precision & Recall & $F1$ & Precision & Recall & $F1$ & & \\\hline
       \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
-      SentiWordNet$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
+      \textsc{SentiWordNet}$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
       14.74\stddev{7.79} & 11.73\stddev{5.59} & 4.57\stddev{4.57} &
       5.88\stddev{5.4} & 2.48\stddev{2.37} & 21.08\stddev{2.15} &
       96.04\stddev{0.72}\\
@@ -523,7 +580,7 @@ The results of this method are shown in Table~\ref{snt-lex:tbl:w2v}.
       & Precision & Recall & $F1$ & Precision & Recall & $F1$ & & \\\hline
       \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
-      SentiWordNet$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
+      \textsc{SentiWordNet}$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
       14.74\stddev{7.79} & 11.73\stddev{5.59} & 4.57\stddev{4.57} &
       5.88\stddev{5.4} & 2.48\stddev{2.37} & 21.08\stddev{2.15} &
       96.04\stddev{0.72}\\
@@ -593,16 +650,6 @@ linguistic clues and then extracted new polar terms from these
 sentences, considering words having the highest PMI association scores
 with the rest of the sentences as subjective.
 
-One of the allegedly first attempts to derive a sentiment lexicon from
-a lexical ontology instead of a corpus was made by \citet{Kim:04}.  In
-their work, the authors expanded an initial seed set of 34 adjectives
-and 44 verbs to a list of 18,192 presumably polar terms by iteratively
-enriching the seed words with their synonyms and antonyms from the
-\texttt{WordNet} database \citep{Miller:95}. In a similar way,
-\citet{Godbole:07} enriched their topic-specific seed sets of polar
-expressions by following the synonymy and antonymy links in
-\texttt{WordNet} and exponentially decreasing the probability of a new
-word being polar with the growing path length from a seed term.
 
 %% Another interesting finding of this paper was surpassed by using
 %% the cosine similarities between word vectors in an LSA matrix
@@ -623,42 +670,17 @@ word being polar with the growing path length from a seed term.
 %% method (82.84\%) and significantly outperformed the precision of
 %% the approach proposed by \citet{Kamps:04} (73.4 versus 70.8).
 
-\citet{Kim:04} used a similar approach to determine the polarity of
-new words (adjectives, nouns, and verbs), given a small seed set of
-terms with known orientation.  More precisely, the likelihood of a
-word $w$ belonging to the polarity class $c \in {\textrm{postive},
-  \textrm{negative}, \textrm{neutral}}$ was computed as:
-\begin{equation*}
-  P(c|w) = \argmax_{c}P(c)\prod_{k=1}^{m}{P(f_k|c)^{\textrm{count}(f_k,\textrm{synset}(w))}},
-\end{equation*}
-where $f_k$ stands for the $k$-th feature (seed word) of sentiment
-class $c$ which is also a member of the synonym set of $w$, and
-$\textrm{count}(f_k,\textrm{synset}(w))$ means the total number of
-occurrences of $f_k$ in the synonym set of $w$.  $P(c)$ is the number
-of words in class $c$ divided by the total number of words considered.
-The authors, however, did not attempt to generate a lexicon with this
-method but only used it to classify new words encountered in reviews.
 
-Another lexical sentiment resource (WordNet-Affect) was proposed by
-\citet{Strapparava:04} who manually compiled a list of 1,903
-subjective terms and projected these polarities to the respective
-synononyms set in WordNet.  The resulting database included 2,874
-synsets with a total of 4,787 words.
-
-Another purely dictionary-based method was described by
-\citet{Esuli:06b}.  The authors automatically assigned positive,
-negative, and neutral polarity scores to synsets in \texttt{WordNet}
-by iteratively expanding seed sets for each of these three polarity
-classes using a committee of binary and multiclass classifiers.  At
-each step of this process, these classifiers were trained on the seed
-sets obtained from the previous runs and then used to predict whether
-further synsets immediately accessible from the recently expanded
-seeds would belong the same polarity class as their seed term.
+Another lexical sentiment resource (\textsc{WordNet-Affect}) was
+proposed by \citet{Strapparava:04} who manually compiled a list of
+1,903 subjective terms and projected these polarities to the
+respective synononyms set in \textsc{WordNet}.  The resulting database
+included 2,874 synsets with a total of 4,787 words.
 
 \citet{Takamura:05} attempted to unite corpus- and dictionary-based
 approaches into a single framework.  To this end, the authors adopted
 the Ising spin model from the statistical mechanics and represented
-all words found in \texttt{WordNet}, in the Wall Street Journal, and
+all words found in \textsc{WordNet}, in the Wall Street Journal, and
 the Brown corpus as nodes in a graph.  The edges of this graph
 represented associativity links and were established between any two
 words, if one of these word was a synonym, an antonym, or a hyponym of
@@ -683,46 +705,6 @@ in a similar way to the approach proposed by \citet{Takamura:05}.  The
 resulting lexicon comprised 2,772 words for Russian and 2,786 lexical
 items for English.
 
-\subsubsection{Sentiment Lexica for German}
-
-One of the first attempts to create a sentiment dictionary for German
-was made by \citet{Remus:10}.  In their work, the authors
-automatically translated the General Inquirer lexicon \citep{Stone:66}
-into German.  In order to incorporate domain-specific knowledge into
-this translated resource, they also collected a set of terms that were
-strongly associated with positive or negative product reviews and
-added this set to their translations.  Finally, the resulting lexicon
-was enriched with inflection forms and frequent collocations of the
-translated expressions.  The authors automatically estimated polarity
-scores of their obtained 3,648 lexicon lemmas as the difference
-between their positive and negative PMIs (i.e. PMI scores between the
-collected terms and the pre-defined sets of positive or negative
-expressions).
-
-Similar work was also done by \citet{Waltinger:10} who compiled a list
-of 10,141 subjective terms by first automatically translating the
-Subjectivity Clues lexicon \citep{Wilson:05} and then manually
-reassessing polarity scores of the translated items.  The author
-expanded this list with the most frequent German synonyms of the
-obtained terms and also added a set of negated opinionated phrases
-(e.g. \emph{nicht schlecht} (\emph{not bad})).  The resulting
-dictionary was used as a source of features for an automatic
-classification of the polarity of Amazon reviews and showed superior
-accuracy in comparison with other automatically translated resources.
-
-A slightly different approach was taken by \citet{Clematide:10} who
-manually annotated synsets from \emph{GermaNet} \cite{Hamp:97} with
-their prior polarities and polarity strengths.  A subsequently
-conducted study revealed, however, that the stock of polar adjectives
-obtained in this way was insufficient for doing proper subjectivity
-analysis of literary texts.  In order to overcome this problem, the
-authors followed the idea of \citet{Hatzivassi:97} and extracted an
-additional set of 918 adjectives which frequently co-occurred in
-conjoined phrases with subjective terms from their dictionary.  After
-manually inspecting each of the candidate terms, the authors added
-this pruned set of new adjectives to their original lexicon.  The
-total size of this final dictionary run up to 7,432 entries, 2,779 of
-which were positive.
 
 \subsection{Summary and Conclusions}
 
@@ -741,17 +723,6 @@ In the next step, we analyzed whether the methods that were used for
 creating the original English resources whose translations formed the
 basis of the German lexica could yield better results than the
 manually revised tranlated lists when applied to German data directly.
-
-The first family of lexicon generation methods that we looked into
-used Ontology information about lexical items: words' definitions,
-examples, and lexical links, to find subjectively connotated terms.
-In particular, we reimplemented the original method of
-\citet{Esuli:06b} and applied it to the German lexical database --
-GermaNet \cite{Hamp:97}.  The results of this approach turned out to
-be relatively low, only achievening \ldots for positive expressions
-and \ldots for negative polar terms.  These rather low scores can be
-explained by the scarceness of GermaNet definitions on the one hand
-and the unconventional vocabulary used on Twitter.
 
 Another popular approach to an unsupervised induction of sentiment
 lexica relies on the cooccurrence information about the words taken
