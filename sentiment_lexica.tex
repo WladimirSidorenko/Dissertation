@@ -415,7 +415,7 @@ path lengths of this word to the prototypic positive and negative
 lexemes---``good'' and ``bad''.  For example, the polarity score of
 the adjective ``honest'' was computed as
 \begin{equation*}
-  POL(w) = \frac{d(\textrm{honest}, \textrm{bad}) - d(\textrm{honest}, \textrm{good})}%
+  POL(honest) = \frac{d(\textrm{honest}, \textrm{bad}) - d(\textrm{honest}, \textrm{good})}%
   {d(\textrm{bad}, \textrm{good})} = \frac{6 - 2}{4} = 1,
 \end{equation*}
 where $d(w_1, w_2)$ means the geodesic (shortest-path) distance
@@ -444,15 +444,15 @@ the synonymity-antonymity links similarly to the method defined by
 classifiers---Rocchio and SVM, using tfidf-vectors of the training
 glosses (whose amount was different in each iteration) as input
 features.  \citet{Esuli:06c} experimented with two different ways of
-obtaining the ternary decissions---using a committee of binary
-classifiers (called Mathod~A) and by directly training a ternary
-predictor (called Method~B); finding that the latter option produced
-slightly better results.  This time, the evaluation was run on both
-the intersection with the GI~lexicon~\cite{Stone:66} and a manually
-annotated subset of \textsc{WordNet} synsets, yielding 66\% accuracy
-for the former metric.\footnote{Note that different publications on
+obtaining the ternary decisions: using a committee of binary
+classifiers (Method~A) and by directly training a ternary predictor
+(Method~B), finding that the latter option produced slightly better
+scores.  This time, the evaluation was run on both the intersection
+with the GI~lexicon~\cite{Stone:66} and a manually annotated subset of
+\textsc{WordNet} synsets, yielding 66\% accuracy for the former
+metric.\footnote{Note that different publications on
   \textsc{SentiWordNet} report different configuration settings,
-  cf. \cite{Esuli:05}, \citet{Esuli:06a}, \citet{Esuli:06b},
+  cf. \cite{Esuli:05}, \citet{Esuli:06a}, \citet{Esuli:06b}, and
   \citet{Esuli:06c}.  In our experiments, we will rely on the setup
   described in last paper as the most recent description of this
   approach.}
@@ -460,12 +460,28 @@ for the former metric.\footnote{Note that different publications on
 
 \cite{Kim:06}
 
-\cite{Rao:09}
-
-GermaNet \cite{Hamp:97}
-
-
 \cite{Blair-Goldensohn:08}
+
+Finally, \citet{Rao:09} proposed another graph-based approach in which
+they tried three different methods of assigning polarity scores to
+\textsc{WordNet}-synsets:
+\begin{inparaenum}[\itshape a\upshape)]
+  \item deterministic min-cut \cite{Blum:01},
+  \item randomized min-cut \cite{Blum:04}, and
+  \item the label propagation algorithm of \citet{Zhu:02}, in which
+    labels were passed multiple times through an adjacency matrix of
+    the synset graph.
+\end{inparaenum}
+An evaluation of these systems on the GI lexicon \cite{Stone:66}
+showed signifcant improvement over the previous baselines
+\cite{Kamps:04,Kim:06}, with the deterministic min-cut yielding an
+average \F{}-score of 0.833 over the three parts of speech (nouns,
+adjectives, and verbs) and the label propagation algorithm reaching
+remarkable 0.916 average \F{} on nouns and verbs.\footnote{In order to
+  obtain such high results, the authors had to use the hypernymy
+  relation in addition to the normal synonymy links.  Since this
+  relation was missing for adjectives, the results for this part of
+  speech were significantly lower, only amounting to 0.73 \F{}.}
 
 \cite{Mohammad:09}
 
@@ -473,6 +489,10 @@ GermaNet \cite{Hamp:97}
 \cite{Hassan:10}
 
 \cite{Dragut:10}
+
+GermaNet \cite{Hamp:97}
+
+
 
 The results of this method are shown in Table~\ref{snt-lex:tbl:swn-res}.
 
