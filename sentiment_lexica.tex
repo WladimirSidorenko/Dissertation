@@ -330,7 +330,7 @@ with a manual correction of the entries, they clearly fall into the
 category of semi-automatic approaches.  Unlike fully automated
 methods, such systems typically yield more precise results, which,
 however, come at the cost of tedious human efforts.  In order to see
-to which extent these efforts really pay off in practice on the
+to which extent these efforts really pay off in practice for the
 lexicon generation (LG) task at hand, we additionally decided to
 evaluate the most popular lexicon induction approaches that work
 completely automatically without any assistance from human experts.
@@ -367,9 +367,9 @@ The presumably first dictionary-based approach was proposed by
 \citet{Hu:04}.  In their work on sentiment classification and
 summarization of cutomer reviews, the authors determined semantic
 orientation of adjectives (which were supposed to be the most relevant
-part of speech for mining people's opinions) by taking a seed set of
-words with known polarities and propagating these values to the
-synonyms of these terms that were found in \textsc{WordNet}
+part of speech for mining people's opinions) by taking a set of seed
+terms with known polarities and propagating these values to the
+synonyms of these words that were found in \textsc{WordNet}
 \cite{Miller:95}.  A similar procedure was applied to antonymic
 relations too with the polarity orientation being reversed in this
 case.  This expansion continued until no more adjective could be
@@ -379,41 +379,57 @@ authors only report their results on recognizing subjective sentences
 and classifying their polarity, where they attain an average \F-score
 of 0.667 and 0.842 respectively.
 
+Later on, this approach was refined by \citet{Blair-Goldensohn:08},
+who obtained polarity lables for unknown words by multiplying a score
+vector containing the polarity values of the known seed terms (-1 and
+1) with the adjacency matrix $A$ constructed for the \textsc{WordNet}
+synsets.  In these experiments, the value of the adjacency cell
+$a_{ij}$ was set to $0.2$ if there was a synonymy link between the
+synsets $i$ and $j$ and to $-0.2$ if these synsets were antonymous to
+each other.  Performing this multiplication multiple times, the
+authors ensured that the polarity scores got propagated transitively
+through the network, decaying by a constant factor ($0.2$) with the
+increasing path length to the original seeds.  This method again was
+evaluated only extrinsically---the authors tested their complete
+sentiment summarization system, which used the sentiment scores for
+individual words as features for a maximum-entropy classifier.
+
 With various modifications, the core idea of propagating the polarity
 classes through a semantic graph was adopted in almost all of the
-following dictionary-based works: \citet{Kim:04}, for instance, used a
-similar approach for determining the polarity of adjectives and verbs
-given a small seed set of terms with known orientation.  In
-particular, the likelihood of a new word $w$ belonging to the class $c
-\in \{\textrm{postive}, \textrm{negative}, \textrm{neutral}\}$ was
-computed as:
+following dictionary-based approaches: \citet{Kim:04,Kim:06}, for
+instance, used a similar method to determine the polarity of
+adjectives and verbs given a small seed set of terms with known
+orientation.  In particular, the likelihood of a new word $w$
+belonging to the class $c \in \{\textrm{postive}, \textrm{negative},
+\textrm{neutral}\}$ was computed as:
 \begin{equation*}
   P(c|w) = \argmax_{c}P(c)\prod_{k=1}^{m}{P(f_k|c)^{\textrm{count}(f_k,\textrm{synset}(w))}},
 \end{equation*}
-where $P(c)$ is the prior probability of the polar class computed as
-the number of words with the orientation $c$ divided by the total
-number of terms considered, $f_k$ stands for the $k$-th seed word of
-the $c$-class which is also a member of the synonym set of $w$, and
-$\textrm{count}(f_k,\textrm{synset}(w))$ means the total number of
-occurrences of $f_k$ in the synsets of $w$.
+where $P(c)$ is the prior probability of the polar class estimated as
+the number of words with the given orientation $c$ divided by the
+total number of terms considered, $f_k$ stands for the $k$-th seed
+word of the $c$-class which is also a member of the synonym set of
+$w$, and $\textrm{count}(f_k,\textrm{synset}(w))$ means the total
+number of occurrences of $f_k$ in the synsets of $w$.
 
 Starting from a seed set of 34 adjectives and 44 verbs, the authors
-expanded their lexicon to a list of 18,192 terms and evaluated it on a
-manually labeled collection of 462 adjectives and 502 verbs taken from
-the TOEFL test and analyzed by two human experts.  The reported
-average accuracy for this method run up to 68.48\% for adjectives and
-74.28\% for verbs with their recall being equal to 93.07\% and 83.27\%
-respectively.  It should, however, be noted that \citet{Kim:04} used a
-lenient metric for their computation by considering neutral and
-positive terms as the same class which can significantly boost the
-results as we saw in the previous evaluation.
+successively expanded their lexicon to a list of 18,192 terms and
+evaluated it on a manually labeled collection of 462 adjectives and
+502 verbs taken from the TOEFL test and analyzed by two human experts.
+The reported average accuracy for this method run up to 68.48\% for
+adjectives and 74.28\% for verbs with their recall being equal to
+93.07\% and 83.27\% respectively.  It should, however, be noted that
+\citet{Kim:04} used a lenient metric for their computation by
+considering neutral and positive terms as the same class which can
+significantly boost the results as we have already seen in the
+previous evaluation.
 
 An alternative way of bootstrapping polarities for adjectives was
 proposed by \citet{Kamps:04}.  The authors estimated the orientation
 of the given term by computing the difference between the shortest
 path lengths of this word to the prototypic positive and negative
 lexemes---``good'' and ``bad''.  For example, the polarity score of
-the adjective ``honest'' was computed as
+the adjective ``honest'' was calculated as
 \begin{equation*}
   POL(honest) = \frac{d(\textrm{honest}, \textrm{bad}) - d(\textrm{honest}, \textrm{good})}%
   {d(\textrm{bad}, \textrm{good})} = \frac{6 - 2}{4} = 1,
@@ -422,8 +438,8 @@ where $d(w_1, w_2)$ means the geodesic (shortest-path) distance
 between the words $w_1$ and $w_2$ in the \textsc{WordNet} graph.  The
 respective orientation of this term was then correspondingly set to
 \texttt{positive} according to the sign of the obtained
-$POL$-term. \citet{Kamps:04} evaluated the accuracy of their method on
-the General Inquirer lexicon \cite{Stone:66} by comparing the terms
+$POL$-value. \citet{Kamps:04} evaluated the accuracy of their method
+on the General Inquirer lexicon \cite{Stone:66} by comparing the terms
 with non-zero scores to the entries from this resource, getting
 68.19\% of correct predictions on a set of 349 adjectives.
 
@@ -444,38 +460,31 @@ the synonymity-antonymity links similarly to the method defined by
 classifiers---Rocchio and SVM, using tfidf-vectors of the training
 glosses (whose amount was different in each iteration) as input
 features.  \citet{Esuli:06c} experimented with two different ways of
-obtaining the ternary decisions: using a committee of binary
-classifiers (Method~A) and by directly training a ternary predictor
-(Method~B), finding that the latter option produced slightly better
-scores.  This time, the evaluation was run on both the intersection
-with the GI~lexicon~\cite{Stone:66} and a manually annotated subset of
-\textsc{WordNet} synsets, yielding 66\% accuracy for the former
-metric.\footnote{Note that different publications on
-  \textsc{SentiWordNet} report different configuration settings,
-  cf. \cite{Esuli:05}, \citet{Esuli:06a}, \citet{Esuli:06b}, and
-  \citet{Esuli:06c}.  In our experiments, we will rely on the setup
-  described in last paper as the most recent description of this
+obtaining such ternary predictors: using a committee of binary
+classifiers (Method~A) and by directly training a ternary
+classification system (Method~B), finding that the latter option
+produced slightly better scores.  This time, the evaluation was run on
+both the intersection with the GI~lexicon~\cite{Stone:66} and a
+manually annotated subset of \textsc{WordNet} synsets, yielding 66\%
+accuracy for the former metric.\footnote{Note that different
+  publications on \textsc{SentiWordNet} report different configuration
+  settings, cf. \cite{Esuli:05}, \citet{Esuli:06a}, \citet{Esuli:06b},
+  and \citet{Esuli:06c}.  In our experiments, we will rely on the
+  setup described in last paper as the most recent description of this
   approach.}
 
-
-\cite{Kim:06}
-
-\cite{Blair-Goldensohn:08}
-
 Finally, \citet{Rao:09} proposed another graph-based approach in which
-they tried three different methods of assigning polarity scores to
-\textsc{WordNet}-synsets:
+they tried three different methods of assigning polarity scores to the
+\textsc{WordNet}-synsets, using
 \begin{inparaenum}[\itshape a\upshape)]
-  \item deterministic min-cut \cite{Blum:01},
-  \item randomized min-cut \cite{Blum:04}, and
-  \item the label propagation algorithm of \citet{Zhu:02}, in which
-    labels were passed multiple times through an adjacency matrix of
-    the synset graph.
+\item deterministic min-cut \cite{Blum:01},
+\item randomized min-cut \cite{Blum:04}, and
+\item the label propagation algorithm of \citet{Zhu:02}.
 \end{inparaenum}
 An evaluation of these systems on the GI lexicon \cite{Stone:66}
-showed signifcant improvement over the previous baselines
+showed significant improvement over the previous baselines
 \cite{Kamps:04,Kim:06}, with the deterministic min-cut yielding an
-average \F{}-score of 0.833 over the three parts of speech (nouns,
+average \F{}-score of 0.833 over three parts of speech (nouns,
 adjectives, and verbs) and the label propagation algorithm reaching
 remarkable 0.916 average \F{} on nouns and verbs.\footnote{In order to
   obtain such high results, the authors had to use the hypernymy
@@ -483,16 +492,58 @@ remarkable 0.916 average \F{} on nouns and verbs.\footnote{In order to
   relation was missing for adjectives, the results for this part of
   speech were significantly lower, only amounting to 0.73 \F{}.}
 
-\cite{Mohammad:09}
+Other notable works on dictionary-based lexicon generation include
+those of \citet{Mohammad:09}, who generated their seed set using
+antonymous morphological patterns (e.g.,
+\emph{logical}---\emph{illogical}, \emph{honest}---\emph{dishonest},
+\emph{happy}---\emph{unhappy}) and then expanded this list by
+classifying entries in the Macquarie Thesaurus \cite{Bernard:86};
+\citet{Hassan:10}, who adopted a random walk approach, estimating the
+polarity of an unknown word by taking the difference between an
+average number of steps a random walker has to make in order to reach
+a term from positive or negative set; and \citet{Dragut:10}, who
+deduced the polarities of new words using manually specified inference
+rules.
 
+Since almost all of the presented approaches used \textsc{WordNet}---a
+large lexical database with over 117,000 synsets---for inducing new
+polarity lists and evaluated their results in vitro (using the General
+Inquirer lexicon \cite{Stone:66}), it remains unclear how these
+methods would work for languages with much smaller lexical resources
+and whether they would perform equally well in vivo (when tested on
+real-life corpora).  Moreover, because General Inquirer is a generic
+standard-language dictionary, it is also not obvious whether the
+systems that perform best on this list would be also successful on
+more colloquial domains.
 
-\cite{Hassan:10}
+To answer these questions, we decided to reimplement the approaches of
+\citet{Hu:04}, \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
+\citet{Esuli:06c}, \citet{Rao:09}, and \citet{Hassan:10} and apply
+these methods to \textsc{GermaNet}\footnote{Throughout our comparisons
+  and experiments, we will use \textsc{WordNet} Version 3.0 and
+  \textsc{GermaNet} Version 9.} \cite{Hamp:97}---the German equivalent
+of \textsc{WordNet}, which, however, is much smaller in size.  To give
+a better impression of the relative sizes of the two databases
+(\textsc{GermaNet} and \textsc{WordNet}), we provide key figures for
+both resources in Table~\ref{snt-lex:tbl:germanet-wordnet}.
 
-\cite{Dragut:10}
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
+    \begin{tabular}{|p{0.21\columnwidth}| % first columm
+        *{6}{>{\centering\arraybackslash}m{0.12\columnwidth}|}} % next nine columns
+      \hline
+      \textbf{Resource} & Noun Synsets & Verb Synsets & Adjective Synsets %
+      & Hypernymy Relations & Meronymy Relations & Antonymy Relations\\\hline
 
-GermaNet \cite{Hamp:97}
-
-
+      \textsc{WordNet}  &  &  &  &  &  & \\
+      \textsc{GermaNet} & 71,575 & 11,026 & 10,645 & 97,712 & 5,948 & 1,741\\\hline
+    \end{tabular}
+    \egroup
+    \caption{Key figures of \textsc{WordNet} and \textsc{GermaNet}.}
+    \label{snt-lex:tbl:germanet-wordnet}
+  \end{center}
+\end{table}
 
 The results of this method are shown in Table~\ref{snt-lex:tbl:swn-res}.
 
