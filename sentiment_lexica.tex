@@ -522,51 +522,104 @@ more colloquial domains.
 
 To answer these questions, we decided to reimplement the approaches of
 \citet{Hu:04}, \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
-\citet{Esuli:06c}, \citet{Rao:09}, and \citet{Hassan:10} and apply
-these methods to \textsc{GermaNet}\footnote{Throughout our
+\citet{Esuli:06c}, \citet{Rao:09}, and \citet{Hassan:10}, applying
+these methods to \textsc{GermaNet}---the German equivalent of the
+English \textsc{WordNet} \cite{Hamp:97}\footnote{Throughout our
   experiments, we will use \textsc{WordNet} Version 3.0 and
-  \textsc{GermaNet} Version 9.} \cite{Hamp:97}---the German equivalent
-of \textsc{WordNet}, which, however, is much smaller in size.  To give
-a better impression of the relative sizes of the two databases
-(\textsc{GermaNet} and \textsc{WordNet}), we provide key statistics on
-both resources in Table~\ref{snt-lex:tbl:germanet-wordnet}.
+  \textsc{GermaNet} Version 9.}--- and subsequently evaluating them on
+the presented Twitter corpus.
+
+Since \textsc{GermaNet}, however, is significantly different from its
+English counterpart, both quantitatively and qualitatively, we should
+first present some key statistics on both resources (shown in
+Table~\ref{snt-lex:tbl:germanet-wordnet}) and visualize the lexical
+graphs of these databases (demonstrated in
+Figures~\ref{snt-lex:fig:germanet} and~\ref{snt-lex:fig:wordnet}).
 
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
     \begin{tabular}{p{0.15\textwidth} % first columm
-        *{9}{>{\centering\arraybackslash}m{0.085\textwidth}}} % next nine columns
+        *{8}{>{\centering\arraybackslash}m{0.085\textwidth}}} % next nine columns
       \toprule
       & \multicolumn{2}{c}{\bfseries Noun} & %
       \multicolumn{2}{c}{\bfseries Verb} & %
-      \multicolumn{2}{c}{\bfseries Adjective} & & & \\
+      \multicolumn{2}{c}{\bfseries Adjective} & & \\
       \multirow{-2}{0.12\columnwidth}{\centering\bfseries Resource} & %
       Words & Synsets & Words & Synsets & Words & Synsets & %
-      \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Hy\-per\-n.\newline{}Rels} & %
-      \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Ho\-lo\-n.\newline{}Rels} & %
+      \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Hy\-per.\newline{}Rels} & %
       \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Anto\-n.\newline{}Rels}\\
       \midrule
 
-      \textsc{WordNet}  & 117,827 & 82,115 & 11,529 & 13,767 & 21,479 & 18,156 & 97,666 & %
-      22,187 & 7,979\\
-      \textsc{GermaNet} & 85,662 & 71,575 & 9,340 & 11,026 & 12,890 & 10,645 & 97,712 & 5,948 & 1,741\\
+      \textsc{GermaNet} & 85,662 & 71,575 & 9,340 & 11,026 & 12,890 & 10,645 & %
+      97,712 & 1,741\\
+      \textsc{WordNet}  & 117,798 & 82,115 & 11,529 & 13,767 & 21,479 & 18,156 & %
+      95,322 & 7,394\\
       \bottomrule
     \end{tabular}
     \egroup
-    \caption{Key statistics on \textsc{WordNet} and
-      \textsc{GermaNet}.}
+    \caption{Key statistics on \textsc{GermaNet} and
+      \textsc{WordNet}.}
     \label{snt-lex:tbl:germanet-wordnet}
   \end{center}
 \end{table}
 
+\begin{figure*}[htbp!]
+{
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/germanet.png}
+  \caption{\textsc{GermaNet}}\label{snt-lex:fig:germanet}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/wordnet.png}
+  \caption{\textsc{WordNet}}\label{snt-lex:fig:wordnet}
+\end{subfigure}
+}
+\caption{Graphical visualization of \textsc{GermaNet} and
+      \textsc{WordNet}.}\label{snt:fig:crp-sent-emo-distr}
+\end{figure*}
+
 As can be seen from the table, \textsc{GermaNet} has significantly
-fewer words and synsets for every common part of speech with the
-largest gaps observed for nouns and adjectives.  A similar situation
-is observed for semantic relations: here, \textsc{GermaNet} fetures
-almost four times less holonyms and five times less antonyms.  The
-only aspect in which the German resource outperforms \textsc{WordNet}
-is the number of hypernym-hyponym links, where it has almost 1,000
-more relations than the English database.
+fewer words and synsets for all common parts of speech with the
+largest gaps observed for nouns and adjectives.  Moreover, as shown in
+the figures, such PoS-classes as adverbs and adjective satellites are
+missing completely in the German resource.  The reason for this is
+that the form (and meaning) of most German adverbs typically coincides
+with that of the adjectives; therefore, both categories are treated
+the same way, being represented as adjectival synsets.
+
+A slightly different situation can be observed for the semantic links
+(relations) between the synsets: here, \textsc{GermaNet} features
+almost 2,500 more hypernym-hyponym pairs than the English resource,
+whereas the number of antonyms is more than four times less than in
+\textsc{WordNet}.
+
+An especially interesting pattern, however, appears with the relations
+that are connecting different part-of-speech classes: As can be seen
+from the figures, the strongest inter-PoS connections in
+\textsc{GermaNet} are the pertainym links between adjectives and nouns
+and participle bounds between adjectives and verbs.  The interlinks
+between nouns and verbs, however, are both much fewer in number and
+more diverse in their nature.  This situation is different for
+\textsc{WordNet} where the prevailing majority of inter-part-of-speech
+connections are the \texttt{related\_to} relations (especially between
+nouns, adjective satellites, verbs, and verbs and adjectives) and
+\texttt{derived\_from} (especially between adverbs and
+adjectives/adjective satellites).  The links between adjectives and
+nouns are mixed though, featuring both \texttt{related\_to} and
+\texttt{derived\_from} connections.  As we should see later, these
+links are crucial for breaking part-of-speech dependencies of seed
+sets in the cases when all seeds belong to the same PoS class.
+
+
+
+Relations: \citet{Kamps:04} direct antonymy, similarity, derived-from,
+pertains-to, attribute, and also-see ,
+
+Translated Relations:
 
 The results of this method are shown in Table~\ref{snt-lex:tbl:swn-res}.
 
@@ -578,33 +631,63 @@ equivalent of the English \textsc{WordNet} \cite{Miller:95} -- the
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
-    \begin{tabular}{|p{0.21\columnwidth}| % first columm
-        *{8}{>{\centering\arraybackslash}m{0.1\columnwidth}|}} % next nine columns
-      \hline
-          \multirow{2}*{\bfseries Element} & \multicolumn{3}{c|}{Positive
-        Expressions} & %
-      \multicolumn{3}{c|}{Negative Expressions} & %
-      \multirow{2}*{Macro-$F1$} & %
-      \multirow{2}*{Micro-$F1$}\\\cline{2-7}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.1\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.084\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+      \toprule
+          \multirow{2}*{\bfseries Lexicon} & %
+          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline $F1$} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline $F1$}\\
+          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-      & Precision & Recall & $F1$ & Precision & Recall & $F1$ & & \\\hline
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+          & Precision & Recall & $F1$ & %
+          Precision & Recall & $F1$ & %
+          Precision & Recall & $F1$ & & \\\midrule
 
-      \textsc{SentiWordNet}$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
-      14.74\stddev{7.79} & 11.73\stddev{5.59} & 4.57\stddev{4.57} &
-      5.88\stddev{5.4} & 2.48\stddev{2.37} & 21.08\stddev{2.15} &
-      96.04\stddev{0.72}\\
+          HL &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
 
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Our Method}\\\hline
+          BG &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+          KH &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+          ES & 46.2\stddev{15} & 14.5\stddev{5.8} & 21.7\stddev{7.7} & %
+          22.4\stddev{28.6} & 2.7\stddev{3.5} & 4.7\stddev{6} & %
+          96.5\stddev{0.7} & 99.5\stddev{0.2} & 97.9\stddev{0.4} & %
+          41.4\stddev{3.5} & 95.9\stddev{0.7} \\
+
+          RR &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+          AR &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Classification results.\\ {\small (GPC -- German Polarity
-        Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
-        -- Zurich Polarity Lexicon \cite{Clematide:10})}}
-    \label{snt-lex:tbl:swn-res}
+    \caption{Evaluation of dictionary-based approaches.\\ {\small (HL
+        -- \citet{Hu:04}, BG -- \citet{Blair-Goldensohn:08}, KH --
+        \citet{Kim:04,Kim:06}, ES -- \citet{Esuli:06c}, RR --
+        \citet{Rao:09}, AR -- \citet{Hassan:10})}}
+    \label{snt-lex:tbl:gsl-res-full}
   \end{center}
 \end{table}
+
+% seed sets: (Turney and Littman, 2003); SentiWS (Remus, 2010)
 
 \subsection{Corpus-based Lexicon Induction}
 
