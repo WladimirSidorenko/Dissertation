@@ -25,8 +25,8 @@ tracking procedure we used to collect the initial raw data for our
 the utilized annotation tool, we turn to an extensive analysis of the
 inter-annotator agreement, which will serve as an upper bound in our
 later experiments.  In Subsection \ref{subsec:snt:iaa}, we propose two
-new versions of the popular $\kappa$ metric \cite{Cohen:60} -- binary
-and proportional kappa -- which were specifically adjusted to the
+new versions of the popular $\kappa$ metric \cite{Cohen:60}---binary
+and proportional kappa---which were specifically adjusted to the
 peculiarities of our annotation task.  With these two measures, we
 estimate the inter-coder reliability of the annotated spans of
 subjective opinions, their targets, and sources, also checking whether
@@ -53,13 +53,13 @@ pay attention to various in-domain factors as they might considerably
 affect the final distribution, making the resulting corpus either
 utterly sparse or excessively biased.
 
-To minimize both of these risks -- scarceness and bias -- when
-preparing our data, we decided to use a compromise approach by
-gathering one part of the new corpus from tweets which were a priori
-more likely to contain sentiments, and sampling the rest of the
-microblogs from a big collection of messages uniformly at random.  By
-doing so, we hoped to increase the recall with the former strategy
-while mitigating the introduced bias with the latter method.
+To minimize both of these risks---scarceness and bias---when preparing
+our data, we decided to use a compromise approach by gathering one
+part of the new corpus from tweets which were a priori more likely to
+contain sentiments, and sampling the rest of the microblogs from a big
+collection of messages uniformly at random.  By doing so, we hoped to
+increase the recall with the former strategy while mitigating the
+introduced bias with the latter method.
 
 As criteria which could help us find more opinionated microblogs, we
 considered the topic and form of tweets.  Our motivation was that some
@@ -256,25 +256,21 @@ that had to be annotated by our experts.  This list included:
 
   With this element we associated the following types of attributes:
   \begin{itemize}
-    \item
-      \emph{polarity}, which reflected the attitude of the opinion's
-      holder towards the evaluated object.  Following
-      \citet{Jindal:06a,Jindal:06b}, we not only distinguished between
-      the traditional values for this attribute -- \emph{positive} and
-      \emph{negative} -- but also considered \emph{comparison} as a
-      separate polarity type, since comparative sentiments typically
-      only showed relative preferences of the user without implying
-      her general fondness or reluctance to any of the juxtaposed
-      objects;
-    \item
-      \emph{intensity}, which showed the emotional strength of the
-      expressed opinion.  Possible values for this property were:
-      \emph{weak}, \emph{medium}, and \emph{strong};
-    \item
-      finally, following \citet{Bosco:13} and \citet{Rosenthal:14}, we
-      also explicitly addressed the cases of \emph{sarcasm} by
-      providing an eponymous boolean attribute for ironically meant
-      comments;
+  \item \emph{polarity}, which reflected the attitude of the opinion's
+    holder towards the evaluated object.  Following
+    \citet{Jindal:06a,Jindal:06b}, we not only distinguished between
+    the traditional values for this attribute---\emph{positive} and
+    \emph{negative}---but also considered \emph{comparison} as a
+    separate polarity type, since comparative sentiments typically
+    only showed relative preferences of the user without implying her
+    general fondness or reluctance to any of the juxtaposed objects;
+  \item \emph{intensity}, which showed the emotional strength of the
+    expressed opinion.  Possible values for this property were:
+    \emph{weak}, \emph{medium}, and \emph{strong};
+  \item finally, following \citet{Bosco:13} and \citet{Rosenthal:14},
+    we also explicitly addressed the cases of \emph{sarcasm} by
+    providing an eponymous boolean attribute for ironically meant
+    comments;
   \end{itemize}
 
 \item
@@ -293,15 +289,14 @@ that had to be annotated by our experts.  This list included:
       antecedents of these proforms (cf. \citet{Stoyanov:06} and
       \citet{Ding:10} on the importance of coreference resolution in
       opinion mining);
-    \item
-      and, finally, another edge feature -- \emph{sentiment-ref} --
-      which had to be drawn from the target to its respective opinion
-      in cases when the target element was located outside of its
-      sentiment or on the intersection of two opinion spans.  This
-      attribute was to help us disambiguate the assignment of the
-      evaluated objects to their pertaining appraisals when this
-      association was not immediately obvious from the surrounding
-      context;
+    \item and, finally, another edge
+      feature---\emph{sentiment-ref}---which had to be drawn from the
+      target to its respective opinion in cases when the target
+      element was located outside of its sentiment or on the
+      intersection of two opinion spans.  This attribute was to help
+      us disambiguate the assignment of the evaluated objects to their
+      pertaining appraisals when this association was not immediately
+      obvious from the surrounding context;
   \end{itemize}
 
 \item
@@ -337,7 +332,7 @@ Following our guidelines, the experts also included the complete noun
 phrase ``diese Milliardeneinnahmen'' (\emph{these billions of
   revenue}) along with the indefinite pronoun ``diese'' (\emph{these})
 into the annotated target span, since the pronoun was syntactically
-dependent on the main evaluated term -- ``Milliardeneinnahmen''
+dependent on the main evaluated term---``Milliardeneinnahmen''
 (\emph{billions of revenue}).
 
 In addition to the main opinion components (sentiments, sources, and
@@ -403,8 +398,7 @@ evaluations.  These elements included:
   attribute \emph{emo-expression-ref}, which had to point from the
   modifying element to its pertaining opinionated term;
 
-\item
-  the final element -- \textbf{negations} -- was defined as
+\item the final element---\textbf{negations}---was defined as
   grammatical or lexical means which turned the polarity of an
   emotional expression to the complete opposite.  These were typically
   represented by the negative particle ``nicht'' (\emph{not}) or the
@@ -453,8 +447,8 @@ elements is shown below:
 \end{example}
 In this case, again, the whole sentence is labeled as a sentiment,
 since only the main verb phrase simultaneously comprises both the
-target of the evaluation -- ``Die Nazi-Vergangenheit'' (\emph{The Nazi
-  history}) -- and its respective polar judgement -- ``nicht sehr
+target of the evaluation---``Die Nazi-Vergangenheit'' (\emph{The Nazi
+  history})---and its respective polar judgement---``nicht sehr
 r\"uhmlich'' (\emph{not very laudable}).  The boundaries of the
 sentiment and target elements are determined on the syntactic level,
 spanning the whole clause in the former case and encompassing the
@@ -477,7 +471,7 @@ element.\footnote{A more detailed description of the annotation
 
 \subsection{Annotation Tool and Format}\label{subsec:snt:tformat}
 
-For annotating the collected dataset, we used \texttt{MMAX2} -- a
+For annotating the collected dataset, we used \texttt{MMAX2}---a
 freely available text markup
 tool.\footnote{\url{http://mmax2.sourceforge.net/}} The primary
 reasons for choosing this program were:
@@ -838,7 +832,7 @@ opinion holders: the scores for the first two entity types amount to
 $31.21\%$ and $26.85\%$ respectively, whereas the figures for sources
 run up to $33.75\%$.  We explain this difference by the fact, that
 sentiments and their targets are typically represented by discourse-
-or syntax-level constituents -- clauses or noun phrases -- and, even
+or syntax-level constituents---clauses or noun phrases---and, even
 though the experts might agree on the presence of these elements more
 often (as suggested by the binary measure), reaching a consensus about
 the exact boundaries of these items turns out to be a challenging task
@@ -862,8 +856,8 @@ absolutely identical for both measures.  It means that there was no
 single case in the labeled dataset where the annotation spans of these
 two elements were overlapping or disagreed on their boundaries once
 the annotators were at one about their presence.  Unfortunately, due
-to a rather small number of these entities in our corpus -- with only
-3 cases of diminishers and 21 cases of negations in total -- the
+to a rather small number of these entities in our corpus---with only
+3 cases of diminishers and 21 cases of negations in total---the
 overall agreement on these elements was relatively small too,
 amounting to $33.32\%$ and $28.69\%$.
 
@@ -956,13 +950,13 @@ determine the boundaries of these terms in most of the cases.
 Somewhat surprisingly, the agreement improvement on intensifiers was
 notably smaller than the reliability increases obtained for sentiments
 and polar terms.  The resulting figures of the intensifying elements
-were, in fact, even worse than the scores attained by other modifiers
--- diminishers and negations, even though the opposite situation was
-seen after the first annotation run.  A closer look at the diverging
-cases revealed that the majority of these disagreements stemmed from a
-different treatment of exclamation marks: the first expert had been
-skipping these entities during the annotation, whereas the second
-coder had regarded them as valid intensifying expressions.
+were, in fact, even worse than the scores attained by other
+modifiers---diminishers and negations, even though the opposite
+situation was seen after the first annotation run.  A closer look at
+the diverging cases revealed that the majority of these disagreements
+stemmed from a different treatment of exclamation marks: the first
+expert had been skipping these entities during the annotation, whereas
+the second coder had regarded them as valid intensifying expressions.
 Nevertheless, even despite these diverging interpretations, the
 reliability on intensifiers was above the $55\%$ threshold, attaining
 a moderate agreement.
@@ -1123,18 +1117,18 @@ Example~\ref{snt:exmp:emo-disagr}
 
 \begin{example}\label{snt:exmp:emo-disagr}
   \textcolor{red3}{\textbf{Annotation 1:}}\\ \upshape{}Syrien vor dem
-  Angriff -- bringen diese Bomben den Frieden?\\[0.3em]\itshape
-  \noindent\itshape{}Syria facing an attack -- will these bombs bring
+  Angriff---bringen diese Bomben den Frieden?\\[0.3em]\itshape
+  \noindent\itshape{}Syria facing an attack---will these bombs bring
   peace?\\
 
   \noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation
       2:}}\\ \upshape{}Syrien vor dem
-  \emoexpression{\textcolor{red}{Angriff}} -- bringen diese
+  \emoexpression{\textcolor{red}{Angriff}}---bringen diese
   \emoexpression{\textcolor{red}{Bomben}} den
   \emoexpression{\textcolor{red}{Frieden}}?\\[0.3em]
   \noindent\itshape{}Syria facing an
-  \upshape\emoexpression{\textcolor{red}{\itshape{}attack}\upshape}\itshape{}
-  -- will these
+  \upshape\emoexpression{\textcolor{red}{\itshape{}attack}\upshape}\itshape{}---will
+  these
   \upshape\emoexpression{\textcolor{red}{\itshape{}bombs}\upshape}\itshape{}
   bring
   \upshape\emoexpression{\textcolor{red}{\itshape{}peace}\upshape}\itshape{}?
@@ -1422,7 +1416,7 @@ noisiness of the labels prevents the researchers from properly
 analyzing linguistic phenomena in these collections.
 
 A notable exception to these works constitutes the SemEval dataset of
-\citet{Nakov:13} -- a set of 15,000 microblogs which were manually
+\citet{Nakov:13}---a set of 15,000 microblogs which were manually
 analyzed by human experts on the Amazon Mechanical Turk platform.
 Even though this corpus is one of the biggest manually labeled tweet
 collections to date, its data still have some potential drawbacks:
@@ -1509,11 +1503,11 @@ our experts proceeded with the annotation of the full corpus, staying
 at a relatively high level of mutual agreement.
 
 To estimate the inter-rater reliability of the labels, we introduced
-two modified versions of the established Cohen's $\kappa$-metric --
-binary and proportional kappa -- which differed in the way of treating
-double and overlapping annotations.  With these two measures, we
-computed the inter-annotator agreement of our coders at different
-stages of their work on the data.
+two modified versions of the established Cohen's
+$\kappa$-metric---binary and proportional kappa---which differed in
+the way of treating double and overlapping annotations.  With these
+two measures, we computed the inter-annotator agreement of our coders
+at different stages of their work on the data.
 
 An extensive IAA study presented in the final part of this section
 showed that, initially, the experts had had major difficulties to

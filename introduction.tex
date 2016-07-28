@@ -12,14 +12,15 @@
 \chapter{Introduction}
 
 \section{Overview}
-As social media become more and more ubiquitous nowadays, the need for
-automatic analysis of their data rises.  This analysis, however, is greatly
-aggravated by the fact that the language style used on the Web is
-fundamentally different from the style that is typical for newspapers or
-scientific articles.  Indeed, sentences like the ones shown in Example
-\ref{exmp:intro:tweets:en} (taken from \citet{HanBaldwin:11}) are highly
-unlikely to appear in editorials or government documents even though their
-wording is commonplace on the U.S. English Twitter.
+As social media become more and more ubiquitous, the need for an
+automatic analysis of their data rises.  This analysis, however, is
+greatly aggravated by the fact that the language style used on the Web
+is fundamentally different from the style that is typical for
+newspapers or scientific articles.  Indeed, sentences like the ones
+shown in Example \ref{exmp:intro:tweets:en} (taken from
+\citet{HanBaldwin:11}) are highly unlikely to appear in editorials or
+government documents even though their wording is commonplace on the
+U.S. English Twitter.
 \begin{example}\label{exmp:intro:tweets:en}
 u must be talkin bout the paper but I was thinkin movies
 
@@ -32,18 +33,17 @@ languages too, and German is not an exception.
 It is, however, unclear whether the idiosyncracies of the online style
 should be considered as a drawback or an advantage for the automated
 language analysis.  While most of the NLP-researchers tend to consider
-these peculiarities as a hindrance and even suggest converting online
-texts to a more standard language-like form before doing any
-processing (cf. relevant works in Section
-\ref{sec:normalization:relwork}), other scientists at least object
-that a straightforward conversion would loose many significant details
-and therefore lead to a decrease in the performance.
-\citet{Brody:11}, for example, claim that the intentional prosodic
-lengthenings of the words (such as \texample{sooooooo strong} or
-\texample{coooolllllll}) often serve as vivid indicators of
-opinionated sentences and keeping these elongations in text would
-result in better sentiment analysis.  \citet{Eisenstein:13} partially
-supports this idea by noting that also in cases of lexical
+these peculiarities as a hindrance and suggest converting online texts
+to a more standard language-like form before doing any processing
+(cf. relevant works in Section \ref{sec:normalization:relwork}), other
+scientists at least object that a straightforward conversion would
+loose many significant details and therefore lead to a decrease in the
+performance.  \citet{Brody:11}, for instance, claim that the
+intentional prosodic lengthenings of words (such as \texample{sooooooo
+  strong} or \texample{coooolllllll}) often serve as vivid indicators
+of opinionated sentences and keeping these elongations in text would
+result in a better sentiment analysis.  \citet{Eisenstein:13}
+partially supports this idea by noting that also in cases of lexical
 normalization, when we are replacing a colloquial variant of some
 expression with its standard language equivalent, we can also observe
 a considerable shift in the original meaning.  %% Even such non-verbal
@@ -64,35 +64,42 @@ first and primary objective is \emph{to find out linguistic phenomena
   that actually account for the idiosyncracies of the Web genre}.
 
 After determining the online language-specific elements, the next
-question that naturally arises is what to do about these elements --
-should we leave them unchanged or should we process them in some
-special way and, if so, what this special way might look like?  Thus,
-the second preliminary objective is \emph{to find effective methods
-  for handling the specifics of the Web language}.  In scope of this
-goal, we should juxtapose two approaches: the one of doing nothing and
-the one of normalizing that specifics.  For the latter method, we
-should also provide an appropriate metric for intrinsic evaluation.
+naturally arising question is what to do about these elements---should
+we leave them unchanged or should we process them in some special way
+and, if so, what this special way might look like?  Thus, the second
+preliminary objective is \emph{to find effective methods for handling
+  the specifics of the Web language}.  In scope of this goal, we
+should juxtapose two approaches: the one of doing nothing and the one
+of normalizing that specifics.
 
-Of course, evaluating an approach intrinsically can tell us much about the
-quality of its work, but a crucial fact about the text preprocessing is that
-people are usually not interested in the preprocessing by itself but much more
-in its effect on the downstream modules, i.e. its extrinsic impact.
-
+For the normalization method, we should also \emph{provide an
+  appropriate metric for an intrinsic evaluation of this technique}.
+However, evaluating an approach intrinsically can tell us much about
+the quality of its work, but a crucial fact about the text
+preprocessing is that people are usually not interested in the
+preprocessing by itself but much more in its effect on the downstream
+modules, i.e., its extrinsic impact.  Therefore, after intrinsically
+evaluating our preprocessing strategy, we should \emph{extrinsically
+  asses its effect on the downstream NLP applications.}  We do so on
+the example of two main NLP objectives: sentiment and discourse
+analysis.
 
 \paragraph{Research objects.}
 
-But before we start addressing our goals, we first would like to clarify some
-methodological aspects that are related to our research.
+However, before we start addressing our goals, we first would like to
+clarify some methodological aspects of our work.
 
-First of all, we should note that in order to assess the impact of stylistic
-peculiarities on the performance of automatic text applications, we need to
-answer the question of what these peculiarities actually are, i.e. which
-linguistic phenomena in fact contribute to the idiosyncracy of the online
-genre.  In order to answer this question, we should conduct an extensive study
-of out-of-vocabulary (OOV) words found in Twitter microblogs and divide found
-OOVs into separate classes depending on their word formation type.  Then, we
-shall investigate which of the suggested classes are typical only for the
-online language and which are common for all text genres.
+First of all, we should note that in order to assess the impact of
+stylistic peculiarities on the performance of automatic text
+applications, we need to answer the question of what these
+peculiarities actually are, i.e., which linguistic phenomena in fact
+contribute to the idiosyncracy of the online genre.  In order to
+answer this question, we should conduct an extensive study of
+out-of-vocabulary (OOV) words found in Twitter microblogs and divide
+found OOVs into separate classes depending on their word formation
+type.  Then, we shall investigate which of the suggested classes are
+typical only for the online language and which are common for all text
+genres.
 
 Secondly, after determining the Web-specific elements, we should
 \begin{inparaenum}[\itshape a)\upshape]
