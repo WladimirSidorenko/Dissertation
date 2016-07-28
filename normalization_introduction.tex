@@ -1,0 +1,85 @@
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "normalization"
+%%% End:
+\section{Introduction to Text Normalization}
+
+At the very onset of the works on noisy text normalization (NTN), the
+two major sources of noisy data were optical character recognition and
+automatic speech recognition applications. The relatively low
+recognition accuracy of those tools at the beginning of the 1990-s
+forced researchers to think about how words distorted during the
+automatic processing could be restored to their respective standard
+language forms. A method which seemed to be most suitable for these
+purposes at that time was a technique called ``noisy channel model''
+(NCM) first introduced by \citet{shannon}.
+
+%% NCM divided the complex task of text normalization in three smaller
+%% subproblems which could be formulated as follows
+%% \begin{inparaenum}[\itshape a\upshape)]
+%%   \item given an unknown and purportedly not normalized word (NNW) how
+%%     could its normalized variants (NVs) be retrieved;
+%%   \item given the devised NVs, how probable would it be that they
+%%     really were the correct variants for normalizing NNW; and finally
+%%   \item given the devised NVs, how probable would it that they would
+%%     ever occur in a normalized text.
+%% \end{inparaenum}
+%% Mayes et al. (\cite{mayes}) and Church and Gale (\cite{church}) first
+%% tried to answer the former two questions by considering several
+%% possible edit operations on single characters in NNWs. Brill and Moore
+%% (\cite{brill}) then improved this approach by considering edit
+%% operations not only on single characters but also on substrings of up
+%% to length 5. This model was later enhanced by Toutanova and Moore
+%% (\cite{toutanova}) who also used information about phonetic similarity
+%% when devising and ranking NVs.
+
+NCM was also one of the first methods which were applied to
+normalization of mobile messages and Internet-based communication
+(IBC) texts.  \citet{Clark:11} proposed a unified NCM system which
+jointly performed tokenization, sentence splitting, and word
+normalization of Usenet forum posts.  \citet{Choudhury:07} extended
+the NCM-approach proposed by \citet{toutanova} by converting it to a
+Hidden Markov Model and then used this enhanced model for
+normalization of short text messages (SMS).  \citet{Beaufort:10} tried
+to normalize French SMSes by using an NCM method which was combined
+with a finite state transducer (FST) technique.
+
+Starting from the early 2000-s, the increasing quality of statistical
+machine-translation (SMT) applications and gradual realization of the
+shortcomings of NCM methods which operated solely on the character
+level of words spurred the researchers on the development of NTN
+methods which were more similar to the established SMT approaches. In
+the scope of this framework, the normalization task was defined as
+mapping an unnormalized word or expression to its normalized
+equivalent. This equivalent could either be specified manually as was
+done by \citet{Clark:11} or derived automatically during the
+alignment of normalized and unnormalized training data as suggested by
+\citet{Aw:06}. The latter approach however presupposed that a
+sufficiently large collection of such data was available. One of the
+first attempts to apply an SMT-like technique to normalization of
+Twitter messages was made by \citet{kaufmann}, who used a corpus of
+SMS messages as his training set.
+
+Finally, it was noticed by \citet{Kobus:08} that NTN methods relying on
+either NCM or SMT techniques usually revealed complementary strengths
+and weaknesses. This notion led to the idea that incorporating these
+two normalization approaches into one system would improve the overall
+performance, as different sources of information would benefit from
+each other. \citet{Kobus:08} proposed a combined method which first used
+a trained SMT module and then fed its output into a FST whose
+transitions represented phonetic or graphematic substitutions
+frequently occurring in unnormalized words.
+
+It should however be noted that almost all of the above methods
+concentrated on English data only. A few exceptions were the
+approaches suggested by \citet{Beaufort:10} and \citet{Kobus:08} for
+French, and \citet{oliva} for Spanish. In order to better understand
+how relevant the text normalization task would be for German and to
+get a clearer picture of the difficulties that may arise when
+processing noisy text data in that language, we decided to have a
+closer look at German Twitter messages and to analyze words occurring
+there which were regarded as unknown by standard NLP tools commonly
+used for processing German texts.
+
+\subsection{History of the Field}
+\subsection{Text Normalization for Social Media}
