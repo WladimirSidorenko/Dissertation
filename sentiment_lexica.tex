@@ -164,7 +164,7 @@ operation was made case-insensitive.  Furthermore, since all analyzed
 lexica only included plain textual terms, we also ignored smileys
 during this comparison, solely concentrating on common lexical terms.
 
-In this way, we estimated the precision, recall, and $F1$-score of the
+In this way, we estimated the precision, recall, and \F{}-score of the
 positive, negative, and neutral polarity classes\footnote{We
   considered a term as neutral if it was not featured in the lexicon
   as either positive or negative entry.} of each lexicon by separately
@@ -173,7 +173,7 @@ obtaining the mean and standard deviation of these scores over all
 files in the dataset.  In addition to that, we also calculated the
 macro- and micro-averaged results over all polarity classes.
 Following the standard practice for computing these terms, we
-estimated the macro-average as the mean of the $F1$-scores over all
+estimated the macro-average as the mean of the \F{}-scores over all
 three types (positive, negative, and neutral) and obtained the
 micro-average by taking the harmonic mean of precision and recall
 calculated over all true positives, false positives, and false
@@ -197,13 +197,13 @@ shown in Table~\ref{snt-lex:tbl:gsl-res}.\footnote{For the sake of
           \multicolumn{3}{c}{\bfseries Positive Expressions} & %
           \multicolumn{3}{c}{\bfseries Negative Expressions} & %
           \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline $F1$} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline $F1$}\\
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
           \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-          & Precision & Recall & $F1$ & %
-          Precision & Recall & $F1$ & %
-          Precision & Recall & $F1$ & & \\\midrule
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
       %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
       GPC & 24\stddev{7.9} & 46.4\stddev{11.2} & 31.1\stddev{8.2} & %
@@ -255,8 +255,8 @@ negative terms among all compared polarity lists.
 
 Regarding the figures attained by the individual lexica, the best
 results here are achieved by the SentiWS resource \cite{Remus:10},
-which not only shows the highest $F1$-score for the negative terms but
-also achieves the best macro-averaged $F1$-result on all classes.
+which not only shows the highest \F{}-score for the negative terms but
+also achieves the best macro-averaged \F{}-result on all classes.
 
 At the same time, we also can observe that the deviation of the scores
 on different files is relatively high.  In order to see whether this
@@ -276,13 +276,13 @@ Table~\ref{snt-lex:tbl:gsl-res-full}.
           \multicolumn{3}{c}{\bfseries Positive Expressions} & %
           \multicolumn{3}{c}{\bfseries Negative Expressions} & %
           \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline $F1$} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline $F1$}\\
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
           \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-          & Precision & Recall & $F1$ & %
-          Precision & Recall & $F1$ & %
-          Precision & Recall & $F1$ & & \\\midrule
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
       %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
       GPC & 23.83 & 46.8 & 31.58 & %
@@ -330,7 +330,7 @@ brevity, we will therefore only present the former metric (the mean
 and standard deviation of the scores estimated over individual files),
 refraining from computing the statistics on the whole corpus in total.
 
-\subsection{Evaluation of Dictionary-Based Lexicon Generation Approaches}
+\subsection{Evaluation of Dictionary-Based Approaches}
 
 Since all of the presented works rely on a manual correction or
 partial annotation of the lexicon entries, they clearly fall into the
@@ -528,7 +528,7 @@ translations of the same words.\footnote{The reimplemented methods and
   translated seed sets used in these experiments are available online
   at \url{https://github.com/WladimirSidorenko/SentiLex}.}
 Furthermore, to settle the differences between the binary and ternary
-approaches (i.e., those approaches that only differentiate between the
+approaches (i.e., those methods that only differentiate between the
 positive and negative classes and those ones which also discern the
 neutral terms as a separate group), we additionally enriched the
 translated seed set with 10 purely objective adjectives---``neutral''
@@ -553,12 +553,35 @@ links \texttt{has\_participle}, \texttt{has\_pertainym},
 We intentionally excluded the relations \texttt{has\_hypernym} and
 \texttt{is\_related\_to} from this set, since hypernyms were not
 guaranteed to preserve the polarity of their children---e.g.,
-``bewertungsspezifisch'' (\emph{appraisal-specific} is a neutral term
+``bewertungsspezifisch'' (\emph{appraisal-specific}) is a neutral term
 in contrast to its immediate hyponyms ``gut'' (\emph{good}) and
-``schlecht'' (\emph{bad})---and the \texttt{is\_related\_to} links
-could connect both synonymous and antonymous terms---e.g., this type
-of relation holds between the words ``Form'' (\emph{shape}) and
-``unf\"ormig'' (\emph{misshapen}).
+``schlecht'' (\emph{bad})---and the relatedness links
+(\texttt{is\_related\_to}) could connect both synonyms and antonyms of
+the same term---e.g., this type of relation held between the words
+``Form'' (\emph{shape}) and ``unf\"ormig'' (\emph{misshapen}).
+
+We fine-tuned the settings of the LG systems that involved
+hyper-parameters by using grid search and optimizing the
+macro-averaged \F{}-score on a small subset of the data (four files)
+from the other annotator.  In particular, instead of waiting for the
+full convergence of the eigenvector in the approach of
+\citet{Blair-Goldensohn:08}, we set the maximum number of times the
+polarity vector was multiplied with the adjacency matrix to five.  Our
+experiments showed that this limitation had a crucial impact on the
+quality of the resulting polarity lists (e.g., after five
+multiplications, the average precision of the recognized positive
+terms amounted to 49.9\%, reaching an average \F{}-score of 26\% for
+that class; after ten more iterations, however, this precision
+decreased dramatically to 4.3\%, pulling the class-specific \F{}-score
+down to 7.8\%).  Similarly to that, we limited the maximum number of
+iterations in the label-propagation method of \citet{Rao:09} to 300,
+although the effect of this setting was much weaker than in the
+previous case (by comparison, the scores obtained after 30 runs
+differed only by a couple percent).  Finally, in the method suggested
+by \citet{Awadallah:10}, we allowed for seven simultaneous walkers
+with a maximum of 17 steps each, considering a term as polar if more
+than a half of these walkers agreed on the polarity of the analyzed
+term.
 
 The results of our re-implementations are shown in
 Table~\ref{snt-lex:tbl:lex-res}.
@@ -567,60 +590,60 @@ Table~\ref{snt-lex:tbl:lex-res}.
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.1\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.084\columnwidth}} % next nine columns
+        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
       \toprule
           \multirow{2}*{\bfseries Lexicon} & %
           \multicolumn{3}{c}{\bfseries Positive Expressions} & %
           \multicolumn{3}{c}{\bfseries Negative Expressions} & %
           \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline $F1$} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline $F1$}\\
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
           \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-          & Precision & Recall & $F1$ & %
-          Precision & Recall & $F1$ & %
-          Precision & Recall & $F1$ & & \\\midrule
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
 
-          HL & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          \textsc{Seeds Set} & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-          % HL & 76.4\stddev{20.8} & 11\stddev{5.76} & 18.7\stddev{8.7} & %
-          % 36.9\stddev{44.1} & 1.9\stddev{2.5} & 3.6\stddev{4.7} & %
-          % 96.3\stddev{0.8} &  99.9\stddev{0.1} & 98.1\stddev{0.4} & %
-          % 40.1\stddev{3.5} & 96.2\stddev{0.8}\\
+          HL & 14\stddev{5.6} & 19.3\stddev{7} & 15.9\stddev{5.8} & %
+          16.7\stddev{9.6} & 9.4\stddev{5.6} & \textbf{11.7}\stddev{6.5} & %
+          96.7\stddev{0.7} & 96.6\stddev{0.6} & 96.6\stddev{0.5} & %
+          41.4\stddev{3.3} & 93.3\stddev{0.9}\\
 
-          BG & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          BG & 49.9\stddev{14.5} & 18\stddev{6.6} & \textbf{26}\stddev{8.3} & %
+          22.8\stddev{20.6} & 5.8\stddev{4.8} & 9\stddev{7.4} & %
+          96.9\stddev{0.7} & 99.3\stddev{0.3} & 97.9\stddev{0.4} & %
+          \textbf{44.3}\stddev{4} & 95.9\stddev{0.8}\\
 
-          KH & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          KH & 70.8\stddev{19.7} & 12.9\stddev{6.3} & 21.3\stddev{9.1} & %
+          21.6\stddev{29.1} & 2.5\stddev{2.8} & 4.3\stddev{4.9} & %
+          96.4\stddev{0.8} & 99.7\stddev{0.2} & 98\stddev{0.4} & %
+          41.2\stddev{3.5} & 96.1\stddev{0.8}\\
 
-          % ES & 46.2\stddev{15} & 14.5\stddev{5.8} & 21.7\stddev{7.7} & %
-          % 22.4\stddev{28.6} & 2.7\stddev{3.5} & 4.7\stddev{6} & %
-          % 96.5\stddev{0.7} & 99.5\stddev{0.2} & 97.9\stddev{0.4} & %
-          % 41.4\stddev{3.5} & 95.9\stddev{0.7} \\
+          ES & 3.6\stddev{1.3} & \textbf{43.9}\stddev{10.8} & 6.6\stddev{2.3} & %
+          2.6\stddev{1.5} & 18\stddev{6.9} & 4.5\stddev{2.3} & %
+          \textbf{97.44}\stddev{0.6} & 71.5\stddev{2.8} & 82.5\stddev{1.8} & %
+          31.2\stddev{1.6} & 66.8\stddev{2.8}\\
 
-          ES & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          RR$_{\textrm{mincut}}$ & 74.6\stddev{23.1} & 10.1\stddev{5.7} & 17.3\stddev{8.8} & %
+          2.6\stddev{1.2} & \textbf{41.5}\stddev{10.2} & 4.8\stddev{2.1} & %
+          97.4\stddev{0.6} & 72.5\stddev{2} & 83.1\stddev{1.3} & %
+          35.1\stddev{3.2} & 70.6\stddev{1.8}\\
 
-          RR & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          RR$_{\textrm{lbl-prop}}$ & 55.6\stddev{18.2} & 14.6\stddev{6.2} & 22.7\stddev{8.4} & %
+          \textbf{42.6}\stddev{41.5} & 2.7\stddev{3} & 5.1\stddev{5.5} & %
+          96.5\stddev{0.7} & 99.7\stddev{0.2} & \textbf{98.1}\stddev{0.4} & %
+          41.9\stddev{3.5} & \textbf{96.2}\stddev{0.8}\\
 
-          AR & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\\bottomrule
+          AR & 75.5\stddev{25.3} & 9\stddev{5.6} & 15.6\stddev{8.7} & %
+          25.3\stddev{42.1} & 1.1\stddev{2.1} & 2\stddev{3.9} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\\bottomrule
     \end{tabular}
     \egroup
     \caption{Evaluation of dictionary-based approaches.\\ {\small (HL
@@ -628,6 +651,135 @@ Table~\ref{snt-lex:tbl:lex-res}.
         \citet{Kim:04,Kim:06}, ES -- \citet{Esuli:06c}, RR --
         \citet{Rao:09}, AR -- \citet{Awadallah:10})}}
     \label{snt-lex:tbl:lex-res}
+  \end{center}
+\end{table}
+
+As can be seen from the table, the results of the purely automatic
+approaches are significantly lower than the scores obtained by the
+semi-automatic systems discussed previously.  The best macro-averaged
+\F{}-score for the three classes (0.443) is attained by the method of
+\citet{Blair-Goldensohn:08} which is still more than 0.12 points worse
+than the peak result reached by the SentiWS lexicon (0.569).  Somewhat
+surprisingly, no one of the compared systems could outperform the
+micro-averaged baseline established by the initial seed set, even
+though the label-propagation approach of \citet{Rao:09} and the
+random-walk method of \citet{Awadallah:10} were on a par with this
+result.
+
+Regarding the figures for the positive and negative classes, we can
+see the top-performing systems (\citet{Blair-Goldensohn:08} with an
+\F{}-score of 0.26 for the positive terms and \citet{Hu:04} with an
+\F{}-score of 0.12 for the negative entries) achieve these results
+mainly due to a relatively good balance of their precision (P) and
+recall (R).  Approaches showing the best scores for one of these two
+aspects (either P or R), however, usually have significant
+difficulties with the other metric: for example, the manually selected
+set of the positive seed terms attains the highest observed precision
+(75\%) for this polarity class, but suffers from a rather low recall
+(9.1\%).  Vice versa, the system with the highest recall---the
+SentiWordNet approach of \citet{Esuli:06c}---has a dramatically low
+precision (3.6\%) on recognizing positive expressions.  A similar
+situation can be observed for the negative polarity class too, where
+the best performing method---the system of \citet{Hu:04}---has a
+well-maintained equilibrium of P and R whereas the approaches with the
+best achieved precision or highest recall---the label propagation and
+min-cut systems of \citet{Rao:09} respectively---only reach 2.6 to
+2.7\% on the other evaluation metric.
+
+In general, the results shown by all systems tested in this section
+are notably lower than the respective figures reported in their
+original papers.  We can explain this divergence by the following
+possible reasons:
+\begin{inparaenum}[\itshape a\upshape)]
+\item the evaluation metrics that we applied in our experiments were
+  considerably different from the testing methods used in the previous
+  works (we estimated the results on a real-life corpus, counting
+  every false positive and false negative case, whereas the English
+  approaches evaluated their results on the intersection with the
+  General Inquirer Lexicon \cite{Stone:66}, thus omitting the false
+  positive matches and artifically boosting their scores);
+\item both the domain and the language that we addressed in this
+  section were apparently more challenging than the standard English
+  invariant for which these methods had been developed; and, finally,
+\item the notion of the synonymous relations and the set of the
+  initial seed terms could differ from the original settings of the
+  evaluated approaches.
+\end{inparaenum}
+
+In order to test how the last factor affected the results obtained by
+the methods, we decided to re-generate the polarity lists with the
+above approaches using a constrained set of synonymous links (this
+time, we only considered two terms as synonyms if they both appeared
+in at least one common synset).  The results of this experiment are
+presented in Table~\ref{snt-lex:tbl:lex-res-constr-syn}.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.1\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+      \toprule
+          \multirow{2}*{\bfseries Lexicon} & %
+          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
+
+         \textsc{Seeds Set} & 75.8\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
+          96.3\stddev{0.8} & 99.9\stddev{0.1} & 98.1\stddev{0.4} & %
+          38.6\stddev{3.2} & 96.2\stddev{0.8}\\
+
+          HL & 73.7\stddev{23.9} & 9.2\stddev{5.6} & 16\stddev{8.7} & %
+          33.1\stddev{44.5} & 1.7\stddev{2.5} & 3.2\stddev{4.7} & %
+          96.3\stddev{0.8} & 99.9\stddev{0.1} & 98.1\stddev{0.4} & %
+          39.1\stddev{3.5} & 96.2\stddev{0.8}\\
+
+          BG & 75.4\stddev{21.9} & 9.7\stddev{5.6} & 16.7\stddev{8.6} & %
+          32.2\stddev{41.1} & 2\stddev{2.6} & 3.7\stddev{4.8} & %
+          96.3\stddev{0.8} & 99.9\stddev{0.1} & 98.1\stddev{0.4} & %
+          39.5\stddev{3.4} & 96.2\stddev{0.8}\\
+
+          KH & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+
+          ES & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+
+          RR$_{\textrm{mincut}}$ & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+
+          RR$_{\textrm{lbl-prop}}$ & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+
+          AR & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+          \bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Evaluation of dictionary-based approaches with a
+      constrained set of synonymous links.\\ {\small (HL --
+        \citet{Hu:04}, BG -- \citet{Blair-Goldensohn:08}, KH --
+        \citet{Kim:04,Kim:06}, ES -- \citet{Esuli:06c}, RR --
+        \citet{Rao:09}, AR -- \citet{Awadallah:10})}}
+    \label{snt-lex:tbl:lex-res-constr-syn}
   \end{center}
 \end{table}
 
@@ -675,9 +827,14 @@ Table~\ref{snt-lex:tbl:lex-res}.
 % words, but this significantly increased the cardinality of the neutral
 % seed set and consequently lowered the recall of the polar items).
 
+          % ES & 46.2\stddev{15} & 14.5\stddev{5.8} & 21.7\stddev{7.7} & %
+          % 22.4\stddev{28.6} & 2.7\stddev{3.5} & 4.7\stddev{6} & %
+          % 96.5\stddev{0.7} & 99.5\stddev{0.2} & 97.9\stddev{0.4} & %
+          % 41.4\stddev{3.5} & 95.9\stddev{0.7} \\
+
 % seed sets: (Turney and Littman, 2003); SentiWS (Remus, 2010)
 
-\subsection{Evaluation of Corpus-Based Lexicon Generation Approaches}
+\subsection{Evaluation of Corpus-Based Approaches}
 
 An opposite situation is observed for the corpus-based approaches:
 These methods typically rely on inherently noisy datasets and
@@ -796,10 +953,10 @@ The results of this method are shown in Table~\ref{snt-lex:tbl:ispn-res}.
           \multirow{2}*{\bfseries Element} & \multicolumn{3}{c|}{Positive
         Expressions} & %
       \multicolumn{3}{c|}{Negative Expressions} & %
-      \multirow{2}*{Macro-$F1$} & %
-      \multirow{2}*{Micro-$F1$}\\\cline{2-7}
+      \multirow{2}*{Macro-\F{}} & %
+      \multirow{2}*{Micro-\F{}}\\\cline{2-7}
 
-      & Precision & Recall & $F1$ & Precision & Recall & $F1$ & & \\\hline
+      & Precision & Recall & \F{} & Precision & Recall & \F{} & & \\\hline
       \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
       Ising Spin Model & \stddev{} & \stddev{} & \stddev{} & \stddev{}
@@ -832,10 +989,10 @@ The results of this method are shown in Table~\ref{snt-lex:tbl:w2v}.
           \multirow{2}*{\bfseries Element} & \multicolumn{3}{c|}{Positive
         Expressions} & %
       \multicolumn{3}{c|}{Negative Expressions} & %
-      \multirow{2}*{Macro-$F1$} & %
-      \multirow{2}*{Micro-$F1$}\\\cline{2-7}
+      \multirow{2}*{Macro-\F{}} & %
+      \multirow{2}*{Micro-\F{}}\\\cline{2-7}
 
-      & Precision & Recall & $F1$ & Precision & Recall & $F1$ & & \\\hline
+      & Precision & Recall & \F{} & Precision & Recall & \F{} & & \\\hline
       \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
       \textsc{SentiWordNet}$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
@@ -977,7 +1134,7 @@ we first evaluated the quality of the existing sentiment lists for
 German: German Polarity Clues~\cite{Waltinger:10},
 SentiWS~\cite{Remus:10}, and Zurich Polarity List~\cite{Clematide:10}.
 We showed that \ldots achieved the best quality, reaching an average
-$F1$-score of \ldots on recognizing positive expressions and \ldots on
+\F{}-score of \ldots on recognizing positive expressions and \ldots on
 predicting negative polar terms.
 
 In the next step, we analyzed whether the methods that were used for
