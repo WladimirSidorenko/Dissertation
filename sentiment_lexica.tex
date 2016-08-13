@@ -549,16 +549,20 @@ set, we not only included the traditional synonymity relations for the
 terms co-occurring in the same synsets but also established edges
 between words if their synsets were conected via the inter-synset
 links \texttt{has\_participle}, \texttt{has\_pertainym},
-\texttt{has\_hyponym}, \texttt{entails}, or \texttt{is\_entailed\_by}.
-We intentionally excluded the relations \texttt{has\_hypernym} and
-\texttt{is\_related\_to} from this set, since hypernyms were not
-guaranteed to preserve the polarity of their children---e.g.,
-``bewertungsspezifisch'' (\emph{appraisal-specific}) is a neutral term
-in contrast to its immediate hyponyms ``gut'' (\emph{good}) and
-``schlecht'' (\emph{bad})---and the relatedness links
-(\texttt{is\_related\_to}) could connect both synonyms and antonyms of
-the same term---e.g., this type of relation held between the words
-``Form'' (\emph{shape}) and ``unf\"ormig'' (\emph{misshapen}).
+\texttt{has\_hyponym}, \texttt{entails}, or
+\texttt{is\_entailed\_by}.\footnote{For the method of
+  \citet{Esuli:06c}, we only used the inter-synset links, dispensing
+  with the intra-synset connections, as those were the only relations
+  utilized in their original work.} We intentionally excluded the
+relations \texttt{has\_hypernym} and \texttt{is\_related\_to} from
+this set, since hypernyms were not guaranteed to preserve the polarity
+of their children---e.g., ``bewertungsspezifisch''
+(\emph{appraisal-specific}) is a neutral term in contrast to its
+immediate hyponyms ``gut'' (\emph{good}) and ``schlecht''
+(\emph{bad})---and the relatedness links (\texttt{is\_related\_to})
+could connect both synonyms and antonyms of the same term---e.g., this
+type of relation held between the words ``Form'' (\emph{shape}) and
+``unf\"ormig'' (\emph{misshapen}).
 
 We fine-tuned the settings of the LG systems that involved
 hyper-parameters by using grid search and optimizing the
@@ -667,48 +671,48 @@ random-walk method of \citet{Awadallah:10} were on a par with this
 result.
 
 Regarding the figures for the positive and negative classes, we can
-see the top-performing systems (\citet{Blair-Goldensohn:08} with an
-\F{}-score of 0.26 for the positive terms and \citet{Hu:04} with an
-\F{}-score of 0.12 for the negative entries) achieve these results
-mainly due to a relatively good balance of their precision (P) and
-recall (R).  Approaches showing the best scores for one of these two
-aspects (either P or R), however, usually have significant
-difficulties with the other metric: for example, the manually selected
-set of the positive seed terms attains the highest observed precision
-(75\%) for this polarity class, but suffers from a rather low recall
-(9.1\%).  Vice versa, the system with the highest recall---the
-SentiWordNet approach of \citet{Esuli:06c}---has a dramatically low
-precision (3.6\%) on recognizing positive expressions.  A similar
-situation can be observed for the negative polarity class too, where
-the best performing method---the system of \citet{Hu:04}---has a
-well-maintained equilibrium of P and R whereas the approaches with the
-best achieved precision or highest recall---the label propagation and
-min-cut systems of \citet{Rao:09} respectively---only reach 2.6 to
-2.7\% on the other evaluation metric.
+see the top-performing systems (\citet{Blair-Goldensohn:08} for the
+positive terms and \citet{Hu:04} for the negative entries) achieve
+these results mainly due to a relatively good balance of their
+precision (P) and recall (R).  At the same time, approaches showing
+the best scores for either of these two aspects (P or R) usually have
+significant difficulties with the other metric: for example, the
+manually selected set of the positive seed terms attains the highest
+observed precision (75\%) for this polarity class, but suffers from a
+rather low recall (9.1\%).  Vice versa, the system with the highest
+recall---the SentiWordNet approach of \citet{Esuli:06c}---has a
+dramatically low precision (3.6\%) on recognizing positive
+expressions.  A similar situation can be observed for the negative
+polarity class too where the best performing method---the system of
+\citet{Hu:04}---has a well-maintained equilibrium of P and R in
+contrast to the approaches with the best achieved precision or highest
+recall---the label propagation and min-cut systems of \citet{Rao:09}
+respectively---which only reach 2.6 to 2.7\% on the other evaluation
+metric.
 
-In general, the results shown by all systems tested in this section
-are notably lower than the respective figures reported in their
-original papers.  We can explain this divergence by the following
-possible reasons:
+In general, however, the results shown by all systems tested in this
+section are notably lower than the respective figures reported in
+their original papers.  We can explain this divergence by the
+following reasons:
 \begin{inparaenum}[\itshape a\upshape)]
-\item the evaluation metrics that we applied in our experiments were
+\item the evaluation metrics that we applied in our experiments are
   considerably different from the testing methods used in the previous
   works (we estimated the results on a real-life corpus, counting
   every false positive and false negative case, whereas the English
   approaches evaluated their results on the intersection with the
-  General Inquirer Lexicon \cite{Stone:66}, thus omitting the false
-  positive matches and artifically boosting their scores);
+  General Inquirer Lexicon \cite{Stone:66}, omitting false positive
+  matches and therefore artifically boosting their scores);
 \item both the domain and the language that we addressed in this
-  section were apparently more challenging than the standard English
-  invariant for which these methods had been developed; and, finally,
+  section are apparently more challenging than the standard English
+  invariant for which these methods have been developed; and, finally,
 \item the notion of the synonymous relations and the set of the
   initial seed terms could differ from the original settings of the
   evaluated approaches.
 \end{inparaenum}
 
-In order to test how the last factor affected the results obtained by
-the methods, we decided to re-generate the polarity lists with the
-above approaches using a constrained set of synonymous links (this
+In order to test how the last factor (diverging settings) affected the
+obtained results, we decided to re-generate the polarity lists with
+the above approaches using a constrained set of synonymous links (this
 time, we only considered two terms as synonyms if they both appeared
 in at least one common synset).  The results of this experiment are
 presented in Table~\ref{snt-lex:tbl:lex-res-constr-syn}.
@@ -732,45 +736,45 @@ presented in Table~\ref{snt-lex:tbl:lex-res-constr-syn}.
           Precision & Recall & \F{} & %
           Precision & Recall & \F{} & & \\\midrule
 
-         \textsc{Seeds Set} & 75.8\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+         \textsc{Seeds Set} & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
           24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
-          96.3\stddev{0.8} & 99.9\stddev{0.1} & 98.1\stddev{0.4} & %
-          38.6\stddev{3.2} & 96.2\stddev{0.8}\\
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
           HL & 73.7\stddev{23.9} & 9.2\stddev{5.6} & 16\stddev{8.7} & %
-          33.1\stddev{44.5} & 1.7\stddev{2.5} & 3.2\stddev{4.7} & %
-          96.3\stddev{0.8} & 99.9\stddev{0.1} & 98.1\stddev{0.4} & %
-          39.1\stddev{3.5} & 96.2\stddev{0.8}\\
+          \textbf{33.1}\stddev{44.5} & 1.7\stddev{2.5} & 3.2\stddev{4.7} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          39.1\stddev{3.5} & \textbf{96.2}\stddev{0.8}\\
 
-          BG & 75.4\stddev{21.9} & 9.7\stddev{5.6} & 16.7\stddev{8.6} & %
-          32.2\stddev{41.1} & 2\stddev{2.6} & 3.7\stddev{4.8} & %
-          96.3\stddev{0.8} & 99.9\stddev{0.1} & 98.1\stddev{0.4} & %
-          39.5\stddev{3.4} & 96.2\stddev{0.8}\\
+          BG & 75.4\stddev{21.9} & 9.7\stddev{5.6} & \textbf{16.7}\stddev{8.6} & %
+          32.2\stddev{41.1} & \textbf{2}\stddev{2.6} & \textbf{3.7}\stddev{4.8} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          \textbf{39.5}\stddev{3.4} & \textbf{96.2}\stddev{0.8}\\
 
-          KH & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          KH & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          25\stddev{41.8} & 1\stddev{1.9} & 2\stddev{3.5} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-          ES & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          ES & 3.9\stddev{1.3} & \textbf{51.9}\stddev{10.7} & 7.3\stddev{2.3} & %
+          13\stddev{20.5} & 1.8\stddev{2.6} & 3\stddev{4.4} & %
+          \textbf{97.6}\stddev{0.5} & 71.7\stddev{2.7} & 82.6\stddev{1.8} & %
+          31\stddev{1.9} & 70\stddev{2.5}\\
 
-          RR$_{\textrm{mincut}}$ & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          RR$_{\textrm{mincut}}$ & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          32.3\stddev{44.4} & 1.4\stddev{2.1} & 2.7\stddev{3.9} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.9\stddev{3.4} & \textbf{96.2}\stddev{0.8}\\
 
-          RR$_{\textrm{lbl-prop}}$ & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          RR$_{\textrm{lbl-prop}}$ & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          32.3\stddev{44.4} & 1.4\stddev{2.1} & 2.7\stddev{3.9} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.9\stddev{3.4} & \textbf{96.2}\stddev{0.8}\\
 
-          AR & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+          AR & 72.9\stddev{27} & 7.3\stddev{4.7} & 12.9\stddev{7.6} & %
+          23.8\stddev{41.1} & 1\stddev{1.9} & 1.9\stddev{3.5} & %
+          96.2\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          37.6\stddev{2.8} & \textbf{96.2}\stddev{0.8}\\
           \bottomrule
     \end{tabular}
     \egroup
@@ -783,54 +787,151 @@ presented in Table~\ref{snt-lex:tbl:lex-res-constr-syn}.
   \end{center}
 \end{table}
 
-% When re-implementing the method of \citet{Hu:04}, we translated the
-% seed terms mentioned in the paper (\emph{great}, \emph{fantastic},
-% \emph{nice}, \emph{cool}, \emph{bad}, and \emph{dull}) into German,
-% but had to remove the German word ``cool'' afterwards as it also was
-% featured as a synonym of the word ``unverkrampft'' (), thus leading to
-% deteriorated results when propagating the positive label along this
-% branch.  Furthermore, since the authors speak of 30 seed terms, but
-% only provide six adjectives in their paper, we filled the remaining
-% items with common polar German adjectives, also including five neutral
-% terms (``elektrisch'' (\emph{electrical}), ``mechanich''
-% (\emph{mechanical}), ``materiell'' (\emph{material}), ``objektiv''
-% (\emph{objective}), and ``sachlich'' (\emph{objective})) into the
-% final seed set.  During the label propagation, we considered two sets
-% of synonymous relations: In the first setting (shown as HU in
-% Table~\ref{snt-lex:tbl:lex-res}), two lexemes were considered as
-% synonymous if they appeared in the same synset.  However, because
-% words like ``sch\"on'' (\emph{nice}) and ``wundersch\"on'' () do not
-% share any common synset, in the second setting (), we expanded the
-% notion of synonymous terms, considering two lexemes as synonyms if
-% their synsets were connected via the \texttt{is\_related\_to},
-% \texttt{has\_participle}, \texttt{has\_pertainym},
-% \texttt{has\_hyponym}, \texttt{entails}, or \texttt{is\_entailed\_by}
-% links.\footnote{The motivation for choosing this list of relations was
-%   that these were the nearest \textsc{GermaNet} correspondences of the
-%   synonymous \textsc{WordNet} relations used by \citet{Kamps:04}.}
+This time, the results are spread much more uniformly: in particular,
+seven of the eight tested models including the seed set attain
+identical \F{}-scores on the neutral terms and get almost the same (up
+to a few hundredths) micro-averaged results.  The only exception from
+this tendency is formed by the method of \citet{Esuli:06c} whose
+original implementation only used inter-synset links and, as we can
+see from the results, did not generalize well to the purely
+intra-synset connections.  Nevertheless, this system reached the
+highest observed precision on recognizing the neutral terms and also
+attained the best recall of the positively connotated expressions.
+The best observed precision for the latter class is, again, attained
+by the manually compiled seed set, with the method of
+\citet{Kim:04,Kim:06} and the two proposed systems of
+\citet{Rao:09}---the min-cut and label propagation
+algorithms---showing identical results.  Similarly to the previous
+experiments, the highest overall \F{}-score for the positive category
+(0.167 \F{}) is shown by the approach of \citet{Blair-Goldensohn:08},
+which, this time, also performs best on predicting the negative
+expressions, getting the best recall and \F{}-result for this polarity
+group.
 
-% When adopting the system of \citet{Esuli:06c}, we used the same set of
-% synonymous relations as in the second variant of the \citet{Hu:04}
-% method, since these were the closest German equivalents of the
-% \textsc{WordNet} links used in the original work.  To obtain the seed
-% sets for this approach, we manually translated the set of 54 polar
-% English terms used by the authors into German and applied an automatic
-% method in order to obtain an initial set of neutral entries: In the
-% original implementation, \citet{Esuli:06c} considered as neutral all
-% terms from the General Inquirer lexicon \cite{Stone:66} which neither
-% had a postive or negative label in this resource and nor appeared
-% among the manually defined polar seeds.  We translated these terms
-% using the publicly available English-German dictionary
-% (\url{www.dict.cc}), taking the first suggested translation of each
-% term in the GI which satisfied the above conditions.  (We also
-% considered using all possible German translations of the English
-% words, but this significantly increased the cardinality of the neutral
-% seed set and consequently lowered the recall of the polar items).
+In general, however, the results obtained after constraining the set
+of the possible synonymity links are significantly lower than the ones
+achieved with the extended relation set.  This effect can partially be
+explained by an extreme sparsity of the resulting \textsc{GermaNet}
+graph which prevents graphical and matrix-based approaches from
+propagating the polarity scores to other nodes.  To check this
+hypothesis, we computed the mean in-degrees of the graph nodes with
+the extended and constrained sets of relations, getting an average
+number of 5.91 incident links per node for the former case and 1.86
+edges per node for the latter setting.
 
-          % ES & 46.2\stddev{15} & 14.5\stddev{5.8} & 21.7\stddev{7.7} & %
-          % 22.4\stddev{28.6} & 2.7\stddev{3.5} & 4.7\stddev{6} & %
-          % 96.5\stddev{0.7} & 99.5\stddev{0.2} & 97.9\stddev{0.4} & %
-          % 41.4\stddev{3.5} & 95.9\stddev{0.7} \\
+Another important factor that could significantly affect the quality
+of the resulting polarity lists was the set of the seed terms which we
+used to initialize the polarity scores in the evaluated methods.  In
+order to estimate the impact of this setting on the final scores, we
+re-run our experiments with the extended set of synonymity links using
+the seed lists proposed by \citet{Hu:04}, \citet{Kim:04},
+\citet{Esuli:06c}, and \citet{Remus:10}.  Since \citet{Hu:04},
+however, only partially specified their polarity set in the original
+paper, and \citet{Kim:04} did not provide any examples at all, we
+filled the missing terms in these lists with common polar German terms
+we came up with to match the size of these seed sets.  Furthermore,
+since the list of the neutral terms from the polarity set of
+\citet{Esuli:06c} comprised 4,122 words---the authors considered as
+neutral all terms from the General Inquirer lexicon \cite{Stone:66}
+which were not marked as either positive or negative and did not
+appear in the seed list of \citet{Turney:03}---and was therefore
+cumbersome to translate manually, we automatically obtained
+translations for these terms using the publicly available online
+dictionary \texttt{dict.cc}\footnote{\url{http://www.dict.cc}}, taking
+the first suggested German translation for each of the neutral
+entries.\footnote{We also tried to use all possible translations of
+  the original terms, but it lead to a considerable boost in the
+  number of neutral items (45,252 words) and resulted in a substantial
+  decrease of the final system scores.} A short statistics on the
+cardinality and composition of the resulting seed sets is presented in
+Table~\ref{snt-lex:tbl:alt-seed-sets}.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{ %
+        >{\centering\arraybackslash}p{0.2\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
+      \toprule
+      {\bfseries Seed Set} & %
+      {\bfseries Cardinality} & %
+      {\bfseries Parts of Speech} & %
+      {\bfseries Examples} & %
+      {\bfseries Comments}\\
+      \midrule
+      \citet{Hu:04} & 14 positive, 15 negative, and 10 neutral terms & adjectives %
+      & {{\itshape fantastisch, lieb, sympathisch, %
+          b\"ose, dumm, schwierig}} & polar terms translated from the original paper %
+      \cite{Hu:04}; neutral terms added by us;\\
+      \citet{Kim:04} & 60 positive, 60 negative, and 60 neutral terms & any & %
+      {\itshape fabelhaft, Hoffnung, lieben, h\"asslich, Missbrauch, t\"oten} %
+      & devised by us so as to match the cardinality of the original set with %
+      neutral terms added extra;\\
+      \citet{Esuli:06c} & 16 positive, 35 negative, and 4,122 neutral terms & %
+      any & {\itshape angenehm, ausgezeichnet, freundlich, %
+        arm, bedauernswert, d\"urftig} & polar terms translated from the seed %
+      set of \citet{Turney:03}; neutral terms automatically translated from %
+      objective entries in the General Inquirer lexicon \cite{Stone:66};\\
+      \citet{Remus:10} & 12 positive, 12 negative, and 10 neutral terms & %
+      adjectives & {\itshape gut, sch\"on, richtig, %
+        schlecht, unsch\"on, falsch} & %
+      polar terms translated from the seed set of \citet{Turney:03}; %
+      neutral terms added by us.\\
+      \\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Cardinality and composition of the alternative polarity lists.\\
+      (all cardinalities are given with respect to the resulting
+      German translations)}
+    \label{snt-lex:tbl:alt-seed-sets}
+  \end{center}
+\end{table}
+
+% Seed Sets:
+
+% Hu-Liu were using 30 adjectives, but they only provided some
+% examples: great, fantastic, nice, cool, bad, and dull
+
+% Blair-Goldensohn: do not report (In our experiments, the original
+% seed set contained 20 negative and 47 positive words that were
+% selected by hand to maximize domain coverage, as well as 293 neutral
+% words that largely consist of stop words.)
+
+% Kim-Hovy (2004): To start the seed lists we selected verbs (23
+% positive and 21 negative) and adjectives (15 positive and 19
+% negative), adding nouns later.  But they, again, do not report
+% specific examples.
+
+% Kim-Hovy (2006): We described a word classification system to de-
+% tect opinion-bearing words in Section 2.1. To ex- amine its
+% effectiveness, we annotated 2011 verbs and 1860 adjectives, which
+% served as a gold stan- dard 7 . These words were randomly selected
+% from a collection of 8011 English verbs and 19748 English
+% adjectives. We use training data as seed words for the WordNet
+% expansion part of our algorithm.
+
+% Esuli/Sebastiani: Lp and Ln are two small sets, which we have
+% defined by manually selecting the intended synsets4 for 14
+% "paradigmatic" Positive and Negative terms (e.g., the Positive term
+% nice, the Negative term nasty) which were used as seed terms in
+% (Turney and Littman, 2003).  The Lo set is treated differently from
+% Lp and Ln, because of the inherently "complementary" nature of the
+% Objective category (an Objective term can be defined as a term that
+% does not have either Positive or Negative characteristics). We have
+% heuristically defined Lo as the set of synsets that (a) do not
+% belong to either T rK p or T rK n , and (b) contain terms not marked
+% as either Positive or Negative in the General Inquirer lexicon
+% (Stone et al., 1966); this lexicon was chosen since it is, to our
+% knowledge, the largest manually annotated lexicon in which terms are
+% tagged according to the Positive or Negative categories.
+
+% Rao-Ravichandran: All experiments reported in Sections 4.1 to 4.5
+% use the data described above with a 50-50 split so that the first half
+% is used as seeds and the sec- ond half is used for test.
+
+% Awdallah: After (Turney, 2002), we use our method to predict
+% semantic orientation of words in the General Inquirer lexicon (Stone
+% et al., 1966) using only 14 seed words.
 
 % seed sets: (Turney and Littman, 2003); SentiWS (Remus, 2010)
 
