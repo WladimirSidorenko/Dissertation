@@ -614,10 +614,10 @@ Table~\ref{snt-lex:tbl:lex-res}.
           96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
           38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-          HL & 14\stddev{5.6} & 19.3\stddev{7} & 15.9\stddev{5.8} & %
+          HL & 13.8\stddev{5.6} & 19.3\stddev{7} & 15.7\stddev{5.8} & %
           16.7\stddev{9.6} & 9.4\stddev{5.6} & \textbf{11.7}\stddev{6.5} & %
-          96.7\stddev{0.7} & 96.6\stddev{0.6} & 96.6\stddev{0.5} & %
-          41.4\stddev{3.3} & 93.3\stddev{0.9}\\
+          96.7\stddev{0.7} & 96.5\stddev{0.6} & 96.6\stddev{0.5} & %
+          41.3\stddev{3.3} & 93.3\stddev{0.9}\\
 
           BG & 49.9\stddev{14.5} & 18\stddev{6.6} & \textbf{26}\stddev{8.3} & %
           22.8\stddev{20.6} & 5.8\stddev{4.8} & 9\stddev{7.4} & %
@@ -741,7 +741,7 @@ presented in Table~\ref{snt-lex:tbl:lex-res-constr-syn}.
           96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
           38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-          HL & 73.7\stddev{23.9} & 9.2\stddev{5.6} & 16\stddev{8.7} & %
+          HL & 73.66\stddev{23.9} & 9.2\stddev{5.6} & 15.6\stddev{8.7} & %
           \textbf{33.1}\stddev{44.5} & 1.7\stddev{2.5} & 3.2\stddev{4.7} & %
           96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
           39.1\stddev{3.5} & \textbf{96.2}\stddev{0.8}\\
@@ -884,6 +884,91 @@ Table~\ref{snt-lex:tbl:alt-seed-sets}.
       (all cardinalities are given with respect to the resulting
       German translations)}
     \label{snt-lex:tbl:alt-seed-sets}
+  \end{center}
+\end{table}
+
+The results of the lexicons generated with the help of these seed sets
+are shown in Figure~\ref{snt:fig:sent-lex-alt-seeds}.  As we can see
+from the statistics, the choice of the initial seed terms might
+significantly affect the overall scores of the resulting polarity
+lists, with the macro-averaged \F{}-results deviating by up to 10\%
+depending on the seed set being applied at the beginning---this is for
+example the case for the approach of \citet{Esuli:06c} whose
+macro-averaged \F{} runs up to $31.45^{\pm 0.19}$\% when generated
+with the initial polar terms of \citet{Turney:03}, \citet{Hu:04},
+\citet{Kim:04}, or \citet{Remus:10}, but achieves remarkable $41.7$\%
+when used with the original seeds of the authors.
+
+In general, however, the best scores for all compared classifieres are
+achieved with either of two seed sets which by themselves (without any
+expansion) attain the best macro-averaged \F{}-results.  These are the
+seed list of \citet{Kim:04}, which yields the best scores for the
+approaches of \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
+\citet{Rao:09}, and \citet{Awadallah:10}, and the initial seed set
+proposed by \citet{Esuli:06c}, which leads to the best results when
+used in combination with the method of \citet{Hu:04} and the original
+system of \citet{Esuli:06c}.
+
+\begin{figure}[hbtp!]
+{
+  \centering
+  \includegraphics[width=\linewidth]{img/sentilex-alt-seed-sets.png}
+}
+\caption{Macro-averaged \F{}-scores of dictionary-based methods with
+  different seed sets.\\ {\small (HL -- \citet{Hu:04}, BG --
+    \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, ES --
+    \citet{Esuli:06c}, RR -- \citet{Rao:09}, AR --
+    \citet{Awadallah:10})}}\label{snt:fig:sent-lex-alt-seeds}
+\end{figure}
+
+For convenience, we will summarize the results of three top-performing
+configurations---the methods of \citet{Blair-Goldensohn:08},
+\citet{Kim:04,Kim:06}, and the label-propagation approach of
+\citet{Rao:09} used in combination with the initial seed sed of
+\citet{Kim:04}---in Table~\ref{snt-lex:tbl:lex-kh-seedset} and use
+these results as baselines in our later experiments.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.1\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+      \toprule
+          \multirow{2}*{\bfseries Lexicon} & %
+          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
+
+          BG & 22.7\stddev{6.5} & \textbf{29.9}\stddev{8.4} & 25.4\stddev{6.7} & %
+          17.1\stddev{7.4} & \textbf{16.9}\stddev{7.2} & \textbf{16.6}\stddev{6.7} & %
+          \textbf{97}\stddev{0.6} & 96.4\stddev{0.6} & 96.7\stddev{0.5} & %
+          46.3\stddev{3.5} & 93.5\stddev{0.9}\\
+
+          KH & 51.6\stddev{12.4} & 21.7\stddev{7.2} & \textbf{29.9}\stddev{8.1} & %
+          38.9\stddev{24.7} & 7.5\stddev{4.9} & 12.2\stddev{7.8} & %
+          96.7\stddev{0.7} & \textbf{99.4}\stddev{0.2} & \textbf{98}\stddev{0.4} & %
+          \textbf{46.7}\stddev{3.9} & \textbf{96}\stddev{0.7}\\
+
+          RR$_{\textrm{lbl-prop}}$ & \textbf{52.9}\stddev{15.2} & 18.4\stddev{6.5} & 26.7\stddev{8.2} & %
+          \textbf{42.8}\stddev{29.7} & 8.9\stddev{5.8} & 14.1\stddev{8.8} & %
+          96.6\stddev{0.7} & \textbf{99.4}\stddev{0.3} & \textbf{98}\stddev{0.4} & %
+          46.3\stddev{4.3} & \textbf{96}\stddev{0.8}\\
+          \bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Evaluation of top-scoring dictionary-based approaches
+      with the best observed seed set configuration. {\small (BG --
+        \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, RR
+        -- \citet{Rao:09})}}
+    \label{snt-lex:tbl:lex-kh-seedset}
   \end{center}
 \end{table}
 
