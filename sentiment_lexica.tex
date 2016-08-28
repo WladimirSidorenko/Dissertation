@@ -964,7 +964,7 @@ these results as baselines in our later experiments.
           \bottomrule
     \end{tabular}
     \egroup
-    \caption{Evaluation of top-scoring dictionary-based approaches
+    \caption{Results of the top-scoring dictionary-based approaches
       with the best observed seed set configuration. {\small (BG --
         \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, RR
         -- \citet{Rao:09})}}
@@ -1021,6 +1021,52 @@ these results as baselines in our later experiments.
 % seed sets: (Turney and Littman, 2003); SentiWS (Remus, 2010)
 
 \subsection{Evaluation of Corpus-Based Approaches}
+
+An alternative way to generate polarity lists represent corpus-based
+methods.  In contrast to dictionary-based approaches, these systems
+typically do not require any large-scale hand-crafted linguistic
+thesauri and draw their information directly from (untagged) corpus
+data, harnessing the co-occurrence statistics of the initial seed
+terms.  A clear advantage of such methods are their virtual
+independence of any (expensive) language resources and the ability to
+keep pace with frequent changes in the targeted discourse domain.
+These benefits, however, come at the cost of a reduced quality as
+these systems operate almost completely unsupervised.
+
+A pioneering work on these methods was done by \citet{Hatzivassi:97}.
+Based on the assumption that coordinatively connected adjectives
+typically share the same semantic orientation, the authors trained a
+supervised logisitic regression classifier, which predicted the degree
+of dissimilarity between two conjoined adjectival terms.  In the next
+step, they constructed a word graph, drawing a link between any two
+adjectives if they appeared in the same coordination pair and taking
+the predicted dissimilarity scores as edge weights in the constructed
+graph.  In the final step, \citet{Hatzivassi:97} partitioned the final
+graph into two parts and ascribed positive polarity to the cluster
+which had more nodes.  This method achieved an overall accuracy of
+82.05\% on predicting the polarity of a subset of manually annotated
+adjectives when trained on the rest of these hand-labeled data.
+
+Later on, this approach was further refined by \citet{Takamura:05},
+who tried to unite dictionary- and corpus-based methods into a unified
+probabilistic framework.  To this end, the authors adopted the Ising
+spin model from the statistical mechanics, considering terms from
+\textsc{WordNet} \cite{Miller:95}, the Wall Street Journal and Brown
+corpora as electrons in a single ferromagnetic lattice.  A link was
+established between any two electrons, if their corresponding terms
+appeared in synonymically connected synsets or a coordinatively
+conjoined pair in any of the two corpora.  Taking into account the a
+priori known polarities of the seed terms, the Ising model then tried
+to find an approximation of the most likely polarity combination of
+all terms in the graph over all possible polarity assignments,
+reaching 91.5\% accuracy at predicting polarity of the manually
+labeled subjective terms from the General Inquirer lexicon
+\cite{Stone:66}.
+
+
+Turney and Littman (2003)
+
+Kiritchenko et al. 2014 (Sentiment 140 and Hashtag Sentiment lexicon)
 
 An opposite situation is observed for the corpus-based approaches:
 These methods typically rely on inherently noisy datasets and
