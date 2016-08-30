@@ -17,7 +17,7 @@ MAIN_FILE = sidarenka_thesis.pdf
 all: thesis
 
 clean: clean_thesis
-	-rm -f *.log *.aux *.out *.bbl *.lof *.blg
+	-rm -f *.lot *.log *.aux *.out *.bbl *.lof *.blg
 
 ##################################################################
 # Thesis

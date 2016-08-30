@@ -1063,17 +1063,38 @@ reaching 91.5\% accuracy at predicting polarity of the manually
 labeled subjective terms from the General Inquirer lexicon
 \cite{Stone:66}.
 
+An alternative way of inducing sentiment lexicons was proposed by
+\citet{Turney:03}, who derived a set of polarity terms by computing
+the ratio of PMI-associations between the potential items and
+predefined sets of positive and negative seeds.  In particular, the
+semantic orientation score of the given word $w$ was defined as:
+\begin{equation*}
+  \textrm{SO-A}(w) = \sum_{w_p\in\mathcal{P}}PMI(w, w_p) - \sum_{w_n\in\mathcal{N}}PMI(w, w_n),
+\end{equation*}
+where $\mathcal{P}$ was the set of the positive seed terms (presented
+earlier in this sections), $\mathcal{N}$ denoted the collection of the
+negative words, and the $PMI$ score was normally computed as the
+log-ratio $PMI(w, w_x) = \log_2\frac{p(w, w_x)}{p(w)p(w_x)}$.  The
+joint probability $p(w, w_x)$ was calculated with the help of the
+AltaVista\footnote{\url{www.altavista.com}} NEAR operator as the
+number of hits returned by the $w NEAR w_x$ query divided by the total
+number of indexed documents.
 
-Turney and Littman (2003)
+With great success, this method was later adapted to the Twitter
+domain by \citet{Kiritchenko:14}.  Using the distantly supervised
+corpus of \citet{Go:09} and a separate collection of 775,000 tweets
+gathered solely for the purpose of their experiments, the authors
+created two sentiment lexicons---the Sentiment140 Base Lexicon and
+Hashtag Sentiment Base Lexicon respectively---using the semantic
+orientation formula described above.  However, instead of querying
+AltaVista for computing the joint probability scores, the authors
+estimated these values as the number of times a potential candidate
+appeared in a positive (negative) tweet divided by the total number of
+tweets in the collection.  The polarity classes of the tweets were
+distantly assigned based on the occurrence of predefined emoticons in
+the \citet{Go:09} corpus or emotional hashtags in the compiled tweet
+collection.
 
-Kiritchenko et al. 2014 (Sentiment 140 and Hashtag Sentiment lexicon)
-
-An opposite situation is observed for the corpus-based approaches:
-These methods typically rely on inherently noisy datasets and
-consequently suffer from a low precision.  This disadvantage, however,
-can be more than compensated for by the abundance of training material
-and the persistent up-to-date state of these data, which can hugely
-boost the recall.
 
 In order to see which of the above paradigms bears more potential for
 generating high-quality polarity lists for Twitter---the
