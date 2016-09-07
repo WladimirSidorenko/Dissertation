@@ -505,7 +505,7 @@ Moreover, because General Inquirer is a generic standard-language
 dictionary, it is also not obvious whether the systems that perform
 best on this list would be also applicable to more colloquial domains.
 
-To answer these questions, we decided to reimplement the approaches of
+To answer these questions, we reimplemented the approaches of
 \citet{Hu:04}, \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
 \citet{Esuli:06c}, \citet{Rao:09}, and \citet{Awadallah:10}, applying
 these methods to \textsc{GermaNet}---the German equivalent of the
@@ -1095,174 +1095,175 @@ distantly assigned based on the occurrence of predefined emoticons in
 the \citet{Go:09} corpus or emotional hashtags in the compiled tweet
 collection.
 
+Later on, this approach was further refined by \citet{Severyn:15a},
+who compiled their list of polar terms by training an SVM classifier
+on the distantly suervised corpus of \citet{Go:09}, using solely
+lexical n-gram features.  In the final step, features with the highest
+learned weights were selected as subjective entries for the
+constructed sentiment lexicon.
 
-In order to see which of the above paradigms bears more potential for
-generating high-quality polarity lists for Twitter---the
-dictionary-based methods with a supposedly higher precision or the
-corpus-based approaches with an allegedly better recall---we
-re-implemented the most popular systems from either groups and
-evaluated these systems on our corpus.  The results of these
-computations are presented in the following sections.
+Graphical methods for corpus-based lexicon induction were advocated by
+\citet{Velikovich:10} and \citet{Feng:11}.  The former work proposed
+an adaptation of the label-propagation algorithm previously suggested
+by \citet{Rao:09} with the core difference that, instead of taking a
+weightes average of all incident scores for a potential subjective
+term, the authors took the maximum value propagated from a seed to the
+potential candidate over the lexical graph.  \citet{Feng:11}
+experimented with two popular IR approaches---PageRank \cite{Brin:98}
+and HITS \cite{Kleinberg:99}---to derive lists of predicates
+typically associated with positively or negatively connotated events
+and these events themselves.
 
-Among the first who addressed the problem of the automatic generation
-of sentiment lexica were \citet{Hatzivassi:97}.  In their work, the
-authors relied on the hypothesis that coordinatively conjoined terms
-often share the same semantic orientation while adversatively linked
-words rather express opposite polarities.  To test this conjecture,
-they automatically extracted all pairs of conjoined adjectives from
-the Wall Street Journal (WSJ) corpus and represented those adjectives
-as nodes in a graph.  The arcs weights of this graph were to show the
-strength and direction by which two coordinatively conjoined terms
-influenced each others' polarity.  To derive these weights,
-\citeauthor{Hatzivassi:97} trained a log-linear regression model on
-those pairs of terms in which both nodes belonged to a manually
-labeled seed set of 1,336 adjectives and then let this model predict
-the weights for the rest of the arcs.  In the final step, the
-resulting graph was partitioned into two clusters -- that of positive
-and that of negative terms -- which were subsequently used to enrich
-the initial seed set.
-%% This method, enhanced by the possibility of recognizing gradable
-%% adjectives, was later used in the classification experiments of
-%% \citet{Hatzivassi:00} to predict subjective and objective sentences in
-%% the WSJ.
+\cite{Lau:11}
 
-A different way of bootstrapping polarity terms from large text
-corpora was proposed by \citet{Turney:03}.  Following
-\citeauthor{Turney:02}'s original approach for classifying reviews
-\citep{Turney:02}, the authors generated a polarity lexicon by first
-taking a seed set of 14 a priory known polar adjectives (seven
-negative and seven positive ones) and then expading this set with the
-words that had the strongest pointwise mutual information associations
-with the chosen seeds.  The PMI scores were computed as the log ratio
-between the number of times a new word $w$ appeared with any of the
-seed terms, divided by the total number of search hits for the
-complete seed set.  As search hits, the authors considered the number
-of relevant documents returned by the \texttt{AltaVista} search engine
-for the given queries.  This system attained an accuracy of 82.84\% on
-the General Inquirer Lexicon \citep{Stone:66} and correctly predicted
-polar terms from the lexicon of \cite{Hatzivassi:97} in 87.13\% of the
-cases. %% This method could also be further improved by using cosine
-%% similarities between word vectors from an LSA matrix instead of
-%% web-based PMIs.
+\citet{Bross:13}
 
-Other notable works on corpus-based lexicon induction include
-\citet{Kanayama:06}, who enhanced the method of
-\citeauthor{Hatzivassi:97} by incorporating iter-sentential coherence
-relations.  \citet{Kaji:07} also followed a corpus-based approach as
-they mined opinionated sentences from HTML pages using structural and
-linguistic clues and then extracted new polar terms from these
-sentences, considering words having the highest PMI association scores
-with the rest of the sentences as subjective.
+\citet{Tai:13}
 
-%% More precisely, the social orientation PMI (SO-PMI) of a new word
-%% $w$ was defined as: \begin{equation*} \text{SO-PMI}(w) =
-%% \log_2\bigg(\frac{\prod_{p\in\mathcal{P}}\text{hits}(w\text{NEAR}p)%
-%% \prod_{n\in\mathcal{N}}\text{hits}(w\text{NEAR}n)}%
-%% {\prod_{p\in\mathcal{P}}\text{hits}(p)\prod_{n\in\mathcal{N}}\text{hits}(n)}\bigg) \end{equation*}
-%% where $\mathcal{P}$ and $\mathcal{N}$ are the seed sets of positive
-%% and negative adjectives respectively and
-%% $\text{hits}(\cdot\text{NEAR}\cdot)$ is the number
+\citet{Yang:14}
 
-%% The authors evaluated the accuracy of their model on the General
-%% Inquirer lexicon \cite{Stone:66}.  Its final results (81.9\%) were
-%% comparable to the figures obtained by \citet{Turney:03} in their
-%% method (82.84\%) and significantly outperformed the precision of
-%% the approach proposed by \citet{Kamps:04} (73.4 versus 70.8).
+\citet{Bravo-Marquez:15}
 
-\citet{Takamura:05} attempted to unite corpus- and dictionary-based
-approaches into a single framework.  To this end, the authors adopted
-the Ising spin model from the statistical mechanics and represented
-all words found in \textsc{WordNet}, in the Wall Street Journal, and
-the Brown corpus as nodes in a graph.  The edges of this graph
-represented associativity links and were established between any two
-words, if one of these word was a synonym, an antonym, or a hyponym of
-the other one or appeared in its gloss or context.  Taking into
-account the a priori known polarities of some of the terms, the Ising
-model then tried to find an approximation of the most likely polarity
-combination of all terms in the graph over all possible polarity
-assignments.
-
-Another popular alternative to the Ontology-based methods is lexicon
-induction on the basis of actual corpus data.  Considering that
-Twitter vocabulary is typically very different from the entries that
-are usually included into standard-language dictionaries, applying
-this strategy directly to tweets might potentially significantly
-outperform the results of both translated resources and polar term
-lists generated from GermaNet.
-
-To check this hypothesis, we have re-implemented the Ising Spin system
-of \citet{Takamura:05} -- one of the arguably most competitive methods
-for unsupervised lexicon induction -- and applied it to the German
-Twitter snapshot of \cite{Scheffler:14}.
-
-The results of this method are shown in Table~\ref{snt-lex:tbl:ispn-res}.
+In order to see which of the two paradigms---dictionary-based methods
+or corpus-based approaches---bears more potential for generating
+high-quality sentiment lexicons for Twitter, we re-implemented the
+most popular systems from the latter group and evaluated these methods
+on our corpus.  The results of these computations are presented in
+Table~\ref{snt-lex:tbl:corp-meth}.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
-    \begin{tabular}{|p{0.21\columnwidth}| % first columm
-        *{8}{>{\centering\arraybackslash}m{0.1\columnwidth}|}} % next nine columns
-      \hline
-          \multirow{2}*{\bfseries Element} & \multicolumn{3}{c|}{Positive
-        Expressions} & %
-      \multicolumn{3}{c|}{Negative Expressions} & %
-      \multirow{2}*{Macro-\F{}} & %
-      \multirow{2}*{Micro-\F{}}\\\cline{2-7}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.1\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+      \toprule
+          \multirow{2}*{\bfseries Lexicon} & %
+          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-      & Precision & Recall & \F{} & Precision & Recall & \F{} & & \\\hline
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
 
-      Ising Spin Model & \stddev{} & \stddev{} & \stddev{} & \stddev{}
-      & \stddev{} & \stddev{} & \stddev{} & \stddev{}\\\hline
+          % cardinality 2,560; \beta = 0.1
+          TKM & 48.8\stddev{17.9} & 12.4\stddev{5.9} & 19.3\stddev{7.9} & %
+          35.7\stddev{28.7} & 4.5\stddev{3.9} & 7.7\stddev{6.4} & %
+          96.4\stddev{0.8} & 99.6\stddev{0.2} & 98\stddev{0.4} & %
+          41.7\stddev{3.7} & 96\stddev{0.8}\\
 
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Our Method}\\\hline
+          VEL & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+
+          KIR & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+
+          SM & \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{} & \stddev{} & %
+          \stddev{} & \stddev{}\\
+          \bottomrule
     \end{tabular}
     \egroup
-    \caption{Classification results.\\ {\small (GPC -- German Polarity
-        Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
-        -- Zurich Polarity Lexicon \cite{Clematide:10})}}
-    \label{snt-lex:tbl:ispn-res}
+    \caption{Evaluation of corpus-based approaches.\\ {\small (TKM --
+        \citet{Takamura:05}), VEL -- \citet{Velikovich:10}, KIR --
+        \citet{Kiritchenko:14}, SM -- \citet{Severyn:15a}}}
+    \label{snt-lex:tbl:corp-meth}
   \end{center}
 \end{table}
 
 \subsection{Lexicon Generation Using Neural Word Embeddings}
 
+\citet{Tang:14}
+
+\citet{Tang:14a}
+
+Similarly to \citet{Severyn:15a}, \citet{Vo:16} applied a deep
+learning approach learning two-dimensional embeddings (one dimension
+for the positive score and one dimension for the negative appraisal)
+
+\citet{Ren:16}
+
 A new family of lexicon induction methods builds on learned vector
 representations of words -- the neural word embeddings
 \cite{Mikolov:13}.
 
-The results of this method are shown in Table~\ref{snt-lex:tbl:w2v}.
+Vector command:
+\begin{verbatim}
+Adjusted Potts' Tokenizer
+
+Sidarenka's Preprocessing (Smiley Replacement)
+
+word2vec -train tokens.tok -output vectors.txt -size 400 -window 5 -min-count 4
+
+Possible Improvements:
+
+* use task specific vectors;
+
+* explore different cardinalities (not just 40-s bins);
+\end{verbatim}
+
+% k-NN: k^2 / \sum d_{ij}
+
+The results of these methods are shown in Table~\ref{snt-lex:tbl:nwe-methods}.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
-    \begin{tabular}{|p{0.21\columnwidth}| % first columm
-        *{8}{>{\centering\arraybackslash}m{0.1\columnwidth}|}} % next nine columns
-      \hline
-          \multirow{2}*{\bfseries Element} & \multicolumn{3}{c|}{Positive
-        Expressions} & %
-      \multicolumn{3}{c|}{Negative Expressions} & %
-      \multirow{2}*{Macro-\F{}} & %
-      \multirow{2}*{Micro-\F{}}\\\cline{2-7}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.1\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+      \toprule
+          \multirow{2}*{\bfseries Lexicon} & %
+          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-      & Precision & Recall & \F{} & Precision & Recall & \F{} & & \\\hline
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
 
-      \textsc{SentiWordNet}$^{\mathrm{ternary}}_{\mathrm{Rocchio}}$ & 67.09\stddev{22.16} &
-      14.74\stddev{7.79} & 11.73\stddev{5.59} & 4.57\stddev{4.57} &
-      5.88\stddev{5.4} & 2.48\stddev{2.37} & 21.08\stddev{2.15} &
-      96.04\stddev{0.72}\\
+          % cardinality 160
+          NC & 75.7\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-      Ising Spin Model & \stddev{} & \stddev{} & \stddev{} & \stddev{}
-      & \stddev{} & \stddev{} & \stddev{} & \stddev{}\\\hline
+          % cardinality 40
+          KNN & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          23.4\stddev{40.6} & 1\stddev{1.8} & 1.8\stddev{3.4} & %
+          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-      \multicolumn{9}{|c|}{\cellcolor{cellcolor}Our Method}\\\hline
+          % cardinality 160
+          PCA & 40.4\stddev{14.6} & \textbf{13.4}\stddev{5.8} & \textbf{19.5}\stddev{7.3} & %
+          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
+          \textbf{96.4}\stddev{0.8} & 99.6\stddev{0.2} & 97.9\stddev{0.4} & %
+          39.8\stddev{2.7} & 95.9\stddev{0.8}\\
+
+          % cardinality 160
+          LP & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+          \textbf{29.4}\stddev{20.3} & \textbf{5.6}\stddev{4.5} & \textbf{9.2}\stddev{6.9} & %
+          \textbf{96.4}\stddev{0.8} & 99.8\stddev{0.1} & 98\stddev{0.4} & %
+          \textbf{41}\stddev{3.9} & 96.1\stddev{0.8}\\
+          \bottomrule
     \end{tabular}
     \egroup
-    \caption{Classification results.\\ {\small (GPC -- German Polarity
-        Clues \cite{Waltinger:10}, SWS -- SentiWS \cite{Remus:10}, ZPL
-        -- Zurich Polarity Lexicon \cite{Clematide:10})}}
-    \label{snt-lex:tbl:w2v}
+    \caption{Evaluation of embedding-based approaches.\\ {\small (NC
+        -- nearest centroids, KNN -- k-nearest neighbors, PCA --
+        principal component analysis, LP -- linear projection)}}
+    \label{snt-lex:tbl:nwe-methods}
   \end{center}
 \end{table}
 
