@@ -105,97 +105,20 @@ case-insensitive trie \cite[pp. 492--512]{Knuth:98} from the lexicon
 entries and match this trie against the corpus text, simultaneously
 comparing these entries with the actual word forms and lemmas of the
 corpus tokens.\footnote{We use the \texttt{TreeTagger}
-  \cite{Schmid:95} to obtain the lemma forms for the corpus tokens.} A
-match is considered correct iff the matched lexicon entry absolutely
+  \cite{Schmid:95} to obtain lemma forms for corpus tokens.} A match
+is considered correct iff the matched lexicon entry absolutely
 corresponds to the (possibly lemmatized) expert's annotation and has
 the same polarity as the one specified by the human coder.  That way,
 we estimate the precision, recall, and \F{}-score for each particular
 polarity class (positive, negative, and neutral), considering all
 words absent in the lexicon as neutral.
 
-% \subsection{Data}\label{subsec:snt-lex:data}
+\subsection{Semi-Automatic Sentiment Lexicons}
 
-% In the following experiments, we will use the updated version 0.1.0 of
-% the sentiment dataset introduced in the previous section.  The main
-% changes included in this version are:
-% \begin{inparaenum}[\itshape a\upshape)]
-%   \item the revision of the annotated emotional expressions, and
-%   \item the addition of the boolean attributes \emph{subjective-fact}
-%     and \emph{uncertain} to the annotation scheme of these elements.
-% \end{inparaenum}
-
-% To accomplish the fortmer objective, we compared the labelings of the
-% opinionated terms in the first release of our corpus (version 0.0.1
-% presented previously) with the entries from the existing German
-% sentiment lexica: SentiWS \cite{Remus:10}, German Polarity Clues
-% \cite{Waltinger:10}, and the Zurich Polarity List \cite{Clematide:10}.
-% Similarly to the adjudication procedure used earlier, we automatically
-% highlighted the differences between the corpus labels and the entries
-% of these resources, letting our experts resolve the emerged conflicts.
-
-% As it turned out, many of the contradicting cases stemmed from a
-% different treatment of polar facts, such as ``Tod'' (\emph{death}),
-% ``Anstieg'' (\emph{surge}), ``duften'' (\emph{to scent}) etc.: these
-% entities were not labeled as emo-expressions in the full annotation of
-% our dataset, but were still present as opinionated terms in the
-% analyzed polarity lists.  Since these words represented a special
-% class of polar clues due to their unequivocal objective nature, we
-% decided to introduce a special feature called \emph{subjective-fact}
-% into the attribute set of emotional expressions, explicitly asking our
-% coders to annotate such terms with the emo-expression tag, but setting
-% the value of the newly added attribute to \texttt{true}.
-
-% The remaining differences were mainly due to polysemous words whose
-% meaning in the corpus was not always subjective; errors in the lexica
-% (GPC, for example, featured such auxiliary terms as ``sein'' (\emph{to
-%   be}), ``wer'' (\emph{who}), or ``aus'' (\emph{from}) as opinionated
-% entries); and, finally, numerous borderline cases which were difficult
-% to resolve even in group discussions.  Examples of such challenging
-% cases were words and idioms such as ``verbieten'' (\emph{to
-%   prohibit}), ``verwechseln'' (\emph{to confuse}), ``Hauen und
-% Stechen'' (\emph{hewing and stabbing}).  To address this issue, we
-% again introduced an additional attribute, called \emph{uncertain},
-% into the annotation scheme of emotional expressions and asked our
-% experts to mark such borderline instances with this attribute.
-
-% The statistics on the total number of the labeled elements and their
-% agreement in the updated version are shown in
-% Table~\ref{tbl:snt-lex:ucrp-agrmnt}:
-
-% \begin{table*}[thb!]
-%   \begin{center}
-%     \bgroup \setlength\tabcolsep{0.7\tabcolsep} \scriptsize
-%     \begin{tabular}{p{0.15\textwidth} % first columm
-%         *{10}{>{\centering\arraybackslash}p{0.05\textwidth}}} % next ten columns
-%       \toprule
-%           \multirow{2}{0.2\textwidth}{\bfseries Element} &
-%           \multicolumn{5}{c}{\bfseries Binary $\kappa$} & %
-%           \multicolumn{5}{c}{\bfseries Proportional $\kappa$}\\
-%           \cmidrule(r){2-6}\cmidrule(l){7-11}
-%           & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$ %
-%           & $M_1$ & $A_1$ & $M_2$ & $A_2$ & $\mathbf{\kappa}$\\\midrule
-
-%           EExpression &  &  &  & & \textbf{} & &  &  &  & \textbf{}\\
-%           \bottomrule
-%     \end{tabular}
-%     \egroup
-%   \end{center}
-%   \captionof{table}{Inter-annotator agreement on the emotional
-%     expression in the updated corpus.\\ {\small ($M1$ -- number of
-%       tokens with matching labels in the first annotation, $A1$ --
-%       total number of tokens labeled with that class in the first
-%       annotation, $M2$ -- number of tokens with matching labels in the
-%       second annotation, $A2$ -- total number of tokens labeled with
-%       that class in the second annotation)}}
-%   \label{tbl:snt-lex:ucrp-agrmnt}
-% \end{table*}
-
-\subsection{Evaluation of the Existing German Lexica}
-
-In order to obtain an upper bound of the expected scores for an
-automatic prediction of polar terms, we evaluated the existing German
-sentiment lexica on the annotated data of our corpus.  The most
-prominent of these resources are:
+With this metric, we first are going to estimate the quality of the
+existing German sentiment lexicons, which would give us un upper bound
+on the results of automatic SLG methods.  The most prominent of these
+resources are:
 \begin{itemize}
 \item the \textbf{German Polarity Clues} (GPC) by
   \citet{Waltinger:10}, which comprises 10,141 subjective entries
@@ -206,8 +129,8 @@ prominent of these resources are:
 
 \item the \textbf{SentiWS} (SWS) lexicon introduced by
   \citet{Remus:10}, which includes 1,818 positively and 1,650
-  negatively connotated terms, also providing their part-of-speech
-  tags and inflections (resulting in a total of 32,734 word forms).
+  negatively connoted terms, also providing their part-of-speech tags
+  and inflections (resulting in a total of 32,734 word forms).
   Similarly to the GPC, the authors used an English sentiment
   resource---the General Inquirer list by \citet{Stone:66}---to
   bootstrap the entries for their lexicon, manually revising these
@@ -219,7 +142,7 @@ prominent of these resources are:
   Dictionary \cite{Quasthoff:10};
 
 \item and, finally, the \textbf{Zurich Polarity List} developed by
-  \citet{Clematide:10}, which comprises 8,000 subjective entries taken
+  \citet{Clematide:10}, which features 8,000 subjective entries taken
   from GermaNet synsets \cite{Hamp:97}.  These synsets were manually
   annotated with their prior polarities by human experts.  Since the
   authors, however, found the number of polar adjectives obtained that
@@ -229,39 +152,14 @@ prominent of these resources are:
   method of \citet{Hatzivassi:97}.
 \end{itemize}
 
-In order to evaluate these resources on our dataset, we represented
-each of the above lexicons as a trie \cite[pp. 492--512]{Knuth:98}
-with the lexicon entries corresponding to paths in the resulting graph
-and the polarity class(es) of these entries stored at the respective
-terminal leaf nodes.  We then applied the standard match operation by
-simultaneously checking the trie against contiguous runs of both
-original and lemmatized corpus tokens.  All lemmatizations were done
-using the \texttt{TreeTagger} \cite{Schmid:95}, and the match
-operation was made case-insensitive.  Furthermore, since all analyzed
-lexica only included plain textual terms, we also ignored smileys
-during this comparison, solely concentrating on common lexical terms.
-
-In this way, we estimated the precision, recall, and \F{}-score of the
-positive, negative, and neutral polarity classes\footnote{We
-  considered a term as neutral if it was not featured in the lexicon
-  as either positive or negative entry.} of each lexicon by separately
-computing these figures on each corpus file (99--109 tweets) and then
-obtaining the mean and standard deviation of these scores over all
-files in the dataset.  In addition to that, we also calculated the
-macro- and micro-averaged results over all polarity classes.
-Following the standard practice for computing these terms, we
-estimated the macro-average as the mean of the \F{}-scores over all
-three types (positive, negative, and neutral) and obtained the
-micro-average by taking the harmonic mean of precision and recall
-calculated over all true positives, false positives, and false
-negatives found in the corpus.  The results of these computations are
-shown in Table~\ref{snt-lex:tbl:gsl-res}.\footnote{For the sake of
-  these experiments, we excluded the auxiliary words ``aus''
-  (\emph{from}), ``der'' (\emph{the}), ``keine'' (\emph{no}),
-  ``nicht'' (\emph{not}), ``sein'' (\emph{to be}), ``was''
-  (\emph{what}), and ``wer'' (\emph{who}) with their inflection forms
-  from the German Polarity Clues lexicon, since these entries
-  significantly worsened the evaluation results.}
+The results of these computations are shown in
+Table~\ref{snt-lex:tbl:gsl-res}.\footnote{For the sake of these
+  experiments, we excluded the auxiliary words ``aus'' (\emph{from}),
+  ``der'' (\emph{the}), ``keine'' (\emph{no}), ``nicht'' (\emph{not}),
+  ``sein'' (\emph{to be}), ``was'' (\emph{what}), and ``wer''
+  (\emph{who}) with their inflection forms from the German Polarity
+  Clues lexicon, since these entries significantly worsened the
+  evaluation results.}
 
 \begin{table}[h]
   \begin{center}
