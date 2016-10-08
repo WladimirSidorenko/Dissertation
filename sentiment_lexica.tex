@@ -318,51 +318,48 @@ adjective could be reached via the synonymy-antonymy links.
 % they attain average \F-scores of 0.667 and 0.842 respectively.
 
 Later on, this approach was refined by \citet{Blair-Goldensohn:08},
-who obtained polarity labels for new words by multiplying a score
-vector $\vec{v}$ containing polarity scores of known seed terms (-1
-for the negative expressions and 1 for the positive terms) with the
-adjacency matrix $A$ constructed from the \textsc{WordNet} synsets.
-In these experiments, the value of the adjacency cell $a_{ij}$ of the
-matrix was set to $\lambda=0.2$ if there was a synonymy link between
-the synsets $i$ and $j$ and to $-\lambda$ if these synsets were
-antonymous to each other.  By performing this multiplication multiple
-times and setting the vector $\vec{v}$ to the result of the previous
-iteration, the authors ensured that the polarity scores were being
-propagated transitively through the network, decaying by a constant
-factor ($\lambda$) with the increasing path length from the original
-seeds.%   This method again was evaluated only extrinsically---the
+who obtained polarity labels for new words by multiplying a vector
+$\vec{v}$ containing polarity scores of known seed terms (-1 for the
+negative expressions and 1 for the positive terms) with an adjacency
+matrix $A$ constructed from the \textsc{WordNet} synsets.  The value
+of the adjacency cell $a_{ij}$ of this matrix was set to $\lambda=0.2$
+if there was a synonymy link between the synsets $i$ and $j$ and to
+$-\lambda$ if these synsets were antonymous to each other.  By
+performing this multiplication multiple times and setting the vector
+$\vec{v}$ to the result of the previous iteration, the authors ensured
+that the polarity scores were propagated transitively through the
+network, decaying by a constant factor ($\lambda$) with the increasing
+path length from the original
+seeds.% This method again was evaluated only extrinsically---the
 % authors tested their complete sentiment summarization system, which
 % used the sentiment scores for individual words as features for a
 % maximum-entropy classifier.
 
 With various modifications, the core idea of propagating the polarity
-classes through the semantic graph was adopted in almost all of the
+classes through a lexical graph was adopted in almost all of the
 following dictionary-based works: \citet{Kim:04,Kim:06}, for instance,
 used a similar method to determine the polarity of adjectives and
-verbs given a small seed set of terms with known orientations.  In
+verbs given a small set of seed terms with known orientation.  In
 particular, the likelihood of a new word $w$ belonging to the class $c
-\in \{\textrm{postive}, \textrm{negative}, \textrm{neutral}\}$ was
-computed as:
+\in \{\textrm{positive, negative, neutral}\}$ was computed as:
 \begin{equation*}
   P(c|w) = \argmax_{c}P(c)P(w|c) = \argmax_{c}P(c)\frac{\sum\limits_{i=1}^{n}count(syn_i, c)}{count(c)},
 \end{equation*}
-where $P(c)$ is the prior probability of the polar class estimated as
-the number of words with the given orientation $c$ divided by the
-total number of terms considered, $count(syn_i, c)$ stands for the
-number of times a seed term from class $c$ appears in a synset of $w$,
-and $count(c)$ means the total number of synsets containing a seed
-item.
-
+where $P(c)$ was the prior probability of the polar class (estimated
+as the number of words with the given orientation $c$ divided by the
+total number of terms considered), $count(syn_i, c)$ meant the number
+of times a seed term from class $c$ appeared in a synset of $w$, and
+$count(c)$ denoted the total number of synsets containing a seed item.
 Starting from a seed set of 34 adjectives and 44 verbs, the authors
-successively expanded their lexicon to a list of 18,192 terms and
-evaluated it on a manually labeled collection of 462 adjectives and
-502 verbs taken from the TOEFL test and analyzed by two human experts.
-The reported average accuracy for this method run up to 68.48\% for
-adjectives and 74.28\% for verbs with their recall being equal to
-93.07\% and 83.27\% respectively.  It should, however, be noted that
-\citet{Kim:04} used a lenient metric for their computation by
-considering neutral and positive terms as the same class which could
-significantly boost the results.
+successively expanded their lexicon to a list of 18,192 terms. %  and
+% evaluated it on a manually labeled collection of 462 adjectives and
+% 502 verbs taken from the TOEFL test and analyzed by two human experts.
+% The reported average accuracy for this method run up to 68.48\% for
+% adjectives and 74.28\% for verbs with their recall being equal to
+% 93.07\% and 83.27\% respectively.  It should, however, be noted that
+% \citet{Kim:04} used a lenient metric for their computation by
+% considering neutral and positive terms as the same class which could
+% significantly boost the results.
 
 % An alternative way of bootstrapping polarities for adjectives was
 % proposed by \citet{Kamps:04}.  The authors estimated the orientation
@@ -389,84 +386,73 @@ negative seed sets used by \citet{Turney:03} and considering the rest
 of the terms as objective if these words neither appeared in the
 aforemention seed lists nor had a subjective tag in the General
 Inquirer lexicon \cite{Stone:66}, the authors successively expanded
-these polar sets for $k \in \{0, 2, 4, 6\}$ iterations by following
-the synonymity-antonymity links similarly to the method proposed by
-\citet{Hu:04}.\footnote{More precisely, following the work of
-  \citet{Strapparava:04}, the authors propagated the same polarity
-  values via the relations \emph{similarity}, \emph{derived-from},
-  \emph{pertains-to}, and \emph{also-see}, and changed these values to
-  the opposite when spreading them over the \emph{direct-antonymy}
-  links.}  In each of these steps, they trained two types of ternary
-classifiers---Rocchio and SVM---using tfidf-vectors of the training
-glosses (whose amount was different in each iteration) as input
-features.  \citet{Esuli:06c} experimented with two different ways of
-obtaining such ternary predictors: using a committee of binary
-classifiers and by directly training a ternary classification system,
-finding that the latter option produced slightly better scores.  This
-time, the evaluation was run on both the intersection with the
-GI~lexicon~\cite{Stone:66} and a manually annotated subset of
-\textsc{WordNet} synsets, yielding 66\% accuracy for the former
-metric.\footnote{Note that different publications on
-  \textsc{SentiWordNet} report different configuration settings,
-  cf. \citet{Esuli:05}, \citet{Esuli:06a}, \citet{Esuli:06b}, and
-  \citet{Esuli:06c}.  In our experiments, we will rely on the setup
-  described in last paper as the most recent description of this
-  approach.}
+these sets for $k \in \{0, 2, 4, 6\}$ iterations by following the
+synonymy-antonymy links similarly to the method of \citet{Hu:04}.  In
+addition to that, in each of these steps, they trained two types of
+ternary classifiers---Rocchio and SVM---using tfidf-vectors of the
+training glosses (whose amount was different in each iteration) as
+input features.  In the concluding step, \citet{Esuli:06c} united
+these classifiers into one ensemble and assigned normalized class
+scores returned by this committee to the remaining \textsc{WordNet}
+synsets.\footnote{In contrast to other works, the method of
+  \citet{Esuli:06c} returned a 3-tuple of scores for each polarity
+  class (positive, negative, and neutral) without attempting to
+  classify them into these categories.}
+% This time, the evaluation was run on both the intersection with the
+% GI~lexicon~\cite{Stone:66} and a manually annotated subset of
+% \textsc{WordNet} synsets, yielding 66\% accuracy for the former
+% metric.\footnote{Note that different publications on
+% \textsc{SentiWordNet} report different configuration settings,
+% cf. \citet{Esuli:05}, \citet{Esuli:06a}, \citet{Esuli:06b}, and
+% \citet{Esuli:06c}.  In our experiments, we will rely on the setup
+% described in last paper as the most recent description of this
+% approach.}
 
-Finally, \citet{Rao:09} proposed another graph-based approach in which
-they tried three different methods of assigning polarity scores to the
-\textsc{WordNet} synsets:
+Another graph-based approach was proposed by \citet{Rao:09}.  In their
+work, the authors experimented with three different methods of
+assigning polarity scores to synsets:
 \begin{inparaenum}[\itshape a\upshape)]
 \item deterministic min-cut \cite{Blum:01},
 \item randomized min-cut \cite{Blum:04}, and
-\item the label propagation algorithm of \citet{Zhu:02}.
+\item the label propagation algorithm by \citet{Zhu:02}.
 \end{inparaenum}
 An evaluation of these systems on the GI lexicon \cite{Stone:66}
-showed significant improvement over the previous baselines
-\cite{Kamps:04,Kim:06}, with the deterministic min-cut yielding an
-average \F{}-score of 0.833 over the three main parts of speech
-(nouns, adjectives, and verbs) and the label propagation algorithm
-reaching remarkable 0.916 average \F{} on nouns and verbs.\footnote{In
-  order to obtain such high results, the authors had to use the
-  hypernymy relation in addition to the normal synonymy links.  Since
-  this relation was missing for adjectives, the results for this part
-  of speech were significantly lower, only amounting to 0.73 \F{}.}
+showed significant improvement over the previous baselines of
+\citet{Kamps:04} and \citet{Kim:06}.  Other notable works on
+dictionary-based lexicon generation include those of
+\citet{Mohammad:09}, who generated their seed set using antonymous
+morphological patterns (e.g., \emph{logical}---\emph{illogical},
+\emph{honest}---\emph{dishonest}, \emph{happy}---\emph{unhappy}) and
+subsequently expanded these seed sets with the help of the Macquarie
+Thesaurus \cite{Bernard:86}; \citet{Awadallah:10}, who adopted a
+random walk approach, estimating the polarity of an unknown word by
+taking the difference between an average number of steps a random
+walker had to make in order to reach a term from positive or negative
+set; and \citet{Dragut:10}, who deduced the polarities of new words
+using manually specified inference rules.
 
-Other notable works on dictionary-based lexicon generation include
-those of \citet{Mohammad:09}, who generated their seed set using
-antonymous morphological patterns (e.g.,
-\emph{logical}---\emph{illogical}, \emph{honest}---\emph{dishonest},
-\emph{happy}---\emph{unhappy}) and subsequently expanded these seed
-sets with the help of the Macquarie Thesaurus \cite{Bernard:86};
-\citet{Awadallah:10}, who adopted a random walk approach, estimating
-the polarity of an unknown word by taking the difference between an
-average number of steps a random walker had to make in order to reach
-a term from positive or negative set; and \citet{Dragut:10}, who
-deduced the polarities of new words using manually specified inference
-rules.
+% Since almost all of the presented approaches used \textsc{WordNet}---a
+% large lexical database with more than 117,000 synsets---and evaluated
+% their results in vitro (using the General Inquirer lexicon
+% \cite{Stone:66}), it remains unclear how these methods would work for
+% languages with smaller lexical resources and whether they would
+% perform equally well in vivo (when tested on a real-life corpus).
+% Moreover, because General Inquirer is a generic standard-language
+% dictionary, it is also not obvious whether the systems that perform
+% best on this list would be also applicable to more colloquial domains.
 
-Since almost all of the presented approaches used \textsc{WordNet}---a
-large lexical database with more than 117,000 synsets---and evaluated
-their results in vitro (using the General Inquirer lexicon
-\cite{Stone:66}), it remains unclear how these methods would work for
-languages with smaller lexical resources and whether they would
-perform equally well in vivo (when tested on a real-life corpus).
-Moreover, because General Inquirer is a generic standard-language
-dictionary, it is also not obvious whether the systems that perform
-best on this list would be also applicable to more colloquial domains.
-
-To answer these questions, we reimplemented the approaches of
-\citet{Hu:04}, \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
-\citet{Esuli:06c}, \citet{Rao:09}, and \citet{Awadallah:10}, applying
-these methods to \textsc{GermaNet}---the German equivalent of the
-English \textsc{WordNet} \cite{Hamp:97}\footnote{Throughout our
-  experiments, we will use \textsc{WordNet} Version 3.0 and
-  \textsc{GermaNet} Version 9.}--- and subsequently evaluating their
-results on our presented Twitter corpus.
+For our experiments, we reimplemented the approaches of \citet{Hu:04},
+\citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06}, \citet{Esuli:06c},
+\citet{Rao:09}, and \citet{Awadallah:10}, applying these methods to
+\textsc{GermaNet}---the German equivalent of the English
+\textsc{WordNet} \cite{Hamp:97}\footnote{Throughout our experiments,
+  we will use \textsc{WordNet} Version 3.0 and \textsc{GermaNet}
+  Version 9.}---and subsequently evaluating their results on our
+presented Twitter corpus.
 
 In order to make this comparison more fair, we used the same set of
 the initial seed terms for all tested methods.  For this purpose, we
-translated the original list of 14 subjectively connotated English
+translated the original list of 14 subjectively connoted English
 adjectives suggested by \citet{Turney:03}---\emph{good}$^+$,
 \emph{nice}$^+$, \emph{excellent}$^+$, \emph{positive}$^+$,
 \emph{fortunate}$^+$, \emph{correct}$^+$, \emph{superior}$^+$,
@@ -478,8 +464,8 @@ translations of the same words.\footnote{The reimplemented methods and
   translated seed sets used in these experiments are available online
   at \url{https://github.com/WladimirSidorenko/SentiLex}.}
 Furthermore, to settle the differences between the binary and ternary
-approaches (i.e., those methods that only differentiate between the
-positive and negative classes and those ones which also discern the
+approaches (i.e., those methods that only differentiated between the
+positive and negative classes and those ones which also discerned
 neutral terms as a separate group), we additionally enriched the
 translated seed set with 10 purely objective adjectives---``neutral''
 (\emph{neutral}), ``sachlich'' (\emph{objective}), ``technisch''
@@ -490,7 +476,7 @@ translated seed set with 10 purely objective adjectives---``neutral''
 all evaluated classifiers work in the ternary mode.  Finally, since
 different methods relied on various notions of synonymous relations
 (e.g., \citet{Hu:04} only considered two words as synonyms if they
-appeared together in the same synset whereas \citet{Esuli:06c},
+appeared together in the same synset, whereas \citet{Esuli:06c},
 \citet{Rao:09}, and \citet{Awadallah:10} also considered
 hyper-hyponymous connections as valid edges for propagating the
 polarity of the seed terms), we decided to unify this aspect too,
@@ -514,413 +500,218 @@ could connect both synonyms and antonyms of the same term---e.g., this
 type of relation held between the words ``Form'' (\emph{shape}) and
 ``unf\"ormig'' (\emph{misshapen}).
 
-We fine-tuned the settings of the LG systems that involved
-hyper-parameters by using grid search and optimizing the
-macro-averaged \F{}-score on a small subset of the data (four files)
-from the other annotator.  In particular, instead of waiting for the
-full convergence of the eigenvector in the approach of
+We fine-tuned the hyper-parameters of the evaluated approaches by
+using grid search and optimizing the macro-averaged \F{}-score on the
+development set.  In particular, instead of waiting for the full
+convergence of the eigenvector in the approach of
 \citet{Blair-Goldensohn:08}, we set the maximum number of times the
 polarity vector was multiplied with the adjacency matrix to five.  Our
 experiments showed that this limitation had a crucial impact on the
 quality of the resulting polarity lists (e.g., after five
 multiplications, the average precision of the recognized positive
-terms amounted to 49.9\%, reaching an average \F{}-score of 26\% for
-that class; after ten more iterations, however, this precision
-decreased dramatically to 4.3\%, pulling the class-specific \F{}-score
-down to 7.8\%).  Similarly to that, we limited the maximum number of
+terms amounted to 0.499, reaching an average \F{}-score of 0.26 for
+this class; after ten more iterations, however, this precision
+decreased dramatically to 0.043, pulling the class-specific \F{}-score
+down to 0.078).  In the same vein, we limited the maximum number of
 iterations in the label-propagation method of \citet{Rao:09} to 300,
 although the effect of this setting was much weaker than in the
 previous case (by comparison, the scores obtained after 30 runs
-differed only by a couple percent).  Finally, in the method suggested
-by \citet{Awadallah:10}, we allowed for seven simultaneous walkers
-with a maximum of 17 steps each, considering a term as polar if more
-than a half of these walkers agreed on the polarity of the analyzed
-term.
+differed only by a few hundredths).  Finally, in the method of
+\citet{Awadallah:10}, we allowed for seven simultaneous walkers with a
+maximum of 17 steps each, considering a term as polar if more than a
+half of these walkers agreed on the polarity of the analyzed term.
 
-The results of our re-implementations are shown in
+The results of our reimplementations are shown in
 Table~\ref{snt-lex:tbl:lex-res}.
 
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.1\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+    \begin{tabular}{p{0.142\columnwidth} % first columm
+        >{\centering\arraybackslash}p{0.06\columnwidth} % second columm
+        *{9}{>{\centering\arraybackslash}p{0.072\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.058\columnwidth}}} % last two columns
       \toprule
-          \multirow{2}*{\bfseries Lexicon} & %
-          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+      \multirow{2}*{\bfseries Lexicon} & %
+      \multirow{2}*{\bfseries Terms} & %
+      \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+      \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+      \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}
 
-          & Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & & \\\midrule
+      & & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
-          \textsc{Seed Set} & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.770601             0.101975                 0.180115
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963176             0.999227                 0.980870
+      % Macro-average              0.767226             0.372780                 0.398086
+      % Micro-average              0.962404             0.962216                 0.962310
 
-          HL & 13.8\stddev{5.6} & 19.3\stddev{7} & 15.7\stddev{5.8} & %
-          16.7\stddev{9.6} & 9.4\stddev{5.6} & \textbf{11.7}\stddev{6.5} & %
-          96.7\stddev{0.7} & 96.5\stddev{0.6} & 96.6\stddev{0.5} & %
-          41.3\stddev{3.3} & 93.3\stddev{0.9}\\
+      \textsc{Seed Set} & 20 & \textbf{0.771} & 0.102 & 0.18 & %
+      0.568 & 0.017 & 0.033 & %
+      0.963 & \textbf{0.999} & \textbf{0.981} & %
+      0.398 & \textbf{0.962}\\
 
-          BG & 49.9\stddev{14.5} & 18\stddev{6.6} & \textbf{26}\stddev{8.3} & %
-          22.8\stddev{20.6} & 5.8\stddev{4.8} & 9\stddev{7.4} & %
-          96.9\stddev{0.7} & 99.3\stddev{0.3} & 97.9\stddev{0.4} & %
-          \textbf{44.3}\stddev{4} & 95.9\stddev{0.8}\\
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.160648             0.266136                 0.200355
+      % negative                   0.199554             0.133383                 0.159893
+      % neutral                    0.969132             0.960190                 0.964640
+      % Macro-average              0.443111             0.453236                 0.441629
+      % Micro-average              0.930521             0.930387                 0.930454
 
-          KH & 70.8\stddev{19.7} & 12.9\stddev{6.3} & 21.3\stddev{9.1} & %
-          21.6\stddev{29.1} & 2.5\stddev{2.8} & 4.3\stddev{4.9} & %
-          96.4\stddev{0.8} & 99.7\stddev{0.2} & 98\stddev{0.4} & %
-          41.2\stddev{3.5} & 96.1\stddev{0.8}\\
+      HL & 5,745 & 0.161 & 0.266 & 0.2 & %
+      0.2 & 0.133 & 0.16 & %
+      0.969 & 0.96 & 0.965 & %
+      0.442 & 0.93\\
 
-          ES & 3.6\stddev{1.3} & \textbf{43.9}\stddev{10.8} & 6.6\stddev{2.3} & %
-          2.6\stddev{1.5} & 18\stddev{6.9} & 4.5\stddev{2.3} & %
-          \textbf{97.44}\stddev{0.6} & 71.5\stddev{2.8} & 82.5\stddev{1.8} & %
-          31.2\stddev{1.6} & 66.8\stddev{2.8}\\
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.502551             0.232243                 0.317678
+      % negative                   0.284571             0.092772                 0.139927
+      % neutral                    0.967533             0.991262                 0.979254
+      % Macro-average              0.584885             0.438759                 0.478953
+      % Micro-average              0.958888             0.958769                 0.958828
 
-          RR$_{\textrm{mincut}}$ & 74.6\stddev{23.1} & 10.1\stddev{5.7} & 17.3\stddev{8.8} & %
-          2.6\stddev{1.2} & \textbf{41.5}\stddev{10.2} & 4.8\stddev{2.1} & %
-          97.4\stddev{0.6} & 72.5\stddev{2} & 83.1\stddev{1.3} & %
-          35.1\stddev{3.2} & 70.6\stddev{1.8}\\
+      BG & 1,895 & 0.503 & 0.232 & \textbf{0.318} & %
+      0.285 & 0.093 & 0.14 & %
+      0.968 & 0.991 & 0.979 & %
+      \textbf{0.479} & 0.959\\
 
-          RR$_{\textrm{lbl-prop}}$ & 55.6\stddev{18.2} & 14.6\stddev{6.2} & 22.7\stddev{8.4} & %
-          \textbf{42.6}\stddev{41.5} & 2.7\stddev{3} & 5.1\stddev{5.5} & %
-          96.5\stddev{0.7} & 99.7\stddev{0.2} & \textbf{98.1}\stddev{0.4} & %
-          41.9\stddev{3.5} & \textbf{96.2}\stddev{0.8}\\
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.715608             0.159446                 0.260786
+      % negative                   0.269406             0.043964                 0.075593
+      % neutral                    0.964973             0.996744                 0.980601
+      % Macro-average              0.649996             0.400051                 0.438993
+      % Micro-average              0.961759             0.961571                 0.961665
 
-          AR & 75.5\stddev{25.3} & 9\stddev{5.6} & 15.6\stddev{8.7} & %
-          25.3\stddev{42.1} & 1.1\stddev{2.1} & 2\stddev{3.9} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\\bottomrule
+      KH & 356 & 0.716 & 0.159 & 0.261 & %
+      0.269 & 0.044 & 0.076 & %
+      0.965 & 0.997 & \textbf{0.981} & %
+      0.439 & \textbf{0.962}\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.041632             0.564397                 0.077544
+      % negative                   0.033042             0.255216                 0.058510
+      % neutral                    0.981022             0.689113                 0.809557
+      % Macro-average              0.351899             0.502909                 0.315204
+      % Micro-average              0.612283             0.678788                 0.643823
+
+      ES & 39,181 & 0.042 & \textbf{0.564} & 0.078 & %
+      0.033 & \textbf{0.255} & 0.059 & %
+      \textbf{0.981} & 0.689 & 0.81 & %
+      0.315 & 0.644\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.070618             0.422045                 0.120992
+      % negative                   0.215708             0.072653                 0.108696
+      % neutral                    0.972028             0.873448                 0.920105
+      % Macro-average              0.419451             0.456049                 0.383264
+      % Micro-average              0.848630             0.849470                 0.849050
+
+      RR$_{\textrm{mincut}}$ & 8,060 & 0.07 & 0.422 & 0.12 & %
+      0.216 & 0.073 & 0.109 & %
+      0.972 & 0.873 & 0.92 & %
+      0.383 & 0.849\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.566825             0.176245                 0.268885
+      % negative                   0.571429             0.046200                 0.085488
+      % neutral                    0.965423             0.996716                 0.980820
+      % Macro-average              0.701225             0.406387                 0.445064
+      % Micro-average              0.962125             0.961956                 0.962040
+
+      RR$_{\textrm{lbl-prop}}$ & 1,105 & 0.567 & 0.176 & 0.269 & %
+      \textbf{0.571} & 0.046 & 0.085 & %
+      0.965 & 0.997 & \textbf{0.981} & %
+      0.445 & \textbf{0.962}\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.768182             0.099617                 0.176363
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963126             0.999233                 0.980847
+      % Macro-average              0.766403             0.371996                 0.396828
+      % Micro-average              0.962358             0.962170                 0.962264
+
+      AR & 23 & 0.768 & 0.1 & 0.176 & %
+      0.568 & 0.017 & 0.033 & %
+      0.963 & \textbf{0.999} & \textbf{0.981} & %
+      0.397 & \textbf{0.962}\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.600858             0.165046                 0.258960
+      % negative                   0.567442             0.045455                 0.084167
+      % neutral                    0.965096             0.997212                 0.980891
+      % Macro-average              0.711132             0.402571                 0.441339
+      % Micro-average              0.962327             0.962170                 0.962249
+
+      HL $\cap$ BG $\cap$ RR$_{\textrm{lbl}}$ & 752 & 0.601 & 0.165 & 0.259 & %
+      0.567 & 0.045 & 0.084 & %
+      0.965 & 0.997 & \textbf{0.981} & %
+      0.441 & \textbf{0.962}\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.165676             0.287651                 0.210254
+      % negative                   0.191198             0.145678                 0.165363
+      % neutral                    0.969910             0.957599                 0.963716
+      % Macro-average              0.442262             0.463643                 0.446444
+      % Micro-average              0.928663             0.928590                 0.928626
+
+      HL $\cup$ BG $\cup$ RR$_{\textrm{lbl}}$ & 6,258 & 0.166 & 0.288 & 0.21 & %
+      0.191 & 0.146 & \textbf{0.165} & %
+      0.97 & 0.958 & 0.964 & %
+      0.446 & 0.929\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Evaluation of dictionary-based approaches.\\ {\small (HL
+    \caption{Evaluation of dictionary-based approaches.\\ {\small HL
         -- \citet{Hu:04}, BG -- \citet{Blair-Goldensohn:08}, KH --
-        \citet{Kim:04,Kim:06}, ES -- \citet{Esuli:06c}, RR --
-        \citet{Rao:09}, AR -- \citet{Awadallah:10})}}
+        \citet{Kim:04}, ES -- \citet{Esuli:06c}, RR -- \citet{Rao:09},
+        AR -- \citet{Awadallah:10}}}
     \label{snt-lex:tbl:lex-res}
   \end{center}
 \end{table}
 
-As can be seen from the table, the results of the purely automatic
-approaches are significantly lower than the scores obtained by the
-semi-automatic systems discussed previously.  The best macro-averaged
-\F{}-score for the three classes (0.443) is attained by the method of
-\citet{Blair-Goldensohn:08} which is still more than 0.12 points worse
-than the peak result reached by the SentiWS lexicon (0.569).  Somewhat
-surprisingly, no one of the compared systems could outperform the
-micro-averaged baseline established by the initial seed set, even
-though the label-propagation approach of \citet{Rao:09} and the
-random-walk method of \citet{Awadallah:10} were on a par with this
-result.
-
-Regarding the figures for the positive and negative classes, we can
-see the top-performing systems (\citet{Blair-Goldensohn:08} for the
-positive terms and \citet{Hu:04} for the negative entries) achieve
-these results mainly due to a relatively good balance of their
-precision (P) and recall (R).  At the same time, approaches showing
-the best scores for either of these two aspects (P or R) usually have
-significant difficulties with the other metric: for example, the
-manually selected set of the positive seed terms attains the highest
-observed precision (75\%) for this polarity class, but suffers from a
-rather low recall (9.1\%).  Vice versa, the system with the highest
-recall---the SentiWordNet approach of \citet{Esuli:06c}---has a
-dramatically low precision (3.6\%) on recognizing positive
-expressions.  A similar situation can be observed for the negative
-polarity class too where the best performing method---the system of
-\citet{Hu:04}---has a well-maintained equilibrium of P and R in
-contrast to the approaches with the best achieved precision or highest
-recall---the label propagation and min-cut systems of \citet{Rao:09}
-respectively---which only reach 2.6 to 2.7\% on the other evaluation
-metric.
-
-In general, however, the results shown by all systems tested in this
-section are notably lower than the respective figures reported in
-their original papers.  We can explain this divergence by the
-following reasons:
-\begin{inparaenum}[\itshape a\upshape)]
-\item the evaluation metrics that we applied in our experiments are
-  considerably different from the testing methods used in the previous
-  works (we estimated the results on a real-life corpus, counting
-  every false positive and false negative case, whereas the English
-  approaches evaluated their results on the intersection with the
-  General Inquirer Lexicon \cite{Stone:66}, omitting false positive
-  matches and therefore artifically boosting their scores);
-\item both the domain and the language that we addressed in this
-  section are apparently more challenging than the standard English
-  invariant for which these methods have been developed; and, finally,
-\item the notion of the synonymous relations and the set of the
-  initial seed terms could differ from the original settings of the
-  evaluated approaches.
+As can be seen from the table, the results of the automatic methods
+are significantly lower than the figures obtained by the
+semi-automatic lexicons.  The best macro-averaged \F{}-score for all
+three classes (0.479) is attained by the method of
+\citet{Blair-Goldensohn:08}, which is still 0.11 points worse than the
+peak result reached by the intersection of the GPC, SentiWS, and
+Zurich Polarity lists (0.589).  Apart from this, the situation for the
+dictionary-based methods in general is much more varied than in the
+case of the existing German lexicons as different systems can achieve
+best scores on just some aspects of certain classes but can hardly
+attain best overall results in all categories.  This is, for instance,
+the case for the positive and negative polarities, where the best
+precision is reached by the seed set in the first case and the label
+propagation algorithm by \citet{Rao:09} in the second case.  However,
+with respect to the recall, both of these polarity lists perform
+notably worse than the approach by \citet{Esuli:06c}.  Yet other
+systems---the matrix-vector method by \citet{Blair-Goldensohn:08} and
+the union of the three overall top-scoring systems
+respectively---reach the highest \F{}-scores for these two classes.
+Nevertheless, we can still notice three main tendencies in this
+evaluation:
+\begin{inparaenum}[\itshape i\upshape)]
+\item the method by \citet{Esuli:06c} generally gets the highest
+  recall of polar terms and, consequently, achieves the best precision
+  in recognizing neutral words, but suffers from a low precision for
+  the positive and negative polarities,
+\item simultaneously five systems attain the same best \F{}-scores on
+  recognizing neutral terms, which, in turn, leads to the best
+  micro-averaged \F{}-results for all polarity classes, and, finally,
+\item the system of \citet{Blair-Goldensohn:08} shows the best
+  macro-averaged performance.  This approach, however, is extremely
+  susceptible to its hyper-parameter settings (in particular, we
+  considered the maximum number of times the initial vector $\vec{v}$
+  was multiplied with the adjacency matrix $A$ as such parameter and
+  noticed a dramatic decrease of method's scores after the fifth
+  iteration).
 \end{inparaenum}
-
-In order to test how the last factor (diverging settings) affected the
-obtained results, we decided to re-generate the polarity lists with
-the above approaches using a constrained set of synonymous links (this
-time, we only considered two terms as synonyms if they both appeared
-in at least one common synset).  The results of this experiment are
-presented in Table~\ref{snt-lex:tbl:lex-res-constr-syn}.
-
-\begin{table}[h]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.1\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
-      \toprule
-          \multirow{2}*{\bfseries Lexicon} & %
-          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
-
-          & Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & & \\\midrule
-
-         \textsc{Seeds Set} & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
-
-          HL & 73.66\stddev{23.9} & 9.2\stddev{5.6} & 15.6\stddev{8.7} & %
-          \textbf{33.1}\stddev{44.5} & 1.7\stddev{2.5} & 3.2\stddev{4.7} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          39.1\stddev{3.5} & \textbf{96.2}\stddev{0.8}\\
-
-          BG & 75.4\stddev{21.9} & 9.7\stddev{5.6} & \textbf{16.7}\stddev{8.6} & %
-          32.2\stddev{41.1} & \textbf{2}\stddev{2.6} & \textbf{3.7}\stddev{4.8} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          \textbf{39.5}\stddev{3.4} & \textbf{96.2}\stddev{0.8}\\
-
-          KH & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          25\stddev{41.8} & 1\stddev{1.9} & 2\stddev{3.5} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
-
-          ES & 3.9\stddev{1.3} & \textbf{51.9}\stddev{10.7} & 7.3\stddev{2.3} & %
-          13\stddev{20.5} & 1.8\stddev{2.6} & 3\stddev{4.4} & %
-          \textbf{97.6}\stddev{0.5} & 71.7\stddev{2.7} & 82.6\stddev{1.8} & %
-          31\stddev{1.9} & 70\stddev{2.5}\\
-
-          RR$_{\textrm{mincut}}$ & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          32.3\stddev{44.4} & 1.4\stddev{2.1} & 2.7\stddev{3.9} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.9\stddev{3.4} & \textbf{96.2}\stddev{0.8}\\
-
-          RR$_{\textrm{lbl-prop}}$ & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          32.3\stddev{44.4} & 1.4\stddev{2.1} & 2.7\stddev{3.9} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.9\stddev{3.4} & \textbf{96.2}\stddev{0.8}\\
-
-          AR & 72.9\stddev{27} & 7.3\stddev{4.7} & 12.9\stddev{7.6} & %
-          23.8\stddev{41.1} & 1\stddev{1.9} & 1.9\stddev{3.5} & %
-          96.2\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          37.6\stddev{2.8} & \textbf{96.2}\stddev{0.8}\\
-          \bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Evaluation of dictionary-based approaches with a
-      constrained set of synonymous links.\\ {\small (HL --
-        \citet{Hu:04}, BG -- \citet{Blair-Goldensohn:08}, KH --
-        \citet{Kim:04,Kim:06}, ES -- \citet{Esuli:06c}, RR --
-        \citet{Rao:09}, AR -- \citet{Awadallah:10})}}
-    \label{snt-lex:tbl:lex-res-constr-syn}
-  \end{center}
-\end{table}
-
-This time, the results are spread much more uniformly: in particular,
-seven of the eight tested models including the seed set attain
-identical \F{}-scores on the neutral terms and get almost the same (up
-to a few hundredths) micro-averaged results.  The only exception from
-this tendency is formed by the method of \citet{Esuli:06c} whose
-original implementation only used inter-synset links and, as we can
-see from the results, did not generalize well to the purely
-intra-synset connections.  Nevertheless, this system reached the
-highest observed precision on recognizing the neutral terms and also
-attained the best recall of the positively connotated expressions.
-The best observed precision for the latter class is, again, attained
-by the manually compiled seed set, with the method of
-\citet{Kim:04,Kim:06} and the two proposed systems of
-\citet{Rao:09}---the min-cut and label propagation
-algorithms---showing identical results.  Similarly to the previous
-experiments, the highest overall \F{}-score for the positive category
-(0.167 \F{}) is shown by the approach of \citet{Blair-Goldensohn:08},
-which, this time, also performs best on predicting the negative
-expressions, getting the best recall and \F{}-result for this polarity
-group.
-
-In general, however, the results obtained after constraining the set
-of the possible synonymity links are significantly lower than the ones
-achieved with the extended relation set.  This effect can partially be
-explained by an extreme sparsity of the resulting \textsc{GermaNet}
-graph which prevents graphical and matrix-based approaches from
-propagating the polarity scores to other nodes.  To check this
-hypothesis, we computed the mean in-degrees of the graph nodes with
-the extended and constrained sets of relations, getting an average
-number of 5.91 incident links per node for the former case and 1.86
-edges per node for the latter setting.
-
-Another important factor that could significantly affect the quality
-of the resulting polarity lists was the set of the seed terms which we
-used to initialize the polarity scores in the evaluated methods.  In
-order to estimate the impact of this setting on the final scores, we
-re-run our experiments with the extended set of synonymity links using
-the seed lists proposed by \citet{Hu:04}, \citet{Kim:04},
-\citet{Esuli:06c}, and \citet{Remus:10}.  Since \citet{Hu:04},
-however, only partially specified their polarity set in the original
-paper, and \citet{Kim:04} did not provide any examples at all, we
-filled the missing terms in these lists with common polar German terms
-we came up with to match the size of these seed sets.  Furthermore,
-since the list of the neutral terms from the polarity set of
-\citet{Esuli:06c} comprised 4,122 words---the authors considered as
-neutral all terms from the General Inquirer lexicon \cite{Stone:66}
-which were not marked as either positive or negative and did not
-appear in the seed list of \citet{Turney:03}---and was therefore
-cumbersome to translate manually, we automatically obtained
-translations for these terms using the publicly available online
-dictionary \texttt{dict.cc}\footnote{\url{http://www.dict.cc}}, taking
-the first suggested German translation for each of the neutral
-entries.\footnote{We also tried to use all possible translations of
-  the original terms, but it lead to a considerable boost in the
-  number of neutral items (45,252 words) and resulted in a substantial
-  decrease of the final system scores.} A short statistics on the
-cardinality and composition of the resulting seed sets is presented in
-Table~\ref{snt-lex:tbl:alt-seed-sets}.
-
-\begin{table}[h]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{ %
-        >{\centering\arraybackslash}p{0.2\columnwidth} % first columm
-        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
-      \toprule
-      {\bfseries Seed Set} & %
-      {\bfseries Cardinality} & %
-      {\bfseries Parts of Speech} & %
-      {\bfseries Examples} & %
-      {\bfseries Comments}\\
-      \midrule
-      \citet{Hu:04} & 14 positive, 15 negative, and 10 neutral terms & adjectives %
-      & {{\itshape fantastisch, lieb, sympathisch, %
-          b\"ose, dumm, schwierig}} & polar terms translated from the original paper %
-      \cite{Hu:04}; neutral terms added by us;\\
-      \citet{Kim:04} & 60 positive, 60 negative, and 60 neutral terms & any & %
-      {\itshape fabelhaft, Hoffnung, lieben, h\"asslich, Missbrauch, t\"oten} %
-      & devised by us so as to match the cardinality of the original set with %
-      neutral terms added extra;\\
-      \citet{Esuli:06c} & 16 positive, 35 negative, and 4,122 neutral terms & %
-      any & {\itshape angenehm, ausgezeichnet, freundlich, %
-        arm, bedauernswert, d\"urftig} & polar terms translated from the seed %
-      set of \citet{Turney:03}; neutral terms automatically translated from %
-      objective entries in the General Inquirer lexicon \cite{Stone:66};\\
-      \citet{Remus:10} & 12 positive, 12 negative, and 10 neutral terms & %
-      adjectives & {\itshape gut, sch\"on, richtig, %
-        schlecht, unsch\"on, falsch} & %
-      polar terms translated from the seed set of \citet{Turney:03}; %
-      neutral terms added by us.\\
-      \\\bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Cardinality and composition of the alternative polarity lists.\\
-      (all cardinalities are given with respect to the resulting
-      German translations)}
-    \label{snt-lex:tbl:alt-seed-sets}
-  \end{center}
-\end{table}
-
-The results of the lexicons generated with the help of these seed sets
-are shown in Figure~\ref{snt:fig:sent-lex-alt-seeds}.  As we can see
-from the statistics, the choice of the initial seed terms might
-significantly affect the overall scores of the resulting polarity
-lists, with the macro-averaged \F{}-results deviating by up to 10\%
-depending on the seed set being applied at the beginning---this is for
-example the case for the approach of \citet{Esuli:06c} whose
-macro-averaged \F{} runs up to $31.45^{\pm 0.19}$\% when generated
-with the initial polar terms of \citet{Turney:03}, \citet{Hu:04},
-\citet{Kim:04}, or \citet{Remus:10}, but achieves remarkable $41.7$\%
-when used with the original seeds of the authors.
-
-In general, however, the best scores for all compared classifieres are
-achieved with either of two seed sets which by themselves (without any
-expansion) attain the best macro-averaged \F{}-results.  These are the
-seed list of \citet{Kim:04}, which yields the best scores for the
-approaches of \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
-\citet{Rao:09}, and \citet{Awadallah:10}, and the initial seed set
-proposed by \citet{Esuli:06c}, which leads to the best results when
-used in combination with the method of \citet{Hu:04} and the original
-system of \citet{Esuli:06c}.
-
-\begin{figure}[hbtp!]
-{
-  \centering
-  \includegraphics[width=\linewidth]{img/sentilex-alt-seed-sets.png}
-}
-\caption{Macro-averaged \F{}-scores of dictionary-based methods with
-  different seed sets.\\ {\small (HL -- \citet{Hu:04}, BG --
-    \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, ES --
-    \citet{Esuli:06c}, RR -- \citet{Rao:09}, AR --
-    \citet{Awadallah:10})}}\label{snt:fig:sent-lex-alt-seeds}
-\end{figure}
-
-For convenience, we will summarize the results of three top-performing
-configurations---the methods of \citet{Blair-Goldensohn:08},
-\citet{Kim:04,Kim:06}, and the label-propagation approach of
-\citet{Rao:09} used in combination with the initial seed sed of
-\citet{Kim:04}---in Table~\ref{snt-lex:tbl:lex-kh-seedset} and use
-these results as baselines in our later experiments.
-
-\begin{table}[h]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.1\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
-      \toprule
-          \multirow{2}*{\bfseries Lexicon} & %
-          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
-
-          & Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & & \\\midrule
-
-          BG & 22.7\stddev{6.5} & \textbf{29.9}\stddev{8.4} & 25.4\stddev{6.7} & %
-          17.1\stddev{7.4} & \textbf{16.9}\stddev{7.2} & \textbf{16.6}\stddev{6.7} & %
-          \textbf{97}\stddev{0.6} & 96.4\stddev{0.6} & 96.7\stddev{0.5} & %
-          46.3\stddev{3.5} & 93.5\stddev{0.9}\\
-
-          KH & 51.6\stddev{12.4} & 21.7\stddev{7.2} & \textbf{29.9}\stddev{8.1} & %
-          38.9\stddev{24.7} & 7.5\stddev{4.9} & 12.2\stddev{7.8} & %
-          96.7\stddev{0.7} & \textbf{99.4}\stddev{0.2} & \textbf{98}\stddev{0.4} & %
-          \textbf{46.7}\stddev{3.9} & \textbf{96}\stddev{0.7}\\
-
-          RR$_{\textrm{lbl-prop}}$ & \textbf{52.9}\stddev{15.2} & 18.4\stddev{6.5} & 26.7\stddev{8.2} & %
-          \textbf{42.8}\stddev{29.7} & 8.9\stddev{5.8} & 14.1\stddev{8.8} & %
-          96.6\stddev{0.7} & \textbf{99.4}\stddev{0.3} & \textbf{98}\stddev{0.4} & %
-          46.3\stddev{4.3} & \textbf{96}\stddev{0.8}\\
-          \bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Results of the top-scoring dictionary-based approaches
-      with the best observed seed set configuration. {\small (BG --
-        \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, RR
-        -- \citet{Rao:09})}}
-    \label{snt-lex:tbl:lex-kh-seedset}
-  \end{center}
-\end{table}
 
 % Seed Sets:
 
@@ -1228,7 +1019,183 @@ The results of these methods are shown in Table~\ref{snt-lex:tbl:nwe-methods}.
   \end{center}
 \end{table}
 
+\subsection{Effect of Seed Sets}
+
+Another important factor that could significantly affect the quality
+of the resulting polarity lists was the set of the seed terms which we
+used to initialize the polarity scores in the evaluated methods.  In
+order to estimate the impact of this setting on the final scores, we
+re-run our experiments with the extended set of synonymity links using
+the seed lists proposed by \citet{Hu:04}, \citet{Kim:04},
+\citet{Esuli:06c}, and \citet{Remus:10}.  Since \citet{Hu:04},
+however, only partially specified their polarity set in the original
+paper, and \citet{Kim:04} did not provide any examples at all, we
+filled the missing terms in these lists with common polar German terms
+we came up with to match the size of these seed sets.  Furthermore,
+since the list of the neutral terms from the polarity set of
+\citet{Esuli:06c} comprised 4,122 words---the authors considered as
+neutral all terms from the General Inquirer lexicon \cite{Stone:66}
+which were not marked as either positive or negative and did not
+appear in the seed list of \citet{Turney:03}---and was therefore
+cumbersome to translate manually, we automatically obtained
+translations for these terms using the publicly available online
+dictionary \texttt{dict.cc}\footnote{\url{http://www.dict.cc}}, taking
+the first suggested German translation for each of the neutral
+entries.\footnote{We also tried to use all possible translations of
+  the original terms, but it lead to a considerable boost in the
+  number of neutral items (45,252 words) and resulted in a substantial
+  decrease of the final system scores.} A short statistics on the
+cardinality and composition of the resulting seed sets is presented in
+Table~\ref{snt-lex:tbl:alt-seed-sets}.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{ %
+        >{\centering\arraybackslash}p{0.2\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
+      \toprule
+      {\bfseries Seed Set} & %
+      {\bfseries Cardinality} & %
+      {\bfseries Parts of Speech} & %
+      {\bfseries Examples} & %
+      {\bfseries Comments}\\
+      \midrule
+      \citet{Hu:04} & 14 positive, 15 negative, and 10 neutral terms & adjectives %
+      & {{\itshape fantastisch, lieb, sympathisch, %
+          b\"ose, dumm, schwierig}} & polar terms translated from the original paper %
+      \cite{Hu:04}; neutral terms added by us;\\
+      \citet{Kim:04} & 60 positive, 60 negative, and 60 neutral terms & any & %
+      {\itshape fabelhaft, Hoffnung, lieben, h\"asslich, Missbrauch, t\"oten} %
+      & devised by us so as to match the cardinality of the original set with %
+      neutral terms added extra;\\
+      \citet{Esuli:06c} & 16 positive, 35 negative, and 4,122 neutral terms & %
+      any & {\itshape angenehm, ausgezeichnet, freundlich, %
+        arm, bedauernswert, d\"urftig} & polar terms translated from the seed %
+      set of \citet{Turney:03}; neutral terms automatically translated from %
+      objective entries in the General Inquirer lexicon \cite{Stone:66};\\
+      \citet{Remus:10} & 12 positive, 12 negative, and 10 neutral terms & %
+      adjectives & {\itshape gut, sch\"on, richtig, %
+        schlecht, unsch\"on, falsch} & %
+      polar terms translated from the seed set of \citet{Turney:03}; %
+      neutral terms added by us.\\
+      \\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Cardinality and composition of the alternative polarity lists.\\
+      (all cardinalities are given with respect to the resulting
+      German translations)}
+    \label{snt-lex:tbl:alt-seed-sets}
+  \end{center}
+\end{table}
+
+The results of the lexicons generated with the help of these seed sets
+are shown in Figure~\ref{snt:fig:sent-lex-alt-seeds}.  As we can see
+from the statistics, the choice of the initial seed terms might
+significantly affect the overall scores of the resulting polarity
+lists, with the macro-averaged \F{}-results deviating by up to 10\%
+depending on the seed set being applied at the beginning---this is for
+example the case for the approach of \citet{Esuli:06c} whose
+macro-averaged \F{} runs up to $31.45^{\pm 0.19}$\% when generated
+with the initial polar terms of \citet{Turney:03}, \citet{Hu:04},
+\citet{Kim:04}, or \citet{Remus:10}, but achieves remarkable $41.7$\%
+when used with the original seeds of the authors.
+
+In general, however, the best scores for all compared classifieres are
+achieved with either of two seed sets which by themselves (without any
+expansion) attain the best macro-averaged \F{}-results.  These are the
+seed list of \citet{Kim:04}, which yields the best scores for the
+approaches of \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
+\citet{Rao:09}, and \citet{Awadallah:10}, and the initial seed set
+proposed by \citet{Esuli:06c}, which leads to the best results when
+used in combination with the method of \citet{Hu:04} and the original
+system of \citet{Esuli:06c}.
+
+\begin{figure}[hbtp!]
+{
+  \centering
+  \includegraphics[width=\linewidth]{img/sentilex-alt-seed-sets.png}
+}
+\caption{Macro-averaged \F{}-scores of dictionary-based methods with
+  different seed sets.\\ {\small (HL -- \citet{Hu:04}, BG --
+    \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, ES --
+    \citet{Esuli:06c}, RR -- \citet{Rao:09}, AR --
+    \citet{Awadallah:10})}}\label{snt:fig:sent-lex-alt-seeds}
+\end{figure}
+
+For convenience, we will summarize the results of three top-performing
+configurations---the methods of \citet{Blair-Goldensohn:08},
+\citet{Kim:04,Kim:06}, and the label-propagation approach of
+\citet{Rao:09} used in combination with the initial seed sed of
+\citet{Kim:04}---in Table~\ref{snt-lex:tbl:lex-kh-seedset} and use
+these results as baselines in our later experiments.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.1\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+      \toprule
+          \multirow{2}*{\bfseries Lexicon} & %
+          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
+
+          BG & 22.7\stddev{6.5} & \textbf{29.9}\stddev{8.4} & 25.4\stddev{6.7} & %
+          17.1\stddev{7.4} & \textbf{16.9}\stddev{7.2} & \textbf{16.6}\stddev{6.7} & %
+          \textbf{97}\stddev{0.6} & 96.4\stddev{0.6} & 96.7\stddev{0.5} & %
+          46.3\stddev{3.5} & 93.5\stddev{0.9}\\
+
+          KH & 51.6\stddev{12.4} & 21.7\stddev{7.2} & \textbf{29.9}\stddev{8.1} & %
+          38.9\stddev{24.7} & 7.5\stddev{4.9} & 12.2\stddev{7.8} & %
+          96.7\stddev{0.7} & \textbf{99.4}\stddev{0.2} & \textbf{98}\stddev{0.4} & %
+          \textbf{46.7}\stddev{3.9} & \textbf{96}\stddev{0.7}\\
+
+          RR$_{\textrm{lbl-prop}}$ & \textbf{52.9}\stddev{15.2} & 18.4\stddev{6.5} & 26.7\stddev{8.2} & %
+          \textbf{42.8}\stddev{29.7} & 8.9\stddev{5.8} & 14.1\stddev{8.8} & %
+          96.6\stddev{0.7} & \textbf{99.4}\stddev{0.3} & \textbf{98}\stddev{0.4} & %
+          46.3\stddev{4.3} & \textbf{96}\stddev{0.8}\\
+          \bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Results of the top-scoring dictionary-based approaches
+      with the best observed seed set configuration. {\small (BG --
+        \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, RR
+        -- \citet{Rao:09})}}
+    \label{snt-lex:tbl:lex-kh-seedset}
+  \end{center}
+\end{table}
+
 \subsection{Discussion}
+
+In general, however, the results shown by all systems tested in this
+section are notably lower than the respective figures reported in
+their original papers.  We can explain this divergence by the
+following reasons:
+\begin{inparaenum}[\itshape a\upshape)]
+\item the evaluation metrics that we applied in our experiments are
+  considerably different from the testing methods used in the previous
+  works (we estimated the results on a real-life corpus, counting
+  every false positive and false negative case, whereas the English
+  approaches evaluated their results on the intersection with the
+  General Inquirer Lexicon \cite{Stone:66}, omitting false positive
+  matches and therefore artifically boosting their scores);
+\item both the domain and the language that we addressed in this
+  section are apparently more challenging than the standard English
+  invariant for which these methods have been developed; and, finally,
+\item the notion of the synonymous relations and the set of the
+  initial seed terms could differ from the original settings of the
+  evaluated approaches.
+\end{inparaenum}
+
 
 Since \textsc{GermaNet}, however, is significantly different from its
 English counterpart, both quantitatively and qualitatively, we should
