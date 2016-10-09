@@ -306,12 +306,12 @@ form a manually created lexical database was proposed by
 summarization of cutomer reviews, the authors determined semantic
 orientation of adjectives (which were supposed to be the most relevant
 part of speech for mining people's opinions) by taking a list of seed
-terms with known semantic orientation and propagating these
-orientation values to the synonyms of these words that were found in
-\textsc{WordNet} \cite{Miller:95}.  A similar procedure was applied
-for the antonymous relations with the polarity scores being reversed
-during this propagation.  The expansion continued until no more
-adjective could be reached via the synonymy-antonymy links.
+terms with known semantic orientation and propagating these values to
+the synonyms of these words that were found in \textsc{WordNet}
+\cite{Miller:95}.  A similar procedure was applied for the antonymous
+relations with the polarity scores being reversed during the
+propagation.  The expansion continued until no more adjective could be
+reached via the synonymy-antonymy links.
 % Unfortunately, no intrinsic evaluation of the resulting lexicon was
 % performed in this work---the authors only report their results on
 % recognizing subjective sentences and classifying their polarity, where
@@ -319,11 +319,11 @@ adjective could be reached via the synonymy-antonymy links.
 
 Later on, this approach was refined by \citet{Blair-Goldensohn:08},
 who obtained polarity labels for new words by multiplying a vector
-$\vec{v}$ containing polarity scores of known seed terms (-1 for the
-negative expressions and 1 for the positive terms) with an adjacency
-matrix $A$ constructed from the \textsc{WordNet} synsets.  The value
-of the adjacency cell $a_{ij}$ of this matrix was set to $\lambda=0.2$
-if there was a synonymy link between the synsets $i$ and $j$ and to
+$\vec{v}$ containing polarity scores of known seed terms (-1 for
+negative expressions and 1 for positive terms) with an adjacency
+matrix $A$ constructed from \textsc{WordNet} synsets.  The value of
+the adjacency cell $a_{ij}$ of this matrix was set to $\lambda=0.2$ if
+there was a synonymy link between the synsets $i$ and $j$ and to
 $-\lambda$ if these synsets were antonymous to each other.  By
 performing this multiplication multiple times and setting the vector
 $\vec{v}$ to the result of the previous iteration, the authors ensured
@@ -382,8 +382,8 @@ successively expanded their lexicon to a list of 18,192 terms. %  and
 
 One of the most popular dictionary-based approaches to date, however,
 was proposed by \citet{Esuli:06c}.  Starting with the positive and
-negative seed sets used by \citet{Turney:03} and considering the rest
-of the terms as objective if these words neither appeared in the
+negative seed sets of \citet{Turney:03} and considering the rest of
+the terms as objective if these words neither appeared in the
 aforemention seed lists nor had a subjective tag in the General
 Inquirer lexicon \cite{Stone:66}, the authors successively expanded
 these sets for $k \in \{0, 2, 4, 6\}$ iterations by following the
@@ -395,7 +395,7 @@ input features.  In the concluding step, \citet{Esuli:06c} united
 these classifiers into one ensemble and assigned normalized class
 scores returned by this committee to the remaining \textsc{WordNet}
 synsets.\footnote{In contrast to other works, the method of
-  \citet{Esuli:06c} returned a 3-tuple of scores for each polarity
+  \citet{Esuli:06c} returns a 3-tuple of scores for each polarity
   class (positive, negative, and neutral) without attempting to
   classify them into these categories.}
 % This time, the evaluation was run on both the intersection with the
@@ -416,20 +416,21 @@ assigning polarity scores to synsets:
 \item randomized min-cut \cite{Blum:04}, and
 \item the label propagation algorithm by \citet{Zhu:02}.
 \end{inparaenum}
-An evaluation of these systems on the GI lexicon \cite{Stone:66}
-showed significant improvement over the previous baselines of
-\citet{Kamps:04} and \citet{Kim:06}.  Other notable works on
-dictionary-based lexicon generation include those of
-\citet{Mohammad:09}, who generated their seed set using antonymous
-morphological patterns (e.g., \emph{logical}---\emph{illogical},
-\emph{honest}---\emph{dishonest}, \emph{happy}---\emph{unhappy}) and
-subsequently expanded these seed sets with the help of the Macquarie
-Thesaurus \cite{Bernard:86}; \citet{Awadallah:10}, who adopted a
-random walk approach, estimating the polarity of an unknown word by
-taking the difference between an average number of steps a random
-walker had to make in order to reach a term from positive or negative
-set; and \citet{Dragut:10}, who deduced the polarities of new words
-using manually specified inference rules.
+% An evaluation of these systems on the GI lexicon \cite{Stone:66}
+% showed significant improvement over the previous baselines of
+% \citet{Kamps:04} and \citet{Kim:06}.
+Other notable works on dictionary-based lexicon generation include
+those of \citet{Mohammad:09}, who generated their seed set using
+antonymous morphological patterns (e.g.,
+\emph{logical}---\emph{illogical}, \emph{honest}---\emph{dishonest},
+\emph{happy}---\emph{unhappy}) and subsequently expanded these seed
+sets with the help of the Macquarie Thesaurus \cite{Bernard:86};
+\citet{Awadallah:10}, who adopted a random walk approach, estimating
+the polarity of an unknown word by taking the difference between an
+average number of steps a random walker had to make in order to reach
+a term from positive or negative set; and \citet{Dragut:10}, who
+deduced the polarities of new words using manually specified inference
+rules.
 
 % Since almost all of the presented approaches used \textsc{WordNet}---a
 % large lexical database with more than 117,000 synsets---and evaluated
@@ -466,7 +467,7 @@ translations of the same words.\footnote{The reimplemented methods and
 Furthermore, to settle the differences between the binary and ternary
 approaches (i.e., those methods that only differentiated between the
 positive and negative classes and those ones which also discerned
-neutral terms as a separate group), we additionally enriched the
+neutral terms as a separate category), we additionally enriched the
 translated seed set with 10 purely objective adjectives---``neutral''
 (\emph{neutral}), ``sachlich'' (\emph{objective}), ``technisch''
 (\emph{technical}) ``chemisch'' (\emph{chemical}), ``physisch''
@@ -481,7 +482,7 @@ appeared together in the same synset, whereas \citet{Esuli:06c},
 hyper-hyponymous connections as valid edges for propagating the
 polarity of the seed terms), we decided to unify this aspect too,
 letting all systems work with an extended set of links.  Into this
-set, we not only included the traditional synonymity relations for the
+set, we not only included the traditional synonymity relations for
 terms co-occurring in the same synsets but also established edges
 between words if their synsets were conected via the inter-synset
 links \texttt{has\_participle}, \texttt{has\_pertainym},
@@ -497,7 +498,7 @@ of their children---e.g., ``bewertungsspezifisch''
 immediate hyponyms ``gut'' (\emph{good}) and ``schlecht''
 (\emph{bad})---and the relatedness links (\texttt{is\_related\_to})
 could connect both synonyms and antonyms of the same term---e.g., this
-type of relation held between the words ``Form'' (\emph{shape}) and
+type of relation holds between the words ``Form'' (\emph{shape}) and
 ``unf\"ormig'' (\emph{misshapen}).
 
 We fine-tuned the hyper-parameters of the evaluated approaches by
@@ -507,7 +508,7 @@ convergence of the eigenvector in the approach of
 \citet{Blair-Goldensohn:08}, we set the maximum number of times the
 polarity vector was multiplied with the adjacency matrix to five.  Our
 experiments showed that this limitation had a crucial impact on the
-quality of the resulting polarity lists (e.g., after five
+quality of the resulting polarity list (e.g., after five
 multiplications, the average precision of the recognized positive
 terms amounted to 0.499, reaching an average \F{}-score of 0.26 for
 this class; after ten more iterations, however, this precision
@@ -533,7 +534,7 @@ Table~\ref{snt-lex:tbl:lex-res}.
         *{2}{>{\centering\arraybackslash}p{0.058\columnwidth}}} % last two columns
       \toprule
       \multirow{2}*{\bfseries Lexicon} & %
-      \multirow{2}*{\bfseries Terms} & %
+      \multirow{2}{0.06\columnwidth}{\bfseries\centering \# of\newline{} Terms} & %
       \multicolumn{3}{c}{\bfseries Positive Expressions} & %
       \multicolumn{3}{c}{\bfseries Negative Expressions} & %
       \multicolumn{3}{c}{\bfseries Neutral Terms} & %
@@ -680,7 +681,7 @@ are significantly lower than the figures obtained by the
 semi-automatic lexicons.  The best macro-averaged \F{}-score for all
 three classes (0.479) is attained by the method of
 \citet{Blair-Goldensohn:08}, which is still 0.11 points worse than the
-peak result reached by the intersection of the GPC, SentiWS, and
+peak result achieved by the intersection of the GPC, SentiWS, and
 Zurich Polarity lists (0.589).  Apart from this, the situation for the
 dictionary-based methods in general is much more varied than in the
 case of the existing German lexicons as different systems can achieve
@@ -696,7 +697,7 @@ the union of the three overall top-scoring systems
 respectively---reach the highest \F{}-scores for these two classes.
 Nevertheless, we can still notice three main tendencies in this
 evaluation:
-\begin{inparaenum}[\itshape i\upshape)]
+\begin{inparaenum}[\itshape a\upshape)]
 \item the method by \citet{Esuli:06c} generally gets the highest
   recall of polar terms and, consequently, achieves the best precision
   in recognizing neutral words, but suffers from a low precision for
@@ -704,13 +705,10 @@ evaluation:
 \item simultaneously five systems attain the same best \F{}-scores on
   recognizing neutral terms, which, in turn, leads to the best
   micro-averaged \F{}-results for all polarity classes, and, finally,
-\item the system of \citet{Blair-Goldensohn:08} shows the best
-  macro-averaged performance.  This approach, however, is extremely
-  susceptible to its hyper-parameter settings (in particular, we
-  considered the maximum number of times the initial vector $\vec{v}$
-  was multiplied with the adjacency matrix $A$ as such parameter and
-  noticed a dramatic decrease of method's scores after the fifth
-  iteration).
+\item the system of \citet{Blair-Goldensohn:08} achieves its high
+  macro-averaged performance mainly due to a relatively good balance
+  of precision and recall for the main polarity groups, but fails to
+  attain best results on any one of these single aspects.
 \end{inparaenum}
 
 % Seed Sets:
@@ -761,50 +759,45 @@ evaluation:
 
 % seed sets: (Turney and Littman, 2003); SentiWS (Remus, 2010)
 
-\subsection{Evaluation of Corpus-Based Approaches}
+\subsubsection{Corpus-Based Methods}
 
-An alternative way to generate polarity lists represent corpus-based
-methods.  In contrast to dictionary-based approaches, these systems
-typically do not require any large-scale hand-crafted linguistic
-thesauri and draw their information directly from (untagged) corpus
-data, harnessing the co-occurrence statistics of the initial seed
-terms.  A clear advantage of such methods are their virtual
-independence of any (expensive) language resources and the ability to
-keep pace with frequent changes in the targeted discourse domain.
-These benefits, however, come at the cost of a reduced quality as
-these systems operate almost completely unsupervised.
+An alternative way to generate polarity lists is provided by
+corpus-based approaches.  In contrast to dictionary-based methods,
+these systems typically operate immediately on raw texts and are,
+therefore, virtually independent of any manually annotated linguistic
+resources.  This flexibility, however, might come at the cost of a
+reduced accuracy due to an inherent noisiness of the unlabeled data.
 
-A pioneering work on these methods was done by \citet{Hatzivassi:97}.
-Based on the assumption that coordinatively connected adjectives
-typically share the same semantic orientation, the authors trained a
-supervised logisitic regression classifier, which predicted the degree
-of dissimilarity between two conjoined adjectival terms.  In the next
-step, they constructed a word graph, drawing a link between any two
-adjectives if they appeared in the same coordination pair and taking
-the predicted dissimilarity scores as edge weights in the constructed
-graph.  In the final step, \citet{Hatzivassi:97} partitioned the final
-graph into two parts and ascribed positive polarity to the cluster
-which had more nodes.  This method achieved an overall accuracy of
-82.05\% on predicting the polarity of a subset of manually annotated
-adjectives when trained on the rest of these hand-labeled data.
+A pioneering work on these algorithms was done by
+\citet{Hatzivassi:97}.  Based on the assumption that coordinately
+conjoined adjectives typically share the same semantic orientation,
+the authors trained a supervised logisitic classifier which predicted
+the degree of dissimilarity between two co-occurring adjectival terms.
+In the next step, they constructed a word graph, drawing a link
+between any two adjectives if they appeared in the same coordinative
+pair, and considering the predicted dissimilarity scores as edge
+weights between these nodes.  In the final step, they partitioned the
+final graph into two parts and ascribed the positive polarity to the
+bigger cluster.% This method achieved an overall accuracy of 82.05\%
+% on predicting the polarity of a subset of manually annotated
+% adjectives when trained on the rest of these hand-labeled data.
 
 Later on, this approach was further refined by \citet{Takamura:05},
-who tried to unite dictionary- and corpus-based methods into a unified
+who tried to unite dictionary- and corpus-based methods into a single
 probabilistic framework.  To this end, the authors adopted the Ising
-spin model from the statistical mechanics, considering terms from
+spin model from the statistical mechanics, considering terms found in
 \textsc{WordNet} \cite{Miller:95}, the Wall Street Journal and Brown
-corpora as electrons in a single ferromagnetic lattice.  A link was
-established between any two electrons, if their corresponding terms
-appeared in synonymically connected synsets or a coordinatively
-conjoined pair in any of the two corpora.  Taking into account the a
-priori known polarities of the seed terms, the Ising model then tried
-to find an approximation of the most likely polarity combination of
-all terms in the graph over all possible polarity assignments,
-reaching 91.5\% accuracy at predicting polarity of the manually
-labeled subjective terms from the General Inquirer lexicon
-\cite{Stone:66}.
+corpora as electrons in a unified ferromagnetic lattice.  They
+established a link between any two electrons if their corresponding
+terms appeared in synonymous synsets or a coordinately conjoined pairs
+in any of the two corpora.  Taking into account the a priori known
+polarities of the seed terms, they then tried to find an approximation
+of the most likely polarity combination in this graph over all
+possible polarity assignments.% reaching 91.5\% accuracy at predicting
+% polarity of the manually labeled subjective terms from the General
+% Inquirer lexicon \cite{Stone:66}.
 
-An alternative way of inducing sentiment lexicons was proposed by
+Another way to induce a sentiment lexicon from corpus was proposed by
 \citet{Turney:03}, who derived a set of polarity terms by computing
 the ratio of PMI-associations between the potential items and
 predefined sets of positive and negative seeds.  In particular, the
@@ -812,36 +805,31 @@ semantic orientation score of the given word $w$ was defined as:
 \begin{equation*}
   \textrm{SO-A}(w) = \sum_{w_p\in\mathcal{P}}PMI(w, w_p) - \sum_{w_n\in\mathcal{N}}PMI(w, w_n),
 \end{equation*}
-where $\mathcal{P}$ was the set of the positive seed terms (presented
-earlier in this sections), $\mathcal{N}$ denoted the collection of the
-negative words, and the $PMI$ score was normally computed as the
-log-ratio $PMI(w, w_x) = \log_2\frac{p(w, w_x)}{p(w)p(w_x)}$.  The
-joint probability $p(w, w_x)$ was calculated with the help of the
+where $\mathcal{P}$ was the set of the positive seed terms,
+$\mathcal{N}$ denoted the collection of the negative words, and the
+$PMI$ score was normally computed as the log-ratio $PMI(w, w_x) =
+\log_2\frac{p(w, w_x)}{p(w)p(w_x)}$.  The joint probability $p(w,
+w_x)$ in the last equation was calculated with the help of the
 AltaVista\footnote{\url{www.altavista.com}} NEAR operator as the
-number of hits returned by the $w NEAR w_x$ query divided by the total
-number of indexed documents.
+number of hits returned by the ``$w\textrm{ NEAR }w_x$'' query divided
+by the total number of indexed documents.
 
 With great success, this method was later adapted to the Twitter
 domain by \citet{Kiritchenko:14}.  Using the distantly supervised
 corpus of \citet{Go:09} and a separate collection of 775,000 tweets
 gathered solely for the purpose of their experiments, the authors
 created two sentiment lexicons---the Sentiment140 Base Lexicon and
-Hashtag Sentiment Base Lexicon respectively---using the semantic
-orientation formula described above.  However, instead of querying
-AltaVista for computing the joint probability scores, the authors
-estimated these values as the number of times a potential candidate
-appeared in a positive (negative) tweet divided by the total number of
-tweets in the collection.  The polarity classes of the tweets were
-distantly assigned based on the occurrence of predefined emoticons in
-the \citet{Go:09} corpus or emotional hashtags in the compiled tweet
-collection.
-
-Later on, this approach was further refined by \citet{Severyn:15a},
-who compiled their list of polar terms by training an SVM classifier
-on the distantly suervised corpus of \citet{Go:09}, using solely
-lexical n-gram features.  In the final step, features with the highest
-learned weights were selected as subjective entries for the
-constructed sentiment lexicon.
+Hashtag Sentiment Base Lexicon---using the semantic orientation
+formula described above.  However, instead of querying AltaVista for
+computing the joint probability scores, the authors estimated these
+values as the number of times a potential candidate appeared in
+distantly labeled positive (negative) tweets divided by the total
+number of tweets in the collection.  In a similar vein,
+\citet{Severyn:15a} compiled their list of polar terms by training an
+SVM classifier on the noisily labeled corpus of \citet{Go:09}, using
+lexical n-grams extracted from these tweets as features.  Afterwards,
+the authors selected features with the highest learned weights as
+subjective entries for their final sentiment lexicon.
 
 Graphical methods for corpus-based lexicon induction were advocated by
 \citet{Velikovich:10} and \citet{Feng:11}.  The former work proposed
@@ -849,86 +837,190 @@ an adaptation of the label-propagation algorithm previously suggested
 by \citet{Rao:09} with the core difference that, instead of taking a
 weightes average of all incident scores for a potential subjective
 term, the authors took the maximum value propagated from a seed to the
-potential candidate over the lexical graph.  \citet{Feng:11}
-experimented with two popular IR approaches---PageRank \cite{Brin:98}
-and HITS \cite{Kleinberg:99}---to derive lists of predicates
-typically associated with positively or negatively connotated events
-and these events themselves.
+potential candidate over the lexical graph in order to prune
+unreliable, noisy corpus connections.  \citet{Feng:11} experimented
+with two popular IR approaches---PageRank \cite{Brin:98} and HITS
+\cite{Kleinberg:99}---to derive lists of predicates typically
+associated with positively or negatively connoted events and these
+events themselves.
 
-\cite{Lau:11}
+For our experiments, we reimplemented the approaches of
+\citet{Takamura:05}, \citet{Velikovich:10}, \citet{Kiritchenko:14} and
+\citet{Severyn:15} and applied these methods to the German Twitter
+Snapshot \cite{Scheffler:14}---a collection of 24~M German microblogs
+which we previously used to sample the data for our sentiment corpus.
+We constructed the collocation graph from the lemmatized word forms of
+this snapshot, skipping all words which appeared less than four times
+in the analyzed data.  We again were using the \texttt{TreeTagger}
+\cite{Schmid:95} for lemmatization and \texttt{GermaNet} for deriving
+auxiliary semantic links between word vertices in the method of
+\citet{Takamura:05}.  Similarly to the previous experiments, we
+fine-tuned all hyper-parameters (including the number of induced polar
+terms) by maximizing the macro-averaged \F{}-score on the development
+set.  In particular, we set the $\beta$ constant in the method of
+\citet{Takamura:05} to 0.8 and the maximum number of iterations in the
+method of \citet{Velikovich:10} to 20.
 
-\citet{Bross:13}
 
-\citet{Tai:13}
+% \cite{Lau:11} \citet{Bross:13} \citet{Tai:13} \citet{Yang:14}
+% \citet{Bravo-Marquez:15}
 
-\citet{Yang:14}
+% \begin{figure}[hbtp!]
+% {
+%   \centering
+%   \includegraphics[width=\linewidth]{img/ising-energy-magnetization.png}
+% }
+% \caption{Energy (E) and magnetization (M) if the Ising spin model with
+%   respect to the hyper-parameter $\beta$.}\label{snt:fig:ising-spin-em}
+% \end{figure}
 
-\citet{Bravo-Marquez:15}
-
-\begin{figure}[hbtp!]
-{
-  \centering
-  \includegraphics[width=\linewidth]{img/ising-energy-magnetization.png}
-}
-\caption{Energy (E) and magnetization (M) if the Ising spin model with
-  respect to the hyper-parameter $\beta$.}\label{snt:fig:ising-spin-em}
-\end{figure}
-
-In order to see which of the two paradigms---dictionary-based methods
-or corpus-based approaches---bears more potential for generating
-high-quality sentiment lexicons for Twitter, we re-implemented the
-most popular systems from the latter group and evaluated these methods
-on our corpus.  The results of these computations are presented in
+The results of this evaluation are shown in
 Table~\ref{snt-lex:tbl:corp-meth}.
 
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.1\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+    \begin{tabular}{p{0.172\columnwidth} % first columm
+        >{\centering\arraybackslash}p{0.06\columnwidth} % second columm
+        *{9}{>{\centering\arraybackslash}p{0.072\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.058\columnwidth}}} % last two columns
       \toprule
-          \multirow{2}*{\bfseries Lexicon} & %
-          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+      \multirow{2}*{\bfseries Lexicon} & %
+      \multirow{2}{0.06\columnwidth}{\bfseries \# of Terms} & %
+      \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+      \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+      \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}
 
-          & Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & & \\\midrule
+      & & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
 
-          % cardinality 2,560; \beta = 0.1
-          TKM & 48.8\stddev{17.9} & 12.4\stddev{5.9} & 19.3\stddev{7.9} & %
-          35.7\stddev{28.7} & 4.5\stddev{3.9} & 7.7\stddev{6.4} & %
-          96.4\stddev{0.8} & 99.6\stddev{0.2} & 98\stddev{0.4} & %
-          41.7\stddev{3.7} & 96\stddev{0.8}\\
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.770601             0.101975                 0.180115
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963176             0.999227                 0.980870
+      % Macro-average              0.767226             0.372780                 0.398086
+      % Micro-average              0.962404             0.962216                 0.962310
 
-          VEL & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+      \textsc{Seed Set} & 20 & \textbf{0.771} & 0.102 & 0.18 & %
+      \textbf{0.568} & 0.017 & 0.033 & %
+      0.963 & \textbf{0.999} & \textbf{0.981} & %
+      0.398 & \textbf{0.962}\\
 
-          KIR & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.646220             0.133510                 0.221299
+      % negative                   0.565217             0.029061                 0.055280
+      % neutral                    0.964071             0.998134                 0.980807
+      % Macro-average              0.725169             0.386902                 0.419129
+      % Micro-average              0.962261             0.962072                 0.962167
 
-          SM & \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{} & \stddev{} & %
-          \stddev{} & \stddev{}\\
-          \bottomrule
+      TKM & 920 & 0.646 & \textbf{0.134} & \textbf{0.221} & %
+      0.565 & \textbf{0.029} & \textbf{0.055} & %
+      \textbf{0.964} & 0.998 & \textbf{0.981} & %
+      \textbf{0.419} & \textbf{0.962}\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.764317             0.102269                 0.180400
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963181             0.999199                 0.980860
+      % Macro-average              0.765133             0.372869                 0.398178
+      % Micro-average              0.962384             0.962196                 0.962290
+
+      VEL & 60 & 0.764 & 0.102 & 0.18 & %
+      \textbf{0.568} & 0.017 & 0.033 & %
+      0.963 & 0.999 & 0.98 & %
+      0.398 & \textbf{0.962}\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.386437             0.105806                 0.166127
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963178             0.996092                 0.979359
+      % Macro-average              0.639172             0.373012                 0.392920
+      % Micro-average              0.959478             0.959290                 0.959384
+
+      KIR & 320 & 0.386 & 0.106 & 0.166 & %
+      \textbf{0.568} & 0.017 & 0.033 & %
+      0.963 & 0.996 & 0.979 & %
+      0.393 & 0.959\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.679764             0.101975                 0.177345
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963162             0.998820                 0.980667
+      % Macro-average              0.736942             0.372644                 0.397095
+      % Micro-average              0.962013             0.961825                 0.961919
+
+      SEV & 60 & 0.68 & 0.102 & 0.177 & %
+      \textbf{0.568} & 0.017 & 0.033 & %
+      0.963 & \textbf{0.999} & \textbf{0.981} & %
+      0.397 & \textbf{0.962}\\
+
+      TKM $\cap$ VEL $\cap$ SEV & 20 & \textbf{0.771} & 0.102 & 0.18 & %
+      \textbf{0.568} & 0.017 & 0.033 & %
+      0.963 & \textbf{0.999} & \textbf{0.981} & %
+      0.398 & \textbf{0.962}\\
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.592689             0.133805                 0.218322
+      % negative                   0.565217             0.029061                 0.055280
+      % neutral                    0.964063             0.997700                 0.980593
+      % Macro-average              0.707323             0.386855                 0.418065
+      % Micro-average              0.961850             0.961662                 0.961756
+
+      TKM $\cup$ VEL $\cup$ SEV & 1,020 & 0.593 & \textbf{0.134} & 0.218  & %
+      0.565 & \textbf{0.029} & \textbf{0.055} & %
+      \textbf{0.964} & 0.998 & 0.98 & %
+      0.418 & \textbf{0.962}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Evaluation of corpus-based approaches.\\ {\small (TKM --
-        \citet{Takamura:05}), VEL -- \citet{Velikovich:10}, KIR --
-        \citet{Kiritchenko:14}, SM -- \citet{Severyn:15a}}}
+    \caption{Evaluation of corpus-based approaches.\\ {\small TKM --
+        \citet{Takamura:05}, VEL -- \citet{Velikovich:10}, KIR --
+        \citet{Kiritchenko:14}, SEV -- \citet{Severyn:15}}}
     \label{snt-lex:tbl:corp-meth}
   \end{center}
 \end{table}
+
+This time, we can observe a clear superiority of Takamura et al.'s
+method, which not only achieves the best recall and \F{} in
+recognizing positive and negative items but also attains the highest
+micro- and macro-averaged results for all three polarity classes.
+% As expected, the best precision in recognizing polar terms is achieved
+% by the manually compiled seed set, whose micro-averaged \F{}-result,
+% however, is still identical to the one shown by the method of
+% \citet{Takamura:05}.
+The cardinality of the other induced lexicons, however, is much
+smaller than the size of Takamura et al.'s and dictionary-based
+polarity lists.  Moreover, these lexicons also show absolutely
+identical scores for the negative expressions as the original seed
+set.  Since these results were somewhat unexpected, we decided to
+investigate the reasons for possible problems.  As it turned out, the
+macro-averaged \F{}-values of these methods were rapidly going down on
+the held-out development set as the number of their induced polar
+terms increased.  Since we considered the lexicon size as one of the
+hyper-parameters of the tested approaches, we rapidly stopped
+populating these lexicons when we noticed a decrease in their results.
+As a consequence, only the highest-ranked terms (all of which had the
+positive polarity) were included in the final lists.
+
+The positive bias was also one of the reasons for such rapid quality
+decrease.  A closer look at the data revealed that this bias was
+mainly due to the ambiguity of the seed set: While converting the
+original seed list by \citet{Turney:03} to German, we translated the
+English word ``correct'' as ``richtig''.  This German word, however,
+also has another reading which means \emph{real} (as in \emph{a real
+  fact} or \emph{a real sports car}) and which was much more frequent
+in the analyzed snapshot, often appearing in an unequivocally negative
+context, e.g., ``ein richtiger Bombenanschlag'' (\emph{a real bomb
+  attack}) or ``ein richtiger Terrorist'' (\emph{a real terrorist}).
+As a consequence of this, methods relying on distant supervision had
+to deal with an extremely unbalanced training set (the automatically
+labeled corpus that we distantly obtained for the approach by
+\citet{Kiritchenko:14} using these seeds, for instance, had 716,210
+positive versus 92,592 negative instances).
 
 \subsection{Lexicon Generation Using Neural Word Embeddings}
 
