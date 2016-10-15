@@ -1206,21 +1206,31 @@ seed list of \citet{Turney:02}.  The latter option---the seed set of
 \citet{Esuli:06c}---shows best results for the approaches of
 \citet{Hu:04} and the SentiWordNet method of \citet{Esuli:06c}.
 
-This is, for instance, the case for the method by \citet{Kim:04} and
-the min-cut approach by \citet{Rao:09}, whose performance with the
-native Kim-Hovy seed set is on par with their results achieved using
-the Turney-Littman seeds.  The label-propagation and the random walk
-algorithms can even strongly benefit from the seeds provided by
-\citet{Kim:04}.  The remaining two methods---\citet{Hu:04} and
-\citet{Esuli:06c}---work best in combination with the initial polarity
-set proposed by \citet{Esuli:06c}.
-
 \begin{figure}[hbtp!]
   \centering
   \includegraphics[height=12em,width=\linewidth]{%
     img/sentilex-dict-alt-seed-sets.png}
   \caption{Macro-averaged \F{}-scores of the dictionary-based approaches
     with different seed sets.}\label{snt:fig:sent-dict-lex-alt-seeds}
+\end{figure}
+
+A slightly different situation is observed for the corpus-based
+approaches as shown in Figure~\ref{snt:fig:sent-crp-lex-alt-seeds}.
+Except for the method of \citet{Takamura:05}, which achieves its best
+result with the seed set of \citet{Hu:04}, all three remaining
+methods---\citet{Velikovich:10}, \citet{Kiritchenko:14}, and
+\citet{Severyn:15}---show very similar (though not identical) scores
+to the ones reached by the non-expanded seed sets.  The primary reason
+for this is again the ambiguity of the translated seeds, which causes
+a rapid decrease of the lexicon quality and, consequently, an early
+stopping of the expansion.
+
+\begin{figure}[hbtp!]
+  \centering
+  \includegraphics[height=12em,width=\linewidth]{%
+    img/sentilex-crp-alt-seed-sets.png}
+  \caption{Macro-averaged \F{}-scores of the corpus-based approaches
+  with different seed sets.}\label{snt:fig:sent-crp-lex-alt-seeds}
 \end{figure}
 
 % For convenience, we will summarize the results of three top-performing
