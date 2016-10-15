@@ -863,7 +863,6 @@ development set.  In particular, we set the $\beta$ constant in the
 method of \citet{Takamura:05} to 0.8 and the maximum number of
 iterations in the method of \citet{Velikovich:10} to 20.
 
-
 % \cite{Lau:11} \citet{Bross:13} \citet{Tai:13} \citet{Yang:14}
 % \citet{Bravo-Marquez:15}
 
@@ -1029,115 +1028,117 @@ provide a remedy to this problem.
 
 \subsection{Lexicon Generation Using Neural Word Embeddings}
 
-\citet{Tang:14}
+% \citet{Tang:14}
 
-\citet{Tang:14a}
+% \citet{Tang:14a}
 
-Similarly to \citet{Severyn:15a}, \citet{Vo:16} applied a deep
-learning approach learning two-dimensional embeddings (one dimension
-for the positive score and one dimension for the negative appraisal)
+% Similarly to \citet{Severyn:15a}, \citet{Vo:16} applied a deep
+% learning approach learning two-dimensional embeddings (one dimension
+% for the positive score and one dimension for the negative appraisal)
 
-\citet{Ren:16}
+% \citet{Ren:16}
 
-A new family of lexicon induction methods builds on learned vector
-representations of words -- the neural word embeddings
-\cite{Mikolov:13}.
+% A new family of lexicon induction methods builds on learned vector
+% representations of words -- the neural word embeddings
+% \cite{Mikolov:13}.
 
-Vector command:
-\begin{verbatim}
-Adjusted Potts' Tokenizer
+% Vector command:
+% \begin{verbatim}
+% Adjusted Potts' Tokenizer
 
-Sidarenka's Preprocessing (Smiley Replacement)
+% Sidarenka's Preprocessing (Smiley Replacement)
 
-word2vec -train tokens.tok -output vectors.txt -size 400 -window 5 -min-count 4
+% word2vec -train tokens.tok -output vectors.txt -size 400 -window 5 -min-count 4
 
-Possible Improvements:
+% Possible Improvements:
 
-* use task specific vectors;
+% * use task specific vectors;
 
-* decide what to do with smileys during evaluation;
+% * decide what to do with smileys during evaluation;
 
-* explore different cardinalities (not just 40-s bins);
-\end{verbatim}
+% * explore different cardinalities (not just 40-s bins);
+% \end{verbatim}
 
-% k-NN: k^2 / \sum d_{ij}
+% % k-NN: k^2 / \sum d_{ij}
 
-The results of these methods are shown in Table~\ref{snt-lex:tbl:nwe-methods}.
+% The results of these methods are shown in Table~\ref{snt-lex:tbl:nwe-methods}.
 
-\begin{table}[h]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.1\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
-      \toprule
-          \multirow{2}*{\bfseries Lexicon} & %
-          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+% \begin{table}[h]
+%   \begin{center}
+%     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+%     \begin{tabular}{p{0.1\columnwidth} % first columm
+%         *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
+%         *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+%       \toprule
+%           \multirow{2}*{\bfseries Lexicon} & %
+%           \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+%           \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+%           \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+%           \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-          & Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & & \\\midrule
+%           & Precision & Recall & \F{} & %
+%           Precision & Recall & \F{} & %
+%           Precision & Recall & \F{} & & \\\midrule
 
-          % cardinality 160
-          NC & 75.7\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
+%           % cardinality 160
+%           NC & 75.7\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+%           24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
+%           96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+%           38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-          % cardinality 40
-          KNN & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          23.4\stddev{40.6} & 1\stddev{1.8} & 1.8\stddev{3.4} & %
-          96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-          38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
+%           % cardinality 40
+%           KNN & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+%           23.4\stddev{40.6} & 1\stddev{1.8} & 1.8\stddev{3.4} & %
+%           96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
+%           38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
 
-          % cardinality 160
-          PCA & 40.4\stddev{14.6} & \textbf{13.4}\stddev{5.8} & \textbf{19.5}\stddev{7.3} & %
-          24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
-          \textbf{96.4}\stddev{0.8} & 99.6\stddev{0.2} & 97.9\stddev{0.4} & %
-          39.8\stddev{2.7} & 95.9\stddev{0.8}\\
+%           % cardinality 160
+%           PCA & 40.4\stddev{14.6} & \textbf{13.4}\stddev{5.8} & \textbf{19.5}\stddev{7.3} & %
+%           24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
+%           \textbf{96.4}\stddev{0.8} & 99.6\stddev{0.2} & 97.9\stddev{0.4} & %
+%           39.8\stddev{2.7} & 95.9\stddev{0.8}\\
 
-          % cardinality 160
-          LP & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-          \textbf{29.4}\stddev{20.3} & \textbf{5.6}\stddev{4.5} & \textbf{9.2}\stddev{6.9} & %
-          \textbf{96.4}\stddev{0.8} & 99.8\stddev{0.1} & 98\stddev{0.4} & %
-          \textbf{41}\stddev{3.9} & 96.1\stddev{0.8}\\
-          \bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Evaluation of embedding-based approaches.\\ {\small (NC
-        -- nearest centroids, KNN -- k-nearest neighbors, PCA --
-        principal component analysis, LP -- linear projection)}}
-    \label{snt-lex:tbl:nwe-methods}
-  \end{center}
-\end{table}
+%           % cardinality 160
+%           LP & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
+%           \textbf{29.4}\stddev{20.3} & \textbf{5.6}\stddev{4.5} & \textbf{9.2}\stddev{6.9} & %
+%           \textbf{96.4}\stddev{0.8} & 99.8\stddev{0.1} & 98\stddev{0.4} & %
+%           \textbf{41}\stddev{3.9} & 96.1\stddev{0.8}\\
+%           \bottomrule
+%     \end{tabular}
+%     \egroup
+%     \caption{Evaluation of embedding-based approaches.\\ {\small (NC
+%         -- nearest centroids, KNN -- k-nearest neighbors, PCA --
+%         principal component analysis, LP -- linear projection)}}
+%     \label{snt-lex:tbl:nwe-methods}
+%   \end{center}
+% \end{table}
 
 \subsection{Effect of Seed Sets}\label{subsec:snt-lex:eoss}
 
-An important factor that could significantly affect the quality of the
-resulting polarity lists was the set of the seed terms which we used
-to initialize the polarity scores in the evaluated methods.  In order
-to estimate the impact of this setting on the final scores, we re-run
-our experiments with the extended set of synonymity links using the
-seed lists proposed by \citet{Hu:04}, \citet{Kim:04},
-\citet{Esuli:06c}, and \citet{Remus:10}.  Since \citet{Hu:04},
-however, only partially specified their polarity set in the original
-paper, and \citet{Kim:04} did not provide any examples at all, we
-filled the missing terms in these lists with common polar German terms
-we came up with to match the size of these seed sets.  Furthermore,
-since the list of the neutral terms from the polarity set of
+An important factor which could significantly affect the quality of
+the resulting polarity lists was the set of the seed terms that we
+used to initialize the polarity scores of the evaluated methods.  In
+order to estimate the impact of this setting on the final scores, we
+re-run our experiments using the seed lists proposed by \citet{Hu:04},
+\citet{Kim:04}, \citet{Esuli:06c}, and \citet{Remus:10}.  In the cases
+where theses resources were missing the neutral class, we explicitly
+added a set of neutral terms proportional to the size of the polar
+categories.  Moreover, since \citet{Hu:04} only partially specified
+their seed list in the original paper, and \citet{Kim:04} did not
+provide any examples of their seed terms at all, we filled the missing
+entries in these lists with common polar German words that we came up
+with in order to match the reported size of these seed sets.  Finally,
+since the set of neutral terms from the polarity list of
 \citet{Esuli:06c} comprised 4,122 words---the authors considered as
 neutral all terms from the General Inquirer lexicon \cite{Stone:66}
-which were not marked as either positive or negative and did not
+which were not marked there as either positive or negative and did not
 appear in the seed list of \citet{Turney:03}---and was therefore
-cumbersome to translate manually, we automatically obtained
-translations for these terms using the publicly available online
-dictionary \texttt{dict.cc}\footnote{\url{http://www.dict.cc}}, taking
-the first suggested German translation for each of the neutral
+tedious to translate manually, we automatically obtained translations
+for these terms using the publicly available online dictionary
+\texttt{dict.cc}\footnote{\url{http://www.dict.cc}} and taking the
+first suggested German translation for each of the neutral
 entries.\footnote{We also tried to use all possible translations of
   the original terms, but it lead to a considerable boost in the
   number of neutral items (45,252 words) and resulted in a substantial
@@ -1186,90 +1187,92 @@ Table~\ref{snt-lex:tbl:alt-seed-sets}.
   \end{center}
 \end{table}
 
-The results of the lexicons generated with the help of these seed sets
-are shown in Figure~\ref{snt:fig:sent-lex-alt-seeds}.  As we can see
-from the statistics, the choice of the initial seed terms might
-significantly affect the overall scores of the resulting polarity
-lists, with the macro-averaged \F{}-results deviating by up to 10\%
-depending on the seed set being applied at the beginning---this is for
-example the case for the approach of \citet{Esuli:06c} whose
-macro-averaged \F{} runs up to $31.45^{\pm 0.19}$\% when generated
-with the initial polar terms of \citet{Turney:03}, \citet{Hu:04},
-\citet{Kim:04}, or \citet{Remus:10}, but achieves remarkable $41.7$\%
-when used with the original seeds of the authors.
+The updated results for the dictionary-based approaches with these
+alternative seed sets are shown in
+Figure~\ref{snt:fig:sent-dict-lex-alt-seeds}.  This time, we again can
+notice superior scores achieved by the method of
+\citet{Blair-Goldensohn:08}, which not only outperforms other systems
+on average but also seems to be less susceptible to the varying
+quality and size of the different seed lists.  The remaining methods
+typically achieve their best macro-averaged \F{}-results with either
+of the two top-performing seed lists: the seed set of \citet{Kim:04}
+or the seed set of \citet{Esuli:06c}.  The former option works best
+for the label-propagation approach \citet{Rao:09} and the random walk
+algorithm of \citet{Awadallah:10}.  Moreover, the results shown by the
+min-cut system \cite{Rao:09} and the original method of \citet{Kim:04}
+when used with this seed set are only slightly lower than their
+respective scores achieved with the best possible configuration---the
+seed list of \citet{Turney:02}.  The latter option---the seed set of
+\citet{Esuli:06c}---shows best results for the approaches of
+\citet{Hu:04} and the SentiWordNet method of \citet{Esuli:06c}.
 
-In general, however, the best scores for all compared classifieres are
-achieved with either of two seed sets which by themselves (without any
-expansion) attain the best macro-averaged \F{}-results.  These are the
-seed list of \citet{Kim:04}, which yields the best scores for the
-approaches of \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06},
-\citet{Rao:09}, and \citet{Awadallah:10}, and the initial seed set
-proposed by \citet{Esuli:06c}, which leads to the best results when
-used in combination with the method of \citet{Hu:04} and the original
-system of \citet{Esuli:06c}.
+This is, for instance, the case for the method by \citet{Kim:04} and
+the min-cut approach by \citet{Rao:09}, whose performance with the
+native Kim-Hovy seed set is on par with their results achieved using
+the Turney-Littman seeds.  The label-propagation and the random walk
+algorithms can even strongly benefit from the seeds provided by
+\citet{Kim:04}.  The remaining two methods---\citet{Hu:04} and
+\citet{Esuli:06c}---work best in combination with the initial polarity
+set proposed by \citet{Esuli:06c}.
 
 \begin{figure}[hbtp!]
-{
   \centering
-  \includegraphics[width=\linewidth]{img/sentilex-alt-seed-sets.png}
-}
-\caption{Macro-averaged \F{}-scores of dictionary-based methods with
-  different seed sets.\\ {\small (HL -- \citet{Hu:04}, BG --
-    \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, ES --
-    \citet{Esuli:06c}, RR -- \citet{Rao:09}, AR --
-    \citet{Awadallah:10})}}\label{snt:fig:sent-lex-alt-seeds}
+  \includegraphics[height=12em,width=\linewidth]{%
+    img/sentilex-dict-alt-seed-sets.png}
+  \caption{Macro-averaged \F{}-scores of the dictionary-based approaches
+    with different seed sets.}\label{snt:fig:sent-dict-lex-alt-seeds}
 \end{figure}
 
-For convenience, we will summarize the results of three top-performing
-configurations---the methods of \citet{Blair-Goldensohn:08},
-\citet{Kim:04,Kim:06}, and the label-propagation approach of
-\citet{Rao:09} used in combination with the initial seed sed of
-\citet{Kim:04}---in Table~\ref{snt-lex:tbl:lex-kh-seedset} and use
-these results as baselines in our later experiments.
+% For convenience, we will summarize the results of three top-performing
+% configurations---the methods of \citet{Blair-Goldensohn:08},
+% \citet{Kim:04,Kim:06}, and the label-propagation approach of
+% \citet{Rao:09} used in combination with the initial seed sed of
+% \citet{Kim:04}---in Table~\ref{snt-lex:tbl:lex-kh-seedset} and use
+% these results as baselines in our later experiments.
 
-\begin{table}[h]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.1\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
-      \toprule
-          \multirow{2}*{\bfseries Lexicon} & %
-          \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-          \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-          \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+% \begin{table}[h]
+%   \begin{center}
+%     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+%     \begin{tabular}{p{0.1\columnwidth} % first columm
+%         *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
+%         *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
+%       \toprule
+%           \multirow{2}*{\bfseries Lexicon} & %
+%           \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+%           \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+%           \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+%           \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-          & Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & %
-          Precision & Recall & \F{} & & \\\midrule
+%           & Precision & Recall & \F{} & %
+%           Precision & Recall & \F{} & %
+%           Precision & Recall & \F{} & & \\\midrule
 
-          BG & 22.7\stddev{6.5} & \textbf{29.9}\stddev{8.4} & 25.4\stddev{6.7} & %
-          17.1\stddev{7.4} & \textbf{16.9}\stddev{7.2} & \textbf{16.6}\stddev{6.7} & %
-          \textbf{97}\stddev{0.6} & 96.4\stddev{0.6} & 96.7\stddev{0.5} & %
-          46.3\stddev{3.5} & 93.5\stddev{0.9}\\
+%           BG & 22.7\stddev{6.5} & \textbf{29.9}\stddev{8.4} & 25.4\stddev{6.7} & %
+%           17.1\stddev{7.4} & \textbf{16.9}\stddev{7.2} & \textbf{16.6}\stddev{6.7} & %
+%           \textbf{97}\stddev{0.6} & 96.4\stddev{0.6} & 96.7\stddev{0.5} & %
+%           46.3\stddev{3.5} & 93.5\stddev{0.9}\\
 
-          KH & 51.6\stddev{12.4} & 21.7\stddev{7.2} & \textbf{29.9}\stddev{8.1} & %
-          38.9\stddev{24.7} & 7.5\stddev{4.9} & 12.2\stddev{7.8} & %
-          96.7\stddev{0.7} & \textbf{99.4}\stddev{0.2} & \textbf{98}\stddev{0.4} & %
-          \textbf{46.7}\stddev{3.9} & \textbf{96}\stddev{0.7}\\
+%           KH & 51.6\stddev{12.4} & 21.7\stddev{7.2} & \textbf{29.9}\stddev{8.1} & %
+%           38.9\stddev{24.7} & 7.5\stddev{4.9} & 12.2\stddev{7.8} & %
+%           96.7\stddev{0.7} & \textbf{99.4}\stddev{0.2} & \textbf{98}\stddev{0.4} & %
+%           \textbf{46.7}\stddev{3.9} & \textbf{96}\stddev{0.7}\\
 
-          RR$_{\textrm{lbl-prop}}$ & \textbf{52.9}\stddev{15.2} & 18.4\stddev{6.5} & 26.7\stddev{8.2} & %
-          \textbf{42.8}\stddev{29.7} & 8.9\stddev{5.8} & 14.1\stddev{8.8} & %
-          96.6\stddev{0.7} & \textbf{99.4}\stddev{0.3} & \textbf{98}\stddev{0.4} & %
-          46.3\stddev{4.3} & \textbf{96}\stddev{0.8}\\
-          \bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Results of the top-scoring dictionary-based approaches
-      with the best observed seed set configuration. {\small (BG --
-        \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, RR
-        -- \citet{Rao:09})}}
-    \label{snt-lex:tbl:lex-kh-seedset}
-  \end{center}
-\end{table}
+%           RR$_{\textrm{lbl-prop}}$ & \textbf{52.9}\stddev{15.2} & 18.4\stddev{6.5} & 26.7\stddev{8.2} & %
+%           \textbf{42.8}\stddev{29.7} & 8.9\stddev{5.8} & 14.1\stddev{8.8} & %
+%           96.6\stddev{0.7} & \textbf{99.4}\stddev{0.3} & \textbf{98}\stddev{0.4} & %
+%           46.3\stddev{4.3} & \textbf{96}\stddev{0.8}\\
+%           \bottomrule
+%     \end{tabular}
+%     \egroup
+%     \caption{Results of the top-scoring dictionary-based approaches
+%       with the best observed seed set configuration. {\small (BG --
+%         \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, RR
+%         -- \citet{Rao:09})}}
+%     \label{snt-lex:tbl:lex-kh-seedset}
+%   \end{center}
+% \end{table}
 
 \subsection{Discussion}
 
