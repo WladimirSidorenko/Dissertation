@@ -1026,7 +1026,7 @@ instances).  We will investigate later in
 Subsection~\ref{subsec:snt-lex:eoss} whether other seed sets could
 provide a remedy to this problem.
 
-\subsection{Lexicon Generation Using Neural Word Embeddings}
+\subsubsection{Lexicon Generation Using Neural Word Embeddings}
 
 % \citet{Tang:14}
 
@@ -1283,6 +1283,192 @@ stopping of the expansion.
 %     \label{snt-lex:tbl:lex-kh-seedset}
 %   \end{center}
 % \end{table}
+
+\subsection{Analysis of Entries}\label{subsec:snt-lex:aoe}
+
+Besides investigating the effects of different hyper-parameters and
+seed sets, we also decided to have a closer look at the actual results
+produced by the tested methods.  For this purpose, we extracted ten
+highest scored entries (not counting the seed terms) from each
+dictionary-based automatic lexicon and summarized them in
+Table~\ref{tbl:snt-lex:dict:top-10}.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.03\tabcolsep}\scriptsize
+    \begin{tabular}{%
+        >{\centering\arraybackslash}p{0.07\columnwidth} % first columm
+        *{6}{>{\centering\arraybackslash}p{0.155\columnwidth}}} % last two columns
+      \toprule
+      \textbf{Rank} & %
+      \textbf{HL} & \textbf{BG} & \textbf{KH} & %
+      \textbf{ES} & \textbf{RR}$^{**}_{\textrm{mincut}}$ & %
+      \textbf{RR}$_{\textrm{lbl-prop}}$\\\midrule
+      1 & \ttranslate{perfekt}{perfect} & %
+      \ttranslate{flei\ss{}ig}{diligent} &%
+      \ttranslate{anr\"uchig}{indecent} &%
+      \ttranslate{namenlos}{nameless} &%
+      \ttranslate{planieren}{to plane} &%
+      \ttranslate{prunkvoll}{splendid}\\
+
+      2 & \ttranslate{musterg\"ultig}{immaculate} & %
+      \ttranslate{b\"ose}{evil} &%
+      \ttranslate{unecht}{artificial} &%
+      \ttranslate{ruhelos}{restless} &%
+      \ttranslate{Erdschicht}{stratum} &%
+      \ttranslate{sinnlich}{sensual}\\
+
+
+      3 & \ttranslate{vorbildlich}{commendable} & %
+      \ttranslate{beispielhaft}{exemplary} &%
+      \ttranslate{irregul\"ar}{irregular} &%
+      \ttranslate{unbewaffnet}{unarmed} &%
+      \ttranslate{gefallen}{please} &%
+      \ttranslate{pomp\"os}{ostentatious}\\
+
+      4 & \ttranslate{beispielhaft}{exemplary} & %
+      \ttranslate{edel}{noble} &%
+      \ttranslate{drittklassig}{third-class} &%
+      \ttranslate{interesselos}{indifferent} &%
+      \ttranslate{Zeiteinheit}{time unit} &%
+      \ttranslate{unappetitlich}{unsavory}\\
+
+      5 & \ttranslate{exzellent}{excellent} & %
+      \ttranslate{t\"uchtig}{proficient} &%
+      \ttranslate{sinnlich}{sensual} &%
+      \ttranslate{reizlos}{unattractive} &%
+      \ttranslate{Derivat}{derivate} &%
+      \ttranslate{befehlsgem\"a\ss{}}{as ordered}\\
+
+      6 & \ttranslate{exzeptionell}{exceptional} & %
+      \ttranslate{emsig}{busy} &%
+      \ttranslate{unprofessionell}{unprofessional} &%
+      \ttranslate{w\"urdelos}{undignified} &%
+      \ttranslate{Oberfl\"ache}{surface} &%
+      \ttranslate{vierschr\"otig}{beefy}\\
+
+      7 & \ttranslate{au\ss{}ergew\"ohnlich}{extraordinary} & %
+      \ttranslate{eifrig}{eager} &%
+      \ttranslate{abgeschlagen}{exhausted} &%
+      \ttranslate{absichtslos}{unintentional} &%
+      \ttranslate{Essbesteck}{cutlery} &%
+      \ttranslate{regelgem\"a\ss}{regularly}\\
+
+      8 & \ttranslate{au\ss{}erordentlich}{exceptionally} & %
+      \ttranslate{arbeitsam}{hardworking} &%
+      \ttranslate{gef\"allig}{pleasing} &%
+      \ttranslate{ereignislos}{uneventful} &%
+      \ttranslate{abl\"osen}{to displace} &%
+      \ttranslate{wahrheitsgem\"a\ss}{true}\\
+
+      9 & \ttranslate{viertklassig}{fourth-class} & %
+      \ttranslate{musterg\"ultig}{exemplary} &%
+      \ttranslate{musterg\"ultig}{exemplary} &%
+      \ttranslate{regellos}{irregular} &%
+      \ttranslate{Musikveranstaltung}{music event} &%
+      \ttranslate{fettig}{greasy}\\
+
+      10 & \ttranslate{sinnreich}{ingenious} & %
+      \ttranslate{vorbildlich}{commendable} &%
+      \ttranslate{unrecht}{wrong} &%
+      \ttranslate{fehlerfrei}{accurate} &%
+      \ttranslate{Gebrechen}{afflictions} &%
+      \ttranslate{lumpig}{shabby}\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Top ten polar terms produced by the dictionary-based methods.\\
+      {\small ** -- the min-cut method of \citet{Rao:09} returns an
+        unsorted set}}
+    \label{tbl:snt-lex:dict:top-10}
+  \end{center}
+\end{table}
+
+As can be seen from the table, the approaches by \citet{Hu:04},
+\citet{Blair-Goldensohn:08}, \citet{Kim:04}, as well as the
+label-propagation algorithm by \citet{Rao:09} produce almost perfect
+polarity lists.  The SentiWordNet approach by \citet{Esuli:06c},
+however, already features some spurious terms (e.g., ``absichtslos''
+\emph{unintentional}) among its top-scored entries.  Finally, the
+min-cut approach by \citet{Rao:09} returns a set of mainly objective
+terms, which, however, is rather due to the fact that this method
+performs a cluster-like partitioning of the lexical graph and does not
+rank words assigned to a cluster.
+
+An opposite situation is observed for the corpus-based systems as
+shown in Table~\ref{tbl:snt-lex:crp:top-10}: The top-scoring polarity
+lists returned by these approaches not only include many apparently
+objective terms but are also difficult to interpret in general, as
+they contain a substantial number of slang and advertising terms
+(e.g., ``BMKS65'', ``\#gameinsight'', ``\#androidgames'' etc.).  This
+again supports the hypothesis that an extreme noisiness of the input
+domain might pose considerable difficulties to corpus-based
+approaches.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.03\tabcolsep}\scriptsize
+    \begin{tabular}{%
+        >{\centering\arraybackslash}p{0.07\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2325\columnwidth}}} % last two columns
+      \toprule
+      \textbf{Rank} & %
+      \textbf{TKM} & \textbf{VEL} & \textbf{KIR} & %
+      \textbf{SEV} \\\midrule
+      1 & \ttranslate{Stockfotos}{stock photos} &%
+      \ttranslate{Wahl\-kampf\-ge\-schenk}{election gift} &%
+      \ttranslate{Suchmaschinen}{search engines} &%
+      \ttranslate{Scherwey}{Scherwey}\\
+
+      2 & \ttranslate{BMKS65}{BMKS65} &%
+      \ttranslate{Or\-dens\-ge\-schich\-te}{order history} &%
+      \ttranslate{\#gameinsight}{\#gameinsight} &%
+      \ttranslate{krebsen}{to crawl}\\
+
+      3 & \ttranslate{Ziya}{Ziya} &%
+      \ttranslate{Indologica}{Indologica} &%
+      \ttranslate{\#androidgames}{\#androidgames} &%
+      \ttranslate{kaschieren}{to conceal}\\
+
+      4 & \ttranslate{Shoafoundation}{shoah found.} &%
+      \ttranslate{Indologie}{Indology} &%
+      \ttranslate{Selamat}{selamat} &%
+      \ttranslate{Davis}{Davis}\\
+
+      5 & \ttranslate{T1199}{T1199} &%
+      \ttranslate{Energieverbrauch}{energy consumption} &%
+      \ttranslate{Pagi}{Pagi} &%
+      \ttranslate{\#Klassiker}{\#classics}\\
+
+      6 & \ttranslate{Emilay55}{Emilay55} &%
+      \ttranslate{Schimmelbildung}{mold formation} &%
+      \ttranslate{\#Sparwelt}{\#savingsworld} &%
+      \ttranslate{Nationalismus}{nationalism}\\
+
+      7 & \ttranslate{Eneramo}{Eneramo} &%
+      \ttranslate{Hygiene}{hygiene} &%
+      \ttranslate{\#Seittest}{\#Seittest} &%
+      \ttranslate{Kraftstoff}{fuel}\\
+
+      8 & \ttranslate{GotzeID}{GotzeID} &%
+      \ttranslate{wasserd}{waterp} &%
+      \ttranslate{Gameinsight}{Gameinsight} &%
+      \ttranslate{inaktiv}{idle}\\
+
+      9 & \ttranslate{BSH65}{BSH65} &%
+      \ttranslate{heizkostensparen}{saving heating costs} &%
+      \ttranslate{\#ipadgames}{\#ipadgames} &%
+      \ttranslate{8DD}{8DD}\\
+
+      10 & \ttranslate{Saymak.}{Saymak.} &%
+      \ttranslate{Re\-fe\-renz\-ar\-chi\-tek\-tu\-ren}{reference architectures} &%
+      \ttranslate{Fitnesstraining}{fitness training} &%
+      \ttranslate{Mailadresse}{mail address}\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Top ten polar terms produced by the corpus-based methods.}
+    \label{tbl:snt-lex:crp:top-10}
+  \end{center}
+\end{table}
 
 \subsection{Discussion}
 
