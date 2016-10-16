@@ -1469,120 +1469,124 @@ approaches.
 
 \subsection{Discussion}
 
-In general, however, the results shown by all systems tested in this
-section are notably lower than the respective figures reported in
-their original papers.  We can explain this divergence by the
-following reasons:
-\begin{inparaenum}[\itshape a\upshape)]
-\item the evaluation metrics that we applied in our experiments are
+In general, as we can see from the results, all systems tested in this
+section performed notably worse than reported in their original
+papers.  We can explain this divergence by the following four reasons:
+\begin{enumerate}[1\upshape)]
+\item the evaluation metrics that we applied in our experiments were
   considerably different from the testing methods used in the previous
   works (we estimated the results on a real-life corpus, counting
-  every false positive and false negative case, whereas the English
-  approaches evaluated their results on the intersection with the
-  General Inquirer Lexicon \cite{Stone:66}, omitting false positive
-  matches and therefore artifically boosting their scores);
+  every false positive and false negative match separately, whereas
+  the English approaches typically evaluated their results on the
+  intersection with the General Inquirer Lexicon \cite{Stone:66},
+  omitting false positive matches and therefore artifically boosting
+  their scores);
 \item both the domain and the language that we addressed in this
-  section are apparently more challenging than the standard English
-  invariant for which these methods have been developed; and, finally,
-\item the notion of the synonymous relations and the set of the
-  initial seed terms could differ from the original settings of the
-  evaluated approaches.
-\end{inparaenum}
+  section were apparently more challenging than the standard English
+  form for which most of these methods had been developed;
+\item the notion of the synonymous relations used for the
+  dictionary-based approaches and the set of the initial seed terms
+  used by all methods could differ from the original settings of the
+  evaluated algorithms;
+\item finally, the underlying lexical taxonomy (\textsc{GermaNet}) and
+  the snapshot corpus were different from the resources originally
+  used for the presented methods.
+\end{enumerate}
 
 
-Since \textsc{GermaNet}, however, is significantly different from its
-English counterpart, both quantitatively and qualitatively, we should
-first present some key statistics (shown in
-Table~\ref{snt-lex:tbl:germanet-wordnet}) and visualize the synset
-graphs (demonstrated in Figures~\ref{snt-lex:fig:germanet}
-and~\ref{snt-lex:fig:wordnet}) of these lexical databases.
+% Since \textsc{GermaNet}, however, is significantly different from its
+% English counterpart, both quantitatively and qualitatively, we should
+% first present some key statistics (shown in
+% Table~\ref{snt-lex:tbl:germanet-wordnet}) and visualize the synset
+% graphs (demonstrated in Figures~\ref{snt-lex:fig:germanet}
+% and~\ref{snt-lex:fig:wordnet}) of these lexical databases.
 
-\begin{table}[h]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
-    \begin{tabular}{p{0.15\textwidth} % first columm
-        *{8}{>{\centering\arraybackslash}m{0.085\textwidth}}} % next nine columns
-      \toprule
-      & \multicolumn{2}{c}{\bfseries Noun} & %
-      \multicolumn{2}{c}{\bfseries Verb} & %
-      \multicolumn{2}{c}{\bfseries Adjective} & & \\
-      \multirow{-2}{0.12\columnwidth}{\centering\bfseries Resource} & %
-      Words & Synsets & Words & Synsets & Words & Synsets & %
-      \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Hy\-pon.\newline{}Rels} & %
-      \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Anto\-n.\newline{}Rels}\\
-      \midrule
+% \begin{table}[h]
+%   \begin{center}
+%     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize \small
+%     \begin{tabular}{p{0.15\textwidth} % first columm
+%         *{8}{>{\centering\arraybackslash}m{0.085\textwidth}}} % next nine columns
+%       \toprule
+%       & \multicolumn{2}{c}{\bfseries Noun} & %
+%       \multicolumn{2}{c}{\bfseries Verb} & %
+%       \multicolumn{2}{c}{\bfseries Adjective} & & \\
+%       \multirow{-2}{0.12\columnwidth}{\centering\bfseries Resource} & %
+%       Words & Synsets & Words & Synsets & Words & Synsets & %
+%       \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Hy\-pon.\newline{}Rels} & %
+%       \multirow{-2}{0.085\columnwidth}{\centering\scriptsize\bfseries{}Anto\-n.\newline{}Rels}\\
+%       \midrule
 
-      \textsc{GermaNet} & 85,662 & 71,575 & 9,340 & 11,026 & 12,890 & 10,645 & %
-      97,712 & 1,741\\
-      \textsc{WordNet}  & 117,798 & 82,115 & 11,529 & 13,767 & 21,479 & 18,156 & %
-      95,322 & 7,394\\
-      \bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Key statistics on \textsc{GermaNet} and
-      \textsc{WordNet}.}
-    \label{snt-lex:tbl:germanet-wordnet}
-  \end{center}
-\end{table}
+%       \textsc{GermaNet} & 85,662 & 71,575 & 9,340 & 11,026 & 12,890 & 10,645 & %
+%       97,712 & 1,741\\
+%       \textsc{WordNet}  & 117,798 & 82,115 & 11,529 & 13,767 & 21,479 & 18,156 & %
+%       95,322 & 7,394\\
+%       \bottomrule
+%     \end{tabular}
+%     \egroup
+%     \caption{Key statistics on \textsc{GermaNet} and
+%       \textsc{WordNet}.}
+%     \label{snt-lex:tbl:germanet-wordnet}
+%   \end{center}
+% \end{table}
 
-\begin{figure*}[htbp!]
-{
-\centering
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{img/germanet.png}
-  \caption{\textsc{GermaNet}}\label{snt-lex:fig:germanet}
-\end{subfigure}%
-\begin{subfigure}{.5\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{img/wordnet.png}
-  \caption{\textsc{WordNet}}\label{snt-lex:fig:wordnet}
-\end{subfigure}
-}
-\caption{Graphical visualization of \textsc{GermaNet} and
-      \textsc{WordNet}.}\label{snt:fig:crp-sent-emo-distr}
-\end{figure*}
+% \begin{figure*}[htbp!]
+% {
+% \centering
+% \begin{subfigure}{.5\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{img/germanet.png}
+%   \caption{\textsc{GermaNet}}\label{snt-lex:fig:germanet}
+% \end{subfigure}%
+% \begin{subfigure}{.5\textwidth}
+%   \centering
+%   \includegraphics[width=\linewidth]{img/wordnet.png}
+%   \caption{\textsc{WordNet}}\label{snt-lex:fig:wordnet}
+% \end{subfigure}
+% }
+% \caption{Graphical visualization of \textsc{GermaNet} and
+%       \textsc{WordNet}.}\label{snt:fig:crp-sent-emo-distr}
+% \end{figure*}
 
-As can be seen from the table, \textsc{GermaNet} has significantly
-fewer words and synsets for all common parts of speech with the
-largest gaps observed for nouns and adjectives.  Moreover, as shown in
-Figures~\ref{snt-lex:fig:germanet} and~\ref{snt-lex:fig:wordnet}, such
-PoS-classes as adverbs and adjective satellites are completely missing
-in the German resource.  The reason for this is that the form (and
-meaning) of most German adverbs typically coincides with that of the
-adjectives; therefore, both categories are treated in the same way,
-being represented through the adjectival synsets.
+% As can be seen from the table, \textsc{GermaNet} has significantly
+% fewer words and synsets for all common parts of speech with the
+% largest gaps observed for nouns and adjectives.  Moreover, as shown in
+% Figures~\ref{snt-lex:fig:germanet} and~\ref{snt-lex:fig:wordnet}, such
+% PoS-classes as adverbs and adjective satellites are completely missing
+% in the German resource.  The reason for this is that the form (and
+% meaning) of most German adverbs typically coincides with that of the
+% adjectives; therefore, both categories are treated in the same way,
+% being represented through the adjectival synsets.
 
-A slightly different situation can be observed for the semantic links
-(relations) between the synsets: here, \textsc{GermaNet} features
-almost 2,500 more hypernym-hyponym pairs than the English resource,
-whereas the number of antonyms is more than four times less than in
-\textsc{WordNet}.
+% A slightly different situation can be observed for the semantic links
+% (relations) between the synsets: here, \textsc{GermaNet} features
+% almost 2,500 more hypernym-hyponym pairs than the English resource,
+% whereas the number of antonyms is more than four times less than in
+% \textsc{WordNet}.
 
-An especially interesting pattern, however, appears with the relations
-connecting different parts of speech: As can be seen from the figures,
-the strongest inter-PoS connections in \textsc{GermaNet} are the
-pertainym links between the adjectives and nouns and the participle
-edges between the adjectives and verbs.  The interlinks between the
-nouns and verbs, however, are both much fewer in number and more
-diverse in their nature.  This situation is different in
-\textsc{WordNet} where the prevailing majority of the
-inter-part-of-speech connections are represented through the
-\texttt{related\_to} (especially between the nouns, adjective
-satellites, verbs, and verbs and adjectives) and
-\texttt{derived\_from} links (especially between adverbs and
-adjectives with their satellites).  The relations between the
-adjectives and nouns are mixed though, featuring both
-\texttt{related\_to} and \texttt{derived\_from} connections.  As we
-should see later, these links are crucial for breaking part-of-speech
-dependencies of seed sets in the cases when all seeds belong to the
-same PoS class.
+% An especially interesting pattern, however, appears with the relations
+% connecting different parts of speech: As can be seen from the figures,
+% the strongest inter-PoS connections in \textsc{GermaNet} are the
+% pertainym links between the adjectives and nouns and the participle
+% edges between the adjectives and verbs.  The interlinks between the
+% nouns and verbs, however, are both much fewer in number and more
+% diverse in their nature.  This situation is different in
+% \textsc{WordNet} where the prevailing majority of the
+% inter-part-of-speech connections are represented through the
+% \texttt{related\_to} (especially between the nouns, adjective
+% satellites, verbs, and verbs and adjectives) and
+% \texttt{derived\_from} links (especially between adverbs and
+% adjectives with their satellites).  The relations between the
+% adjectives and nouns are mixed though, featuring both
+% \texttt{related\_to} and \texttt{derived\_from} connections.  As we
+% should see later, these links are crucial for breaking part-of-speech
+% dependencies of seed sets in the cases when all seeds belong to the
+% same PoS class.
 
-Another lexical sentiment resource (\textsc{WordNet-Affect}) was
-proposed by \citet{Strapparava:04} who manually compiled a list of
-1,903 subjective terms and projected these polarities to the
-respective synononyms set in \textsc{WordNet}.  The resulting database
-included 2,874 synsets with a total of 4,787 words.
+% Another lexical sentiment resource (\textsc{WordNet-Affect}) was
+% proposed by \citet{Strapparava:04} who manually compiled a list of
+% 1,903 subjective terms and projected these polarities to the
+% respective synononyms set in \textsc{WordNet}.  The resulting database
+% included 2,874 synsets with a total of 4,787 words.
 
 % \subsubsection{Domain-Specific Sentiment Lexica}
 
