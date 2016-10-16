@@ -43,7 +43,7 @@ a thorough way, we use the complete data set labeled by one of the
 experts as our test corpus.  This set comprises a total of 6,040
 positive and 3,055 negative terms.  However, since many of these
 expressions are emoticons, which, on the one hand, are a priory absent
-in common lexical taxonomies such as \texttt{WordNet}
+in common lexical taxonomies such as \textsc{WordNet}
 \cite{Miller:95,Miller:07} or \texttt{GermaNet} \cite{Hamp:97} and
 therefore not amenable to SLG approaches based on these resources but,
 on the other hand, can be easily captured by regular expressions, we
@@ -522,9 +522,6 @@ differed only by a few hundredths).  Finally, in the method of
 maximum of 17 steps each, considering a term as polar if more than a
 half of these walkers agreed on the polarity of the analyzed term.
 
-The results of our reimplementations are shown in
-Table~\ref{snt-lex:tbl:lex-res}.
-
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -676,27 +673,28 @@ Table~\ref{snt-lex:tbl:lex-res}.
   \end{center}
 \end{table}
 
-As can be seen from the table, the results of the automatic methods
-are significantly lower than the figures obtained by the
-semi-automatic lexicons.  The best macro-averaged \F{}-score for all
-three classes (0.479) is attained by the method of
-\citet{Blair-Goldensohn:08}, which is still 0.11 points worse than the
-peak result achieved by the intersection of the GPC, SentiWS, and
-Zurich Polarity lists (0.589).  Apart from this, the situation for the
-dictionary-based methods in general is much more varied than in the
-case of the existing German lexicons as different systems can achieve
-best scores on just some aspects of certain classes but can hardly
-attain best overall results in all categories.  This is, for instance,
-the case for the positive and negative polarities, where the best
-precision is reached by the seed set in the first case and the label
-propagation algorithm by \citet{Rao:09} in the second case.  However,
-with respect to the recall, both of these polarity lists perform
-notably worse than the approach by \citet{Esuli:06c}.  Yet other
-systems---the matrix-vector method by \citet{Blair-Goldensohn:08} and
-the union of the three overall top-scoring systems
-respectively---reach the highest \F{}-scores for these two classes.
-Nevertheless, we can still notice three main tendencies in this
-evaluation:
+The results of our reimplementations are shown in
+Table~\ref{snt-lex:tbl:lex-res}.  As can be seen from the table, the
+results of the automatic methods are significantly lower than the
+figures obtained by the semi-automatic lexicons.  The best
+macro-averaged \F{}-score for all three classes (0.479) is attained by
+the method of \citet{Blair-Goldensohn:08}, which is still 0.11 points
+worse than the peak result achieved by the intersection of the GPC,
+SentiWS, and Zurich Polarity lists (0.589).  Apart from this, the
+situation for the dictionary-based methods in general is much more
+varied than in the case of the existing German lexicons as different
+systems can achieve best scores on just some aspects of certain
+classes but can hardly attain best overall results in all categories.
+This is, for instance, the case for the positive and negative
+polarities, where the best precision is reached by the seed set in the
+first case and the label propagation algorithm by \citet{Rao:09} in
+the second case.  However, with respect to the recall, both of these
+polarity lists perform notably worse than the approach by
+\citet{Esuli:06c}.  Yet other systems---the matrix-vector method by
+\citet{Blair-Goldensohn:08} and the union of the three overall
+top-scoring systems respectively---reach the highest \F{}-scores for
+these two classes.  Nevertheless, we can still notice three main
+tendencies in this evaluation:
 \begin{inparaenum}[\itshape a\upshape)]
 \item the method by \citet{Esuli:06c} generally gets the highest
   recall of polar terms and, consequently, achieves the best precision
@@ -875,16 +873,13 @@ iterations in the method of \citet{Velikovich:10} to 20.
 %   respect to the hyper-parameter $\beta$.}\label{snt:fig:ising-spin-em}
 % \end{figure}
 
-The results of this evaluation are shown in
-Table~\ref{snt-lex:tbl:corp-meth}.
-
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.172\columnwidth} % first columm
         >{\centering\arraybackslash}p{0.06\columnwidth} % second columm
-        *{9}{>{\centering\arraybackslash}p{0.072\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.058\columnwidth}}} % last two columns
+        *{9}{>{\centering\arraybackslash}p{0.07\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.053\columnwidth}}} % last two columns
       \toprule
       \multirow{2}*{\bfseries Lexicon} & %
       \multirow{2}{0.06\columnwidth}{\bfseries \# of Terms} & %
@@ -985,10 +980,12 @@ Table~\ref{snt-lex:tbl:corp-meth}.
   \end{center}
 \end{table}
 
-This time, we can observe a clear superiority of Takamura et al.'s
-method, which not only achieves the best recall and \F{} in
-recognizing positive and negative items but also attains the highest
-micro- and macro-averaged results for all three polarity classes.
+The results of this evaluation are shown in
+Table~\ref{snt-lex:tbl:corp-meth}.  This time, we can observe a clear
+superiority of Takamura et al.'s method, which not only achieves the
+best recall and \F{} in recognizing positive and negative items but
+also attains the highest micro- and macro-averaged results for all
+three polarity classes.
 % As expected, the best precision in recognizing polar terms is achieved
 % by the manually compiled seed set, whose micro-averaged \F{}-result,
 % however, is still identical to the one shown by the method of
@@ -1204,7 +1201,7 @@ when used with this seed set are only slightly lower than their
 respective scores achieved with the best possible configuration---the
 seed list of \citet{Turney:02}.  The latter option---the seed set of
 \citet{Esuli:06c}---shows best results for the approaches of
-\citet{Hu:04} and the SentiWordNet method of \citet{Esuli:06c}.
+\citet{Hu:04} and the \textsc{SentiWordNet} method of \citet{Esuli:06c}.
 
 \begin{figure}[hbtp!]
   \centering
@@ -1386,7 +1383,7 @@ Table~\ref{tbl:snt-lex:dict:top-10}.
 As can be seen from the table, the approaches by \citet{Hu:04},
 \citet{Blair-Goldensohn:08}, \citet{Kim:04}, as well as the
 label-propagation algorithm by \citet{Rao:09} produce almost perfect
-polarity lists.  The SentiWordNet approach by \citet{Esuli:06c},
+polarity lists.  The \textsc{SentiWordNet} approach by \citet{Esuli:06c},
 however, already features some spurious terms (e.g., ``absichtslos''
 \emph{unintentional}) among its top-scored entries.  Finally, the
 min-cut approach by \citet{Rao:09} returns a set of mainly objective
@@ -1409,7 +1406,7 @@ approaches.
     \bgroup \setlength\tabcolsep{0.03\tabcolsep}\scriptsize
     \begin{tabular}{%
         >{\centering\arraybackslash}p{0.07\columnwidth} % first columm
-        *{4}{>{\centering\arraybackslash}p{0.2325\columnwidth}}} % last two columns
+        *{4}{>{\centering\arraybackslash}p{0.232\columnwidth}}} % last two columns
       \toprule
       \textbf{Rank} & %
       \textbf{TKM} & \textbf{VEL} & \textbf{KIR} & %
@@ -1604,42 +1601,40 @@ included 2,874 synsets with a total of 4,787 words.
 
 \subsection{Summary and Conclusions}
 
-In this section, we presented the first attempt of a practical
-evaluation of our corpus.  In doing so, we addressed the task of
-automatic prediction of polar terms (emotional expressions) with the
-help of sentiment dictionaries.  To obtain a rough baseline estimate,
-we first evaluated the quality of the existing sentiment lists for
-German: German Polarity Clues~\cite{Waltinger:10},
-SentiWS~\cite{Remus:10}, and Zurich Polarity List~\cite{Clematide:10}.
-We showed that \ldots achieved the best quality, reaching an average
-\F{}-score of \ldots on recognizing positive expressions and \ldots on
-predicting negative polar terms.
+In this section, we presented a thorough evaluation of the most
+popular methods for an automatic generation of sentiment lexicons.
+For this purpose, we compared the results achieved by the common
+English polarity lists which were semi-automatically translated into
+German with the scores attained by the original English approaches
+which were applied directly to German data.  In the latter case, we
+also juxtaposed automatic dictionary- and corpus-based systems in
+order to find out which of these paradigms was better suited for the
+inherently noisy Twitter domain.  As many of the corpus-based
+algorithms showed an extreme susceptibility to the unbalancedness of
+the training sets, we also proposed several novel SLG approaches,
+which derived polarity lists by using neural word embeddings trained
+on a big unlabeled tweet corpus.  In the concluding step, we analyzed
+the effect of different seed sets and hyper-parameters of word vectors
+on the net results of the tested approaches.
 
-In the next step, we analyzed whether the methods that were used for
-creating the original English resources whose translations formed the
-basis of the German lexica could yield better results than the
-manually revised tranlated lists when applied to German data directly.
-
-Another popular approach to an unsupervised induction of sentiment
-lexica relies on the cooccurrence information about the words taken
-directly from corpus.  One of the most popular methods from this
-category is the Ising spin model adopted from the statistical
-mechanics which interprets words as magnetic spins in a crystal grid
-and tries to derive the most probable orientation of these spins in a
-magnetic field.  This model was first applied to the needs of
-computational linguistics by \citet{Takamura:05}, who induced a
-sentiment lexicon for English using \ldots corpus data.  We have
-reimplemented this approach in our program suite and applied to the
-German Twitter snapshop of \citet{Scheffler:14}.  The results of this
-approach are shown in Table~\ref{snt-lex:tbl:ispn-res}.
-
-A different way of incorporating corpus data is to encode the
-cooccurrence statistics directly into word information, representing
-the latter as vectors.  We explored this direction in the final part
-of this section, first obtaining word2vec embeddings for tokens from
-the aforementioned snapshot and then applying clustering algorithms to
-these representations.
-
-Our results show that \ldots.
+Based on our observations and experiments, we can formulate the main
+conclusions of this section as follows:
+\begin{itemize}
+\item semi-automatic translations of common English polarity lists
+  notably outperform automatic SLG methods which are applied to German
+  data;
+\item despite their allegedly worse ability to accommodate new
+  domains, dictionary-based approaches are still superior to
+  corpus-based systems (at least in terms of an intrinsic evaluation);
+\item a potential weakness of the dictionary-based algorithms,
+  however, is their dependence on different hyper-parameters and the
+  size and composition of the initial seed sets;
+\item nevertheless, the effect of the seed sets might be even stronger
+  for the corpus-based approaches which rely on distant supervision if
+  the resulting noisy labeled training set becomes highly unbalanced;
+\item in this regard, NWE-based algorithms might be a much better
+  alternative to these methods for capturing domain-specific polar
+  words and expressions.
+\end{itemize}
 
 \newpage
