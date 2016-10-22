@@ -766,13 +766,13 @@ tendencies in this evaluation:
 
 \subsubsection{Corpus-Based Methods}
 
-An alternative way to generate polarity lists is provided by
-corpus-based approaches.  In contrast to dictionary-based methods,
-these systems can typically operate immediately on raw texts of the
-target domain and are, therefore, virtually independent of any
-manually annotated linguistic resources.  This flexibility, however,
-might come at the cost of a reduced accuracy due to an inherent
-noisiness of the unlabeled data.
+An alternative way to generate polarity lists is to use corpus-based
+approaches.  In contrast to dictionary-based methods, these systems
+typically operate immediately on raw texts of the target domain and
+are, therefore, virtually independent of any manually annotated
+linguistic resources.  This flexibility, however, might come at the
+cost of a reduced accuracy due to an inherent noisiness of the
+unlabeled data.
 
 A pioneering work on these algorithms was done by
 \citet{Hatzivassi:97}.  Based on the assumption that coordinately
@@ -782,8 +782,8 @@ the degree of dissimilarity between two co-occurring adjectival terms.
 In the next step, they constructed a word graph, drawing a link
 between any two adjectives which appeared in the same coordinative
 pair and considering the predicted dissimilarity scores between these
-words as their respective edge weights.  Finally, the authors
-partitioned the resulting graph into two parts and ascribed the
+words as their respective edge weights.  In the final stage, the
+authors partitioned this graph into two parts and ascribed the
 positive polarity to the bigger cluster.
 % This method achieved an overall accuracy of 82.05\%
 % on predicting the polarity of a subset of manually annotated
@@ -795,12 +795,11 @@ probabilistic framework.  To this end, the authors adopted the Ising
 spin model from the statistical mechanics, considering terms found in
 \textsc{WordNet} \cite{Miller:95}, the Wall Street Journal and Brown
 corpora as electrons in a unified ferromagnetic lattice.  They
-established a link between any two electrons if their corresponding
-terms appeared in synonymous synsets or a coordinately conjoined pairs
-in any of the two corpora.  Taking into account the a priori known
-polarities of the seed terms, they then approximated the most likely
-polarity combination in this graph over all possible polarity
-assignments.
+established a link between any two electrons whose corresponding terms
+appeared in synonymous synsets or coordinately conjoined pairs in any
+of the two corpora.  Taking into account the a priori known polarities
+of the seed terms, they then approximated the most likely polarity
+combination in this graph over all possible polarity assignments.
 % reaching 91.5\% accuracy at predicting polarity of the manually
 % labeled subjective terms from the General Inquirer lexicon
 % \cite{Stone:66}.
@@ -813,16 +812,16 @@ orientation score of the given word $w$ was defined as:
 \begin{equation*}
   \textrm{SO-A}(w) = \sum_{w_p\in\mathcal{P}}PMI(w, w_p) - \sum_{w_n\in\mathcal{N}}PMI(w, w_n),
 \end{equation*}
-where $\mathcal{P}$ was the set of the positive seed terms,
-$\mathcal{N}$ denoted the collection of the negative words, and the
-$PMI$ score was normally computed as the log-ratio $PMI(w, w_x) =
-\log_2\frac{p(w, w_x)}{p(w)p(w_x)}$.  The joint probability $p(w,
-w_x)$ in the last equation was calculated with the help of the
+where $\mathcal{P}$ was the set of positive seed terms, $\mathcal{N}$
+denoted the collection of negative words, and the $PMI$ score was
+normally computed as the log-ratio $PMI(w, w_x) = \log_2\frac{p(w,
+  w_x)}{p(w)p(w_x)}$.  The joint probability $p(w, w_x)$ in the last
+equation was calculated with the help of the
 AltaVista\footnote{\url{www.altavista.com}} NEAR operator as the
 number of hits returned by the ``$w\textrm{ NEAR }w_x$'' query divided
-by the total number of indexed documents.
+by the total number of documents indexed by this search engine.
 
-With great success, this method was adapted to Twitter by
+This method was also successfully adapted to Twitter by
 \citet{Kiritchenko:14}.  Using the distantly supervised corpus of
 \citet{Go:09} and a separate collection of 775,000 tweets gathered
 solely for the purpose of their experiments, the authors created two
@@ -831,13 +830,13 @@ Lexicon---using the semantic orientation formula described above.
 However, instead of querying AltaVista for computing the joint
 probability scores, the authors estimated these values as the number
 of times a potential candidate appeared in distantly labeled positive
-(negative) tweets divided by the total number of tweets in the
+(negative) tweets divided by the total number of tweets in their
 collection.  In a similar vein, \citet{Severyn:15a} compiled their
-list of polar terms by training an SVM classifier on the noisily
+list of polar terms by training an SVM classifier on the distantly
 labeled corpus of \citet{Go:09} and using lexical n-grams extracted
-from these tweets as features.  Afterwards, the authors included
-tokens with the highest learned weights into their final polarity
-list.
+from these tweets as features.  In the final step, the authors
+included tokens with the highest learned weights into their final
+polarity list.
 
 Graphical methods for corpus-based lexicon induction were advocated by
 \citet{Velikovich:10} and \citet{Feng:11}.  The former work proposed
@@ -845,28 +844,28 @@ an adaptation of the label-propagation algorithm previously suggested
 by \citet{Rao:09} with the core difference that, instead of taking a
 weighted average of all incident scores for a potential subjective
 term, the authors took the maximum value propagated from a seed in
-order to prune unreliable, noisy corpus connections.  \citet{Feng:11}
+order to prune unreliable, noisy corpus connections.  The latter work
 derived a list of subjectively connoted events and their associated
 verb predicates using two popular approaches from information
 retrieval---the PageRank \cite{Brin:98} and HITS algorithms
 \cite{Kleinberg:99}.
 
-For our experiments, we reimplemented the approaches of
+For our experiments, we reimplemented the approaches by
 \citet{Takamura:05}, \citet{Velikovich:10}, \citet{Kiritchenko:14} and
-\citet{Severyn:15} and applied these methods to the German Twitter
+\citet{Severyn:15}, and applied these methods to the German Twitter
 Snapshot \cite{Scheffler:14}---a collection of 24~M German microblogs
 which we previously used to sample the data for our sentiment corpus.
 We constructed the collocation graph from the lemmatized word forms of
 this snapshot, skipping all words which appeared less than four times
 in the analyzed data.  We again were using the \texttt{TreeTagger}
 \cite{Schmid:95} for lemmatization and \texttt{GermaNet} for deriving
-auxiliary semantic links between word vertices in the method of
+auxiliary semantic links between words for the method of
 \citet{Takamura:05}.  Similarly to the previous experiments, we
 fine-tuned all hyper-parameters (including the number of the induced
 polar terms) by maximizing the macro-averaged \F{}-score on the
 development set.  In particular, we set the $\beta$ constant in the
-method of \citet{Takamura:05} to 0.8 and the maximum number of
-iterations in the method of \citet{Velikovich:10} to 20.
+method by \citet{Takamura:05} to 0.8 and the maximum number of
+iterations in the method by \citet{Velikovich:10} to 20.
 
 % \cite{Lau:11} \citet{Bross:13} \citet{Tai:13} \citet{Yang:14}
 % \citet{Bravo-Marquez:15}
@@ -990,8 +989,8 @@ iterations in the method of \citet{Velikovich:10} to 20.
 The results of this evaluation are shown in
 Table~\ref{snt-lex:tbl:corp-meth}.  This time, we can observe a clear
 superiority of Takamura et al.'s method, which not only achieves the
-best recall and \F{} in recognizing positive and negative items but
-also attains the highest micro- and macro-averaged results for all
+best recall and \F{}-value in recognizing positive and negative items
+but also attains the highest micro- and macro-averaged results for all
 three polarity classes.
 % As expected, the best precision in recognizing polar terms is achieved
 % by the manually compiled seed set, whose micro-averaged \F{}-result,
@@ -1008,27 +1007,30 @@ rapidly going down on the held-out development set as the number of
 their induced polar terms increased.  Since we considered the lexicon
 size as one of the hyper-parameters of the tested approaches, we
 rapidly stopped populating these lexicons when we noticed a decrease
-in their results.  As a consequence, only the highest-ranked terms
-(all of which had the positive polarity) were included in the final
-lists.
+in their results.  As a consequence, only the terms with the highest
+ranks (all of which had the positive polarity) were included in the
+final lists.
 
 A closer look at the data revealed that the positive bias of the
 learned lexicons was mainly due to the ambiguity of the seed set:
 While converting the original seed list of \citet{Turney:03} to
 German, we translated the English word ``correct'' as ``richtig''.
 This German word, however, also has another reading which means
-\emph{real} (as in \emph{a real fact} or \emph{a real sports car}) and
-which was much more frequent in the analyzed snapshot, also often
-appearing in a negative context, e.g., ``ein richtiger
-Bombenanschlag'' (\emph{a real bomb attack}) or ``ein richtiger
-Terrorist'' (\emph{a real terrorist}).  As a consequence of this,
-methods relying on distant supervision had to deal with an extremely
-unbalanced training set (the automatically labeled corpus that we
-obtained for the approach of \citet{Kiritchenko:14} using these seeds,
-for instance, had 716,210 positive versus 92,592 negative training
-instances).  We will investigate later in
-Subsection~\ref{subsec:snt-lex:eoss} whether other seed sets could
-provide a remedy to this problem.
+\emph{real}---as in ``ein richtiges Spiel'' (\emph{a real game}) or
+``ein richtiger Rennwagen'' (\emph{a real sports car})---and which was
+much more frequent in the analyzed snapshot, often appearing in a
+negative context---e.g., ``ein richtiger Bombenanschlag'' (\emph{a
+  real bomb attack}) or ``ein richtiger Terrorist'' (\emph{a real
+  terrorist}).  As a consequence of this, methods relying on distant
+supervision had to deal with an extremely unbalanced training
+set\footnote{The automatically labeled corpus that we obtained for the
+  approach by \citet{Kiritchenko:14} using these seeds, for instance,
+  had 716,210 positive versus 92,592 negative training instances.} and
+fell victim to this unjustified skewness, getting stuck in a local
+optimum from the very beginning of their training.  We will
+investigate later in Subsection~\ref{subsec:snt-lex:eoss} whether the
+seed sets proposed by other authors could provide a remedy to this
+problem.
 
 \subsubsection{Lexicon Generation Using Neural Word Embeddings}
 
@@ -1122,33 +1124,34 @@ provide a remedy to this problem.
 \subsection{Effect of Seed Sets}\label{subsec:snt-lex:eoss}
 
 An important factor which could significantly affect the quality of
-the resulting polarity lists was the set of the seed terms that we
-used to initialize the polarity scores of the evaluated methods.  In
+the resulting sentiment lexicons was the set of the seed terms that we
+used to initialize the polarity scores of the tested methods.  In
 order to estimate the impact of this setting on the final scores, we
 re-run our experiments using the seed lists proposed by \citet{Hu:04},
-\citet{Kim:04}, \citet{Esuli:06c}, and \citet{Remus:10}.  In the cases
-where theses resources were missing the neutral class, we explicitly
-added a set of neutral terms proportional to the size of the polar
-categories.  Moreover, since \citet{Hu:04} only partially specified
-their seed list in the original paper, and \citet{Kim:04} did not
-provide any examples of their seed terms at all, we filled the missing
-entries in these lists with common polar German words that we came up
-with in order to match the reported size of these seed sets.  Finally,
-since the set of neutral terms from the polarity list of
-\citet{Esuli:06c} comprised 4,122 words---the authors considered as
-neutral all terms from the General Inquirer lexicon \cite{Stone:66}
-which were not marked there as either positive or negative and did not
-appear in the seed list of \citet{Turney:03}---and was therefore
-tedious to translate manually, we automatically obtained translations
-for these terms using the publicly available online dictionary
+\citet{Kim:04}, \citet{Esuli:06c}, and \citet{Remus:10}.  Since
+\citet{Hu:04}, however, only partially specified their seed set in the
+original paper, and \citet{Kim:04} did not provide any examples of
+their seeds at all, we filled the missing entries in these resources
+with common polar German words that we came up with in order to match
+the reported size of these lists.  Furthermore, in the cases where the
+above seed sets were missing the neutral category, we explicitly added
+a number of objective terms proportional to the size of the polar
+classes in these lists.  Finally, as the set of neutral terms in the
+polarity list of \citet{Esuli:06c} comprised 4,122 words---the authors
+considered as neutral all terms from the General Inquirer lexicon
+\cite{Stone:66} which were not marked there as either positive or
+negative and did not appear in the seed list of
+\citet{Turney:03}---and was therefore tedious to translate manually,
+we automatically obtained translations for these terms by using the
+publicly available online dictionary
 \texttt{dict.cc}\footnote{\url{http://www.dict.cc}} and taking the
 first suggested German translation for each of the neutral
 entries.\footnote{We also tried to use all possible translations of
   the original terms, but it lead to a considerable boost in the
   number of neutral items (45,252 words) and resulted in a substantial
   decrease of the final system scores.} A short statistics on the
-cardinality and composition of the resulting seed sets is presented in
-Table~\ref{snt-lex:tbl:alt-seed-sets}.
+cardinality and composition of the resulting seed lists is presented
+in Table~\ref{snt-lex:tbl:alt-seed-sets}.
 
 \begin{table}[h]
   \begin{center}
@@ -1191,24 +1194,25 @@ Table~\ref{snt-lex:tbl:alt-seed-sets}.
   \end{center}
 \end{table}
 
-The updated results for the dictionary-based approaches with these
+The updated results of the dictionary-based approaches with these
 alternative seed sets are shown in
 Figure~\ref{snt:fig:sent-dict-lex-alt-seeds}.  This time, we again can
 notice superior scores achieved by the method of
 \citet{Blair-Goldensohn:08}, which not only outperforms other systems
 on average but also seems to be less susceptible to the varying
-quality and size of the different seed lists.  The remaining methods
-typically achieve their best macro-averaged \F{}-results with either
-of the two top-performing seed lists: the seed set of \citet{Kim:04}
+quality and size of different seeds.  The remaining methods typically
+achieve their best macro-averaged \F{}-results with either of the two
+top-performing initial polarity lists: the seed set of \citet{Kim:04}
 or the seed set of \citet{Esuli:06c}.  The former option works best
-for the label-propagation approach \citet{Rao:09} and the random walk
-algorithm of \citet{Awadallah:10}.  Moreover, the results shown by the
-min-cut system \cite{Rao:09} and the original method of \citet{Kim:04}
-when used with this seed set are only slightly lower than their
-respective scores achieved with the best possible configuration---the
-seed list of \citet{Turney:02}.  The latter option---the seed set of
-\citet{Esuli:06c}---shows best results for the approaches of
-\citet{Hu:04} and the \textsc{SentiWordNet} method of \citet{Esuli:06c}.
+for the label-propagation approach of \citet{Rao:09} and the random
+walk algorithm of \citet{Awadallah:10}.  Moreover, the results shown
+by the min-cut system \cite{Rao:09} and the original method of
+\citet{Kim:04} when used with this seed set are only slightly lower
+than their respective scores achieved with the best possible
+configuration---the seed list of \citet{Turney:02}.  The latter
+option---the seed set of \citet{Esuli:06c}---shows best results for
+the approaches of \citet{Hu:04} and the \textsc{SentiWordNet} method
+of \citet{Esuli:06c}.
 
 \begin{figure}[hbtp!]
   \centering
@@ -1387,26 +1391,26 @@ Table~\ref{tbl:snt-lex:dict:top-10}.
   \end{center}
 \end{table}
 
-As can be seen from the table, the approaches by \citet{Hu:04},
+As can be seen from the table, the approaches of \citet{Hu:04},
 \citet{Blair-Goldensohn:08}, \citet{Kim:04}, as well as the
-label-propagation algorithm by \citet{Rao:09} produce almost perfect
-polarity lists.  The \textsc{SentiWordNet} approach by \citet{Esuli:06c},
-however, already features some spurious terms (e.g., ``absichtslos''
-\emph{unintentional}) among its top-scored entries.  Finally, the
-min-cut approach by \citet{Rao:09} returns a set of mainly objective
-terms, which, however, is rather due to the fact that this method
-performs a cluster-like partitioning of the lexical graph and does not
-rank words assigned to a cluster.
+label-propagation algorithm of \citet{Rao:09} produce almost perfect
+polarity lists.  The \textsc{SentiWordNet} approach of
+\citet{Esuli:06c}, however, already features some spurious terms
+(e.g., ``absichtslos'' \emph{unintentional}) among its top-scored
+entries.  Finally, the min-cut approach of \citet{Rao:09} returns a
+set of mainly objective terms, which, however, is rather due to the
+fact that this method performs a cluster-like partitioning of the
+lexical graph without ranking the words assigned to a cluster.
 
-An opposite situation is observed for the corpus-based systems as
+A different situation is observed for the corpus-based systems as
 shown in Table~\ref{tbl:snt-lex:crp:top-10}: The top-scoring polarity
-lists returned by these approaches not only include many apparently
-objective terms but are also difficult to interpret in general, as
-they contain a substantial number of slang and advertising terms
-(e.g., ``BMKS65'', ``\#gameinsight'', ``\#androidgames'' etc.).  This
-again supports the hypothesis that an extreme noisiness of the input
-domain might pose considerable difficulties to corpus-based
-approaches.
+lists returned by all of these approaches not only include many
+apparently objective terms but are also difficult to interpret in
+general, as they contain a substantial number of slang and advertising
+terms (e.g., ``BMKS65'', ``\#gameinsight'', ``\#androidgames'' etc.).
+This again supports the hypothesis that an extreme noisiness of the
+input domain might pose considerable difficulties to corpus-based
+methods.
 
 \begin{table}[h]
   \begin{center}
@@ -1615,8 +1619,8 @@ papers.  We can explain this divergence by the following four reasons:
 In this section, we presented a thorough evaluation of the most
 popular methods for an automatic generation of sentiment lexicons.
 For this purpose, we compared the results achieved by the common
-English polarity lists which were semi-automatically translated into
-German with the scores attained by the original English approaches
+English polarity lists, which were semi-automatically translated into
+German, with the scores attained by the original English approaches,
 which were applied directly to German data.  In the latter case, we
 also juxtaposed automatic dictionary- and corpus-based systems in
 order to find out which of these paradigms was better suited for the
@@ -1625,8 +1629,9 @@ algorithms showed an extreme susceptibility to the unbalancedness of
 the training sets, we also proposed several novel SLG approaches,
 which derived polarity lists by using neural word embeddings trained
 on a big unlabeled tweet corpus.  In the concluding step, we analyzed
-the effect of different seed sets and hyper-parameters of word vectors
-on the net results of the tested approaches.
+the effect of different seed sets and hyper-parameters on the net
+results of the tested approaches, also explaining possible reasons for
+the success and failures of various systems.
 
 Based on our observations and experiments, we can formulate the main
 conclusions of this section as follows:
@@ -1641,7 +1646,7 @@ conclusions of this section as follows:
   however, is their dependence on different hyper-parameters and the
   size and composition of the initial seed sets;
 \item nevertheless, the effect of the seed sets might be even stronger
-  for the corpus-based approaches which rely on distant supervision if
+  for the corpus-based approaches that rely on distant supervision if
   the resulting noisy labeled training set becomes highly unbalanced;
 \item in this regard, NWE-based algorithms might be a much better
   alternative to these methods for capturing domain-specific polar
