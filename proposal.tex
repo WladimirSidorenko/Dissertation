@@ -1,0 +1,139 @@
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+\documentclass{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Packages
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Preamble
+\title{Thesis Proposal}
+\author{Wladimir Sidorenko}
+
+\date{\today}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Document
+\begin{document}
+
+\maketitle
+
+With the ever growing role of social media in everyday life, the
+ability to rapidly analyze people's opinion on the Web becomes an
+inevitable prerequisite for any social, political, and economic
+endeavor.  Unfortunately, to date, such analysis still raises many
+important questions.  First of all, it is yet unclear how well even
+human experts can detect, analyze, and agree on other people's
+emotions on the Internet.  Secondly, it is yet unanswered how
+difficult this task would be for purely automatic systems, what
+peculiarities of the social media domain might pose especially big
+challenges to them, and which approaches could deal with these
+challenges in the most efficient way.  In our thesis, we try to give a
+comprehensive answer to these and other related questions on the
+example of German Twitter.
+
+For this purpose, we first present PotTS \cite{Sidarenka:16}---a
+substantial collection of $\approx$8,000 tweets which were manually
+annotated with polar terms, sentiment spans, targets and sources of
+opinions as well as important compositional elements (intensifiers,
+diminishers, and negations) by two human coders.  Using this data set,
+we estimate the mutual agreement of these experts on different types of
+elements, also proposing two novel reliability metrics---binary and
+proportional $\kappa$---which explicitly account for partial matches
+of annotations spanning multiple tokens.  Since this corpus was
+compiled from microblogs pertaining to different topics (German
+federal elections, papal conclave, casual everyday conversations etc.)
+with different formal traits (tweets containing emoticons, messages
+with a priory known polar terms and so on), we also investigate
+whether these topics or traits by themselves can lead to a greater
+number of opinions or significant deviations in the agreement on
+annotated elements.
+
+Since automatic sentiment analysis (SA) typically presupposes a
+hierarchically organized system rather than a monolith programming
+block, we then analyze each of the typical SA system components in
+more detail.  In so doing, we first address the problem of an
+automatic prediction of polar terms.  To this end, we investigate
+which of the currently existing techniques for an automatic generation
+of sentiment lexicons (a semi-automatic translation of common English
+polarity lists or automatic dictionary- and corpus-based approaches)
+can better accommodate the German Twitter domain.  In addition to
+that, we also propose several new algorithms that infer sets of polar
+terms from distributed vector representations of words---word
+embeddings, showing that our suggested methods can substantially
+outperform established state-of-the-art corpus-based approaches.
+
+In the next step, we turn to the subsentential analysis of opinions,
+whose primary goal is to find textual spans of sentiments, targets,
+and sources within a single sentence.  In the course of this study, we
+compare which of the two most-popular recent approaches to the
+fine-grained SA---supervised conditional random fields or deep
+recurrent neural networks---are best suited for recognizing these
+elements in microblog texts.  Moreover, for each of these methods, we
+estimate the impact of the graphical topologies on the net
+classification results by analyzing whether a (possibly higher-order)
+linear-chain or (syntactically motivated) tree-like structure forms a
+better basis for propagating probability scores of different labels in
+a sentence.
+
+Finally, in the last stage, we turn to the message-level analysis of
+tweets in which we try to automatically determine the overall polarity
+of a microblog.  In this part, we again compare traditional supervised
+classification methods with the latest deep learning approaches also
+looking into whether systems trained on a smaller amount of
+hand-labeled data can outperform methods trained on a bigger amount of
+distantly annotated tweets.
+
+With this chapter, we not only make a major contribution to the
+ecosystem of publicly available corpora and tools by releasing one of
+the biggest manually labeled German sentiment data sets and
+open-sourcing all code accompanying our experiments but we also make
+for a substantial theoretical advancement by establishing an upper
+bound on the performance of automatic systems through the study of
+human experts' agreement and exploring different automatic ways of
+analyzing people's opinions.
+
+\section*{Text Normalization}
+An important question which, however, remains unanswered in the
+previous part is that of the inherent difficulty of the Twitter domain
+for an automatic analysis.  Traditionally, analyzing text from this
+service has been considered a challenging, prohibitively difficult
+task due to an inherent noisiness, ungrammaticality, and creativity of
+Twitter's users in expressing their opinions and thoughts.  Usually,
+this noisiness is addressed with either of the two popular techniques:
+domain adaptation or text normalization.  With the first approach,
+systems trained on one (usually standard-language) domain are adjusted
+to the analyzed target domain by finding statistical correspondences
+in features.  With the latter method, text of the target genre is
+converted to the standard representation by removing spurious elements
+and mapping non-standard spellings to their cannonical form.  Since we
+already train all sentiment classifiers on Twitter texts, we should
+analyze whether applying the second option---text
+normalization---could further improve the results of automatic
+sentiment analysis.
+
+For this purpose, we first give a thorough definition of the text
+normalization task---an NLP application whose notion, however, was
+only vaguely defined in the liguistic literature \cite{Eisenstein:13}.
+In particular, we split this task into two major sub-objectives: text
+segmentation and the actual normalization.  The former component
+splits a contiguous run of text into single sentences and tokens,
+while the latter component deletes or replaces non-canonical tokens
+with their standard-language equivalents.
+
+In the next step, we present a manually segmented and normalized
+corpus of German tweets, on which the difficulty of these objectives
+for human coders.  After analyzing the most efficient ways of doing
+these tasks automatically, we estimate the impact of these factors on
+the net results of subsentential and sentential sentiment analysis.
+
+\section*{Discourse Analysis}
+
+\bibliographystyle{apalike}
+\bibliography{bibliography}
+\end{document}

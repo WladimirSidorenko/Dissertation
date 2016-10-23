@@ -4,7 +4,7 @@ BIBDIR := Bibliography
 BIBFILE := bibliography.bib
 
 MAIN_FILE := sidarenka_thesis.pdf
-PROPOSAL_FILE := sidarenka_proposal.pdf
+PROPOSAL_FILE := proposal.pdf
 
 ##################################################################
 # Special Targets
@@ -35,7 +35,6 @@ ${MAIN_FILE}: %.pdf: %.tex ${BIBFILE} $(wildcard *.tex)
 	pdflatex -halt-on-error -output-directory ${@D} $< && pdflatex -halt-on-error \
 	-output-directory ${@D} $<
 
-
 ##################################################################
 # Proposal
 proposal: ${PROPOSAL_FILE}
@@ -43,3 +42,8 @@ proposal: ${PROPOSAL_FILE}
 clean_proposal:
 	-rm -f ${PROPOSAL_FILE}
 
+${PROPOSAL_FILE}: %.pdf: %.tex ${BIBFILE}
+	@set -e; \
+	pdflatex -halt-on-error -output-directory ${@D} $< && bibtex $(basename $<) && \
+	pdflatex -halt-on-error -output-directory ${@D} $< && pdflatex -halt-on-error \
+	-output-directory ${@D} $<
