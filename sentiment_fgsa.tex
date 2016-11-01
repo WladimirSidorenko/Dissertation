@@ -9,179 +9,273 @@
 % Humboldt-Universitaet zu Berlin AG Elektronisches Publizieren Joanna
 % Rycko und der DNB - Deutsche Nationalbibliothek
 
-\section{Fine-grained Sentiment Analysis}\label{sec:snt:fgsa}
+\section{Fine-Grained Sentiment Analysis}\label{sec:snt:fgsa}
 
-The main goal of fine-grained sentiment analysis is traditionally
-defined as the identification of subjective evaluative opinions
-(\emph{sentiments}), the holders of these opinions (\emph{sources}),
-and their respectively evaluated objects (\emph{targets}) in text.
-Since an accurate automatic prediction of these elements would enable
-us to track the public opinion on essentially any object (a product, a
-service, a political decision etc.) in a literally online mode,
-fine-grained sentiment analysis is commonly considered to be one of
-the most attractive but, unfortunately, also one of the most
-challenging tasks in computational linguistics.
+The main goal of fine-grained sentiment analysis (FGSA) is
+traditionally defined as the identification of subjective evaluative
+opinions (\emph{sentiments}), the holders of these opinions
+(\emph{sources}), and their respectively evaluated objects
+(\emph{targets}) in text.  Since an accurate automatic prediction of
+these elements would enable us to track public attitude to literally
+any object (e.g., a product, a service, or a political decision), FGSA
+is commonly considered to be one of the most attractive, necessary,
+but, unfortunately, also challenging goals in computational
+linguistics.
+
+Researchers usually consider this objective as a sequence labeling
+(SL) task and address it with either of the two popular SL techniques:
+conditional random fields or recurrent neural networks.  The former
+approach relies on a discriminative probabilistic graphical model and
+uses hand-crafted features; the latter framework utilizes a recursive
+computational loop and can learn feature representations completely
+automatically.  In this section, we are going to evaluate each of
+these methods in detail in order to find out which of these algorithms
+is better suited for the domain of German Twitter.  However, before we
+proceed with our evaluation, we should first make a short linguistic
+digression and briefly discuss the definition of textual spans to
+which these approaches should assign their labels and the evaluation
+metrics with which we should estimate the quality of this assignment.
+
+\subsection{Definition of Sentiment, Source, and Target Spans}
+Despite some notable advances and an ongoing active research on
+fine-grained opinion extraction, the crucial task of defining the
+exact boundaries of sentiment spans and the spans of their respective
+targets and sources has not been addressed with the due attention in
+the literature yet.  Researchers typically ignore this problem,
+leaving its solution to the discretion of their annotators
+\cite[cf.][]{Wiebe:05,Klinger:13}.
+
+Instead of relying on intuitive decisions of our coders, we provided
+an explicit rule for determining sentiments' boundaries by telling our
+annotators to assign the \texttt{sentiment} tag to ``minimal complete
+syntactic or discourse-level units that included both the target of an
+opinion and its actual evaluation''.  According to this definition,
+during annotation, our experts first had to identify evaluated objects
+(targets), then find their respective evaluative expressions (usually
+but not necessarily polar terms), and, finally, determine the smallest
+syntactic components (noun or verb phrases) or discourse units
+(clauses or sentences) where both of these entities appeared together.
+
+An annotation example labeled in accordance with this rule is provided
+below:
+\begin{example}\label{snt:fgsa:exmp:sent-anno1}
+  \upshape\sentiment{Der neue Papst gilt als
+    bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
+  \noindent\sentiment{The new Pope is believed to be a sober, modest
+    man.}
+\end{example}
+In this sentence, our annotators would have to label the complete
+clause, since this unit was the minimal syntactic constituent which
+included both the target of an evaluation---``der neue Papst''
+(\textit{the new pope})---and the evaluation itself--- ``bescheidener,
+zur\"uckgenommener Typ'' (\textit{a sober, modest man}).
+
+The same principles of minimality and completeness were enforced on
+sources and targets of opinions too, whose main elements (nouns or
+verbs) had to be labeled along with their dependent attributes.
+
+example source
+
+example target
+
+\subsection{Evaluation Metrics}
+\citet{Johansson:10}
 
 \subsection{Fine-grained Sentiment Analysis Using Conditional Random Fields}
-Our next step after obtaining the training data was to train automatic
-classifiers to see how good their performance would be on this dataset
-for the two proposed sentiment interpretations.
+Introduction to CRF
 
-Based on the current state-of-the-art practices in the sentiment
-analysis research, we formulated this task as a sequence labeling
-problem.  The main objective of this problem is to assign the
-most-probable label sequence $\vec{y} =
-\langle{}y_0,\ldots,y_n\rangle$ to an input instance $\bm{x} =
-\langle{}x_0,\ldots,x_n\rangle$ given a feature representation
-$\vec{x}$ for that instance.  The tagset $\mathcal{Y}$ in our case
-consisted of only four labels $\mathcal{Y} = \{\text{TRG}, \text{SRC},
-\text{SNT}, \text{NON}\}$ which represented targets, sources,
-sentiments, and ``none of the above'' elements respectively.
+Main working principle
 
-Again, relying on the state-of-the-art approaches, we chose to use the
-conditional random fields classifiers which had previously shown
-superior results due to the discriminative structured nature of their
-predictions.
+Training
 
-\subsubsection{Linear-chain CRFs}
-In the case of the first-order linear-chain CRF model, the conditional
-probability of $\vec{y}$ given $\vec{x}$ w.r.t. the feature parameters
-$\Theta$ is formulated as the softmax function:
-\begin{equation*}\label{eqn:prob}\small
-  \begin{split}
-    p_{\Theta}(\vec{y}|\vec{x}) =
-    \frac{\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y},
-      \vec{x}, i)\Big)}{Z_{\vec{x}}}
-  \end{split}
-\end{equation*}
-where $n$ represents the total length of the input instance,
-$\theta_k$ and $\mathit{f}_k$ are the weight and value of the $k$-th
-feature activated at the $i$-th item of that instance (in our case,
-the $i$-th token of the input sentence), and $Z_{\vec{x}}$ is the
-normalization factor which is computed over all possible label
-assignments $\mathcal{Y}^n$:
-\begin{equation*}\small
-  \begin{split}
-    Z_{\vec{x}} = \sum\limits_{\vec{y}' \in
-      \mathcal{Y}^n}\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y}',
-    \vec{x}, i)\Big)
-  \end{split}
-\end{equation*}
-In the case of the first-order linear-chain models, the feature
-function $\mathit{f}_k(\vec{y},\vec{x}, i)$ is a binary- or
-real-valued function of the token $x_i$ and its predicted tag $y_i$
-(state feature) or a pair of adjacent token labels $(y_{i-1}, y_i)$
-(transition feature).
+Decoding
 
-During the training step, feature parameters $\Theta$ are successively
-optimized in order to maximize the log conditional likelihood of the
-training data $\mathcal{D} = \{(\vec{x}_m,\vec{y}_m)\}_{m=1}^M$.  The
-partial derivatives of the log-likelihood function $\ell(\mathcal{D})$
-w.r.t. to the feature weights $\Theta$, which are needed for
-performing this optimization, are then computed as the difference
-between the empirical and the model expectation of the respective
-feature values taken over the whole training set:
-\begin{equation*}\label{eqn:pderiv}\small
-  \begin{split}
-    \frac{\partial}{\partial{\theta_k}}\ell(\mathcal{D}) = &
-    \sum\limits_{m=1}^M\sum\limits_{i=1}^{n}\big(\mathit{f}_k(\vec{y}_m,
-    \vec{x}_m, i) -
-    \bm{E}_{\bm{\Theta}}[\mathit{f}_k(\mathcal{Y}^n, \vec{x}_m, i)]
-    \big)
-  \end{split}
-\end{equation*}
-The latter expectations can be estimated dynamically at each training
-step using the belief-propagation algorithm
-\cite{Pearl:82}.\footnote{A detailed description of the
-  belief-propagation algorithm in application to different CRF
-  variants is provided in Appendix A of this paper.}
+Features
 
-\subsubsection{Semi-Markov CRFs}
-Instead of making their predictions over single tokens, semi-Markov
-CRFs try to partition the input sequence $\bm{x}$ into contiguous
-segments $\vec{s} = \langle{}s_1,\ldots,s_l\rangle{}$ where each
-segment $s_i$ consists of one or more tokens which all share the same
-common tag $y_i$.
+Topologies
 
-Features in semi-Markov models are defined at the level of segments
-and, like in the linear-chain case, are binary- or real-valued
-functions associated either with the segment $s_i$ and its label $y_i$
-or a pair of adjacent segment labels $(y_{i-1}, y_i)$.
+Results
 
-During the training and the later prediction step, the model considers
-all potential segmentations for all possible label assignments and all
-possible segment lengths ranging from 1 to $L$ where $L$ is the length
-of the longest sequence of tokens with identical tags that was
-observed in the training data.  The decoding step then jointly finds
-the most probable segmentation $\hat{s}$ and the label sequence
-$\vec{y}$ for that segmentation using either the greedy search or the
-dynamic Viterbi algorithm.
+Ablation Tests
 
-\subsubsection{Higher-order CRFs}
-Unlike the first-order models whose transition features can only
-access a pair of adjacent element labels $(y_{i-1}, y_i)$, transition
-features of higher-order linear-chain and semi-Markov CRFs encode
-information about complete label sequences up to length $d$ that might
-precede the predicted label $y_i$ where $d$ is the maximum order of
-the model.
+% Our next step after obtaining the training data was to train automatic
+% classifiers to see how good their performance would be on this dataset
+% for the two proposed sentiment interpretations.
 
-But since the number of such label sequences grows exponentially in
-the order of the encoded dependencies (up to
-$\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$), the running time of
-the training and inference algorithms rapidly becomes prohibitively
-expensive and amounts to
-$\mathcal{O}(n(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
-for the linear-chain case and
-$\mathcal{O}(nL(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
-for the semi-Markov models.
+% Based on the current state-of-the-art practices in the sentiment
+% analysis research, we formulated this task as a sequence labeling
+% problem.  The main objective of this problem is to assign the
+% most-probable label sequence $\vec{y} =
+% \langle{}y_0,\ldots,y_n\rangle$ to an input instance $\bm{x} =
+% \langle{}x_0,\ldots,x_n\rangle$ given a feature representation
+% $\vec{x}$ for that instance.  The tagset $\mathcal{Y}$ in our case
+% consisted of only four labels $\mathcal{Y} = \{\text{TRG}, \text{SRC},
+% \text{SNT}, \text{NON}\}$ which represented targets, sources,
+% sentiments, and ``none of the above'' elements respectively.
 
-Because this problem is intractable in general \cite{Istrail:00},
-researchers are usually forced to resort to some sort of heuristics
-like an early state pruning \cite{Mueller:13} or state-transition
-reduction.
+% Again, relying on the state-of-the-art approaches, we chose to use the
+% conditional random fields classifiers which had previously shown
+% superior results due to the discriminative structured nature of their
+% predictions.
 
-For the purpose of our experiments, we applied the affix-based
-algorithm of \citet{Nguyen:14}.  This algorithm relies on the
-advantage that the actual number of possible sequences of $d$
-consecutive segment labels that are observed in the training set is
-typically much smaller than
-$\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$.  Furthermore, the
-number of possible transitions that need to be considered for the
-given label sequence $(y_{i-d}, y_{i-d+1},\ldots,y_i)$ can further be
-reduced by restricting them only to those patterns for which this
-label sequence forms the longest possible suffix.
+% \subsubsection{Linear-chain CRFs}
+% In the case of the first-order linear-chain CRF model, the conditional
+% probability of $\vec{y}$ given $\vec{x}$ w.r.t. the feature parameters
+% $\Theta$ is formulated as the softmax function:
+% \begin{equation*}\label{eqn:prob}\small
+%   \begin{split}
+%     p_{\Theta}(\vec{y}|\vec{x}) =
+%     \frac{\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y},
+%       \vec{x}, i)\Big)}{Z_{\vec{x}}}
+%   \end{split}
+% \end{equation*}
+% where $n$ represents the total length of the input instance,
+% $\theta_k$ and $\mathit{f}_k$ are the weight and value of the $k$-th
+% feature activated at the $i$-th item of that instance (in our case,
+% the $i$-th token of the input sentence), and $Z_{\vec{x}}$ is the
+% normalization factor which is computed over all possible label
+% assignments $\mathcal{Y}^n$:
+% \begin{equation*}\small
+%   \begin{split}
+%     Z_{\vec{x}} = \sum\limits_{\vec{y}' \in
+%       \mathcal{Y}^n}\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y}',
+%     \vec{x}, i)\Big)
+%   \end{split}
+% \end{equation*}
+% In the case of the first-order linear-chain models, the feature
+% function $\mathit{f}_k(\vec{y},\vec{x}, i)$ is a binary- or
+% real-valued function of the token $x_i$ and its predicted tag $y_i$
+% (state feature) or a pair of adjacent token labels $(y_{i-1}, y_i)$
+% (transition feature).
 
-The running time of this algorithm for the semi-Markov case runs up to
-$\mathcal{O}(nL\left\vert\mathcal{P}\right\vert\left\vert\mathcal{Y}\right\vert)$
-where $\left\vert\mathcal{P}\right\vert$ is the total number of the
-label prefixes observed in the training set.  And even though this
-number can still be exponential in the order of the dependencies in
-the worst case, this algorithm usually leads to much faster results in
-practice especially when the label patterns in the addressed domain
-are sparse.
+% During the training step, feature parameters $\Theta$ are successively
+% optimized in order to maximize the log conditional likelihood of the
+% training data $\mathcal{D} = \{(\vec{x}_m,\vec{y}_m)\}_{m=1}^M$.  The
+% partial derivatives of the log-likelihood function $\ell(\mathcal{D})$
+% w.r.t. to the feature weights $\Theta$, which are needed for
+% performing this optimization, are then computed as the difference
+% between the empirical and the model expectation of the respective
+% feature values taken over the whole training set:
+% \begin{equation*}\label{eqn:pderiv}\small
+%   \begin{split}
+%     \frac{\partial}{\partial{\theta_k}}\ell(\mathcal{D}) = &
+%     \sum\limits_{m=1}^M\sum\limits_{i=1}^{n}\big(\mathit{f}_k(\vec{y}_m,
+%     \vec{x}_m, i) -
+%     \bm{E}_{\bm{\Theta}}[\mathit{f}_k(\mathcal{Y}^n, \vec{x}_m, i)]
+%     \big)
+%   \end{split}
+% \end{equation*}
+% The latter expectations can be estimated dynamically at each training
+% step using the belief-propagation algorithm
+% \cite{Pearl:82}.\footnote{A detailed description of the
+%   belief-propagation algorithm in application to different CRF
+%   variants is provided in Appendix A of this paper.}
 
-\subsubsection{Tree-structured CRFs}
-In contrast to the linearly structured models, in which the predicted
-label $y_i$ only depends on the state attributes of the respective
-item $x_i$ and the label scores of the preceding tokens or segments
-and where the syntax information can only be expressed as feature
-attributes of single items, tree-CRFs allow to incorporate syntactic
-dependencies directly into the model's structure.
+% \subsubsection{Semi-Markov CRFs}
+% Instead of making their predictions over single tokens, semi-Markov
+% CRFs try to partition the input sequence $\bm{x}$ into contiguous
+% segments $\vec{s} = \langle{}s_1,\ldots,s_l\rangle{}$ where each
+% segment $s_i$ consists of one or more tokens which all share the same
+% common tag $y_i$.
 
-In our experiments, we used the automatically constructed dependency
-trees of the sentences as the underlying graphs for the
-tree-structured CRF model.  Like in the linear CRF case, every
-predicted label $y_i$ in this model is dependent on the state features
-of the token $x_i$, but, instead of hard-coding dependencies on the
-label scores of the previous tokens, we let transition features
-connect the predicted label with every label score $y_c$ where $c$
-ranges over all indices of the child nodes of the token $x_i$ in the
-dependency tree.
+% Features in semi-Markov models are defined at the level of segments
+% and, like in the linear-chain case, are binary- or real-valued
+% functions associated either with the segment $s_i$ and its label $y_i$
+% or a pair of adjacent segment labels $(y_{i-1}, y_i)$.
 
-Since the resulting model graphs are acyclic, the inference in this
-type of CRFs can still be exact and its running time remains the same
-as for the first-order linear chain models:
-$\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
+% During the training and the later prediction step, the model considers
+% all potential segmentations for all possible label assignments and all
+% possible segment lengths ranging from 1 to $L$ where $L$ is the length
+% of the longest sequence of tokens with identical tags that was
+% observed in the training data.  The decoding step then jointly finds
+% the most probable segmentation $\hat{s}$ and the label sequence
+% $\vec{y}$ for that segmentation using either the greedy search or the
+% dynamic Viterbi algorithm.
+
+% \subsubsection{Higher-order CRFs}
+% Unlike the first-order models whose transition features can only
+% access a pair of adjacent element labels $(y_{i-1}, y_i)$, transition
+% features of higher-order linear-chain and semi-Markov CRFs encode
+% information about complete label sequences up to length $d$ that might
+% precede the predicted label $y_i$ where $d$ is the maximum order of
+% the model.
+
+% But since the number of such label sequences grows exponentially in
+% the order of the encoded dependencies (up to
+% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$), the running time of
+% the training and inference algorithms rapidly becomes prohibitively
+% expensive and amounts to
+% $\mathcal{O}(n(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
+% for the linear-chain case and
+% $\mathcal{O}(nL(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
+% for the semi-Markov models.
+
+% Because this problem is intractable in general \cite{Istrail:00},
+% researchers are usually forced to resort to some sort of heuristics
+% like an early state pruning \cite{Mueller:13} or state-transition
+% reduction.
+
+% For the purpose of our experiments, we applied the affix-based
+% algorithm of \citet{Nguyen:14}.  This algorithm relies on the
+% advantage that the actual number of possible sequences of $d$
+% consecutive segment labels that are observed in the training set is
+% typically much smaller than
+% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$.  Furthermore, the
+% number of possible transitions that need to be considered for the
+% given label sequence $(y_{i-d}, y_{i-d+1},\ldots,y_i)$ can further be
+% reduced by restricting them only to those patterns for which this
+% label sequence forms the longest possible suffix.
+
+% The running time of this algorithm for the semi-Markov case runs up to
+% $\mathcal{O}(nL\left\vert\mathcal{P}\right\vert\left\vert\mathcal{Y}\right\vert)$
+% where $\left\vert\mathcal{P}\right\vert$ is the total number of the
+% label prefixes observed in the training set.  And even though this
+% number can still be exponential in the order of the dependencies in
+% the worst case, this algorithm usually leads to much faster results in
+% practice especially when the label patterns in the addressed domain
+% are sparse.
+
+% \subsubsection{Tree-structured CRFs}
+% In contrast to the linearly structured models, in which the predicted
+% label $y_i$ only depends on the state attributes of the respective
+% item $x_i$ and the label scores of the preceding tokens or segments
+% and where the syntax information can only be expressed as feature
+% attributes of single items, tree-CRFs allow to incorporate syntactic
+% dependencies directly into the model's structure.
+
+% In our experiments, we used the automatically constructed dependency
+% trees of the sentences as the underlying graphs for the
+% tree-structured CRF model.  Like in the linear CRF case, every
+% predicted label $y_i$ in this model is dependent on the state features
+% of the token $x_i$, but, instead of hard-coding dependencies on the
+% label scores of the previous tokens, we let transition features
+% connect the predicted label with every label score $y_c$ where $c$
+% ranges over all indices of the child nodes of the token $x_i$ in the
+% dependency tree.
+
+% Since the resulting model graphs are acyclic, the inference in this
+% type of CRFs can still be exact and its running time remains the same
+% as for the first-order linear chain models:
+% $\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
+
+\subsection{Fine-grained Sentiment Analysis Using Recurrent Neural Networks}
+Introduction to RNN
+
+GRU and LSTM
+
+Training
+
+Decoding
+
+Topologies
+
+Results
+
+LIME
+
+\subsection{Related Work}
+
+\subsection{Summary and Conclusions}
 
 \subsubsection{Experiments}\label{sec:experiment}
 For our experiments, we split our final corpus into three parts using
