@@ -36,47 +36,71 @@ digression and briefly discuss the definition of textual spans to
 which these approaches should assign their labels and the evaluation
 metrics with which we should estimate the quality of this assignment.
 
-\subsection{Definition of Sentiment, Source, and Target Spans}
+\subsection{Definition of Sentiment, Target, and Source Spans}
 Despite some notable advances and an ongoing active research on
 fine-grained opinion extraction, the crucial task of defining the
 exact boundaries of sentiment spans and the spans of their respective
-targets and sources has not been addressed with the due attention in
-the literature yet.  Researchers typically ignore this problem,
-leaving its solution to the discretion of their annotators
+targets and sources has not been addressed in the literature with the
+due attention yet.  Scientists typically skip this problem in their
+research, leaving its solution to the discretion of their annotators
 \cite[cf.][]{Wiebe:05,Klinger:13}.
 
-Instead of relying on intuitive decisions of our coders, we provided
-an explicit rule for determining sentiments' boundaries by telling our
-annotators to assign the \texttt{sentiment} tag to ``minimal complete
+Instead of relying on intuitive decisions of our coders, we defined an
+explicit rule for determining opinions' boundaries by telling the
+experts to assign the \texttt{sentiment} tag to ``minimal complete
 syntactic or discourse-level units that included both the target of an
-opinion and its actual evaluation''.  According to this definition,
-during annotation, our experts first had to identify evaluated objects
-(targets), then find their respective evaluative expressions (usually
-but not necessarily polar terms), and, finally, determine the smallest
-syntactic components (noun or verb phrases) or discourse units
-(clauses or sentences) where both of these entities appeared together.
+opinion and its actual evaluation''.
 
-An annotation example labeled in accordance with this rule is provided
-below:
+According to this definition, our annotators first had to identify
+evaluated objects (targets) in text, then find their respective
+evaluative expressions (usually but not necessarily polar terms), and,
+finally, determine the smallest syntactic components (noun or verb
+phrases) or discourse units (clauses or sentences) where both of these
+entities appeared together.  An annotation example labeled in
+compliance with this rule is provided below:
 \begin{example}\label{snt:fgsa:exmp:sent-anno1}
   \upshape\sentiment{Der neue Papst gilt als
     bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
   \noindent\sentiment{The new Pope is believed to be a sober, modest
     man.}
 \end{example}
-In this sentence, our annotators would have to label the complete
+\noindent In this sentence, our coders had to label the complete
 clause, since this unit was the minimal syntactic constituent which
-included both the target of an evaluation---``der neue Papst''
-(\textit{the new pope})---and the evaluation itself--- ``bescheidener,
+included both the object of evaluation---``der neue Papst''
+(\textit{the new pope})---and the evaluation itself---``bescheidener,
 zur\"uckgenommener Typ'' (\textit{a sober, modest man}).
 
-The same principles of minimality and completeness were enforced on
-sources and targets of opinions too, whose main elements (nouns or
-verbs) had to be labeled along with their dependent attributes.
+We applied the same principles of minimality and completeness to the
+targets and sources of opinions too, requiring the main components of
+these elements (typically nouns or verbs) to be labeled along with all
+their syntactic dependants.  Accordingly, the correct annotation of
+target in the previous example had to look as follows:
+\begin{example}\label{snt:fgsa:exmp:sent-anno2}
+  \upshape\sentiment{\target{Der neue Papst} gilt als
+    bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
+  \noindent\sentiment{\target{The new Pope} is believed to be a sober,
+    modest man.}
+\end{example}
+\noindent with the \texttt{target} tag encompassing the whole noun
+phrase---``der neue Papst'' (\textit{the new pope})---not only its
+main noun---``Papst'' (\textit{pope})---or main noun with either of
+the two attributes---``der'' (\textit{the}) or ``neue''
+(\textit{new}).
 
-example source
-
-example target
+Similarly, source elements had to cover complete syntactic structures
+as shown in Example~\ref{snt:fgsa:exmp:src-anno1}:
+\begin{example}\label{snt:fgsa:exmp:src-anno1}
+  \upshape\sentiment{Die Homosexuellenehe war f\"ur \source{den Kardinal, der jetzt Papst ist,} eine Zerst\"orung von Gottes Plan}\\[0.8em]
+  \noindent\sentiment{For \source{the cardinal, who is the Pope now,}
+    the same-sex marriage was a destruction of God's plan.}
+\end{example}
+\noindent This time, again, the whole noun phrase including its
+dependent attributive clause---``den Kardinal, der jetzt Papst ist,''
+(\textit{the cardinal, who is the Pope now,})---was marked with the
+\texttt{source} tag as this constituent was at the same time
+\emph{minimal} and \emph{complete}, encompassing only the immediate
+holder of the opinion---``Kardinal'' \textit{cardinal}---and its
+dependants but not including any superordinate elements.
 
 \subsection{Evaluation Metrics}
 \citet{Johansson:10}
