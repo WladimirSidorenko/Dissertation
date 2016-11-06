@@ -103,7 +103,56 @@ holder of the opinion---``Kardinal'' \textit{cardinal}---and its
 dependants but not including any superordinate elements.
 
 \subsection{Evaluation Metrics}
-\citet{Johansson:10}
+Another question which arises after defining the span boundaries for
+human coders is that of the best way to compare these spans with
+automatically assigned labels.  Researchers
+\cite[e.g.,][]{Choi:06,Breck:07} typically estimate the quality of an
+automatic assignment by computing the precision, recall, and
+\F{}-scores using either the binary overlap or exact match metric.
+The former method considers an automatically labeled entity as correct
+if this entity has at least one token in common with a labeled span
+from the gold annotation.  The latter metric only regards as true
+positives automatic spans which have identical boundaries with labeled
+gold entities.  Unfortunately, both of these approaches are relatively
+problematic: While the binary overlap might be overly optimistic,
+assigning perfect scores to automatic spans that cover the whole
+sentence, the method of exact match might, vice versa, be too drastic,
+considering the whole assignment as false if only one (often
+irrelevant) token is missing.
+
+Instead of relying on these measures, we opted for the ``golden mean''
+solution to the above problem proposed by \citet{Johansson:10}.  In
+their work, the authors described another metric for estimating the
+quality of an automatic assignment, in which they penalized the
+predicted spans proportional to the number of tokens whose labels
+differed from the gold annotation.  More precisely, given a set of
+manually annotated gold spans $\mathcal{S}$ and automatically tagged
+entities $\widehat{\mathcal{S}}$, they estimated the precision of the automatic
+assignment as:
+\begin{equation*}
+  P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
+\end{equation*}
+where the \emph{span coverage} metric
+$C(\mathcal{S},\widehat{\mathcal{S}})$ was computed as $C(\mathcal{S},
+\widehat{\mathcal{S}}) = \sum_{s_i \in \mathcal{S}}\sum_{s_j \in
+  \widehat{\mathcal{S}}}c(s_i, s_j)$ with $c(s_i, s_j)$ denoting the
+number of tokens common to both spans---manual $s_i$ and automatic
+$s_j$, and $|\widehat{\mathcal{S}}|$ denoted the total number of
+tokens automatically labeled with the given tag.  Similarly, the
+recall of the automatic assignment was estimated as:
+\begin{equation*}
+  R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
+\end{equation*}
+and the \F{}-score was normally computed as the harmonic mean of the
+precision and recall metrics:
+\begin{equation*}
+  F_1 = 2\times\frac{P \times R}{P + R}.
+\end{equation*}
+
+We will rely on the proportional overlap metric throughout our
+subsequent experiments as this measure adequately accommodates both
+extrema of an automatic assignment: too long and too short or
+imprecise spans.
 
 \subsection{Fine-grained Sentiment Analysis Using Conditional Random Fields}
 Introduction to CRF
@@ -298,7 +347,10 @@ Results
 LIME
 
 \subsection{Related Work}
-
+\citet{Choi:05}
+\citet{Choi:09}
+\citet{Breck:07}
+\citet{Johansson:10}
 \subsection{Summary and Conclusions}
 
 \subsubsection{Experiments}\label{sec:experiment}
