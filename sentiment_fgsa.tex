@@ -41,37 +41,38 @@ Despite some notable advances and an ongoing active research on
 fine-grained opinion extraction, the crucial task of defining the
 exact boundaries of sentiment spans and the spans of their respective
 targets and sources has not been addressed in the literature with the
-due attention yet.  Scientists typically skip this problem in their
-research, leaving its solution to the discretion of their annotators
+due attention yet.  Researchers typically overlook this problem,
+leaving its solution to the discretion of their annotators
 \cite[cf.][]{Wiebe:05,Klinger:13}.
 
-Instead of relying on intuitive decisions of our coders, we defined an
-explicit rule for determining opinions' boundaries by telling the
-experts to assign the \texttt{sentiment} tag to ``minimal complete
-syntactic or discourse-level units that included both the target of an
-opinion and its actual evaluation''.
+In contrast to this, instead of relying on intuitive decisions of our
+coders, we explicitly defined a rule for determining opinions'
+boundaries by telling the experts to assign the \texttt{sentiment} tag
+to ``\emph{minimal complete syntactic or discourse-level units that
+  included both the target of an opinion and its actual evaluation}''.
 
-According to this definition, our annotators first had to identify
-evaluated objects (targets) in text, then find their respective
-evaluative expressions (usually but not necessarily polar terms), and,
-finally, determine the smallest syntactic components (noun or verb
-phrases) or discourse units (clauses or sentences) where both of these
-entities appeared together.  An annotation example labeled in
-compliance with this rule is provided below:
+In other words, during the annotation, our coders first had to
+identify evaluated objects (targets) in text, then find the respective
+evaluative expressions of these objects (usually but not necessarily
+polar terms), and, finally, determine the smallest syntactic
+components (noun or verb phrases) or discourse units (clauses or
+sentences) where both of these entities appeared together.  An
+annotation example labeled in compliance with this rule is provided
+below:
 \begin{example}\label{snt:fgsa:exmp:sent-anno1}
   \upshape\sentiment{Der neue Papst gilt als
     bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
   \noindent\sentiment{The new Pope is believed to be a sober, modest
     man.}
 \end{example}
-\noindent In this sentence, our coders had to label the complete
+\noindent In this sentence, our experts had to label the complete
 clause, since this unit was the minimal syntactic constituent which
-included both the object of evaluation---``der neue Papst''
+included both the object of an evaluation---``der neue Papst''
 (\textit{the new pope})---and the evaluation itself---``bescheidener,
 zur\"uckgenommener Typ'' (\textit{a sober, modest man}).
 
-We applied the same principles of minimality and completeness to the
-targets and sources of opinions too, requiring the main components of
+We used the same principles of minimality and completeness for the
+annotation of targets and sources, requiring the main components of
 these elements (typically nouns or verbs) to be labeled along with all
 their syntactic dependants.  Accordingly, the correct annotation of
 target in the previous example had to look as follows:
@@ -83,9 +84,7 @@ target in the previous example had to look as follows:
 \end{example}
 \noindent with the \texttt{target} tag encompassing the whole noun
 phrase---``der neue Papst'' (\textit{the new pope})---not only its
-main noun---``Papst'' (\textit{pope})---or main noun with either of
-the two attributes---``der'' (\textit{the}) or ``neue''
-(\textit{new}).
+main noun.
 
 Similarly, source elements had to cover complete syntactic structures
 as shown in Example~\ref{snt:fgsa:exmp:src-anno1}:
@@ -96,39 +95,39 @@ as shown in Example~\ref{snt:fgsa:exmp:src-anno1}:
 \end{example}
 \noindent This time, again, the whole noun phrase including its
 dependent attributive clause---``den Kardinal, der jetzt Papst ist,''
-(\textit{the cardinal, who is the Pope now,})---was marked with the
-\texttt{source} tag as this constituent was at the same time
-\emph{minimal} and \emph{complete}, encompassing only the immediate
-holder of the opinion---``Kardinal'' \textit{cardinal}---and its
-dependants but not including any superordinate elements.
+(\textit{the cardinal, who is the Pope now,})---had to be labeled with
+the \texttt{source} tag because this constituent was the only
+\emph{minimal complete} syntactic node which encompassed both the
+immediate holder of the opinion---``Kardinal'' \textit{cardinal}---and
+its dependants without including any of its parental elements.
 
 \subsection{Evaluation Metrics}
-Another question which arises after defining the span boundaries for
-human coders is that of the best way to compare these spans with
-automatically assigned labels.  Researchers
-\cite[e.g.,][]{Choi:06,Breck:07} typically estimate the quality of an
-automatic assignment by computing the precision, recall, and
-\F{}-scores using either the binary overlap or exact match metric.
-The former method considers an automatically labeled entity as correct
-if this entity has at least one token in common with a labeled span
-from the gold annotation.  The latter metric only regards as true
-positives automatic spans which have identical boundaries with labeled
-gold entities.  Unfortunately, both of these approaches are relatively
-problematic: While the binary overlap might be overly optimistic,
-assigning perfect scores to automatic spans that cover the whole
-sentence, the method of exact match might, vice versa, be too drastic,
-considering the whole assignment as false if only one (often
-irrelevant) token is missing.
+The next natural question which arises after defining the span
+boundaries for human coders is that of the best way to compare these
+spans with automatically assigned labels.  One possibility to estimate
+the quality of an automatic assignment is to compute the precision,
+recall, and \F{}-scores using either the binary overlap or exact match
+metric \cite{Choi:06,Breck:07} .  The former method considers an
+automatically labeled span as correct if it has at least one token in
+common with a labeled entity from the gold annotation.  The latter
+metric only regards as true positives automatic spans which have
+absolutely identical boundaries with the gold labels.  Unfortunately,
+both of these approaches are relatively problematic: While the binary
+overlap might be overly optimistic, always assigning perfect scores to
+automatic spans which cover the whole sentence; the method of exact
+match might, vice versa, be too drastic, considering the whole
+assignment as false if only one (possibly irrelevant) token is
+missing.
 
 Instead of relying on these measures, we opted for the ``golden mean''
-solution to the above problem proposed by \citet{Johansson:10}.  In
-their work, the authors described another metric for estimating the
+solution to this problem which was proposed by \citet{Johansson:10}.
+In their work, the authors devised another measure for estimating the
 quality of an automatic assignment, in which they penalized the
-predicted spans proportional to the number of tokens whose labels
-differed from the gold annotation.  More precisely, given a set of
+predicted spans proportional to the number of tokens whose labels were
+different from the gold annotation.  More precisely, given a set of
 manually annotated gold spans $\mathcal{S}$ and automatically tagged
-entities $\widehat{\mathcal{S}}$, they estimated the precision of the automatic
-assignment as:
+entities $\widehat{\mathcal{S}}$, they estimated the precision of the
+automatic assignment as:
 \begin{equation*}
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation*}
@@ -137,22 +136,21 @@ $C(\mathcal{S},\widehat{\mathcal{S}})$ was computed as $C(\mathcal{S},
 \widehat{\mathcal{S}}) = \sum_{s_i \in \mathcal{S}}\sum_{s_j \in
   \widehat{\mathcal{S}}}c(s_i, s_j)$ with $c(s_i, s_j)$ denoting the
 number of tokens common to both spans---manual $s_i$ and automatic
-$s_j$, and $|\widehat{\mathcal{S}}|$ denoted the total number of
-tokens automatically labeled with the given tag.  Similarly, the
-recall of the automatic assignment was estimated as:
+$s_j$; and $|\widehat{\mathcal{S}}|$ meant the total number of tokens
+automatically labeled with the given tag.  Similarly, the recall of
+such assignment was estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
 and the \F{}-score was normally computed as the harmonic mean of the
-precision and recall metrics:
+previous two scores:
 \begin{equation*}
   F_1 = 2\times\frac{P \times R}{P + R}.
 \end{equation*}
-
-We will rely on the proportional overlap metric throughout our
-subsequent experiments as this measure adequately accommodates both
-extrema of an automatic assignment: too long and too short or
-imprecise spans.
+Since this metric adequately accommodates both extrema of an automatic
+assignment---too long and too short spans---and also penalizes for
+erroneous and spurious labels, we will rely on it throughout our
+subsequent experiments which we describe in this section.
 
 \subsection{Fine-grained Sentiment Analysis Using Conditional Random Fields}
 Introduction to CRF
