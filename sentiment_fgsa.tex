@@ -150,12 +150,99 @@ previous two scores:
 Since this metric adequately accommodates both extrema of an automatic
 assignment---too long and too short spans---and also penalizes for
 erroneous and spurious labels, we will rely on it throughout our
-subsequent experiments which we describe in this section.
+subsequent experiments.
 
-\subsection{Fine-grained Sentiment Analysis Using Conditional Random Fields}
-Introduction to CRF
+\subsection{Fine-Grained Sentiment Analysis Using Conditional Random
+  Fields}
+The first automatic approach that we are going to evaluate in this
+section is that of the conditional random fields (CRFs).  First
+introduced by \citet{Lafferty:01}, CRFs rapidly grew in popularity,
+turning into one of the most commonly used probabilistic frameworks
+which dominated the NLP field for more than a decade.  The main resons
+for such huge success were:
+\begin{enumerate}[1)]
+\item the \emph{structural nature} of CRFs, which, in contrast to
+  single-entity classifiers such as logistic regression or SVM, make
+  their predictions over a sequence of covariates, trying to find the
+  most likely sequence of dependent valiables corresponding to these
+  observations;
+\item the \emph{discriminative power} of this framework, which, in
+  contrast to generative probabilistic graphical models such as HMM
+  \cite{Rabiner:86}, optimizes the conditional probability
+  $P(\boldsymbol{Y}|\boldsymbol{X})$ instead of maximizing the joint
+  distribution $P(\boldsymbol{X},\boldsymbol{Y})$ and consequently can
+  efficiently deal with overlapping and correlated features;
+\begin{example}[Overlapping and Correlated Features]
+  In order to demonstrate the different effects of correlated and
+  overlapping features on generative and discriminative models, let us
+  go through an example where we need to predict whether a tweet
+  mentioning ``Merkel'' and ``Steinmeier'' is about the Christian
+  Democratic Union (\texttt{CDU}) or Social Democratic Party of
+  Germany (\texttt{SPD}).  As features for this task, we will use
+  lexical unigrams appearing in the training data.  Assuming that our
+  training set consists of three messages mentioning ``Merkel'' and
+  one microblog mentioning ``Steinmeier'' which are labeled as
+  \texttt{CDU} plus one tweets mentioning ``Merkel'' and three posts
+  mentioning ``Steinmeier'' which are annotated as \texttt{SPD}, the
+  na\"{i}ve Bayes model will estimate the probability of the two
+  competing classes as:
+  \begin{align*}
+    P(\mathbf{x}, CDU) =& P(\textrm{Merkel},\textrm{Steinmeier}|CDU)\times P(CDU)\\
+    =& P(\textrm{Merkel}|CDU)\times P(\textrm{Steinmeier}|CDU) \times P(CDU)\\
+    =&\frac{3}{4}\times\frac{1}{4}\times\frac{4}{8}\approx 0.0938\\
+    P(\mathbf{x}, SPD) =& P(\textrm{Merkel},\textrm{Steinmeier}|SPD)\times P(SPD)\\
+    =& P(\textrm{Merkel}|SPD)\times P(\textrm{Steinmeier}|SPD) \times P(SPD)\\
+    =&\frac{1}{4}\times\frac{3}{4}\times\frac{4}{8}\approx 0.0938.\\
+  \end{align*}
+  After normalizing these probabilities, we will get equal 50\%
+  chances for each of the parties, which is fair regarding the token
+  distribution in our corpus.  However, if we replace ``Merkel'' with
+  ``von der Leyen'' in the test example and training data and rerun
+  this experiment, the probability will get significantly skewed:
+  \begin{align*}
+    P(\mathbf{x}, CDU) =& P(\textrm{von},\textrm{der},\textrm{Leyen},\textrm{Steinmeier}|CDU)\times P(CDU)\\
+    =& P(\textrm{von}|CDU)\times P(\textrm{der}|CDU)\times P(\textrm{Leyen}|CDU)\\
+    &\times P(\textrm{Steinmeier}|CDU) \times P(CDU)\\
+    =&\frac{3}{4}\times\frac{3}{4}\times\frac{3}{4}\times\frac{1}{4}\times\frac{4}{8}\approx 0.0527\\
+    P(\mathbf{x}, SPD) =& P(\textrm{von},\textrm{der},\textrm{Leyen},\textrm{Steinmeier}|SPD)\times P(SPD)\\
+    =& P(\textrm{von}|SPD)\times P(\textrm{der}|SPD)\times P(\textrm{Leyen}|SPD)\\
+    &\times P(\textrm{Steinmeier}|SPD) \times P(SPD)\\
+    =&\frac{1}{4}\times\frac{1}{4}\times\frac{1}{4}\times\frac{3}{4}\times\frac{4}{8}\approx 0.0059,\\
+  \end{align*}
+  which, after normalization, would result in 90\% chances for
+  \texttt{CDU} and a 10\% score for \texttt{SPD}, even though we only
+  changed the name of the politician.
 
-Main working principle
+  A different situation is observed for discriminative models such as
+  logistic regression: In contrast to generative frameworks, which
+  optimize the joint distribution $P(\mathbf{x}, y)$, discriminative
+  classifiers seek to optimize the conditional likelihood
+  $P(y|\mathbf{x})$ by maximizing the probability of the training set
+  $\sum_{i=1}^N\log P(y_i|\mathbf{x}_i, \mathbf{\lambda})$, where $N$
+  is the number of training instances, $y_i$ is the gold label for the
+  $i$-th instance (e.g., 1 for \texttt{CDU} and 0 for \texttt{SPD}),
+  $\mathbf{x}_i$ stands for the features of this instance,
+  $\mathbf{\lambda}$ are the learned feature weights, and the
+  probability $P$ being normally computed as the sigmoid function
+  $\frac{1}{1 + e^{-(\mathbf{x}_i, \mathbf{\lambda})}}$.  Working
+  through the derivatives of these features, we will arrive at the
+  solution $\lambda_1 \approx 0.5052$ for the feature ``Merkel'' and
+  $\lambda_2 \approx -0.5052$ for the feature ``Steinmeier'' for the
+  first example, which would again result in equal 50\% probabilities
+  for both classes.  In the second example, however, all three
+  features ``von'', ``der'', and ``Leyen'' will get an equal weight of
+  $\approx 0.2936$, and the ``Steinmeier'' feature will receive a
+  coefficient of $\approx -0.4364$, which would result in 60\% chances
+  for the message being about \texttt{CDU} and 40\% probability that
+  the tweet is about \texttt{SPD}.  Even though this still means a
+  slight skewness towards \texttt{CDU}; this time, the effect of
+  correlated features is much less dramatic than in the generative
+  case.
+\end{example}
+\item and, finally, the \emph{avoidance of the label bias problem}, to
+  which other discriminative classifiers such as MEMM
+  \cite{McCallum:00} are known to be susceptible.
+\end{enumerate}
 
 Training
 
