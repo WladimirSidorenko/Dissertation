@@ -16,7 +16,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Packages
 \usepackage{amsmath}
-\usepackage{amsthm}
+% \usepackage{amsthm}
 \usepackage{bm}
 \usepackage{booktabs}
 \usepackage[font={small,it},justification=centering]{caption}
@@ -28,9 +28,11 @@
 \usepackage{graphicx}           % \scalebox
 \usepackage{hhline}             % \ifstrempty
 \usepackage{listings}           % for \lstlisting
+\usepackage{mdframed}           % gray background boxes
 \usepackage{multicol}           % for multiple columns in a table
 \usepackage{multirow}
 \usepackage[authoryear]{natbib}
+\usepackage{ntheorem}
 \usepackage{paralist}
 \usepackage{subcaption}
 \usepackage{tabularx}
@@ -73,13 +75,24 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Environments
-\newtheoremstyle{break}
-  {\topsep}{\topsep}%
-  {\itshape}{}%
-  {\bfseries}{}%
-  {\newline}{}%
+% uncomment this and the `amsthm` package to get plain uncolored
+% examples
+% \newtheoremstyle{break}
+%   {\topsep}{\topsep}%
+%   {\itshape}{}%
+%   {\bfseries}{}%
+%   {\newline}{}%
+% \theoremstyle{break}
+% \newtheorem{example}{Example}[section]
+
 \theoremstyle{break}
-\newtheorem{example}{Example}[section]
+\theoremheaderfont{\bfseries\upshape}
+\newmdtheoremenv[%
+linecolor=gray,%
+leftmargin=40,%
+rightmargin=40,%
+backgroundcolor=gray!20,%
+innertopmargin=5pt]{example}{Example}[section]
 
 % allow fotnotes in tables
 \makesavenoteenv{tabular}
