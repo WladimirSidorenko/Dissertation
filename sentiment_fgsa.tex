@@ -276,13 +276,13 @@ for such huge success were:
       \path [-] (B) edge node[below] {$.5$} (E);
       \path [-] (B) edge node[above] {$.5$} (F);
 
-      \path [-] (E) edge node[below] {$.1$} (I);
-      \path [-] (E) edge node[below left=0.4] {$.9$} (H);
-      \path [-] (F) edge node[above left=0.4] {$.5$} (I);
-      \path [-] (F) edge node[above] {$.5$} (H);
+      \path [-] (E) edge node[below] {$.3$} (I);
+      \path [-] (E) edge node[below left=0.4] {$.7$} (H);
+      \path [-] (F) edge node[above left=0.4] {$.8$} (I);
+      \path [-] (F) edge node[above] {$.2$} (H);
 
-      \path [-] (I) edge node[below] {$.8$} (K);
-      \path [-] (H) edge node[above] {$.2$} (K);
+      \path [-] (I) edge node[below] {$.1$} (K);
+      \path [-] (H) edge node[above] {$.9$} (K);
     \end{tikzpicture}
     \captionof{figure}{\emph{Feature weights for states and
         transitions of the part-of-speech example.}\label{fig:snt:memm-crf}}
@@ -298,26 +298,29 @@ for such huge success were:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times P(ADV|KON)\times P(NN|ADV)\times P(VA|NN)\\
       =&\frac{\exp(1)}{\exp(1)}\times\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\\%
-      \times&\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\times\frac{\exp(0.2 + 1.)}{\exp(0.2 + 1.)} = 0.25
+      \times&\frac{\exp(0.2 + 0.5)}{\exp(0.2 + 0.5) + \exp(0.8 + 0.5)}\times\frac{\exp(0.9 + 1.)}{\exp(0.9 + 1.)} \approx 0.177
     \end{align*}
     At the same time, the probability of the incorrect variant
-    ($KON-ADJA-NN-VA$) would amount to 0.45 and will therefore be
-    preferred during the automatic tagging.
+    ($KON-ADV-ADJA-VA$) would amount to $\approx$ 0.323 and will
+    therefore be preferred during the automatic tagging.
 
     A different situation is observed with the CRFs, where the
-    normalizing factor in the denominator is computed for the whole
-    sequence at once without factorizing into individual terms for
-    each transition as it was done in the previous case.  That way, we
-    the probability of the correct labels:
+    normalizing factor in the denominator is computed over the whole
+    input sequence without factorizing into individual terms for each
+    transition as it was done in the previous case.  That way, the
+    probability of the correct labels would amount to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
       P(ADV|KON)\times P(NN|ADV)\times P(VA|NN)\\ =&\frac{\exp(1 + 0.5
-        \times 4 + 0.2 + 1)}{Z} = 0.18066\\
+        \times 3 + 0.2 + 0.9 + 1)}{Z} \approx 0.252\\
     \end{align*}
-    where $Z = \exp(1 + 0.5 \times 4 + 0.2 + 1) + \exp(1 + 0.5 \times
-    4 + 0.8 + 1) + \exp(1 + 0.5 \times 3 + 0.9 + 0.2 + 1) + \exp(1 +
-    0.5 \times 3 + 0.1 + 0.8 + 1)$ is the enumeration of all possible
-    label assignments with their respective scores.
+    where $Z = \exp(1 + 0.5 \times 3 + 0.2 + 0.9 + 1) + \exp(1 + 0.5
+    \times 3 + 0.8 + 0.1 + 1) + \exp(1 + 0.5 \times 3 + 0.7 + 0.9 + 1)
+    + \exp(1 + 0.5 \times 3 + 0.3 + 0.1 + 1)$ is the total score of
+    all possible label assignments.  The incorrect alternative
+    ($KON-ADV-ADJA-VA$), however, will get a probability score of
+    $\approx$ 0.207, which is smaller than the likelihood of the
+    correct labeling.
   \end{example}
 \end{enumerate}
 CRFs attain these useful properties thanks to a neatly formulated
