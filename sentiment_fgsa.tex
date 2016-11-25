@@ -254,49 +254,70 @@ for such huge success were:
     probable sequence of part-of-speech tags.
 
     \begin{center}
-    \begin{tikzpicture}[node distance=5cm]
-      \tikzstyle{tag}=[shape=circle split,draw=black,minimum size=2.5em,inner sep=1,fill=black!0]
+      \begin{tikzpicture}[node distance=5cm]
+        \tikzstyle{tag}=[circle split,draw=gray!50,%
+          minimum size=2.5em,inner ysep=2,inner xsep=0,%
+          circle split part fill={yellow!20,blue!30}]
       \tikzstyle{word}=[draw=none,inner sep=10pt]
+
 
       \node[word] (A) at (1, 1) {Aber};
       \node[tag] (B) at (1, 3) {\footnotesize KON \nodepart{lower} 1.};
       \node[word] (D) at (3, 1) {gerade};
       \node[tag] (E) at (3, 2) {\footnotesize ADJA \nodepart{lower} .5};
       \node[tag] (F) at (3, 4) {\footnotesize ADV \nodepart{lower} .5} ;
-      \node[word] (G) at (5, 1) {Erwachsene};
-      \node[tag] (I) at (5,2) {\footnotesize ADJA \nodepart{lower} .5} ;
-      \node[tag] (H) at (5,4) {\footnotesize NN \nodepart{lower} .5};
-      \node[word] (J) at (7,1) {haben};
-      \node[tag] (K) at (7,3) {\footnotesize VA \nodepart{lower} 1.};
-      \node[word] (J) at (9,1) {\ldots};
+      \node[word] (G) at (7, 1) {Erwachsene};
+      \node[tag] (I) at (7,2) {\footnotesize ADJA \nodepart{lower} .5} ;
+      \node[tag] (H) at (7,4) {\footnotesize NN \nodepart{lower} .5};
+      \node[word] (J) at (9,1) {haben};
+      \node[tag] (K) at (9,3) {\footnotesize VA \nodepart{lower}\small 1.};
+      \node[word] (J) at (11,1) {\ldots};
 
       \path [-] (B) edge node[below] {$.5$} (E);
       \path [-] (B) edge node[above] {$.5$} (F);
 
       \path [-] (E) edge node[below] {$.1$} (I);
-      \path [-] (E) edge node[above] {$.9$} (H);
-      \path [-] (F) edge node[below] {$.5$} (I);
+      \path [-] (E) edge node[below left=0.4] {$.9$} (H);
+      \path [-] (F) edge node[above left=0.4] {$.5$} (I);
       \path [-] (F) edge node[above] {$.5$} (H);
 
-      \path [-] (I) edge node[below] {$.2$} (K);
-      \path [-] (H) edge node[above] {$.8$} (K);
-    \end{tikzpicture}\label{fig:memm-crf}
-    % \caption{Feature weights for states and transitions of the
-    %   part-of-speech example.}\label{fig:snt:memm-crf}
+      \path [-] (I) edge node[below] {$.8$} (K);
+      \path [-] (H) edge node[above] {$.2$} (K);
+    \end{tikzpicture}
+    \captionof{figure}{\emph{Feature weights for states and
+        transitions of the part-of-speech example.}\label{fig:snt:memm-crf}}
     \end{center}
 
     Assuming that feature weights are distributed as shown in
-    Figure~\ref{fig:memm-crf}, we will first estimate the likelihood
-    of different sequences using the approach of Maximum Entropy
-    Markov Networks (MEMM)---a predecessor of Conditional Random
-    Fields.  According to this formalism, the probability of the
-    correct labeling of the initial part of the sentence
-    ($KON-ADV-NN-VA$) would be equal to:
+    Figure~\ref{fig:snt:memm-crf}, we will first estimate the
+    probability of the correct label sequence for the initial part of
+    this sentence using the Maximum Entropy Markov Model (MEMM)---the
+    predecessor of Conditional Random Fields.  According to the MEMM's
+    definition, the probability of the correct labeling
+    ($KON-ADV-NN-VA$) is equal to:
     \begin{align*}
-      P(KON, ADV, NN, VA) =& P(KON)\times P(ADV|KON)\times
-      P(NN|ADV)\\
-      &\times P(VA)\times P(VA)
+      P(KON, ADV, NN, VA) =& P(KON)\times P(ADV|KON)\times P(NN|ADV)\times P(VA|NN)\\
+      =&\frac{\exp(1)}{\exp(1)}\times\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\\%
+      \times&\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\times\frac{\exp(0.2 + 1.)}{\exp(0.2 + 1.)} = 0.25
     \end{align*}
+    At the same time, the probability of the incorrect variant
+    ($KON-ADJA-NN-VA$) would amount to 0.45 and will therefore be
+    preferred during the automatic tagging.
+
+    A different situation is observed with the CRFs, where the
+    normalizing factor in the denominator is computed for the whole
+    sequence at once without factorizing into individual terms for
+    each transition as it was done in the previous case.  That way, we
+    the probability of the correct labels:
+    \begin{align*}
+      P(KON, ADV, NN, VA) =& P(KON)\times
+      P(ADV|KON)\times P(NN|ADV)\times P(VA|NN)\\ =&\frac{\exp(1 + 0.5
+        \times 4 + 0.2 + 1)}{Z} = 0.18066\\
+    \end{align*}
+    where $Z = \exp(1 + 0.5 \times 4 + 0.2 + 1) + \exp(1 + 0.5 \times
+    4 + 0.8 + 1) + \exp(1 + 0.5 \times 3 + 0.9 + 0.2 + 1) + \exp(1 +
+    0.5 \times 3 + 0.1 + 0.8 + 1)$ is the enumeration of all possible
+    label assignments with their respective scores.
   \end{example}
 \end{enumerate}
 CRFs attain these useful properties thanks to a neatly formulated

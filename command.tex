@@ -41,7 +41,7 @@
 \usepackage{wrapfig}
 \usepackage{xcolor}             % \colorlet
 
-\usetikzlibrary{arrows,positioning,shapes,snakes}
+\usetikzlibrary{arrows,backgrounds,calc,positioning,shapes,snakes}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
@@ -74,6 +74,28 @@
 \newcommand{\argmax}{\operatornamewithlimits{argmax}}
 \newcommand{\stddev}[1]{{\tiny$^{\pm#1}$}}
 \newcommand{\F}[0]{$F_1$}
+
+%% Tikz
+\makeatletter
+\tikzset{circle split part fill/.style  args={#1,#2}{%
+alias=tmp@name, % Jake's idea !!
+postaction={%
+insert path={
+\pgfextra{%
+\pgfpointdiff{\pgfpointanchor{\pgf@node@name}{center}}%
+{\pgfpointanchor{\pgf@node@name}{east}}%
+\pgfmathsetmacro\insiderad{\pgf@x}
+%\begin{scope}[on background layer]
+%\fill[#1] (\pgf@node@name.base) ([xshift=-\pgflinewidth]\pgf@node@name.east) arc
+%                    (0:180:\insiderad-0.5\pgflinewidth)--cycle;
+%\fill[#2] (\pgf@node@name.base) ([xshift=\pgflinewidth]\pgf@node@name.west)  arc
+%                     (180:360:\insiderad-0.5\pgflinewidth)--cycle;
+\fill[#1] (\pgf@node@name.base) ([xshift=-\pgflinewidth]\pgf@node@name.east) arc
+(0:180:\insiderad-\pgflinewidth)--cycle;
+\fill[#2] (\pgf@node@name.base) ([xshift=\pgflinewidth]\pgf@node@name.west)  arc
+(180:360:\insiderad-\pgflinewidth)--cycle;            %  \end{scope}
+}}}}}
+\makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Environments
