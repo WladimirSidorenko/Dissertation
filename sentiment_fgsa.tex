@@ -393,30 +393,30 @@ functions used in Conditional Random Fields are divided into
 transition- and state-based ones.  The former attributes represent
 real- or binary-valued functions $f(\mathbf{x}, y'',
 y')\rightarrow\mathbb{R}$ associated with some data predicate
-$\phi(\mathbf{x})\rightarrow\mathbb{R}$ and the labels $y''$ and $y'$.
-The value of the feature function $f$ at position $m$ is then normally
-defined as:
+$\phi(\mathbf{x})\rightarrow\mathbb{R}$ and labels $y''$ and $y'$.
+The value of this attribute at position $m$ in the sequence
+$\mathbf{x}$ is then normally defined as:
 \begin{equation}
   f(\mathbf{x}_m, y'', y') = \begin{cases} \phi(\mathbf{x}_m), &
     \mbox{if } \mathbf{y}_{m-1} = y''\mbox{ and }\mathbf{y}_{m} =
     y'\\ 0, & \mbox{otherwise.}
   \end{cases}
 \end{equation}
-The most common predicate used for this type of the attributes is a
-simple unit function~$\phi$, which always yields one regardless of the
-data input $\mathbf{x}$.  However other, more complex conditions are
+The most common predicate used for this type of features is a simple
+unit function~$\phi$, which always yields one regardless of the data
+input.  However other, more complex conditions and return values are
 possible and fairly straightforward to implement.
 
 In contrast to the ternary transition functions, state attributes
 typically represent binary predicates, whose output depends solely on
-the input data $\mathbf{x}$ at position $m$ and the label $y'$ at the
+the input data at the given position and the label $y'$ at the
 respective state:
 \begin{equation}
   f(\mathbf{x}_m, y') = \begin{cases} \phi(\mathbf{x}_m), & \mbox{if }
     \mathbf{y}_{m} = y'\\ 0, & \mbox{otherwise.}
   \end{cases}
 \end{equation}
-This type of the attributes commonly accounts for the overwhelming
+This type of attributes commonly accounts for the overwhelming
 majority of all features used in a CRF system.
 
 As state attributes in our experiments, we used the following types of
@@ -424,14 +424,14 @@ predicates (which, for simplicity, are listed here in groups):
 \begin{itemize}
 \item\emph{formal}, which included the initial three characters of
   each token (e.g., $\phi_{abc}(\mathbf{x}_m) = 1\mbox{ if
-  }\mathbf{x}_m[:3] == \mbox{"abc" else } 0$), its last three
+  }\mathbf{x}_m\sim\mbox{ /\textasciicircum abc/ else } 0$), its last three
   characters, and the general spelling class (e.g., alphanumeric,
   digit, or punctuation);
 
-\item\emph{morphological}, which encompassed the PoS tag of the token,
-  case and gender values for inflectable PoS types, degree of
-  comparison for adjectives; and mood, tense, and person forms for
-  verbs;
+\item\emph{morphological}, which encompassed the PoS tag of the
+  analyzed token, case and gender values for inflectable PoS types,
+  degree of comparison for adjectives; and mood, tense, and person
+  forms for verbs;
 
 \item\emph{lexical}, which comprised the actual lemma and form of the
   token (using one-hot encoding), its polarity class (positive,
@@ -440,97 +440,54 @@ predicates (which, for simplicity, are listed here in groups):
 
 \item and, finally, \emph{syntactic}, which included the dependency
   relation via which the token $\mathbf{x}_m$ was connected to its
-  parent, the lemma of its parent node as a unigram feature, the PoS
-  tag and the polarity class of the grandparent, and the overall
-  polarity class of all children.  The latter class was computed by
-  summing up the polarity scores of all immediate descendants and
-  checking whether this result was greater, less, or equal to zero.
+  parent, the lemma of the parent node, the PoS tag and the polarity
+  class of the grandparent, as well as the overall polarity of all
+  children.  The latter term was computed by summing up polarity
+  scores of all immediate descendants and checking whether the
+  resulting value was greater, less, or equal to zero.
 \end{itemize}
 
 In addition to the above attributes, we also used a set of complex
-lexical-syntactic features which combined several semantic and
-syntactic traits into a single function.  These complex features
-included the dependency relation of the previous token in the sentence
-to its parent + dependency relation of the current token to its
-ancestor; the dependency relation of the next word in the sentence +
-dependency relation of the current token; the lemma of the child node
-+ dependency relation of this child; the PoS tag of the child node +
-its dependency relation + the pos-tag of the current token.
+lexical-syntactic features, which simultaneously combined several
+semantic and syntactic traits.  These included:
+\begin{itemize}
+\item the dependency relation of the previous token in the sentence to
+  its parent + dependency relation of the current token to its
+  ancestor;
+\item the dependency relation of the next word in the sentence +
+  dependency relation of the current token;
+\item the lemma of the child node + dependency relation of this child;
+\item the PoS tag of the child node + its dependency relation + PoS
+  tag of the current token.
+\end{itemize}
 
-\textbf{Results}
+\textbf{Results} The results of our experiments are shown in
+Table~\ref{snt-fgsa:tbl:crf-res}.
 
-% Our next step after obtaining the training data was to train automatic
-% classifiers to see how good their performance would be on this dataset
-% for the two proposed sentiment interpretations.
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{1}{>{\centering\arraybackslash}p{0.136\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
+      \multicolumn{3}{c}{\bfseries Source} & %
+      \multicolumn{3}{c}{\bfseries Target} & %
+      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} &\\\midrule
 
-% Based on the current state-of-the-art practices in the sentiment
-% analysis research, we formulated this task as a sequence labeling
-% problem.  The main objective of this problem is to assign the
-% most-probable label sequence $\vec{y} =
-% \langle{}y_0,\ldots,y_n\rangle$ to an input instance $\bm{x} =
-% \langle{}x_0,\ldots,x_n\rangle$ given a feature representation
-% $\vec{x}$ for that instance.  The tagset $\mathcal{Y}$ in our case
-% consisted of only four labels $\mathcal{Y} = \{\text{TRG}, \text{SRC},
-% \text{SNT}, \text{NON}\}$ which represented targets, sources,
-% sentiments, and ``none of the above'' elements respectively.
-
-% Again, relying on the state-of-the-art approaches, we chose to use the
-% conditional random fields classifiers which had previously shown
-% superior results due to the discriminative structured nature of their
-% predictions.
-
-% \subsubsection{Linear-chain CRFs}
-% In the case of the first-order linear-chain CRF model, the conditional
-% probability of $\vec{y}$ given $\vec{x}$ w.r.t. the feature parameters
-% $\Theta$ is formulated as the softmax function:
-% \begin{equation*}\label{eqn:prob}\small
-%   \begin{split}
-%     p_{\Theta}(\vec{y}|\vec{x}) =
-%     \frac{\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y},
-%       \vec{x}, i)\Big)}{Z_{\vec{x}}}
-%   \end{split}
-% \end{equation*}
-% where $n$ represents the total length of the input instance,
-% $\theta_k$ and $\mathit{f}_k$ are the weight and value of the $k$-th
-% feature activated at the $i$-th item of that instance (in our case,
-% the $i$-th token of the input sentence), and $Z_{\vec{x}}$ is the
-% normalization factor which is computed over all possible label
-% assignments $\mathcal{Y}^n$:
-% \begin{equation*}\small
-%   \begin{split}
-%     Z_{\vec{x}} = \sum\limits_{\vec{y}' \in
-%       \mathcal{Y}^n}\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\vec{y}',
-%     \vec{x}, i)\Big)
-%   \end{split}
-% \end{equation*}
-% In the case of the first-order linear-chain models, the feature
-% function $\mathit{f}_k(\vec{y},\vec{x}, i)$ is a binary- or
-% real-valued function of the token $x_i$ and its predicted tag $y_i$
-% (state feature) or a pair of adjacent token labels $(y_{i-1}, y_i)$
-% (transition feature).
-
-% During the training step, feature parameters $\Theta$ are successively
-% optimized in order to maximize the log conditional likelihood of the
-% training data $\mathcal{D} = \{(\vec{x}_m,\vec{y}_m)\}_{m=1}^M$.  The
-% partial derivatives of the log-likelihood function $\ell(\mathcal{D})$
-% w.r.t. to the feature weights $\Theta$, which are needed for
-% performing this optimization, are then computed as the difference
-% between the empirical and the model expectation of the respective
-% feature values taken over the whole training set:
-% \begin{equation*}\label{eqn:pderiv}\small
-%   \begin{split}
-%     \frac{\partial}{\partial{\theta_k}}\ell(\mathcal{D}) = &
-%     \sum\limits_{m=1}^M\sum\limits_{i=1}^{n}\big(\mathit{f}_k(\vec{y}_m,
-%     \vec{x}_m, i) -
-%     \bm{E}_{\bm{\Theta}}[\mathit{f}_k(\mathcal{Y}^n, \vec{x}_m, i)]
-%     \big)
-%   \end{split}
-% \end{equation*}
-% The latter expectations can be estimated dynamically at each training
-% step using the belief-propagation algorithm
-% \cite{Pearl:82}.\footnote{A detailed description of the
-%   belief-propagation algorithm in application to different CRF
-%   variants is provided in Appendix A of this paper.}
+          Training Set\\
+          Test Set\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Results of fine-grained sentiment analysis with
+      first-order linear-chain CRFs.}
+    \label{snt-fgsa:tbl:crf-res}
+  \end{center}
+\end{table*}
 
 % \subsubsection{Semi-Markov CRFs}
 % Instead of making their predictions over single tokens, semi-Markov
@@ -628,7 +585,34 @@ Training
 
 Decoding
 
+\textbf{Results}
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{1}{>{\centering\arraybackslash}p{0.136\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
+      \multicolumn{3}{c}{\bfseries Source} & %
+      \multicolumn{3}{c}{\bfseries Target} & %
+      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} &\\\midrule
+
+          Training Set\\
+          Test Set\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Results of fine-grained sentiment analysis with
+      first-order linear-chain CRFs.}
+    \label{snt-fgsa:tbl:dl-res}
+  \end{center}
+\end{table*}
+
 \subsection{Evaluation}
+
 Topologies
 
 Ablation Tests
@@ -636,10 +620,31 @@ Ablation Tests
 Error Analysis
 
 \subsection{Related Work}
-\citet{Choi:05}
+One of the first attempts at automatically analyzing subjective
+opinions with Conditional Random fields was made by \citet{Choi:05}.
+In their work, the authors combined a linear-chain CRF system with the
+unsupervised pattern extractor \texttt{AutoSlog-TS} \cite{Riloff:96}
+in order to recognize holders of opinions in text.  This approach
+showed a significant improvement over compared baselines (noun phrases
+pre-selected by heuristic rules), reaching an \F-score of 68\%
+measured with the head-matching metric.
+
 \citet{Choi:09}
+\citet{Choi:10}
 \citet{Breck:07}
 \citet{Johansson:10}
+\citet{Johansson:11}
+
+The allegedly first attempt to use semi-Markov CRFs in an opinion
+mining application was made by \citet{Yang:12} who first determined
+the boundaries of potential DSE (\emph{direct speech events}) and ESE
+(\emph{expressive subjective elements}) based on a shallow syntastic
+parsing and then let a semi-Markov model determine the most likely
+label assignment for these segments.  The authors reached remarkable
+67.17\% for DSEs and 54.47\% for ESEs measured with proportional
+overlap metric, surpassing the baselines for these tasks established
+by \citet{Breck:07} and \citet{Johansson:10,Johansson:11}
+
 \subsection{Summary and Conclusions}
 
 \subsubsection{Experiments}\label{sec:experiment}
@@ -956,6 +961,7 @@ questions that we want to address in future research.
 \subsection{Fine-grained Sentiment Analysis Using Deep Neural Networks}
 
 \subsection{Related Work}
+\citet{Choi:05}
 
 \cite{Kim:06}
 \subsubsection{Sentiment Analysis with CRFs}
