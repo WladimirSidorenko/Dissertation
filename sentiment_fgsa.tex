@@ -620,30 +620,54 @@ Ablation Tests
 Error Analysis
 
 \subsection{Related Work}
+Nasukawa and Yi, 2003 ???
+Bethard, 2004 ???
+
 One of the first attempts at automatically analyzing subjective
 opinions with Conditional Random fields was made by \citet{Choi:05}.
 In their work, the authors combined a linear-chain CRF system with the
 unsupervised pattern extractor \texttt{AutoSlog-TS} \cite{Riloff:96}
 in order to recognize holders of opinions in text.  This approach
 showed a significant improvement over compared baselines (noun phrases
-pre-selected by heuristic rules), reaching an \F-score of 68\%
-measured with the head-matching metric.
+pre-selected by heuristic rules).
 
-\citet{Choi:09}
-\citet{Choi:10}
-\citet{Breck:07}
+Later on, \citet{Choi:06} further enhanced this system, simultaneously
+trying to predict both sources and expressions of opinions, also
+establishing links between these entities.  For this purpose, they
+again applied two CRF classifiers (one for each entity type) to
+determine the textual spans of opinion holders and subjective
+elements, getting top-10 results from each of the systems.  In the
+next step, they pruned off invalid suggestions with a set of hard and
+soft constraints, whose weights were optimized using the integer
+linear programming.  This two-stage approach not only allowed the
+authors to reach impressive 68.9\% \F-measure on predicting links but
+also helped to improve automatic recognition for each of the predicted
+element types.
+
+\citet{Breck:07} concentrated on the prediction of \emph{direct speech
+  events} (DSEs) and \emph{expressive subjective elements} (ESE) in
+the MPQA corpus \cite[cf.][]{Wiebe:05}.  For this task, they also
+adopted the CRF approach, getting a substantial imrovement over
+dictionary-based baselines.
+
+\citet{Choi:10} attempted to jointly predict the boundaries, polarity,
+and intensity of subjective elements (DSEs and ESEs) with a single CRF
+classifier.  For this purpose, they adopted the hierarchical parameter
+sharing technique \cite{Zhao:08}, letting their system differentiate
+between ten different classes (two classes for the presence of an
+opinion times three polarities and three intensities), but ensuring
+that parameters belonging to the same group (e.g., high intensity)
+were shared among these classes.
+
 \citet{Johansson:10}
 \citet{Johansson:11}
 
-The allegedly first attempt to use semi-Markov CRFs in an opinion
-mining application was made by \citet{Yang:12} who first determined
-the boundaries of potential DSE (\emph{direct speech events}) and ESE
-(\emph{expressive subjective elements}) based on a shallow syntastic
-parsing and then let a semi-Markov model determine the most likely
-label assignment for these segments.  The authors reached remarkable
-67.17\% for DSEs and 54.47\% for ESEs measured with proportional
-overlap metric, surpassing the baselines for these tasks established
-by \citet{Breck:07} and \citet{Johansson:10,Johansson:11}
+\citet{Yang:12} were allegedly the first who used semi-Markov CRFs in
+an opinion mining application.  In order to determine the boundaries
+of DSEs and ESEs, the authors derived a set of potential segments from
+shallow syntastic parse trees and then let a semi-Markov model
+determine the most likely segmentation and label assignment over these
+hypotheses.
 
 \subsection{Summary and Conclusions}
 
