@@ -155,7 +155,42 @@ extrema of an automatic assignment---too long and too short
 spans---and also penalizes for erroneous and spurious labels, we will
 rely on it throughout our subsequent experiments.
 
-\subsection{Data}
+\subsection{Data}\label{snt:fgsa:subsec:data}
+
+For our experiments, we split our final corpus into three parts using
+70\% of it as a training set, 15\% as cross-validation data, and the
+remaining 15\% for testing purposes.  The data were tokenized with an
+adjusted version of Christopher Potts'
+Twitter-tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+and preprocessed using the rule-based normalization approach of
+\citet{Sidarenka:13}.
+
+%% During the normalization, Twitter-specific phenomena like @-mentions,
+%% retweets, and URIs that were not syntactically integrated in any
+%% sentence of the message were removed from the tweets and those
+%% elements which played an integral syntactic role were replaced with
+%% the special artificial tokens \%User, \%Link etc.  Emoticons like :-),
+%% \smiley{}, \frownie{} etc. were also replaced with the placeholders
+%% \%PosSmiley, \%NegSmiley, or simply \%Smiley depending on their prior
+%% polarity.  Furthemore, out-of-vocabulary words which could be
+%% converted to in-vocabulary terms with a pre-defined set of
+%% transformations were also normalized.
+
+We then labeled the preprocessed data with their part-of-speech tags
+using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger} Version
+  3.2 with the German parameter file UTF-8.}  \cite{Schmid:95} and
+parsed obtained sentences with the \texttt{Mate} dependency
+parser\footnote{We used \texttt{Mate} Version \texttt{3.61} with the
+  German parameter model 3.6.}  \cite{Bohnet:13}.  These automatically
+derived trees were then used as the source of syntactic features for
+all our models and the underlying graph structures for tree-CRFs.
+
+Since \texttt{MMAX2} did not provide a straightforward support for
+storing character offsets of the tokens and the automatically
+tokenized preprocessed data did not necessarily agree with the corpus
+tokenization, we next applied the Needleman-Wunsch algorithm
+\cite{Needleman:70} to align the manual annotation with the
+automatically segmented data.
 
 \subsection{Fine-Grained Sentiment Analysis Using Conditional Random
   Fields}
@@ -622,6 +657,12 @@ Error Analysis
 \subsection{Related Work}
 Nasukawa and Yi, 2003 ???
 Bethard, 2004 ???
+Bethard et al., 2005;
+Kobayashi et al., 2007;
+Joshi and Penstein-Rosé, 2009;
+Wu et al., 2009
+Wiegand and Klakow (2010)
+Ruppenhofer et al. (2008)
 
 One of the first attempts at automatically analyzing subjective
 opinions with Conditional Random fields was made by \citet{Choi:05}.
@@ -659,53 +700,27 @@ opinion times three polarities and three intensities), but ensuring
 that parameters belonging to the same group (e.g., high intensity)
 were shared among these classes.
 
-\citet{Johansson:10}
-\citet{Johansson:11}
+Instead of relying on just one most likely label assignment when
+predicting subjective expressions, \citet{Johansson:10a} explored the
+possibility of reranking by first obtaining top-$k$ alternative
+predictions (with $k = 8$) and then reweighting these labelings with a
+different type of classifier.  In particular, the authors experimented
+with linear and tree-based preference kernels as well as structured
+perceptron and passive-aggressive algorithms, finding the last option
+performing best and yielding 4\% improvement over the standard
+linear-chain CRF baseline.  The same idea was also used for the joint
+extraction of subjective expressions and opinion
+holders~\cite{Johansson:10b}
 
 \citet{Yang:12} were allegedly the first who used semi-Markov CRFs in
 an opinion mining application.  In order to determine the boundaries
 of DSEs and ESEs, the authors derived a set of potential segments from
-shallow syntastic parse trees and then let a semi-Markov model
-determine the most likely segmentation and label assignment over these
+shallow syntastic parses and then let a semi-Markov model determine
+the most likely segmentation and label assignment over these
 hypotheses.
 
 \subsection{Summary and Conclusions}
 
-\subsubsection{Experiments}\label{sec:experiment}
-For our experiments, we split our final corpus into three parts using
-70\% of it as a training set, 15\% as cross-validation data, and the
-remaining 15\% for testing purposes.  The data were tokenized with an
-adjusted version of Christopher Potts'
-Twitter-tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
-and preprocessed using the rule-based normalization approach of
-\citet{Sidarenka:13}.
-
-%% During the normalization, Twitter-specific phenomena like @-mentions,
-%% retweets, and URIs that were not syntactically integrated in any
-%% sentence of the message were removed from the tweets and those
-%% elements which played an integral syntactic role were replaced with
-%% the special artificial tokens \%User, \%Link etc.  Emoticons like :-),
-%% \smiley{}, \frownie{} etc. were also replaced with the placeholders
-%% \%PosSmiley, \%NegSmiley, or simply \%Smiley depending on their prior
-%% polarity.  Furthemore, out-of-vocabulary words which could be
-%% converted to in-vocabulary terms with a pre-defined set of
-%% transformations were also normalized.
-
-We then labeled the preprocessed data with their part-of-speech tags
-using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger} Version
-  3.2 with the German parameter file UTF-8.}  \cite{Schmid:95} and
-parsed obtained sentences with the \texttt{Mate} dependency
-parser\footnote{We used \texttt{Mate} Version \texttt{3.61} with the
-  German parameter model 3.6.}  \cite{Bohnet:13}.  These automatically
-derived trees were then used as the source of syntactic features for
-all our models and the underlying graph structures for tree-CRFs.
-
-Since \texttt{MMAX2} did not provide a straightforward support for
-storing character offsets of the tokens and the automatically
-tokenized preprocessed data did not necessarily agree with the corpus
-tokenization, we next applied the Needleman-Wunsch algorithm
-\cite{Needleman:70} to align the manual annotation with the
-automatically segmented data.
 
 \begin{table*}
   \begin{center}
