@@ -655,14 +655,22 @@ Ablation Tests
 Error Analysis
 
 \subsection{Related Work}
-Nasukawa and Yi, 2003 ???
-Bethard, 2004 ???
-Bethard et al., 2005;
-Kobayashi et al., 2007;
-Joshi and Penstein-Rosé, 2009;
-Wu et al., 2009
-Wiegand and Klakow (2010)
-Ruppenhofer et al. (2008)
+One of the first attempts at automatically analyzing subjective
+opinions below the document and sentence level was made by
+\citet{Nasukawa:03}.  In their work, the authors proposed a
+lexicon-based approach to this objective, in which they first
+determenied the occurrences of the given target in text, then anlyzed
+the immediate context of these occurrences, looking there for
+subjective terms from their manually compiled lexicon; and, finally,
+determined the overall polarity of the opinion, judging by the
+predetermined polarity score of the lexicon term and a set of
+heuristic rules which accounted for contextual changes.
+
+An alternative way of classifying subjective opinions and their
+holders was proposed by \citet{Bethard:04}, who utilized the lexicon
+of~\citet{Wiebe:03} enriched with the method of~\citet{Hatzivassi:97}
+for the former task and an SVM classifier working on constituency
+trees for the latter objective.
 
 One of the first attempts at automatically analyzing subjective
 opinions with Conditional Random fields was made by \citet{Choi:05}.
@@ -710,7 +718,7 @@ perceptron and passive-aggressive algorithms, finding the last option
 performing best and yielding 4\% improvement over the standard
 linear-chain CRF baseline.  The same idea was also used for the joint
 extraction of subjective expressions and opinion
-holders~\cite{Johansson:10b}
+holders~\cite[cf.][]{Johansson:10b}.
 
 \citet{Yang:12} were allegedly the first who used semi-Markov CRFs in
 an opinion mining application.  In order to determine the boundaries
@@ -718,6 +726,10 @@ of DSEs and ESEs, the authors derived a set of potential segments from
 shallow syntastic parses and then let a semi-Markov model determine
 the most likely segmentation and label assignment over these
 hypotheses.
+
+Kobayashi et al., 2007; Joshi and Penstein-Rosé, 2009; Wu et
+al., 2009 Wiegand and Klakow (2010) Ruppenhofer et al. (2008)
+
 
 \subsection{Summary and Conclusions}
 
