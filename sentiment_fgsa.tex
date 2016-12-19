@@ -518,7 +518,7 @@ Table~\ref{snt-fgsa:tbl:crf-res}.
           Test Set\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained sentiment analysis with
+    \caption{Results of fine-grained sentiment analysis with the
       first-order linear-chain CRFs.}
     \label{snt-fgsa:tbl:crf-res}
   \end{center}
@@ -730,11 +730,7 @@ shallow syntastic parses and then let a semi-Markov model determine
 the most likely segmentation and label assignment over these
 hypotheses.
 
-Socher 11; Yessenalina and Cardie
-
-\citet{Socher:12}
-
-A more efficient way of tackling this problem was proposed later
+A more efficient way of tackling this problem was proposed
 by~\citet{Socher:13}.  In their work on predicting sentiment polarity
 of single syntactic constituents and whole sentences, the authors
 explored a recursive tensor-based approach, in which they computed the
@@ -1084,9 +1080,10 @@ an average $F$-score of $\approx$ 78\% for recognizing targets,
 positive and negative opinions.  A notable fact, however, was that
 even a maximum entropy classifier could score impressive 67.8\% on
 this dataset.
-%% Tree-CRFs based on the dependency graphs were also used by
-%% \citet{Nakagawa:10} to predict the overall sentiment polarity of
-%% complete sentences.
+
+TODO: Tree-CRFs based on the dependency graphs were also used by
+\citet{Nakagawa:10} to predict the overall sentiment polarity of
+complete sentences.
 
 \citet{Yang:12} were among the first who applied the semi-Markov CRF
 model to the sentiment analysis task.  The authors used this
@@ -1127,84 +1124,5 @@ models for the sentiment analysis task.
 %% the exact inference algorithms which we later describe in Section
 %% \ref{sec:models}.
 
-\subsubsection{Sentiment Analysis on Twitter}
-
-With the wide spread of social media services in recent years,
-sentiment researchers also have gradually started changing the focus
-of their work from the analysis of official documents and newspaper
-articles to the classification of user-generated content abounding on
-the Web.
-
-One of the first attempts to analyze sentiments on Twitter was made by
-\citet{Go:09}.  For their experiments, the authors collected a set of
-1,600,000 tweets containing smileys.  Based on these emoticons, they
-automatically derived polarity classes for these messages (positive or
-negative) and used them to train a Na\"{\i}ve Bayes, a MaxEnt, and an
-SVM classifier.  The best $F$-score for this two-class classification
-problem could be achieved by the last system and run up to 82.2\%.
-
-Similar work was done later by \citet{Pak:10} who used a Na\"{\i}ve
-Bayes approach to differentiate between neutral, positive, and
-negative microblogs. \citet{Barbosa:10} also gathered a collection of
-200,000 tweets from three publicly available sentiment web-services
-and then trained an SVM classifier to predict the subjectivity and the
-polarity class of new unseen messages.
-
-Works attempting a more fine-grained sentiment analysis on Twitter
-usually try to derive a common polarity class for each message with
-respect to a particular target that is mentioned in that microblog.
-
-\citet{Jiang:11}, for instance, tried to classify the polarity of
-microblogs pertaining to a predefined set of specific topics, like
-\emph{Obama}, \emph{Google}, \emph{iPad} etc.  To this end, the
-authors manually labeled a corpus of 1,939 messages and trained a
-binary SVM model in order to predict the subjectivity and the polarity
-of the tweets with respect to the given subjects.
-
-%% This classifier could achieve an accuracy of 68.2\% for the
-%% subjectivity classification and 85.6\% for the polarity prediction.
-%% The $F$-score of this system for the latter task could further be
-%% improved from 66\% to 68.3\% by incorporating the information about
-%% the predicted polarity class of the re-tweets, replies, and other
-%% microblogs posted by the same author.
-
-\citet{Mitchell:13} broadened the set of possible targets by allowing
-any named entities found in microblogs to be associated with a
-specific polarity.  For that purpose, the authors combined a CRF-based
-NER system with a sentiment predicting CRF by considering three
-different possibilities of such combination: a pipeline approach, a
-joint multi-layer model, and a single classifier with a combined
-tagset.  The best scores on their corpora of 7,105 Spanish and 2,350
-English tweets could be achieved with the joint and pipeline
-approaches.  The accuracy of recognizing the opinionated named
-entities amounted to 31\% for Spanish and 30.4\% for English.
-
-%% Other notable works in this direction include \citet{Chunping:14} who
-%% first applied a Na\"{\i}ve Bayes classifier to predict the
-%% subjectivity class of microblogs and then sequentially used two CRF
-%% models to predict the particular type of subjectivity (such as anger,
-%% fear, happiness etc.) for message sentences.
-
-%% Other notable works in this direction include \citet{Dong:14} who used
-%% a recurrent neural network to predict the polarity class associated
-%% with the opinion targets.  They, however, assumed the targets of
-%% sentiments to be apriori known and only were interested whether a
-%% positive or a negative judgement was made about them.
-
-%% Except for the work of \citet{Mitchell:13} and to some extent
-%% \citet{Jiang:11}, neither of the approaches attempted to classify
-%% sentiments below the sentence level.  And even in these two works, the
-%% set of possible targets was either restricted to the named entities or
-%% to some pre-defined list of words.  Therefore, the task that we are
-%% addressing here (simultaneous classification of sentiments, source,
-%% and targets) is by far more challenging, more difficult, and,
-%% unfortunately, probably less successful than the work previously done.
-
-Again, to the best of our knowledge, no work on simultaneous
-prediction of sentiment targets, and sources, as well as opinion
-segments has been reported for Twitter so far.
-
-%% and we sincerely hope that our data can at least ease the efforts of
-%% other researches on this field.
 \subsection{Conclusions}
 \newpage
