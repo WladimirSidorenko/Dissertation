@@ -730,18 +730,64 @@ shallow syntastic parses and then let a semi-Markov model determine
 the most likely segmentation and label assignment over these
 hypotheses.
 
-A more efficient way of tackling this problem was proposed
+One of the first steps towards using deep neural networks for the
+prposes of fine-grained sentiment analysis was made
 by~\citet{Socher:13}.  In their work on predicting sentiment polarity
-of single syntactic constituents and whole sentences, the authors
-explored a recursive tensor-based approach, in which they computed the
-semantic orientation of a given node bottom up by recursively
-multiplying the embeddings of descendant leaves with a compositional
-tensor, whose weights along with the vector representations of words
-were learned automatically.
+of syntactic constituents (including the whole sentences), the authors
+explored a recursive neural tensor approach, in which they computed
+the semantic orientation of a given node $\vec{v}_c \in \mathbb{R}^n$
+in a bottom-up fashion by recursively multiplying the embeddings of
+its descendant leaves (e.g., $\vec{w}_1 \in \mathbb{R}^n$ and
+$\vec{w}_2 \in \mathbb{R}^n$) with a compositional tensor $V \in
+\mathbb{R}^{2n\times2n\times2n}$:
+\begin{align*}
+  \vec{v}_c = softmax\left(%
+  \begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+  \end{bmatrix}^T \cdot V^{1:n}\cdot\begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+  \end{bmatrix}%
+  + W\cdot\begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+  \end{bmatrix}%
+  \right),
+\end{align*}
+where $W\in\mathbb{R}^{n\times n}$ was an additional shared
+compositionality matrix, and the tensor productfor a single element
+was defined as:
+\begin{align*}
+  v'_i = \begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+  \end{bmatrix}^T \cdot V^{i}\cdot\begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+  \end{bmatrix}.
+\end{align*}
+The weights of this tensor as well as the vector representations of
+the underlying words, and the compositionality matrix $W$ were learned
+automatically during training.
+
+Another recursive approach was suggested by~\citet{Irsoy:14a}, who
+explored deep bidirectional neural networks for predicting DSEe and
+ESEs on the MPQA corpus.  In particular, they estimated the label $y$
+of the $t$-th token as:
+\begin{align*}
+  y_t = softmax\left(U_{\rightarrow}\cdot \vec{h}_t^{(L)} + U_{\leftarrow}\cdot \cev{h}_t^{(L)} + \vec{c}\right),
+\end{align*}
+where $\vec{h}_t^{(L)}$ and $\cev{h}_t^{(L)}$ were the outputs of the
+top-$L$ levels computed from left to right and from right to left
+respectively; and $U_{\rightarrow}$, $U_{\leftarrow}$, and the bias
+term $\vec{c}$ were the other learned parameters used to reduce the
+dimensions.  This system could outperform the previous state of the
+art set by \citet{Yang:12}, reaching a proportional \F-score of 66.01
+for DSEs and 56.26 for ESEs.
 
 \citet{Irsoy:14b}
 \citet{Irsoy:14c}
-\citet{Irsoy:14a}
 
 \citet{Tang:16}
 \citet{Wang:16}
