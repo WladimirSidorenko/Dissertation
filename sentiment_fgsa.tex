@@ -771,10 +771,10 @@ The weights of this tensor as well as the vector representations of
 the underlying words, and the compositionality matrix $W$ were learned
 automatically during training.
 
-Another recursive approach was suggested by~\citet{Irsoy:14a}, who
-explored deep bidirectional neural networks for predicting DSEe and
-ESEs on the MPQA corpus.  In particular, they estimated the label $y$
-of the $t$-th token as:
+Another recursive approach was suggested by~\citet{Irsoy:14a}
+\cite[see also][]{Irsoy:14b}, who explored deep bidirectional neural
+networks for predicting DSEe and ESEs on the MPQA corpus.  In
+particular, they estimated the label $y$ of the $t$-th token as:
 \begin{align*}
   y_t = softmax\left(U_{\rightarrow}\cdot \vec{h}_t^{(L)} + U_{\leftarrow}\cdot \cev{h}_t^{(L)} + \vec{c}\right),
 \end{align*}
@@ -786,11 +786,13 @@ dimensions.  This system could outperform the previous state of the
 art set by \citet{Yang:12}, reaching a proportional \F-score of 66.01
 for DSEs and 56.26 for ESEs.
 
-\citet{Irsoy:14b}
-\citet{Irsoy:14c}
-
-\citet{Tang:16}
-\citet{Wang:16}
+Other notable works on fine-grained opinion mining with deep neural
+networks include thos of \citet{Irsoy:14c}, who used a tensor
+multiplication within the recursive loop; \citet{Tang:16}, who
+proposed a memory-based multi-level network for classifying opinions
+about the given aspects; and, finally, \citet{Wang:16}, who used the
+output of a deep recursive network as input for a CRF system, updating
+the weights of the network along with the CRF parameters.
 
 \subsection{Summary and Conclusions}
 
