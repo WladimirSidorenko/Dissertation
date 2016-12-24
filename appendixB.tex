@@ -1,0 +1,63 @@
+% FILE: appendixA.tex  Version 2.1
+% AUTHOR:
+% Universität Duisburg-Essen, Standort Duisburg
+% AG Prof. Dr. Günter Törner
+% Verena Gondek, Andy Braune, Henning Kerstan
+% Fachbereich Mathematik
+% Lotharstr. 65., 47057 Duisburg
+% entstanden im Rahmen des DFG-Projektes DissOnlineTutor
+% in Zusammenarbeit mit der
+% Humboldt-Universitaet zu Berlin
+% AG Elektronisches Publizieren
+% Joanna Rycko
+% und der
+% DNB - Deutsche Nationalbibliothek
+
+\chapter{Gradient Computation for the Optimized Projection Line}\label{chap:apdx:lex-grad}
+
+In order to prove the correctness of the gradient shown in
+Equation~\ref{eq:prj-line-grad}, let us first compute the partial
+derivative of the optimized distance function $f =
+\sum_{\vec{p}_+}\sum_{\vec{p}_-}\frac{1}{2}\left(%
+\frac{\vec{b}\cdot\left(\vec{p}_+ - \vec{p}_-\right)}{\vec{b}^2}%
+\vec{b}\right)^2$ w.r.t. to a single element $\vec{b}_j$ of the
+projection vector $\vec{b}$.  Assuming that the length of this vector
+is normalized at each iteration step prior to calculating the
+derivative, we obtain:
+
+{\small
+  \begin{align}
+    \frac{\partial}{\partial\vec{b}_j}f &= %
+    \frac{\partial}{\partial\vec{b}_j}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\frac{1}{2}\left(%
+\frac{\vec{b}\cdot\left(\vec{p}_+ - \vec{p}_-\right)}{\vec{b}^2}%
+\vec{b}_j\right)^2\\
+&=\sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\vec{b}_j%
+\frac{\partial}{\partial\vec{b}_j}%
+\frac{\vec{b}\cdot\left(\vec{p}_+ - \vec{p}_-\right)}{\vec{b}^2}\vec{b}_j\\
+&=\sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\vec{b}_j%
+\left(\frac{(\vec{p}_+ - \vec{p}_-)_j\vec{b}^2 - 2\gamma\vec{b}_j}{\vec{b}^4}\vec{b}_j%
++\frac{\gamma}{\vec{b}^2}\right)\\
+&=\sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\vec{b}_j%
+\left(\left(\vec{p}_+ - \vec{p}_-\right)_j\vec{b}_j - 2\gamma\vec{b}^2_j+\gamma\right)\\
+&=\sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(%
+\left(\vec{p}_+ - \vec{p}_-\right)_j\vec{b}^2_j - 2\gamma\vec{b}_j\vec{b}^2_j%
++\gamma\vec{b}_j\right),\label{eq:prj-line-partial}%
+  \end{align}}%
+where $\gamma$ is defined as previously:
+
+{\small
+  \begin{align*}
+    \gamma = \vec{b}\cdot\left(\vec{p}_+ - \vec{p}_-\right).%
+  \end{align*}}%
+Since Expression~\ref{eq:prj-line-partial} will be identical for all
+$j$, we can estimate the final form of the gradient as follows:
+
+{\small
+  \begin{align}
+    \nabla f &= \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(%
+\left(\vec{p}_+ - \vec{p}_-\right)\vec{b}^2 - 2\gamma\vec{b}\vec{b}^2%
++\gamma\vec{b}\right)\\
+&= \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(\Delta - \gamma\vec{b}\right),%
+\end{align}}%
+which is exactly the solution we provide in
+Equation~\ref{eq:prj-line-grad}.
