@@ -1065,38 +1065,43 @@ distributed vector representations of words:
   \item and the linear projection algorithm.
 \end{enumerate}
 
-With the first approach, we used the embeddings of the seed terms
-$\mathcal{P} = \{p^+_1,\ldots,p^+_k\}$, $\mathcal{N} =
-\{p^-_1,\ldots,p^-_m\}$, and $\mathcal{O} = \{p^0_1,\ldots,p^0_n\}$ to
-compute the centroids of the positive, negative, and objective classes
-respectively, and then assigned a new word $w$ to the nearest polarity
-group whose centroid was the nearest to the $w$'s embedding.  We
+With the first approach, we used the embeddings of the seed terms to
+compute the centroids of the positive, negative, and objective
+clusters respectively.  Afterwards, we assigned a new word $w$ to the
+polarity group whose centroid was the nearest to the $w$'s vector.  We
 considered the distance to the nearest centroid as the polarity score
-of the word $w$ and sorted the resulting sentiment lexicon in the
+for the word $w$ and sorted the resulting sentiment lexicon in the
 ascending order of these distances.
 
-The NWE-based SLG method we propose in this paper draws on a fairly
-intuitive idea that, in order to obtain a polarity list from
-(typically high-dimensional) word embeddings, it suffices to reduce
-the dimensionality of these embeddings from $\mathbb{R}^n$ (with $n$
-usually ranging between 100 and 500) to $\mathbb{R}^1$, i.e., to
-project the vectors of words from their original multi-dimensional
-space to an one-dimensional scale line $\vec{b}$.
+Similarly, with the KNN method, we allocated each new word $w$ to the
+polarity class $c$ if the seed embeddings of this class appeared more
+frequently among the neighbors of the $w$'s vector than the seed
+representations of any other polarity group.
 
-A natural question which arises in this context is what this line
-should be in this case and how we can compute it automatically.
-Unfortunately, our knowledge about this optimal scale is very limited
-except for the one property that we definitely would wish this line to
-have: we do know that the projections of word embeddings for words
-with opposite polarities on this line should better be located
-furthest away from each other.  In particular, given a small set of
-word vectors for seed terms with known semantic orientations (e.g.,
-$\mathcal{P} = \{\vec{p_+}_1,\ldots,\vec{p_+}_n\}$ for positive terms
-and $\mathcal{N} = \{\vec{p_-}_1,\ldots,\vec{p_-}_m\}$ for negative
-expressions), we can mathematically formulate the above problem as
-follows:
+A slightly different technique was used with the approach of the
+principal component analysis.  After normally decomposing the
+embedding matrix $E$ into its SVD components:
+\begin{align*}
+  E = U \Sigma V^T,
+\end{align*}
+where the matrices $U$ and $V$ represent orthogonal bases of the row
+and column spaces of $E$ respectively, we looked for the row axis
+$v$,\footnote{Due to implementation specifics, the initial embedding
+  vectors had to be represented as columns.} such that the projections
+of the embeddings for seed terms with opposite polarities on this axis
+were maximally far apart from each other.
 
-{\small%
+Since SVD, however, was not guaranteed to find the optimum polarity
+scale (the orthognal bases of SVD are computed using the covariance
+matrix of $E$ and therefore might not capture the semantic orientation
+if terms with opposite polarities occur in the same contexts), we
+additionally introduced our own \emph{linear projection method}, in
+whoch we explicitly defined this objective: Namely, given the sets of
+word vectors for positive and negative polarity terms $\mathcal{P} =
+\{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and $\mathcal{N} =
+\{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$ respectively, find a
+projection line $\vec{b}$ which would maximize the distance between
+the projections of terms with opposite semantic orientations, i.e.: {\small%
 \begin{align}
   \small
   \vec{b} &=\argmax\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}%
@@ -1113,7 +1118,7 @@ respective projection of a negative seed term.\footnote{Since we are
   assume an intercept of zero.}
 
 Considering the $\argmax$ argument in Expression~\ref{eq:f} as our
-objective function $f$ to be optimized, we can compute the gradient of
+objective function $f$ to be optimized, we computed the gradient of
 this function w.r.t. the projection line $\vec{b}$:
 
 {\small%
@@ -1127,14 +1132,14 @@ vectors $\vec{p}_{+}$ and $\vec{p}_{-}$: $\Delta =
 this difference with the projection vector $\vec{b}$ at the $i$-th
 iteration step: $\gamma = \Delta \cdot \vec{b^i}$.\footnote{A detailed
   explanation of the gradient computation is given in Appendix~A of
-  this paper.} With this gradient, we can easily optimize $\vec{b}$ by
-using gradient ascent until we reach the global maximum of the
+  this paper.} With this gradient, we optimized the line $\vec{b}$
+using gradient ascent until we reached the global maximum of the
 function $f$.
 
-After computing the optimal projection line, we project all known word
-embeddings on its slope vector and compute the origin $O_{\vec{b}}$ of
-this line, which not necessarily coincides with the global origin
-point $\vec{0}$ of the initial coordinate system:
+Afterwards, we projected all known word embeddings on the computed
+slope vector and determined the origin $O_{\vec{b}}$ of this vector,
+which not necessarily had to be identical with the global origin point
+$\vec{0}$ of the initial coordinate system:
 
 {\small%
   \begin{align}
@@ -1143,12 +1148,12 @@ point $\vec{0}$ of the initial coordinate system:
 where $\mu_-$ is the mean of the projected embeddings of negative seed
 terms: $\mu_- = \frac{\sum\vec{p'_-}}{|\mathcal{N}|}$; and $\mu_+$ is
 the respective mean for the projections of positive seed words.
-Eventually, we create the final list of polar terms, sorting them by
-the distance of their projections to the computed origin in descending
-order (so that words whose projections are furthest away from the
-central point appear at the very beginning of the list) and assigning
-negative polarity to those terms whose projections are on the same
-side from the origin as the negative mean $\mu_-$.
+Eventually, we created the final list of polar terms, sorting them by
+the distance of their projections to the computed origin point in
+descending order (so that words whose projections were furthest away
+from the central point appeared at the very beginning of the list) and
+assigning negative polarity to those terms whose projections were on
+the same side from the origin as the negative mean $\mu_-$.
 
 % A new family of lexicon induction methods builds on learned vector
 % representations of words -- the neural word embeddings
