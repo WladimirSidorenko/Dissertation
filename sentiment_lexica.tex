@@ -1044,7 +1044,36 @@ tagging~\cite{Collobert:11}, syntactic
 parsing~\cite{Kiperwasser:16b,Kiperwasser:16a}, named entity
 recognition~\cite{dosSantos:15} etc.  Unfortunately, to this day, the
 SLG task mainly remained untouched from these advances up to a few
-works introduced by~\citet{Tang:14} and \citet{Vo:16}.
+works introduced by~\citet{Tang:14a}, who trained sentiment-specific
+embeddings, considering the prediction of distantly supervised
+sentiment labels as an additional training objective, and applied
+another classifier in order to predict the polarity of these
+embeddings.  Another NWE-based method was proposed by~\citet{Vo:16},
+who trained two-dimensional embeddings, trying to predict the
+occurrence of positive and negative emoticons in a tweet.
+
+In order to estimate the potential of these approaches for an
+automatic generation of sentiment lexicons for German Twitter, we
+reimplemented these methods, extending them to three-way
+classification (positive, negative, and neutral), and also came up
+with four alternative machenisms of obtaining polarity lists from
+distributed vector representations of words:
+\begin{enumerate}
+  \item the method of the nearest centroids,
+  \item the $k$-means clustering,
+  \item the principal component analysis,
+  \item and the linear projection algorithm.
+\end{enumerate}
+
+With the first approach, we used the embeddings of the seed terms
+$\mathcal{P} = \{p^+_1,\ldots,p^+_k\}$, $\mathcal{N} =
+\{p^-_1,\ldots,p^-_m\}$, and $\mathcal{O} = \{p^0_1,\ldots,p^0_n\}$ to
+compute the centroids of the positive, negative, and objective classes
+respectively, and then assigned a new word $w$ to the nearest polarity
+group whose centroid was the nearest to the $w$'s embedding.  We
+considered the distance to the nearest centroid as the polarity score
+of the word $w$ and sorted the resulting sentiment lexicon in the
+ascending order of these distances.
 
 The NWE-based SLG method we propose in this paper draws on a fairly
 intuitive idea that, in order to obtain a polarity list from
