@@ -482,7 +482,7 @@ predicates (which, for simplicity, are listed here in groups):
 \end{itemize}
 
 In addition to the above attributes, we also used a set of complex
-lexical-syntactic features, which simultaneously combined several
+lexico-syntactic features, which simultaneously combined several
 semantic and syntactic traits.  These included:
 \begin{itemize}
 \item the dependency relation of the previous token in the sentence to
@@ -523,6 +523,118 @@ Table~\ref{snt-fgsa:tbl:crf-res}.
   \end{center}
 \end{table*}
 
+\subsection{Fine-grained Sentiment Analysis with Recurrent Neural Networks}
+
+A competive alternative to the conditional random fields are deep
+recurrent neural networks (RNNs).  Introduced in the
+mid-nineties~\cite{Hochreiter:97}, RNNs became one of the most widely
+used trends in the recent surge of deep learning.  The main factors
+for this success are
+\begin{inparaenum}[(i)]
+\item the ability of these systems to learn the optimal feature
+  representations automatically, which favorably sets them apart from
+  traditional supervised machine learning frameworks, where all
+  features need to be defined by user; and
+\item the ability to deal with arbitrary sequence lengths, which
+  advantageously distinguishes them from other NN architectures, where
+  the size of the learned parameters needs to be fixed.
+\end{inparaenum}
+
+The key component which is common to any modern RNN system is a
+fixed-size hidden vector $\vec{h}$, which is recurrently updated over
+the input sequence $\mathbf{x}$ and is supposed to encode the meaning
+of the input seen so far.  The general form of this vector at time
+step $t$ is typically defined as:
+\begin{align*}
+  \vec{h}^{(t)} = f(\vec{h}^{(t-1)}, \mathbf{x}^{(t)});
+\end{align*}
+where $f$ usually represents as a pointwise non-linear transformation
+such as logistic function or hyperbolic tangent, $\vec{h}^{(t-1)}$
+denotes the state of the hidden vector at the previous time step, and
+$\mathbf{x}^{(t)}$ is the input at step $t$.
+
+A fundamental problem which arises from the above definition is that
+the gradients of the trained parameters, which are used to estimate
+the $\vec{h}$ vector, rapidly vanish to zero or explode to infinity
+(depending on whether the abosule values of $\vec{h}$ are less or
+greater than one) as the length of the input increases.  In order to
+solve this issue, \citet{Hochreiter:97} proposed the long short-term
+memory mechanism (LSTM), in which they explicitly incorporated the
+goal to drop parts of the input which seemed to be irrelevant for the
+final outcome.  In particular, given an input sequence $\mathbf{x}$,
+they introduced an intermediate input unit $\vec{i}^{(t)}$:
+\begin{align*}
+  \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right),
+\end{align*}
+where $\sigma$ is the sigmoid function; $W_i$, $U_i$, and $\vec{b_i}$
+denote the optimized model's parameters; and $\mathbf{x}^{(t)}$ and
+$\vec{h}^{(t-1)}$ are defined as previously.  From this intermediate
+representation, they then computed the candidate value $\widetilde{C}^{(t)}$
+for the current time step:
+\begin{align*}
+  \widetilde{C}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
+  \cdot \vec{h}^{(t-1)} + \vec{b}_c\right).
+\end{align*}
+After computing the forget unit~$f^{(t)}$ as:
+\begin{align*}
+  \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f
+  \cdot \vec{h}^{(t-1)} + \vec{b}_f\right),
+\end{align*}
+they finally estimated the activation candidate for time step $t$ as a
+weighted sum of the current candidate and the previous activation
+state:
+\begin{align*}
+  C^{(t)} &= \vec{i}^{(t)} * \widetilde{C}^{(t)} + \vec{f}^{(t)} * C^{(t-1)}.
+\end{align*}
+From this activation, one then can normally compute the output vector
+$\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$
+as follows:
+\begin{align*}
+  \vec{o}^{(t)} &= \sigma\left(W_o\cdot \mathbf{x}^{(t)} + U_o \cdot \vec{h}^{(t-1)} + \vec{b}_o\right),\\
+  \vec{h}^{(t)} &= \vec{o}^{(t)} * tanh(C^{(t)}).
+\end{align*}
+
+GRU
+
+\textbf{Training}
+
+\textbf{Inference}
+
+\textbf{Results}
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{1}{>{\centering\arraybackslash}p{0.136\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
+      \multicolumn{3}{c}{\bfseries Source} & %
+      \multicolumn{3}{c}{\bfseries Target} & %
+      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} &\\\midrule
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}GRU}\\
+          Training Set\\
+          Test Set\\
+
+          \multicolumn{11}{c}{\cellcolor{cellcolor}LSTM}\\
+          Training Set\\
+          Test Set\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Results of fine-grained sentiment analysis with recurrent
+      neural networks.}
+    \label{snt-fgsa:tbl:nn-res}
+  \end{center}
+\end{table*}
+
+
+\subsection{Evaluation}
+
+\subsubsection{Topologies}
 % \subsubsection{Semi-Markov CRFs}
 % Instead of making their predictions over single tokens, semi-Markov
 % CRFs try to partition the input sequence $\bm{x}$ into contiguous
@@ -609,21 +721,6 @@ Table~\ref{snt-fgsa:tbl:crf-res}.
 % type of CRFs can still be exact and its running time remains the same
 % as for the first-order linear chain models:
 % $\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
-
-\subsection{Fine-grained Sentiment Analysis with Recurrent Neural Networks}
-Introduction to RNN
-
-GRU and LSTM
-
-Training
-
-Decoding
-
-\textbf{Results}
-
-\subsection{Evaluation}
-
-\subsubsection{Topologies}
 
 \subsubsection{Effect of the Annotation Scheme}
 Experiment I (broad sentiment)

@@ -97,7 +97,7 @@ Instead of using these approaches, we opt for a direct comparison of
 the induced lexicons with an annotated corpus, since this type of
 evaluation allows us to solve at least three of the previously
 mentioned issues:
-\begin{inparaenum}[i)]
+\begin{inparaenum}[(i)]
   \item It does account for the recall,
   \item it does accommodate polysemous words,\footnote{The annotators
       of the PotTS corpus were asked to annotate a polar expression
@@ -1038,49 +1038,51 @@ Another group of SLG methods that we are going to explore in this
 section are algorithms which operate on distributed vector
 representations of words---neural word embeddings (NWEs).  Introduced
 by~\citet{Bengio:03}, \citet{Collobert:11}, and \citet{Mikolov:13},
-NWEs had a huge ``tsunami''-like effect on many downstream NLP
+NWEs had a great ``tsunami''-like effect on many downstream NLP
 applications~\cite{Manning:15} including part-of-speech
 tagging~\cite{Collobert:11}, syntactic
 parsing~\cite{Kiperwasser:16b,Kiperwasser:16a}, named entity
 recognition~\cite{dosSantos:15} etc.  Unfortunately, to this day, the
-SLG task mainly remained untouched from these advances up to a few
-works introduced by~\citet{Tang:14a}, who trained sentiment-specific
-embeddings, considering the prediction of distantly supervised
-sentiment labels as an additional training objective, and applied
-another classifier in order to predict the polarity of these
-embeddings.  Another NWE-based method was proposed by~\citet{Vo:16},
-who trained two-dimensional embeddings, trying to predict the
-occurrence of positive and negative emoticons in a tweet.
+SLG task remained largely untouched from these advances, up to a few
+works introduced by~\citet{Tang:14a} and \citet{Vo:16}.  In the former
+method, the authors used a $k$-NN classifier in order to predict the
+polarity of hybrid word embeddings (\citeauthor{Tang:14a} considered
+the occurrence of positive and negative smileys as noisy sentiment
+labels for tweets and incorporated the polarity prediction as an
+additional training objective for computing the word vectors).  In the
+latter approach, \citet{Vo:16} trained task-specific two-dimensional
+embeddings, also utilizing smileys as distantly supervised labels, and
+regarded the two elements of each obtained representation as the
+positive and negative scores for the respective word.
 
 In order to estimate the potential of these approaches for an
 automatic generation of sentiment lexicons for German Twitter, we
 reimplemented these methods, extending them to three-way
 classification (positive, negative, and neutral), and also came up
-with four alternative machenisms of obtaining polarity lists from
+with three alternative solutions for obtaining polarity lists from
 distributed vector representations of words:
 \begin{enumerate}
   \item the method of the nearest centroids,
-  \item the $k$-means clustering,
   \item the principal component analysis,
   \item and the linear projection algorithm.
 \end{enumerate}
 
 With the first approach, we used the embeddings of the seed terms to
 compute the centroids of the positive, negative, and objective
-clusters respectively.  Afterwards, we assigned a new word $w$ to the
-polarity group whose centroid was the nearest to the $w$'s vector.  We
+clusters.  Afterwards, we assigned a new word $w$ to the polarity
+group whose centroid was the nearest to the $w$'s vector.  We
 considered the distance to the nearest centroid as the polarity score
 for the word $w$ and sorted the resulting sentiment lexicon in the
 ascending order of these distances.
 
-Similarly, with the KNN method, we allocated each new word $w$ to the
-polarity class $c$ if the seed embeddings of this class appeared more
-frequently among the neighbors of the $w$'s vector than the seed
-representations of any other polarity group.
+%% Similarly, with the KNN method, we allocated each new word $w$ to the
+%% polarity class $c$ if the seed embeddings of this class appeared more
+%% frequently among the neighbors of the $w$'s vector than the seed
+%% representations of any other polarity group.
 
 A slightly different technique was used with the approach of the
 principal component analysis.  After normally decomposing the
-embedding matrix $E$ into its SVD components:
+embedding matrix $E$ into its components using SVD:
 \begin{align*}
   E = U \Sigma V^T,
 \end{align*}
@@ -1088,20 +1090,20 @@ where the matrices $U$ and $V$ represent orthogonal bases of the row
 and column spaces of $E$ respectively, we looked for the row axis
 $v$,\footnote{Due to implementation specifics, the initial embedding
   vectors had to be represented as columns.} such that the projections
-of the embeddings for seed terms with opposite polarities on this axis
-were maximally far apart from each other.
+of the embeddings for the seed terms with opposite polarities on this
+axis were maximally far apart from each other.
 
-Since SVD, however, was not guaranteed to find the optimum polarity
+Since PCA, however, was not guaranteed to find the optimum polarity
 scale (the orthognal bases of SVD are computed using the covariance
-matrix of $E$ and therefore might not capture the semantic orientation
-if terms with opposite polarities occur in the same contexts), we
+matrix of $E$ and might therefore not capture semantic orientation if
+terms with opposite polarities occur in the same contexts), we
 additionally introduced our own \emph{linear projection method}, in
-whoch we explicitly defined this objective: Namely, given the sets of
-word vectors for positive and negative polarity terms $\mathcal{P} =
-\{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and $\mathcal{N} =
-\{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$ respectively, find a
+which we explicitly adopted this objective: Namely, given two sets of
+vectors for the positive and negative seed terms respectively (let us
+denote them as $\mathcal{P} = \{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$
+and $\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$), find a
 projection line $\vec{b}$ which would maximize the distance between
-the projections of terms with opposite semantic orientations, i.e.: {\small%
+the projections of terms from these disjoint sets, i.e.: {\small%
 \begin{align}
   \small
   \vec{b} &=\argmax\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}%
@@ -1130,11 +1132,10 @@ where $\Delta$ is the difference between the positive and negative
 vectors $\vec{p}_{+}$ and $\vec{p}_{-}$: $\Delta =
 \vec{p}_{+}-\vec{p}_{-}$; and $\gamma$ stands for the dot product of
 this difference with the projection vector $\vec{b}$ at the $i$-th
-iteration step: $\gamma = \Delta \cdot \vec{b^i}$.\footnote{A detailed
+iteration step: $\gamma = \Delta \cdot \vec{b}^i$;\footnote{A detailed
   explanation of the gradient computation is given in Appendix~A of
-  this paper.} With this gradient, we optimized the line $\vec{b}$
-using gradient ascent until we reached the global maximum of the
-function $f$.
+  this paper.} and optimized the line $\vec{b}$ using gradient ascent
+until we reached the global maximum of the function $f$.
 
 Afterwards, we projected all known word embeddings on the computed
 slope vector and determined the origin $O_{\vec{b}}$ of this vector,
@@ -1154,6 +1155,105 @@ descending order (so that words whose projections were furthest away
 from the central point appeared at the very beginning of the list) and
 assigning negative polarity to those terms whose projections were on
 the same side from the origin as the negative mean $\mu_-$.
+
+The results of these methods are shown in
+Table~\ref{snt-lex:tbl:nwe-meth}:
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.172\columnwidth} % first columm
+        >{\centering\arraybackslash}p{0.06\columnwidth} % second columm
+        *{9}{>{\centering\arraybackslash}p{0.07\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.053\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Lexicon} & %
+      \multirow{2}{0.06\columnwidth}{\bfseries \# of Terms} & %
+      \multicolumn{3}{c}{\bfseries Positive Expressions} & %
+      \multicolumn{3}{c}{\bfseries Negative Expressions} & %
+      \multicolumn{3}{c}{\bfseries Neutral Terms} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){3-5}\cmidrule(lr){6-8}\cmidrule(lr){9-11}
+
+      & & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+
+      % Class                     Precision              Recall                 F-score
+      % positive                   0.770601             0.101975                 0.180115
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963176             0.999227                 0.980870
+      % Macro-average              0.767226             0.372780                 0.398086
+      % Micro-average              0.962404             0.962216                 0.962310
+
+      \textsc{Seed Set} & 20 & 0.771 & 0.102 & 0.18 & %
+      0.568 & 0.017 & 0.033 & %
+      0.963 & 0.999 & 0.981 & %
+      0.398 & 0.962\\
+
+      % Class                     Precision              Recall                 F-score
+      TNG &  &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      % Class                     Precision              Recall                 F-score
+      VO &  &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% file: 'data/results/ncentroids/ncentroids.160.w2v.turney-littman-seedset.txt'
+      %% Class                     Precision              Recall                 F-score
+      %% positive                   0.824053             0.108568                 0.191859
+      %% negative                   0.654321             0.019681                 0.038212
+      %% neutral                    0.963202             0.999410                 0.980972
+      %% Macro-average              0.813859             0.375886                 0.403681
+      %% Micro-average              0.962632             0.962438                 0.962535
+
+      NC & 160 & 0.824 & 0.109 & 0.192 & %
+      0.654 & 0.02 & 0.038 & %
+      0.963 & 0.999 & 0.981 & %
+      0.404 & 0.963\\
+
+      %% file: 'data/results/knn/knn.5120.w2v.turney-littman-seedset.txt'
+      %% Class                     Precision              Recall                 F-score
+      %% positive                   0.019395             0.108568                 0.032911
+      %% negative                   0.654321             0.019681                 0.038212
+      %% neutral                    0.958128             0.873040                 0.913607
+      %% Macro-average              0.543948             0.333763                 0.328243
+      %% Micro-average              0.841261             0.841091                 0.841176
+
+      %% KNN & 5,120 & 0.019 & 0.109 & 0.033 & %
+      %% 0.654 & 0.02 & 0.038 & %
+      %% 0.958 & 0.873 & 0.914 & %
+      %% 0.328 & 0.841\\
+
+      %% file: 'data/results/linproj/linproj.2900.w2v.turney-littman-seedset.txt'
+      %% Class                     Precision              Recall                 F-score
+      %% positive                   0.645217             0.108862                 0.186292
+      %% negative                   0.265590             0.219829                 0.240553
+      %% neutral                    0.967741             0.989259                 0.978381
+      %% Macro-average              0.626183             0.439317                 0.468409
+      %% Micro-average              0.956333             0.956209                 0.956271
+
+      LP &  &  &  &  & %
+       &  &  & %
+       &  &  & %
+       & \\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Evaluation of NWE-based approaches.\\ {\small
+        TNG -- \citet{Tang:14a}, %
+        VO -- \citet{Vo:16}, %
+        NC --- nearest centroids, %
+        KNN --- $k$-nearest neighbors, %
+        LP --- linear projection}}%
+    \label{snt-lex:tbl:nwe-meth}
+  \end{center}
+\end{table}
 
 % A new family of lexicon induction methods builds on learned vector
 % representations of words -- the neural word embeddings
@@ -1402,6 +1502,38 @@ stopping of the expansion.
 %     \label{snt-lex:tbl:lex-kh-seedset}
 %   \end{center}
 % \end{table}
+
+\subsection{Effect of Word Embedding Types}\label{subsec:snt-lex:eowet}
+
+\begin{table}[thb!]
+  \begin{center}
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}%
+    \setlength{\belowrulesep}{0pt}\scriptsize
+    \begin{tabular}{p{0.15\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
+      \toprule
+      \multirow{2}*{\bfseries Lexicon} & \multicolumn{4}{c}{\bfseries Embedding Type}\\
+      & word2vec & task-specific + word2vec & task-specific + least squares & task-specific\\\midrule
+      NC & 0.404 & 0.41 & 0.404 & 0.401\\
+      KNN & 0.328 & 0.403 & 0.404 & 0.403\\
+      PCA & 0.404 & 0.411 & 0.404 & 0.404\\
+      LP &  &  &  & \\\bottomrule
+
+    \end{tabular}\egroup%
+    {
+      \captionsetup{justification=centering}
+      \caption{Macro-averaged
+        \F-scores of NWE-based methods depending on the embedding type.\\%
+                  {\small\itshape%
+                    NC --- nearest centroids, %
+                    KNN --- $k$-nearest neighbors, %
+                    PCA --- principal component analysis, %
+                    LP --- linear projection%
+                  }%
+      }\label{snt-lex:tbl:emb-eff}
+    }
+  \end{center}
+\end{table}
 
 \subsection{Analysis of Entries}\label{subsec:snt-lex:aoe}
 
