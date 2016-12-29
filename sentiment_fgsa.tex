@@ -549,9 +549,9 @@ step $t$ is typically defined as:
   \vec{h}^{(t)} = f(\vec{h}^{(t-1)}, \mathbf{x}^{(t)});
 \end{align*}
 where $f$ usually represents as a pointwise non-linear transformation
-such as logistic function or hyperbolic tangent, $\vec{h}^{(t-1)}$
-denotes the state of the hidden vector at the previous time step, and
-$\mathbf{x}^{(t)}$ is the input at step $t$.
+such as a logistic function or the hyperbolic tangent,
+$\vec{h}^{(t-1)}$ denotes the state of the hidden vector at the
+previous time step, and $\mathbf{x}^{(t)}$ is the input at step $t$.
 
 A fundamental problem which arises from the above definition is that
 the gradients of the trained parameters, which are used to estimate
@@ -586,7 +586,7 @@ state:
 \begin{align*}
   C^{(t)} &= \vec{i}^{(t)} * \widetilde{C}^{(t)} + \vec{f}^{(t)} * C^{(t-1)}.
 \end{align*}
-From this activation, one then can normally compute the output vector
+From this activation, they then computed the output vector
 $\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$
 as follows:
 \begin{align*}
@@ -594,7 +594,26 @@ as follows:
   \vec{h}^{(t)} &= \vec{o}^{(t)} * tanh(C^{(t)}).
 \end{align*}
 
-GRU
+An alternative recurrent architecture, which also mitigated the
+problem of vanishing and exploding gradients, was proposed
+by~\citet{Cho:14a}.  In their work, the authors also used activation
+and forget gates similar to the ones defined by~\citet{Hochreiter:97},
+though without the gate-specific bias terms ($\vec{b}_i$ and
+$\vec{b}_f$ respectively):
+\begin{align*}
+  \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)}\right),\\
+  \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)}\right).
+\end{align*}
+The candidate activation $\widetilde{C}^{(t)}$ was then computed as:
+\begin{align*}
+  \widetilde{C}^{(t)} &= \phi\left(W_c\cdot \mathbf{x}^{(t)} + U_c
+  \cdot \left(\vec{f}^{(t)}\odot\vec{h}^{(t-1)}\right)\right);
+\end{align*}
+and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
+\begin{align*}
+  \vec{h}^{(t)} &= \vec{i}^{(t)} * \vec{h}^{(t-1)} + \left(\vec{1} -
+  \vec{i}^{(t)}\right) * \widetilde{C}^{(t)}.
+\end{align*}
 
 \textbf{Training}
 
