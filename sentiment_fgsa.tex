@@ -458,45 +458,72 @@ predicates (which, for simplicity, are listed here in groups):
 \begin{itemize}
 \item\emph{formal}, which included the initial three characters of
   each token (e.g., $\phi_{abc}(\mathbf{x}_m) = 1\mbox{ if
-  }\mathbf{x}_m\sim\mbox{ /\textasciicircum abc/ else } 0$), its last three
-  characters, and the general spelling class (e.g., alphanumeric,
-  digit, or punctuation);
+  }\mathbf{x}_m\sim\mbox{ /\textasciicircum abc/ else } 0$), its last
+  three characters, and the general spelling class of the token (e.g.,
+  alphanumeric, digit, or punctuation);
 
-\item\emph{morphological}, which encompassed the PoS tag of the
-  analyzed token, case and gender values for inflectable PoS types,
-  degree of comparison for adjectives; and mood, tense, and person
-  forms for verbs;
+\item\emph{morphological}, which encompassed the part-of-speech tag of
+  the analyzed token, case and gender values for inflectable PoS
+  types, the degree of comparison for adjectives, and mood, tense, and
+  person forms for verbs;
 
 \item\emph{lexical}, which comprised the actual lemma and form of the
   token (using one-hot encoding), its polarity class (positive,
   negative, or neutral), which we obtained from the Zurich Polarity
-  Lexicon \cite{Clematide:10};
+  Lexicon~\cite{Clematide:10};
 
 \item and, finally, \emph{syntactic}, which included the dependency
   relation via which the token $\mathbf{x}_m$ was connected to its
-  parent, the lemma of the parent node, the PoS tag and the polarity
-  class of the grandparent, as well as the overall polarity of all
-  children.  The latter term was computed by summing up polarity
-  scores of all immediate descendants and checking whether the
-  resulting value was greater, less, or equal to zero.
+  parent, two binary features reflecting whether the previos token in
+  the sentence was the parent or child of the current word, as well as
+  two other features, one of which encoded the dependency relation of
+  the previous token in the sentence to its parent + dependency
+  relation of the current token to its ancestor and the other
+  reflected the dependency link of the next token + dependency
+  relation of the current token to its parent.
 \end{itemize}
 
 In addition to the above attributes, we also used a set of complex
 lexico-syntactic features, which simultaneously combined several
 semantic and syntactic traits.  These included:
 \begin{itemize}
-\item the dependency relation of the previous token in the sentence to
-  its parent + dependency relation of the current token to its
-  ancestor;
-\item the dependency relation of the next word in the sentence +
-  dependency relation of the current token;
-\item the lemma of the child node + dependency relation of this child;
+\item the lemma of the syntactic parent;
+\item the part-of-speech tag and the polarity class of the
+  grandparent;
+\item the lemma of the child node + dependency relation emanating from
+  this child;
 \item the PoS tag of the child node + its dependency relation + PoS
-  tag of the current token.
+  tag of the current token;
+\item the lemma of the child node + its dependency relation + lemma of
+  the current token;
+\item the overall polarity of children, which was computed by summing
+  up polarity scores of all immediate syntactic descendants and
+  checking whether the resulting value was greater, less than or equal
+  to zero.\footnote{We again used the Zurich Polarity Lexicon
+    of~\citet{Clematide:10} for computing these scores.}
 \end{itemize}
 
 \textbf{Results} The results of our experiments are shown in
-Table~\ref{snt-fgsa:tbl:crf-res}.
+Table~\ref{snt-fgsa:tbl:crf-res}.  As can be seen from the table, with
+the given features, the model can perfectly well fit the training set,
+achieving a macro-averaged \F-score of~0.904.  The learned parameters,
+however, only partially generalize to unseen data, leading to notably
+lower \F-results on the test corpus (0.287).  This disbalance
+indicates a strong ``overfitting'' of the model to the training data
+(i.e., the model assigns heigher weights to rather sporadic, noisy
+features, which only accidentally co-occurred with the target classes
+in the observed training instances).
+
+Another notable tendency, which can be observed both on the training
+and test splits, is that the recall of the CRF system is generally
+lower than its precision.  This again can be attributed to the
+overfitting effect, due to which, attributes which actually give rise
+to subjective evaluations are often disregarded in favor of less
+indicative features.  Since the latter attributes, might not to appear
+in the test data or are unlikely to correlate with the sentiment
+entities even if they occur, the model often fails to recognize
+sentiments in contexts which do have indicative but underweighted
+features.
 
 \begin{table*}
   \begin{center}
@@ -513,8 +540,10 @@ Table~\ref{snt-fgsa:tbl:crf-res}.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-          Training Set\\
-          Test Set\\\bottomrule
+      Training Set & 0.949 & 0.908 & 0.928 & 0.903 & 0.87 & 0.886 & %
+      0.933 & 0.865 & 0.898 & 0.904\\
+      Test Set & 0.37 & 0.28 & 0.319 & 0.305 & 0.244 & 0.271 & 0.304 & %
+      0.244 & 0.271 & 0.287\\\bottomrule
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis with the
@@ -594,12 +623,12 @@ as follows:
   \vec{h}^{(t)} &= \vec{o}^{(t)} * tanh(C^{(t)}).
 \end{align*}
 
-An alternative recurrent architecture, which also mitigated the
-problem of vanishing and exploding gradients, was proposed
-by~\citet{Cho:14a}.  In their work, the authors also used activation
-and forget gates similar to the ones defined by~\citet{Hochreiter:97},
-though without the gate-specific bias terms ($\vec{b}_i$ and
-$\vec{b}_f$ respectively):
+An alternative recurrent architecture (Gated Recurrent Units or GRU),
+which also mitigated the problem of vanishing and exploding gradients,
+was proposed by~\citet{Cho:14a}.  In their work, the authors also used
+activation and forget gates similar to the ones defined
+by~\citet{Hochreiter:97}, though without the gate-specific bias terms
+($\vec{b}_i$ and $\vec{b}_f$ respectively):
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)}\right),\\
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)}\right).
@@ -607,7 +636,7 @@ $\vec{b}_f$ respectively):
 The candidate activation $\widetilde{C}^{(t)}$ was then computed as:
 \begin{align*}
   \widetilde{C}^{(t)} &= \phi\left(W_c\cdot \mathbf{x}^{(t)} + U_c
-  \cdot \left(\vec{f}^{(t)}\odot\vec{h}^{(t-1)}\right)\right);
+  \cdot \left(\vec{f}^{(t)} * \vec{h}^{(t-1)}\right)\right);
 \end{align*}
 and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
 \begin{align*}
