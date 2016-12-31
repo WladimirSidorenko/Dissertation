@@ -517,13 +517,12 @@ in the observed training instances).
 Another notable tendency, which can be observed both on the training
 and test splits, is that the recall of the CRF system is generally
 lower than its precision.  This again can be attributed to the
-overfitting effect, due to which, attributes which actually give rise
-to subjective evaluations are often disregarded in favor of less
-indicative features.  Since the latter attributes, might not to appear
-in the test data or are unlikely to correlate with the sentiment
-entities even if they occur, the model often fails to recognize
-sentiments in contexts which do have indicative but underweighted
-features.
+overfitting effect, due to which, less indicative features become more
+important than attributes which actually give rise to subjective
+evaluations.  Since the former features, might not to appear in the
+test data or are unlikely to correlate with the sentiment entities
+even if they occur, the model often fails to recognize sentiments in
+contexts which do have important but underweighted features.
 
 \begin{table*}
   \begin{center}
@@ -554,25 +553,26 @@ features.
 
 \subsection{Fine-grained Sentiment Analysis with Recurrent Neural Networks}
 
-A competive alternative to the conditional random fields are deep
-recurrent neural networks (RNNs).  Introduced in the
+A competive modern alternative to the conditional random fields are
+deep recurrent neural networks (RNNs).  Introduced in the
 mid-nineties~\cite{Hochreiter:97}, RNNs became one of the most widely
 used trends in the recent surge of deep learning.  The main factors
 for this success are
 \begin{inparaenum}[(i)]
 \item the ability of these systems to learn the optimal feature
   representations automatically, which favorably sets them apart from
-  traditional supervised machine learning frameworks, where all
-  features need to be defined by user; and
+  traditional supervised machine learning frameworks such as SVMs or
+  CRFs, where all features need to be defined by user; and
 \item the ability to deal with arbitrary sequence lengths, which
-  advantageously distinguishes them from other NN architectures, where
-  the size of the learned parameters needs to be fixed.
+  advantageously distinguishes them from other NN architectures such
+  as CNN or feed-forward networks, where the size of all perceptron
+  layers needs to be fixed.
 \end{inparaenum}
 
-The key component which is common to any modern RNN system is a
+The key component which underlies any popular RNN system is a
 fixed-size hidden vector $\vec{h}$, which is recurrently updated over
 the input sequence $\mathbf{x}$ and is supposed to encode the meaning
-of the input seen so far.  The general form of this vector at time
+of the input seen so far.  The general form of this vector at the time
 step $t$ is typically defined as:
 \begin{align*}
   \vec{h}^{(t)} = f(\vec{h}^{(t-1)}, \mathbf{x}^{(t)});
@@ -580,55 +580,62 @@ step $t$ is typically defined as:
 where $f$ usually represents as a pointwise non-linear transformation
 such as a logistic function or the hyperbolic tangent,
 $\vec{h}^{(t-1)}$ denotes the state of the hidden vector at the
-previous time step, and $\mathbf{x}^{(t)}$ is the input at step $t$.
+previous time step, and $\mathbf{x}^{(t)}$ is the input vector at the
+step $t$.
 
-A fundamental problem which arises from the above definition is that
-the gradients of the trained parameters, which are used to estimate
-the $\vec{h}$ vector, rapidly vanish to zero or explode to infinity
-(depending on whether the abosule values of $\vec{h}$ are less or
-greater than one) as the length of the input increases.  In order to
-solve this issue, \citet{Hochreiter:97} proposed the long short-term
-memory mechanism (LSTM), in which they explicitly incorporated the
-goal to drop parts of the input which seemed to be irrelevant for the
-final outcome.  In particular, given an input sequence $\mathbf{x}$,
-they introduced an intermediate input unit $\vec{i}^{(t)}$:
+\textbf{LSTM} A fundamental problem which arises from the above
+definition is that the gradients of the trained parameters, which are
+used to estimate the $\vec{h}$ vector, rapidly vanish to zero or
+explode to infinity (depending on whether the abosule values of
+$\vec{h}$ are less or greater than one) as the length of the input
+increases.  In order to solve this issue, \citet{Hochreiter:97}
+proposed the long short-term memory mechanism (LSTM), in which they
+explicitly incorporated the goal to drop parts of the input which
+appeared to be irrelevant for the final outcome.  In particular, given
+an input sequence $\mathbf{x}$, they introduced a special
+\emph{activation} unit $\vec{i}^{(t)}$:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right),
 \end{align*}
-where $\sigma$ is the sigmoid function; $W_i$, $U_i$, and $\vec{b_i}$
-denote the optimized model's parameters; and $\mathbf{x}^{(t)}$ and
-$\vec{h}^{(t-1)}$ are defined as previously.  From this intermediate
-representation, they then computed the candidate value $\widetilde{C}^{(t)}$
-for the current time step:
-\begin{align*}
-  \widetilde{C}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
-  \cdot \vec{h}^{(t-1)} + \vec{b}_c\right).
-\end{align*}
-After computing the forget unit~$f^{(t)}$ as:
+where $\sigma$ denotes the sigmoid function; $W_i$, $U_i$, and
+$\vec{b_i}$ represent the optimized model's parameters; and
+$\mathbf{x}^{(t)}$ and $\vec{h}^{(t-1)}$ represent the input and the
+previous hidden state respectively.  In addition to that, they also
+estimated a dedicated \emph{forget} gate~$\vec{f}^{(t)}$:
 \begin{align*}
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f
-  \cdot \vec{h}^{(t-1)} + \vec{b}_f\right),
+  \cdot \vec{h}^{(t-1)} + \vec{b}_f\right).
 \end{align*}
-they finally estimated the activation candidate for time step $t$ as a
-weighted sum of the current candidate and the previous activation
-state:
+Then, after computing an \emph{intermediate update} value for the
+current time step~$\widetilde{C}^{(t)}$:
+\begin{align*}
+  \widetilde{C}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
+  \cdot \vec{h}^{(t-1)} + \vec{b}_c\right),
+\end{align*}
+they estimated the \emph{final update} state~$\widetilde{C}^{(t)}$ by
+taking a weighted sum of the candidate update
+vector~$\widetilde{C}^{(t)}$ and the previous update
+value~$C^{(t-1)}$:
 \begin{align*}
   C^{(t)} &= \vec{i}^{(t)} * \widetilde{C}^{(t)} + \vec{f}^{(t)} * C^{(t-1)}.
 \end{align*}
-From this activation, they then computed the output vector
-$\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$
-as follows:
+From this term, they finally computed the output vector
+$\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$:
 \begin{align*}
   \vec{o}^{(t)} &= \sigma\left(W_o\cdot \mathbf{x}^{(t)} + U_o \cdot \vec{h}^{(t-1)} + \vec{b}_o\right),\\
   \vec{h}^{(t)} &= \vec{o}^{(t)} * tanh(C^{(t)}).
 \end{align*}
 
-An alternative recurrent architecture (Gated Recurrent Units or GRU),
-which also mitigated the problem of vanishing and exploding gradients,
-was proposed by~\citet{Cho:14a}.  In their work, the authors also used
-activation and forget gates similar to the ones defined
-by~\citet{Hochreiter:97}, though without the gate-specific bias terms
-($\vec{b}_i$ and $\vec{b}_f$ respectively):
+\textbf{GRU} Despite their enormous popularity and many successful
+practical applications~\cite[cf.][]{Filippova:15,Ghosh:16,Rao:16},
+LSTM has often been criticized for an unduly complexity of the
+recurrent unit.  In order to overcome this issue while still keeping
+the gradients within an appropriate interval, \citet{Cho:14a}
+introduced an alternative architecture called Gated Recurrent Units
+(GRU).  In this framework, the authors also used an activation and
+forget gate similar to the ones defined by~\citet{Hochreiter:97}.
+They dropped however the unit-specific bias terms $\vec{b}_i$ and
+$\vec{b}_f$ for simplicity:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)}\right),\\
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)}\right).
@@ -636,7 +643,7 @@ by~\citet{Hochreiter:97}, though without the gate-specific bias terms
 The candidate activation $\widetilde{C}^{(t)}$ was then computed as:
 \begin{align*}
   \widetilde{C}^{(t)} &= \phi\left(W_c\cdot \mathbf{x}^{(t)} + U_c
-  \cdot \left(\vec{f}^{(t)} * \vec{h}^{(t-1)}\right)\right);
+  \cdot \left(\vec{f}^{(t)} * \vec{h}^{(t-1)}\right)\right),
 \end{align*}
 and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
 \begin{align*}
