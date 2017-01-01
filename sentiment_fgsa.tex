@@ -655,20 +655,29 @@ the final equation, which is obtained after unrolling the loop, is
 differentiable with respect to all of its parameters and can therefore
 be optimized using the standard gradient update methods.  Since most
 of these parameters, however, represent high-dimensional vectors or
-matrices, finding an optimal update rate (i.e. the length of the
-update step made in the direction of the gradient) might pose
+matrices, finding an optimal learning rate (i.e., the size of the
+update step taken in the direction of the gradient) might pose
 considerable difficulties, leading either to a prohibitively large
-training time or to a complete divergence of the trained model.
+training times (if the steps are too small) or divergence of the
+trained model (if the steps are too big).
 
 Several algorithms have been proposed in order to solve this issue,
 including the method of momentum~\cite{Rumelhart:88},
 AdaGrad~\cite{Duchi:11}, AdaDelta~\cite{Zeiler:12},
-RmsProp~\cite{Tieleman:12} etc.  In our subsequent experiments, we
-will rely on the last option---the RmsProp optimization introduced
-by~\citet{Tieleman:12}---as we found this algorithm leading to a
-faster convergence and a superior classification quality.
+RmsProp~\cite{Tieleman:12} etc.  In our RNN experiments, we will rely
+on the last option---the RmsProp optimization proposed
+by~\citet{Tieleman:12}---as we found this algorithm leading to both a
+faster convergence and superior classification quality.
 
-Following
+Another important factor, which might significantly affect the
+training, is the initialization of the learned model's parameters.  As
+shown by~\citet{He:15}, an inappropriate choice of the initial values
+might result in a complete stalling of the learning process.
+Following the recommended practices~\cite{Saxe:13}, we initialized all
+parameter matrices to orthogonal values in order to ensure their full
+rank and used He initialization~\cite{He:15} for setting the values of
+the bias vectors.
+
 \textbf{Inference}
 
 \textbf{Results}
@@ -944,7 +953,13 @@ underlying CRF model: broad sentiments, for example, are best
 processed with the second-order semi-Markov CRFs, while narrow
 opinions are more amenable to the tree-structured model.
 
-\subsubsection{Ablation Tests}
+\subsubsection{Effect of Features}
+
+Another important factor which significantly influenced the results of
+the CRF system were the features which we provided to this model as
+input.  In order to check the utility of the defined attributes, we
+performed an ablation test, removing one group of features at a time
+and rechecking model's performance on the dev set
 
 We checked the utility of these features by conducting an ablation
 test using the first-order linear-chain and the tree-structured models
