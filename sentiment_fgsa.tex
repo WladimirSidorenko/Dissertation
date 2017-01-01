@@ -612,10 +612,9 @@ current time step~$\widetilde{C}^{(t)}$:
   \widetilde{C}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
   \cdot \vec{h}^{(t-1)} + \vec{b}_c\right),
 \end{align*}
-they estimated the \emph{final update} state~$\widetilde{C}^{(t)}$ by
-taking a weighted sum of the candidate update
-vector~$\widetilde{C}^{(t)}$ and the previous update
-value~$C^{(t-1)}$:
+they estimated the \emph{final update} state~$C^{(t)}$ by taking a
+weighted sum of the candidate update vector~$\widetilde{C}^{(t)}$ and
+the previous update value~$C^{(t-1)}$:
 \begin{align*}
   C^{(t)} &= \vec{i}^{(t)} * \widetilde{C}^{(t)} + \vec{f}^{(t)} * C^{(t-1)}.
 \end{align*}
@@ -628,14 +627,14 @@ $\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$:
 
 \textbf{GRU} Despite their enormous popularity and many successful
 practical applications~\cite[cf.][]{Filippova:15,Ghosh:16,Rao:16},
-LSTM has often been criticized for an unduly complexity of the
-recurrent unit.  In order to overcome this issue while still keeping
-the gradients within an appropriate interval, \citet{Cho:14a}
-introduced an alternative architecture called Gated Recurrent Units
-(GRU).  In this framework, the authors also used an activation and
-forget gate similar to the ones defined by~\citet{Hochreiter:97}.
-They dropped however the unit-specific bias terms $\vec{b}_i$ and
-$\vec{b}_f$ for simplicity:
+LSTMs are often criticized for the high complexity of the recurrent
+unit.  In order to overcome this issue while still keeping the
+gradients within an appropriate interval, \citet{Cho:14a} introduced
+an alternative architecture called Gated Recurrent Units (GRU).  In
+this framework, the authors also used activation and forget gates
+($\vec{i}^{(t)}$ and $\vec{f}^{(t)}$ respecitvely) similar to the ones
+defined by~\citet{Hochreiter:97}.  They dropped however the
+gate-specific bias terms $\vec{b}_i$ and $\vec{b}_f$ for simplicity:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)}\right),\\
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)}\right).
@@ -651,8 +650,25 @@ and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
   \vec{i}^{(t)}\right) * \widetilde{C}^{(t)}.
 \end{align*}
 
-\textbf{Training}
+\textbf{Training} A neat property of both of these approaches is that
+the final equation, which is obtained after unrolling the loop, is
+differentiable with respect to all of its parameters and can therefore
+be optimized using the standard gradient update methods.  Since most
+of these parameters, however, represent high-dimensional vectors or
+matrices, finding an optimal update rate (i.e. the length of the
+update step made in the direction of the gradient) might pose
+considerable difficulties, leading either to a prohibitively large
+training time or to a complete divergence of the trained model.
 
+Several algorithms have been proposed in order to solve this issue,
+including the method of momentum~\cite{Rumelhart:88},
+AdaGrad~\cite{Duchi:11}, AdaDelta~\cite{Zeiler:12},
+RmsProp~\cite{Tieleman:12} etc.  In our subsequent experiments, we
+will rely on the last option---the RmsProp optimization introduced
+by~\citet{Tieleman:12}---as we found this algorithm leading to a
+faster convergence and a superior classification quality.
+
+Following
 \textbf{Inference}
 
 \textbf{Results}
