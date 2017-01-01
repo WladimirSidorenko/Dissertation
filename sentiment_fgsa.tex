@@ -675,8 +675,8 @@ shown by~\citet{He:15}, an inappropriate choice of the initial values
 might result in a complete stalling of the learning process.
 Following the recommended practices~\cite{Saxe:13}, we initialized all
 parameter matrices to orthogonal values in order to ensure their full
-rank and used He initialization~\cite{He:15} for setting the values of
-the bias vectors.
+rank, and used He initialization~\cite{He:15} for setting the values
+of the bias vectors.
 
 \textbf{Inference}
 
@@ -713,94 +713,6 @@ the bias vectors.
 
 
 \subsection{Evaluation}
-
-\subsubsection{Topologies}
-% \subsubsection{Semi-Markov CRFs}
-% Instead of making their predictions over single tokens, semi-Markov
-% CRFs try to partition the input sequence $\bm{x}$ into contiguous
-% segments $\vec{s} = \langle{}s_1,\ldots,s_l\rangle{}$ where each
-% segment $s_i$ consists of one or more tokens which all share the same
-% common tag $y_i$.
-
-% Features in semi-Markov models are defined at the level of segments
-% and, like in the linear-chain case, are binary- or real-valued
-% functions associated either with the segment $s_i$ and its label $y_i$
-% or a pair of adjacent segment labels $(y_{i-1}, y_i)$.
-
-% During the training and the later prediction step, the model considers
-% all potential segmentations for all possible label assignments and all
-% possible segment lengths ranging from 1 to $L$ where $L$ is the length
-% of the longest sequence of tokens with identical tags that was
-% observed in the training data.  The decoding step then jointly finds
-% the most probable segmentation $\hat{s}$ and the label sequence
-% $\vec{y}$ for that segmentation using either the greedy search or the
-% dynamic Viterbi algorithm.
-
-% \subsubsection{Higher-order CRFs}
-% Unlike the first-order models whose transition features can only
-% access a pair of adjacent element labels $(y_{i-1}, y_i)$, transition
-% features of higher-order linear-chain and semi-Markov CRFs encode
-% information about complete label sequences up to length $d$ that might
-% precede the predicted label $y_i$ where $d$ is the maximum order of
-% the model.
-
-% But since the number of such label sequences grows exponentially in
-% the order of the encoded dependencies (up to
-% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$), the running time of
-% the training and inference algorithms rapidly becomes prohibitively
-% expensive and amounts to
-% $\mathcal{O}(n(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
-% for the linear-chain case and
-% $\mathcal{O}(nL(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
-% for the semi-Markov models.
-
-% Because this problem is intractable in general \cite{Istrail:00},
-% researchers are usually forced to resort to some sort of heuristics
-% like an early state pruning \cite{Mueller:13} or state-transition
-% reduction.
-
-% For the purpose of our experiments, we applied the affix-based
-% algorithm of \citet{Nguyen:14}.  This algorithm relies on the
-% advantage that the actual number of possible sequences of $d$
-% consecutive segment labels that are observed in the training set is
-% typically much smaller than
-% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$.  Furthermore, the
-% number of possible transitions that need to be considered for the
-% given label sequence $(y_{i-d}, y_{i-d+1},\ldots,y_i)$ can further be
-% reduced by restricting them only to those patterns for which this
-% label sequence forms the longest possible suffix.
-
-% The running time of this algorithm for the semi-Markov case runs up to
-% $\mathcal{O}(nL\left\vert\mathcal{P}\right\vert\left\vert\mathcal{Y}\right\vert)$
-% where $\left\vert\mathcal{P}\right\vert$ is the total number of the
-% label prefixes observed in the training set.  And even though this
-% number can still be exponential in the order of the dependencies in
-% the worst case, this algorithm usually leads to much faster results in
-% practice especially when the label patterns in the addressed domain
-% are sparse.
-
-% \subsubsection{Tree-structured CRFs}
-% In contrast to the linearly structured models, in which the predicted
-% label $y_i$ only depends on the state attributes of the respective
-% item $x_i$ and the label scores of the preceding tokens or segments
-% and where the syntax information can only be expressed as feature
-% attributes of single items, tree-CRFs allow to incorporate syntactic
-% dependencies directly into the model's structure.
-
-% In our experiments, we used the automatically constructed dependency
-% trees of the sentences as the underlying graphs for the
-% tree-structured CRF model.  Like in the linear CRF case, every
-% predicted label $y_i$ in this model is dependent on the state features
-% of the token $x_i$, but, instead of hard-coding dependencies on the
-% label scores of the previous tokens, we let transition features
-% connect the predicted label with every label score $y_c$ where $c$
-% ranges over all indices of the child nodes of the token $x_i$ in the
-% dependency tree.
-
-% Since the resulting model graphs are acyclic, the inference in this
-% type of CRFs can still be exact and its running time remains the same
-% as for the first-order linear chain models:
-% $\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
 
 \subsubsection{Effect of the Annotation Scheme}
 Experiment I (broad sentiment)
@@ -1002,6 +914,94 @@ shown in Table \ref{tbl:ablation}.\footnote{Since we did not observe
   \end{center}
 \end{table}
 
+
+\subsubsection{Topologies}
+% \subsubsection{Semi-Markov CRFs}
+% Instead of making their predictions over single tokens, semi-Markov
+% CRFs try to partition the input sequence $\bm{x}$ into contiguous
+% segments $\vec{s} = \langle{}s_1,\ldots,s_l\rangle{}$ where each
+% segment $s_i$ consists of one or more tokens which all share the same
+% common tag $y_i$.
+
+% Features in semi-Markov models are defined at the level of segments
+% and, like in the linear-chain case, are binary- or real-valued
+% functions associated either with the segment $s_i$ and its label $y_i$
+% or a pair of adjacent segment labels $(y_{i-1}, y_i)$.
+
+% During the training and the later prediction step, the model considers
+% all potential segmentations for all possible label assignments and all
+% possible segment lengths ranging from 1 to $L$ where $L$ is the length
+% of the longest sequence of tokens with identical tags that was
+% observed in the training data.  The decoding step then jointly finds
+% the most probable segmentation $\hat{s}$ and the label sequence
+% $\vec{y}$ for that segmentation using either the greedy search or the
+% dynamic Viterbi algorithm.
+
+% \subsubsection{Higher-order CRFs}
+% Unlike the first-order models whose transition features can only
+% access a pair of adjacent element labels $(y_{i-1}, y_i)$, transition
+% features of higher-order linear-chain and semi-Markov CRFs encode
+% information about complete label sequences up to length $d$ that might
+% precede the predicted label $y_i$ where $d$ is the maximum order of
+% the model.
+
+% But since the number of such label sequences grows exponentially in
+% the order of the encoded dependencies (up to
+% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$), the running time of
+% the training and inference algorithms rapidly becomes prohibitively
+% expensive and amounts to
+% $\mathcal{O}(n(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
+% for the linear-chain case and
+% $\mathcal{O}(nL(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
+% for the semi-Markov models.
+
+% Because this problem is intractable in general \cite{Istrail:00},
+% researchers are usually forced to resort to some sort of heuristics
+% like an early state pruning \cite{Mueller:13} or state-transition
+% reduction.
+
+% For the purpose of our experiments, we applied the affix-based
+% algorithm of \citet{Nguyen:14}.  This algorithm relies on the
+% advantage that the actual number of possible sequences of $d$
+% consecutive segment labels that are observed in the training set is
+% typically much smaller than
+% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$.  Furthermore, the
+% number of possible transitions that need to be considered for the
+% given label sequence $(y_{i-d}, y_{i-d+1},\ldots,y_i)$ can further be
+% reduced by restricting them only to those patterns for which this
+% label sequence forms the longest possible suffix.
+
+% The running time of this algorithm for the semi-Markov case runs up to
+% $\mathcal{O}(nL\left\vert\mathcal{P}\right\vert\left\vert\mathcal{Y}\right\vert)$
+% where $\left\vert\mathcal{P}\right\vert$ is the total number of the
+% label prefixes observed in the training set.  And even though this
+% number can still be exponential in the order of the dependencies in
+% the worst case, this algorithm usually leads to much faster results in
+% practice especially when the label patterns in the addressed domain
+% are sparse.
+
+% \subsubsection{Tree-structured CRFs}
+% In contrast to the linearly structured models, in which the predicted
+% label $y_i$ only depends on the state attributes of the respective
+% item $x_i$ and the label scores of the preceding tokens or segments
+% and where the syntax information can only be expressed as feature
+% attributes of single items, tree-CRFs allow to incorporate syntactic
+% dependencies directly into the model's structure.
+
+% In our experiments, we used the automatically constructed dependency
+% trees of the sentences as the underlying graphs for the
+% tree-structured CRF model.  Like in the linear CRF case, every
+% predicted label $y_i$ in this model is dependent on the state features
+% of the token $x_i$, but, instead of hard-coding dependencies on the
+% label scores of the previous tokens, we let transition features
+% connect the predicted label with every label score $y_c$ where $c$
+% ranges over all indices of the child nodes of the token $x_i$ in the
+% dependency tree.
+
+% Since the resulting model graphs are acyclic, the inference in this
+% type of CRFs can still be exact and its running time remains the same
+% as for the first-order linear chain models:
+% $\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
 
 \subsubsection{Error Analysis}
 
