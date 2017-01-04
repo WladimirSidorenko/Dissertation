@@ -330,8 +330,9 @@ main resons for such huge success were:
     definition, the probability of the correct labeling
     ($KON-ADV-NN-VA$) is equal to:
     \begin{align*}
-      P(KON, ADV, NN, VA) =& P(KON)\times P(ADV|KON)\times P(NN|ADV)\times P(VA|NN)\\
-      =&\frac{\exp(1)}{\exp(1)}\times\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\\%
+      P(KON, ADV, NN, VA) =& P(KON)\times P(ADV|KON)\\
+      &\times P(NN|ADV)\times P(VA|NN)\\
+      &=\frac{\exp(1)}{\exp(1)}\times\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\\%
       \times&\frac{\exp(0.2 + 0.5)}{\exp(0.2 + 0.5) + \exp(0.8 + 0.5)}\times\frac{\exp(0.9 + 1.)}{\exp(0.9 + 1.)} \approx 0.177
     \end{align*}
     At the same time, the probability of the incorrect variant
@@ -345,7 +346,8 @@ main resons for such huge success were:
     probability of the correct labels would amount to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
-      P(ADV|KON)\times P(NN|ADV)\times P(VA|NN)\\ =&\frac{\exp(1 + 0.5
+      P(ADV|KON)\times P(NN|ADV)\\
+      &\times P(VA|NN)\\ =&\frac{\exp(1 + 0.5
         \times 3 + 0.2 + 0.9 + 1)}{Z} \approx 0.252,
     \end{align*}
     where $Z = \exp(1 + 0.5 \times 3 + 0.2 + 0.9 + 1) + \exp(1 + 0.5
@@ -534,7 +536,7 @@ contexts which do have important but underweighted features.
       \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
       \multicolumn{3}{c}{\bfseries Source} & %
       \multicolumn{3}{c}{\bfseries Target} & %
-      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\
+      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\\cline{2-10}
       & Precision & Recall & \F{} & %
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
@@ -691,16 +693,16 @@ of the bias vectors.
       \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
       \multicolumn{3}{c}{\bfseries Source} & %
       \multicolumn{3}{c}{\bfseries Target} & %
-      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\
+      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\\cline{2-10}
       & Precision & Recall & \F{} & %
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}GRU}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}LSTM}\\
           Training Set\\
           Test Set\\
 
-          \multicolumn{11}{c}{\cellcolor{cellcolor}LSTM}\\
+          \multicolumn{11}{c}{\cellcolor{cellcolor}GRU}\\
           Training Set\\
           Test Set\\\bottomrule
     \end{tabular}
@@ -867,53 +869,114 @@ opinions are more amenable to the tree-structured model.
 
 \subsubsection{Effect of Features}
 
-Another important factor which significantly influenced the results of
-the CRF system were the features which we provided to this model as
-input.  In order to check the utility of the defined attributes, we
-performed an ablation test, removing one group of features at a time
-and rechecking model's performance on the dev set
-
-We checked the utility of these features by conducting an ablation
-test using the first-order linear-chain and the tree-structured models
-with the broad interpretation scheme.
-%%  All of these attributes proved to increase the classification
-%% accuracy with the lexical and syntactic features being the most useful
-%% ones.
-The relative changes of the classification results on the test set
-that were caused by the removal of each of these feature groups are
-shown in Table \ref{tbl:ablation}.\footnote{Since we did not observe
-  the test data during the feature development stage, some of the
-  features that had lead to classification improvements on the
-  training corpus showed a negative influence on the test data.}
+Another important factor which could significantly influence the
+results of the CRF system were the features which we provided to it as
+input.  In order to check the utility of our attributes, we performed
+an ablation test, removing one feature group at a time and rechecking
+the performance of the model on the development set.
 
 \begin{table}[hbt]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.47\tabcolsep} \small
-    \begin{tabular}{|p{0.2\columnwidth}| % first columm
-        *{5}{>{\centering\arraybackslash}p{0.12\columnwidth}|}} % next five columns
-      \hline
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.14\columnwidth} % first columm
+        *{6}{>{\centering\arraybackslash}p{0.13\columnwidth}}} % next five columns
+      \toprule
           \multirow{2}{0.2\columnwidth}{\bfseries Element} &
-          \multicolumn{5}{c|}{\bfseries Removed feature type}\\\cline{2-6}
-          & Form & Morph & Lex & Synt & Cmplx\\\hline
+          \multirow{2}{0.1\columnwidth}{\bfseries Original\newline \F-Score} &
+          \multicolumn{5}{c}{\bfseries \F-Score after Feature Removal}\\\cline{3-7}
+          & & Formal & Morphological & Lexical & Syntactic & Complex\\\midrule
 
-          \multicolumn{6}{|c|}{\cellcolor{cellcolor}1-st order linear-chain CRFs}\\\hline
-
-          Sentiment & -2.12 & -1.41 & -2.7 & -1.32 & -5.25\\
-          Target & -2.62 & -0.7 & -5.24 & -0.47 & -5.49\\
-          Source & -1.94 & -1.91 & -2.49 & -2.92 & -7.83\\\hline
-
-          \multicolumn{6}{|c|}{\cellcolor{cellcolor}Tree-structured CRFs}\\\hline
-
-          Sentiment & -0.05 & -0.09 & +0.02 & -0.65 & -5.59\\
-          Target & -1.4 & +1.11 & +2.71 & +3.87 & -4.28\\
-          Source & -0.63 & +0.12 & +0.15 & +0.65 & -5.72\\\hline
+          Sentiment & 0.346 & 0.343\negdelta{0.003} & 0.344\negdelta{0.002} & 0.326\negdelta{0.02} & 0.345\negdelta{0.001} & 0.324\negdelta{0.022}\\
+          Source & 0.309 & 0.321\posdelta{0.012} & 0.313\posdelta{0.004} & 0.265\negdelta{0.044} & 0.359\posdelta{0.05} & 0.271\negdelta{0.038}\\
+          Target & 0.26 & 0.282\posdelta{0.022} & 0.252\negdelta{0.008} & 0.263\posdelta{0.003} & 0.233\negdelta{0.027} & 0.263\posdelta{0.003}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Feature ablation tests.}
+    \caption{Results of the feature ablation test.\\{\small\itshape
+        Negative changes w.r.t. the original scores on the dev set are
+        shown in \textsuperscript{\textcolor{red3}{red}}, and positive changes are depicted in
+        \textsuperscript{\textcolor{seagreen}{green}} superscript.}}
     \label{tbl:ablation}
   \end{center}
 \end{table}
 
+The results of this test are shown in Table~\ref{tbl:ablation}.  As we
+can see from the table, all feature types turn out to be useful for
+predicting sentiments as their removal unequivocally leads to some
+degradation of the scores.  This quality drop, however, is usually
+quite small, suggesting that other attributes types can easily make up
+for the removed ones.
+
+A different situation is observed for sources and targets though.  In
+the first case, removing formal, morphological, and syntactic features
+shows a strongly positive effect, improving the \F-results for sources
+by up to 5\%.  However, removing lexical and lexico-syntactic
+features, on the contrary, worsens these results, tearing the
+\F-scores down by up to 4.4\%.  Except for the formal group, all these
+attributes behave completely differently when applied to targets,
+which seem to benefit from morphological and syntactic features, while
+suffering a slight degradation from lexical and complex attributes.
+
+\begin{table}[hbt]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \begin{tabular}{>{\centering\arraybackslash}p{0.05\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
+      \toprule
+          \multirow{2}{0.2\columnwidth}{Rank} &
+          \multicolumn{2}{c}{\bfseries Top-10 State Features} &
+          \multicolumn{2}{c}{\bfseries Top-10 Transition Features}\\\cline{2-5}
+          & Feature & Score & Feature & Score\\\midrule
+
+          1 & prntLemma=meiste $\rightarrow$ TRG & 18.68 & NON $\rightarrow$ TRG & -7.01\\
+          2 & prntLemma=rettungsschirme $\rightarrow$ TRG & 18.3 & NON $\rightarrow$ SRC & -6.85\\
+          3 & initChar=sty $\rightarrow$ NON & -16.04  & NON $\rightarrow$ SNT & -5.39\\
+          4 & form=meisten $\rightarrow$ NON & 15.99 & TRG $\rightarrow$ SRC & -2.99\\
+          5 & prntLemma=urlauberin $\rightarrow$ SNT & 14.74 & NON $\rightarrow$ NON & 2.69\\
+          6 & lemma=anfechten  $\rightarrow$ SNT & 14.07 & SRC $\rightarrow$ NON & -2.59\\
+          7 & form=thomasoppermann  $\rightarrow$ TRG & 13.44 & SNT $\rightarrow$ SNT & 2.54\\
+          8 & form=bezeichnete $\rightarrow$ SNT & 13.25 & TRG $\rightarrow$ TRG & 2.31\\
+          9 & deprel[0]|deprel[1]=NK|AMS $\rightarrow$ NON & 12.92 & SRC $\rightarrow$ SRC & 2.19\\
+          10 & trailChar=te. $\rightarrow$ NON & 12.77 & SRC $\rightarrow$ TRG & -2.07\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Top ten state and transition features learned by the CRF
+      model.\\{\small (sorted by the absolute values of their
+        weights)}}
+    \label{fgsa:tbl:ablation}
+  \end{center}
+\end{table}
+
+In order to get a better overview of the learned model's parameters,
+we also extracted top ten state and transition features ranked by the
+absolute values of their scores (see Table~\ref{fgsa:tbl:ablation}).
+As can be seen from the statistics, three of the five highest ranked
+state attributes are complex features reflecting the lemma of the
+parent token: ``meiste'' (\emph{most}) and ``rettungsschirme''
+(\emph{bailout}), which typically indicate a target, and
+``urlauberin'' (\emph{holiday}), which frequently correlates with
+sentiments.  Another common group of features are the lemma and form
+of the current token: here, we again can encounter ``meisten''
+(\emph{most}), which, however, indicates the absence of any sentiment
+entities at the current position; two other attributes---``anfechten''
+(\emph{doubt}) and ``bezeichnete'' (\emph{called})---represent the
+so-called \emph{direct speech events} and expectedly correlate with
+the sentiment tags; the remaining feature---``thomasopperman''---is a
+person name, which frequently appears as a target of an opinion.
+
+An interesting pattern can be observed for transition attributes: As
+we can see from the results, the top-3 transition features indicate a
+strong belief that an objective token is highly unlikely to be
+followed by any sentiment entity (hence, the high negative weights of
+the transitions emanating from $NON$).  It is, however, quite common
+that a $NON$ tag will preceed another $NON$ instance (cf. line 5 of
+the table).  Other transition attributes also mainly reflect plausible
+regularities: It is, for instance, uncommon that a target of an
+opinion will appear immediately before a source ($TRG\rightarrow SRC =
+-2.99$); in the same vein, it is rather uncommon that a source tag
+will preceed a target ($SRC\rightarrow TRG = -2.07$); nonetheless, is
+is perfectly acceptable that the same tag will continue over multiple
+words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
+2.31$).
 
 \subsubsection{Topologies}
 % \subsubsection{Semi-Markov CRFs}
