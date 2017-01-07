@@ -892,7 +892,14 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 
 \subsubsection{Effect of Word Embeddings}
 
+\subsubsection{Effect of Lexica and Normalization}
+
 \subsubsection{Effect of Topologies}
+
+Due to an exponentially increasing running time, we restricted the
+maximum number of training iterations to 256 while keeping all other
+hyper-parameters of the model the same as the original setting.
+
 
 \begin{table*}
   \begin{center}
@@ -905,17 +912,17 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
       & 1 lcCRF & 2 lcCRF & 3 lcCRF & 4 lcCRF & %
       1 smCRF & 2 smCRF & 3 smCRF & 4 smCRF & 1 trCRF\\\midrule
 
-          \multicolumn{10}{c}{\cellcolor{cellcolor}Training Set}\\
+      \multicolumn{10}{c}{\cellcolor{cellcolor}Training Set}\\
 
-          Sentiment &  &  &  &  &  &  &  &  & \\
-          Source &  &  &  &  &  &  &  &  & \\
-          Target &  &  &  &  &  &  &  &  & \\\midrule
+      Sentiment & 0.928 &  &  &  & 0.931 & 0.931 &  &  & \\
+      Source & 0.886 &  &  &  & 0.869 & 0.886 &  &  & \\
+      Target & 0.898 &  &  &  & 0.813 & 0.827 &  &  & \\\midrule
 
-          \multicolumn{10}{c}{\cellcolor{cellcolor}Test Set}\\
+      \multicolumn{10}{c}{\cellcolor{cellcolor}Development Set}\\
 
-          Sentiment &  &  &  &  &  &  &  &  & \\
-          Source &  &  &  &  &  &  &  &  & \\
-          Target &  &  & &  &  &  &  &  & \\\bottomrule
+      Sentiment &  &  &  &  & 0.395 & 0.385 &  &  & \\
+      Source &  &  &  &  & 0.298 & 0.282 &  &  & \\
+      Target &  &  &  &  & 0.287 & 0.309 &  &  & \\\bottomrule
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis for different
@@ -1038,9 +1045,9 @@ for identifying subjective expressions pertaining to product aspects.
 One of the first attempts at automatically analyzing subjective
 opinions with Conditional Random fields was made by \citet{Choi:05}.
 In their work, the authors combined a linear-chain CRF system with the
-unsupervised pattern extractor \texttt{AutoSlog-TS} \cite{Riloff:96}
-in order to recognize holders of opinions in text.  This approach
-showed a significant improvement over compared baselines (noun phrases
+unsupervised pattern extractor AutoSlog-TS \cite{Riloff:96} in order
+to recognize holders of opinions in text.  This approach showed a
+significant improvement over compared baselines (noun phrases
 pre-selected by heuristic rules).
 
 Later on, \citet{Choi:06} further enhanced this system, simultaneously
