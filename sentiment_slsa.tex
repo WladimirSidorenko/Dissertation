@@ -8,6 +8,21 @@
 
 \subsection{Related Work}
 
+One of the first attempts to analyze sentiments on Twitter was made by
+\citet{Go:09}.  For their experiments, the authors collected a set of
+1,600,000 tweets containing smileys.  Based on these emoticons, they
+automatically derived polarity classes for these messages (positive or
+negative) and used them to train a Na\"{\i}ve Bayes, a MaxEnt, and an
+SVM classifier.  The best $F$-score for this two-class classification
+problem could be achieved by the last system and run up to 82.2\%.
+
+Similar work was done later by \citet{Pak:10} who used a Na\"{\i}ve
+Bayes approach to differentiate between neutral, positive, and
+negative microblogs. \citet{Barbosa:10} also gathered a collection of
+200,000 tweets from three publicly available sentiment web-services
+and then trained an SVM classifier to predict the subjectivity and the
+polarity class of new unseen messages.
+
 \citet{Kobayashi:07}
 Wiebe, Bruce, \& O'Hara 1999
 Hatzivassiloglou \& Wiebe 2000
@@ -55,21 +70,6 @@ of their work from the analysis of official documents and newspaper
 articles to the classification of user-generated content abounding on
 the Web.
 
-One of the first attempts to analyze sentiments on Twitter was made by
-\citet{Go:09}.  For their experiments, the authors collected a set of
-1,600,000 tweets containing smileys.  Based on these emoticons, they
-automatically derived polarity classes for these messages (positive or
-negative) and used them to train a Na\"{\i}ve Bayes, a MaxEnt, and an
-SVM classifier.  The best $F$-score for this two-class classification
-problem could be achieved by the last system and run up to 82.2\%.
-
-Similar work was done later by \citet{Pak:10} who used a Na\"{\i}ve
-Bayes approach to differentiate between neutral, positive, and
-negative microblogs. \citet{Barbosa:10} also gathered a collection of
-200,000 tweets from three publicly available sentiment web-services
-and then trained an SVM classifier to predict the subjectivity and the
-polarity class of new unseen messages.
-
 Works attempting a more fine-grained sentiment analysis on Twitter
 usually try to derive a common polarity class for each message with
 respect to a particular target that is mentioned in that microblog.
@@ -81,23 +81,14 @@ authors manually labeled a corpus of 1,939 messages and trained a
 binary SVM model in order to predict the subjectivity and the polarity
 of the tweets with respect to the given subjects.
 
+\citet{Wang:15}
+
 %% This classifier could achieve an accuracy of 68.2\% for the
 %% subjectivity classification and 85.6\% for the polarity prediction.
 %% The $F$-score of this system for the latter task could further be
 %% improved from 66\% to 68.3\% by incorporating the information about
 %% the predicted polarity class of the re-tweets, replies, and other
 %% microblogs posted by the same author.
-
-\citet{Mitchell:13} broadened the set of possible targets by allowing
-any named entities found in microblogs to be associated with a
-specific polarity.  For that purpose, the authors combined a CRF-based
-NER system with a sentiment predicting CRF by considering three
-different possibilities of such combination: a pipeline approach, a
-joint multi-layer model, and a single classifier with a combined
-tagset.  The best scores on their corpora of 7,105 Spanish and 2,350
-English tweets could be achieved with the joint and pipeline
-approaches.  The accuracy of recognizing the opinionated named
-entities amounted to 31\% for Spanish and 30.4\% for English.
 
 %% Other notable works in this direction include \citet{Chunping:14} who
 %% first applied a Na\"{\i}ve Bayes classifier to predict the
