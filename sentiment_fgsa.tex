@@ -104,7 +104,7 @@ immediate holder of the opinion---``Kardinal'' \textit{cardinal}---and
 its grammatical dependants without including any of its parental
 elements.
 
-\subsection{Data}\label{snt:fgsa:subsec:data}
+\subsection{Data Preparation}\label{snt:fgsa:subsec:data}
 
 For our experiments, we split our final corpus into three parts using
 70\% of it as a training set, 15\% as cross-validation data, and the
@@ -172,12 +172,12 @@ the automatic assignment as:
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation*}
 where the \emph{span coverage} metric
-$C(\mathcal{S},\widehat{\mathcal{S}})$ was computed as the number of
+$C(\mathcal{S},\widehat{\mathcal{S}})$ is computed as the number of
 overlapping tokens across all pairs of manually ($s_i$) and
 automatically ($s_j$) annotated entities: $C(\mathcal{S},
 \widehat{\mathcal{S}}) = \sum_{s_i \in \mathcal{S}}\sum_{s_j \in
   \widehat{\mathcal{S}}}c(s_i, s_j)$; and $|\widehat{\mathcal{S}}|$
-meant the total number of tokens automatically labeled with the given
+means the total number of spans automatically labeled with the given
 tag.  Similarly, the recall of such assignment was estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
@@ -609,47 +609,47 @@ estimated a dedicated \emph{forget} gate~$\vec{f}^{(t)}$:
   \cdot \vec{h}^{(t-1)} + \vec{b}_f\right).
 \end{align*}
 Then, after computing an \emph{intermediate update} value for the
-current time step~$\widetilde{C}^{(t)}$:
+current time step~$\widetilde{c}^{(t)}$:
 \begin{align*}
-  \widetilde{C}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
+  \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
   \cdot \vec{h}^{(t-1)} + \vec{b}_c\right),
 \end{align*}
-they estimated the \emph{final update} state~$C^{(t)}$ by taking a
-weighted sum of the candidate update vector~$\widetilde{C}^{(t)}$ and
-the previous update value~$C^{(t-1)}$:
+they estimated the \emph{final update} state~$\vec{c}^{(t)}$ by taking a
+weighted sum of the candidate update vector~$\widetilde{c}^{(t)}$ and
+the previous update value~$\vec{c}^{(t-1)}$:
 \begin{align*}
-  C^{(t)} &= \vec{i}^{(t)} * \widetilde{C}^{(t)} + \vec{f}^{(t)} * C^{(t-1)}.
+  \vec{c}^{(t)} &= \vec{i}^{(t)} * \widetilde{c}^{(t)} + \vec{f}^{(t)} * \vec{c}^{(t-1)}.
 \end{align*}
 From this term, they finally computed the output vector
 $\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$:
 \begin{align*}
-  \vec{o}^{(t)} &= \sigma\left(W_o\cdot \mathbf{x}^{(t)} + U_o \cdot \vec{h}^{(t-1)} + \vec{b}_o\right),\\
-  \vec{h}^{(t)} &= \vec{o}^{(t)} * tanh(C^{(t)}).
+  \vec{o}^{(t)} &= \sigma\left(W_o\cdot \mathbf{x}^{(t)} + U_o \cdot \vec{h}^{(t-1)} + V_o \cdot \vec{c}^{(t)} + \vec{b}_o\right),\\
+  \vec{h}^{(t)} &= \vec{o}^{(t)} * tanh(\vec{c}^{(t)}).
 \end{align*}
 
 \textbf{GRU} Despite their enormous popularity and many successful
 practical applications~\cite[cf.][]{Filippova:15,Ghosh:16,Rao:16},
-LSTMs are often criticized for the high complexity of the recurrent
-unit.  In order to overcome this issue while still keeping the
-gradients within an appropriate interval, \citet{Cho:14a} introduced
-an alternative architecture called Gated Recurrent Units (GRU).  In
-this framework, the authors also used activation and forget gates
-($\vec{i}^{(t)}$ and $\vec{f}^{(t)}$ respecitvely) similar to the ones
+LSTMs have often been criticized for the high complexity of the
+recurrent unit.  In order to overcome this issue while still keeping
+the gradients within an appropriate interval, \citet{Cho:14a}
+introduced an alternative architecture called Gated Recurrent Units
+(GRU).  In this framework, the authors also used activation and forget
+gates---$\vec{i}^{(t)}$ and $\vec{f}^{(t)}$---similar to the ones
 defined by~\citet{Hochreiter:97}.  They dropped however the
 gate-specific bias terms $\vec{b}_i$ and $\vec{b}_f$ for simplicity:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)}\right),\\
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)}\right).
 \end{align*}
-The candidate activation $\widetilde{C}^{(t)}$ was then computed as:
+The candidate activation $\widetilde{c}^{(t)}$ was then computed as:
 \begin{align*}
-  \widetilde{C}^{(t)} &= \phi\left(W_c\cdot \mathbf{x}^{(t)} + U_c
+  \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
   \cdot \left(\vec{f}^{(t)} * \vec{h}^{(t-1)}\right)\right),
 \end{align*}
 and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
 \begin{align*}
   \vec{h}^{(t)} &= \vec{i}^{(t)} * \vec{h}^{(t-1)} + \left(\vec{1} -
-  \vec{i}^{(t)}\right) * \widetilde{C}^{(t)}.
+  \vec{i}^{(t)}\right) * \widetilde{c}^{(t)}.
 \end{align*}
 
 \textbf{Training} A neat property of both of these approaches is that
@@ -914,15 +914,15 @@ hyper-parameters of the model the same as the original setting.
 
       \multicolumn{10}{c}{\cellcolor{cellcolor}Training Set}\\
 
-      Sentiment & 0.928 &  &  &  & 0.931 & 0.931 & 0.933 & 0.931 & \\
-      Source & 0.887 &  &  &  & 0.869 & 0.886 & 0.874 & 0.878 & \\
-      Target & 0.898 &  &  &  & 0.813 & 0.827 & 0.815 & 0.817 & \\
+      Sentiment & 0.928 & 0.919 & 0.922 & 0.925 & 0.931 & 0.931 & 0.933 & 0.931 & \\
+      Source & 0.887 & 0.876 & 0.89  & 0.901 & 0.869 & 0.886 & 0.874 & 0.878 & \\
+      Target & 0.898 & 0.811 & 0.816 & 0.827 & 0.813 & 0.827 & 0.815 & 0.817 & \\
 
       \multicolumn{10}{c}{\cellcolor{cellcolor}Development Set}\\
 
-      Sentiment & 0.345 &  &  &  & 0.395 & 0.385 & 0.389 & 0.378 & \\
-      Source & 0.313 &  &  &  & 0.298 & 0.282 & 0.287 & 0.291 & \\
-      Target & 0.258 &  &  &  & 0.287 & 0.309 & 0.301 & 0.292 & \\\bottomrule
+      Sentiment & 0.345 & 0.334 & 0.332 & 0.335 & 0.395 & 0.385 & 0.389 & 0.378 & \\
+      Source & 0.313 & 0.32 & 0.272 & 0.304 & 0.298 & 0.282 & 0.287 & 0.291 & \\
+      Target & 0.258 & 0.235 & 0.24 & 0.229 & 0.287 & 0.309 & 0.301 & 0.292 & \\\bottomrule
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis for different
