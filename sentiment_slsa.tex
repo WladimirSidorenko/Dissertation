@@ -8,6 +8,10 @@
 
 \subsection{Related Work}
 
+\citet{Hu:04}
+
+\citet{Kim:04}
+
 One of the first attempts to analyze sentiments on Twitter was made by
 \citet{Go:09}.  For their experiments, the authors collected a set of
 1,600,000 tweets containing smileys.  Based on these emoticons, they
@@ -16,12 +20,23 @@ negative) and used them to train a Na\"{\i}ve Bayes, a MaxEnt, and an
 SVM classifier.  The best $F$-score for this two-class classification
 problem could be achieved by the last system and run up to 82.2\%.
 
-Similar work was done later by \citet{Pak:10} who used a Na\"{\i}ve
+Bermingham and Smeaton, 2010
+
+Similar work was done later by \citet{Pak:10}, who used the Na\"{\i}ve
 Bayes approach to differentiate between neutral, positive, and
-negative microblogs. \citet{Barbosa:10} also gathered a collection of
-200,000 tweets from three publicly available sentiment web-services
-and then trained an SVM classifier to predict the subjectivity and the
-polarity class of new unseen messages.
+negative microblogs; and \citet{Barbosa:10}, who gathered a collection
+of 200,000 tweets, subsequently analyzing them with three publicly
+available sentiment web-services; the results of these services were
+then used as noisy labels for training an SVM classifier.
+
+\citet{Agarwal:11} compared a simple unigram-based SVM approach with
+two other full-fledged systems, one which relied on a rich set of
+manually defined features, and another used partial tree
+kernels~\cite{Moschitti:06}.  The authors evaluated these methods on a
+commercially acquired corpus of 8,753 foreign-language tweets, which
+were automatically translated into English, finding that a combination
+of these methods worked best both for the two- and three-way
+classification tasks.
 
 \citet{Kobayashi:07}
 Wiebe, Bruce, \& O'Hara 1999
@@ -34,28 +49,29 @@ Yu \& Hatzivassiloglou 2003
 
 A real breakthrough in the use of deep neural networks for the
 sentence-level sentiment analysis happened with the pioneering work
-of~\citet{Socher:11}, who first introduced the recursive autoencoder
-(RAE), in which they obtained fixed-width vector representations of
-complex phrases $\vec{v}$ by recursively merging the vectors of
-adjacent tokens (say $\vec{w}_1$ and $\vec{w}_2$), first multiplying
-these vectors with a compositional matrix $W$ and then applying a
-non-linear function ($softmax$) to this product:
+of~\citet{Socher:11}, who first introduced a recursive autoencoder
+(RAE).  In this system, the authors obtained a fixed-width vector
+representation for complex phrases $\vec{v}$ by recursively merging
+the vectors of adjacent tokens (say $\vec{w}_1$ and $\vec{w}_2$),
+first multiplying these vectors with a compositional matrix $W$ and
+then applying a non-linear function ($softmax$) to the resulting
+product:
 \begin{align*}
   \vec{c} &= softmax\left(W\cdot\begin{bmatrix}
   \vec{w}_1\\
   \vec{w}_2
   \end{bmatrix}\right)
 \end{align*}
-By training a max-margin classifier on top of the resulting phrase
-representation, the authors could improve the state-of-the-art results
-on predicting the sentence-level polarity of user's blog posts in the
-experience corpus~\cite{Potts:10} and also outperformed the system
+Using a max-margin classifier on top of the resulting phrase
+representation, \citet{Socher:11} could improve the state-of-the-art
+results on predicting the sentence-level polarity of user's blog
+posts~\cite{Potts:10} and also outperformed the system
 of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}.
 
 Later on, \citet{Socher:12} further improved these scores with the
-help of the recursive matrix-vectors space model (RMVSM), in which
-each word was associated with a 2-tuple of a vector and matrix, e.g.,
-$(\vec{w}_1, W_1)$ and $(\vec{w}_2, W_2)$ a, and the compositionality
+help of a recursive matrix-vectors space model (RMVSM), in which each
+word was associated with a 2-tuple of a vector and matrix---e.g.,
+$(\vec{w}_1, W_1)$ and $(\vec{w}_2, W_2)$---and the compositionality
 function was redefined as follows:
 \begin{align*}
   \vec{c} &= softmax\left(W\cdot\begin{bmatrix}
@@ -64,58 +80,6 @@ function was redefined as follows:
   \end{bmatrix}\right)
 \end{align*}
 
-With the wide spread of social media services in recent years,
-sentiment researchers also have gradually started changing the focus
-of their work from the analysis of official documents and newspaper
-articles to the classification of user-generated content abounding on
-the Web.
-
-Works attempting a more fine-grained sentiment analysis on Twitter
-usually try to derive a common polarity class for each message with
-respect to a particular target that is mentioned in that microblog.
-
-\citet{Jiang:11}, for instance, tried to classify the polarity of
-microblogs pertaining to a predefined set of specific topics, like
-\emph{Obama}, \emph{Google}, \emph{iPad} etc.  To this end, the
-authors manually labeled a corpus of 1,939 messages and trained a
-binary SVM model in order to predict the subjectivity and the polarity
-of the tweets with respect to the given subjects.
-
 \citet{Wang:15}
-
-%% This classifier could achieve an accuracy of 68.2\% for the
-%% subjectivity classification and 85.6\% for the polarity prediction.
-%% The $F$-score of this system for the latter task could further be
-%% improved from 66\% to 68.3\% by incorporating the information about
-%% the predicted polarity class of the re-tweets, replies, and other
-%% microblogs posted by the same author.
-
-%% Other notable works in this direction include \citet{Chunping:14} who
-%% first applied a Na\"{\i}ve Bayes classifier to predict the
-%% subjectivity class of microblogs and then sequentially used two CRF
-%% models to predict the particular type of subjectivity (such as anger,
-%% fear, happiness etc.) for message sentences.
-
-%% Other notable works in this direction include \citet{Dong:14} who used
-%% a recurrent neural network to predict the polarity class associated
-%% with the opinion targets.  They, however, assumed the targets of
-%% sentiments to be apriori known and only were interested whether a
-%% positive or a negative judgement was made about them.
-
-%% Except for the work of \citet{Mitchell:13} and to some extent
-%% \citet{Jiang:11}, neither of the approaches attempted to classify
-%% sentiments below the sentence level.  And even in these two works, the
-%% set of possible targets was either restricted to the named entities or
-%% to some pre-defined list of words.  Therefore, the task that we are
-%% addressing here (simultaneous classification of sentiments, source,
-%% and targets) is by far more challenging, more difficult, and,
-%% unfortunately, probably less successful than the work previously done.
-
-Again, to the best of our knowledge, no work on simultaneous
-prediction of sentiment targets, and sources, as well as opinion
-segments has been reported for Twitter so far.
-
-%% and we sincerely hope that our data can at least ease the efforts of
-%% other researches on this field.
 
 \subsection{Summary and Conclusions}\label{slsa:subsec:conclusions}
