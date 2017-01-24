@@ -197,12 +197,12 @@ automatically split words using the Needleman-Wunsch alignment
 algorithm~\cite{Needleman:70}.
 
 \subsection{Fine-Grained Sentiment Analysis with Conditional Random
-  Fields} The first automatic method that we are going to evaluate in
-this section is that of the conditional random fields (CRFs).  First
+  Fields} The first method that we are going to evaluate on the
+obtained data is that of the conditional random fields.  First
 introduced by \citet{Lafferty:01}, CRFs rapidly grew in popularity,
 turning into one of the most commonly used probabilistic frameworks,
 which was dominating the NLP field for more than a decade.  The main
-resons for such huge success are:
+resons for this huge success are:
 \begin{enumerate}[1)]
 \item the \emph{structural nature} of CRFs, which, in contrast to
   single-entity classifiers such as logistic regression or SVM, make
@@ -221,14 +221,16 @@ resons for such huge success are:
   go through an example where we need to predict whether a tweet
   mentioning ``Merkel'' and ``Steinmeier'' is about the Christian
   Democratic Union (\texttt{CDU}) or Social Democratic Party of
-  Germany (\texttt{SPD}).  As features for this task, we will use
-  lexical unigrams appearing in the training data.  Assuming that our
-  training set consists of three messages mentioning ``Merkel'' and
-  one microblog mentioning ``Steinmeier'' which are labeled as
-  \texttt{CDU} plus one tweets mentioning ``Merkel'' and three posts
-  mentioning ``Steinmeier'' which are annotated as \texttt{SPD}, the
-  na\"{i}ve Bayes model will estimate the probability of the two
-  competing classes as:
+  Germany (\texttt{SPD}).
+
+  As features for this task, we will use lexical unigrams appearing in
+  the training data.  Assuming that our training set consists of three
+  messages mentioning ``Merkel'' and one microblog mentioning
+  ``Steinmeier'' which are labeled as \texttt{CDU} plus one tweets
+  mentioning ``Merkel'' and three posts mentioning ``Steinmeier''
+  which are annotated as \texttt{SPD}, the generative Na\"{i}ve Bayes
+  model would estimate the probability of the two competing classes
+  as:
   \begin{align*}
     P(\mathbf{x}, CDU) =& P(\textrm{Merkel},\textrm{Steinmeier}|CDU)\times P(CDU)\\
     =& P(\textrm{Merkel}|CDU)\times P(\textrm{Steinmeier}|CDU) \times P(CDU)\\
@@ -237,11 +239,12 @@ resons for such huge success are:
     =& P(\textrm{Merkel}|SPD)\times P(\textrm{Steinmeier}|SPD) \times P(SPD)\\
     =&\frac{1}{4}\times\frac{3}{4}\times\frac{4}{8}\approx 0.0938.\\
   \end{align*}
-  After normalizing these probabilities, we will get equal 50\%
+  After normalizing these probabilities, we would get equal 50\%
   chances for each of the parties, which is fair regarding the token
-  distribution in our corpus.  However, if we replace ``Merkel'' with
-  ``von der Leyen'' in the training data and test example and rerun
-  this experiment, the probability will get significantly skewed:
+  distribution in our corpus.  However, if we replaced ``Merkel'' with
+  ``von der Leyen'' both in the training data and test example and
+  rerun this experiment, the probability would get significantly
+  skewed towards the CDU class:
   \begin{align*}
     P(\mathbf{x}, CDU) =& P(\textrm{von},\textrm{der},\textrm{Leyen},\textrm{Steinmeier}|CDU)\times P(CDU)\\
     =& P(\textrm{von}|CDU)\times P(\textrm{der}|CDU)\times P(\textrm{Leyen}|CDU)\\
@@ -256,35 +259,33 @@ resons for such huge success are:
   \texttt{CDU} and a 10\% score for \texttt{SPD}, even though we only
   changed the name of the politician.
 
-  A different situation is observed for discriminative models such as
-  maximum entropy: Instead of optimizing the joint distribution
-  $P(\mathbf{x}, y)$ as it is done by generative frameworks,
-  discriminative classifiers seek to optimize the conditional
+  A different situation can be observed for discriminative models such
+  as a maximum entropy classifier: Instead of optimizing the joint
+  distribution $P(\mathbf{x}, y)$ as it is done by generative
+  frameworks, discriminative systems seek to optimize the conditional
   likelihood $P(y|\mathbf{x})$ by maximizing the probability of the
-  training set $\sum_{i=1}^N\log P(y_i|\mathbf{x}_i, \mathbf{w})$,
-  where $N$ is the number of training instances, $y_i$ is the gold
-  label for the $i$-th instance (e.g., 1 for \texttt{CDU} and 0 for
-  \texttt{SPD}), $\mathbf{x}_i$ stands for the feature vector of this
-  instance, and $\mathbf{w}$ represent the learned coefficients of
-  these feature.  The probability $P$ is typically normally computed
-  using the sigmoid function $\frac{1}{1 + e^{-(\mathbf{x}_i,
-      \mathbf{w})}}$.  Working through the partial derivatives of this
-  probability, we will arrive at the solution $w_1 \approx 0.5$ for
-  the feature ``Merkel'' and $w_2 \approx -0.5$ for the feature
-  ``Steinmeier'' for the first example, which would again result in
-  equal 50\% chances for both classes.  In the second example,
-  however, all three features ``von'', ``der'', and ``Leyen'' will get
-  an equal weight of $\approx 0.3$, and the ``Steinmeier'' feature
-  will receive a coefficient of $\approx -0.4$, which would result in
-  60\% probability for the test message being about the CDU and 40\%
-  that the tweet is about the SPD.  Even though this still means a
-  slight skewness towards \texttt{CDU}; this time, the effect of
-  correlated features is much less dramatic than in the generative
+  training set $\sum_{i=1}^N\log P(y_i|\mathbf{x}_i, \mathbf{w})$.
+  This probability is usually computed using the sigmoid function
+  $\frac{1}{1 + e^{-(\mathbf{x}_i, \mathbf{w})}}$, where
+  $\mathbf{x}_i$ denotes the input features of the $i$-th training
+  instance, and the vector $\mathbf{w}$ stands for the respective
+  weights of these features.  By optimizing this function using
+  gradient descent, we will arrive at the optimal solution $w_1
+  \approx 0.5$ for the feature ``Merkel'' and $w_2 \approx -0.5$ for
+  the feature ``Steinmeier'' for the first example, which would again
+  result in equal 50\% chances for both classes.  In the second
+  example, however, all three features ``von'', ``der'', and ``Leyen''
+  would get an equal weight of $\approx 0.3$, and the ``Steinmeier''
+  feature would receive a coefficient of $\approx -0.4$, which would
+  result in 60\% probability for the test message being about the CDU
+  and 40\% that the tweet is about the SPD.  Even though this still
+  means a slight skewness towards \texttt{CDU}; this time, the effect
+  of correlated features is much less dramatic than in the generative
   case.
 \end{example}
 \item and, finally, the \emph{avoidance of the label bias problem}, to
-  which other discriminative classifiers, such as MEMM
-  \cite{McCallum:00}, are known to be susceptible.
+  which other discriminative classifiers, such as maximum entropy
+  Markov networks \cite{McCallum:00}, are known to be susceptible.
   \begin{example}[Label Bias Problem]
     The label bias problem arises in the cases where a locally optimal
     decision outweights globally superior solutions.  Consider, for
@@ -340,14 +341,14 @@ resons for such huge success are:
       \times&\frac{\exp(0.2 + 0.5)}{\exp(0.2 + 0.5) + \exp(0.8 + 0.5)}\times\frac{\exp(0.9 + 1.)}{\exp(0.9 + 1.)} \approx 0.177
     \end{align*}
     At the same time, the probability of the incorrect variant
-    ($KON-ADV-ADJA-VA$) would amount to $\approx$ 0.323 and will
-    therefore be preferred during the automatic tagging.
+    ($KON-ADV-ADJA-VA$) amounts to $\approx$ 0.323 and will therefore
+    be preferred during the automatic tagging.
 
     A different situation is observed with the CRFs, where the
     normalizing factor in the denominator is computed over the whole
     input sequence without factorizing into individual terms for each
-    transition as it was done in the previous case.  That way, the
-    probability of the correct labels would amount to:
+    transition as it is done in the previous case.  That way, the
+    probability of the correct labels runs up to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
       P(ADV|KON)\times P(NN|ADV)\\
@@ -358,20 +359,20 @@ resons for such huge success are:
     \times 3 + 0.8 + 0.1 + 1) + \exp(1 + 0.5 \times 3 + 0.7 + 0.9 + 1)
     + \exp(1 + 0.5 \times 3 + 0.3 + 0.1 + 1)$ is the total score of
     all possible label assignments.  The incorrect alternative
-    ($KON-ADV-ADJA-VA$), however, will get a probability score of
+    ($KON-ADV-ADJA-VA$), however, would get a probability score of
     $\approx$ 0.207, which is smaller than the likelihood of the
     correct labeling.
   \end{example}
 \end{enumerate}
-\textbf{Training} CRFs possess these useful properties thanks to a
-neatly formulated objective function in which they seek to optimize
-the global log-likelihood of the gold labels $\mathbf{Y}$ conditioned
-on the training data $\mathbf{X}$.  In particular, given a set of
+\textbf{Training} CRFs get these useful properties thanks to a neatly
+formulated objective function in which they seek to optimize the
+global log-likelihood of the gold labels $\mathbf{Y}$ conditioned on
+the training data $\mathbf{X}$.  In particular, given a set of
 training instances $\mathcal{D} = \{(\mathbf{x}^{(n)},
 \mathbf{y}^{(n)})\}_{n=1}^N$, where $\mathbf{x}^{(n)}$ stands for the
 input variables of the $n$-th training instance and $\mathbf{y}^{(n)}$
-denotes its gold labels, CRF's training adds up to finding feature
-coefficients $\mathbf{w}$ which maximize the log-probabilities $\ell$
+denotes their gold labels, CRF's training adds up to finding feature
+coefficients $\mathbf{w}$ that maximize the log-probabilities $\ell$
 of $\mathbf{y}^{(i)}$ given their respective covariates
 $\mathbf{x}^{(i)}$ over the whole corpus:
 \begin{equation}\label{snt:fgsa:eq:crf-ell}
@@ -387,11 +388,11 @@ function:
   \ln\left(\frac{ \exp\left(\sum_{m=1}^{M}\sum_jw_{j} \times f_j(x_{m},
     y_{m-1}, y_{m})\right)}{Z}\right),
 \end{equation}
-where $M$ stands for the length of the $n$-th training instance
-$|\mathbf{x}^{(n)}|$, $f_j(x_{m}, y_{m-1}, y_{m})$ denotes the value
-of the $j$-th feature function $f$ at the sequence position $m$, $w_j$
-represents the corresponding weight of this feature, and $Z$ is a
-normalization factor calculated over all possible label assignments:
+where $M$ stands for the length of the $n$-th training instance,
+$f_j(x_{m}, y_{m-1}, y_{m})$ denotes the value of the $j$-th feature
+function $f$ at the sequence position $m$, $w_j$ represents the
+corresponding weight of this feature, and $Z$ is a normalization
+factor calculated over all possible label assignments:
 \begin{equation}
   Z =
   \sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}\exp\left(\sum_{m=1}^{M}\sum_jw_{j}
