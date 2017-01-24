@@ -17,25 +17,24 @@ opinions (\emph{sentiments}), the holders of these opinions
 (\emph{sources}), and their respectively evaluated objects
 (\emph{targets}) in text.  Since an accurate automatic prediction of
 these elements would enable us to track public attitude to literally
-any object (e.g., a product, a service, or a political decision), FGSA
-is commonly considered to be one of the most attractive, necessary,
-but, unfortunately, also challenging goals in computational
-linguistics.
+any object (e.g., a product, service, or political decision), FGSA is
+commonly regarded to be one of the most attractive, necessary, but,
+unfortunately, also challenging goals in computational linguistics.
 
 Researchers usually consider this objective as a sequence labeling
 (SL) task and address it with either of the two popular SL techniques:
-conditional random fields or recurrent neural networks.  The former
-approach represents a discriminative probabilistic graphical model
-which relies on hand-crafted features; the latter framework utilizes a
-recursive computational loop which can learn feature representations
-completely automatically.  In this section, we are going to evaluate
-each of these methods in detail in order to find out which of these
-algorithms is better suited for the domain of German Twitter.
-However, before we proceed with our evaluation, we should first make a
-short linguistic digression and briefly discuss the definition of
-textual spans, to which these approaches should assign their labels,
-and the evaluation metrics, with which we should estimate the quality
-of this assignment.
+conditional random fields (CRFs) or recurrent neural networks (RNNs).
+The former approach represents a discriminative probabilistic
+graphical model, which relies on hand-crafted features; the latter
+framework utilizes a recursive computational loop, which can learn
+feature representations completely automatically.  In this section, we
+are going to evaluate each of these methods in detail in order to find
+out which of these algorithms is better suited for the domain of
+German Twitter.  However, before we proceed with our evaluation, we
+should first make a short linguistic digression and briefly discuss
+the definition of textual spans, to which these approaches should
+assign their labels, and the evaluation metrics, using which we will
+estimate the quality of this assignment.
 
 \subsection{Definition of Sentiment, Target, and Source Spans}
 Despite some notable advances and an ongoing active research on
@@ -46,19 +45,22 @@ due attention yet.  Researchers typically overlook this problem,
 leaving its solution to the discretion of their annotators
 \cite[cf.][]{Wiebe:05,Klinger:13}.
 
-In contrast to this, instead of relying on intuitive decisions of our
-coders, we explicitly defined a rule for determining opinions'
-boundaries by telling the experts to assign the \texttt{sentiment} tag
-to ``\emph{minimal complete syntactic or discourse-level units that
-  included both the target of an opinion and its actual evaluation}''.
+In contrast to these works, instead of relying on rather intuitive
+decisions of the coders, we explicitly provided a rule for determining
+opinions' boundaries by telling our experts to assign the
+\texttt{sentiment} tag to ``\emph{minimal complete syntactic or
+  discourse-level units that included both the target of an opinion
+  and its actual evaluation}''.
 
-In other words, during the annotation, our coders first had to
-identify evaluated objects (targets) in text, then find the respective
-evaluative expressions of these objects (usually but not necessarily
-polar terms), and, finally, determine the smallest syntactic
-components (noun or verb phrases) or discourse units (clauses or
-sentences) where both of these entities appeared together.  An
-annotation example labeled in compliance with this rule is provided
+According to this instruction, during the annotation, a linguist first
+had to identify evaluated objects (targets) in text, then find the
+respective evaluative expressions of these objects (usually but not
+necessarily polar terms), and, finally, determine the smallest
+syntactic components (typically noun or verb phrases) or discourse
+units (clauses or sentences) where both of these entities appeared
+together.
+
+An annotation example labeled in compliance with this rule is provided
 below:
 \begin{example}\label{snt:fgsa:exmp:sent-anno1}
   \upshape\sentiment{Der neue Papst gilt als
@@ -66,7 +68,7 @@ below:
   \noindent\sentiment{The new Pope is believed to be a sober, modest
     man.}
 \end{example}
-\noindent In this sentence, our experts had to label the complete
+\noindent In this sentence, the experts had to label the complete
 clause as a sentiment, since this unit was the minimal syntactic
 constituent which included both the object of an evaluation---``der
 neue Papst'' (\textit{the new pope})---and the evaluation
@@ -76,8 +78,10 @@ itself---``bescheidener, zur\"uckgenommener Typ'' (\textit{a sober,
 We applied the same principles of minimality and completeness to the
 annotation of targets and sources, requiring the main components of
 these elements (typically nouns or verbs) to be labeled along with all
-their syntactic dependants.  Accordingly, the correct annotation of
-the target in the previous example had to look as follows:
+their syntactic dependants.
+
+Accordingly, the correct annotation of the target in the previous
+example had to look as follows:
 \begin{example}\label{snt:fgsa:exmp:sent-anno2}
   \upshape\sentiment{\target{Der neue Papst} gilt als
     bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
@@ -104,63 +108,26 @@ immediate holder of the opinion---``Kardinal'' \textit{cardinal}---and
 its grammatical dependants without including any of its parental
 elements.
 
-\subsection{Data Preparation}\label{snt:fgsa:subsec:data}
-
-For our experiments, we split our final corpus into three parts using
-70\% of it as a training set, 15\% as cross-validation data, and the
-remaining 15\% for testing purposes.  The data were tokenized with an
-adjusted version of Christopher Potts'
-Twitter-tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
-and preprocessed using the rule-based normalization approach of
-\citet{Sidarenka:13}.
-
-%% During the normalization, Twitter-specific phenomena like @-mentions,
-%% retweets, and URIs that were not syntactically integrated in any
-%% sentence of the message were removed from the tweets and those
-%% elements which played an integral syntactic role were replaced with
-%% the special artificial tokens \%User, \%Link etc.  Emoticons like :-),
-%% \smiley{}, \frownie{} etc. were also replaced with the placeholders
-%% \%PosSmiley, \%NegSmiley, or simply \%Smiley depending on their prior
-%% polarity.  Furthemore, out-of-vocabulary words which could be
-%% converted to in-vocabulary terms with a pre-defined set of
-%% transformations were also normalized.
-
-We then labeled the preprocessed data with their part-of-speech tags
-using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger} Version
-  3.2 with the German parameter file UTF-8.}  \cite{Schmid:95} and
-parsed obtained sentences with the \texttt{Mate} dependency
-parser\footnote{We used \texttt{Mate} Version \texttt{3.61} with the
-  German parameter model 3.6.}  \cite{Bohnet:13}.  These automatically
-derived trees were then used as the source of syntactic features for
-all our models and the underlying graph structures for tree-CRFs.
-
-Since \texttt{MMAX2} did not provide a straightforward support for
-storing character offsets of the tokens and the automatically
-tokenized preprocessed data did not necessarily agree with the corpus
-tokenization, we next applied the Needleman-Wunsch algorithm
-\cite{Needleman:70} to align the manual annotation with the
-automatically segmented data.
-
 \subsection{Evaluation Metrics}
-A natural question which arises after defining the span boundaries for
-human coders is that of the best way to compare these spans with
-automatically assigned labels.  One possibility to estimate the
-quality of such automatic assignment is to compute the precision,
+The next question which naturally arises after defining the span
+boundaries for human coders is that of the best way to compare these
+spans with automatically assigned labels.  One possibility to estimate
+the quality of such automatic assignment is to compute the precision,
 recall, and \F{}-scores using either the binary overlap or exact match
-metric \cite{Choi:06,Breck:07} .  The former method considers an
+metrics \cite{Choi:06,Breck:07} .  The former method considers an
 automatically labeled span as correct if it has at least one token in
 common with a labeled entity from the gold annotation.  The latter
-metric only regards as true positives automatic spans which have
-absolutely identical boundaries with the gold labels.  Unfortunately,
-both of these approaches are somewhat problematic: While the binary
-overlap might be overly optimistic, always assigning perfect scores to
-automatic spans which cover the whole sentence; the method of exact
-match might, vice versa, be too drastic, considering the whole
+metric only regards as true positive those automatic spans which have
+absolutely identical boundaries with the gold assignment.
+Unfortunately, both of these approaches are somewhat problematic:
+While the binary overlap might be overly optimistic, always assigning
+perfect scores to automatic spans which cover the whole sentence; the
+exact match might, vice versa, be too drastic, considering the whole
 assignment as false if only one (possibly irrelevant) token is
 missing.
 
 Instead of relying on these measures, we opted for the ``golden mean''
-solution to this problem which was proposed by \citet{Johansson:10a}.
+solution to this problem that was proposed by \citet{Johansson:10a}.
 In their work, the authors introduced another metric for estimating
 the quality of an automatic assignment, in which they penalized the
 predicted spans proportionally to the number of tokens whose labels
@@ -171,14 +138,17 @@ the automatic assignment as:
 \begin{equation*}
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation*}
-where the \emph{span coverage} metric
-$C(\mathcal{S},\widehat{\mathcal{S}})$ is computed as the number of
-overlapping tokens across all pairs of manually ($s_i$) and
-automatically ($s_j$) annotated entities: $C(\mathcal{S},
-\widehat{\mathcal{S}}) = \sum_{s_i \in \mathcal{S}}\sum_{s_j \in
-  \widehat{\mathcal{S}}}c(s_i, s_j)$; and $|\widehat{\mathcal{S}}|$
-means the total number of spans automatically labeled with the given
-tag.  Similarly, the recall of such assignment was estimated as:
+where $C(\mathcal{S},\widehat{\mathcal{S}})$ means the \emph{span
+  coverage} metric and is computed as the proportion of overlapping
+tokens across all pairs of manually ($s_i$) and automatically ($s_j$)
+annotated entities:
+\begin{equation*}
+ C(\mathcal{S}, \widehat{\mathcal{S}}) = \sum_{s_i \in
+   \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j);
+\end{equation*}
+and $|\widehat{\mathcal{S}}|$ denotes the total number of spans
+automatically labeled with the given tag.  Similarly to precision, the
+recall of such assignment was estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
@@ -187,18 +157,52 @@ precision and recall scores:
 \begin{equation*}
   F_1 = 2\times\frac{P \times R}{P + R}.
 \end{equation*}
+
 Since this proportional estimation adequately accommodates both
-extrema of an automatic assignment---too long and too short
-spans---and also penalizes for erroneous and spurious labels, we will
-rely on it throughout our subsequent experiments.
+extrema of an automatic labeling---too long and too short spans---and
+also penalizes for erroneous and spurious tags, we will primarily rely
+on this measure throughout our subsequent experiments.
+
+\subsection{Data Preparation}\label{snt:fgsa:subsec:data}
+
+In order to evaluate the CRF and RNN approaches on our data set, we
+split the whole corpus into three parts, using 70\% of it as training
+data, 10\% as a development set, and the remaining 20\% as a test
+corpus.  We tokenized all tweets with an adjusted version of the
+Christopher Potts' Twitter-aware
+tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+and preprocessed them using the rule-based normalization technique of
+\citet{Sidarenka:13}.
+%% During the normalization, Twitter-specific phenomena like @-mentions,
+%% retweets, and URIs that were not syntactically integrated in any
+%% sentence of the message were removed from the tweets and those
+%% elements which played an integral syntactic role were replaced with
+%% the special artificial tokens \%User, \%Link etc.  Emoticons like :-),
+%% \smiley{}, \frownie{} etc. were also replaced with the placeholders
+%% \%PosSmiley, \%NegSmiley, or simply \%Smiley depending on their prior
+%% polarity.  Furthemore, out-of-vocabulary words which could be
+%% converted to in-vocabulary terms with a pre-defined set of
+%% transformations were also normalized.
+In the next step, we labeled the preprocessed data with their
+part-of-speech tags using \texttt{TreeTagger}\footnote{We used
+  \texttt{TreeTagger} Version 3.2 with the German parameter file
+  UTF-8.}  \cite{Schmid:95} and parsed the obtained sentences with the
+\texttt{Mate} dependency parser\footnote{We used \texttt{Mate} Version
+  \texttt{3.61} with the German parameter model 3.6.}
+\cite{Bohnet:13}.  Finally, since \texttt{MMAX2} did not provide a
+straightforward support for character offsets of the annotated tokens
+and the automatically tokenized data could disagree with the original
+corpus tokenization, we aligned the manual annotation with the
+automatically split words using the Needleman-Wunsch alignment
+algorithm~\cite{Needleman:70}.
 
 \subsection{Fine-Grained Sentiment Analysis with Conditional Random
-  Fields} The first automatic approach that we are going to evaluate
-in this section is that of the conditional random fields (CRFs).
-First introduced by \citet{Lafferty:01}, CRFs rapidly grew in
-popularity, turning into one of the most commonly used probabilistic
-frameworks, which dominated the NLP field for more than a decade.  The
-main resons for such huge success were:
+  Fields} The first automatic method that we are going to evaluate in
+this section is that of the conditional random fields (CRFs).  First
+introduced by \citet{Lafferty:01}, CRFs rapidly grew in popularity,
+turning into one of the most commonly used probabilistic frameworks,
+which was dominating the NLP field for more than a decade.  The main
+resons for such huge success are:
 \begin{enumerate}[1)]
 \item the \emph{structural nature} of CRFs, which, in contrast to
   single-entity classifiers such as logistic regression or SVM, make
@@ -279,8 +283,8 @@ main resons for such huge success were:
   case.
 \end{example}
 \item and, finally, the \emph{avoidance of the label bias problem}, to
-  which other discriminative classifiers such as MEMM
-  \cite{McCallum:00} are known to be susceptible.
+  which other discriminative classifiers, such as MEMM
+  \cite{McCallum:00}, are known to be susceptible.
   \begin{example}[Label Bias Problem]
     The label bias problem arises in the cases where a locally optimal
     decision outweights globally superior solutions.  Consider, for
@@ -359,15 +363,17 @@ main resons for such huge success were:
     correct labeling.
   \end{example}
 \end{enumerate}
-\textbf{Training} CRFs attain these useful properties thanks to a
+\textbf{Training} CRFs possess these useful properties thanks to a
 neatly formulated objective function in which they seek to optimize
 the global log-likelihood of the gold labels $\mathbf{Y}$ conditioned
 on the training data $\mathbf{X}$.  In particular, given a set of
 training instances $\mathcal{D} = \{(\mathbf{x}^{(n)},
-\mathbf{y}^{(n)})\}_{n=1}^N$, CRF's training adds up to finding
-feature coefficients $\mathbf{w}$ that maximize the log-probabilities
-$\ell$ of the dependent variables $\mathbf{y}^{(i)}$ given their
-respective covariates $\mathbf{x}^{(i)}$ over the whole corpus:
+\mathbf{y}^{(n)})\}_{n=1}^N$, where $\mathbf{x}^{(n)}$ stands for the
+input variables of the $n$-th training instance and $\mathbf{y}^{(n)}$
+denotes its gold labels, CRF's training adds up to finding feature
+coefficients $\mathbf{w}$ which maximize the log-probabilities $\ell$
+of $\mathbf{y}^{(i)}$ given their respective covariates
+$\mathbf{x}^{(i)}$ over the whole corpus:
 \begin{equation}\label{snt:fgsa:eq:crf-ell}
   \mathbf{w} = \argmax_{\mathbf{w}}\sum_{n=1}^N\ell
   \left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right).
@@ -717,8 +723,6 @@ of the bias vectors.
 \subsection{Evaluation}
 
 \subsubsection{Effect of the Annotation Scheme}
-Experiment I (broad sentiment)
-
 In our first set of experiments, we applied the \emph{broad}
 interpretation of sentiments.  With this interpretation, we assigned
 the \textsc{SNT} labels to all tokens that belonged to the sentiment
@@ -804,9 +808,10 @@ the performance of the model on the development set.
     \end{tabular}
     \egroup
     \caption{Results of the feature ablation test.\\{\small\itshape
-        Negative changes w.r.t. the original scores on the dev set are
-        shown in \textsuperscript{\textcolor{red3}{red}}, and positive changes are depicted in
-        \textsuperscript{\textcolor{seagreen}{green}} superscript.}}
+        (Negative changes w.r.t. the original scores on the dev set
+        are shown in \textsuperscript{\textcolor{red3}{red}}; positive
+        changes are depicted in
+        \textsuperscript{\textcolor{seagreen}{green}} superscript)}}
     \label{tbl:ablation}
   \end{center}
 \end{table}
