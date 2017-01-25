@@ -398,17 +398,26 @@ factor calculated over all possible label assignments:
   \sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}\exp\left(\sum_{m=1}^{M}\sum_jw_{j}
   \times f_j(x_{m}, y'_{m-1}, y''_{m})\right).
 \end{equation}
-Taking the partial derivative of the log-likelihood function from
-Equation~\ref{snt:fgsa:eq:crf-ell} w.r.t. the feature weight $w_j$, we
-arrive at the solution:
+Since this normalizing term appears in the denominator and couples
+together all feature weights that need to be optimized, it becomes
+prohibitively expensive to find the best analytical solution to
+Equation~\ref{snt:fgsa:eq:crf-ell} with a single shot.  One therefore
+has to resort to other optimization techniques such as the gradient
+descent method, in which the weights of the features are successively
+changed towards the direction of their gradient until the global
+minimum of the loss function is reached.
+
+We can easily see that the partial derivative of the log-likelihood
+function from Equation~\ref{snt:fgsa:eq:crf-ell} w.r.t. the single
+feature weight $w_j$ amounts to the following solution:
 \begin{equation}
   \frac{\partial}{\partial w_j}\ell =%
   \sum_{n=1}^N\sum_{m=1}^Mf_j(x_{m}, y_{m-1}, y_{m}) -%
   \sum_{n=1}^N\sum_{m=1}^{M}\sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}f_j(x_{m},%
-  y'_{m-1}, y''_{m})P(y',y''|\mathbf{x}^{(n)}).
+  y'_{m-1}, y''_{m})P(y',y''|\mathbf{x}^{(n)}),
 \end{equation}
-After dividing both parts of this equation with the constant term $N$,
-we eventually obtain the final form for this derivative:
+which, after dividing both parts of the equation with the constant
+term $N$---the size of the corpus, can, in turn, be transformed into:
 \begin{equation}
   \frac{1}{N}\frac{\partial}{\partial w_j}\ell = \E[f_j(\mathbf{x},
     \mathbf{y}] - \E_{\mathbf{w}}[f_j(\mathbf{x}, \mathbf{y})],
