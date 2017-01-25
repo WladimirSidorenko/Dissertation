@@ -17,8 +17,8 @@ opinions (\emph{sentiments}), the holders of these opinions
 (\emph{sources}), and their respectively evaluated objects
 (\emph{targets}) in text.  Since an accurate automatic prediction of
 these elements would enable us to track public attitude to literally
-any object (e.g., a product, service, or political decision), FGSA is
-commonly regarded to be one of the most attractive, necessary, but,
+any object (e.g., a product, a service, or a political decision), FGSA
+is commonly regarded to be one of the most attractive, necessary, but,
 unfortunately, also challenging goals in computational linguistics.
 
 Researchers usually consider this objective as a sequence labeling
@@ -33,7 +33,7 @@ out which of these algorithms is better suited for the domain of
 German Twitter.  However, before we proceed with our evaluation, we
 should first make a short linguistic digression and briefly discuss
 the definition of textual spans, to which these approaches should
-assign their labels, and the evaluation metrics, using which we will
+assign their labels, and the evaluation metrics, with which we will
 estimate the quality of this assignment.
 
 \subsection{Definition of Sentiment, Target, and Source Spans}
@@ -46,8 +46,8 @@ leaving its solution to the discretion of their annotators
 \cite[cf.][]{Wiebe:05,Klinger:13}.
 
 In contrast to these works, instead of relying on rather intuitive
-decisions of the coders, we explicitly provided a rule for determining
-opinions' boundaries by telling our experts to assign the
+decisions of our coders, we explicitly provided a rule for determining
+opinions' boundaries by telling the experts to assign the
 \texttt{sentiment} tag to ``\emph{minimal complete syntactic or
   discourse-level units that included both the target of an opinion
   and its actual evaluation}''.
@@ -70,7 +70,7 @@ below:
 \end{example}
 \noindent In this sentence, the experts had to label the complete
 clause as a sentiment, since this unit was the minimal syntactic
-constituent which included both the object of an evaluation---``der
+constituent which included both the object of the evaluation---``der
 neue Papst'' (\textit{the new pope})---and the evaluation
 itself---``bescheidener, zur\"uckgenommener Typ'' (\textit{a sober,
   modest man}).
@@ -117,27 +117,27 @@ recall, and \F{}-scores using either the binary overlap or exact match
 metrics \cite{Choi:06,Breck:07} .  The former method considers an
 automatically labeled span as correct if it has at least one token in
 common with a labeled entity from the gold annotation.  The latter
-metric only regards as true positive those automatic spans which have
+metric only regards as true positives those automatic spans which have
 absolutely identical boundaries with the gold assignment.
-Unfortunately, both of these approaches are somewhat problematic:
-While the binary overlap might be overly optimistic, always assigning
-perfect scores to automatic spans which cover the whole sentence; the
-exact match might, vice versa, be too drastic, considering the whole
-assignment as false if only one (possibly irrelevant) token is
-missing.
+Unfortunately, both of these approaches are problematic to some
+extent: While the binary overlap might be overly optimistic, always
+assigning perfect scores to automatic spans which cover the whole
+sentence; the exact match metric might, vice versa, be too drastic,
+considering the whole assignment as false if only one (possibly
+irrelevant) token is missing.
 
 Instead of relying on these measures, we opted for the ``golden mean''
 solution to this problem that was proposed by \citet{Johansson:10a}.
-In their work, the authors introduced another metric for estimating
-the quality of an automatic assignment, in which they penalized the
+In their work, the authors introduced another way of estimating the
+quality of an automatic assignment, in which they penalized the
 predicted spans proportionally to the number of tokens whose labels
 were different from the gold annotation.  More precisely, given a set
 of manually annotated gold entities $\mathcal{S}$ and automatically
 tagged spans $\widehat{\mathcal{S}}$, they estimated the precision of
 the automatic assignment as:
-\begin{equation*}
+\begin{equation}\label{eq:fgsa:jmmetric}
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
-\end{equation*}
+\end{equation}
 where $C(\mathcal{S},\widehat{\mathcal{S}})$ means the \emph{span
   coverage} metric and is computed as the proportion of overlapping
 tokens across all pairs of manually ($s_i$) and automatically ($s_j$)
@@ -146,9 +146,10 @@ annotated entities:
  C(\mathcal{S}, \widehat{\mathcal{S}}) = \sum_{s_i \in
    \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j);
 \end{equation*}
-and $|\widehat{\mathcal{S}}|$ denotes the total number of spans
-automatically labeled with the given tag.  Similarly to precision, the
-recall of such assignment was estimated as:
+The $|\widehat{\mathcal{S}}|$ term in Equation~\ref{eq:fgsa:jmmetric}
+stands for the total number of spans automatically labeled with the
+given tag.  Similarly to precision, the recall of the assignment was
+estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
@@ -201,14 +202,14 @@ algorithm~\cite{Needleman:70}.
 obtained data is that of the conditional random fields.  First
 introduced by \citet{Lafferty:01}, CRFs rapidly grew in popularity,
 turning into one of the most commonly used probabilistic frameworks,
-which was dominating the NLP field for more than a decade.  The main
-resons for this huge success are:
+which dominated the NLP field for more than a decade.  The main resons
+for this huge success are:
 \begin{enumerate}[1)]
 \item the \emph{structural nature} of CRFs, which, in contrast to
   single-entity classifiers such as logistic regression or SVM, make
   their predictions over a sequence of covariates, trying to find the
-  most likely label assignment for the whole sequence not only its
-  individual elements;
+  most likely label assignment for the whole input chain and not only
+  its individual elements;
 \item the \emph{discriminative power} of this framework, which, in
   contrast to generative probabilistic models such as HMM
   \cite{Rabiner:86}, optimizes the conditional probability
@@ -241,10 +242,10 @@ resons for this huge success are:
   \end{align*}
   After normalizing these probabilities, we would get equal 50\%
   chances for each of the parties, which is fair regarding the token
-  distribution in our corpus.  However, if we replaced ``Merkel'' with
+  distribution in our corpus.  However, if we replace ``Merkel'' with
   ``von der Leyen'' both in the training data and test example and
-  rerun this experiment, the probability would get significantly
-  skewed towards the CDU class:
+  rerun this experiment once again, the probability would get
+  significantly skewed towards the CDU class:
   \begin{align*}
     P(\mathbf{x}, CDU) =& P(\textrm{von},\textrm{der},\textrm{Leyen},\textrm{Steinmeier}|CDU)\times P(CDU)\\
     =& P(\textrm{von}|CDU)\times P(\textrm{der}|CDU)\times P(\textrm{Leyen}|CDU)\\
@@ -256,7 +257,7 @@ resons for this huge success are:
     =&\frac{1}{4}\times\frac{1}{4}\times\frac{1}{4}\times\frac{3}{4}\times\frac{4}{8}\approx 0.0059,\\
   \end{align*}
   which, after normalization, would result in 90\% chances for
-  \texttt{CDU} and a 10\% score for \texttt{SPD}, even though we only
+  \texttt{CDU}, and a 10\% score for \texttt{SPD}, even though we only
   changed the name of the politician.
 
   A different situation can be observed for discriminative models such
@@ -265,7 +266,7 @@ resons for this huge success are:
   frameworks, discriminative systems seek to optimize the conditional
   likelihood $P(y|\mathbf{x})$ by maximizing the probability of the
   training set $\sum_{i=1}^N\log P(y_i|\mathbf{x}_i, \mathbf{w})$.
-  This probability is usually computed using the sigmoid function
+  This probability is usually estimated using the sigmoid function
   $\frac{1}{1 + e^{-(\mathbf{x}_i, \mathbf{w})}}$, where
   $\mathbf{x}_i$ denotes the input features of the $i$-th training
   instance, and the vector $\mathbf{w}$ stands for the respective
@@ -283,9 +284,9 @@ resons for this huge success are:
   of correlated features is much less dramatic than in the generative
   case.
 \end{example}
-\item and, finally, the \emph{avoidance of the label bias problem}, to
+\item and, finally, the \emph{avoidance of the label bias problem},
   which other discriminative classifiers, such as maximum entropy
-  Markov networks \cite{McCallum:00}, are known to be susceptible.
+  Markov networks \cite{McCallum:00}, are known to be susceptible to.
   \begin{example}[Label Bias Problem]
     The label bias problem arises in the cases where a locally optimal
     decision outweights globally superior solutions.  Consider, for
@@ -342,13 +343,13 @@ resons for this huge success are:
     \end{align*}
     At the same time, the probability of the incorrect variant
     ($KON-ADV-ADJA-VA$) amounts to $\approx$ 0.323 and will therefore
-    be preferred during the automatic tagging.
+    be preferred during automatic tagging.
 
     A different situation is observed with the CRFs, where the
     normalizing factor in the denominator is computed over the whole
     input sequence without factorizing into individual terms for each
     transition as it is done in the previous case.  That way, the
-    probability of the correct labels runs up to:
+    probability of the correct labels would run up to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
       P(ADV|KON)\times P(NN|ADV)\\
@@ -370,11 +371,11 @@ global log-likelihood of the gold labels $\mathbf{Y}$ conditioned on
 the training data $\mathbf{X}$.  In particular, given a set of
 training instances $\mathcal{D} = \{(\mathbf{x}^{(n)},
 \mathbf{y}^{(n)})\}_{n=1}^N$, where $\mathbf{x}^{(n)}$ stands for the
-input variables of the $n$-th training instance and $\mathbf{y}^{(n)}$
-denotes their gold labels, CRF's training adds up to finding feature
+input variables of the $n$-th instance and $\mathbf{y}^{(n)}$ denotes
+its respective gold labels, CRF's training adds up to finding feature
 coefficients $\mathbf{w}$ that maximize the log-probabilities $\ell$
-of $\mathbf{y}^{(i)}$ given their respective covariates
-$\mathbf{x}^{(i)}$ over the whole corpus:
+of $\mathbf{y}^{(i)}$ given their covariates $\mathbf{x}^{(i)}$ over
+the whole corpus:
 \begin{equation}\label{snt:fgsa:eq:crf-ell}
   \mathbf{w} = \argmax_{\mathbf{w}}\sum_{n=1}^N\ell
   \left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right).
@@ -401,15 +402,15 @@ factor calculated over all possible label assignments:
 Since this normalizing term appears in the denominator and couples
 together all feature weights that need to be optimized, it becomes
 prohibitively expensive to find the best solution to
-Equation~\ref{snt:fgsa:eq:crf-ell} analytically with a single shot.
-One therefore has to resort to other optimization techniques such as
-the gradient descent method, in which the weights of the features are
-successively changed towards the direction of the gradient until the
-global minimum of the loss function is reached.
+Equation~\ref{snt:fgsa:eq:crf-ell} analytically with a single shot.  A
+possible remedy to this problem is to resort to other optimization
+techniques such as the gradient descent method, in which the weights
+of the features are successively changed towards the direction of the
+gradient until the global minimum of the loss function is reached.
 
 We can easily see that the partial derivative of the log-likelihood
-from Equation~\ref{snt:fgsa:eq:crf-ell} w.r.t. the single feature
-weight $w_j$ amounts to the following solution:
+$\ell$ w.r.t. the single feature weight $w_j$ amounts to the following
+solution:
 \begin{equation}
   \frac{\partial}{\partial w_j}\ell =%
   \sum_{n=1}^N\sum_{m=1}^Mf_j(x_{m}, y_{m-1}, y_{m}) -%
@@ -424,58 +425,58 @@ term $N$---the size of the corpus, can, in turn, be transformed into:
 \end{equation}
 where the first term is the expectation of the feature $f_j$ under the
 empirical distribution, and the second term is its expectation under
-the model's parameters $\mathbf{w}$.  In other words, the optimal
-solution to the log-likelihood function in
-Equation~\ref{snt:fgsa:eq:crf-ell} is the one, where the model's
-expectation of the features matches their (true) empirical expectation
-in the corpus.
+the model's parameters $\mathbf{w}$.  That way, the optimal solution
+to the log-likelihood function in Equation~\ref{snt:fgsa:eq:crf-ell}
+would be the one, where the model's expectation of the features
+matches their (true) empirical expectation in the corpus.
 
 The marginal probability of the features, which is required for
-computing the model's expectation, can be estimated dynamically using
-the forward-backward (FB) algorithm \cite{Rabiner:90}---a particular
-instance of the more general belief propagation method
+computing their model's expectation, can be estimated dynamically
+using the forward-backward (FB) algorithm \cite{Rabiner:90}---a
+particular case of the more general belief propagation method
 \cite[cf.][p.~81]{Barber:12}.
 
 \noindent\textbf{Inference} Once the optimal feature weights are
 learned, one can unproblematically compute the most likely label
 assignment for a new instance by using the Viterbi algorithm
 \cite{Viterbi:67}, which effectively corresponds to the forward pass
-of the FB method with the summation over alternative preceding states
-replaced by the maximum operator (hence the other name for this
-algorithm---``max-product'').
+of the FB method with the summation over the alternative preceding
+states replaced by the maximum operator (hence the other name for the
+inference algorithm---``max-product'').
 
 \noindent\textbf{Features} A crucial component which accounts for a
 huge part of the success (or failure) of a CRF system are feature
-attributes defined by the developer.  Tranditionally, feature
-functions used in Conditional Random Fields are divided into
-transition- and state-based ones.  The former attributes represent
-real- or binary-valued functions $f(\mathbf{x}, y'',
-y')\rightarrow\mathbb{R}$ associated with some data predicate
-$\phi(\mathbf{x})\rightarrow\mathbb{R}$ and labels $y''$ and $y'$.
-The value of this attribute at position $m$ in the sequence
-$\mathbf{x}$ is then normally defined as:
+attributes which are defined by its developer.  Tranditionally,
+feature functions used in CRFs are divided into transition- and
+state-based ones.  The former attributes represent real- or
+binary-valued functions $f(\mathbf{x}, y'', y')\rightarrow\mathbb{R}$
+associated with some data predicate
+$\phi(\mathbf{x})\rightarrow\mathbb{R}$ and the labels $y''$ and $y'$.
+The value of theses attributes at position $m$ in the sequence
+$\mathbf{x}$ is usually defined as follows:
 \begin{equation}
   f(\mathbf{x}_m, y'', y') = \begin{cases} \phi(\mathbf{x}_m), &
     \mbox{if } \mathbf{y}_{m-1} = y''\mbox{ and }\mathbf{y}_{m} =
-    y'\\ 0, & \mbox{otherwise.}
+    y'\\ 0, & \mbox{otherwise;}
   \end{cases}
 \end{equation}
-The most common predicate used for this type of features is a simple
-unit function~$\phi$, which always yields one regardless of the data
-input.  However other, more complex conditions and return values are
-possible and fairly straightforward to implement.
+where the predicate~$\phi$ typically represents a simple unit
+function: $\phi(\mathbf{x}_m)\mapsto 1$, $\forall\mathbf{x}_m$.
 
-In contrast to the ternary transition functions, state attributes
-typically represent binary predicates, whose output depends solely on
-the input data at the given position and the label $y'$ at the
-respective state:
+In contrast to the ternary transition features, state attributes are
+associated with binary predicates, whose output depends on the input
+data at the given position and the label $y'$ at the respective state:
 \begin{equation}
   f(\mathbf{x}_m, y') = \begin{cases} \phi(\mathbf{x}_m), & \mbox{if }
-    \mathbf{y}_{m} = y'\\ 0, & \mbox{otherwise.}
+    \mathbf{y}_{m} = y'\\ 0, & \mbox{otherwise;}
   \end{cases}
 \end{equation}
-This type of attributes commonly accounts for the overwhelming
-majority of all features used in a CRF system.
+this time, the predicate~$\phi$ is usually much more sophisticated
+than in the previous case and reflects various properties of the input
+sequence at the respective position, such as whether the current token
+is capitalized or whether it begins with a specific prefix or ends
+with a specific suffix.  This type of features commonly accounts for
+the overwhelming majority of all attributes used in a CRF system.
 
 As state attributes in our experiments, we used the following types of
 predicates (which, for simplicity, are listed here in groups):
@@ -487,9 +488,9 @@ predicates (which, for simplicity, are listed here in groups):
   alphanumeric, digit, or punctuation);
 
 \item\emph{morphological}, which encompassed the part-of-speech tag of
-  the analyzed token, case and gender values for inflectable PoS
-  types, the degree of comparison for adjectives, and mood, tense, and
-  person forms for verbs;
+  the analyzed token as well as case and gender values for inflectable
+  PoS types, the degree of comparison for adjectives, and mood, tense,
+  and person forms for verbs;
 
 \item\emph{lexical}, which comprised the actual lemma and form of the
   token (using one-hot encoding), its polarity class (positive,
@@ -498,11 +499,11 @@ predicates (which, for simplicity, are listed here in groups):
 
 \item and, finally, \emph{syntactic}, which included the dependency
   relation via which the token $\mathbf{x}_m$ was connected to its
-  parent, two binary features reflecting whether the previos token in
-  the sentence was the parent or child of the current word, as well as
+  parent; two binary features reflecting whether the previos token in
+  the sentence was the parent or child of the current word; as well as
   two other features, one of which encoded the dependency relation of
   the previous token in the sentence to its parent + dependency
-  relation of the current token to its ancestor and the other
+  relation of the current token to its ancestor, and the other
   reflected the dependency link of the next token + dependency
   relation of the current token to its parent.
 \end{itemize}
@@ -514,8 +515,8 @@ semantic and syntactic traits.  These included:
 \item the lemma of the syntactic parent;
 \item the part-of-speech tag and the polarity class of the
   grandparent;
-\item the lemma of the child node + dependency relation emanating from
-  this child;
+\item the lemma of the child node + dependency relation connecting the
+  parent with this child;
 \item the PoS tag of the child node + its dependency relation + PoS
   tag of the current token;
 \item the lemma of the child node + its dependency relation + lemma of
@@ -528,25 +529,25 @@ semantic and syntactic traits.  These included:
 \end{itemize}
 
 \textbf{Results} The results of our experiments are shown in
-Table~\ref{snt-fgsa:tbl:crf-res}.  As can be seen from the table, with
-the given features, the model can perfectly well fit the training set,
-achieving a macro-averaged \F-score of~0.904.  The learned parameters,
-however, only partially generalize to unseen data, leading to notably
-lower \F-results on the test corpus (0.287).  This disbalance
-indicates a strong ``overfitting'' of the model to the training data
-(i.e., the model assigns heigher weights to rather sporadic, noisy
-features, which only accidentally co-occurred with the target classes
-in the observed training instances).
+Table~\ref{snt-fgsa:tbl:crf-res}.  As we can see from the table, with
+the given set of features, the model can perfectly well fit the
+training data, achieving a macro-averaged \F-score of~0.904.  The
+learned parameters, however, only partially generalize to unseen data,
+leading to notably lower \F-results on the test corpus (0.287).  This
+disbalance indicates a strong ``overfitting'' of the model to the
+training data (i.e., the assignment of unreasonably high weights to
+rather sporadic, noisy features, which only accidentally co-occurred
+with the target classes in the observed training instances).
 
 Another notable tendency, which can be observed both on the training
 and test splits, is that the recall of the CRF system is generally
 lower than its precision.  This again can be attributed to the
 overfitting effect, due to which, less indicative features become more
 important than attributes which actually give rise to subjective
-evaluations.  Since the former features, might not to appear in the
-test data or are unlikely to correlate with the sentiment entities
-even if they occur, the model often fails to recognize sentiments in
-contexts which do have important but underweighted features.
+evaluations.  Since the former features might not to appear in the
+test data or, even if they do, are unlikely to correlate with the
+sentiment entities, the model often fails to recognize sentiments in
+new contexts which do have important but underweighted attributes.
 
 \begin{table*}
   \begin{center}
@@ -577,61 +578,66 @@ contexts which do have important but underweighted features.
 
 \subsection{Fine-grained Sentiment Analysis with Recurrent Neural Networks}
 
-A competive modern alternative to the conditional random fields are
-deep recurrent neural networks (RNNs).  Introduced in the
-mid-nineties~\cite{Hochreiter:97}, RNNs became one of the most widely
-used trends in the recent surge of deep learning.  The main factors
-for this success are
-\begin{inparaenum}[(i)]
-\item the ability of these systems to learn the optimal feature
-  representations automatically, which favorably sets them apart from
+A competive alternative to the conditional random fields are deep
+recurrent neural networks (RNNs).  Introduced in the
+mid-nineties~\cite{Hochreiter:97}, RNNs have become one of the most
+popular trends in the recent surge of deep learning research, showing
+superior performance on many important NLP tasks including
+part-of-speech tagging~\cite{Wang:15:pos}, dependency
+parsing~\cite{Kiperwasser:16a}, machine
+translation~\cite{Kalchbrenner:13,Bahdanau:14,Sutskever:14} etc.  The
+main factors which contributed to this success are
+\begin{enumerate}[1)]
+\item \emph{the ability of these systems to learn the optimal feature
+  representations automatically}, which favorably sets them apart from
   traditional supervised machine learning frameworks such as SVMs or
-  CRFs, where all features need to be defined by user; and
-\item the ability to deal with arbitrary sequence lengths, which
-  advantageously distinguishes them from other NN architectures such
-  as CNN or feed-forward networks, where the size of all perceptron
-  layers needs to be fixed.
-\end{inparaenum}
+  CRFs where all features need to be defined by the user; and
+\item \emph{the ability to deal with arbitrary sequence lengths},
+  which advantageously distinguishes them from other NN architectures
+  such as convolutional or standard feed-forward networks where the
+  size of all layers has to be constant.
+\end{enumerate}
 
-The key component which underlies any popular RNN system is a
-fixed-size hidden vector $\vec{h}$, which is recurrently updated over
-the input sequence $\mathbf{x}$ and is supposed to encode the meaning
-of the input seen so far.  The general form of this vector at the time
-step $t$ is typically defined as:
-\begin{align*}
+A key component which underlies any popular RNN system is a fixed-size
+hidden vector $\vec{h}$, which gets recurrently updated over the input
+sequence $\mathbf{x}$ and is supposed to encode the meaning of the
+sequence seen so far.  The general form of this vector at input
+position $t$ is usually defined as:
+\begin{align}
   \vec{h}^{(t)} = f(\vec{h}^{(t-1)}, \mathbf{x}^{(t)});
-\end{align*}
-where $f$ usually represents as a pointwise non-linear transformation
-such as a logistic function or the hyperbolic tangent,
-$\vec{h}^{(t-1)}$ denotes the state of the hidden vector at the
-previous time step, and $\mathbf{x}^{(t)}$ is the input vector at the
-step $t$.
+\end{align}
+where $f$ represents some pointwise non-linear transformation
+function, $\vec{h}^{(t-1)}$ denotes the state of the hidden vector at
+the previous time step $t-1$, and $\mathbf{x}^{(t)}$ is the input
+vector at position $t$.
 
 \textbf{LSTM} A fundamental problem which arises from the above
-definition is that the gradients of the trained parameters, which are
-used to estimate the $\vec{h}$ vector, rapidly vanish to zero or
+formula is that the gradients of the trained parameters (the ones
+involved in computing the $\vec{h}$ vector), rapidly vanish to zero or
 explode to infinity (depending on whether the abosule values of
 $\vec{h}$ are less or greater than one) as the length of the input
 increases.  In order to solve this issue, \citet{Hochreiter:97}
 proposed the long short-term memory mechanism (LSTM), in which they
-explicitly incorporated the goal to drop parts of the input which
+explicitly incorporated the goal of dropping parts of the input which
 appeared to be irrelevant for the final outcome.  In particular, given
 an input sequence $\mathbf{x}$, they introduced a special
-\emph{activation} unit $\vec{i}^{(t)}$:
+\emph{activation unit} $\vec{i}^{(t)}$:
 \begin{align*}
-  \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right),
+  \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right);
 \end{align*}
 where $\sigma$ denotes the sigmoid function; $W_i$, $U_i$, and
 $\vec{b_i}$ represent the optimized model's parameters; and
-$\mathbf{x}^{(t)}$ and $\vec{h}^{(t-1)}$ represent the input and the
-previous hidden state respectively.  In addition to that, they also
-estimated a dedicated \emph{forget} gate~$\vec{f}^{(t)}$:
+$\mathbf{x}^{(t)}$ and $\vec{h}^{(t-1)}$ stand for the input and
+previous hidden states respectively.  In addition to that, the authors
+also estimated a dedicated \emph{forget gate}~$\vec{f}^{(t)}$:
 \begin{align*}
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f
-  \cdot \vec{h}^{(t-1)} + \vec{b}_f\right).
+  \cdot \vec{h}^{(t-1)} + \vec{b}_f\right),
 \end{align*}
-Then, after computing an \emph{intermediate update} value for the
-current time step~$\widetilde{c}^{(t)}$:
+which was then used to erase parts of the previous input.
+
+After computing an \emph{intermediate update value}
+$\widetilde{c}^{(t)}$ for the current time step~$t$:
 \begin{align*}
   \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
   \cdot \vec{h}^{(t-1)} + \vec{b}_c\right),
@@ -640,9 +646,9 @@ they estimated the \emph{final update} state~$\vec{c}^{(t)}$ by taking a
 weighted sum of the candidate update vector~$\widetilde{c}^{(t)}$ and
 the previous update value~$\vec{c}^{(t-1)}$:
 \begin{align*}
-  \vec{c}^{(t)} &= \vec{i}^{(t)} * \widetilde{c}^{(t)} + \vec{f}^{(t)} * \vec{c}^{(t-1)}.
+  \vec{c}^{(t)} &= \vec{i}^{(t)} * \widetilde{c}^{(t)} + \vec{f}^{(t)} * \vec{c}^{(t-1)};
 \end{align*}
-From this term, they finally computed the output vector
+from which, they finally computed the output vector
 $\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$:
 \begin{align*}
   \vec{o}^{(t)} &= \sigma\left(W_o\cdot \mathbf{x}^{(t)} + U_o \cdot \vec{h}^{(t-1)} + V_o \cdot \vec{c}^{(t)} + \vec{b}_o\right),\\
@@ -658,12 +664,13 @@ introduced an alternative architecture called Gated Recurrent Units
 (GRU).  In this framework, the authors also used activation and forget
 gates---$\vec{i}^{(t)}$ and $\vec{f}^{(t)}$---similar to the ones
 defined by~\citet{Hochreiter:97}.  They dropped however the
-gate-specific bias terms $\vec{b}_i$ and $\vec{b}_f$ for simplicity:
+gate-specific bias terms $\vec{b}_i$ and $\vec{b}_f$ while computing
+these gates for simplicity:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)}\right),\\
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)}\right).
 \end{align*}
-The candidate activation $\widetilde{c}^{(t)}$ was then computed as:
+The candidate activation $\widetilde{c}^{(t)}$ was then estimated as:
 \begin{align*}
   \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
   \cdot \left(\vec{f}^{(t)} * \vec{h}^{(t-1)}\right)\right),
@@ -673,17 +680,19 @@ and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
   \vec{h}^{(t)} &= \vec{i}^{(t)} * \vec{h}^{(t-1)} + \left(\vec{1} -
   \vec{i}^{(t)}\right) * \widetilde{c}^{(t)}.
 \end{align*}
+This state simultaneously served as the output unit ($\vec{o}^{(t)}$
+in the LSTM case).
 
 \textbf{Training} A neat property of both of these approaches is that
 the final equation, which is obtained after unrolling the loop, is
 differentiable with respect to all of its parameters and can therefore
-be optimized using the standard gradient update methods.  Since most
-of these parameters, however, represent high-dimensional vectors or
-matrices, finding an optimal learning rate (i.e., the size of the
+be optimized using the standard gradient update techniques.  Since
+most of these parameters, however, represent high-dimensional vectors
+or matrices, finding an optimal learning rate (i.e., the size of the
 update step taken in the direction of the gradient) might pose
-considerable difficulties, leading either to a prohibitively large
-training times (if the steps are too small) or divergence of the
-trained model (if the steps are too big).
+considerable difficulties, leading either to prohibitively large
+training times (if the steps are too small) or a complete divergence
+of the trained model (if the steps are too big).
 
 Several algorithms have been proposed in order to solve this issue,
 including the method of momentum~\cite{Rumelhart:88},
@@ -691,20 +700,42 @@ AdaGrad~\cite{Duchi:11}, AdaDelta~\cite{Zeiler:12},
 RmsProp~\cite{Tieleman:12} etc.  In our RNN experiments, we will rely
 on the last option---the RmsProp optimization proposed
 by~\citet{Tieleman:12}---as we found this algorithm leading to both a
-faster convergence and superior classification quality.
+faster convergence and superior classification results.
 
 Another important factor, which might significantly affect the
 training, is the initialization of the learned model's parameters.  As
 shown by~\citet{He:15}, an inappropriate choice of the initial values
 might result in a complete stalling of the learning process.
 Following the recommended practices~\cite{Saxe:13}, we initialized all
-parameter matrices to orthogonal values in order to ensure their full
-rank, and used He initialization~\cite{He:15} for setting the values
-of the bias vectors.
+parameter matrices with orthogonal values in order to ensure their
+full rank, and used a uniform He initialization~\cite{He:15} for the
+corresponding bias vectors.
 
-\textbf{Inference}
+We chose categorical cross-entropy as the optimized loss function $L$:
+\begin{align}
+  L &= -\sum_{i}^{N}Y \odot \log\left(O\right);
+\end{align}
+and minimized it with the above settings using RmsProp updates.  (For
+estimating the entropy, we concatenated the gold label vectors
+$\vec{y}$ (obtained using one-hot encoding) and the output vectors
+$\vec{o}$ into the matrices $Y$ and $O$ respectiveley, and computed
+the sum over all elements of the Hadamard product of the $Y$ term with
+the logarithm of the $O$ matrix.)
 
-\textbf{Results}
+\textbf{Inference} Since each of the above approaches (LSTM and GRU)
+explicitly defines an output unit, the inference of the most likely
+label assignment for an input instance $\mathbf{x}$ is straightforward
+and amounts to finding the $\argmax$ value of the output vector at
+each time step of the recurrence:
+\begin{equation}
+  \mathbf{\hat{y}} =
+  \argmax{\vec{h}^{(1)}},\argmax{\vec{h}^{(2)}},\ldots,\argmax{\vec{h}^{(|\mathbf{x}|)}}.
+\end{equation}
+
+\textbf{Results} The results of the RNN methods are shown in
+Table~\ref{snt-fgsa:tbl:rnn-res}.
+
+
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -731,7 +762,7 @@ of the bias vectors.
     \egroup
     \caption{Results of fine-grained sentiment analysis with recurrent
       neural networks.}
-    \label{snt-fgsa:tbl:nn-res}
+    \label{snt-fgsa:tbl:rnn-res}
   \end{center}
 \end{table*}
 
@@ -834,9 +865,9 @@ the performance of the model on the development set.
 
 The results of this test are shown in Table~\ref{tbl:ablation}.  As we
 can see from the table, all feature types turn out to be useful for
-predicting sentiments as their removal unequivocally leads to some
+predicting sentiments as their removal unequivocally leads to a
 degradation of the scores.  This quality drop, however, is usually
-quite small, suggesting that other attributes types can easily make up
+quite small, suggesting that other attribute types can easily make up
 for the removed ones.
 
 A different situation is observed for sources and targets though.  In
@@ -844,10 +875,12 @@ the first case, removing formal, morphological, and syntactic features
 shows a strongly positive effect, improving the \F-results for sources
 by up to 5\%.  However, removing lexical and lexico-syntactic
 features, on the contrary, worsens these results, tearing the
-\F-scores down by up to 4.4\%.  Except for the formal group, all these
-attributes behave completely differently when applied to targets,
-which seem to benefit from morphological and syntactic features, while
-suffering a slight degradation from lexical and complex attributes.
+\F-scores down by up to 4.4\%.
+
+Except for the formal group, all these attributes behave completely
+differently when applied to targets, which seem to benefit from
+morphological and syntactic features, while suffering a slight
+degradation from lexical and complex attributes.
 
 \begin{table}[hbt]
   \begin{center}
