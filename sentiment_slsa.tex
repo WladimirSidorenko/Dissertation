@@ -1,51 +1,70 @@
-\section{Sentence-Level Sentiment Analysis}\label{sec:snt:slsa}
+\chapter{Message-Level Sentiment Analysis}\label{sec:snt:slsa}
 
+\section{Sentence-Level Sentiment Analysis with Deep Neural Networks}
 
+\section{Sentence-Level Sentiment Analysis with Deep Neural Networks}
 
-\subsection{Sentence-Level Sentiment Analysis with Deep Neural Networks}
+\section{Evaluation}
 
-\subsection{Sentence-Level Sentiment Analysis with Deep Neural Networks}
+\section{Related Work}
 
-\subsection{Evaluation}
+Wiebe 2002, Riloff 2003
 
-\subsection{Related Work}
+\citet{Kim:04} experimented with three different methods of
+determining the overall polarity of a sentence:
+\begin{inparaenum}[(i)]
+  \item multiplying the signs of polar terms found in sentence,
+  \item taking their sum, and
+  \item taking the geometric mean of polarity scores;
+\end{inparaenum}
+finding that the first and last options worked best for the Document
+Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 
-\citet{Hu:04}
+One of the first attempts to analyze message-level sentiments on
+Twitter was made by \citet{Go:09}.  For their experiments, the authors
+collected a set of 1,600,000 tweets containing smileys.  Based on
+these emoticons, they automatically derived polarity classes for these
+messages (positive or negative) and used them to train a Na\"{\i}ve
+Bayes, MaxEnt, and SVM classifier.  The best $F$-score for this
+two-class classification problem could be achieved by the last system
+and run up to 82.2\%.
 
-\citet{Kim:04}
-
-One of the first attempts to analyze sentiments on Twitter was made by
-\citet{Go:09}.  For their experiments, the authors collected a set of
-1,600,000 tweets containing smileys.  Based on these emoticons, they
-automatically derived polarity classes for these messages (positive or
-negative) and used them to train a Na\"{\i}ve Bayes, a MaxEnt, and an
-SVM classifier.  The best $F$-score for this two-class classification
-problem could be achieved by the last system and run up to 82.2\%.
-
-Bermingham and Smeaton, 2010
-
-Similar work was done later by \citet{Pak:10}, who used the Na\"{\i}ve
+Similar work was also done by \citet{Pak:10}, who used the Na\"{\i}ve
 Bayes approach to differentiate between neutral, positive, and
 negative microblogs; and \citet{Barbosa:10}, who gathered a collection
 of 200,000 tweets, subsequently analyzing them with three publicly
-available sentiment web-services; the results of these services were
-then used as noisy labels for training an SVM classifier.
-
-\citet{Agarwal:11} compared a simple unigram-based SVM approach with
-two other full-fledged systems, one which relied on a rich set of
-manually defined features, and another used partial tree
+available sentiment web-services and training an SVM classifier on the
+results of these services.  In a similar way, \citet{Agarwal:11}
+compared a simple unigram-based SVM approach with two other
+full-fledged systems, one which relied on a rich set of manually
+defined features, and another used partial tree
 kernels~\cite{Moschitti:06}.  The authors evaluated these methods on a
 commercially acquired corpus of 8,753 foreign-language tweets, which
 were automatically translated into English, finding that a combination
-of these methods worked best for both two- and three-way
-classification tasks.
+of these methods worked best for both two- and three-way prediction
+tasks.
 
-\citet{Mohammad:13}
+The state-of-the-art results for message level polarity prediction on
+tweets were established by~\citet{Mohammad:13}, whose system (a
+supervised SVM classifier) used a rich set of various features
+including word and character n-grams, PoS statistics, Brown
+clusters~\cite{Brown:92}, etc., and also strongly benefitted from
+automatic corpus-based polarity lists---Sentiment~140 and NRC
+Hashtag~\cite{Mohammad:12,Kiritchenko:14}.  This approach ranked first
+at the SemEval competition~2013~\cite{Nakov:13} and anchieved the
+fourth place on the rerun of this task one year
+later~\cite{Rosenthal:14}, being outperformed by the supervised
+logistic regression approach of~\citet{Miura:14}, who used a heavy
+preprocessing of the data and a special balancing scheme for
+underrepresented classes.  Later on, these results were further
+improved by the apporaches of~\citet{Hagen:15} and \citet{Deriu:16},
+which both relied on ensembles of multiple independent classifiers.
 
 \citet{Kobayashi:07}
 Wiebe, Bruce, \& O'Hara 1999
 Hatzivassiloglou \& Wiebe 2000
-Wiebe 2000; Wiebe et al. 2002
+Wiebe 2000;
+Wiebe et al. 2002
 Yu \& Hatzivassiloglou 2003
 
 
@@ -86,4 +105,4 @@ function was redefined as follows:
 
 \citet{Wang:15}
 
-\subsection{Summary and Conclusions}\label{slsa:subsec:conclusions}
+\section{Summary and Conclusions}\label{slsa:subsec:conclusions}

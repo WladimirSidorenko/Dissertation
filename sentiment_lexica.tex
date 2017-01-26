@@ -9,14 +9,14 @@
 % Humboldt-Universitaet zu Berlin AG Elektronisches Publizieren Joanna
 % Rycko und der DNB - Deutsche Nationalbibliothek
 
-\section{Sentiment Lexica}\label{sec:snt:lex}
+\chapter{Sentiment Lexicons}\label{sec:snt:lex}
 
 The first avenue that we are going to explore using the obtained data
 is an automatic prediction of polar terms.
 % To this end, we will first present an updated version of our dataset
 % in Subsection~\ref{subsec:snt-lex:data} in which our experts revised
 % the annotations of words and idioms that were present in the existing
-% German sentiment lexica (GSL), but were not marked as emo-expressions
+% German sentiment lexicons (GSL), but were not marked as emo-expressions
 % in our data and, vice versa, were annotated as polar terms in the
 % corpus, but absent in the analyzed polarity lists.
 For this purpose, we are going to evaluate the existing German
@@ -35,7 +35,7 @@ hyper-parameters and seed sets on these automatic approaches,
 summarizing and concluding our findings in the last part of this
 section.
 
-\subsection{Data}\label{subsec:snt-lex:data}
+\section{Data}\label{subsec:snt-lex:data}
 
 In our experiments, we are going to use the complete data set labeled
 by one of the experts as a test corpus in order to model a situation
@@ -56,7 +56,7 @@ to that, we also selected a small subset of 400 tweets from the other
 annotator as a development set for tuning hyper-parameters of
 different approaches.
 
-\subsection{Evaluation Metrics}\label{subsec:snt-lex:eval-metrics}
+\section{Evaluation Metrics}\label{subsec:snt-lex:eval-metrics}
 
 An important question which needs to be addressed before we procceed
 with our experiments are the evaluation metrics that we should use to
@@ -119,14 +119,14 @@ we estimate the precision, recall, and \F{}-score for each particular
 polarity class (positive, negative, and neutral), considering all
 words absent in the lexicon as neutral.
 
-\subsection{Semi-Automatic Lexicons}
+\section{Semi-Automatic Lexicons}
 
 We first use this metric to estimate the quality of the existing
 German sentiment lexicons.  The most prominent of these resources are:
 \begin{itemize}
 \item the \textbf{German Polarity Clues} (GPC) by
   \citet{Waltinger:10}, which comprises 10,141 subjective entries
-  automatically translated from the English sentiment lexica
+  automatically translated from the English sentiment lexicons
   Subjectivity Clues \cite{Wilson:05} and SentiSpin \cite{Takamura:05}
   with a subsequent manual correction of these translations and
   several synonyms and negated terms added by the authors;
@@ -192,7 +192,7 @@ Table~\ref{snt-lex:tbl:gsl-res}.
       & Precision & Recall & \F{} & %
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
-      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexicons}\\\hline
 
       % Class                     Precision              Recall                 F-score
       % positive                   0.209155             0.534630                 0.300680
@@ -273,14 +273,14 @@ is a relatively high precision of this list for all but the neutral
 polarity class, where it is outperformed by the union of all three
 resources.  Not surpisingly, the union also shows the highest recall
 of positive and negative terms among all compared polarity lists.
-Regarding the figures attained by the individual lexica, the best
+Regarding the figures attained by the individual lexicons, the best
 results here are achieved by the SentiWS resource~\cite{Remus:10},
 which shows the highest \F{}-score for negative terms, and the Zurich
 Polarity List~\cite{Clematide:10}, which achieves the second best
 macro-averaged \F{}-result, coming very close to the scores attained
 by the intersection of the three resources.
 
-\subsection{Automatic Methods}
+\section{Automatic Methods}
 
 A natural question which arises upon the evaluation of the existing
 semi-automatic lexicons is how well fully automatic methods can
@@ -303,7 +303,7 @@ weaknesses would have a stronger influence on the net results, we
 decided to reimplement the most commonly used algorithms from both of
 these paradigms and evaluate them on our corpus.
 
-\subsubsection{Dictionary-Based Methods}
+\subsection{Dictionary-Based Methods}
 
 The presumably first SLG system which inferred a set of polar terms
 form a manually created lexical database was proposed by
@@ -549,7 +549,7 @@ agreed on the polarity of the analyzed term.
       & & Precision & Recall & \F{} & %
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
-      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexicons}\\\hline
 
       % Class                     Precision              Recall                 F-score
       % positive                   0.770601             0.101975                 0.180115
@@ -764,7 +764,7 @@ tendencies in this evaluation:
 
 % seed sets: (Turney and Littman, 2003); SentiWS (Remus, 2010)
 
-\subsubsection{Corpus-Based Methods}
+\subsection{Corpus-Based Methods}
 
 An alternative way to generate polarity lists is to use corpus-based
 approaches.  In contrast to dictionary-based methods, these systems
@@ -899,7 +899,7 @@ iterations in the method by \citet{Velikovich:10} to 20.
       & & Precision & Recall & \F{} & %
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
-      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexicons}\\\hline
 
       % Class                     Precision              Recall                 F-score
       % positive                   0.770601             0.101975                 0.180115
@@ -1028,11 +1028,11 @@ set\footnote{The automatically labeled corpus that we obtained for the
   had 716,210 positive versus 92,592 negative training instances.} and
 fell victim to this unjustified skewness, getting stuck in a local
 optimum from the very beginning of their training.  We will
-investigate later in Subsection~\ref{subsec:snt-lex:eoss} whether the
+investigate later in Section~\ref{subsec:snt-lex:eoss} whether the
 seed sets proposed by other authors could provide a remedy to this
 problem.
 
-\subsubsection{NWE-Based Methods}
+\subsection{NWE-Based Methods}
 
 Another group of SLG methods that we are going to explore in this
 section are algorithms which operate on distributed vector
@@ -1179,7 +1179,7 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       & & Precision & Recall & \F{} & %
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
-      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexica}\\\hline
+      %% \multicolumn{9}{|c|}{\cellcolor{cellcolor}Existing Lexicons}\\\hline
 
       % Class                     Precision              Recall                 F-score
       % positive                   0.770601             0.101975                 0.180115
@@ -1332,7 +1332,7 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
 %   \end{center}
 % \end{table}
 
-\subsection{Effect of Seed Sets}\label{subsec:snt-lex:eoss}
+\section{Effect of Seed Sets}\label{subsec:snt-lex:eoss}
 
 An important factor which could significantly affect the quality of
 the resulting sentiment lexicons was the set of the seed terms that we
@@ -1503,7 +1503,7 @@ stopping of the expansion.
 %   \end{center}
 % \end{table}
 
-\subsection{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
+\section{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
 
 \begin{table}[thb!]
   \begin{center}
@@ -1535,7 +1535,7 @@ stopping of the expansion.
   \end{center}
 \end{table}
 
-\subsection{Analysis of Entries}\label{subsec:snt-lex:aoe}
+\section{Analysis of Entries}\label{subsec:snt-lex:aoe}
 
 Besides investigating the effects of different hyper-parameters and
 seed sets, we also decided to have a closer look at the actual results
@@ -1721,7 +1721,7 @@ methods.
   \end{center}
 \end{table}
 
-\subsection{Discussion}
+\section{Discussion}
 
 In general, as we can see from the results, all systems tested in this
 section performed notably worse than reported in their original
@@ -1842,7 +1842,7 @@ papers.  We can explain this divergence by the following four reasons:
 % respective synononyms set in \textsc{WordNet}.  The resulting database
 % included 2,874 synsets with a total of 4,787 words.
 
-% \subsubsection{Domain-Specific Sentiment Lexica}
+% \subsection{Domain-Specific Sentiment Lexicons}
 
 % \citet{Chetviorkin:14} obtained a set of possible subjective terms
 % from English and Russian microblogs by using an ensemble of supervised
@@ -1857,7 +1857,7 @@ papers.  We can explain this divergence by the following four reasons:
 % resulting lexicon comprised 2,772 words for Russian and 2,786 lexical
 % items for English.
 
-\subsection{Summary and Conclusions}
+\section{Summary and Conclusions}
 
 In this section, we presented a thorough evaluation of the most
 popular methods for an automatic generation of sentiment lexicons.

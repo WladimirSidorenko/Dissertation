@@ -9,7 +9,7 @@
 % Humboldt-Universitaet zu Berlin AG Elektronisches Publizieren Joanna
 % Rycko und der DNB - Deutsche Nationalbibliothek
 
-\section{Fine-Grained Sentiment Analysis}\label{sec:snt:fgsa}
+\chapter{Fine-Grained Sentiment Analysis}\label{sec:snt:fgsa}
 
 The main goal of fine-grained sentiment analysis (FGSA) is
 traditionally defined as the identification of subjective evaluative
@@ -36,7 +36,7 @@ the definition of textual spans, to which these approaches should
 assign their labels, and the evaluation metrics, with which we will
 estimate the quality of this assignment.
 
-\subsection{Definition of Sentiment, Target, and Source Spans}
+\section{Definition of Sentiment, Target, and Source Spans}
 Despite some notable advances and an ongoing active research on
 fine-grained opinion extraction, the crucial task of defining the
 exact boundaries of sentiment spans and the spans of their respective
@@ -108,7 +108,7 @@ immediate holder of the opinion---``Kardinal'' \textit{cardinal}---and
 its grammatical dependants without including any of its parental
 elements.
 
-\subsection{Evaluation Metrics}
+\section{Evaluation Metrics}
 The next question which naturally arises after defining the span
 boundaries for human coders is that of the best way to compare these
 spans with automatically assigned labels.  One possibility to estimate
@@ -164,7 +164,7 @@ extrema of an automatic labeling---too long and too short spans---and
 also penalizes for erroneous and spurious tags, we will primarily rely
 on this measure throughout our subsequent experiments.
 
-\subsection{Data Preparation}\label{snt:fgsa:subsec:data}
+\section{Data Preparation}\label{snt:fgsa:subsec:data}
 
 In order to evaluate the CRF and RNN approaches on our data set, we
 split the whole corpus into three parts, using 70\% of it as training
@@ -197,7 +197,7 @@ corpus tokenization, we aligned the manual annotation with the
 automatically split words using the Needleman-Wunsch alignment
 algorithm~\cite{Needleman:70}.
 
-\subsection{Fine-Grained Sentiment Analysis with Conditional Random
+\section{Fine-Grained Sentiment Analysis with Conditional Random
   Fields} The first method that we are going to evaluate on the
 obtained data is that of the conditional random fields.  First
 introduced by \citet{Lafferty:01}, CRFs rapidly grew in popularity,
@@ -576,7 +576,7 @@ new contexts which do have important but underweighted attributes.
   \end{center}
 \end{table*}
 
-\subsection{Fine-grained Sentiment Analysis with Recurrent Neural Networks}
+\section{Fine-grained Sentiment Analysis with Recurrent Neural Networks}
 
 A competive alternative to the conditional random fields are deep
 recurrent neural networks (RNNs).  Introduced in the
@@ -767,9 +767,9 @@ Table~\ref{snt-fgsa:tbl:rnn-res}.
 \end{table*}
 
 
-\subsection{Evaluation}
+\section{Evaluation}
 
-\subsubsection{Effect of the Annotation Scheme}
+\subsection{Effect of the Annotation Scheme}
 In our first set of experiments, we applied the \emph{broad}
 interpretation of sentiments.  With this interpretation, we assigned
 the \textsc{SNT} labels to all tokens that belonged to the sentiment
@@ -830,7 +830,7 @@ underlying CRF model: broad sentiments, for example, are best
 processed with the second-order semi-Markov CRFs, while narrow
 opinions are more amenable to the tree-structured model.
 
-\subsubsection{Effect of Features}
+\subsection{Effect of Features}
 
 Another important factor which could significantly influence the
 results of the CRF system were the features which we provided to it as
@@ -944,11 +944,11 @@ is perfectly acceptable that the same tag will continue over multiple
 words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 2.31$).
 
-\subsubsection{Effect of Word Embeddings}
+\subsection{Effect of Word Embeddings}
 
-\subsubsection{Effect of Lexica and Normalization}
+\subsection{Effect of Lexica and Normalization}
 
-\subsubsection{Effect of Topologies}
+\subsection{Effect of Topologies}
 
 Due to an exponentially increasing running time, we constrained the
 maximum number of training iterations to 256 while keeping all other
@@ -986,7 +986,7 @@ hyper-parameters of the model the same as the original setting.
     \label{fgsa:tbl:topologies}
   \end{center}
 \end{table*}
-% \subsubsection{Semi-Markov CRFs}
+% \subsection{Semi-Markov CRFs}
 % Instead of making their predictions over single tokens, semi-Markov
 % CRFs try to partition the input sequence $\bm{x}$ into contiguous
 % segments $\vec{s} = \langle{}s_1,\ldots,s_l\rangle{}$ where each
@@ -1007,7 +1007,7 @@ hyper-parameters of the model the same as the original setting.
 % $\vec{y}$ for that segmentation using either the greedy search or the
 % dynamic Viterbi algorithm.
 
-% \subsubsection{Higher-order CRFs}
+% \subsection{Higher-order CRFs}
 % Unlike the first-order models whose transition features can only
 % access a pair of adjacent element labels $(y_{i-1}, y_i)$, transition
 % features of higher-order linear-chain and semi-Markov CRFs encode
@@ -1050,7 +1050,7 @@ hyper-parameters of the model the same as the original setting.
 % practice especially when the label patterns in the addressed domain
 % are sparse.
 
-% \subsubsection{Tree-structured CRFs}
+% \subsection{Tree-structured CRFs}
 % In contrast to the linearly structured models, in which the predicted
 % label $y_i$ only depends on the state attributes of the respective
 % item $x_i$ and the label scores of the preceding tokens or segments
@@ -1073,9 +1073,9 @@ hyper-parameters of the model the same as the original setting.
 % as for the first-order linear chain models:
 % $\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
 
-\subsubsection{Error Analysis}
+\subsection{Error Analysis}
 
-\subsection{Related Work}
+\section{Related Work}
 One of the first attempts at automatically analyzing subjective
 opinions below the document and sentence level was made by
 \citet{Nasukawa:03}.  In their work, the authors proposed a
@@ -1215,7 +1215,7 @@ about the given aspects; and, finally, \citet{Wang:16}, who used the
 output of a deep recursive network as input for a CRF system, updating
 the weights of the network along with the CRF parameters.
 
-\subsection{Summary and Conclusions}\label{fgsa:subsec:conclusions}
+\section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
 
 TODO
 
