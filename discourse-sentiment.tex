@@ -13,8 +13,7 @@
 % und der
 % DNB - Deutsche Nationalbibliothek
 
-\chapter{Discourse-Augmented Sentiment Analysis}
-Somasundaran et al., 2009
+\part{Discourse-Augmented Sentiment Analysis}
 
 %% \section{Introduction to Discourse Analysis}
 %% \subsection{Definitions and Related Work}
@@ -27,14 +26,47 @@ Somasundaran et al., 2009
 %% \subsection{Related Work}
 %% \subsection{Conclusions}
 
-\section{Correlation between Discourse Relations and Sentiment}
-\subsection{Discourse Influence on Sentiments}
-\subsection{Sentiment Influence on Discourse}
-\subsection{Related Work}
-\subsection{Conclusions}
-
 \section{Discourse-augmented Sentiment Analysis}
 \subsection{Discourse-related Features}
 \subsection{Analysis of Results}
 \subsection{Related Work}
+Polanyi and Zaenen, 2006
+Somasundaran et al., 2009
+Voll and Taboada, 2007
+Yessenalina, 2010
+Mao and Lebanon, 2006
+McDonald et al., 2007
+
+\citet{Trivedi:13} presented a latent-variable approach, in which they
+tried to predict the overall polarity of a document using a set of
+unigram attributes augmented by special discourse connectives
+and polarity coherence features.
+
+Other ways of incorporating discourse structure into opinion mining
+applications were proposed by~\citet{Bhatia:15}.  In their work, the
+authors proposed two methods for augmenting a sentiment analysis
+system with discourse information:
+\begin{inparaenum}[(i)]
+\item discourse depth reweighting and
+\item rhetorical recursive neural network (R2N2).
+\end{inparaenum}
+In the former approach, they introduced a special parameter $\lambda_i$:
+\begin{equation*}
+  \lambda_i = \max\left(0.5, 1 - d_i/6\right),
+\end{equation*}
+where $d_i$ stands for the depth of an elementary discourse unit in
+the discourse tree of the whole document.  With this parameter, they
+estimated the overall polarity of a document~$\Psi$, by summing up the
+individual linaer predictions for each sentence scaled by~$\lambda_i$:
+\begin{equation*}
+  \Psi = \sum_i\lambda_i\mathbf{\theta}^T\cdot\mathbf{w}_i,
+\end{equation*}
+where $\mathbf{\theta}$ represents a vector of polarity scores ($-1$
+for negative terms and $+1$ for positive) obtained from the sentiment
+lexicon of~\citet{Wilson:05}, and $w_i$ stands for the bag-of-words
+representation of the $i$-th sentence.  In the R2N2 method, the
+authors adopted the RNN approach of~\citet{Socher:13} and recursively
+estimated the polarity of a document from the leaves of the RST tree
+up to its root.
+
 \subsection{Conclusions}
