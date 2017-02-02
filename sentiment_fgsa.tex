@@ -680,8 +680,14 @@ and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
   \vec{h}^{(t)} &= \vec{i}^{(t)} * \vec{h}^{(t-1)} + \left(\vec{1} -
   \vec{i}^{(t)}\right) * \widetilde{c}^{(t)}.
 \end{align*}
-This state simultaneously served as the output unit ($\vec{o}^{(t)}$
-in the LSTM case).
+After obtaining the output of the recurrence ($\vec{o}^{(t)}$ in the
+case of LSTM and $\vec{h}^{(t)}$ in the GRU case), we estamated the
+final probability of the labels $\vec{p}^{(t)}$ by computing the dot
+product of the output vector with the matrix $O$, and estimating the
+softmax of this product:
+\begin{align*}
+  \vec{p}^{(t)} &= softmax\left(O\cdot\vec{o}^{(t)}\right).
+\end{align*}
 
 \textbf{Training} A neat property of both of these approaches is that
 the final equation, which is obtained after unrolling the loop, is
@@ -704,23 +710,39 @@ faster convergence and superior classification results.
 
 Another important factor, which might significantly affect the
 training, is the initialization of the learned model's parameters.  As
-shown by~\citet{He:15}, an inappropriate choice of the initial values
-might result in a complete stalling of the learning process.
-Following the recommended practices~\cite{Saxe:13}, we initialized all
-parameter matrices with orthogonal values in order to ensure their
-full rank, and used a uniform He initialization~\cite{He:15} for the
-corresponding bias vectors.
+shown by~\citet{He:15}, an inappropriate choice of the initial
+parameter values might result in a complete stalling of the whole
+learning process.  Following the recommended practices~\cite{Saxe:13},
+we used orthogonal initialization for all linear transformation
+matrices, and applied uniform He sampling~\cite{He:15} for setting
+their respective bias vectors.
 
-We chose categorical cross-entropy as the optimized loss function $L$:
+Furthermore, due to a high imbalance of the target classes in the
+training set (where most of the instances only contained the
+\texttt{NONE} tag without any sentiment entities), we randomly
+``over-sampled'' sentiment tweets (i.e., we randomly repeated some of
+the training microblogs containing sentiments until we reached an
+equal proportion of subjective and objective messages).
+
+In addition to that, in order to make sure, that the correct
+prediction of the \texttt{NONE} tags would not dominate the weight
+updates for other classes,\footnote{Since most of the tokens in the
+  over-sampled training set still had the \texttt{NONE} tag, the
+  easiest way for the classifier to minimize the training error would
+  be to always predict this tag with a high confidence.} we chose the
+hinge-loss as the optimized objective function $L$:
 \begin{align}
-  L &= -\sum_{i}^{N}Y \odot \log\left(O\right);
+  L &= \sum_{i}^{N}\sum_{t=0}^{\lvert\mathbf{x}_i\rvert}\max\left(0, %
+  c + \max\limits_{y'\neq y}\vec{p}_{t,y'} - \vec{p}_{t,y}\right) + \alpha \norm{O}^2_2,
 \end{align}
-and minimized it with the above settings using RmsProp updates.  (For
-estimating the entropy, we concatenated the gold label vectors
-$\vec{y}$ (obtained using one-hot encoding) and the output vectors
-$\vec{o}$ into the matrices $Y$ and $O$ respectiveley, and computed
-the sum over all elements of the Hadamard product of the $Y$ term with
-the logarithm of the $O$ matrix.)
+in which $\vec{p}_{t,y'}$ stands for the probability of the most
+likely wrong tag $y'$ at position $t$ in the training instance
+$\mathbf{x}_i$, $\vec{p}_{t,y}$ represents the probability of the gold
+label, and $\norm{O}^2_2$ stands for the $L2$-norm of the $O$ matrix.
+We optimized the scalar hyper-parameters $c$ and $\alpha$ on the dev
+set, and trained the final model for 256 epochs, choosing parameter
+values that maximized the macro-averaged \F-score on the development
+data.
 
 \textbf{Inference} Since each of the above approaches (LSTM and GRU)
 explicitly defines an output unit, the inference of the most likely
@@ -731,10 +753,6 @@ each time step of the recurrence:
   \mathbf{\hat{y}} =
   \argmax{\vec{h}^{(1)}},\argmax{\vec{h}^{(2)}},\ldots,\argmax{\vec{h}^{(|\mathbf{x}|)}}.
 \end{equation}
-
-\textbf{Results} The results of the RNN methods are shown in
-Table~\ref{snt-fgsa:tbl:rnn-res}.
-
 
 \begin{table*}
   \begin{center}
@@ -752,14 +770,27 @@ Table~\ref{snt-fgsa:tbl:rnn-res}.
       Precision & Recall & \F{} &\\\midrule
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}LSTM}\\
-          Training Set\\
-          Test Set\\
+      %%  Tag        Precision    Recall F-Measure
+      %% O             86.60%    86.63%    86.62%
+      %% SENTIMENT     55.50%    74.72%    63.69%
+      %% SOURCE        46.27%    68.82%    55.33%
+      %% TARGET        43.12%    77.99%    55.53%
+      Training Set & 0.555 & 0.747 & 0.637 & 0.463 & 0.688 & 0.553 %
+      & 0.431 & 0.78 & 0.553 & 0.582\\
+      %% Tag        Precision    Recall F-Measure
+      %% O             77.77%    82.91%    80.26%
+      %% SENTIMENT     31.69%    28.00%    29.73%
+      %% SOURCE        23.05%    31.25%    26.53%
+      %% TARGET        21.77%    23.57%    22.63%
 
-          \multicolumn{11}{c}{\cellcolor{cellcolor}GRU}\\
-          Training Set & 0.475 & 0.665 & 0.554 & 0.439 & 0.545 %
-          & 0.486 & 0.387 & 0.674 & 0.492 & 0.511\\
-          Test Set & 0.3 & 0.255 & 0.276 & 0.236 & 0.259 & 0.247%
-          & 0.222 & 0.239 & 0.23 & 0.251\\\bottomrule
+      Test Set & 0.317 & 0.28 & 0.297 & 0.231 & 0.313 & 0.265 %
+      & 0.218 & 0.236 & 0.226 & 0.263\\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}GRU}\\
+      Training Set & 0.475 & 0.665 & 0.554 & 0.439 & 0.545 %
+      & 0.486 & 0.387 & 0.674 & 0.492 & 0.511\\
+      Test Set & 0.3 & 0.255 & 0.276 & 0.236 & 0.259 & 0.247%
+      & 0.222 & 0.239 & 0.23 & 0.251\\\bottomrule
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis with recurrent
@@ -767,6 +798,10 @@ Table~\ref{snt-fgsa:tbl:rnn-res}.
     \label{snt-fgsa:tbl:rnn-res}
   \end{center}
 \end{table*}
+
+\textbf{Results} The results of these methods are shown in
+Table~\ref{snt-fgsa:tbl:rnn-res}.
+
 
 
 \section{Evaluation}
