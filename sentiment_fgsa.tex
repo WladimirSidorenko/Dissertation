@@ -560,6 +560,7 @@ new contexts which do have important but underweighted attributes.
       \multicolumn{3}{c}{\bfseries Source} & %
       \multicolumn{3}{c}{\bfseries Target} & %
       \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\\cline{2-10}
+
       & Precision & Recall & \F{} & %
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
@@ -877,7 +878,7 @@ human expert can encode with manually defined attributes.
 
       Test Set & \textbf{0.3}\stddev{0.01} & 0.26\stddev{0.06} & 0.28\stddev{0.03} & %
       0.22\stddev{0.03} & 0.28\stddev{0.02} & 0.24\stddev{0.02} & %
-      0.24\stddev{0.03} & 0.21\stddev{0.07} & 0.22\stddev{0,03} & 0.25\stddev{0.01}\\\bottomrule
+      0.24\stddev{0.03} & 0.21\stddev{0.07} & 0.22\stddev{0.03} & 0.25\stddev{0.01}\\\bottomrule
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis with recurrent
@@ -959,20 +960,6 @@ underlying CRF model: broad sentiments, for example, are best
 processed with the second-order semi-Markov CRFs, while narrow
 opinions are more amenable to the tree-structured model.
 
-%% GRU (Train Set)
-%% Tag        Precision    Recall F-Measure
-%% O             74.86%    83.85%    79.10%
-%% SENTIMENT     34.57%    36.65%    35.58%
-%% SOURCE        31.68%    33.75%    32.68%
-%% TARGET        35.51%    41.95%    38.46%
-
-%% GRU (Test Set)
-%% Tag        Precision    Recall F-Measure
-%% O             74.12%    86.22%    79.72%
-%% SENTIMENT     34.70%    30.44%    32.43%
-%% SOURCE        25.62%    25.65%    25.63%
-%% TARGET        27.97%    20.25%    23.49%
-
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -988,102 +975,60 @@ opinions are more amenable to the tree-structured model.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}LSTM}\\
-      %%  Tag        Precision    Recall F-Measure
-      %% O             86.60%    86.63%    86.62%
-      %% SENTIMENT     55.50%    74.72%    63.69%
-      %% SOURCE        46.27%    68.82%    55.33%
-      %% TARGET        43.12%    77.99%    55.53%
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Wide Interpretation}\\
 
-      %% Tag        Precision    Recall F-Measure
-      %% O             88.76%    67.71%    76.82%
-      %% SENTIMENT     30.76%    76.51%    43.88%
-      %% SOURCE        38.84%    49.82%    43.65%
-      %% TARGET        29.45%    67.18%    40.95%
+      %% SENTIMENT     37.62%    31.85%    34.49%
+      %% SOURCE        29.75%    33.00%    31.29%
+      %% TARGET        29.25%    23.06%    25.79%
 
-      %% Tag        Precision    Recall F-Measure
-      %% O             86.38%    89.91%    88.11%
-      %% SENTIMENT     60.90%    74.87%    67.16%
-      %% SOURCE        48.96%    71.18%    58.02%
-      %% TARGET        50.61%    74.58%    60.30%
+      CRF & 0.376 & 0.319 & 0.345 & %
+      0.298 & 0.33 & 0.313 & %
+      0.293 & 0.231 & 0.258 & 0.305\\
 
-      Training Set & 0.49\stddev{0.16} & 0.75\stddev{0.01} & 0.58\stddev{0.13} & %
-      0.45\stddev{0.05} & 0.63\stddev{0.12} & 0.52\stddev{0.08} %
-      & 0.41\stddev{0.11} & 0.73\stddev{0.06} & 0.52\stddev{0.11} %
-      & 0.54\stddev{0.11}\\
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             77.77%    82.91%    80.26%
-      %% SENTIMENT     31.69%    28.00%    29.73%
-      %% SOURCE        23.05%    31.25%    26.53%
-      %% TARGET        21.77%    23.57%    22.63%
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             79.83%    71.62%    75.50%
-      %% SENTIMENT     26.23%    43.07%    32.60%
-      %% SOURCE        26.07%    30.68%    28.19%
-      %% TARGET        21.53%    30.16%    25.13%
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             77.58%    86.08%    81.61%
-      %% SENTIMENT     30.16%    22.60%    25.84%
-      %% SOURCE        24.42%    30.60%    27.16%
-      %% TARGET        24.99%    21.20%    22.94%
-
-      Test Set & 0.29\stddev{0.03} & \textbf{0.31}\stddev{0.11} & \textbf{0.29}\stddev{0.03} &%
-      \textbf{0.25}\stddev{0.02} & \textbf{0.31}\stddev{0.0} & \textbf{0.27}\stddev{0.01} & %
-      \textbf{0.23}\stddev{0.02} & \textbf{0.25}\stddev{0.05} & \textbf{0.24}\stddev{0.01} & %
-      \textbf{0.27}\stddev{0.02}\\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}GRU}\\
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             82.40%    89.44%    85.77%
-      %% SENTIMENT     60.16%    60.25%    60.21%
-      %% SOURCE        44.77%    66.74%    53.59%
-      %% TARGET        46.36%    63.22%    53.49%
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             87.39%    80.32%    83.71%
-      %% SENTIMENT     44.88%    70.75%    54.92%
-      %% SOURCE        39.69%    63.31%    48.79%
-      %% TARGET        35.37%    73.96%    47.86%
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             81.03%    87.80%    84.28%
-      %% SENTIMENT     47.95%    66.84%    55.84%
-      %% SOURCE        42.49%    56.86%    48.64%
-      %% TARGET        58.22%    51.08%    54.42%
-
-      Training Set & 0.51\stddev{0.08} & 0.66\stddev{0.05} & 0.57\stddev{0.03} & %
-      0.42\stddev{0.03} & 0.62\stddev{0.05} & 0.5\stddev{0.03} & %
-      0.47\stddev{0.11} & 0.63\stddev{0.11} & 0.52\stddev{0.04} & 0.53\stddev{0.03}\\
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             76.78%    86.47%    81.34%
-      %% SENTIMENT     30.77%    19.68%    24.01%
-      %% SOURCE        20.71%    26.44%    23.22%
-      %% TARGET        24.20%    20.93%    22.45%
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             78.15%    79.14%    78.64%
-      %% SENTIMENT     28.61%    30.25%    29.41%
-      %% SOURCE        19.71%    29.45%    23.62%
-      %% TARGET        21.54%    27.49%    24.15%
-
-      %% Tag        Precision    Recall F-Measure
-      %% O             77.52%    86.03%    81.56%
-      %% SENTIMENT     30.66%    28.43%    29.50%
-      %% SOURCE        24.46%    29.09%    26.58%
-      %% TARGET        27.17%    14.15%    18.61%
+      LSTM & \stddev{} & \stddev{} & \stddev{} & %
+      \stddev{} & \stddev{} & \stddev{} & %
+      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\
 
       GRU & \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{0.02} & %
-      \stddev{} & \stddev{} & \stddev{0,03} & 0.25\stddev{0.01}\\\bottomrule
+      \stddev{} & \stddev{} & \stddev{} & %
+      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\\midrule
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Narrow Interpretation}\\
+
+      %% Tag        Precision    Recall F-Measure
+      %% O             85.93%    85.69%    85.81%
+      %% SENTIMENT     58.84%    64.49%    61.54%
+      %% SOURCE        26.13%    23.00%    24.47%
+      %% TARGET        22.14%    20.14%    21.09%
+
+      CRF & 0.588 & 0.645 & 0.615 & %
+      0.261 & 0.23 & 0.245 & %
+      0.221 & 0.201 & 0.211 & 0.357\\
+
+      LSTM & \stddev{} & \stddev{} & \stddev{} & %
+      \stddev{} & \stddev{} & \stddev{} & %
+      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\
+
+      %% Tag        Precision    Recall F-Measure
+      %% O             84.78%    87.61%    86.17%
+      %% SENTIMENT     59.02%    61.71%    60.34%
+      %% SOURCE        27.35%    37.83%    31.75%
+      %% TARGET        22.37%    21.18%    21.76%
+
+      %% Tag        Precision    Recall F-Measure
+      %% O             84.38%    90.46%    87.31%
+      %% SENTIMENT     60.14%    64.76%    62.36%
+      %% SOURCE        27.93%    29.53%    28.71%
+      %% TARGET        27.40%    20.07%    23.17%
+
+      GRU & \stddev{} & \stddev{} & \stddev{} & %
+      \stddev{} & \stddev{} & \stddev{} & %
+      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\\bottomrule
+
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained sentiment analysis for narrow and
-      wide annotation interpretations.}
+    \caption{Results of fine-grained sentiment analysis for wide and
+      narrow annotation interpretations.}
     \label{snt-fgsa:tbl:narrow-wide
     }
   \end{center}
