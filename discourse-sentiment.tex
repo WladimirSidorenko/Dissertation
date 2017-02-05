@@ -29,8 +29,17 @@
 \section{Discourse-augmented Sentiment Analysis}
 \subsection{Discourse-related Features}
 \subsection{Analysis of Results}
+
 \subsection{Related Work}
+One of the first discourse-aware approaches to coarse-grained
+sentiment analysis was proposed by~\citet{Pang:04}.  In their work,
+the authors partitioned the text of a movie review into subjective and
+objective sentences using the min-cut method of~\citet{Blum:01}, and
+then analyzed the sentences from the former group in order to classify
+the overall polarity of the review.
+
 Polanyi and Zaenen, 2006
+
 Somasundaran et al., 2009
 
 Taboada and Grieve, 2009
@@ -53,15 +62,6 @@ able to obtain their best results (69\% accuracy), getting their
 second-best scores with the system which considered all adjectives.
 The suboptimal results of the discourse-based approach were partially
 explained by the limited performance of the automatic RST system.
-
-
-Zaidan and Eisner, 2008
-
-Pang Lee, 2004 min-cut
-
-Thomas et al., 2006
-
-\cite{Mao:06}
 
 Another joint framework for predicting the polarity of both sentences
 and documents was described by \cite{McDonald:07}.  In their work, the
@@ -108,5 +108,14 @@ representation of the $i$-th sentence.  In the R2N2 method, the
 authors adopted the RNN approach of~\citet{Socher:13} and recursively
 estimated the polarity of a document from the leaves of the RST tree
 up to its root.
+
+Other notable works on discourse-level sentiment analysis include
+those of~\citet{Mao:06}, who used isotonic CRFs to predict the
+polarity of single sentences and then used a nearest neighbors
+classifier to induce the polarity of the whole document from these
+predictions, observing an improvement over the traditional
+bag-of-words approach.
+
+Thomas et al., 2006
 
 \subsection{Conclusions}
