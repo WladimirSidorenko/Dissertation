@@ -890,76 +890,73 @@ human expert can encode with manually defined attributes.
 
 \section{Evaluation}
 
-After obtaining the results for the most popular fine-grained
-sentiment analysis systems with the (mostly) standard settings, we
-decided to investigate the impact of different training factors on the
-net scores of these approaches.  For this purpose, we reran the
-experiments, changing one aspect of the training at a time, and
-reestimated the scores on the development data (in order to keep the
-test set undisclosed).  The results of these experiments are presented
-below.
+After obtaining results for the most popular sentiment analysis
+approaches with the (mostly) standard settings, we decided to
+investigate the impact of different training factors on the net scores
+of these methods.  For this purpose, we reran the evaluation, changing
+one aspect of the training at a time, and reestimated the scores on
+the development data (in order to keep the test set undisclosed).  The
+results of these experiments are presented below.
 
 \subsection{Effect of the Annotation Scheme}
-In our first set of experiments, we applied the \emph{broad}
-interpretation of sentiments.  With this interpretation, we assigned
-the \textsc{SNT} labels to all tokens that belonged to the sentiment
-spans in our corpus annotation except for the tokens that also were
-labeled as targets or sources of the opinions.  In the latter case, we
-used the \textsc{TRG} and \textsc{SRC} tags respectively.  A
-translated example of such annotation mapping is provided below:
-\begin{example}\label{exmp:3}
+
+As the first factor which could significantly affect the quality of
+the automatic systems, we considered the annotation scheme that we
+used to create the corpus.  As described in
+Section~\ref{subsec:snt:ascheme}, we initially asked our experts to
+assign the \textsc{SENTIMENT} tag to complete syntactic or
+discourse-level units which encompassed both the target of an opinion
+and its immediate evaluation.  Even though this decision was
+linguistically plausible and notably eased the task of determining
+opinion boundaries, it also posed considerable difficulties for
+sequence labeling approaches, since the same tag got assigned not only
+to subjective words, but also to objective terms which reside within
+the same syntactic constituent.  Since none of the tested methods
+could explicitly encode this logic, we decided to check whether an
+alternative interpretation of the annotation scheme could alleviate
+their inference.
+
+In particular, instead of unconditionally labeling all words belonging
+to a sentiment span in the original annotation with the \textsc{SNT}
+tag as we did previously (which we call the \emph{broad}
+interpretation of the annotation scheme), we only assigned this label
+to emotional expressions found in the corpus (which we dub the
+\emph{narrow} interpretation of the scheme).  The difference between
+these two approaches is shown in Examples~\ref{snt:fgsa:exmp:wide}
+and~\ref{snt:fgsa:exmp:narrow}.
+\begin{example}[Broad Sentiment
+  Interpretation]\label{snt:fgsa:exmp:wide}
   \noindent\sentiment{\target{Francis} makes a \intensifier{very}
-    \emoexpression{good} impression on \source{me}!
+    \emoexpression{good} impression on\\ \source{me}!
     \emoexpression{:)}}
 
   $\rightarrow$
 
-  Francis/TRG makes/SNT a/SNT very/SNT good/SNT impression/SNT on/SNT
-  me/SRC !/SNT :)/SNT
+  \noindent Francis/TRG makes/SNT a/SNT very/SNT good/SNT
+  impression/SNT on/SNT\\ me/SRC !/SNT :)/SNT
 \end{example}
-After mapping and aligning the annotation from the corpus with the
-automatically pre-processed data, we trained various modifications of
-CRFs on the training set using the l-BFGS algorithm \cite{Liu:89} and
-adjusted the $L1$ and $L2$ regularization parameters using the
-cross-validation data.  Our final classification results for the test
-set are shown in Table \ref{tbl:res-broad}.  For all reported
-evaluations, we used the proportional overlap metric of
-\citet{Johansson:10}.
 
-Experiment II (narrow sentiment)
-In the next attempt, we had a different take of the annotation scheme
-and only assigned the label \textsc{SNT} to the tokens that were
-labeled as \textsc{Emo-Expression}s in our corpus.  A translated
-example of this annotation mapping is provided below:
-\begin{example}\label{exmp:4}
+\begin{example}[Narrow Sentiment Interpretation]\label{snt:fgsa:exmp:narrow}
   \noindent\sentiment{\target{Francis} makes a \intensifier{very}
-    \emoexpression{good} impression on \source{me}!
+    \emoexpression{good} impression on\\ \source{me}!
     \emoexpression{:)}}
 
   $\rightarrow$
 
-  Francis/TRG makes/NON a/NON very/NON good/SNT impression/NON on/NON
-  me/SRC !/NON :)/SNT
+  \noindent Francis/TRG makes/NON a/NON very/NON good/SNT
+  impression/NON on/NON\\ me/SRC !/NON :)/SNT
 \end{example}
+\noindent In the former case (with the broad interpretation), we
+labeled the whole opinionated sentence with the \texttt{SNT} tag
+except for the words that denoted the target and source of the
+opinion.  In the latter case (with the narrow interpretation), we only
+assigned the \texttt{SNT} tag to the emotional expression ``good'' and
+the emoticon ``:)'', which, however, were expressive enough to convey
+the main evaluative sense.
 
-
-As can be seen from the tables, classification performance for the
-narrow sentiment spans is almost twice as high as the results obtained
-with the broad interpretation (62.92\% versus 33.09\%).  The broad
-approach, however, leads to better prediction scores for targets and
-sources of the opinions.
-
-For the narrow scheme, classification results for these opinion
-arguments can be improved by increasing the dependency order of the
-linearly structured CRF-models.  This improvement, however, comes at
-the cost of a decreased accuracy for the sentiment spans themselves.
-
-We can also see that, depending on the utilized interpretation scheme,
-sentiment classification notably depends on the graph structure of the
-underlying CRF model: broad sentiments, for example, are best
-processed with the second-order semi-Markov CRFs, while narrow
-opinions are more amenable to the tree-structured model.
-
+The results of the automatic systems for these two approaches to
+defining the boundaris of sentiment spans are shown in
+Table~\ref{snt-fgsa:tbl:narrow-wide}.
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -985,13 +982,25 @@ opinions are more amenable to the tree-structured model.
       0.298 & 0.33 & 0.313 & %
       0.293 & 0.231 & 0.258 & 0.305\\
 
-      LSTM & \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\
+      % Tag        Precision    Recall F-Measure
+      % O             77.89%    70.02%    73.75%
+      % SENTIMENT     24.03%    37.51%    29.29%
+      % SOURCE        28.52%    37.43%    32.37%
+      % TARGET        22.73%    30.54%    26.06%
 
-      GRU & \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\\midrule
+      % Tag        Precision    Recall F-Measure
+      % O             76.44%    86.10%    80.98%
+      % SENTIMENT     30.53%    23.22%    26.38%
+      % SOURCE        27.74%    36.33%    31.46%
+      % TARGET        28.76%    23.59%    25.92%
+
+      LSTM &  &  &  & %
+       &  &  & %
+       &  &  & \\
+
+      GRU &  &  &  & %
+       &  &  & %
+       &  &  & \\\midrule
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}Narrow Interpretation}\\
 
@@ -1005,9 +1014,26 @@ opinions are more amenable to the tree-structured model.
       0.261 & 0.23 & 0.245 & %
       0.221 & 0.201 & 0.211 & 0.357\\
 
-      LSTM & \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\
+      % Tag        Precision    Recall F-Measure
+      % O             85.08%    90.61%    87.76%
+      % SENTIMENT     57.18%    66.52%    61.50%
+      % SOURCE        27.22%    40.25%    32.48%
+      % TARGET        25.54%    12.56%    16.84%
+
+      % Tag        Precision    Recall F-Measure
+      % O             84.57%    91.93%    88.10%
+      % SENTIMENT     69.83%    60.92%    65.07%
+      % SOURCE        32.28%    35.55%    33.84%
+      % TARGET        26.04%    16.18%    19.96%
+
+      % Tag        Precision    Recall F-Measure
+      % O             84.05%    91.82%    87.77%
+      % SENTIMENT     58.79%    67.52%    62.85%
+      % SOURCE        30.90%    27.85%    29.30%
+      % TARGET        27.07%    13.31%    17.85%
+
+      LSTM & 0.62 & 0.65 & 0.63 & 0.3 & 0.35 & 0.32 & %
+      0.26 & 0.14 & 0.18 & 0.38\\
 
       %% Tag        Precision    Recall F-Measure
       %% O             84.78%    87.61%    86.17%
@@ -1021,18 +1047,29 @@ opinions are more amenable to the tree-structured model.
       %% SOURCE        27.93%    29.53%    28.71%
       %% TARGET        27.40%    20.07%    23.17%
 
-      GRU & \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & %
-      \stddev{} & \stddev{} & \stddev{} & \stddev{}\\\bottomrule
+      % Tag        Precision    Recall F-Measure
+      % O             84.98%    85.60%    85.29%
+      % SENTIMENT     65.71%    61.64%    63.61%
+      % SOURCE        29.91%    31.20%    30.54%
+      % TARGET        19.18%    31.63%    23.88%
+
+      GRU & 0.62 & 0.63 & 0.62 & %
+      0.28 & 0.33 & 0.3 & %
+      0.23 & 0.24 & 0.23 & 0.38\\\bottomrule
 
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained sentiment analysis for wide and
-      narrow annotation interpretations.}
-    \label{snt-fgsa:tbl:narrow-wide
-    }
+    \caption{Results of fine-grained analysis with broad and narrow
+      sentiment interpretations.}
+    \label{snt-fgsa:tbl:narrow-wide}
   \end{center}
 \end{table*}
+As we can see from the table, the wide interpretation generally leads
+to notably lower scores for the sentiment spans, but yields much
+better results for the prediction of sources and targets of the
+opinions.  An opposite situation is observed with the narrow scheme:
+even though the \F-score for the \texttt{SNT} labels is twice as high
+as in the wide case, the accuracy for holders and objects
 
 \subsection{Effect of Features}
 
@@ -1154,6 +1191,22 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 
 \subsection{Effect of Word Embeddings}
 
+
+% LSTM
+
+%% word2vec
+% Tag        Precision    Recall F-Measure
+% O             75.08%    81.90%    78.34%
+% SENTIMENT     28.76%    35.81%    31.90%
+% SOURCE        27.16%    30.53%    28.75%
+% TARGET        23.54%    24.07%    23.80%
+
+% Tag        Precision    Recall F-Measure
+% O             76.18%    83.40%    79.63%
+% SENTIMENT     30.01%    35.54%    32.54%
+% SOURCE        26.85%    27.53%    27.19%
+% TARGET        24.25%    23.30%    23.76%
+
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1169,18 +1222,22 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}LSTM}\\
-          Training Set\\
-          Test Set\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Narrow Interpretation}\\
 
-          \multicolumn{11}{c}{\cellcolor{cellcolor}GRU}\\
-          Training Set\\
-          Test Set\\\bottomrule
+      LSTM &  &  &  & %
+       &  &  & %
+       &  &  & \\
+
+      GRU &  &  &  & %
+       &  &  & %
+       &  &  & \\\bottomrule
+
     \end{tabular}
     \egroup
-    \caption{Macro-averaged \F-scores for sentiment entities achieved
-      by recurrent neural networks with different types of embeddings.}
-    \label{snt-fgsa:tbl:rnn-emb-effect}
+    \caption{Results of fine-grained sentiment analysis with different
+      types of word embedding.}
+    \label{snt-fgsa:tbl:embeddings
+    }
   \end{center}
 \end{table*}
 
