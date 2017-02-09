@@ -1,0 +1,62 @@
+#!/usr/bin/awk -f
+
+##################################################################
+function update_stat(stat, key, val) {
+    if (key in stat)
+	stat[key] += val
+    else
+	stat[key] = val
+}
+
+##################################################################
+BEGIN {
+    F1 = "F1"
+    PRC = "Precision"
+    RCL = "Recall"
+    N = "n"
+    macro_f1 = 0
+    m_f1 = m_sections = m_lines = 0
+}
+
+##################################################################
+$1 ~ /^Tag/ {
+    ++m_sections
+    if (m_lines) {
+	macro_f1 += m_f1 / m_lines
+	m_f1 = 0
+	m_lines = 0
+    }
+    next
+}
+
+NF && $1 !~ /^[Oo]/ {
+    gsub(/%/, "")
+    tag = $1
+    known_tags[tag] = 1
+    update_stat(stat, tag SUBSEP PRC, 0 + $2)
+    update_stat(stat, tag SUBSEP RCL, 0 + $3)
+    update_stat(stat, tag SUBSEP F1, 0 + $4)
+    update_stat(stat, tag SUBSEP N, 1)
+    m_f1 += 0 + $4
+    ++m_lines
+    next
+}
+
+END {
+    if (m_lines)
+	macro_f1 += m_f1 / m_lines
+
+    i = n = 0
+    printf("%-15s%10s%10s%10s\n", "Tag", PRC, RCL, F1)
+    for (tag in known_tags) {
+	n = 0. + stat[tag SUBSEP N]
+	printf("%-15s%10.2f%10.2f%10.2f\n", tag,
+	       stat[tag SUBSEP PRC] / n,
+	       stat[tag SUBSEP RCL] / n,
+	       stat[tag SUBSEP F1] / n)
+    }
+    if (m_sections) {
+	printf("%-10s%-5.4f\n", "Macro-F1",
+	       macro_f1 / m_sections)
+    }
+}
