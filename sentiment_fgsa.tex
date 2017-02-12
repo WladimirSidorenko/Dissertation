@@ -890,13 +890,14 @@ human expert can encode with manually defined attributes.
 
 \section{Evaluation}
 
-After obtaining results for the most popular sentiment analysis
+After obtaining the results for the most popular sentiment analysis
 approaches with the (mostly) standard settings, we decided to
-investigate the impact of different training factors on the net scores
+investigate the impact of different external factors on the net scores
 of these methods.  For this purpose, we reran the evaluation, changing
-one aspect of the training at a time, and reestimated the scores on
-the development data (in order to keep the test set undisclosed).  The
-results of these experiments are presented below.
+one aspect of the training data or procedure at a time, and
+reestimated the scores on the development set (in order to keep the
+test corpus undisclosed).  The results of these experiments are
+presented below.
 
 \subsection{Effect of the Annotation Scheme}
 
@@ -904,26 +905,27 @@ As the first factor which could significantly affect the quality of
 the automatic systems, we considered the annotation scheme that we
 used to create the corpus.  As described in
 Section~\ref{subsec:snt:ascheme}, we initially asked our experts to
-assign the \textsc{SENTIMENT} tag to complete syntactic or
+assign the \texttt{sentiment} tag to complete syntactic or
 discourse-level units which encompassed both the target of an opinion
-and its immediate evaluation.  Even though this decision was
-linguistically plausible and notably eased the task of determining
-opinion boundaries, it also posed considerable difficulties for
-sequence labeling approaches, since the same tag got assigned not only
-to subjective words, but also to objective terms which reside within
-the same syntactic constituent.  Since none of the tested methods
-could explicitly encode this logic, we decided to check whether an
+and its immediate evaluation.  Even though this decision is
+linguistically plausible and extremely helpful for determining the
+boundaries of opinions, it also poses considerable difficulties for
+sequence labeling approaches, since the same tag gets assigned not
+only to immediately subjective words, but also to objective terms
+which reside within the same syntactic constituent as the polar term
+and its respective target.  Since none of the tested methods could
+explicitly incorporate this logic, we decided to check whether an
 alternative interpretation of the annotation scheme could alleviate
 their inference.
 
 In particular, instead of unconditionally labeling all words belonging
 to a sentiment span in the original annotation with the \textsc{SNT}
-tag as we did previously (which we call the \emph{broad}
-interpretation of the annotation scheme), we only assigned this label
-to emotional expressions found in the corpus (which we dub the
-\emph{narrow} interpretation of the scheme).  The difference between
-these two approaches is shown in Examples~\ref{snt:fgsa:exmp:wide}
-and~\ref{snt:fgsa:exmp:narrow}.
+tag as we did previously (which we call a \emph{broad} interpretation
+of the annotation scheme), we only assigned this label to emotional
+expressions found in the corpus (which we dub a \emph{narrow}
+interpretation of the scheme).  The difference between these two ways
+of interpreting the annotation scheme is shown in
+Examples~\ref{snt:fgsa:exmp:wide} and~\ref{snt:fgsa:exmp:narrow}.
 \begin{example}[Broad Sentiment
   Interpretation]\label{snt:fgsa:exmp:wide}
   \noindent\sentiment{\target{Francis} makes a \intensifier{very}
@@ -946,18 +948,17 @@ and~\ref{snt:fgsa:exmp:narrow}.
   \noindent Francis/TRG makes/NON a/NON very/NON good/SNT
   impression/NON on/NON\\ me/SRC !/NON :)/SNT
 \end{example}
-\noindent In the former case (with the broad interpretation), we
-labeled the whole opinionated sentence with the \texttt{SNT} tag
-except for the words that denoted the target and source of the
-opinion.  In the latter case (with the narrow interpretation), we only
-assigned the \texttt{SNT} tag to the emotional expression ``good'' and
-the emoticon ``:)'', which, however, were expressive enough to convey
-the main evaluative sense.
+\noindent In the former (broad) case, we labeled the whole opinionated
+sentence with the \texttt{SNT} tag except for the words which denoted
+the target and source of the opinion.  In the latter (narrow) case, we
+only assigned the \texttt{SNT} tag to the emotional expression
+``good'' and the emoticon ``:)'', which, however, were expressive
+enough to convey the main evaluative sense of the whole subjective
+statement.
 
-The results of the automatic systems for these two approaches to
-defining the boundaris of sentiment spans are shown in
-Table~\ref{snt-fgsa:tbl:narrow-wide}.
-\begin{table*}
+The results of the automatic systems with these two iterpretations are
+given in Table~\ref{snt-fgsa:tbl:narrow-wide}.
+\begin{table*}[hbt!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
@@ -1103,12 +1104,50 @@ Table~\ref{snt-fgsa:tbl:narrow-wide}.
     \label{snt-fgsa:tbl:narrow-wide}
   \end{center}
 \end{table*}
-As we can see from the table, the wide interpretation generally leads
-to notably lower scores for the sentiment spans, but yields much
-better results for the prediction of sources and targets of the
-opinions.  An opposite situation is observed with the narrow scheme:
-even though the \F-score for the \texttt{SNT} labels is twice as high
-as in the wide case, the accuracy for holders and objects
+
+As we can see from the table, the wide approach generally leads to
+notably lower scores for sentiment spans, but yields much better
+results for sources and targets of the opinions.  An opposite
+situation is observed with the narrow interpretation: even though the
+\F-values for sentiments are twice as high as in the wide case, the
+scores for the remaining opinion elements are up to seven percent
+lower~(cf., for instance, 0.31~\F{} attained by the linear-chain CRFs
+with the wide interpretation versus 0.24~\F{} achieved by this model
+with the narrow mapping).
+
+An obvious explanation for these results is the expectedly better
+amenability of the narrow scheme to the prediction of sentiment labels
+(since \texttt{sentiment} tags only get assigned to unequivocally
+polar terms, it becomes easier for the models to infer this class
+using state features---especially morphological or lexical ones---or
+the learned embeddings).  However, on the other hand, such short spans
+lead to disrupted label chains for opinion-related elements, making
+sentiment tags be far apart from the spans of the respective sources
+and targets.  Consequently, these latter classes suffer from the lack
+of context and become heavily dependent on the state attributes too.
+Although, this time, the effect of these features is rather negative,
+since, in contrast to polar terms, being a holder or target of an
+opinion is not an inherent property of a lexical expression, but
+arises from the context which this expression appears in.  Consider,
+for instance, the name ``Silvio Berlusconi'' in
+Example~\ref{snt:fgsa:trg-ctxt}, where it appears as a target of an
+evaluation in the first sentence, but serves as a normal subject of an
+objective statement in the second case.  As we can see from this
+example, the decision about the role of this name depends primarily on
+the sense of the whole sentence rather than only the name.  Therefore,
+state attributes might only increase our prior belief that certain
+words appear in subjective rather than objective contexts, but cannot
+tell us for sure whether they actually do or not.  This is especially
+so, when the actual polar term appears at the other end of the
+sentence.
+
+\begin{example}[Contextual Dependence of Target
+  Elements]\label{snt:fgsa:trg-ctxt}
+  Hoffentlich ist es nicht \target{Silvio Berlusconi}. \#Papst\\[0.5em]
+  \noindent Hopefully, this won't be \target{Silvio Berlusconi}. \#Pope\\[1em]
+  Silvio Berlusconi ist ein italienischer Medienmagnat und Politiker.\\[0.5em]
+  \noindent Silvio Berlusconi is an Italian media tycoon and politician.\\
+\end{example}
 
 \subsection{Effect of Features}
 
@@ -1233,7 +1272,54 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 
 % LSTM
 
-%% word2vec
+%% TASK-SPECIFIC
+% Tag        Precision    Recall F-Measure
+% O             77.89%    70.02%    73.75%
+% SENTIMENT     24.03%    37.51%    29.29%
+% SOURCE        28.52%    37.43%    32.37%
+% TARGET        22.73%    30.54%    26.06%
+
+% Tag        Precision    Recall F-Measure
+% O             76.44%    86.10%    80.98%
+% SENTIMENT     30.53%    23.22%    26.38%
+% SOURCE        27.74%    36.33%    31.46%
+% TARGET        28.76%    23.59%    25.92%
+
+% Tag        Precision    Recall F-Measure
+% O             76.87%    83.75%    80.16%
+% SENTIMENT     30.39%    25.69%    27.84%
+% SOURCE        31.59%    37.88%    34.45%
+% TARGET        24.59%    26.94%    25.71%
+
+% Summary:
+% Tag             Precision    Recall        F1
+% SENTIMENT           28.32     28.81     27.84
+% SOURCE              29.28     37.21     32.76
+% TARGET              25.36     27.02     25.90
+% Macro-F1  28.8311
+
+%% TASK-SPECIFIC + WORD2VEC
+% Tag        Precision    Recall F-Measure
+% O             76.24%    80.65%    78.38%
+% SENTIMENT     27.67%    34.46%    30.69%
+% SOURCE        25.48%    36.78%    30.11%
+% TARGET        23.74%    24.72%    24.22%
+
+% Tag        Precision    Recall F-Measure
+% O             75.73%    82.88%    79.14%
+% SENTIMENT     31.91%    37.32%    34.41%
+% SOURCE        32.94%    27.50%    29.98%
+% TARGET        25.87%    22.66%    24.15%
+
+% Tag        Precision    Recall F-Measure
+% O             75.05%    78.71%    76.83%
+% SENTIMENT     28.31%    33.89%    30.85%
+% SOURCE        20.74%    47.08%    28.80%
+% TARGET        23.07%    27.58%    25.12%
+
+%% TASK-SPECIFIC + LEAST SQUARES
+
+%% WORD2VEC
 % Tag        Precision    Recall F-Measure
 % O             75.08%    81.90%    78.34%
 % SENTIMENT     28.76%    35.81%    31.90%
@@ -1245,6 +1331,22 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 % SENTIMENT     30.01%    35.54%    32.54%
 % SOURCE        26.85%    27.53%    27.19%
 % TARGET        24.25%    23.30%    23.76%
+
+% Tag        Precision    Recall F-Measure
+% O             76.42%    79.33%    77.84%
+% SENTIMENT     30.65%    41.05%    35.09%
+% SOURCE        31.31%    28.12%    29.63%
+% TARGET        22.92%    29.15%    25.66%
+
+% GRU
+
+%% TASK-SPECIFIC
+
+%% TASK-SPECIFIC + WORD2VEC
+
+%% TASK-SPECIFIC + LEAST SQUARES
+
+%% WORD2VEC
 
 \begin{table*}
   \begin{center}
