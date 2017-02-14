@@ -386,7 +386,7 @@ function:
 \begin{equation}
   \ell\left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right) =
   \ln\left(P(\mathbf{y}^{(n)}|\mathbf{x}^{(n)})\right) =
-  \ln\left(\frac{ \exp\left(\sum_{m=1}^{M}\sum_jw_{j} \times f_j(x_{m},
+  \ln\left(\frac{ \exp\left(\sum_{m=1}^{M}\sum_jw_{j} \cdot f_j(x_{m},
     y_{m-1}, y_{m})\right)}{Z}\right),
 \end{equation}
 where $M$ stands for the length of the $n$-th training instance,
@@ -577,7 +577,8 @@ new contexts which do have important but underweighted attributes.
   \end{center}
 \end{table*}
 
-\section{Fine-grained Sentiment Analysis with Recurrent Neural Networks}
+\section{Fine-grained Sentiment Analysis with Recurrent Neural
+  Networks}
 
 A competive alternative to the conditional random fields are deep
 recurrent neural networks (RNNs).  Introduced in the
@@ -957,7 +958,7 @@ enough to convey the main evaluative sense of the whole subjective
 statement.
 
 The results of the automatic systems with these two iterpretations are
-given in Table~\ref{snt-fgsa:tbl:narrow-wide}.
+given in Table~\ref{snt-fgsa:tbl:broad-narrow}.
 \begin{table*}[hbt!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -973,7 +974,7 @@ given in Table~\ref{snt-fgsa:tbl:narrow-wide}.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}Wide Interpretation}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Broad Interpretation}\\
 
       %% SENTIMENT     37.62%    31.85%    34.49%
       %% SOURCE        29.75%    33.00%    31.29%
@@ -1101,18 +1102,18 @@ given in Table~\ref{snt-fgsa:tbl:narrow-wide}.
     \egroup
     \caption{Results of fine-grained analysis with broad and narrow
       sentiment interpretations.}
-    \label{snt-fgsa:tbl:narrow-wide}
+    \label{snt-fgsa:tbl:broad-narrow}
   \end{center}
 \end{table*}
 
-As we can see from the table, the wide approach generally leads to
+As we can see from the table, the broad approach generally leads to
 notably lower scores for sentiment spans, but yields much better
 results for sources and targets of the opinions.  An opposite
 situation is observed with the narrow interpretation: even though the
-\F-values for sentiments are twice as high as in the wide case, the
+\F-values for sentiments are twice as high as in the broad case, the
 scores for the remaining opinion elements are up to seven percent
 lower~(cf., for instance, 0.31~\F{} attained by the linear-chain CRFs
-with the wide interpretation versus 0.24~\F{} achieved by this model
+with the broad interpretation versus 0.24~\F{} achieved by this model
 with the narrow mapping).
 
 An obvious explanation for these results is the expectedly better
@@ -1136,10 +1137,12 @@ objective statement in the second case.  As we can see from this
 example, the decision about the role of this name depends primarily on
 the sense of the whole sentence rather than only the name.  Therefore,
 state attributes might only increase our prior belief that certain
-words appear in subjective rather than objective contexts, but cannot
-tell us for sure whether they actually do or not.  This is especially
-so, when the actual polar term appears at the other end of the
-sentence.
+words appear in subjective rather than objective contexts (e.g., one
+of the most frequent mistakes made by the CRF was always to assign the
+target tag to the word ``Nordkorea'' (\emph{North Korea}) regardless
+of the sentence content), but cannot tell us for sure whether they
+actually do or not.  This is especially so, when the actual polar term
+appears at the other end of the sentence.
 
 \begin{example}[Contextual Dependence of Target
   Elements]\label{snt:fgsa:trg-ctxt}
@@ -1148,6 +1151,165 @@ sentence.
   Silvio Berlusconi ist ein italienischer Medienmagnat und Politiker.\\[0.5em]
   \noindent Silvio Berlusconi is an Italian media tycoon and politician.\\
 \end{example}
+
+\subsection{Effect of Graph Topologies}
+
+Since the lack of contextual links appeared to have a strongly
+negative effect on the prediction of surces and targets of opinions,
+we decided to investigate whether redefining the way these links were
+established in the model could help improve the results.  For this
+purpose, we implemented three possible extensions to the traditional
+first-order linear-chain CRF model:
+\begin{itemize}
+  \item higher-order linear-chain CRFs,
+  \item first- and higher-order semi-Markov models, and
+  \item tree-structured CRFs.
+\end{itemize}
+In the first of these variants, the standard binary transition
+functions $f(\mathbf{x}_m, y'', y')$:
+\begin{equation*}
+  f(\mathbf{x}_m, y'', y') = \begin{cases} \phi(\mathbf{x}_m), &
+    \mbox{if } \mathbf{y}_{m-1} = y''\mbox{ and }\mathbf{y}_{m} =
+    y'\\ 0, & \mbox{otherwise;}
+  \end{cases}
+\end{equation*}
+was replaced with a sum over multiple predicates up to an arity of
+$n$, where $n- 1$ is the order of the model.  For instance, a typical
+transition feature for the third order linear-chain CRF would look as
+follows:
+\begin{equation*}
+  f(\mathbf{x}_m, y'''', y''', y'', y') = \begin{cases} \phi(\mathbf{x}_m) + f(\mathbf{x}_m, y''', y'', y'), &\mbox{if } \mathbf{y}_{m-3} = y''''\mbox{ and }\mathbf{y}_{m-2} = y'''\\
+    &\mbox{ and }\mathbf{y}_{m-1} = y''\mbox{ and }\mathbf{y}_{m} =
+    y'\\ 0, & \mbox{otherwise;}
+  \end{cases}
+\end{equation*}
+Since transition features had to be consistently multiplied with the
+scores of the previous states while doing forward propagation, the
+number of states (each of which kept the score of a particular
+preceding label sequence) increased exponentially with the order of
+the model.  To mitigate this effect and keep the inference still
+tractable, we applied the algorithm of~\citet{Nguyen:14}, reducing the
+number of states only to the sequence which were actually observed in
+the training set.
+
+The same heuristic approach was also used for higher-order semi-Markov
+CRFs, which, in contrast to linear-chain models, simultaneously try to
+find both the most likely segmentation and the label assignment to the
+segments.  In particular, instead of computing the conditional
+probability of a label sequence given the input
+\begin{equation*}
+  P(\mathbf{y}|\mathbf{x}) = \frac{\exp\left(\sum_{m=1}^{M}\sum_jw_{j}
+      \times f_j(x_{m}, y_{m-1},
+      y_{m})\right)}{Z\left(\mathbf{x}\right)},
+\end{equation*}
+semi-Markov models estimate the probability of a segmentation, in
+which each segment is associated with a particular label:
+\begin{equation*}
+  P(\mathbf{s}|\mathbf{x}) = \frac{\exp\left(\sum_{n=1}^{N}\sum_jw_{j}
+      \cdot f_j(s_{n}, y_{s_{n-1}},
+      y_{s_n})\right)}{Z\left(\mathbf{x}\right)},
+\end{equation*}
+where $\mathbf{s}$ stands for the whole segmentation of the input
+instance, $s_{n}$ denotes the $n$-the segment, and $y_{s_{n-1}}$ and
+$y_{s_n}$ represent the labels of the previous and current segments
+respectively.  The normalization factor $Z\left(\mathbf{x}\right)$ is
+computed over all possible label and segment assignments, with
+segments' length ranging from 1 to $K$, where $K$ is the maximum
+length of a contiguous tag span observed in the training data.
+
+The tree-structured CRFs represent a generalization of the
+linear-chain case, in which transition links are established between
+syntactic dependants instead of adjacent tokens.  We derived the
+netwotk graphs from the automatically constructed Mate dependency
+trees.  Since these tree structures are acyclic, one can still apply
+the belief propagation method (where the incident scores coming from
+the child nodes are summed up), getting both a convergence guarantee
+during the training and an exact inference during the testing time.
+
+The results of these systems on the training and development sets are
+shown in Table~\ref{fgsa:tbl:crf-topologies}.  As we can see from the
+scores, semi-Markov CRFs are generally better at predicting sentiments
+and targets.  Moreover, increasing the order of the models up to the
+second degree also improves the results for sources and targets of
+opinions.  However, higher-order approaches again start suffering from
+overfitting the training data.  Somewhat counterintuively,
+tree-structured CRFs get worse results than the linear chain model,
+which can partially be explained by errors in the syntactic trees
+which are produced on this domain.
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.12\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.094\columnwidth}}} % next nine columns
+      \toprule
+      \multirow{2}*{\bfseries Element} & %
+      \multicolumn{9}{c}{\bfseries Topology}\\\cline{2-10}
+      & lcCRF$^1$ & lcCRF$^2$ & lcCRF$^3$ & lcCRF$^4$ & %
+      smCRF$^1$ & smCRF$^2$ & smCRF$^3$ & smCRF$^4$ & trCRF$^1$\\\midrule
+
+      \multicolumn{10}{c}{\cellcolor{cellcolor}Training Set}\\
+
+      Sentiment & 0.928 & 0.919 & 0.922 & 0.925 & 0.931 & 0.931 & 0.933 & 0.931 & 0.906\\
+      Source & 0.887 & 0.876 & 0.89  & 0.901 & 0.869 & 0.886 & 0.874 & 0.878 & 0.881\\
+      Target & 0.898 & 0.811 & 0.816 & 0.827 & 0.813 & 0.827 & 0.815 & 0.817 & 0.876\\
+
+      \multicolumn{10}{c}{\cellcolor{cellcolor}Development Set}\\
+
+      Sentiment & 0.345 & 0.334 & 0.332 & 0.335 & \textbf{0.395} & 0.385 & 0.389 & 0.378 & 0.331\\
+      Source & 0.313 & \textbf{0.32} & 0.272 & 0.304 & 0.298 & 0.282 & 0.287 & 0.291 & 0.223\\
+      Target & 0.258 & 0.235 & 0.24 & 0.229 & 0.287 & \textbf{0.309} & 0.301 & 0.292 & 0.243\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Results of fine-grained sentiment analysis with different
+      CRF topologies.\\ {\small lcCRF---linear-chain CRFs,
+        smCRF---semi-Markov CRFs, trCRF---tree-structured CRFs;\\1, 2,
+        3, and 4 in the superscripts denote the order}}
+    \label{fgsa:tbl:crf-topologies}
+  \end{center}
+\end{table*}
+
+In a similar way as we did for CRFs, we also implemented higher-order
+and tree-structured models for the common RNN methods---LSTM and GRU.
+In particular, we passed a concatenation of $n$ preceding $\vec{h}$
+vectors as input to the reccurrence loop in the higher-order case
+(where $n$ stands for the order of the model), and constructed the
+recurrence schedule from the automatic dependency graphs for the
+tree-structured models.
+
+The results of these systems are shown in
+Table~\ref{fgsa:tbl:nn-topologies}.
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.12\columnwidth} % first columm
+        *{8}{>{\centering\arraybackslash}p{0.1\columnwidth}}} % next nine columns
+      \toprule
+      \multirow{2}*{\bfseries Element} & %
+      \multicolumn{8}{c}{\bfseries Topology}\\\cline{2-9}
+      & lcLSTM$^1$ & lcLSTM$^2$ & lcLSTM$^3$ & lcGRU$^1$ & %
+      lcGRU$^2$ & lcGRU$^3$ & trLSTM$^1$ & trGRU$^1$\\\midrule
+
+      \multicolumn{9}{c}{\cellcolor{cellcolor}Training Set}\\
+
+      Sentiment &  &  &  &  &  &  &  &  \\
+      Source &  &  &   &  &  &  &  &  \\
+      Target &  &  &  &  &  &  &  &  \\
+
+      \multicolumn{9}{c}{\cellcolor{cellcolor}Development Set}\\
+
+      Sentiment &  &  &  &  &  &  &  &  \\
+      Source &  &  &   &  &  &  &  &  \\
+      Target &  &  &  &  &  &  &  &  \\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Results of fine-grained sentiment analysis with different
+      neural network topologies.\\ {\small lcLSTM---linear-chain LSTM,
+        lcGRU---linear-chain GRU, trLSTM---tree-structured LSTM,
+        trGRU---tree-structured GRU;\\1,
+        2, and 3 in the superscripts denote the order}}
+    \label{fgsa:tbl:nn-topologies}
+  \end{center}
+\end{table*}
 
 \subsection{Effect of Features}
 
@@ -1298,25 +1460,6 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 % TARGET              25.36     27.02     25.90
 % Macro-F1  28.8311
 
-%% TASK-SPECIFIC + WORD2VEC
-% Tag        Precision    Recall F-Measure
-% O             76.24%    80.65%    78.38%
-% SENTIMENT     27.67%    34.46%    30.69%
-% SOURCE        25.48%    36.78%    30.11%
-% TARGET        23.74%    24.72%    24.22%
-
-% Tag        Precision    Recall F-Measure
-% O             75.73%    82.88%    79.14%
-% SENTIMENT     31.91%    37.32%    34.41%
-% SOURCE        32.94%    27.50%    29.98%
-% TARGET        25.87%    22.66%    24.15%
-
-% Tag        Precision    Recall F-Measure
-% O             75.05%    78.71%    76.83%
-% SENTIMENT     28.31%    33.89%    30.85%
-% SOURCE        20.74%    47.08%    28.80%
-% TARGET        23.07%    27.58%    25.12%
-
 %% TASK-SPECIFIC + LEAST SQUARES
 
 %% WORD2VEC
@@ -1342,11 +1485,15 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 
 %% TASK-SPECIFIC
 
-%% TASK-SPECIFIC + WORD2VEC
-
 %% TASK-SPECIFIC + LEAST SQUARES
 
 %% WORD2VEC
+% Tag        Precision    Recall F-Measure
+% O             78.82%    68.16%    73.11%
+% SENTIMENT     24.28%    35.71%    28.90%
+% SOURCE        21.66%    31.72%    25.74%
+% TARGET        18.92%    32.88%    24.02%
+
 
 \begin{table*}
   \begin{center}
@@ -1383,131 +1530,6 @@ words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
 \end{table*}
 
 \subsection{Effect of Lexica and Normalization}
-
-\subsection{Effect of Topologies}
-
-Due to an exponentially increasing running time, we constrained the
-maximum number of training iterations to 256 while keeping all other
-hyper-parameters of the model the same as the original setting.
-
-
-\begin{table*}
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.12\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.08\columnwidth}}} % next nine columns
-      \toprule
-      \multirow{2}*{\bfseries Element} & %
-      \multicolumn{9}{c}{\bfseries Topology}\\\cline{2-10}
-      & lcCRF$^1$ & lcCRF$^2$ & lcCRF$^3$ & lcCRF$^4$ & %
-      smCRF$^1$ & smCRF$^2$ & smCRF$^3$ & smCRF$^4$ & trCRF$^1$\\\midrule
-
-      \multicolumn{10}{c}{\cellcolor{cellcolor}Training Set}\\
-
-      Sentiment & 0.928 & 0.919 & 0.922 & 0.925 & 0.931 & 0.931 & 0.933 & 0.931 & \\
-      Source & 0.887 & 0.876 & 0.89  & 0.901 & 0.869 & 0.886 & 0.874 & 0.878 & \\
-      Target & 0.898 & 0.811 & 0.816 & 0.827 & 0.813 & 0.827 & 0.815 & 0.817 & \\
-
-      \multicolumn{10}{c}{\cellcolor{cellcolor}Development Set}\\
-
-      Sentiment & 0.345 & 0.334 & 0.332 & 0.335 & 0.395 & 0.385 & 0.389 & 0.378 & \\
-      Source & 0.313 & 0.32 & 0.272 & 0.304 & 0.298 & 0.282 & 0.287 & 0.291 & \\
-      Target & 0.258 & 0.235 & 0.24 & 0.229 & 0.287 & 0.309 & 0.301 & 0.292 & \\\bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Results of fine-grained sentiment analysis for different
-      CRF topologies.\\ {\small lcCRF---linear-chain CRFs,
-        smCRF---semi-Markov CRFs, trCRF---tree-structured CRFs;\\1, 2,
-        and 3 in the superscriptsdenote the order}}
-    \label{fgsa:tbl:topologies}
-  \end{center}
-\end{table*}
-% \subsection{Semi-Markov CRFs}
-% Instead of making their predictions over single tokens, semi-Markov
-% CRFs try to partition the input sequence $\bm{x}$ into contiguous
-% segments $\vec{s} = \langle{}s_1,\ldots,s_l\rangle{}$ where each
-% segment $s_i$ consists of one or more tokens which all share the same
-% common tag $y_i$.
-
-% Features in semi-Markov models are defined at the level of segments
-% and, like in the linear-chain case, are binary- or real-valued
-% functions associated either with the segment $s_i$ and its label $y_i$
-% or a pair of adjacent segment labels $(y_{i-1}, y_i)$.
-
-% During the training and the later prediction step, the model considers
-% all potential segmentations for all possible label assignments and all
-% possible segment lengths ranging from 1 to $L$ where $L$ is the length
-% of the longest sequence of tokens with identical tags that was
-% observed in the training data.  The decoding step then jointly finds
-% the most probable segmentation $\hat{s}$ and the label sequence
-% $\vec{y}$ for that segmentation using either the greedy search or the
-% dynamic Viterbi algorithm.
-
-% \subsection{Higher-order CRFs}
-% Unlike the first-order models whose transition features can only
-% access a pair of adjacent element labels $(y_{i-1}, y_i)$, transition
-% features of higher-order linear-chain and semi-Markov CRFs encode
-% information about complete label sequences up to length $d$ that might
-% precede the predicted label $y_i$ where $d$ is the maximum order of
-% the model.
-
-% But since the number of such label sequences grows exponentially in
-% the order of the encoded dependencies (up to
-% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$), the running time of
-% the training and inference algorithms rapidly becomes prohibitively
-% expensive and amounts to
-% $\mathcal{O}(n(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
-% for the linear-chain case and
-% $\mathcal{O}(nL(\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^{i})^2)$
-% for the semi-Markov models.
-
-% Because this problem is intractable in general \cite{Istrail:00},
-% researchers are usually forced to resort to some sort of heuristics
-% like an early state pruning \cite{Mueller:13} or state-transition
-% reduction.
-
-% For the purpose of our experiments, we applied the affix-based
-% algorithm of \citet{Nguyen:14}.  This algorithm relies on the
-% advantage that the actual number of possible sequences of $d$
-% consecutive segment labels that are observed in the training set is
-% typically much smaller than
-% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$.  Furthermore, the
-% number of possible transitions that need to be considered for the
-% given label sequence $(y_{i-d}, y_{i-d+1},\ldots,y_i)$ can further be
-% reduced by restricting them only to those patterns for which this
-% label sequence forms the longest possible suffix.
-
-% The running time of this algorithm for the semi-Markov case runs up to
-% $\mathcal{O}(nL\left\vert\mathcal{P}\right\vert\left\vert\mathcal{Y}\right\vert)$
-% where $\left\vert\mathcal{P}\right\vert$ is the total number of the
-% label prefixes observed in the training set.  And even though this
-% number can still be exponential in the order of the dependencies in
-% the worst case, this algorithm usually leads to much faster results in
-% practice especially when the label patterns in the addressed domain
-% are sparse.
-
-% \subsection{Tree-structured CRFs}
-% In contrast to the linearly structured models, in which the predicted
-% label $y_i$ only depends on the state attributes of the respective
-% item $x_i$ and the label scores of the preceding tokens or segments
-% and where the syntax information can only be expressed as feature
-% attributes of single items, tree-CRFs allow to incorporate syntactic
-% dependencies directly into the model's structure.
-
-% In our experiments, we used the automatically constructed dependency
-% trees of the sentences as the underlying graphs for the
-% tree-structured CRF model.  Like in the linear CRF case, every
-% predicted label $y_i$ in this model is dependent on the state features
-% of the token $x_i$, but, instead of hard-coding dependencies on the
-% label scores of the previous tokens, we let transition features
-% connect the predicted label with every label score $y_c$ where $c$
-% ranges over all indices of the child nodes of the token $x_i$ in the
-% dependency tree.
-
-% Since the resulting model graphs are acyclic, the inference in this
-% type of CRFs can still be exact and its running time remains the same
-% as for the first-order linear chain models:
-% $\mathcal{O}(n\left\vert\mathcal{Y}\right\vert^{2})$.
 
 \subsection{Error Analysis}
 
