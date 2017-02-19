@@ -45,8 +45,6 @@ statements (arguments or sentiments) that were related to each via the
 statements had to refer to the same target, while, in the latter case,
 these targets had to represent mutually exclusive alternatives.
 
-TODO: Somasundaran, 2007, 2009
-
 \citet{Voll:07} addressed the problem of classifying the polarity of
 Epinions reviews.\footnote{\url{www.epinions.com}} For this purpose,
 they applied the SO-CAL system (Semantic Orientation CALculator) to
@@ -121,11 +119,28 @@ bag-of-words approach.
 
 Other notable works on discourse-augented sentiment analysis include
 those of~\citet{Snyder:07}, who proposed a joint Good Grief model to
-predict users' evaluations of different restaurant aspects.  In the
-first phase of framework, a set of aspect-specific calssifiers was
-applied to the input text.  In the next step, the output of this
-ensemble was corrected by an additional linear classifier, which was
-supposed to account for the agreement of multiple aspects.
+predict users' evaluations of different aspects of restaurants.  In
+the first phase of this approach, they applied a set of
+aspect-specific classifiers, each of which was supposed to predict
+user's polarity towards one particular criterion.  In the next step,
+the output of this ensemble was corrected by an additional linear
+classifier, which was supposed to account for the overall agreement on
+multiple aspects.
+
+Another work, which apparently comes closest to ours, is that
+of~\citet{Somasundaran:09a}, who tried to unite the notions of opinion
+frames~\cite{Somasundaran:08} with the \emph{dialogue act
+  theory}~\cite{Bunt:12} within a single framework.  In particular,
+the authors projected the polarity annotation of the
+AMI~corpus~\cite{Carletta:05} onto the dialogue segments, and then
+used a two-stage approach similar to the one proposed
+by~\citet{Snyder:07}, in which they first separately classified
+polarity of each dialogue leaf, and then used an integer linear
+programming module to correct the cases which violated the overall
+agreement of opinion frames.
+
+
+TODO: Somasundaran, 2007, 2009b
 
 TODO:
 Riloff, 2003
@@ -134,6 +149,7 @@ Thomas, 2006
 
 Polanyi and Zaenen, 2006
 
+Sadamitsu, 2008
 
 Taboada and Grieve, 2009
 
