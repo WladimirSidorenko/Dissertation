@@ -759,19 +759,18 @@ each time step of the recurrence:
 \textbf{Results} To account for the random factors in the
 initialization, we repeated each training experiment three times, and
 show the mean and standard deviation of these results in
-Table~\ref{snt-fgsa:tbl:rnn-res}.
-
-As can be seen from the table, the LSTM model generally performs
-better than the GRU system on both training and test data.  The only
-aspect at which it shows a slightly worse performance on the test set
-is the precision of sentiments, which, however, can be more than
-compensated for by a higher recall.  Furthermore, the overfitting
-effect is much less pronounced than in the case of CRFs (where the \F
-scores on training and test data differed by a factor of three).
-Nonetheless, both RNN systems achieve lower results than the
-linear-chain CRFs, which indicates the fact that deeply learned
-features still cannot capture the full extent of information which a
-human expert can encode with manually defined attributes.
+Table~\ref{snt-fgsa:tbl:rnn-res}.  As we can see from the table, the
+LSTM model shows generally better scores than the GRU system on both
+training and test data.  The only aspect at which it is slightly
+outperfomed by the latter approach is the precision of sentiment
+spans, which, however, can be more than compensated for by a higher
+recall.  Moreover, the overfitting effect is much less pronounced than
+in the CRF case (where the \F scores on training and test data
+differed by a factor of three).  Nonetheless, both RNN systems achieve
+lower results than the linear-chain CRFs, which indicates the fact
+that deeply learned features still cannot capture the full extent of
+information which a human expert can encode with manually defined
+attributes.
 
 \begin{table*}
   \begin{center}
@@ -891,30 +890,29 @@ human expert can encode with manually defined attributes.
 
 \section{Evaluation}
 
-After obtaining the results for the most popular sentiment analysis
-approaches with the (mostly) standard settings, we decided to
-investigate the impact of different external factors on the net scores
-of these methods.  For this purpose, we reran the evaluation, changing
-one aspect of the training data or procedure at a time, and
-reestimated the scores on the development set (in order to keep the
-test corpus undisclosed).  The results of these experiments are
-presented below.
+After estimating the results of the most popular FGSA approaches with
+the (mostly) standard settings, we decided to investigate the impact
+of different external factors on the net scores of these methods.  For
+this purpose, we reran the evaluation, changing one aspect of the
+training procedure at a time, and reestimated the scores on the
+development set (in order to keep the test corpus undisclosed).  The
+results of these experiments are presented below.
 
 \subsection{Effect of the Annotation Scheme}
 
 As the first factor which could significantly affect the quality of
-the automatic systems, we considered the annotation scheme that we
+the automatic approaches, we considered the annotation scheme that we
 used to create the corpus.  As described in
 Section~\ref{subsec:snt:ascheme}, we initially asked our experts to
-assign the \texttt{sentiment} tag to complete syntactic or
+assign the \texttt{sentiment} label to complete syntactic or
 discourse-level units which encompassed both the target of an opinion
-and its immediate evaluation.  Even though this decision is
+and its immediate evaluation.  Even though this decision was
 linguistically plausible and extremely helpful for determining the
-boundaries of opinions, it also poses considerable difficulties for
-sequence labeling approaches, since the same tag gets assigned not
-only to immediately subjective words, but also to objective terms
-which reside within the same syntactic constituent as the polar term
-and its respective target.  Since none of the tested methods could
+boundaries of opinions, it also posed considerable difficulties for
+sequence labeling approaches, since the same tag got assigned not only
+to immediately subjective words, but also to objective terms which
+resided within the same syntactic constituent as the polar term and
+its respective target.  Since none of the tested methods could
 explicitly incorporate this logic, we decided to check whether an
 alternative interpretation of the annotation scheme could alleviate
 their inference.
@@ -1040,7 +1038,7 @@ given in Table~\ref{snt-fgsa:tbl:broad-narrow}.
 
       GRU & 0.29 & 0.25 & 0.26 & %
        0.29 & 0.4 & 0.34 & %
-       0.25 & 0.21 & 0.22 & 0.27\\\midrule
+       0.25 & 0.21 & 0.22 & 0.27\\
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}Narrow Interpretation}\\
 
@@ -1112,37 +1110,42 @@ results for sources and targets of the opinions.  An opposite
 situation is observed with the narrow interpretation: even though the
 \F-values for sentiments are twice as high as in the broad case, the
 scores for the remaining opinion elements are up to seven percent
-lower~(cf., for instance, 0.31~\F{} attained by the linear-chain CRFs
-with the broad interpretation versus 0.24~\F{} achieved by this model
-with the narrow mapping).
+lower~(consider, for instance, 0.31~\F{} attained by the linear-chain
+CRFs with the broad interpretation versus 0.24~\F{} achieved by this
+model with the narrow mapping).
 
 An obvious explanation for these results is the expectedly better
-amenability of the narrow scheme to the prediction of sentiment labels
-(since \texttt{sentiment} tags only get assigned to unequivocally
-polar terms, it becomes easier for the models to infer this class
-using state features---especially morphological or lexical ones---or
-the learned embeddings).  However, on the other hand, such short spans
-lead to disrupted label chains for opinion-related elements, making
-sentiment tags be far apart from the spans of the respective sources
-and targets.  Consequently, these latter classes suffer from the lack
-of context and become heavily dependent on the state attributes too.
-Although, this time, the effect of these features is rather negative,
-since, in contrast to polar terms, being a holder or target of an
-opinion is not an inherent property of a lexical expression, but
-arises from the context which this expression appears in.  Consider,
-for instance, the name ``Silvio Berlusconi'' in
+amenability of the narrow scheme to the prediction of sentiment
+labels: since \texttt{sentiment} tags only get assigned to
+unequivocally polar terms, it becomes easier for the models to infer
+this class using their state features---especially morphological or
+lexical ones---or learned embeddings.  However, on the other hand,
+such short spans lead to disrupted label chains for opinion-related
+elements, making sentiment tags be far apart from the spans of the
+respective sources and targets.  Consequently, these latter classes
+suffer from the lack of context and become heavily dependent on the
+state attributes too.  Although, this time, the effect of these
+features is rather negative, since, in contrast to polar terms, being
+a holder or target of an opinion is not an inherent property of a
+lexical expression, but arises from the context which this expression
+appears in.
+
+Consider, for instance, the name ``Silvio Berlusconi'' in
 Example~\ref{snt:fgsa:trg-ctxt}, where it appears as a target of an
 evaluation in the first sentence, but serves as a normal subject of an
-objective statement in the second case.  As we can see from this
-example, the decision about the role of this name depends primarily on
-the sense of the whole sentence rather than only the name.  Therefore,
-state attributes might only increase our prior belief that certain
-words appear in subjective rather than objective contexts (e.g., one
-of the most frequent mistakes made by the CRF was always to assign the
-target tag to the word ``Nordkorea'' (\emph{North Korea}) regardless
-of the sentence content), but cannot tell us for sure whether they
-actually do or not.  This is especially so, when the actual polar term
-appears at the other end of the sentence.
+objective clause in the second case.  The decision about the role of
+this name depends primarily on the sense of the whole statement rather
+than the name itself.  Consequently, state attributes might only
+increase our prior belief that certain words would rather appear in a
+subjective context, but cannot tell for sure whether they actually do
+so or not.  Therefore, the recognition of sources and targets of
+opinions becomes much harder, once the context information is deprived
+(as in the narrow case).\footnote{The negative effect of state
+  features on the prediction of sources and targets was actually
+  observed in our corpus, where one of the most frequently made
+  mistakes was the uncoditional assignment of the TRG tag to the word
+  ``Nordkorea'' (\emph{North Korea}) regardless of whether its
+  surrounding context was polar or not.}
 
 \begin{example}[Contextual Dependence of Target
   Elements]\label{snt:fgsa:trg-ctxt}
@@ -1330,6 +1333,73 @@ Table~\ref{fgsa:tbl:nn-topologies}.
 % SOURCE              29.28     37.21     32.76
 % TARGET              25.36     27.02     25.90
 
+%% Order 2
+% Train Set
+% Tag        Precision    Recall F-Measure
+% O             79.96%    80.03%    79.99%
+% SENTIMENT     34.18%    47.72%    39.83%
+% SOURCE        29.79%    25.06%    27.22%
+% TARGET        26.50%    45.30%    33.44%
+
+% Tag        Precision    Recall F-Measure
+% O             84.72%    90.62%    87.57%
+% SENTIMENT     57.87%    72.89%    64.52%
+% SOURCE        43.78%    71.41%    54.28%
+% TARGET        56.50%    69.33%    62.26%
+
+% Tag        Precision    Recall F-Measure
+% O             86.00%    87.80%    86.89%
+% SENTIMENT     54.88%    75.08%    63.41%
+% SOURCE        47.69%    67.65%    55.94%
+% TARGET        46.39%    77.69%    58.09%
+
+% Dev Set
+% Tag        Precision    Recall F-Measure
+% O             75.82%    85.19%    80.23%
+% SENTIMENT     29.97%    28.29%    29.11%
+% SOURCE        30.34%    27.00%    28.57%
+% TARGET        21.23%    20.78%    21.00%
+
+% Tag        Precision    Recall F-Measure
+% O             76.66%    85.62%    80.89%
+% SENTIMENT     31.40%    26.14%    28.53%
+% SOURCE        28.37%    41.75%    33.78%
+% TARGET        26.24%    18.44%    21.66%
+
+% Tag        Precision    Recall F-Measure
+% O             76.11%    81.96%    78.92%
+% SENTIMENT     29.00%    26.98%    27.96%
+% SOURCE        27.62%    37.50%    31.81%
+% TARGET        22.38%    23.27%    22.82%
+
+%% Order 3
+% Train Set
+% Tag        Precision    Recall F-Measure
+% O             83.94%    83.93%    83.93%
+% SENTIMENT     45.33%    64.52%    53.25%
+% SOURCE        38.18%    40.19%    39.16%
+% TARGET        37.10%    65.11%    47.27%
+
+% Tag        Precision    Recall F-Measure
+% O             82.26%    87.43%    84.76%
+% SENTIMENT     42.69%    65.16%    51.59%
+% SOURCE        35.61%    37.49%    36.52%
+% TARGET        47.47%    51.20%    49.26%
+
+% Dev Set
+% Tag        Precision    Recall F-Measure
+% O             77.12%    83.11%    80.01%
+% SENTIMENT     29.10%    26.74%    27.87%
+% SOURCE        31.37%    31.50%    31.44%
+% TARGET        22.21%    22.03%    22.12%
+
+% Tag        Precision    Recall F-Measure
+% O             75.60%    87.57%    81.15%
+% SENTIMENT     31.34%    27.84%    29.49%
+% SOURCE        28.16%    28.40%    28.28%
+% TARGET        28.09%    16.18%    20.54%
+
+
 % GRU
 %% Order 1
 % Train Set
@@ -1446,6 +1516,12 @@ Table~\ref{fgsa:tbl:nn-topologies}.
 % SOURCE        42.86%    72.56%    53.89%
 % TARGET        55.02%    66.83%    60.35%
 
+% Tag        Precision    Recall F-Measure
+% O             84.77%    89.75%    87.19%
+% SENTIMENT     52.93%    73.87%    61.67%
+% SOURCE        43.66%    73.42%    54.76%
+% TARGET        52.95%    70.96%    60.65%
+
 % Dev Set
 % Tag        Precision    Recall F-Measure
 % O             76.09%    78.42%    77.24%
@@ -1458,6 +1534,12 @@ Table~\ref{fgsa:tbl:nn-topologies}.
 % SENTIMENT     29.55%    21.46%    24.86%
 % SOURCE        23.39%    41.33%    29.87%
 % TARGET        23.64%    14.40%    17.90%
+
+% Tag        Precision    Recall F-Measure
+% O             76.00%    84.78%    80.15%
+% SENTIMENT     27.00%    22.51%    24.55%
+% SOURCE        25.75%    37.50%    30.53%
+% TARGET        20.13%    16.70%    18.25%
 
 \begin{table*}
   \begin{center}
