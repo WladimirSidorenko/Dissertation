@@ -1,0 +1,39 @@
+{\scriptsize
+  \begin{tikzpicture}
+    \tikzstyle{xnode}=[circle,draw,fill=gray76,minimum size=2.3em] %
+    \tikzstyle{ynode}=[ellipse,draw,inner sep=1pt,minimum size=2.3em,%
+    minimum width={width("SNT|SNT") + 2em}] %
+    \tikzstyle{factor}=[rectangle,fill=black,midway,inner sep=0pt,%
+    minimum size=0.4em] %
+    \tikzstyle{ctxt}=[red] %
+
+    \node[ynode] (SNT1) at (2, 2) {SNT|SNT};
+
+    \node[ynode] (TRG1) [above=0.4em of SNT1] {TRG|SNT};
+    \node[ynode] (SRC1) [above=0.4em of TRG1] {SRC|SNT};
+    \node[ynode] (NON10) [above=0.4em of SRC1] {$\ldots$|$\ldots$};
+    \node[ynode] (NON11) [above=0.4em of NON10] {NON|NON};
+
+    \node[ynode] (SNT0) [left=2.5em of SNT1] {SNT|SNT};
+
+    \node[ynode] (TRG0) [above=0.4em of SNT0] {TRG|SNT};
+    \node[ynode] (SRC0) [above=0.4em of TRG0] {SRC|SNT};
+    \node[ynode] (NON00) [above=0.4em of SRC0] {$\ldots$|$\ldots$};
+    \node[ynode] (NON01) [above=0.4em of NON00] {NON|NON};
+
+    \node[xnode] (FEAT1) [below left=2em and 1.7em of SNT1] {};
+    \node[xnode] (FEAT2) [below=1.2em of SNT1] {};
+    \node[xnode] (FEAT3) [below right=2em and 1.7em of SNT1] {};
+
+    \path [-] (FEAT1) edge node [factor] {} (SNT1);
+    \path [-] (FEAT2) edge node [factor] {} (SNT1);
+    \path [-] (FEAT3) edge node [factor] {} (SNT1);
+
+    \path [-] (SNT0) edge[ctxt,bend right=5] node [factor,ctxt] {} (SNT1);
+    \path [-] (SNT0) edge[ctxt,bend left=5] node [factor,ctxt] {} (SNT1);
+    \path [-] (TRG0) edge[ctxt,bend right=5] node [factor,ctxt] {} (SNT1);
+    \path [-] (TRG0) edge[ctxt,bend left=5] node [factor,ctxt] {} (SNT1);
+    \path [-] (SRC0) edge[ctxt,bend right=5] node [factor,ctxt] {} (SNT1);
+    \path [-] (SRC0) edge[ctxt,bend left=5] node [factor,ctxt] {} (SNT1);
+\end{tikzpicture}
+}

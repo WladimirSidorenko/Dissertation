@@ -36,6 +36,7 @@
 \usepackage[authoryear]{natbib}
 \usepackage{ntheorem}
 \usepackage{paralist}
+\usepackage{relsize}
 \usepackage{subcaption}
 \usepackage{tabularx}
 \usepackage{tikz}
@@ -43,7 +44,8 @@
 \usepackage{wrapfig}
 \usepackage{xcolor}             % \colorlet
 
-\usetikzlibrary{arrows,backgrounds,calc,positioning,shapes,snakes}
+\usetikzlibrary{arrows,backgrounds,calc,decorations.markings,%
+        positioning,shapes,snakes}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
@@ -103,6 +105,7 @@
 
 %% Tikz
 \makeatletter
+\tikzset{nomorepostaction/.code={\let\tikz@postactions\pgfutil@empty}}
 \tikzset{circle split part fill/.style  args={#1,#2}{%
 alias=tmp@name, % Jake's idea !!
 postaction={%

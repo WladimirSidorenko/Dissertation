@@ -1157,17 +1157,47 @@ opinions becomes much harder, once the context information is deprived
 
 \subsection{Effect of Graph Topologies}
 
-Since the lack of contextual links appeared to have a strongly
-negative effect on the prediction of surces and targets of opinions,
-we decided to investigate whether redefining the way these links were
-established in the model could help improve the results.  For this
+Since the lack of contextual links appeared to have a strong negative
+effect on the prediction of sources and targets of sentiments, we
+decided to investigate whether redefining the way these links were
+established in the model would help improve the results.  For this
 purpose, we implemented three possible extensions to the traditional
-first-order linear-chain CRF model:
+first-order linear-chain CRF model, which are shown in
+Figure~\ref{fig:snt:ho-crf}:
 \begin{itemize}
   \item higher-order linear-chain CRFs,
   \item first- and higher-order semi-Markov models, and
   \item tree-structured CRFs.
 \end{itemize}
+
+\begin{figure*}
+  \centering
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+      \input{linchain-crf-1}
+    \caption{First-order linear-chain CRFs}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+      \input{linchain-crf-ho}
+    \caption{Second-order linear-chain CRFs}
+  \end{subfigure}\\[1em]
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+      \input{semim-crf}
+    \caption{Semi-Markov CRFs}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+      \input{tree-crf}
+    \caption{Tree-structured CRFs}
+  \end{subfigure}
+\caption{\emph{Feature weights for states and transitions of the
+      part-of-speech example.}\label{fig:snt:ho-crf}}
+\end{figure*}
+
 In the first of these variants, the standard binary transition
 functions $f(\mathbf{x}_m, y'', y')$:
 \begin{equation*}
@@ -1239,6 +1269,7 @@ overfitting the training data.  Somewhat counterintuively,
 tree-structured CRFs get worse results than the linear chain model,
 which can partially be explained by errors in the syntactic trees
 which are produced on this domain.
+
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1282,265 +1313,6 @@ tree-structured models.
 The results of these systems are shown in
 Table~\ref{fgsa:tbl:nn-topologies}.
 
-% LSTM
-%% Order 1
-% Train Set
-% Tag        Precision    Recall F-Measure
-% O             86.21%    87.44%    86.82%
-% SENTIMENT     57.93%    72.23%    64.29%
-% SOURCE        46.62%    69.97%    55.95%
-% TARGET        43.22%    76.01%    55.11%
-
-% Tag        Precision    Recall F-Measure
-% O             86.38%    89.91%    88.11%
-% SENTIMENT     60.90%    74.87%    67.16%
-% SOURCE        48.96%    71.18%    58.02%
-% TARGET        50.61%    74.58%    60.30%
-
-% Tag        Precision    Recall F-Measure
-% O             88.76%    67.71%    76.82%
-% SENTIMENT     30.76%    76.51%    43.88%
-% SOURCE        38.84%    49.82%    43.65%
-% TARGET        29.45%    67.18%    40.95%
-
-% Tag             Precision    Recall        F1
-% SENTIMENT           49.86     74.54     58.44
-% SOURCE              44.81     63.66     52.54
-% TARGET              41.09     72.59     52.12
-% Macro-F1  54.3678
-
-% Dev Set
-% Tag        Precision    Recall F-Measure
-% O             76.87%    83.75%    80.16%
-% SENTIMENT     30.39%    25.69%    27.84%
-% SOURCE        31.59%    37.88%    34.45%
-% TARGET        24.59%    26.94%    25.71%
-
-% Tag        Precision    Recall F-Measure
-% O             76.44%    86.10%    80.98%
-% SENTIMENT     30.53%    23.22%    26.38%
-% SOURCE        27.74%    36.33%    31.46%
-% TARGET        28.76%    23.59%    25.92%
-
-% Tag        Precision    Recall F-Measure
-% O             77.89%    70.02%    73.75%
-% SENTIMENT     24.03%    37.51%    29.29%
-% SOURCE        28.52%    37.43%    32.37%
-% TARGET        22.73%    30.54%    26.06%
-
-% Tag             Precision    Recall        F1
-% SENTIMENT           28.32     28.81     27.84
-% SOURCE              29.28     37.21     32.76
-% TARGET              25.36     27.02     25.90
-
-%% Order 2
-% Train Set
-% Tag        Precision    Recall F-Measure
-% O             79.96%    80.03%    79.99%
-% SENTIMENT     34.18%    47.72%    39.83%
-% SOURCE        29.79%    25.06%    27.22%
-% TARGET        26.50%    45.30%    33.44%
-
-% Tag        Precision    Recall F-Measure
-% O             84.72%    90.62%    87.57%
-% SENTIMENT     57.87%    72.89%    64.52%
-% SOURCE        43.78%    71.41%    54.28%
-% TARGET        56.50%    69.33%    62.26%
-
-% Tag        Precision    Recall F-Measure
-% O             86.00%    87.80%    86.89%
-% SENTIMENT     54.88%    75.08%    63.41%
-% SOURCE        47.69%    67.65%    55.94%
-% TARGET        46.39%    77.69%    58.09%
-
-% Dev Set
-% Tag        Precision    Recall F-Measure
-% O             75.82%    85.19%    80.23%
-% SENTIMENT     29.97%    28.29%    29.11%
-% SOURCE        30.34%    27.00%    28.57%
-% TARGET        21.23%    20.78%    21.00%
-
-% Tag        Precision    Recall F-Measure
-% O             76.66%    85.62%    80.89%
-% SENTIMENT     31.40%    26.14%    28.53%
-% SOURCE        28.37%    41.75%    33.78%
-% TARGET        26.24%    18.44%    21.66%
-
-% Tag        Precision    Recall F-Measure
-% O             76.11%    81.96%    78.92%
-% SENTIMENT     29.00%    26.98%    27.96%
-% SOURCE        27.62%    37.50%    31.81%
-% TARGET        22.38%    23.27%    22.82%
-
-%% Order 3
-% Train Set
-% Tag        Precision    Recall F-Measure
-% O             83.94%    83.93%    83.93%
-% SENTIMENT     45.33%    64.52%    53.25%
-% SOURCE        38.18%    40.19%    39.16%
-% TARGET        37.10%    65.11%    47.27%
-
-% Tag        Precision    Recall F-Measure
-% O             82.26%    87.43%    84.76%
-% SENTIMENT     42.69%    65.16%    51.59%
-% SOURCE        35.61%    37.49%    36.52%
-% TARGET        47.47%    51.20%    49.26%
-
-% Dev Set
-% Tag        Precision    Recall F-Measure
-% O             77.12%    83.11%    80.01%
-% SENTIMENT     29.10%    26.74%    27.87%
-% SOURCE        31.37%    31.50%    31.44%
-% TARGET        22.21%    22.03%    22.12%
-
-% Tag        Precision    Recall F-Measure
-% O             75.60%    87.57%    81.15%
-% SENTIMENT     31.34%    27.84%    29.49%
-% SOURCE        28.16%    28.40%    28.28%
-% TARGET        28.09%    16.18%    20.54%
-
-
-% GRU
-%% Order 1
-% Train Set
-% Tag        Precision    Recall F-Measure
-% O             82.40%    89.44%    85.77%
-% SENTIMENT     60.16%    60.25%    60.21%
-% SOURCE        44.77%    66.74%    53.59%
-% TARGET        46.36%    63.22%    53.49%
-
-% Tag        Precision    Recall F-Measure
-% O             87.39%    80.32%    83.71%
-% SENTIMENT     44.88%    70.75%    54.92%
-% SOURCE        39.69%    63.31%    48.79%
-% TARGET        35.37%    73.96%    47.86%
-
-% Tag        Precision    Recall F-Measure
-% O             81.03%    87.80%    84.28%
-% SENTIMENT     47.95%    66.84%    55.84%
-% SOURCE        42.49%    56.86%    48.64%
-% TARGET        58.22%    51.08%    54.42%
-
-% Tag             Precision    Recall        F1
-% SENTIMENT           51.00     65.95     56.99
-% SOURCE              42.32     62.30     50.34
-% TARGET              46.65     62.75     51.92
-% Macro-F1  53.0844
-
-% Dev Set
-% Tag        Precision    Recall F-Measure
-% O             76.64%    86.78%    81.39%
-% SENTIMENT     30.31%    19.73%    23.90%
-% SOURCE        27.54%    39.00%    32.28%
-% TARGET        23.10%    19.12%    20.93%
-
-% Tag        Precision    Recall F-Measure
-% O             77.05%    78.92%    77.97%
-% SENTIMENT     28.27%    28.35%    28.31%
-% SOURCE        27.30%    43.05%    33.41%
-% TARGET        22.68%    29.29%    25.56%
-
-% Tag        Precision    Recall F-Measure
-% O             76.82%    85.63%    80.98%
-% SENTIMENT     27.49%    25.78%    26.60%
-% SOURCE        31.34%    39.30%    34.87%
-% TARGET        29.86%    13.15%    18.26%
-
-% Tag             Precision    Recall        F1
-% SOURCE              28.73     40.45     33.52
-% SENTIMENT           28.69     24.62     26.27
-% TARGET              25.21     20.52     21.58
-% Macro-F1  27.1244
-
-%% Order 2
-% Train Set
-% Tag        Precision    Recall F-Measure
-% O             82.75%    88.99%    85.75%
-% SENTIMENT     61.09%    64.14%    62.57%
-% SOURCE        43.26%    72.45%    54.17%
-% TARGET        43.88%    72.01%    54.53%
-
-% Tag        Precision    Recall F-Measure
-% O             84.05%    86.07%    85.05%
-% SENTIMENT     54.56%    73.06%    62.47%
-% SOURCE        45.20%    68.61%    54.50%
-% TARGET        43.81%    73.83%    54.99%
-
-% Tag        Precision    Recall F-Measure
-% O             87.02%    78.11%    82.32%
-% SENTIMENT     37.04%    81.82%    50.99%
-% SOURCE        47.12%    66.16%    55.04%
-% TARGET        42.89%    71.68%    53.66%
-
-% Tag             Precision    Recall        F1
-% SENTIMENT           50.90     73.01     58.68
-% SOURCE              45.19     69.07     54.57
-% TARGET              43.53     72.51     54.39
-% Macro-F1  55.8800
-
-% Dev Set
-%Tag        Precision    Recall F-Measure
-% O             77.32%    85.60%    81.25%
-% SENTIMENT     29.84%    19.67%    23.71%
-% SOURCE        23.05%    40.50%    29.38%
-% TARGET        22.66%    22.46%    22.56%
-
-% Tag        Precision    Recall F-Measure
-% O             76.63%    82.50%    79.46%
-% SENTIMENT     25.98%    23.57%    24.72%
-% SOURCE        24.13%    37.83%    29.47%
-% TARGET        20.55%    21.98%    21.24%
-
-% Tag        Precision    Recall F-Measure
-% O             76.84%    75.21%    76.01%
-% SENTIMENT     22.91%    33.65%    27.26%
-% SOURCE        26.93%    35.63%    30.68%
-% TARGET        21.46%    22.19%    21.82%
-
-% Tag             Precision    Recall        F1
-% SENTIMENT           26.24     25.63     25.23
-% SOURCE              24.70     37.99     29.84
-% TARGET              21.56     22.21     21.87
-
-%% Order 3
-% Train Set
-% Tag        Precision    Recall F-Measure
-% O             86.39%    83.76%    85.05%
-% SENTIMENT     43.74%    80.02%    56.56%
-% SOURCE        46.65%    68.83%    55.61%
-% TARGET        51.08%    74.50%    60.60%
-
-% Tag        Precision    Recall F-Measure
-% O             81.66%    90.63%    85.91%
-% SENTIMENT     60.13%    67.51%    63.61%
-% SOURCE        42.86%    72.56%    53.89%
-% TARGET        55.02%    66.83%    60.35%
-
-% Tag        Precision    Recall F-Measure
-% O             84.77%    89.75%    87.19%
-% SENTIMENT     52.93%    73.87%    61.67%
-% SOURCE        43.66%    73.42%    54.76%
-% TARGET        52.95%    70.96%    60.65%
-
-% Dev Set
-% Tag        Precision    Recall F-Measure
-% O             76.09%    78.42%    77.24%
-% SENTIMENT     24.53%    28.49%    26.36%
-% SOURCE        27.11%    37.00%    31.30%
-% TARGET        21.22%    19.30%    20.22%
-
-% Tag        Precision    Recall F-Measure
-% O             75.96%    87.42%    81.29%
-% SENTIMENT     29.55%    21.46%    24.86%
-% SOURCE        23.39%    41.33%    29.87%
-% TARGET        23.64%    14.40%    17.90%
-
-% Tag        Precision    Recall F-Measure
-% O             76.00%    84.78%    80.15%
-% SENTIMENT     27.00%    22.51%    24.55%
-% SOURCE        25.75%    37.50%    30.53%
-% TARGET        20.13%    16.70%    18.25%
-
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1554,20 +1326,20 @@ Table~\ref{fgsa:tbl:nn-topologies}.
 
       \multicolumn{9}{c}{\cellcolor{cellcolor}Training Set}\\
 
-      Sentiment & 0.584 &  &  & 0.57 & 0.587 &  &  &  \\
-      Source & 0.525 &  &   & 0.503 & 0.546 &  &  &  \\
-      Target & 0.521 &  &  & 0.519 & 0.544 &  &  &  \\
+      Sentiment & 0.584 & 0.559 & 0.54 & 0.57 & 0.587 & 0.606 & 0.43 &  \\
+      Source & 0.525 & 0.458 & 0.424  & 0.503 & 0.546 & 0.548 & 0.317 &  \\
+      Target & 0.521 & 0.513 & 0.501 & 0.519 & 0.544 & 0.605 & 0.305 &  \\
 
       \multicolumn{9}{c}{\cellcolor{cellcolor}Development Set}\\
 
-      Sentiment & 0.278 &  &  & 0.335 & 0.252 &  &  &  \\
-      Source & 0.328 &  &   & 0.263 & 0.298 &  &  &  \\
-      Target & 0.259 &  &  & 0.216 & 0.219 &  &  &  \\\bottomrule
+      Sentiment & 0.278 & 0.285 & 0.281 & 0.335 & 0.252 & 0.253 & 0.314 &  \\
+      Source & 0.328 & 0.314 & 0.303  & 0.263 & 0.298 & 0.306 & 0.256 &  \\
+      Target & 0.259 & 0.218 & 0.222 & 0.216 & 0.219 & 0.188 & 0.205 &  \\\bottomrule
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis with different
       neural network topologies.\\ {\small lcLSTM---linear-chain LSTM,
-        lcGRU---linear-chain GRU,\\trLSTM---tree-structured LSTM,
+        lcGRU---linear-chain GRU, trLSTM---tree-structured LSTM,
         trGRU---tree-structured GRU;\\1,
         2, and 3 in the superscripts denote the order}}
     \label{fgsa:tbl:nn-topologies}
