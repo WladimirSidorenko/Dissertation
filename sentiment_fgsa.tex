@@ -1158,10 +1158,10 @@ opinions becomes much harder, once the context information is deprived
 \subsection{Effect of Graph Topologies}
 
 Since the lack of contextual links appeared to have a strong negative
-effect on the prediction of sources and targets of sentiments, we
+effect on the prediction of sources and targets of the opinions, we
 decided to investigate whether redefining the way these links were
-established in the model would help improve the results.  For this
-purpose, we implemented three possible extensions to the traditional
+established in the model would improve the results.  For this purpose,
+we implemented three possible extensions to the traditional
 first-order linear-chain CRF model, which are shown in
 Figure~\ref{fig:snt:ho-crf}:
 \begin{itemize}
@@ -1170,7 +1170,7 @@ Figure~\ref{fig:snt:ho-crf}:
   \item tree-structured CRFs.
 \end{itemize}
 
-\begin{figure*}
+\begin{figure*}[thb]
   \centering
   \begin{subfigure}[t]{0.4\textwidth}
     \centering
@@ -1194,86 +1194,94 @@ Figure~\ref{fig:snt:ho-crf}:
       \input{tree-crf}
     \caption{Tree-structured CRFs}
   \end{subfigure}
-  \caption{\emph{Factor graphs of different CRF-topologies.}\\Blank
-    nodes represent predicted variables; gray circles denote observed
+  \caption{\emph{Factor graphs of different CRF topologies.}\\Blank
+    nodes represent unobserved variables; gray circles denote observed
     input; feature functions are shown as squares (with black squares
     representing state features, and red rectangles denoting
     transition functions).\label{fig:snt:ho-crf}}
 \end{figure*}
 
-In the first of these variants, the standard binary transition
-functions $f(\mathbf{x}_m, y'', y')$:
+In the first of these variants, instead of estimating the likelihood
+of a single tag~$y$ at the given position~$i$~(e.g.,~$P(y_i)=$ SNT),
+we kept a separate track of the probability each possible label
+sequence~$P(y_{i-n+1},\ldots,y_{i})$, where $n$ denotes the order of
+the model.  In compliance with this structure, we established
+transition functions only between those pairs of adjacent nodes where
+the label suffix of the preceding unobserved state matched the tag
+prefix of the successor.  (For example, in the second-order case, we
+only connected the node TRG|SNT to the preceding nodes SNT|TRG,
+SRC|TRG, TRG|TRG, and NON|TRG via transition factors; since these were
+the only unobserved states whose last label matched the first tag of
+the former node.)  Furthermore, instead of considering just one
+transition attribute between those states, as we did in the
+first-order model (e.g.,
+$f(\mathbf{x}_i, TRG, SNT) = 1.\text{ if }y_{i-1}=TRG\text{ and
+}y_i=SNT\text{ else }0.$), we took a sum of different transition
+features for each possible prefix length.  For instance, in the case
+of transition between the states NON|TRG and TRG|SNT, we would take a
+sum of two transition functions:
 \begin{equation*}
-  f(\mathbf{x}_m, y'', y') = \begin{cases} \phi(\mathbf{x}_m), &
-    \mbox{if } \mathbf{y}_{m-1} = y''\mbox{ and }\mathbf{y}_{m} =
-    y'\\ 0, & \mbox{otherwise;}
+  f_1(\mathbf{x}_i, NON|TRG, SNT) = \begin{cases} 1, &
+    \mbox{if } \mathbf{y}_{i-2} = NON\mbox{ and }\mathbf{y}_{i-1} = TRG\mbox{ and }\mathbf{y}_{i} =
+    SNT\\ 0, & \mbox{otherwise;}\\
   \end{cases}
 \end{equation*}
-was replaced with a sum over multiple predicates up to an arity of
-$n$, where $n- 1$ is the order of the model.  For instance, a typical
-transition feature for the third order linear-chain CRF would look as
-follows:
+and
 \begin{equation*}
-  f(\mathbf{x}_m, y'''', y''', y'', y') = \begin{cases} \phi(\mathbf{x}_m) + f(\mathbf{x}_m, y''', y'', y'), &\mbox{if } \mathbf{y}_{m-3} = y''''\mbox{ and }\mathbf{y}_{m-2} = y'''\\
-    &\mbox{ and }\mathbf{y}_{m-1} = y''\mbox{ and }\mathbf{y}_{m} =
-    y'\\ 0, & \mbox{otherwise;}
+  f_2(\mathbf{x}_i, TRG, SNT) = \begin{cases} 1, &
+    \mbox{if } \mathbf{y}_{i-1} = TRG\mbox{ and }\mathbf{y}_{i} =
+    SNT\\ 0, & \mbox{otherwise.}
   \end{cases}
 \end{equation*}
-Since transition features had to be consistently multiplied with the
-scores of the previous states while doing forward propagation, the
-number of states (each of which kept the score of a particular
-preceding label sequence) increased exponentially with the order of
-the model.  To mitigate this effect and keep the inference still
-tractable, we applied the algorithm of~\citet{Nguyen:14}, reducing the
-number of states only to the sequence which were actually observed in
-the training set.
 
-The same heuristic approach was also used for higher-order semi-Markov
-CRFs, which, in contrast to linear-chain models, simultaneously try to
-find both the most likely segmentation and the label assignment to the
-segments.  In particular, instead of computing the conditional
-probability of a label sequence given the input
+Since the number of states in this extension increased exponentially
+with the order of the model, we applied the heuristic inference
+algorithm of~\citet{Nguyen:14} by only considering those label
+sequence which were actually observed in the training data and
+pre-caching valid prefix and suffix transition while doing belief
+propagation.
+
+The same optimization was also applied to higher-order semi-Markov
+CRFs, which, in contrast to the linear-chain models, operate on whole
+chunks of text, simultaneously trying to predict both the most
+probably segmentation of the input and the best possible label
+assignment to these segments.  In particular, instead of simply
+optimizing the conditional probability of the labels as it is done by
+the linear CRFs:
 \begin{equation*}
   P(\mathbf{y}|\mathbf{x}) = \frac{\exp\left(\sum_{m=1}^{M}\sum_jw_{j}
       \times f_j(x_{m}, y_{m-1},
       y_{m})\right)}{Z\left(\mathbf{x}\right)},
 \end{equation*}
-semi-Markov models estimate the probability of a segmentation, in
-which each segment is associated with a particular label:
+semi-Markov models seek to maximize the conditional likelihood of the
+segments and their labels over the training data:
 \begin{equation*}
   P(\mathbf{s}|\mathbf{x}) = \frac{\exp\left(\sum_{n=1}^{N}\sum_jw_{j}
       \cdot f_j(s_{n}, y_{s_{n-1}},
-      y_{s_n})\right)}{Z\left(\mathbf{x}\right)},
+      y_{s_n})\right)}{Z\left(\mathbf{x}\right)}.
 \end{equation*}
-where $\mathbf{s}$ stands for the whole segmentation of the input
-instance, $s_{n}$ denotes the $n$-the segment, and $y_{s_{n-1}}$ and
-$y_{s_n}$ represent the labels of the previous and current segments
-respectively.  The normalization factor $Z\left(\mathbf{x}\right)$ is
-computed over all possible label and segment assignments, with
-segments' length ranging from 1 to $K$, where $K$ is the maximum
-length of a contiguous tag span observed in the training data.
+The $\mathbf{s}$ term in the latter formula stands for the total
+segmentation of an input instance, $s_{n}$ denotes the $n$-the
+segment, and $y_{s_{n-1}}$ and $y_{s_n}$ represent the labels of the
+previous and current segments respectively.  The normalization factor
+$Z\left(\mathbf{x}\right)$ here is computed over all possible label
+and segment assignments, with segments' length ranging from 1 to $K$,
+where $K$ is the maximum length of a contiguous tag span observed in
+the training data.
 
-The tree-structured CRFs represent a generalization of the
-linear-chain case, in which transition links are established between
-syntactic dependants instead of adjacent tokens.  We derived the
-netwotk graphs from the automatically constructed Mate dependency
-trees.  Since these tree structures are acyclic, one can still apply
-the belief propagation method (where the incident scores coming from
-the child nodes are summed up), getting both a convergence guarantee
-during the training and an exact inference during the testing time.
+Finally, tree-structured CRFs represent another generalization of the
+linear-chain model, in which transition functions are connecting
+syntactic dependents instead of adjacent tokens.  As the underlying
+graph structure for this variant of CRFs, we used automatically
+derived dependences trees, obtaining these analyses from the
+state-of-the-art dependency parser~\cite[Mate;][]{Bohnet:09}.  Since
+these graphs were guaranteed to be acyclic, we could still apply the
+normal belief propagation method with exact inference, getting the
+same convergence guarantees as in the linear case.
 
 The results of these systems on the training and development sets are
-shown in Table~\ref{fgsa:tbl:crf-topologies}.  As we can see from the
-scores, semi-Markov CRFs are generally better at predicting sentiments
-and targets.  Moreover, increasing the order of the models up to the
-second degree also improves the results for sources and targets of
-opinions.  However, higher-order approaches again start suffering from
-overfitting the training data.  Somewhat counterintuively,
-tree-structured CRFs get worse results than the linear chain model,
-which can partially be explained by errors in the syntactic trees
-which are produced on this domain.
-
-\begin{table*}
+shown in Table~\ref{fgsa:tbl:crf-topologies}.
+\begin{table*}[hbt!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.12\columnwidth} % first columm
@@ -1304,6 +1312,16 @@ which are produced on this domain.
     \label{fgsa:tbl:crf-topologies}
   \end{center}
 \end{table*}
+
+As we can see from the scores, semi-Markov CRFs achieve better results
+at predicting sentiments and targets, but show a degradation in
+classifying sources of the opinions.  Moreover, second-order
+semi-Markov and linear-chain topologies outperform first-order models
+on targets and sources.  However, further increasing the order of
+these structures does not bring about any further improvements.
+Somewhat surprisingly, tree-structured CRFs show worse scores than the
+traditional linear models, which can partially be explained by the
+errors in the syntactic trees which are produced on this domain.
 
 In a similar way as we did for CRFs, we also implemented higher-order
 and tree-structured models for the common RNN methods---LSTM and GRU.
