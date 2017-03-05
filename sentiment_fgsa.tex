@@ -1319,26 +1319,52 @@ classifying sources of the opinions.  Moreover, second-order
 semi-Markov and linear-chain topologies outperform first-order models
 on targets and sources.  However, further increasing the order of
 these structures does not bring about any further improvements.
-Somewhat surprisingly, tree-structured CRFs show worse scores than the
-traditional linear models, which can partially be explained by the
-errors in the syntactic trees which are produced on this domain.
+Somewhat surprisingly, tree-structured CRFs show worse scores than
+their linear counterparts.
 
-In a similar way as we did for CRFs, we also implemented higher-order
-and tree-structured models for the common RNN methods---LSTM and GRU.
-In particular, we passed a concatenation of $n$ preceding $\vec{h}$
-vectors as input to the reccurrence loop in the higher-order case
-(where $n$ stands for the order of the model), and constructed the
-recurrence schedule from the automatic dependency graphs for the
-tree-structured models.
+In oder to see whether the same tendencies would hold for the deep
+learning methods, we also implemented higher-order and tree-structured
+extensions to the LSTM and GRU approaches.  In the former case, we
+passed a concatenation of $n$ preceding $\vec{h}$ vectors (where $n$
+is the order of the model) as input to the reccurrence loop.  In the
+tree-structure modification, we followed the approach
+of~\citet{Tai:15} and defined the LSTM unit as follows:
+\begin{align*}
+  \tilde{h}^{(t)} &= \sum_{k \in C\left(t\right)}\vec{h}^{(k)},\\
+  \vec{i}^{(t)} &= \sigma\left(W_i\cdot\vec{x}^{(t)} + U_i\cdot\tilde{h}^{(t)} + \vec{b}_i\right),\\
+  \vec{o}^{(t)} &= \sigma\left(W_o\cdot\vec{x}^{(t)} + U_o\cdot\tilde{h}^{(t)} + \vec{b}_o\right),\\
+  \vec{u}^{(t)} &= \sigma\left(W_o\cdot\vec{x}^{(t)} + U_o\cdot\tilde{h}^{(t)} + \vec{b}_u\right),\\
+  \vec{f}^{(t,k)} &= \sigma\left(W_f\cdot\vec{x}^{(t)} + U_f\cdot\vec{h}^{(k)} + \vec{b}_f\right),\\
+  \vec{c}^{(t)} &= \vec{i}^{(t)}\odot\vec{u}^{(t)} + \sum_{k \in C(t)}f^{(t,k)}\odot c^{(k)},\\
+  \vec{h}^{(t)} &= \vec{o}^{(t)}\odot tanh\left(\vec{c}^{(t)}\right).
+\end{align*}
+In a similar way, we also redefined the GRU unit:
+\begin{align*}
+  \tilde{h}^{(t)} &= \sum_{k \in C\left(t\right)}\vec{h}^{(k)},\\
+  \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \tilde{h}^{(t)}\right),\\
+  \vec{f}^{(t,k)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t,k)}\right),\\
+  \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
+  \cdot \sum_{k\in C(t)}\left(\vec{f}^{(t,k)} * \vec{h}^{(k)}\right)\right),\\
+  \vec{h}^{(t)} &= \vec{i}^{(t)} * \tilde{h}^{(t)} + \left(\vec{1} -
+  \vec{i}^{(t)}\right) * \widetilde{c}^{(t)}.
+\end{align*}
 
-The results of these systems are shown in
-Table~\ref{fgsa:tbl:nn-topologies}.
+The results of these modifications are shown in
+Table~\ref{fgsa:tbl:nn-topologies}, in which we can see that the
+first-order LSTM model still outperforms all higher-order LSTM and GRU
+extensions on predicting targets and sources of the opinions.
+Moreover, first-order GRU also achieves the best scores on predicting
+sentiment spans among all compared models.  This time, again, none of
+the tree-structured extensions can outperform their linear-chain
+counterparts, which can be partially explained by the errors produced
+by the parser whose original target domain are standard-language news
+texts.
 
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.12\columnwidth} % first columm
-        *{8}{>{\centering\arraybackslash}p{0.1\columnwidth}}} % next nine columns
+        *{8}{>{\centering\arraybackslash}p{0.10575\columnwidth}}} % next nine columns
       \toprule
       \multirow{2}*{\bfseries Element} & %
       \multicolumn{8}{c}{\bfseries Topology}\\\cline{2-9}
@@ -1347,15 +1373,15 @@ Table~\ref{fgsa:tbl:nn-topologies}.
 
       \multicolumn{9}{c}{\cellcolor{cellcolor}Training Set}\\
 
-      Sentiment & 0.584 & 0.559 & 0.54 & 0.57 & 0.587 & 0.606 & 0.43 &  \\
-      Source & 0.525 & 0.458 & 0.424  & 0.503 & 0.546 & 0.548 & 0.317 &  \\
-      Target & 0.521 & 0.513 & 0.501 & 0.519 & 0.544 & 0.605 & 0.305 &  \\
+      Sentiment & 0.584 & 0.559 & 0.54 & 0.57 & 0.587 & 0.606 & 0.43 & 0.518\\
+      Source & 0.525 & 0.458 & 0.424  & 0.503 & 0.546 & 0.548 & 0.317 & 0.372 \\
+      Target & 0.521 & 0.513 & 0.501 & 0.519 & 0.544 & 0.605 & 0.305 & 0.425\\
 
       \multicolumn{9}{c}{\cellcolor{cellcolor}Development Set}\\
 
-      Sentiment & 0.278 & 0.285 & 0.281 & 0.335 & 0.252 & 0.253 & 0.314 &  \\
-      Source & 0.328 & 0.314 & 0.303  & 0.263 & 0.298 & 0.306 & 0.256 &  \\
-      Target & 0.259 & 0.218 & 0.222 & 0.216 & 0.219 & 0.188 & 0.205 &  \\\bottomrule
+      Sentiment & 0.278 & 0.285 & 0.281 & \textbf{0.335} & 0.252 & 0.253 & 0.314 & 0.292\\
+      Source & \textbf{0.328} & 0.314 & 0.303  & 0.263 & 0.298 & 0.306 & 0.256 & 0.262\\
+      Target & \textbf{0.259} & 0.218 & 0.222 & 0.216 & 0.219 & 0.188 & 0.205 & 0.193\\\bottomrule
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis with different
