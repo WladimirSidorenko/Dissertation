@@ -1400,7 +1400,7 @@ texts.
 
 Since redefining the graph topologies of the presented models did not
 bring the expected improvements, we decided to investigate the effect
-of the input provided to these systems on their net results, and
+of the input provided to these systems on their net results, and also
 analyze more thoroughly what these models actually have learned from
 this input.  For this purpose, we first performed an ablation test of
 the CRF's state features, removing one feature group at a time and
@@ -1518,97 +1518,21 @@ $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
 
 \subsection{Effect of Word Embeddings}
 
-
 % LSTM
 
 %% TASK-SPECIFIC
-% Tag        Precision    Recall F-Measure
-% O             77.89%    70.02%    73.75%
-% SENTIMENT     24.03%    37.51%    29.29%
-% SOURCE        28.52%    37.43%    32.37%
-% TARGET        22.73%    30.54%    26.06%
-
-% Tag        Precision    Recall F-Measure
-% O             76.44%    86.10%    80.98%
-% SENTIMENT     30.53%    23.22%    26.38%
-% SOURCE        27.74%    36.33%    31.46%
-% TARGET        28.76%    23.59%    25.92%
-
-% Tag        Precision    Recall F-Measure
-% O             76.87%    83.75%    80.16%
-% SENTIMENT     30.39%    25.69%    27.84%
-% SOURCE        31.59%    37.88%    34.45%
-% TARGET        24.59%    26.94%    25.71%
-
-% Summary:
-% Tag             Precision    Recall        F1
-% SENTIMENT           28.32     28.81     27.84
-% SOURCE              29.28     37.21     32.76
-% TARGET              25.36     27.02     25.90
-% Macro-F1  28.8311
 
 %% TASK-SPECIFIC + LEAST SQUARES
 
 %% WORD2VEC
-% Tag        Precision    Recall F-Measure
-% O             75.08%    81.90%    78.34%
-% SENTIMENT     28.76%    35.81%    31.90%
-% SOURCE        27.16%    30.53%    28.75%
-% TARGET        23.54%    24.07%    23.80%
-
-% Tag        Precision    Recall F-Measure
-% O             76.18%    83.40%    79.63%
-% SENTIMENT     30.01%    35.54%    32.54%
-% SOURCE        26.85%    27.53%    27.19%
-% TARGET        24.25%    23.30%    23.76%
-
-% Tag        Precision    Recall F-Measure
-% O             76.42%    79.33%    77.84%
-% SENTIMENT     30.65%    41.05%    35.09%
-% SOURCE        31.31%    28.12%    29.63%
-% TARGET        22.92%    29.15%    25.66%
 
 % GRU
 
 %% TASK-SPECIFIC
-% Tag        Precision    Recall F-Measure
-% O             76.64%    86.78%    81.39%
-% SENTIMENT     30.31%    19.73%    23.90%
-% SOURCE        27.54%    39.00%    32.28%
-% TARGET        23.10%    19.12%    20.93%
-
-% Tag        Precision    Recall F-Measure
-% O             77.05%    78.92%    77.97%
-% SENTIMENT     28.27%    28.35%    28.31%
-% SOURCE        27.30%    43.05%    33.41%
-% TARGET        22.68%    29.29%    25.56%
-
-% Tag        Precision    Recall F-Measure
-% O             76.82%    85.63%    80.98%
-% SENTIMENT     27.49%    25.78%    26.60%
-% SOURCE        31.34%    39.30%    34.87%
-% TARGET        29.86%    13.15%    18.26%
 
 %% TASK-SPECIFIC + LEAST SQUARES
 
 %% WORD2VEC
-% Tag        Precision    Recall F-Measure
-% O             78.82%    68.16%    73.11%
-% SENTIMENT     24.28%    35.71%    28.90%
-% SOURCE        21.66%    31.72%    25.74%
-% TARGET        18.92%    32.88%    24.02%
-
-% Tag        Precision    Recall F-Measure
-% O             77.90%    73.98%    75.89%
-% SENTIMENT     28.01%    34.43%    30.89%
-% SOURCE        17.89%    37.72%    24.27%
-% TARGET        20.90%    29.70%    24.54%
-
-% Tag        Precision    Recall F-Measure
-% O             76.30%    81.36%    78.75%
-% SENTIMENT     31.94%    28.91%    30.35%
-% SOURCE        22.15%    31.90%    26.14%
-% TARGET        21.02%    22.44%    21.71%
 
 \begin{table*}
   \begin{center}
@@ -1625,7 +1549,17 @@ $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}Narrow Interpretation}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Word2vec Embeddings}\\
+
+      LSTM & 0.203 & 0.078 & 0.112 & %
+       0.194 & 0.256 & 0.22 & %
+       0.132 & 0.115 & 0.116 & 0.149\\
+
+      GRU & 0.216 & 0.072 & 0.104 & %
+       0.159 & 0.271 & 0.186 & %
+       0.134 & 0.212 & 0.142 & 0.144\\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Least-Squares Embeddings}\\
 
       LSTM &  &  &  & %
        &  &  & %
@@ -1633,7 +1567,17 @@ $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
 
       GRU &  &  &  & %
        &  &  & %
-       &  &  & \\\bottomrule
+       &  &  & \\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Task-Specific Embeddings}\\
+
+      LSTM & 0.283 & 0.288 & 0.278 & %
+       0.293 & 0.372 & 0.328 & %
+       0.254 & 0.27 & 0.259 & 0.288\\
+
+      GRU & 0.287 & 0.246 & 0.263 & %
+       0.287 & 0.405 & 0.335 & %
+       0.252 & 0.205 & 0.216 & 0.271\\\bottomrule
 
     \end{tabular}
     \egroup
