@@ -1336,8 +1336,11 @@ of~\citet{Tai:15} and defined the LSTM unit as follows:
   \vec{u}^{(t)} &= \sigma\left(W_o\cdot\vec{x}^{(t)} + U_o\cdot\tilde{h}^{(t)} + \vec{b}_u\right),\\
   \vec{f}^{(t,k)} &= \sigma\left(W_f\cdot\vec{x}^{(t)} + U_f\cdot\vec{h}^{(k)} + \vec{b}_f\right),\\
   \vec{c}^{(t)} &= \vec{i}^{(t)}\odot\vec{u}^{(t)} + \sum_{k \in C(t)}f^{(t,k)}\odot c^{(k)},\\
-  \vec{h}^{(t)} &= \vec{o}^{(t)}\odot tanh\left(\vec{c}^{(t)}\right).
+  \vec{h}^{(t)} &= \vec{o}^{(t)}\odot tanh\left(\vec{c}^{(t)}\right);
 \end{align*}
+where $C\left(t\right)$ stands for the indices of all child nodes of
+the token $t$.
+
 In a similar way, we also redefined the GRU unit:
 \begin{align*}
   \tilde{h}^{(t)} &= \sum_{k \in C\left(t\right)}\vec{h}^{(k)},\\
@@ -1395,11 +1398,13 @@ texts.
 
 \subsection{Effect of Features}
 
-Another important factor which could significantly influence the
-results of the CRF system were the features which we provided to it as
-input.  In order to check the utility of our attributes, we performed
-an ablation test, removing one feature group at a time and rechecking
-the performance of the model on the development set.
+Since redefining the graph topologies of the presented models did not
+bring the expected improvements, we decided to investigate the effect
+of the input provided to these systems on their net results, and
+analyze more thoroughly what these models actually have learned from
+this input.  For this purpose, we first performed an ablation test of
+the CRF's state features, removing one feature group at a time and
+rechecking the performance of the model on the development set.
 
 \begin{table}[hbt]
   \begin{center}
@@ -1440,7 +1445,7 @@ types can easily make up for the removed ones.
 A different situation is observed for sources and targets though.  In
 the first case, removing formal, morphological, and syntactic features
 shows a strongly positive effect, improving the \F-results for sources
-by up to 5\%.  However, removing lexical and lexico-syntactic
+by up to five percent.  However, removing lexical and lexico-syntactic
 features, on the contrary, worsens these results, tearing the
 \F-scores down by up to 4.4\%.
 
@@ -1494,22 +1499,22 @@ entities at the current position; two other attributes---``anfechten''
 (\emph{doubt}) and ``bezeichnete'' (\emph{called})---represent the
 so-called \emph{direct speech events} and expectedly correlate with
 the sentiment tags; the remaining feature---``thomasopperman''---is a
-person name, which frequently appears as a target of an opinion.
+person name, which frequently serves as a target of an opinion.
 
 An interesting pattern can be observed for transition attributes: As
-we can see from the results, the top-3 transition features indicate a
-strong belief that an objective token is highly unlikely to be
-followed by any sentiment entity (hence, the high negative weights of
+we can see from the results, the top-three transition features
+indicate a strong belief that an objective token is highly unlikely to
+be followed by a sentiment entity (hence, the high negative weights of
 the transitions emanating from $NON$).  It is, however, quite common
 that a $NON$ tag will preceed another $NON$ instance (cf. line 5 of
 the table).  Other transition attributes also mainly reflect plausible
 regularities: It is, for instance, uncommon that a target of an
-opinion will appear immediately before a source ($TRG\rightarrow SRC =
--2.99$); in the same vein, it is rather uncommon that a source tag
-will preceed a target ($SRC\rightarrow TRG = -2.07$); nonetheless, is
-is perfectly acceptable that the same tag will continue over multiple
-words (e.g., $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG =
-2.31$).
+opinion will appear immediately before a source
+($TRG\rightarrow SRC = -2.99$); in the same vein, it is rather
+uncommon that a source tag will preceed a target
+($SRC\rightarrow TRG = -2.07$); nonetheless, is is perfectly
+acceptable that the same tag will continue over multiple words (e.g.,
+$SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
 
 \subsection{Effect of Word Embeddings}
 
