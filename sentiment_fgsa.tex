@@ -12,11 +12,11 @@
 \chapter{Fine-Grained Sentiment Analysis}\label{sec:snt:fgsa}
 
 Even though polar lexicons play a crucial role in opinion-mining
-research, they still serve only as a building block for achieving more
+research, they still only serve as a building block for achieving more
 challenging and more sophisticated objectives.  One of the most
-prominent of these objectives is that of fine-grained sentiment
-analysis (FGSA), which deals with the identification of subjective
-evaluative opinions (\emph{sentiments}), the holders of these opinions
+prominent such objectives is that of fine-grained sentiment analysis
+(FGSA), which deals with the identification of subjective evaluative
+opinions (\emph{sentiments}), the holders of these opinions
 (\emph{sources}), and their respectively evaluated objects
 (\emph{targets}) in text.  Since an accurate automatic prediction of
 these elements would enable people to track public attitude to
@@ -29,7 +29,7 @@ Researchers usually consider this objective as a sequence labeling
 (SL) task and address it with either of the two popular SL techniques:
 conditional random fields (CRFs) or recurrent neural networks (RNNs).
 The former approach represents a discriminative probabilistic
-graphical framework, which relies on extensive sets of hand-crafted
+graphical framework, which relies on an extensive set of hand-crafted
 features; the latter model utilizes a recursive computational loop,
 which can learn feature representations completely automatically.  In
 this section, we are going to evaluate each of these methods in detail
@@ -64,8 +64,8 @@ syntactic components (typically noun or verb phrases) or discourse
 units (clauses or sentences) where both of these entities appeared
 together.
 
-A sample annotation analyzed in compliance with this rule is shown
-below:
+A sample annotation analyzed in compliance with this rule is shown in
+Example~\ref{snt:fgsa:exmp:sent-anno1}:
 \begin{example}\label{snt:fgsa:exmp:sent-anno1}
   \upshape\sentiment{Der neue Papst gilt als
     bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
@@ -130,7 +130,7 @@ irrelevant) token is missing.
 Instead of relying on these measures, we opted for the ``golden mean''
 solution to this problem that was proposed by \citet{Johansson:10a}.
 In their work, the authors introduced another way of estimating the
-quality of an automatic assignment, in which they penalized the
+quality of automatic label assignments, in which they penalized the
 predicted spans proportionally to the number of tokens whose labels
 were different from the gold annotation.  More precisely, given a set
 of manually annotated entities $\mathcal{S}$ and automatically tagged
@@ -140,18 +140,16 @@ automatic assignment as:
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation}
 where $C(\mathcal{S},\widehat{\mathcal{S}})$ stands for the \emph{span
-  coverage} metric, and is computed as the proportion of overlapping
+  coverage} metric, which is computed as the proportion of overlapping
 tokens across all pairs of manually ($s_i$) and automatically ($s_j$)
 annotated entities:
 \begin{equation*}
  C(\mathcal{S}, \widehat{\mathcal{S}}) = \sum_{s_i \in
    \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j);
 \end{equation*}
-The $|\widehat{\mathcal{S}}|$ term in Equation~\ref{eq:fgsa:jmmetric}
-denotes the total number of spans automatically labeled with the given
-tag.
-
-Similarly to that, the recall of the assignment was estimated as:
+and the $|\widehat{\mathcal{S}}|$ term denotes the total number of
+spans automatically labeled with the given tag.  Similarly to that,
+the recall of the assignment was estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
@@ -161,10 +159,10 @@ precision and recall scores:
   F_1 = 2\times\frac{P \times R}{P + R}.
 \end{equation*}
 
-Since this proportional estimation adequately accommodates both
-extrema of an automatic labeling---too long and too short spans---and
-also penalizes for erroneous and spurious annotations, we decided to
-use this measure throughout our subsequent experiments.
+Since this proportional estimation could adequately accommodate both
+extrema of an automatic annotation---too long and too short
+spans---and also penalized for erroneous and spurious labels, we
+decided to use this measure throughout our subsequent experiments.
 
 \section{Data Preparation}\label{snt:fgsa:subsec:data}
 
@@ -199,12 +197,15 @@ manual annotation with the automatically split words using the
 Needleman-Wunsch alignment algorithm~\cite{Needleman:70}.
 
 \section{Fine-Grained Sentiment Analysis with Conditional Random
-  Fields} The first method that we are going to evaluate on the
-obtained data is that of the conditional random fields.  First
-introduced by \citet{Lafferty:01}, CRFs rapidly grew in popularity,
-turning into one of the most commonly used probabilistic frameworks,
-which dominated the NLP field for more than a decade.  The main resons
-for this huge success are:
+  Fields}
+
+The first method that we evaluated on the obtained data was that of
+the conditional random fields.  First introduced by
+\citet{Lafferty:01}, CRFs had rapidly grown in popularity, turning
+into one of the most commonly used probabilistic frameworks, which had
+been dominating the NLP field for more than a decade.
+
+The main resons for the huge success of this model are:
 \begin{enumerate}[1)]
 \item the \emph{structural nature} of CRFs, which, in contrast to
   single-entity classifiers such as logistic regression or SVM, make
@@ -228,7 +229,7 @@ for this huge success are:
   As features for this task, we will use lexical unigrams appearing in
   the training data.  Assuming that our training set consists of three
   messages mentioning ``Merkel'' and one microblog mentioning
-  ``Steinmeier'' which are labeled as \texttt{CDU} plus one tweets
+  ``Steinmeier'' which are labeled as \texttt{CDU}, plus one tweet
   mentioning ``Merkel'' and three posts mentioning ``Steinmeier''
   which are annotated as \texttt{SPD}, the generative Na\"{i}ve Bayes
   model would estimate the probability of the two competing classes
@@ -262,24 +263,24 @@ for this huge success are:
   changed the name of the politician.
 
   A different situation can be observed for discriminative models such
-  as a maximum entropy classifier: Instead of optimizing the joint
+  as maximum entropy classifier: Instead of optimizing the joint
   distribution $P(\mathbf{x}, y)$ as it is done by generative
   frameworks, discriminative systems seek to optimize the conditional
-  likelihood $P(y|\mathbf{x})$ by maximizing the probability of the
-  training set $\sum_{i=1}^N\log P(y_i|\mathbf{x}_i, \mathbf{w})$.
+  likelihood $P(y|\mathbf{x})$ by maximizing the total probability of
+  the training set $\sum_{i=1}^N\log P(y_i|\mathbf{x}_i, \mathbf{w})$.
   This probability is usually estimated using the sigmoid function
   $\frac{1}{1 + e^{-(\mathbf{x}_i, \mathbf{w})}}$, where
   $\mathbf{x}_i$ denotes the input features of the $i$-th training
   instance, and the vector $\mathbf{w}$ stands for the respective
   weights of these features.  By optimizing this function using
-  gradient descent, we will arrive at the optimal solution $w_1
-  \approx 0.5$ for the feature ``Merkel'' and $w_2 \approx -0.5$ for
-  the feature ``Steinmeier'' for the first example, which would again
-  result in equal 50\% chances for both classes.  In the second
+  gradient descent, we will arrive at the optimal solution
+  $w_1 \approx 0.5$ for the feature ``Merkel'' and $w_2 \approx -0.5$
+  for the feature ``Steinmeier'' for the first example, which would
+  again result in equal 50\% chances for both classes.  In the second
   example, however, all three features ``von'', ``der'', and ``Leyen''
   would get an equal weight of $\approx 0.3$, and the ``Steinmeier''
   feature would receive a coefficient of $\approx -0.4$, which would
-  result in 60\% probability for the test message being about the CDU
+  result in 60\% probability for the test message being about the CDU,
   and 40\% that the tweet is about the SPD.  Even though this still
   means a slight skewness towards \texttt{CDU}; this time, the effect
   of correlated features is much less dramatic than in the generative
@@ -333,14 +334,14 @@ for this huge success are:
     Figure~\ref{fig:snt:memm-crf}, we will first estimate the
     probability of the correct label sequence for the initial part of
     this sentence using the Maximum Entropy Markov Model (MEMM)---the
-    predecessor of Conditional Random Fields.  According to the MEMM's
-    definition, the probability of the correct labeling
+    predecessor of the Conditional Random Fields.  According to the
+    MEMM's definition, the probability of the correct labeling
     ($KON-ADV-NN-VA$) is equal to:
     \begin{align*}
-      P(KON, ADV, NN, VA) =& P(KON)\times P(ADV|KON)\\
+      P(KON, ADV, NN, VA) &= P(KON)\times P(ADV|KON)\\
       &\times P(NN|ADV)\times P(VA|NN)\\
       &=\frac{\exp(1)}{\exp(1)}\times\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\\%
-      \times&\frac{\exp(0.2 + 0.5)}{\exp(0.2 + 0.5) + \exp(0.8 + 0.5)}\times\frac{\exp(0.9 + 1.)}{\exp(0.9 + 1.)} \approx 0.177
+      &\times\frac{\exp(0.2 + 0.5)}{\exp(0.2 + 0.5) + \exp(0.8 + 0.5)}\times\frac{\exp(0.9 + 1.)}{\exp(0.9 + 1.)} \approx 0.177
     \end{align*}
     At the same time, the probability of the incorrect variant
     ($KON-ADV-ADJA-VA$) amounts to $\approx$ 0.323 and will therefore
@@ -349,7 +350,7 @@ for this huge success are:
     A different situation is observed with the CRFs, where the
     normalizing factor in the denominator is computed over the whole
     input sequence without factorizing into individual terms for each
-    transition as it is done in the previous case.  That way, the
+    transition as it is done in the MEMM case.  That way, the
     probability of the correct labels would run up to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
@@ -357,34 +358,35 @@ for this huge success are:
       &\times P(VA|NN)\\ =&\frac{\exp(1 + 0.5
         \times 3 + 0.2 + 0.9 + 1)}{Z} \approx 0.252,
     \end{align*}
-    where $Z = \exp(1 + 0.5 \times 3 + 0.2 + 0.9 + 1) + \exp(1 + 0.5
-    \times 3 + 0.8 + 0.1 + 1) + \exp(1 + 0.5 \times 3 + 0.7 + 0.9 + 1)
-    + \exp(1 + 0.5 \times 3 + 0.3 + 0.1 + 1)$ is the total score of
-    all possible label assignments.  The incorrect alternative
+    where
+    $Z = \exp(1 + 0.5 \times 3 + 0.2 + 0.9 + 1) + \exp(1 + 0.5 \times
+    3 + 0.8 + 0.1 + 1) + \exp(1 + 0.5 \times 3 + 0.7 + 0.9 + 1) +
+    \exp(1 + 0.5 \times 3 + 0.3 + 0.1 + 1)$ is the total score of all
+    possible label assignments.  The incorrect alternative
     ($KON-ADV-ADJA-VA$), however, would get a probability score of
-    $\approx$ 0.207, which is smaller than the likelihood of the
-    correct labeling.
+    $\approx$ 0.207, which is less than the likelihood of the correct
+    labeling.
   \end{example}
 \end{enumerate}
 \textbf{Training} CRFs get these useful properties thanks to a neatly
 formulated objective function in which they seek to optimize the
 global log-likelihood of the gold labels $\mathbf{Y}$ conditioned on
 the training data $\mathbf{X}$.  In particular, given a set of
-training instances $\mathcal{D} = \{(\mathbf{x}^{(n)},
-\mathbf{y}^{(n)})\}_{n=1}^N$, where $\mathbf{x}^{(n)}$ stands for the
-input variables of the $n$-th instance and $\mathbf{y}^{(n)}$ denotes
-its respective gold labels, CRF's training adds up to finding feature
-coefficients $\mathbf{w}$ that maximize the log-probabilities $\ell$
-of $\mathbf{y}^{(i)}$ given their covariates $\mathbf{x}^{(i)}$ over
-the whole corpus:
-\begin{equation}\label{snt:fgsa:eq:crf-ell}
+training instances
+$\mathcal{D} = \{(\mathbf{x}^{(n)}, \mathbf{y}^{(n)})\}_{n=1}^N$,
+where $\mathbf{x}^{(n)}$ stands for the input variables of the $n$-th
+instance, and $\mathbf{y}^{(n)}$ denotes its respective gold labels,
+CRF's training adds up to finding feature coefficients $\mathbf{w}$
+which maximize the log-probabilities $\ell$ of $\mathbf{y}^{(i)}$
+given their covariates $\mathbf{x}^{(i)}$ over the whole corpus:
+\begin{equation}\label{snt:fgsa:eq:crf-w}
   \mathbf{w} = \argmax_{\mathbf{w}}\sum_{n=1}^N\ell
   \left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right).
 \end{equation}
 The likelihood term $\ell(\mathbf{y}^{(n)}|\mathbf{x}^{(n)})$ in this
 equation is commonly estimated using a globally normalized softmax
 function:
-\begin{equation}
+\begin{equation}\label{snt:fgsa:eq:crf-ell}
   \ell\left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right) =
   \ln\left(P(\mathbf{y}^{(n)}|\mathbf{x}^{(n)})\right) =
   \ln\left(\frac{ \exp\left(\sum_{m=1}^{M}\sum_jw_{j} \cdot f_j(x_{m},
@@ -394,7 +396,7 @@ where $M$ stands for the length of the $n$-th training instance,
 $f_j(x_{m}, y_{m-1}, y_{m})$ denotes the value of the $j$-th feature
 function $f$ at the sequence position $m$, $w_j$ represents the
 corresponding weight of this feature, and $Z$ is a normalization
-factor calculated over all possible label assignments:
+factor calculated over all possible labels:
 \begin{equation}
   Z =
   \sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}\exp\left(\sum_{m=1}^{M}\sum_jw_{j}
@@ -403,15 +405,15 @@ factor calculated over all possible label assignments:
 Since this normalizing term appears in the denominator and couples
 together all feature weights that need to be optimized, it becomes
 prohibitively expensive to find the best solution to
-Equation~\ref{snt:fgsa:eq:crf-ell} analytically with a single shot.  A
+Equation~\ref{snt:fgsa:eq:crf-w} analytically with a single shot.  A
 possible remedy to this problem is to resort to other optimization
 techniques such as the gradient descent method, in which the weights
 of the features are successively changed towards the direction of the
 gradient until the global minimum of the loss function is reached.
 
-We can easily see that the partial derivative of the log-likelihood
-$\ell$ w.r.t. the single feature weight $w_j$ amounts to the following
-solution:
+From Equation~\ref{snt:fgsa:eq:crf-ell}, we can see that the partial
+derivative of the log-likelihood function $\ell$ w.r.t. a single
+feature weight $w_j$ amounts to the following solution:
 \begin{equation}
   \frac{\partial}{\partial w_j}\ell =%
   \sum_{n=1}^N\sum_{m=1}^Mf_j(x_{m}, y_{m-1}, y_{m}) -%
@@ -419,21 +421,23 @@ solution:
   y'_{m-1}, y''_{m})P(y',y''|\mathbf{x}^{(n)}),
 \end{equation}
 which, after dividing both parts of the equation with the constant
-term $N$---the size of the corpus, can, in turn, be transformed into:
+term $N$---the size of the corpus---can in turn be transformed into:
 \begin{equation}
   \frac{1}{N}\frac{\partial}{\partial w_j}\ell = \E[f_j(\mathbf{x},
-    \mathbf{y}] - \E_{\mathbf{w}}[f_j(\mathbf{x}, \mathbf{y})],
+  \mathbf{y})] - \E_{\mathbf{w}}[f_j(\mathbf{x}, \mathbf{y})],
 \end{equation}
-where the first term is the expectation of the feature $f_j$ under the
-empirical distribution, and the second term is its expectation under
-the model's parameters $\mathbf{w}$.  That way, the optimal solution
-to the log-likelihood function in Equation~\ref{snt:fgsa:eq:crf-ell}
-would be the one, where the model's expectation of the features
-matches their (true) empirical expectation in the corpus.
+where the first term ($\E[f_j(\mathbf{x}, \mathbf{y})]$) is the
+expectation of the feature $f_j$ under the empirical distribution, and
+the second term ($\E_{\mathbf{w}}[f_j(\mathbf{x}, \mathbf{y})]$) is
+the same expectation under the model's parameters $\mathbf{w}$.  That
+way, the optimal solution to the log-likelihood objective in
+Equation~\ref{snt:fgsa:eq:crf-ell} is the one, where the model's
+expectation of the features matches their (true) empirical expectation
+in the corpus.
 
-The marginal probability of the features, which is required for
-computing their model's expectation, can be estimated dynamically
-using the forward-backward (FB) algorithm \cite{Rabiner:90}---a
+The marginal probabilities of the features, which are required for
+computing their expectation, can be estimated dynamically using the
+forward-backward (FB) algorithm \cite{Rabiner:90}, which is a
 particular case of the more general belief propagation method
 \cite[cf.][p.~81]{Barber:12}.
 
@@ -442,8 +446,8 @@ learned, one can unproblematically compute the most likely label
 assignment for a new instance by using the Viterbi algorithm
 \cite{Viterbi:67}, which effectively corresponds to the forward pass
 of the FB method with the summation over the alternative preceding
-states replaced by the maximum operator (hence the other name for the
-inference algorithm---``max-product'').
+states replaced by the maximum operator (hence the other name for this
+algorithm---``max-product'').
 
 \noindent\textbf{Features} A crucial component which accounts for a
 huge part of the success (or failure) of a CRF system are feature
@@ -453,7 +457,7 @@ state-based ones.  The former attributes represent real- or
 binary-valued functions $f(\mathbf{x}, y'', y')\rightarrow\mathbb{R}$
 associated with some data predicate
 $\phi(\mathbf{x})\rightarrow\mathbb{R}$ and the labels $y''$ and $y'$.
-The value of theses attributes at position $m$ in the sequence
+The value of such attribute at position $m$ in the sequence
 $\mathbf{x}$ is usually defined as follows:
 \begin{equation}
   f(\mathbf{x}_m, y'', y') = \begin{cases} \phi(\mathbf{x}_m), &
@@ -469,15 +473,15 @@ associated with binary predicates, whose output depends on the input
 data at the given position and the label $y'$ at the respective state:
 \begin{equation}
   f(\mathbf{x}_m, y') = \begin{cases} \phi(\mathbf{x}_m), & \mbox{if }
-    \mathbf{y}_{m} = y'\\ 0, & \mbox{otherwise;}
+    \mathbf{y}_{m} = y'\\ 0, & \mbox{otherwise.}
   \end{cases}
 \end{equation}
-this time, the predicate~$\phi$ is usually much more sophisticated
-than in the previous case and reflects various properties of the input
-sequence at the respective position, such as whether the current token
-is capitalized or whether it begins with a specific prefix or ends
-with a specific suffix.  This type of features commonly accounts for
-the overwhelming majority of all attributes used in a CRF system.
+This time, the predicate~$\phi$ is usually much more sophisticated
+than in the transition case, as it reflects various properties of the
+input sequence at the respective position, such as whether the current
+token is capitalized or whether it begins with a specific prefix or
+ends with a specific suffix.  This type of features commonly accounts
+for the overwhelming majority of all attributes used in a CRF system.
 
 As state attributes in our experiments, we used the following types of
 predicates (which, for simplicity, are listed here in groups):
@@ -488,25 +492,25 @@ predicates (which, for simplicity, are listed here in groups):
   three characters, and the general spelling class of the token (e.g.,
   alphanumeric, digit, or punctuation);
 
-\item\emph{morphological}, which encompassed the part-of-speech tag of
-  the analyzed token as well as case and gender values for inflectable
-  PoS types, the degree of comparison for adjectives, and mood, tense,
-  and person forms for verbs;
+\item\emph{morphological}, which encompassed the part-of-speech tags
+  of the analyzed tokens as well as case and gender values for
+  inflectable PoS types, the degree of comparison for adjectives, and
+  mood, tense, and person forms for verbs;
 
 \item\emph{lexical}, which comprised the actual lemma and form of the
-  token (using one-hot encoding), its polarity class (positive,
+  tokens (using one-hot encoding), their polarity classes (positive,
   negative, or neutral), which we obtained from the Zurich Polarity
   Lexicon~\cite{Clematide:10};
 
 \item and, finally, \emph{syntactic}, which included the dependency
-  relation via which the token $\mathbf{x}_m$ was connected to its
-  parent; two binary features reflecting whether the previos token in
-  the sentence was the parent or child of the current word; as well as
-  two other features, one of which encoded the dependency relation of
-  the previous token in the sentence to its parent + dependency
-  relation of the current token to its ancestor, and the other
-  reflected the dependency link of the next token + dependency
-  relation of the current token to its parent.
+  relation via which token $x_m$ was connected to its parent; two
+  binary features reflecting whether the previos token in the sentence
+  was the parent or child of the current word; as well as two other
+  features, one of which encoded the dependency relation of the
+  previous token in the sentence to its parent + dependency relation
+  of the current token to its ancestor, and the other reflected the
+  dependency link of the next token + dependency relation of the
+  current token to its parent.
 \end{itemize}
 
 In addition to the above attributes, we also used a set of complex
@@ -522,23 +526,24 @@ semantic and syntactic traits.  These included:
   tag of the current token;
 \item the lemma of the child node + its dependency relation + lemma of
   the current token;
-\item the overall polarity of children, which was computed by summing
-  up polarity scores of all immediate syntactic descendants and
-  checking whether the resulting value was greater, less than or equal
-  to zero.\footnote{We again used the Zurich Polarity Lexicon
-    of~\citet{Clematide:10} for computing these scores.}
+\item the overall polarity of the children, which was computed by
+  summing up the polarity scores of all immediate syntactic
+  descendants, and checking whether the resulting value was greater,
+  less than or equal to zero.\footnote{We again used the Zurich
+    Polarity Lexicon of~\citet{Clematide:10} for computing these
+    scores.}
 \end{itemize}
 
 \textbf{Results} The results of our experiments are shown in
 Table~\ref{snt-fgsa:tbl:crf-res}.  As we can see from the table, with
 the given set of features, the model can perfectly well fit the
 training data, achieving a macro-averaged \F-score of~0.904.  The
-learned parameters, however, only partially generalize to unseen data,
-leading to notably lower \F-results on the test corpus (0.287).  This
-disbalance indicates a strong ``overfitting'' of the model to the
-training data (i.e., the assignment of unreasonably high weights to
-rather sporadic, noisy features, which only accidentally co-occurred
-with the target classes in the observed training instances).
+learned parameters, however, only partially generalize to unseen
+tweets, leading to notably lower \F-results on the test corpus
+(0.287).  This disbalance indicates a strong ``overfitting'' of the
+model to the training data (i.e., the assignment of unreasonably high
+weights to rather sporadic, noisy features, which only accidentally
+co-occurred with the target classes in the corpus).
 
 Another notable tendency, which can be observed both on the training
 and test splits, is that the recall of the CRF system is generally
