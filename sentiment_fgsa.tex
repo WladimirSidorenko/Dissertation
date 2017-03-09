@@ -11,30 +11,34 @@
 
 \chapter{Fine-Grained Sentiment Analysis}\label{sec:snt:fgsa}
 
-The main goal of fine-grained sentiment analysis (FGSA) is
-traditionally defined as the identification of subjective evaluative
-opinions (\emph{sentiments}), the holders of these opinions
+Even though polar lexicons play a crucial role in opinion-mining
+research, they still serve only as a building block for achieving more
+challenging and more sophisticated objectives.  One of the most
+prominent of these objectives is that of fine-grained sentiment
+analysis (FGSA), which deals with the identification of subjective
+evaluative opinions (\emph{sentiments}), the holders of these opinions
 (\emph{sources}), and their respectively evaluated objects
 (\emph{targets}) in text.  Since an accurate automatic prediction of
-these elements would enable us to track public attitude to literally
-any object (e.g., a product, a service, or a political decision), FGSA
-is commonly regarded to be one of the most attractive, necessary, but,
-unfortunately, also challenging goals in computational linguistics.
+these elements would enable people to track public attitude to
+literally any object (e.g., a product, service, or political
+decision), FGSA is commonly regarded to be one of the most attractive,
+necessary, but, unfortunately, also challenging goals in computational
+linguistics.
 
-Researchers usually consider this objective as a sequence labeling
-(SL) task and address it with either of the two popular SL techniques:
+Researchers usually cast this objective as a sequence labeling (SL)
+task and address it with either of the two popular SL techniques:
 conditional random fields (CRFs) or recurrent neural networks (RNNs).
 The former approach represents a discriminative probabilistic
-graphical model, which relies on hand-crafted features; the latter
-framework utilizes a recursive computational loop, which can learn
-feature representations completely automatically.  In this section, we
-are going to evaluate each of these methods in detail in order to find
-out which of these algorithms is better suited for the domain of
-German Twitter.  However, before we proceed with our evaluation, we
-should first make a short linguistic digression and briefly discuss
-the definition of textual spans, to which these approaches should
-assign their labels, and the evaluation metrics, with which we will
-estimate the quality of this assignment.
+graphical framework, which relies on extensive sets of hand-crafted
+features; the latter model utilizes a recursive computational loop,
+which can learn feature representations completely automatically.  In
+this section, we are going to evaluate each of these methods in detail
+in order to find out which of these algorithms is better suited for
+the domain of German Twitter.  However, before we proceed with our
+evaluation, we should first make a short linguistic digression and
+briefly discuss the definition of textual spans, to which these
+approaches should assign their labels, and the evaluation metrics,
+with which we will estimate the quality of this assignment.
 
 \section{Definition of Sentiment, Target, and Source Spans}
 Despite some notable advances and an ongoing active research on
@@ -48,9 +52,9 @@ leaving its solution to the discretion of their annotators
 In contrast to these works, instead of relying on rather intuitive
 decisions of our coders, we explicitly provided a rule for determining
 opinions' boundaries by telling the experts to assign the
-\texttt{sentiment} tag to ``\emph{minimal complete syntactic or
-  discourse-level units that included both the target of an opinion
-  and its actual evaluation}''.
+\textsc{sentiment} tag to ``\emph{minimal complete syntactic or
+  discourse-level units that include both the target of an opinion and
+  its actual evaluation}''.
 
 According to this instruction, during the annotation, a linguist first
 had to identify evaluated objects (targets) in text, then find the
@@ -60,8 +64,8 @@ syntactic components (typically noun or verb phrases) or discourse
 units (clauses or sentences) where both of these entities appeared
 together.
 
-An annotation example labeled in compliance with this rule is provided
-below:
+An annotation example analyzed in compliance with this rule is
+provided below:
 \begin{example}\label{snt:fgsa:exmp:sent-anno1}
   \upshape\sentiment{Der neue Papst gilt als
     bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
@@ -88,8 +92,8 @@ example had to look as follows:
   \noindent\sentiment{\target{The new Pope} is believed to be a sober,
     modest man.}
 \end{example}
-\noindent with the \texttt{target} tag encompassing the whole noun
-phrase---``der neue Papst'' (\textit{the new pope})---not only its
+\noindent with the \textsc{target} tag encompassing the whole noun
+phrase---``der neue Papst'' (\textit{the new pope})---and not only its
 main noun.
 
 Similarly, source elements had to cover complete syntactic structures
@@ -102,7 +106,7 @@ as shown in Example~\ref{snt:fgsa:exmp:src-anno1}:
 \noindent This time, again, the whole noun phrase including its
 dependent attributive clause---``den Kardinal, der jetzt Papst ist,''
 (\textit{the cardinal, who is the Pope now,})---had to be labeled with
-the \texttt{source} tag because this constituent was the only
+the \textsc{source} tag because this constituent was the only
 \emph{minimal complete} syntactic node which encompassed both the
 immediate holder of the opinion---``Kardinal'' \textit{cardinal}---and
 its grammatical dependants without including any of its parental
@@ -118,7 +122,7 @@ metrics \cite{Choi:06,Breck:07} .  The former method considers an
 automatically labeled span as correct if it has at least one token in
 common with a labeled entity from the gold annotation.  The latter
 metric only regards as true positives those automatic spans which have
-absolutely identical boundaries with the gold assignment.
+absolutely identical boundaries with the expert's assignment.
 Unfortunately, both of these approaches are problematic to some
 extent: While the binary overlap might be overly optimistic, always
 assigning perfect scores to automatic spans which cover the whole
@@ -132,9 +136,9 @@ In their work, the authors introduced another way of estimating the
 quality of an automatic assignment, in which they penalized the
 predicted spans proportionally to the number of tokens whose labels
 were different from the gold annotation.  More precisely, given a set
-of manually annotated gold entities $\mathcal{S}$ and automatically
-tagged spans $\widehat{\mathcal{S}}$, they estimated the precision of
-the automatic assignment as:
+of manually annotated entities $\mathcal{S}$ and automatically tagged
+spans $\widehat{\mathcal{S}}$, they estimated the precision of the
+automatic assignment as:
 \begin{equation}\label{eq:fgsa:jmmetric}
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation}
@@ -148,8 +152,9 @@ annotated entities:
 \end{equation*}
 The $|\widehat{\mathcal{S}}|$ term in Equation~\ref{eq:fgsa:jmmetric}
 stands for the total number of spans automatically labeled with the
-given tag.  Similarly to precision, the recall of the assignment was
-estimated as:
+given tag.
+
+Similarly to precision, the recall of the assignment was estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
@@ -161,8 +166,8 @@ precision and recall scores:
 
 Since this proportional estimation adequately accommodates both
 extrema of an automatic labeling---too long and too short spans---and
-also penalizes for erroneous and spurious tags, we will primarily rely
-on this measure throughout our subsequent experiments.
+also penalizes for erroneous and spurious tags, we decided to rely on
+this measure throughout our subsequent experiments.
 
 \section{Data Preparation}\label{snt:fgsa:subsec:data}
 
@@ -184,18 +189,17 @@ and preprocessed them using the rule-based normalization technique of
 %% polarity.  Furthemore, out-of-vocabulary words which could be
 %% converted to in-vocabulary terms with a pre-defined set of
 %% transformations were also normalized.
-In the next step, we labeled the preprocessed data with their
-part-of-speech tags using \texttt{TreeTagger}\footnote{We used
-  \texttt{TreeTagger} Version 3.2 with the German parameter file
-  UTF-8.}  \cite{Schmid:95} and parsed the obtained sentences with the
-\texttt{Mate} dependency parser\footnote{We used \texttt{Mate} Version
-  \texttt{3.61} with the German parameter model 3.6.}
-\cite{Bohnet:13}.  Finally, since \texttt{MMAX2} did not provide a
-straightforward support for character offsets of the annotated tokens
-and the automatically tokenized data could disagree with the original
-corpus tokenization, we aligned the manual annotation with the
-automatically split words using the Needleman-Wunsch alignment
-algorithm~\cite{Needleman:70}.
+Afterwards, we labeled the preprocessed data with their part-of-speech
+tags using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger}
+  Version 3.2 with the German parameter file UTF-8.}  \cite{Schmid:95}
+and parsed the obtained sentences with the \texttt{Mate} dependency
+parser\footnote{We used \texttt{Mate} Version \texttt{3.61} with the
+  German parameter model 3.6.}  \cite{Bohnet:13}.  Finally, since
+\texttt{MMAX2} did not provide a straightforward support for character
+offsets of the annotated tokens and the automatically tokenized data
+could disagree with the original corpus tokenization, we aligned the
+manual annotation with the automatically split words using the
+Needleman-Wunsch alignment algorithm~\cite{Needleman:70}.
 
 \section{Fine-Grained Sentiment Analysis with Conditional Random
   Fields} The first method that we are going to evaluate on the
@@ -1588,9 +1592,40 @@ $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
   \end{center}
 \end{table*}
 
-\subsection{Effect of Lexica and Normalization}
+\subsection{Effect of Normalization}
 
-\subsection{Error Analysis}
+\subsection{Effect of Lexicons}
+
+\section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
+
+TODO
+
+We also note that all our obtained results are significantly lower
+than the corresponding figures achieved for other domains and other
+languages.  A closer look into the errors showed us that the main
+reason for such severe accuracy drop was an insufficiently good
+recognition of opinionated words and phrases.  This can be partially
+explained by the creativity of the users in expressing their thoughts
+but also by the lack of appropriate sentiment dictionaries which would
+not only contain standard language expressions but also slang words
+and cusses.
+
+An additional challenge was posed by emoticons which could not only
+convey an evaluative meaning but also serve as politeness expressions
+and were therefore ambiguous sentiment markers.  Furthermore, we
+should also mention that the German language itself is more difficult
+for automatic processing due to its relatively free word order,
+ambiguous inflections, and a rich morphology.  And these problems
+become even more aggravated when dealing with Twitter.
+
+We also saw that the outcomes of our experiments crucially depended on
+the definition of the sentiments that we applied and that different
+CRF variants had different influence on the classification accuracy
+for either interpretation.  Unfortunately, none of these models could
+clearly outperform its rivals, but we could detect some general trends
+for each of the proposed interpretations.  If these trends would also
+hold whe using other feature sets and other corpora is one of the
+questions that we want to address in future research.
 
 \section{Related Work}
 One of the first attempts at automatically analyzing subjective
@@ -1732,34 +1767,4 @@ about the given aspects; and, finally, \citet{Wang:16}, who used the
 output of a deep recursive network as input for a CRF system, updating
 the weights of the network along with the CRF parameters.
 
-\section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
-
-TODO
-
-We also note that all our obtained results are significantly lower
-than the corresponding figures achieved for other domains and other
-languages.  A closer look into the errors showed us that the main
-reason for such severe accuracy drop was an insufficiently good
-recognition of opinionated words and phrases.  This can be partially
-explained by the creativity of the users in expressing their thoughts
-but also by the lack of appropriate sentiment dictionaries which would
-not only contain standard language expressions but also slang words
-and cusses.
-
-An additional challenge was posed by emoticons which could not only
-convey an evaluative meaning but also serve as politeness expressions
-and were therefore ambiguous sentiment markers.  Furthermore, we
-should also mention that the German language itself is more difficult
-for automatic processing due to its relatively free word order,
-ambiguous inflections, and a rich morphology.  And these problems
-become even more aggravated when dealing with Twitter.
-
-We also saw that the outcomes of our experiments crucially depended on
-the definition of the sentiments that we applied and that different
-CRF variants had different influence on the classification accuracy
-for either interpretation.  Unfortunately, none of these models could
-clearly outperform its rivals, but we could detect some general trends
-for each of the proposed interpretations.  If these trends would also
-hold whe using other feature sets and other corpora is one of the
-questions that we want to address in future research.
 \newpage
