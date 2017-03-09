@@ -577,7 +577,7 @@ new contexts which do have important but underweighted attributes.
       0.244 & 0.271 & 0.287\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained sentiment analysis with the
+    \caption{Results of the fine-grained sentiment analysis with the
       first-order linear-chain CRFs.}
     \label{snt-fgsa:tbl:crf-res}
   \end{center}
@@ -594,47 +594,47 @@ superior performance on many important NLP tasks including
 part-of-speech tagging~\cite{Wang:15:pos}, dependency
 parsing~\cite{Kiperwasser:16a}, machine
 translation~\cite{Kalchbrenner:13,Bahdanau:14,Sutskever:14} etc.  The
-main factors which contributed to this success are
+key factors which account for this success are
 \begin{enumerate}[1)]
-\item \emph{the ability of these systems to learn the optimal feature
-  representations automatically}, which favorably sets them apart from
-  traditional supervised machine learning frameworks such as SVMs or
-  CRFs where all features need to be defined by the user; and
+\item \emph{the ability of these systems to learn optimal feature
+    representations automatically}, which favorably sets them apart
+  from traditional supervised machine learning frameworks such as SVMs
+  or CRFs where all features need to be defined by the user; and
 \item \emph{the ability to deal with arbitrary sequence lengths},
-  which advantageously distinguishes them from other NN architectures
-  such as convolutional or standard feed-forward networks where the
-  size of all layers has to be constant.
+  which advantageously distinguishes these approaches from other NN
+  architectures such as convolutional or standard feed-forward
+  networks where the size of all layers has to be constant.
 \end{enumerate}
 
-A key component which underlies any popular RNN system is a fixed-size
-hidden vector $\vec{h}$, which gets recurrently updated over the input
-sequence $\mathbf{x}$ and is supposed to encode the meaning of the
-sequence seen so far.  The general form of this vector at input
-position $t$ is usually defined as:
+The main component which underlies any modern RNN system is a
+fixed-size hidden vector $\vec{h}$, which gets recurrently updated
+over the input sequence $\mathbf{x}$, and is supposed to encode the
+meaning of the sequence seen so far.  The general form of this vector
+at input position $t$ is usually defined as:
 \begin{align}
   \vec{h}^{(t)} = f(\vec{h}^{(t-1)}, \mathbf{x}^{(t)});
 \end{align}
 where $f$ represents some pointwise non-linear transformation
 function, $\vec{h}^{(t-1)}$ denotes the state of the hidden vector at
-the previous time step $t-1$, and $\mathbf{x}^{(t)}$ is the input
-vector at position $t$.
+the previous time step, and $\mathbf{x}^{(t)}$ is the input vector at
+position $t$.
 
 \textbf{LSTM} A fundamental problem which arises from the above
 formula is that the gradients of the trained parameters (the ones
 involved in computing the $\vec{h}$ vector), rapidly vanish to zero or
 explode to infinity (depending on whether the abosule values of
 $\vec{h}$ are less or greater than one) as the length of the input
-increases.  In order to solve this issue, \citet{Hochreiter:97}
-proposed the long short-term memory mechanism (LSTM), in which they
-explicitly incorporated the goal of dropping parts of the input which
-appeared to be irrelevant for the final outcome.  In particular, given
-an input sequence $\mathbf{x}$, they introduced a special
-\emph{activation unit} $\vec{i}^{(t)}$:
+sequence increases.  In order to solve this issue,
+\citet{Hochreiter:97} proposed the long short-term memory mechanism
+(LSTM), in which they explicitly incorporated the goal of dropping
+parts of the input which appeared to be irrelevant for the final
+outcome.  In particular, given an input sequence $\mathbf{x}$, they
+introduced a special \emph{activation unit} $\vec{i}^{(t)}$:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right);
 \end{align*}
 where $\sigma$ denotes the sigmoid function; $W_i$, $U_i$, and
-$\vec{b_i}$ represent the optimized model's parameters; and
+$\vec{b_i}$ represent the optimized model's metrices and vector; and
 $\mathbf{x}^{(t)}$ and $\vec{h}^{(t-1)}$ stand for the input and
 previous hidden states respectively.  In addition to that, the authors
 also estimated a dedicated \emph{forget gate}~$\vec{f}^{(t)}$:
@@ -654,103 +654,102 @@ they estimated the \emph{final update} state~$\vec{c}^{(t)}$ by taking a
 weighted sum of the candidate update vector~$\widetilde{c}^{(t)}$ and
 the previous update value~$\vec{c}^{(t-1)}$:
 \begin{align*}
-  \vec{c}^{(t)} &= \vec{i}^{(t)} * \widetilde{c}^{(t)} + \vec{f}^{(t)} * \vec{c}^{(t-1)};
+  \vec{c}^{(t)} &= \vec{i}^{(t)} \odot \widetilde{c}^{(t)} + \vec{f}^{(t)} \odot \vec{c}^{(t-1)};
 \end{align*}
 from which, they finally computed the output vector
 $\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$:
 \begin{align*}
   \vec{o}^{(t)} &= \sigma\left(W_o\cdot \mathbf{x}^{(t)} + U_o \cdot \vec{h}^{(t-1)} + V_o \cdot \vec{c}^{(t)} + \vec{b}_o\right),\\
-  \vec{h}^{(t)} &= \vec{o}^{(t)} * tanh(\vec{c}^{(t)}).
+  \vec{h}^{(t)} &= \vec{o}^{(t)} \odot tanh(\vec{c}^{(t)}).
 \end{align*}
 
 \textbf{GRU} Despite their enormous popularity and many successful
 practical applications~\cite[cf.][]{Filippova:15,Ghosh:16,Rao:16},
 LSTMs have often been criticized for the high complexity of the
-recurrent unit.  In order to overcome this issue while still keeping
-the gradients within an appropriate interval, \citet{Cho:14a}
-introduced an alternative architecture called Gated Recurrent Units
-(GRU).  In this framework, the authors also used activation and forget
+recurrent unit.  In order to overcome this problem while still keeping
+the gradients within an appropriate range, \citet{Cho:14a} introduced
+an alternative architecture called Gated Recurrent Units (GRU).  In
+this framework, the authors also used activation and forget
 gates---$\vec{i}^{(t)}$ and $\vec{f}^{(t)}$---similar to the ones
-defined by~\citet{Hochreiter:97}.  They dropped however the
-gate-specific bias terms $\vec{b}_i$ and $\vec{b}_f$ while computing
-these gates for simplicity:
+defined by~\citet{Hochreiter:97}:
 \begin{align*}
-  \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)}\right),\\
-  \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)}\right).
+  \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right),\\
+  \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)} + \vec{b}_f\right).
 \end{align*}
 The candidate activation $\widetilde{c}^{(t)}$ was then estimated as:
 \begin{align*}
   \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
-  \cdot \left(\vec{f}^{(t)} * \vec{h}^{(t-1)}\right)\right),
+  \cdot \left(\vec{f}^{(t)} \odot \vec{h}^{(t-1)}\right)  + \vec{b}_c\right),
 \end{align*}
 and the final hidden state $\vec{h}^{(t)}$ was estimated as follows:
 \begin{align*}
-  \vec{h}^{(t)} &= \vec{i}^{(t)} * \vec{h}^{(t-1)} + \left(\vec{1} -
-  \vec{i}^{(t)}\right) * \widetilde{c}^{(t)}.
+  \vec{h}^{(t)} &= \vec{i}^{(t)} \odot \vec{h}^{(t-1)} + \left(\vec{1} -
+  \vec{i}^{(t)}\right) \odot \widetilde{c}^{(t)}.
 \end{align*}
 After obtaining the output of the recurrence ($\vec{o}^{(t)}$ in the
-case of LSTM and $\vec{h}^{(t)}$ in the GRU case), we estamated the
-final probability of the labels $\vec{p}^{(t)}$ by computing the dot
-product of the output vector with the matrix $O$, and estimating the
-softmax of this product:
+case of LSTM, and $\vec{h}^{(t)}$ in the case of GRU), we estimated
+the final probability of the labels $\vec{p}^{(t)}$ by computing the
+dot product of the output vector with the matrix $O$, and estimating
+the softmax of this product:
 \begin{align*}
   \vec{p}^{(t)} &= softmax\left(O\cdot\vec{o}^{(t)}\right).
 \end{align*}
 
 \textbf{Training} A neat property of both of these approaches is that
 the final equation, which is obtained after unrolling the loop, is
-differentiable with respect to all of its parameters and can therefore
-be optimized using the standard gradient update techniques.  Since
-most of these parameters, however, represent high-dimensional vectors
-or matrices, finding an optimal learning rate (i.e., the size of the
-update step taken in the direction of the gradient) might pose
+differentiable with respect to all of its parameters, and can
+therefore be optimized using the standard gradient update techniques.
+Since most of these parameters, however, represent high-dimensional
+matrices or vectors, finding an optimal learning rate (i.e., the size
+of the update step taken in the direction of the gradient) might pose
 considerable difficulties, leading either to prohibitively large
 training times (if the steps are too small) or a complete divergence
 of the trained model (if the steps are too big).
 
-Several algorithms have been proposed in order to solve this issue,
+Several algorithms have been proposed for solving this problem
 including the method of momentum~\cite{Rumelhart:88},
 AdaGrad~\cite{Duchi:11}, AdaDelta~\cite{Zeiler:12},
-RmsProp~\cite{Tieleman:12} etc.  In our RNN experiments, we will rely
-on the last option---the RmsProp optimization proposed
-by~\citet{Tieleman:12}---as we found this algorithm leading to both a
+RmsProp~\cite{Tieleman:12} etc.  In our RNN experiments, we chose the
+last of these options---the RmsProp technique
+of~\citet{Tieleman:12}---as this algorithm typically showed both a
 faster convergence and superior classification results.
 
-Another important factor, which might significantly affect the
-training, is the initialization of the learned model's parameters.  As
-shown by~\citet{He:15}, an inappropriate choice of the initial
-parameter values might result in a complete stalling of the whole
-learning process.  Following the recommended practices~\cite{Saxe:13},
-we used orthogonal initialization for all linear transformation
-matrices, and applied uniform He sampling~\cite{He:15} for setting
-their respective bias vectors.
+Another important factor, which could significantly affect the
+training results, were the initial values of the model's parameters.
+As shown by~\citet{He:15}, an inappropriate initialization of a neural
+network might lead to a complete stalling of the whole learning
+process.  Following the recommended practices~\cite{Saxe:13}, we used
+orthogonal initialization for all linear transformation matrices, and
+applied a uniform He sampling~\cite{He:15} for setting the initial
+values of the bias vectors.
 
-Furthermore, due to a high imbalance of the target classes in the
-training set (where most of the instances only contained the
-\texttt{NONE} tag without any sentiment entities), we randomly
-``over-sampled'' sentiment tweets (i.e., we randomly repeated some of
-the training microblogs containing sentiments until we reached an
-equal proportion of subjective and objective messages).
-
-In addition to that, in order to make sure, that the correct
-prediction of the \texttt{NONE} tags would not dominate the weight
-updates for other classes,\footnote{Since most of the tokens in the
-  over-sampled training set still had the \texttt{NONE} tag, the
-  easiest way for the classifier to minimize the training error would
-  be to always predict this tag with a high confidence.} we chose the
-hinge-loss as the optimized objective function $L$:
+Finally, due to a high imbalance of the target classes in the training
+set (where most of the instances represented objective statements
+without any sentiment tags), we ``over-sampled'' opinionated tweets
+(i.e., we randomly repeated some of the training microblogs containing
+sentiments until we reached an equal proportion of subjective and
+objective messages), and chose \emph{hinge-loss} as the optimized
+objective function $L$:\footnote{Since most of the tokens in the
+  over-sampled training set still had the \textsc{NONE} tag, the
+  easiest way for a classifier to minimize the training error would be
+  to always predict this tag with a very high confidence.  We hoped to
+  mitigate this effect by using hinge-loss, since this objective
+  function only penalized incorrectly predicted labels or correct tags
+  whose probability was insufficiently high (less than $c$), but did
+  not reward any over-confident decisions.}
 \begin{align}
   L &= \sum_{i}^{N}\sum_{t=0}^{\lvert\mathbf{x}_i\rvert}\max\left(0, %
   c + \max\limits_{y'\neq y}\vec{p}_{t,y'} - \vec{p}_{t,y}\right) + \alpha \norm{O}^2_2,
 \end{align}
-in which $\vec{p}_{t,y'}$ stands for the probability of the most
-likely wrong tag $y'$ at position $t$ in the training instance
+where $\vec{p}_{t,y'}$ stands for the probability of the most likely
+wrong tag $y'$ at position $t$ in the training instance
 $\mathbf{x}_i$, $\vec{p}_{t,y}$ represents the probability of the gold
 label, and $\norm{O}^2_2$ stands for the $L2$-norm of the $O$ matrix.
-We optimized the scalar hyper-parameters $c$ and $\alpha$ on the dev
-set, and trained the final model for 256 epochs, choosing parameter
-values that maximized the macro-averaged \F-score on the development
-data.
+
+We optimized the scalar hyper-parameters $c$ and $\alpha$ on the
+development set, and trained the final model for 256 epochs, choosing
+parameter values that maximized the macro-averaged \F-score on the
+development data.
 
 \textbf{Inference} Since each of the above approaches (LSTM and GRU)
 explicitly defines an output unit, the inference of the most likely
@@ -759,24 +758,13 @@ and amounts to finding the $\argmax$ value of the output vector at
 each time step of the recurrence:
 \begin{equation}
   \mathbf{\hat{y}} =
-  \argmax{\vec{h}^{(1)}},\argmax{\vec{h}^{(2)}},\ldots,\argmax{\vec{h}^{(|\mathbf{x}|)}}.
+  \argmax{\vec{p}^{(1)}},\argmax{\vec{p}^{(2)}},\ldots,\argmax{\vec{p}^{(|\mathbf{x}|)}}.
 \end{equation}
 
 \textbf{Results} To account for the random factors in the
 initialization, we repeated each training experiment three times, and
 show the mean and standard deviation of these results in
-Table~\ref{snt-fgsa:tbl:rnn-res}.  As we can see from the table, the
-LSTM model shows generally better scores than the GRU system on both
-training and test data.  The only aspect at which it is slightly
-outperfomed by the latter approach is the precision of sentiment
-spans, which, however, can be more than compensated for by a higher
-recall.  Moreover, the overfitting effect is much less pronounced than
-in the CRF case (where the \F scores on training and test data
-differed by a factor of three).  Nonetheless, both RNN systems achieve
-lower results than the linear-chain CRFs, which indicates the fact
-that deeply learned features still cannot capture the full extent of
-information which a human expert can encode with manually defined
-attributes.
+Table~\ref{snt-fgsa:tbl:rnn-res}.
 
 \begin{table*}
   \begin{center}
@@ -887,12 +875,23 @@ attributes.
       0.24\stddev{0.03} & 0.21\stddev{0.07} & 0.22\stddev{0.03} & 0.25\stddev{0.01}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained sentiment analysis with recurrent
+    \caption{Results of the fine-grained sentiment analysis with recurrent
       neural networks.}
     \label{snt-fgsa:tbl:rnn-res}
   \end{center}
 \end{table*}
 
+As we can see from the table, the LSTM model shows generally better
+scores than the GRU system on both training and test data.  The only
+aspect at which it yields slightly worse results than the latter
+approach is precision of sentiment spans, which, however, is more than
+compensated for by a much higher recall.  Moreover, the overfitting
+effect is significantly less pronounced than in the CRF case (where
+the \F scores on training and test data differed by a factor of
+three).  Nonetheless, both RNN systems achieve lower results than the
+linear-chain CRFs, which indicates the fact that deeply learned
+features still cannot capture the full extent of information which a
+human expert can encode with manually defined attributes.
 
 \section{Evaluation}
 
@@ -910,7 +909,7 @@ As the first factor which could significantly affect the quality of
 the automatic approaches, we considered the annotation scheme that we
 used to create the corpus.  As described in
 Section~\ref{subsec:snt:ascheme}, we initially asked our experts to
-assign the \texttt{sentiment} label to complete syntactic or
+assign the \textsc{sentiment} label to complete syntactic or
 discourse-level units which encompassed both the target of an opinion
 and its immediate evaluation.  Even though this decision was
 linguistically plausible and extremely helpful for determining the
@@ -927,7 +926,7 @@ In particular, instead of unconditionally labeling all words belonging
 to a sentiment span in the original annotation with the \textsc{SNT}
 tag as we did previously (which we call a \emph{broad} interpretation
 of the annotation scheme), we only assigned this label to emotional
-expressions found in the corpus (which we dub a \emph{narrow}
+expressions found in the corpus (which we term a \emph{narrow}
 interpretation of the scheme).  The difference between these two ways
 of interpreting the annotation scheme is shown in
 Examples~\ref{snt:fgsa:exmp:wide} and~\ref{snt:fgsa:exmp:narrow}.
@@ -954,9 +953,9 @@ Examples~\ref{snt:fgsa:exmp:wide} and~\ref{snt:fgsa:exmp:narrow}.
   impression/NON on/NON\\ me/SRC !/NON :)/SNT
 \end{example}
 \noindent In the former (broad) case, we labeled the whole opinionated
-sentence with the \texttt{SNT} tag except for the words which denoted
+sentence with the \textsc{SNT} tag except for the words which denoted
 the target and source of the opinion.  In the latter (narrow) case, we
-only assigned the \texttt{SNT} tag to the emotional expression
+only assigned the \textsc{SNT} tag to the emotional expression
 ``good'' and the emoticon ``:)'', which, however, were expressive
 enough to convey the main evaluative sense of the whole subjective
 statement.
@@ -1104,8 +1103,8 @@ given in Table~\ref{snt-fgsa:tbl:broad-narrow}.
 
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained analysis with broad and narrow
-      sentiment interpretations.}
+    \caption{Results of the fine-grained analysis with the broad and
+      narrow sentiment interpretations.}
     \label{snt-fgsa:tbl:broad-narrow}
   \end{center}
 \end{table*}
@@ -1122,19 +1121,19 @@ model with the narrow mapping).
 
 An obvious explanation for these results is the expectedly better
 amenability of the narrow scheme to the prediction of sentiment
-labels: since \texttt{sentiment} tags only get assigned to
+labels: since \textsc{sentiment} tags only get assigned to
 unequivocally polar terms, it becomes easier for the models to infer
 this class using their state features---especially morphological or
-lexical ones---or learned embeddings.  However, on the other hand,
-such short spans lead to disrupted label chains for opinion-related
-elements, making sentiment tags be far apart from the spans of the
-respective sources and targets.  Consequently, these latter classes
-suffer from the lack of context and become heavily dependent on the
-state attributes too.  Although, this time, the effect of these
-features is rather negative, since, in contrast to polar terms, being
-a holder or target of an opinion is not an inherent property of a
-lexical expression, but arises from the context which this expression
-appears in.
+lexical ones---or the learned word embeddings.  However, on the other
+hand, such short spans lead to disrupted label chains for
+opinion-related elements, making sentiment tags be far apart from the
+spans of the respective sources and targets.  Consequently, these
+latter classes suffer from the lack of context and become heavily
+dependent on the state attributes too.  Although, this time, the
+effect of these features is rather negative, since, in contrast to
+polar terms, being a holder or target of an opinion is not an inherent
+property of a lexical expression, but arises from the context which
+this expression appears in.
 
 Consider, for instance, the name ``Silvio Berlusconi'' in
 Example~\ref{snt:fgsa:trg-ctxt}, where it appears as a target of an
@@ -1353,9 +1352,9 @@ In a similar way, we also redefined the GRU unit:
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \tilde{h}^{(t)}\right),\\
   \vec{f}^{(t,k)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t,k)}\right),\\
   \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
-  \cdot \sum_{k\in C(t)}\left(\vec{f}^{(t,k)} * \vec{h}^{(k)}\right)\right),\\
-  \vec{h}^{(t)} &= \vec{i}^{(t)} * \tilde{h}^{(t)} + \left(\vec{1} -
-  \vec{i}^{(t)}\right) * \widetilde{c}^{(t)}.
+  \cdot \sum_{k\in C(t)}\left(\vec{f}^{(t,k)} \odot \vec{h}^{(k)}\right)\right),\\
+  \vec{h}^{(t)} &= \vec{i}^{(t)} \odot \tilde{h}^{(t)} + \left(\vec{1} -
+  \vec{i}^{(t)}\right) \odot \widetilde{c}^{(t)}.
 \end{align*}
 
 The results of these modifications are shown in
@@ -1429,12 +1428,12 @@ rechecking the performance of the model on the development set.
     \end{tabular}
     \egroup
     \caption[Results of feature ablation tests for CRF model.]{
-      Results of feature ablation tests for CRF model.\\{\small\itshape
-        (negative changes w.r.t. the original scores on the dev set
-        are shown in \textsuperscript{\textcolor{red3}{red}}; positive
-        changes are depicted in
-        \textsuperscript{\textcolor{seagreen}{green}}
-        superscript)\footnotemark}}
+      Results of feature ablation tests for CRF
+      model.\\{\small\itshape (negative changes w.r.t. the original
+        scores on the dev set are shown in
+        \textsuperscript{\textcolor{red3}{red}}; positive changes are
+        depicted in \textsuperscript{\textcolor{seagreen}{green}}
+        superscripts)\footnotemark}}
     \label{tbl:ablation}
   \end{center}
 \end{table}
