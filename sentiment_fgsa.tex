@@ -25,8 +25,8 @@ decision), FGSA is commonly regarded to be one of the most attractive,
 necessary, but, unfortunately, also challenging goals in computational
 linguistics.
 
-Researchers usually cast this objective as a sequence labeling (SL)
-task and address it with either of the two popular SL techniques:
+Researchers usually consider this objective as a sequence labeling
+(SL) task and address it with either of the two popular SL techniques:
 conditional random fields (CRFs) or recurrent neural networks (RNNs).
 The former approach represents a discriminative probabilistic
 graphical framework, which relies on extensive sets of hand-crafted
@@ -52,11 +52,11 @@ leaving its solution to the discretion of their annotators
 In contrast to these works, instead of relying on rather intuitive
 decisions of our coders, we explicitly provided a rule for determining
 opinions' boundaries by telling the experts to assign the
-\textsc{sentiment} tag to ``\emph{minimal complete syntactic or
+\textsc{sentiment} label to ``\emph{minimal complete syntactic or
   discourse-level units that include both the target of an opinion and
   its actual evaluation}''.
 
-According to this instruction, during the annotation, a linguist first
+According to this instruction, during the annotation, linguists first
 had to identify evaluated objects (targets) in text, then find the
 respective evaluative expressions of these objects (usually but not
 necessarily polar terms), and, finally, determine the smallest
@@ -64,35 +64,32 @@ syntactic components (typically noun or verb phrases) or discourse
 units (clauses or sentences) where both of these entities appeared
 together.
 
-An annotation example analyzed in compliance with this rule is
-provided below:
+A sample annotation analyzed in compliance with this rule is shown
+below:
 \begin{example}\label{snt:fgsa:exmp:sent-anno1}
   \upshape\sentiment{Der neue Papst gilt als
     bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
   \noindent\sentiment{The new Pope is believed to be a sober, modest
     man.}
 \end{example}
-\noindent In this sentence, the experts had to label the complete
-clause as a sentiment, since this unit was the minimal syntactic
-constituent which included both the object of the evaluation---``der
-neue Papst'' (\textit{the new pope})---and the evaluation
-itself---``bescheidener, zur\"uckgenommener Typ'' (\textit{a sober,
-  modest man}).
+\noindent In this sentence, an expert had to label the complete clause
+as a sentiment, since this unit was the minimal syntactic constituent
+which included both the object of the evaluation---``der neue Papst''
+(\textit{the new pope})---and the evaluation itself---``bescheidener,
+zur\"uckgenommener Typ'' (\textit{a sober, modest man}).
 
 We applied the same principles of minimality and completeness to the
 annotation of targets and sources, requiring the main components of
 these elements (typically nouns or verbs) to be labeled along with all
-their syntactic dependants.
-
-Accordingly, the correct annotation of the target in the previous
-example had to look as follows:
+their syntactic dependants.  Accordingly, the correct annotation of
+the target in the previous example had to look as follows:
 \begin{example}\label{snt:fgsa:exmp:sent-anno2}
   \upshape\sentiment{\target{Der neue Papst} gilt als
     bescheidener, zur\"uckgenommener Typ.}\\[0.8em]
   \noindent\sentiment{\target{The new Pope} is believed to be a sober,
     modest man.}
 \end{example}
-\noindent with the \textsc{target} tag encompassing the whole noun
+\noindent with the \textsc{target} span assigned to the whole noun
 phrase---``der neue Papst'' (\textit{the new pope})---and not only its
 main noun.
 
@@ -109,16 +106,16 @@ dependent attributive clause---``den Kardinal, der jetzt Papst ist,''
 the \textsc{source} tag because this constituent was the only
 \emph{minimal complete} syntactic node which encompassed both the
 immediate holder of the opinion---``Kardinal'' \textit{cardinal}---and
-its grammatical dependants without including any of its parental
+its grammatical dependants, without including any of its parental
 elements.
 
 \section{Evaluation Metrics}
-The next question which naturally arises after defining the span
-boundaries for human coders is that of the best way to compare these
+The next question which naturally arose after defining the span
+boundaries for human coders was that of the best way to compare these
 spans with automatically assigned labels.  One possibility to estimate
 the quality of such automatic assignment is to compute the precision,
 recall, and \F{}-scores using either the binary overlap or exact match
-metrics \cite{Choi:06,Breck:07} .  The former method considers an
+metrics \cite[cf.][]{Choi:06,Breck:07} .  The former method considers an
 automatically labeled span as correct if it has at least one token in
 common with a labeled entity from the gold annotation.  The latter
 metric only regards as true positives those automatic spans which have
@@ -142,8 +139,8 @@ automatic assignment as:
 \begin{equation}\label{eq:fgsa:jmmetric}
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation}
-where $C(\mathcal{S},\widehat{\mathcal{S}})$ means the \emph{span
-  coverage} metric and is computed as the proportion of overlapping
+where $C(\mathcal{S},\widehat{\mathcal{S}})$ stands for the \emph{span
+  coverage} metric, and is computed as the proportion of overlapping
 tokens across all pairs of manually ($s_i$) and automatically ($s_j$)
 annotated entities:
 \begin{equation*}
@@ -151,10 +148,10 @@ annotated entities:
    \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j);
 \end{equation*}
 The $|\widehat{\mathcal{S}}|$ term in Equation~\ref{eq:fgsa:jmmetric}
-stands for the total number of spans automatically labeled with the
-given tag.
+denotes the total number of spans automatically labeled with the given
+tag.
 
-Similarly to precision, the recall of the assignment was estimated as:
+Similarly to that, the recall of the assignment was estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
@@ -166,8 +163,8 @@ precision and recall scores:
 
 Since this proportional estimation adequately accommodates both
 extrema of an automatic labeling---too long and too short spans---and
-also penalizes for erroneous and spurious tags, we decided to rely on
-this measure throughout our subsequent experiments.
+also penalizes for erroneous and spurious annotations, we decided to
+use this measure throughout our subsequent experiments.
 
 \section{Data Preparation}\label{snt:fgsa:subsec:data}
 
@@ -176,7 +173,7 @@ split the whole corpus into three parts, using 70\% of it as training
 data, 10\% as a development set, and the remaining 20\% as a test
 corpus.  We tokenized all tweets with an adjusted version of the
 Christopher Potts' Twitter-aware
-tokenizer\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
 and preprocessed them using the rule-based normalization technique of
 \citet{Sidarenka:13}.
 %% During the normalization, Twitter-specific phenomena like @-mentions,
@@ -191,12 +188,12 @@ and preprocessed them using the rule-based normalization technique of
 %% transformations were also normalized.
 Afterwards, we labeled the preprocessed data with their part-of-speech
 tags using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger}
-  Version 3.2 with the German parameter file UTF-8.}  \cite{Schmid:95}
-and parsed the obtained sentences with the \texttt{Mate} dependency
+  Version 3.2 with the German parameter file UTF-8.} \cite{Schmid:95},
+and parsed the resulting sentences with the \texttt{Mate} dependency
 parser\footnote{We used \texttt{Mate} Version \texttt{3.61} with the
   German parameter model 3.6.}  \cite{Bohnet:13}.  Finally, since
 \texttt{MMAX2} did not provide a straightforward support for character
-offsets of the annotated tokens and the automatically tokenized data
+offsets of the annotated tokens, and the automatically tokenized data
 could disagree with the original corpus tokenization, we aligned the
 manual annotation with the automatically split words using the
 Needleman-Wunsch alignment algorithm~\cite{Needleman:70}.
@@ -1553,15 +1550,15 @@ $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}Word2vec Embeddings}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Task-Specific Embeddings}\\
 
-      LSTM & 0.203 & 0.078 & 0.112 & %
-       0.194 & 0.256 & 0.22 & %
-       0.132 & 0.115 & 0.116 & 0.149\\
+      LSTM & 0.283 & 0.288 & 0.278 & %
+       0.293 & 0.372 & 0.328 & %
+       0.254 & 0.27 & 0.259 & 0.288\\
 
-      GRU & 0.216 & 0.072 & 0.104 & %
-       0.159 & 0.271 & 0.186 & %
-       0.134 & 0.212 & 0.142 & 0.144\\
+      GRU & 0.287 & 0.246 & 0.263 & %
+       0.287 & 0.405 & 0.335 & %
+       0.252 & 0.205 & 0.216 & 0.271\\
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}Least-Squares Embeddings}\\
 
@@ -1573,15 +1570,15 @@ $SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
        &  &  & %
        &  &  & \\
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}Task-Specific Embeddings}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}word2vec Embeddings}\\
 
-      LSTM & 0.283 & 0.288 & 0.278 & %
-       0.293 & 0.372 & 0.328 & %
-       0.254 & 0.27 & 0.259 & 0.288\\
+      LSTM &  &  &  & %
+       &  &  & %
+       &  &  & \\
 
-      GRU & 0.287 & 0.246 & 0.263 & %
-       0.287 & 0.405 & 0.335 & %
-       0.252 & 0.205 & 0.216 & 0.271\\\bottomrule
+      GRU & 0.273 & 0.355 & 0.301 & %
+       0.207 & 0.353 & 0.257 & %
+       0.213 & 0.26 & 0.233 & 0.264\\\bottomrule
 
     \end{tabular}
     \egroup
