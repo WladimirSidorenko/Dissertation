@@ -918,18 +918,18 @@ boundaries of opinions, it also posed considerable difficulties for
 sequence labeling approaches, since the same tag got assigned not only
 to immediately subjective words, but also to objective terms which
 resided within the same syntactic constituent as the polar term and
-its respective target.  Since none of the tested methods could
-explicitly incorporate this logic, we decided to check whether an
-alternative interpretation of the annotation scheme could alleviate
-their inference.
+its target.  Since none of the tested methods could explicitly
+incorporate this logic, we decided to check whether an alternative
+interpretation of the annotation scheme could alleviate their
+inference.
 
 In particular, instead of unconditionally labeling all words belonging
 to a sentiment span in the original annotation with the \textsc{SNT}
 tag as we did previously (which we call a \emph{broad} interpretation
-of the annotation scheme), we only assigned this label to emotional
-expressions found in the corpus (which we term a \emph{narrow}
-interpretation of the scheme).  The difference between these two ways
-of interpreting the annotation scheme is shown in
+of the annotation scheme), we only assigned this label to the
+emotional expressions found in the corpus (which we term a
+\emph{narrow} interpretation of the scheme).  The difference between
+these two ways of interpreting the annotation scheme is shown in
 Examples~\ref{snt:fgsa:exmp:wide} and~\ref{snt:fgsa:exmp:narrow}.
 \begin{example}[Broad Sentiment
   Interpretation]\label{snt:fgsa:exmp:wide}
@@ -961,7 +961,7 @@ only assigned the \textsc{SNT} tag to the emotional expression
 enough to convey the main evaluative sense of the whole subjective
 statement.
 
-The results of the automatic systems with these two iterpretations are
+The results of the automatic systems for these two iterpretations are
 given in Table~\ref{snt-fgsa:tbl:broad-narrow}.
 \begin{table*}[hbt!]
   \begin{center}
@@ -1126,15 +1126,15 @@ labels: since \textsc{sentiment} tags only get assigned to
 unequivocally polar terms, it becomes easier for the models to infer
 this class using their state features---especially morphological or
 lexical ones---or the learned word embeddings.  However, on the other
-hand, such short spans lead to disrupted label chains for
+hand, such short spans lead to disrupted label chains for other
 opinion-related elements, making sentiment tags be far apart from the
 spans of the respective sources and targets.  Consequently, these
 latter classes suffer from the lack of context and become heavily
 dependent on the state attributes too.  Although, this time, the
-effect of these features is rather negative, since, in contrast to
+effect of these attributes is rather negative, since, in contrast to
 polar terms, being a holder or target of an opinion is not an inherent
-property of a lexical expression, but arises from the context which
-this expression appears in.
+property of a lexical term, but arises solely from the context which
+this term appears in.
 
 Consider, for instance, the name ``Silvio Berlusconi'' in
 Example~\ref{snt:fgsa:trg-ctxt}, where it appears as a target of an
@@ -1164,12 +1164,11 @@ opinions becomes much harder, once the context information is deprived
 \subsection{Effect of Graph Topologies}
 
 Since the lack of contextual links appeared to have a strong negative
-effect on the prediction of sources and targets of the opinions, we
-decided to investigate whether redefining the way these links were
-established in the model would improve the results.  For this purpose,
-we implemented three possible extensions to the traditional
-first-order linear-chain CRF model, which are shown in
-Figure~\ref{fig:snt:ho-crf}:
+effect on the prediction of sources and targets, we decided to
+investigate whether redefining the way these links were established in
+the model would improve the results.  For this purpose, we implemented
+three possible extensions to the traditional first-order linear-chain
+CRF model, which are shown in Figure~\ref{fig:snt:ho-crf}:
 \begin{itemize}
   \item higher-order linear-chain CRFs,
   \item first- and higher-order semi-Markov models, and
@@ -1207,9 +1206,10 @@ Figure~\ref{fig:snt:ho-crf}:
     transition functions).\label{fig:snt:ho-crf}}
 \end{figure*}
 
-In the first of these variants, instead of estimating the likelihood
-of a single tag~$y$ at the given position~$i$~(e.g.,~$P(y_i)=$ SNT),
-we kept a separate track of the probability each possible label
+In the first (higher-order) variant, instead of estimating the
+likelihood of a single tag~$y$ at the given
+position~$i$~(e.g.,~$P(y_i)=$ SNT), we kept a separate track of the
+probability of each possible label
 sequence~$P(y_{i-n+1},\ldots,y_{i})$, where $n$ denotes the order of
 the model.  In compliance with this structure, we established
 transition functions only between those pairs of adjacent nodes where
@@ -1220,12 +1220,12 @@ SRC|TRG, TRG|TRG, and NON|TRG via transition factors; since these were
 the only unobserved states whose last label matched the first tag of
 the former node.)  Furthermore, instead of considering just one
 transition attribute between those states, as we did in the
-first-order model (e.g.,
+first-order case (e.g.,
 $f(\mathbf{x}_i, TRG, SNT) = 1.\text{ if }y_{i-1}=TRG\text{ and
 }y_i=SNT\text{ else }0.$), we took a sum of different transition
 features for each possible prefix length.  For instance, in the case
-of transition between the states NON|TRG and TRG|SNT, we would take a
-sum of two transition functions:
+of transition between the states NON|TRG and TRG|SNT, we took a sum of
+two transition functions:
 \begin{equation*}
   f_1(\mathbf{x}_i, NON|TRG, SNT) = \begin{cases} 1, &
     \mbox{if } \mathbf{y}_{i-2} = NON\mbox{ and }\mathbf{y}_{i-1} = TRG\mbox{ and }\mathbf{y}_{i} =
@@ -1244,7 +1244,7 @@ Since the number of states in this extension increased exponentially
 with the order of the model, we applied the heuristic inference
 algorithm of~\citet{Nguyen:14} by only considering those label
 sequence which were actually observed in the training data and
-pre-caching valid prefix and suffix transition while doing belief
+pre-caching valid prefix and suffix transitions while doing the belief
 propagation.
 
 The same optimization was also applied to higher-order semi-Markov
@@ -1252,7 +1252,7 @@ CRFs, which, in contrast to the linear-chain models, operate on whole
 chunks of text, simultaneously trying to predict both the most
 probably segmentation of the input and the best possible label
 assignment to these segments.  In particular, instead of simply
-optimizing the conditional probability of the labels as it is done by
+optimizing the conditional probability of the labels, as it is done by
 the linear CRFs:
 \begin{equation*}
   P(\mathbf{y}|\mathbf{x}) = \frac{\exp\left(\sum_{m=1}^{M}\sum_jw_{j}
@@ -1276,14 +1276,14 @@ where $K$ is the maximum length of a contiguous tag span observed in
 the training data.
 
 Finally, tree-structured CRFs represent another generalization of the
-linear-chain model, in which transition functions are connecting
-syntactic dependents instead of adjacent tokens.  As the underlying
-graph structure for this variant of CRFs, we used automatically
-derived dependences trees, obtaining these analyses from the
-state-of-the-art dependency parser~\cite[Mate;][]{Bohnet:09}.  Since
-these graphs were guaranteed to be acyclic, we could still apply the
-normal belief propagation method with exact inference, getting the
-same convergence guarantees as in the linear case.
+linear-chain model, in which transition functions are established
+between syntactic dependents instead of adjacent tokens.  As the
+underlying graph structure for this variant of CRFs, we used the
+automatically derived dependences trees, getting these analyses from
+the state-of-the-art dependency parser~\cite[Mate;][]{Bohnet:09}.
+Since these graphs were guaranteed to be acyclic, we could still apply
+the normal belief propagation method with exact inference, getting the
+same convergence guarantees as in the linear-chain case.
 
 The results of these systems on the training and development sets are
 shown in Table~\ref{fgsa:tbl:crf-topologies}.
@@ -1330,9 +1330,9 @@ their linear counterparts.
 
 In oder to see whether the same tendencies would hold for the deep
 learning methods, we also implemented higher-order and tree-structured
-extensions to the LSTM and GRU approaches.  In the former case, we
-passed a concatenation of $n$ preceding $\vec{h}$ vectors (where $n$
-is the order of the model) as input to the reccurrence loop.  In the
+extensions to the LSTM and GRU systems.  In the former case, we passed
+a concatenation of $n$ preceding $\vec{h}$ vectors (where $n$ was the
+order of the model) as input to the reccurrence loop.  In the
 tree-structure modification, we followed the approach
 of~\citet{Tai:15} and defined the LSTM unit as follows:
 \begin{align*}
@@ -1347,7 +1347,8 @@ of~\citet{Tai:15} and defined the LSTM unit as follows:
 where $C\left(t\right)$ stands for the indices of all child nodes of
 the token $t$.
 
-In a similar way, we also redefined the GRU unit:
+In a similar way, we also redefined the GRU unit to the following
+solutions:
 \begin{align*}
   \tilde{h}^{(t)} &= \sum_{k \in C\left(t\right)}\vec{h}^{(k)},\\
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \tilde{h}^{(t)}\right),\\
@@ -1364,10 +1365,10 @@ first-order LSTM model still outperforms all higher-order LSTM and GRU
 extensions on predicting targets and sources of the opinions.
 Moreover, first-order GRU also achieves the best scores on predicting
 sentiment spans among all compared models.  This time, again, none of
-the tree-structured extensions can outperform their linear-chain
-counterparts, which can be partially explained by the errors produced
-by the parser whose original target domain are standard-language news
-texts.
+the tree-structured extensions could outperform their linear-chain
+counterparts, which might be partially explained by the errors
+produced by the parser whose original target domain are
+standard-language news texts.
 
 \begin{table*}
   \begin{center}
@@ -1407,7 +1408,7 @@ texts.
 Since redefining the graph topologies of the presented models did not
 bring the expected improvements, we decided to investigate the effect
 of the input provided to these systems on their net results, and also
-analyze more thoroughly what these models actually have learned from
+analyze more thoroughly what these models have actually learned from
 this input.  For this purpose, we first performed an ablation test of
 the CRF's state features, removing one feature group at a time and
 rechecking the performance of the model on the development set.
@@ -1446,19 +1447,16 @@ Table~\ref{tbl:ablation}.\footnotetext{Negative changes indicate good
 out to be useful for predicting sentiments as their removal
 unequivocally leads to a degradation of the scores.  This quality
 drop, however, is usually quite small, suggesting that other attribute
-types can easily make up for the removed ones.
-
-A different situation is observed for sources and targets though.  In
-the first case, removing formal, morphological, and syntactic features
-shows a strongly positive effect, improving the \F-results for sources
-by up to five percent.  However, removing lexical and lexico-syntactic
+types can easily make up for the removed ones.  A different situation
+is observed for sources and targets though.  In the first case,
+removing formal, morphological, and syntactic features shows a
+strongly positive effect, improving the \F-results for sources by up
+to five percent.  However, removing lexical and lexico-syntactic
 features, on the contrary, worsens these results, tearing the
-\F-scores down by up to 4.4\%.
-
-Except for the formal group, all these attributes behave completely
-differently when applied to targets, which seem to benefit from
-morphological and syntactic features, while suffering a slight
-degradation from lexical and complex attributes.
+\F-scores down by up to 4.4\%.  Except for the formal group, all these
+attributes behave completely differently when applied to targets,
+which seem to benefit from morphological and syntactic features, while
+suffering a slight degradation from lexical and complex attributes.
 
 \begin{table}[hbt]
   \begin{center}
@@ -1492,35 +1490,37 @@ degradation from lexical and complex attributes.
 
 In order to get a better overview of the learned model's parameters,
 we also extracted top ten state and transition features ranked by the
-absolute values of their scores (see Table~\ref{fgsa:tbl:ablation}).
-As can be seen from the statistics, three of the five highest ranked
-state attributes are complex features reflecting the lemma of the
-parent token: ``meiste'' (\emph{most}) and ``rettungsschirme''
-(\emph{bailout}), which typically indicate a target, and
-``urlauberin'' (\emph{holiday}), which frequently correlates with
-sentiments.  Another common group of features are the lemma and form
-of the current token: here, we again can encounter ``meisten''
-(\emph{most}), which, however, indicates the absence of any sentiment
-entities at the current position; two other attributes---``anfechten''
-(\emph{doubt}) and ``bezeichnete'' (\emph{called})---represent the
-so-called \emph{direct speech events} and expectedly correlate with
-the sentiment tags; the remaining feature---``thomasopperman''---is a
-person name, which frequently serves as a target of an opinion.
+absolute values of their learned weights (see
+Table~\ref{fgsa:tbl:ablation}).  As can be seen from the statistics,
+three of the five highest ranked state attributes are complex features
+reflecting the lemma of the parent token: ``meiste'' (\emph{most}) and
+``rettungsschirme'' (\emph{bailout}), which typically indicate a
+target, and ``urlauberin'' (\emph{holiday}), which frequently
+correlates with sentiments.  Another common group of features are the
+lemma and form of the current token: here, we again can encounter
+``meisten'' (\emph{most}), which, however, indicates the absence of
+any sentiment entities at the current position; two other
+attributes---``anfechten'' (\emph{doubt}) and ``bezeichnete''
+(\emph{called})---represent the so-called \emph{direct speech events}
+and expectedly correlate with the sentiment tags; the remaining
+feature---``thomasopperman''---is a person name, which frequently
+serves as a target of an opinion.
 
 An interesting pattern can be observed for transition attributes: As
 we can see from the results, the top-three transition features
 indicate a strong belief that an objective token is highly unlikely to
 be followed by a sentiment entity (hence, the high negative weights of
-the transitions emanating from $NON$).  It is, however, quite common
-that a $NON$ tag will preceed another $NON$ instance (cf. line 5 of
-the table).  Other transition attributes also mainly reflect plausible
-regularities: It is, for instance, uncommon that a target of an
-opinion will appear immediately before a source
-($TRG\rightarrow SRC = -2.99$); in the same vein, it is rather
-uncommon that a source tag will preceed a target
-($SRC\rightarrow TRG = -2.07$); nonetheless, is is perfectly
-acceptable that the same tag will continue over multiple words (e.g.,
-$SNT\rightarrow SNT = 2.54$, $TRG\rightarrow TRG = 2.31$).
+the transitions emanating from \textsc{NON}).  It is, however, quite
+common that a \textsc{NON} tag will preceed another \textsc{NON}
+instance (cf. line 5 of the table).  Other transition attributes also
+mainly reflect plausible regularities: It is, for instance, uncommon
+that a target of an opinion will appear immediately before a source
+(\textsc{TRG}$\rightarrow$\textsc{SRC} $= -2.99$); in the same vein,
+it is rather uncommon that a source tag will preceed a target
+(\textsc{SRC}$\rightarrow$\textsc{TRG} $= -2.07$); nonetheless, is is
+perfectly acceptable that the same tag will continue over multiple
+words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
+\textsc{TRG}$\rightarrow$\textsc{TRG} $= 2.31$).
 
 \subsection{Effect of Word Embeddings}
 
