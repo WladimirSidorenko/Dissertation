@@ -27,7 +27,7 @@ linguistics.
 
 Researchers usually consider this objective as a sequence labeling
 (SL) task, and address it with either of the two popular SL
-techniques: Conditional Random Fields (CRFs) or recurrent neural
+techniques: conditional random fields (CRFs) or recurrent neural
 networks (RNNs).  The former approach represents a discriminative
 probabilistic graphical framework, which relies on an extensive set of
 hand-crafted features; the latter model utilizes a recursive
@@ -137,7 +137,8 @@ of manually annotated entities $\mathcal{S}$ and automatically tagged
 spans $\widehat{\mathcal{S}}$, they estimated the precision of an
 automatic assignment as:
 \begin{equation}\label{eq:fgsa:jmmetric}
-  P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
+  P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
+    \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation}
 where $C(\mathcal{S},\widehat{\mathcal{S}})$ stands for the \emph{span
   coverage} metric, which is computed as the proportion of overlapping
@@ -151,7 +152,8 @@ and the $|\widehat{\mathcal{S}}|$ term denotes the total number of
 spans automatically labeled with the given tag.  Similarly to that,
 the recall of the assignment is estimated as:
 \begin{equation*}
-  R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|},
+  R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
+    \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
 and the \F{}-measure is normally computed as the harmonic mean of the
 precision and recall scores:
@@ -200,7 +202,7 @@ the Needleman-Wunsch alignment algorithm~\cite{Needleman:70}.
   Fields}
 
 The first method that we evaluated on the obtained data was that of
-the Conditional Random Fields.  First introduced by
+the conditional random fields.  First introduced by
 \citet{Lafferty:01}, CRFs had rapidly grown in popularity, turning
 into one of the most commonly used probabilistic frameworks, which had
 been dominating the NLP field for more than a decade.
@@ -334,7 +336,7 @@ The main resons for the huge success of this model are:
     Figure~\ref{fig:snt:memm-crf}, we will first estimate the
     probability of the correct label sequence for the initial part of
     this sentence using the Maximum Entropy Markov Model (MEMM)---the
-    predecessor of the Conditional Random Fields.  According to the
+    predecessor of the conditional random fields.  According to the
     MEMM's definition, the probability of the correct labeling
     ($KON-ADV-NN-VA$) is equal to:
     \begin{align*}
@@ -578,7 +580,7 @@ new contexts which do have important but underweighted traits.
       0.244 & 0.271 & 0.287\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Results of the fine-grained sentiment analysis with the
+    \caption{Results of fine-grained sentiment analysis with the
       first-order linear-chain CRFs.}
     \label{snt-fgsa:tbl:crf-res}
   \end{center}
@@ -587,7 +589,7 @@ new contexts which do have important but underweighted traits.
 \section{Fine-grained Sentiment Analysis with Recurrent Neural
   Networks}
 
-A competive alternative to the Conditional Random Fields are deep
+A competive alternative to the conditional random fields are deep
 recurrent neural networks (RNNs).  Introduced in the
 mid-nineties~\cite{Hochreiter:97}, RNNs have become one of the most
 popular trends in the recent surge of deep learning research, showing
@@ -876,7 +878,7 @@ Table~\ref{snt-fgsa:tbl:rnn-res}.
       0.24\stddev{0.03} & 0.21\stddev{0.07} & 0.22\stddev{0.03} & 0.25\stddev{0.01}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Results of the fine-grained sentiment analysis with recurrent
+    \caption{Results of fine-grained sentiment analysis with recurrent
       neural networks.}
     \label{snt-fgsa:tbl:rnn-res}
   \end{center}
@@ -1104,7 +1106,7 @@ given in Table~\ref{snt-fgsa:tbl:broad-narrow}.
 
     \end{tabular}
     \egroup
-    \caption{Results of the fine-grained analysis with the broad and
+    \caption{Results of fine-grained analysis with the broad and
       narrow sentiment interpretations.}
     \label{snt-fgsa:tbl:broad-narrow}
   \end{center}
@@ -1524,22 +1526,6 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
 
 \subsection{Effect of Word Embeddings}
 
-% LSTM
-
-%% TASK-SPECIFIC
-
-%% TASK-SPECIFIC + LEAST SQUARES
-
-%% WORD2VEC
-
-% GRU
-
-%% TASK-SPECIFIC
-
-%% TASK-SPECIFIC + LEAST SQUARES
-
-%% WORD2VEC
-
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1602,101 +1588,109 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
 
 TODO
 
-We also note that all our obtained results are significantly lower
-than the corresponding figures achieved for other domains and other
-languages.  A closer look into the errors showed us that the main
-reason for such severe accuracy drop was an insufficiently good
-recognition of opinionated words and phrases.  This can be partially
-explained by the creativity of the users in expressing their thoughts
-but also by the lack of appropriate sentiment dictionaries which would
-not only contain standard language expressions but also slang words
-and cusses.
+% We also note that all our obtained results are significantly lower
+% than the corresponding figures achieved for other domains and other
+% languages.  A closer look into the errors showed us that the main
+% reason for such severe accuracy drop was an insufficiently good
+% recognition of opinionated words and phrases.  This can be partially
+% explained by the creativity of the users in expressing their thoughts
+% but also by the lack of appropriate sentiment dictionaries which would
+% not only contain standard language expressions but also slang words
+% and cusses.
 
-An additional challenge was posed by emoticons which could not only
-convey an evaluative meaning but also serve as politeness expressions
-and were therefore ambiguous sentiment markers.  Furthermore, we
-should also mention that the German language itself is more difficult
-for automatic processing due to its relatively free word order,
-ambiguous inflections, and a rich morphology.  And these problems
-become even more aggravated when dealing with Twitter.
+% An additional challenge was posed by emoticons which could not only
+% convey an evaluative meaning but also serve as politeness expressions
+% and were therefore ambiguous sentiment markers.  Furthermore, we
+% should also mention that the German language itself is more difficult
+% for automatic processing due to its relatively free word order,
+% ambiguous inflections, and a rich morphology.  And these problems
+% become even more aggravated when dealing with Twitter.
 
-We also saw that the outcomes of our experiments crucially depended on
-the definition of the sentiments that we applied and that different
-CRF variants had different influence on the classification accuracy
-for either interpretation.  Unfortunately, none of these models could
-clearly outperform its rivals, but we could detect some general trends
-for each of the proposed interpretations.  If these trends would also
-hold whe using other feature sets and other corpora is one of the
-questions that we want to address in future research.
+% We also saw that the outcomes of our experiments crucially depended on
+% the definition of the sentiments that we applied and that different
+% CRF variants had different influence on the classification accuracy
+% for either interpretation.  Unfortunately, none of these models could
+% clearly outperform its rivals, but we could detect some general trends
+% for each of the proposed interpretations.  If these trends would also
+% hold whe using other feature sets and other corpora is one of the
+% questions that we want to address in future research.
 
 \section{Related Work}
+
+Due to its high social impact and big economic importance,
+fine-grained sentiment analysis has always been an area of active
+research in the opinion mining community.  One of the first
+groundbreaking steps in this direction was made
+by~\citet{Nasukawa:03}, who proposed a lexicon-based approach for
+determining phrase-level sentiments towards particular pre-defined
+objects.  More precisely, in the initial phase of their method, the
+authors determined occurrences of a priori known targets in text.
+Afterwards, they analyzed the immediate context of these occurrences,
+looking for subjective terms from their manually compiled lexicon;
+and, finally, determined the overall orientation of these opinions,
+judging by the polarity scores of the lexicon terms and a set of
+heuristic rules which accounted for contextual changes.
+
+Similarly to this approach, \citet{Bethard:04} proposed a method for
+identifying subjective opinions and their holders, in which they first
+determined polar expressions using the lexicon of~\citet{Wiebe:03} and
+then used these expressions as features for a set of SVM classifiers.
+The authors applied the resulting ensemble to the nodes of syntactic
+constituency trees, trying to predict which of these nodes were the
+heads of opinionated clauses or sources of sentiments.  In the same
+vein, \citet{Kobayashi:07} used a lexicon-based system for finding
+subjective expressions pertaining to some pre-determined product
+aspects.
+
 One of the first attempts at automatically analyzing subjective
-opinions below the document and sentence level was made by
-\citet{Nasukawa:03}.  In their work, the authors proposed a
-lexicon-based approach, in which they first determenied the
-occurrences of the given target in text; then analyzed the immediate
-context of these occurrences, looking for subjective terms from their
-manually compiled lexicon; and, finally, determined the overall
-orientation of the opinion, judging by the predetermined polarity
-score of the lexicon term and a set of heuristic rules which accounted
-for contextual changes.
+opinions with conditional random fields was made by \citet{Choi:05},
+who combined a linear-chain CRF system with the unsupervised pattern
+extractor AutoSlog-TS~\cite{Riloff:96} in order to predict holders of
+opinions.  This approach showed a significant improvement over
+compared baselines (noun phrases pre-selected by heuristic rules).
+Later on, \citet{Choi:06} further enhanced their system,
+simultaneously trying to identify both sources of sentiments and their
+respective polar expressions, also establishing links between these
+entities.  For this purpose, they applied two CRF classifiers (one for
+each entity type), getting top-10 results from each of these systems.
+After obtaining these predictions, they pruned off invalid suggestions
+using a set of hard and soft constraints, whose weights were optimized
+through the integer linear programming.  This two-stage procedure not
+only improved the automatic recognition of sources and polar
+expressions, but also yielded an impressive \F-score of 0.689 on
+predicting inter-entity links.
 
-An alternative way of classifying subjective opinions and their
-holders was proposed by \citet{Bethard:04}, who also utilized a
-lexicon \cite{Wiebe:03} for finding opinionated terms.  In the
-following step, the recognized expressions were used as features for a
-set of SVM classifiers which predicted which nodes of a syntactic
-constituency trees represented opinionated clauses or sources of the
-opinions.  A similar method was also applied by \citet{Kobayashi:07}
-for identifying subjective expressions pertaining to product aspects.
-
-One of the first attempts at automatically analyzing subjective
-opinions with Conditional Random fields was made by \citet{Choi:05}.
-In their work, the authors combined a linear-chain CRF system with the
-unsupervised pattern extractor AutoSlog-TS \cite{Riloff:96} in order
-to recognize holders of opinions in text.  This approach showed a
-significant improvement over compared baselines (noun phrases
-pre-selected by heuristic rules).
-
-Later on, \citet{Choi:06} further enhanced this system, simultaneously
-trying to predict both sources and expressions of opinions, also
-establishing links between these entities.  For this purpose, they
-again applied two CRF classifiers (one for each entity type) to
-determine the textual spans of opinion holders and subjective
-elements, getting top-10 results from each of the systems.  In the
-next step, they pruned off invalid suggestions with a set of hard and
-soft constraints, whose weights were optimized using the integer
-linear programming.  This two-stage approach not only allowed the
-authors to reach impressive 68.9\% \F-measure on predicting links but
-also helped to improve automatic recognition for each of the predicted
-element types.
-
-\citet{Breck:07} concentrated on the prediction of \emph{direct speech
-  events} (DSEs) and \emph{expressive subjective elements} (ESE) in
-the MPQA corpus \cite[cf.][]{Wiebe:05}.  For this task, they also
-adopted the CRF approach, getting a substantial imrovement over
-dictionary-based baselines.
-
-\citet{Choi:10} attempted to jointly predict the boundaries, polarity,
-and intensity of subjective elements (DSEs and ESEs) with a single CRF
-classifier.  For this purpose, they adopted the hierarchical parameter
+With the release of the MPQA corpus \cite[cf.][]{Wiebe:05},
+fine-grained opinion-mining researchers have gradually shifted the
+focus of their work to the analysis of newspaper texts: For example,
+\citet{Breck:07} addressed the problem of predicting \emph{direct
+  speech events} (DSEs) and \emph{expressive subjective elements}
+(ESE), for which they also adopted the CRF approach, getting a
+substantial imrovement over dictionary-based baselines.
+\citet{Choi:10} attempted to jointly predict boundaries, polarity, and
+intensity of subjective elements (DSEs and ESEs) with a single CRF
+classifier.  To this end, they applied the hierarchical parameter
 sharing technique \cite{Zhao:08}, letting their system differentiate
-between ten different classes (two classes for the presence of an
-opinion times three polarities and three intensities), but ensuring
-that parameters belonging to the same group (e.g., high intensity)
-were shared among these classes.
+between ten different sentiment classes (two classes for the presence
+or absence of an opinion times three polarities times three
+intensities), ensuring, however, that the parameters belonging to the
+same group (e.g., positive polarity) were shared among all the
+respective subclasses (e.g., positive sentiments with high, low, and
+middle intensities).
 
 Instead of relying on just one most likely label assignment when
 predicting subjective expressions, \citet{Johansson:10a} explored the
-possibility of reranking by first obtaining top-$k$ alternative
-predictions (with $k = 8$) and then reweighting these labelings with a
-different type of classifier.  In particular, the authors experimented
-with linear and tree-based preference kernels as well as structured
-perceptron and passive-aggressive algorithms, finding the last option
-performing best and yielding 4\% improvement over the standard
-linear-chain CRF baseline.  The same idea was also used for the joint
-extraction of subjective expressions and opinion
-holders~\cite[cf.][]{Johansson:10b}.
+possibility of reranking the initial decisions by first obtaining
+top-$k$ alternative predictions (with $k = 8$) and then reweighting
+these labelings with a different classifier.  In particular, they
+experimented with linear and tree-based preference kernels as well as
+structured perceptron and passive-aggressive algorithms for doing this
+reweighting, finding that the last option---the passive-aggressive
+method---performed best on the MPQA dataset, yielding 4\% improvement
+over the standard linear-chain CRF baseline.
+\citet[cf.][]{Johansson:10b} also used this idea for the joint
+extraction of subjective expressions and their holders from newspaper
+articles.
 
 \citet{Yang:12} were allegedly the first who used semi-Markov CRFs in
 an opinion mining application.  In order to determine the boundaries
