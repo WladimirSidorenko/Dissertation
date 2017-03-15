@@ -1582,6 +1582,58 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
 
 \subsection{Effect of Normalization}
 
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{1}{>{\centering\arraybackslash}p{0.136\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
+      \multicolumn{3}{c}{\bfseries Source} & %
+      \multicolumn{3}{c}{\bfseries Target} & %
+      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\\cline{2-10}
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} &\\\midrule
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}With Normalization}\\
+
+      CRF &  &  &  & %
+       &  &  & %
+       &  &  & \\
+
+      LSTM & 0.283 & 0.288 & 0.278 & %
+       0.293 & 0.372 & 0.328 & %
+       0.254 & 0.27 & 0.259 & 0.288\\
+
+      GRU & 0.287 & 0.246 & 0.263 & %
+       0.287 & 0.405 & 0.335 & %
+       0.252 & 0.205 & 0.216 & 0.271\\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}W/O Normalization}\\
+
+      CRF &  &  &  & %
+       &  &  & %
+       &  &  & \\
+
+      LSTM &  &  &  & %
+       &  &  & %
+       &  &  & \\
+
+      GRU &  &  &  & %
+       &  &  & %
+       &  &  & \\\bottomrule
+
+    \end{tabular}
+    \egroup
+    \caption{Results of fine-grained sentiment analysis with and
+      without text normalization.}
+    \label{snt-fgsa:tbl:embeddings
+    }
+  \end{center}
+\end{table*}
+
 \subsection{Effect of Lexicons}
 
 \section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
@@ -1699,18 +1751,17 @@ shallow syntastic parses and then let a semi-Markov model determine
 the most likely segmentation and label assignment over these
 hypotheses.
 
-One of the first steps towards using deep neural networks for the
-prposes of fine-grained sentiment analysis was made
-by~\citet{Socher:13}.  In their work on predicting sentiment polarity
-of syntactic constituents (including the whole sentences), the authors
-explored a recursive neural tensor approach, in which they computed
-the semantic orientation of a given node $\vec{v}_c \in \mathbb{R}^n$
-in a bottom-up fashion by recursively multiplying the embeddings of
-its descendant leaves (e.g., $\vec{w}_1 \in \mathbb{R}^n$ and
-$\vec{w}_2 \in \mathbb{R}^n$) with a compositional tensor $V \in
-\mathbb{R}^{2n\times2n\times2n}$:
+A veritable milestone in the fine-grained sentiment analysis research
+was set by~\citet{Socher:13}, who first introduced a deep learning
+method for predicting the polarity of syntactic constituents.  In
+their work, the authors computed a vector representation of a given
+constituency node ($\vec{w}_c \in \mathbb{R}^n$) by recursively
+multiplying the embeddings of its descendants (e.g.,
+$\vec{w}_1 \in \mathbb{R}^n$ and $\vec{w}_2 \in \mathbb{R}^n$) with a
+compositional tensor $V \in \mathbb{R}^{2n\times2n\times2n}$ and
+applying the softmax non-linearity afterwards:
 \begin{align*}
-  \vec{v}_c = softmax\left(%
+  \vec{w}_c = softmax\left(%
   \begin{bmatrix}
   \vec{w}_1\\
   \vec{w}_2
@@ -1724,11 +1775,11 @@ $\vec{w}_2 \in \mathbb{R}^n$) with a compositional tensor $V \in
   \end{bmatrix}%
   \right),
 \end{align*}
-where $W\in\mathbb{R}^{n\times n}$ was an additional shared
-compositionality matrix, and the tensor productfor a single element
-was defined as:
+The $W\in\mathbb{R}^{n\times n}$ term in the above equation stands for
+an additional shared compositionality matrix, and the tensor
+productfor for a single element $\vec{v}_i$ is defined as follows:
 \begin{align*}
-  v'_i = \begin{bmatrix}
+  \vec{v}_i = \begin{bmatrix}
   \vec{w}_1\\
   \vec{w}_2
   \end{bmatrix}^T \cdot V^{i}\cdot\begin{bmatrix}
@@ -1736,31 +1787,32 @@ was defined as:
   \vec{w}_2
   \end{bmatrix}.
 \end{align*}
-The weights of this tensor as well as the vector representations of
-the underlying words, and the compositionality matrix $W$ were learned
-automatically during training.
+The embeddings of the underlying words as well as the compositionality
+matrix $W$ and the tensor $V$ were learned automatically during
+training.
 
-Another recursive approach was suggested by~\citet{Irsoy:14a}
-\cite[see also][]{Irsoy:14b}, who explored deep bidirectional neural
-networks for predicting DSEe and ESEs on the MPQA corpus.  In
-particular, they estimated the label $y$ of the $t$-th token as:
+A recurrent approach to the FGSA problem was proposed
+by~\citet{Irsoy:14a} \cite[see also][]{Irsoy:14b}, who explored deep
+bidirectional neural networks for predicting DSEe and ESEs on the MPQA
+corpus.  In particular, they estimated the label probabilities
+$\vec{y}$ for the $t$-th token as:
 \begin{align*}
   y_t = softmax\left(U_{\rightarrow}\cdot \vec{h}_t^{(L)} + U_{\leftarrow}\cdot \cev{h}_t^{(L)} + \vec{c}\right),
 \end{align*}
 where $\vec{h}_t^{(L)}$ and $\cev{h}_t^{(L)}$ were the outputs of the
-top-$L$ levels computed from left to right and from right to left
+top-$L$ LSTM-levels computed from left to right and from right to left
 respectively; and $U_{\rightarrow}$, $U_{\leftarrow}$, and the bias
-term $\vec{c}$ were the other learned parameters used to reduce the
-dimensions.  This system could outperform the previous state of the
-art set by \citet{Yang:12}, reaching a proportional \F-score of 66.01
-for DSEs and 56.26 for ESEs.
+term $\vec{c}$ were the other learned parameters which were used to
+reduce the dimensions.  This system could outperform the previous
+state of the art set by \citet{Yang:12}, reaching a proportional
+\F-score of 66.01 for DSEs and 56.26 for ESEs.
 
 Other notable works on fine-grained opinion mining with deep neural
-networks include thos of \citet{Irsoy:14c}, who used a tensor
-multiplication within the recursive loop; \citet{Tang:16}, who
-proposed a memory-based multi-level network for classifying opinions
-about the given aspects; and, finally, \citet{Wang:16}, who used the
-output of a deep recursive network as input for a CRF system, updating
-the weights of the network along with the CRF parameters.
+networks include those of \citet{Irsoy:14c}, who used a tensor
+multiplication within a recursive loop; \citet{Tang:16}, who proposed
+a memory-based multi-level network for classifying opinions about the
+given aspects; and, finally, \citet{Wang:16}, who used the output of a
+deep recursive network as input to a CRF system, updating the weights
+of the network along with the CRF parameters.
 
 \newpage
