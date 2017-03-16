@@ -1526,6 +1526,42 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
 
 \subsection{Effect of Word Embeddings}
 
+Similarly to the CRF features, we also investigated the impact of
+input embeddings on the net results of the RNN approaches.  For this
+purpose, instead of learning task-specific word representations we did
+in the initial experiments, we re-ran the training using two other
+embedding types:
+\begin{itemize}
+\item\emph{least-squares embeddings}, in which we again learned
+  task-specific word vectors, but additionally computed an optimal
+  transformation matrix $W$ using the method of ordinary least
+  squares:
+  \begin{equation}\label{eq:fgsa:least-sq}
+    W = \argmin_{W}\lVert V_{TS} - W^T\cdot V_{W2V}\rVert_F,
+  \end{equation}
+  where $V_{TS}$ stands for the matrix of task-specific word
+  representations learned by the system, $V_{W2V}$ represents the
+  respective matrix of word2vec embeddings, and $\lVert\cdot\rVert_F$
+  is the Frobenius norm of the resulting difference.  With this
+  matrix, we then obtained the best possible approximations of
+  task-specific vectors for unknown words that were encountered in the
+  test set;
+\item finally, we also experimented with the normal \emph{word2vec
+    embeddings} which were learned with the standard options on the
+  German Twitter snapshot~\cite{Scheffler:14}.
+\end{itemize}
+
+The results of these modifications are given in
+Table~\ref{snt-fgsa:tbl:embeddings}.  As we can see from the scores,
+the least-squares method significantly boosts the recall, which, in
+turn, leads to much higher macro-averaged \F-measures, outperforming
+all other compared approaches. The task-specific variant shows
+second-best results, mainly due to a higher precision of the targets
+and sources.  Last but not least, the word2vec approach still brings
+an improvement for the prediction of sentiment spans, but otherwise
+shows a notable degradation at literally every other opinion-related
+aspect.
+
 \begin{table*}
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1570,13 +1606,11 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
       GRU & 0.273 & 0.355 & 0.301 & %
        0.207 & 0.353 & 0.257 & %
        0.213 & 0.26 & 0.233 & 0.264\\\bottomrule
-
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis with different
       types of word embeddings.}
-    \label{snt-fgsa:tbl:embeddings
-    }
+    \label{snt-fgsa:tbl:embeddings}
   \end{center}
 \end{table*}
 
@@ -1597,11 +1631,14 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}With Normalization}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}W Normalization}\\
 
-      CRF &  &  &  & %
-       &  &  & %
-       &  &  & \\
+      %% SENTIMENT     37.62%    31.85%    34.49%
+      %% SOURCE        29.75%    33.00%    31.29%
+      %% TARGET        29.25%    23.06%    25.79%
+      CRF & 0.376 & 0.319 & 0.345 & %
+       0.298 & 0.33 & 0.313 & %
+       0.293 & 0.231 & 0.258 & 0.305\\
 
       LSTM & 0.283 & 0.288 & 0.278 & %
        0.293 & 0.372 & 0.328 & %
@@ -1621,9 +1658,9 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
        &  &  & %
        &  &  & \\
 
-      GRU &  &  &  & %
-       &  &  & %
-       &  &  & \\\bottomrule
+      GRU & 0.266 & 0.245 & 0.252 & %
+       0.296 & 0.369 & 0.328 & %
+       0.232 & 0.268 & 0.245 & 0.275\\\bottomrule
 
     \end{tabular}
     \egroup
