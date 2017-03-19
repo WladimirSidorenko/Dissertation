@@ -1665,29 +1665,29 @@ preprocessing pipeline off this time.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}W Normalization}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}w Normalization}\\
 
-      CRF & 0.376 & 0.319 & 0.345 & %
-       0.298 & 0.33 & 0.313 & %
-       0.293 & 0.231 & 0.258 & 0.305\\
+      CRF & \textbf{0.376} & \textbf{0.319} & \textbf{0.345} & %
+       \textbf{0.298} & 0.33 & 0.313 & %
+       \textbf{0.293} & 0.231 & 0.258 & \textbf{0.305}\\
 
       LSTM & 0.283 & 0.288 & 0.278 & %
        0.293 & 0.372 & 0.328 & %
-       0.254 & 0.27 & 0.259 & 0.288\\
+       0.254 & \textbf{0.27} & \textbf{0.259} & 0.288\\
 
       GRU & 0.287 & 0.246 & 0.263 & %
-       0.287 & 0.405 & 0.335 & %
+       0.287 & \textbf{0.405} & \textbf{0.335} & %
        0.252 & 0.205 & 0.216 & 0.271\\
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}W/O Normalization}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}w/o Normalization}\\
 
-      CRF &  &  &  & %
-       &  &  & %
-       &  &  & \\
+      CRF & 0.301 & 0.278 & 0.289 & %
+       0.276 & 0.3  & 0.287 & %
+       0.255 & 0.23 & 0.242 & 0.273\\
 
-      LSTM &  &  &  & %
-       &  &  & %
-       &  &  & \\
+      LSTM & 0.274 & 0.252 & 0.261 & %
+       0.284 & 0.367 & 0.32 & %
+       0.237 & 0.241 & 0.237 & 0.273\\
 
       GRU & 0.266 & 0.245 & 0.252 & %
        0.296 & 0.369 & 0.328 & %
@@ -1695,8 +1695,8 @@ preprocessing pipeline off this time.
 
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained sentiment analysis with and
-      without text normalization.}
+    \caption{Results of fine-grained sentiment analysis with (w) and
+      without (w/o) text normalization.}
     \label{snt-fgsa:tbl:normalization}
   \end{center}
 \end{table*}
@@ -1705,6 +1705,8 @@ As we can see from the results in
 Table~\ref{snt-fgsa:tbl:normalization},
 
 \subsection{Effect of Sentiment Lexicons}
+
+data/results/takamura/takamura.ext-syn-rels.hu-liu-seedset.txt
 
 \begin{table*}
   \begin{center}
@@ -1721,81 +1723,38 @@ Table~\ref{snt-fgsa:tbl:normalization},
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} &\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}No Lexicon}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}w Lexicon}\\
 
-      CRF &  &  &  & %
+      CRF & 0.379 & 0.309 & 0.34 & %
+        0.291 & 0.32 & 0.305 & %
+        0.284 & 0.226 & 0.252 & 0.299\\
+
+      LSTM &  &  &  & %
         &  &  & %
         &  &  & \\
 
-      LSTM &  &  &  & %
-        &  &  & %
-        &  &  & \\
-
       GRU &  &  &  & %
         &  &  & %
         &  &  & \\
 
-      \multicolumn{11}{c}{\centering\cellcolor{cellcolor}
-      \specialcell{Zurich Polarity Lexicon\\\cite{Clematide:10}}}\\
+      \multicolumn{11}{c}{\cellcolor{cellcolor}w/o Lexicon}\\
 
-      CRF &  &  &  & %
-       &  &  & %
-       &  &  & \\
+      CRF & 0.382 & 0.303 & 0.338 & %
+       0.288 & 0.3 & 0.294 & %
+       0.291 & 0.221 & 0.251 & 0.294\\
 
-      LSTM &  &  &  & %
-       &  &  & %
-       &  &  & \\
+      LSTM & 0.283 & 0.288 & 0.278 & %
+       0.293 & 0.372 & 0.328 & %
+       0.254 & 0.27 & 0.259 & 0.288\\
 
-      GRU &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}\citet{Blair-Goldensohn:08}}\\
-
-      CRF &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      LSTM &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      GRU &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}\citet{Takamura:05}}\\
-
-      CRF &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      LSTM &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      GRU &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}Linear Projection}\\
-
-      CRF &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      LSTM &  &  &  & %
-       &  &  & %
-       &  &  & \\
-
-      GRU &  &  &  & %
-       &  &  & %
-       &  &  & \\\bottomrule
+      GRU & 0.287 & 0.246 & 0.263 & %
+       0.287 & 0.405 & 0.335 & %
+       0.252 & 0.205 & 0.216 & 0.271\\\bottomrule
 
     \end{tabular}
     \egroup
-    \caption{Results of fine-grained sentiment analysis with different
-      sentiment lexicons.}
+    \caption{Results of fine-grained sentiment analysis with (w) and
+      without (w/o) sentiment lexicons.}
     \label{snt-fgsa:tbl:lexicons}
   \end{center}
 \end{table*}
