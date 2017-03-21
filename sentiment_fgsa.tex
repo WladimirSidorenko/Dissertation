@@ -1541,7 +1541,7 @@ embedding types:
   \end{equation}
   where $V_{TS}$ stands for the matrix of task-specific word
   representations learned by the system, $V_{W2V}$ represents the
-  respective matrix of word2vec embeddings, and $\lVert\cdot\rVert_F$
+  respective matrix of word2vec embeddings, and $\left\lVert\cdot\right\rVert_F$
   is the Frobenius norm of the resulting difference.  With this
   matrix, we then obtained the best possible approximations of
   task-specific vectors for unknown words that were encountered in the
@@ -1619,38 +1619,39 @@ aspect.
 Another question which remained open in the foregoing experiments was
 whether the input passed to the models actually had to be normalized
 or not.  As mentioned in Section~\ref{snt:fgsa:subsec:data}, when
-preparing the data, we pre-processed all corpus tweets using the
+preparing the data, we preprocessed all corpus tweets using the
 rule-based normalization procedure of~\citet{Sidarenka:13}.  In this
 approach, we
 \begin{itemize}
 \item replaced syntactically integrated Twitter-specific phenomena
   (@-mentions, hyperlinks, e-mail addresses etc.) with special unified
-  tokens representing their semantic class (e.g., ``\%Username'' for
+  tokens representing their semantic classes (e.g., ``\%Username'' for
   @-mentions, and ``\%URI'' for hyperlinks);
 \item removed these phenomena if they were syntactically independent
-  and did not play an important role for the succeeding sentiment
-  analysis (e.g., we stripped off all retweets and hyperlinks appearing
+  and did not play a potential role in the expression of sentiments
+  (e.g., we stripped off all retweet mentions and hyperlinks appearing
   at the very end of the tweets if they were not preceded by a
   preposition);
 \item substituted all emoticons with unified placeholders representing
-  their polarity classes (e.g., \smiley{} $\rightarrow$
-  ``\%PosSmiley'', \frownie{} $\rightarrow$ ``\%NegSmiley'',
-  \texttt{:-O} $\rightarrow$ ``\%Smiley'' etc.);
+  their polarities (e.g., \smiley{} $\rightarrow$ ``\%PosSmiley'',
+  \frownie{} $\rightarrow$ ``\%NegSmiley'', \texttt{:-O} $\rightarrow$
+  ``\%Smiley'' etc.);
 \item stripped off the number sign (\#) from the beginning of hashtags
   (e.g., ``\#gl\"ucklich'' $\rightarrow$ ``gl\"ucklich'');
 \item and, finally, restored some common forms of misspellings (e.g.,
   ``zuguckn'' $\rightarrow$ ``zugucken'' (\emph{to watch}), ``Tach''
-  $\rightarrow$ ``Tag'' (\emph{day}) etc.).
+  $\rightarrow$ ``Tag'' (\emph{day}) etc.) using a set of
+  manually-defined rules.
 \end{itemize}
 
 Even though these transformations were supposed to improve the
-grammaticality of the sentences, an opposite effect of the
+grammaticality of the sentences, an opposite consequence of this
 normalization could be the loss of (potentially valuable) surface
-features.  In order to check, which of these implications was
-stronger, we repeated the evaluation once again, turning the
-preprocessing pipeline off this time.
+features.  In order to check, which of these effects had a stronger
+impact on the FGSA results, we repeated the evaluation once again,
+turning the preprocessing pipeline off this time.
 
-\begin{table*}
+\begin{table*}[bht!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
@@ -1702,11 +1703,28 @@ preprocessing pipeline off this time.
 \end{table*}
 
 As we can see from the results in
-Table~\ref{snt-fgsa:tbl:normalization},
+Table~\ref{snt-fgsa:tbl:normalization}, text preprocessing was
+unequivocally beneficial to the sentiment classification as all of the
+best observed results were achieved exclusively with normalized text.
+The only aspect which benefited from keeping the input unchanged was
+the precision of target classification with GRU, which, in turn, led
+to a slightly higher (+0.4\%) macro-averaged \F-scores for this
+system.  Apart from that, all other aspects and classifiers showed a
+notable degradation when the preprocessing module was switched off.
 
-\subsection{Effect of Sentiment Lexicons}
+\subsection{Effect of the Sentiment Lexicon}
 
-data/results/takamura/takamura.ext-syn-rels.hu-liu-seedset.txt
+Finally, to answer the question pointed out at the beginning of this
+chapter (how useful sentiment lexicons were extrinsically), we
+scrutinized the effect of the lexicon that we used in the CRF system
+\cite[Zurich Polarity List;][]{Clematide:10} in more detail.  For this
+purpose, we repeated the CRF experiments with all lexicon features
+removed from the input.  In addition to that, in order to see whether
+deep RNN methods would benefit from the lexicon data, we also
+re-evaluated the GRU and LSTM systems, appending the lexicon scores of
+the input words to their respective embedding vectors.  (This
+additional part of the embeddings was kept fixed and did not get
+updated during training.)
 
 \begin{table*}
   \begin{center}
@@ -1733,9 +1751,9 @@ data/results/takamura/takamura.ext-syn-rels.hu-liu-seedset.txt
         &  &  & %
         &  &  & \\
 
-      GRU &  &  &  & %
-        &  &  & %
-        &  &  & \\
+      GRU & 0.268 & 0.235 & 0.249 & %
+        0.28 & 0.383 & 0.323 & %
+        0.253 & 0.193 & 0.217 & 0.263\\
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}w/o Lexicon}\\
 
@@ -1758,6 +1776,16 @@ data/results/takamura/takamura.ext-syn-rels.hu-liu-seedset.txt
     \label{snt-fgsa:tbl:lexicons}
   \end{center}
 \end{table*}
+
+The results of these approaches with both configurations (with and
+without the lexicon) are shown in Table~\ref{snt-fgsa:tbl:lexicons}.
+Somewhat surprisingly, the loss of the lexicon information did not
+cause a severe drop of the CRF results: the biggest degradation here
+was observed for the \F-score of sentiment sources and amounted to
+only 0.9~\%.  Other sentiment-related aspects showed even smaller
+deteriorations, so that the final macro-averaged \F-measure without
+the lexicon features was only 0.5~\% lower than the original score
+attained with the full feature set.
 
 \section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
 
