@@ -1720,9 +1720,9 @@ scrutinized the effect of the lexicon that we used in the CRF system
 \cite[Zurich Polarity List;][]{Clematide:10} in more detail.  For this
 purpose, we repeated the CRF experiments with all lexicon features
 removed from the input.  In addition to that, in order to see whether
-deep RNN methods would benefit from the lexicon data, we also
-re-evaluated the GRU and LSTM systems, appending the lexicon scores of
-the input words to their respective embedding vectors.  (This
+the lexicon information would be beneficial to the RNN methods, we
+also re-evaluated the GRU and LSTM systems, appending the lexicon
+scores of input words to the respective embedding vectors.  (This
 additional part of the embeddings was kept fixed and did not get
 updated during training.)
 
@@ -1743,13 +1743,13 @@ updated during training.)
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}w Lexicon}\\
 
-      CRF & 0.379 & 0.309 & 0.34 & %
+      CRF & 0.379 & \textbf{0.309} & \textbf{0.34} & %
         0.291 & 0.32 & 0.305 & %
-        0.284 & 0.226 & 0.252 & 0.299\\
+        0.284 & \textbf{0.226} & 0.252 & \textbf{0.299}\\
 
-      LSTM &  &  &  & %
-        &  &  & %
-        &  &  & \\
+      LSTM & 0.314 & 0.226 & 0.262 & %
+        0.264 & 0.377 & 0.31 & %
+        0.256 & 0.225 & 0.239 & 0.27\\
 
       GRU & 0.268 & 0.235 & 0.249 & %
         0.28 & 0.383 & 0.323 & %
@@ -1757,35 +1757,57 @@ updated during training.)
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}w/o Lexicon}\\
 
-      CRF & 0.382 & 0.303 & 0.338 & %
+      CRF & \textbf{0.382} & 0.303 & 0.338 & %
        0.288 & 0.3 & 0.294 & %
-       0.291 & 0.221 & 0.251 & 0.294\\
+       \textbf{0.291} & 0.221 & 0.251 & 0.294\\
 
       LSTM & 0.283 & 0.288 & 0.278 & %
-       0.293 & 0.372 & 0.328 & %
-       0.254 & 0.27 & 0.259 & 0.288\\
+       \textbf{0.293} & 0.372 & 0.328 & %
+       0.254 & 0.27 & \textbf{0.259} & 0.288\\
 
       GRU & 0.287 & 0.246 & 0.263 & %
-       0.287 & 0.405 & 0.335 & %
+       0.287 & \textbf{0.405} & \textbf{0.335} & %
        0.252 & 0.205 & 0.216 & 0.271\\\bottomrule
 
     \end{tabular}
     \egroup
     \caption{Results of fine-grained sentiment analysis with (w) and
-      without (w/o) sentiment lexicons.}
+      without (w/o) the sentiment lexicon.}
     \label{snt-fgsa:tbl:lexicons}
   \end{center}
 \end{table*}
 
 The results of these approaches with both configurations (with and
 without the lexicon) are shown in Table~\ref{snt-fgsa:tbl:lexicons}.
-Somewhat surprisingly, the loss of the lexicon information did not
-cause a severe drop of the CRF results: the biggest degradation here
-was observed for the \F-score of sentiment sources and amounted to
-only 0.9~\%.  Other sentiment-related aspects showed even smaller
-deteriorations, so that the final macro-averaged \F-measure without
-the lexicon features was only 0.5~\% lower than the original score
-attained with the full feature set.
+Somewhat surprisingly, the removal of the lexicon data did not cause a
+severe drop of the CRF results: the biggest degradation here is
+observed for the \F-score of sentiment sources and amounts to only
+0.9~\%.  Other sentiment-related aspects show even smaller losses, so
+that the final macro-averaged \F-measure achieved without the lexicon
+is only 0.5~\% lower than the original score attained with the full
+feature set.
+
+An even more unexpected outcome represent the results of the RNN
+methods where adding the lexicon values worsened the final
+classification scores: The macro-averaged \F-measure of the LSTM
+system, for instance, dropped down by almost 2~\% from 0.288 to 0.27.
+A similar sutuation is observed for the GRU approach, whose \F-score
+decreased from 0.271 to 0.263 after adding the lexicon information.
+We can explain this degradation by the following possible reasons:
+\begin{itemize}
+\item since the utilized polarity list did not provide a continuous
+  ranking of its polar terms (all positive entries in this lexicon had
+  a unifom score of~+1, and all negative words had a negative value
+  of~-1), the decision boundary of the classifier could become more
+  rigid, loosing its ability to separate classes which were located
+  closely in the feature space;
+\item since the number of input features in the RNN methods was much
+  smaller than in the CRF approach (in the former case, the number of
+  features was actually the dimension of the word vectors (100 + 1)
+  whereas, in the CRF case, the number of state attributes only run up
+  to 15,047), the lexicon scores could get an unduly big influence,
+  outweighing all other embedding features.
+\end{itemize}
 
 \section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
 
