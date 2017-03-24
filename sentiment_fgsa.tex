@@ -1782,15 +1782,15 @@ without the lexicon) are shown in Table~\ref{snt-fgsa:tbl:lexicons}.
 Somewhat surprisingly, the removal of the lexicon data did not cause a
 severe drop of the CRF results: the biggest degradation here is
 observed for the \F-score of sentiment sources and amounts to only
-0.9~\%.  Other sentiment-related aspects show even smaller losses, so
+0.9\%.  Other sentiment-related aspects show even smaller losses, so
 that the final macro-averaged \F-measure achieved without the lexicon
-is only 0.5~\% lower than the original score attained with the full
+is only 0.5\% lower than the original score attained with the full
 feature set.
 
 An even more unexpected outcome represent the results of the RNN
 methods where adding the lexicon values worsened the final
 classification scores: The macro-averaged \F-measure of the LSTM
-system, for instance, dropped down by almost 2~\% from 0.288 to 0.27.
+system, for instance, dropped down by almost 2\% from 0.288 to 0.27.
 A similar sutuation is observed for the GRU approach, whose \F-score
 decreased from 0.271 to 0.263 after adding the lexicon information.
 We can explain this degradation by the following possible reasons:
@@ -1813,56 +1813,91 @@ We can explain this degradation by the following possible reasons:
 
 Summarizing the above findings, we would like to recap that in this
 chapter we presented two most common approaches to the fine-grained
-sentiment analysis (conditional random fields and recurrent neural
-networks), applying these methods to the corpus of German tweets
+sentiment analysis: conditional random fields and recurrent neural
+networks; applying these methods to the corpus of German tweets
 introduced earlier.  Our experiments showed that CRFs with manually
-defined features outperform both recurrent deep learning systems (LSTM
-and GRU), reaching a macro-averaged \F-score of~0.287 on three
-opinion-relevant entity classes (sentiments, targets, and sources).  A
-closer look at each of the settings in these experiments revealed that:
+defined features outperform both recurrent neural network
+architectures (LSTM and GRU), reaching a macro-averaged \F-score
+of~0.287 on three opinion-relevant entity classes (sentiments,
+sources, and targets).
+
+Furtermore, a closer look at each of the settings of our experiments
+revealed that:
 \begin{itemize}
 \item Higher sentiment scores can be achieved by narrowing the spans
   of this class to the emotional expression only.  This, however,
-  might negatively affect the results of other opinion entities
-  (targets and sources);
-\item Even though the context, redefining the topologies of both PGM and RNN
-\item 
-\item 
+  might negatively affect the classification of other opinion entities
+  (sources and targets);
+\item Even though the context seems to play an important role in the
+  prediction, redefining the context flow in the models by changing
+  their graph topologies (such as increasing the order of the
+  dependencies or modifying the underlying graph structure from linear
+  chains to trees) does not bring much improvement.  We could,
+  however, still improve the results of the traditional linear-chain
+  CRFs with their first- and second-order semi-Markov variants;
+\item In order to understand why the effect of topology changes was so
+  little, we analyzed in more depth the features that were learned by
+  the CRF model, coming to the conclusion that the large number state
+  attributes massively predominated the final decisions, surpressing
+  the influence of the contextual flow;
+\item Nevertheless, a closer look at the top-scoring state and
+  transition features showed that the CRF system could learn
+  meaningful correlations.  However, an additional ablation test of
+  the state attributes revealed that different types of these features
+  had varying effects on different entity classes: while sentiment
+  classification benefited from all provided traits without exception,
+  the prediction of sources profited most from lexical and complex
+  attributes, whereas the analysis of targets was positively
+  influenced by morphological and syntactic attributes only;
+\item Similarly to the review of CRF features, we also analyzed the
+  effect of different embedding types on the net scores of the RNN
+  approaches, finding that task-specific word vectors with
+  least-squares fallback to word2vec embeddings yielded best overall
+  results;
+\item In the penultimate step, we revised the influence of the text
+  normalization on the classification scores by rerunning all
+  experiments on the original (unnormalized) messages.  This test
+  showed that preprocessing is an extremely helpful preparation step
+  which might boost the FGSA results by up to 3\%;
+\item Finally, in the concluding part of the evaluation, we estimated
+  the utility of the Zurich Polarity List~\cite{Clematide:10}---one of
+  the best-performing German sentiment lexicons; finding that the
+  lexicon features only marginally improved the CRF results, and had
+  an even negative effect on the scores achieved by the LSTM and GRU
+  approaches.
 \end{itemize}
 
-% We also note that all our obtained results are significantly lower
-% than the corresponding figures achieved for other domains and other
-% languages.  A closer look into the errors showed us that the main
-% reason for such severe accuracy drop was an insufficiently good
-% recognition of opinionated words and phrases.  This can be partially
-% explained by the creativity of the users in expressing their thoughts
-% but also by the lack of appropriate sentiment dictionaries which would
-% not only contain standard language expressions but also slang words
-% and cusses.
-
-% An additional challenge was posed by emoticons which could not only
-% convey an evaluative meaning but also serve as politeness expressions
-% and were therefore ambiguous sentiment markers.  Furthermore, we
-% should also mention that the German language itself is more difficult
-% for automatic processing due to its relatively free word order,
-% ambiguous inflections, and a rich morphology.  And these problems
-% become even more aggravated when dealing with Twitter.
-
-% We also saw that the outcomes of our experiments crucially depended on
-% the definition of the sentiments that we applied and that different
-% CRF variants had different influence on the classification accuracy
-% for either interpretation.  Unfortunately, none of these models could
-% clearly outperform its rivals, but we could detect some general trends
-% for each of the proposed interpretations.  If these trends would also
-% hold whe using other feature sets and other corpora is one of the
-% questions that we want to address in future research.
+With these observations, we hope to have provided a better insight
+into the abilities of modern FGSA approaches, the importance of their
+hyper-parameter settings, and the general amenability of the German
+Twitter domain to the automatic extraction of fine-grained opinions.
+Even though we did our best to make the foregoing description and
+evaluation as comprehensive as possible, there still remain many
+potential avenues to explore and potential ways to improve the
+presented results: It would, for instance, be extremely helpful to
+evaluate other polarity lists (produced by different SLG methods) in
+combination with the described FGSA methods.\footnote{Unfortunately,
+  we were not able to do this analysis by ourselves due to
+  prohibitively long training times: a single run of an RNN classifier
+  was taking more than 27 hours on a very strong machine.}  Another
+interesting opportunity would be a modification of the CRF formalism
+in which the influence from the context would be equal or reciprocal
+to the sum of the state feature weights.  Finally, an ensemble of CRF
+and RNN systems would be a viable possibility for improving the scores
+of each of these systems.  We encourage interested readers to explore
+these ways in their future research, as we soon have to turn our
+attention to another big area of opinion mining in which the polarity
+lists might reveal their true power: the coarse-grained sentiment
+analysis.
 
 \section{Related Work}
 
-Due to its high social impact and big economic importance,
-fine-grained sentiment analysis has always been an area of active
-research in the opinion mining community.  One of the first
-groundbreaking steps in this direction was made
+However, before we proceed to another topic, we first would like to
+conclude with a short summary of related work on the fine-grained
+opinion mining.  At this point we should note that, due to its high
+social impact and big economic importance, FGSA has always been an
+area of active research in the sentiment analysis community.  One of
+the first groundbreaking steps in this direction was made
 by~\citet{Nasukawa:03}, who proposed a lexicon-based approach for
 determining phrase-level sentiments towards particular pre-defined
 objects.  More precisely, in the initial phase of their method, the
@@ -2004,5 +2039,3 @@ a memory-based multilevel network for classifying opinions about the
 given aspects; and, finally, \citet{Wang:16}, who used the output of a
 deep recursive network as input to a CRF system, updating the weights
 of the network along with the CRF parameters.
-
-\newpage
