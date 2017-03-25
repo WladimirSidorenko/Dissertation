@@ -689,11 +689,18 @@ and the final hidden state $\vec{h}^{(t)}$ was computed as follows:
   \vec{h}^{(t)} &= \vec{i}^{(t)} \odot \vec{h}^{(t-1)} + \left(\vec{1} -
   \vec{i}^{(t)}\right) \odot \widetilde{c}^{(t)}.
 \end{align*}
-After obtaining the output of the recurrence ($\vec{o}^{(t)}$ in the
-case of LSTM, and $\vec{h}^{(t)}$ in the case of GRU), we calculated
-the final probability of the labels $\vec{p}^{(t)}$ by computing the
-dot product of the output vector with the matrix $O$, and estimating
-the softmax of this product:
+
+Since the output vectors of these recurrences---$\vec{o}^{(t)}$ in the
+LSTM case, and $\vec{h}^{(t)}$ in the case of GRU---did not strictly
+represent probabilities of the lables (as their elements could also be
+negative, and their sum not necessarily run up to one), and, moreover,
+because the size of the final tagset (four tags: \textsc{SNT},
+\textsc{SRC}, \textsc{TRG}, and \textsc{NON}) was unequivocally too
+small for the size of the hidden unit, we set the dimensionality of
+the intermediate RNN vectors to 100, and applied another linear
+transformation matrix $O \in \mathbb{R}^{4 \times 100}$ to the final
+output of the recursion loop, computing the softmax of their dot
+product:
 \begin{align*}
   \vec{p}^{(t)} &= softmax\left(O\cdot\vec{o}^{(t)}\right).
 \end{align*}
@@ -733,13 +740,13 @@ without any sentiment tags), we ``over-sampled'' opinionated tweets
 sentiments until we reached an equal proportion of subjective and
 objective messages), and chose the \emph{hinge-loss} as the optimized
 objective function $L$:\footnote{Since most of the tokens in the
-  over-sampled training set still had the \textsc{NONE} tag, the
-  easiest way for a classifier to minimize the training error would be
+  over-sampled training set still had the \textsc{NON} tag, the
+  easiest way for a classifier to minimize the objective function was
   to always predict this tag with a very high confidence.  We hoped to
-  mitigate this effect by using hinge-loss, since this objective
-  function only penalizes incorrectly predicted labels or correct tags
-  whose probability is insufficiently high (less than $c$), but does
-  not reward any over-confident decisions.}
+  mitigate this effect by using the hinge-loss, since this function
+  only penalized incorrectly predicted labels or correct tags whose
+  probability was insufficiently high (less than $c$), but did not
+  reward any over-confident decisions.}
 \begin{align}
   L &= \sum_{i}^{N}\sum_{t=0}^{\lvert\mathbf{x}_i\rvert}\max\left(0, %
   c + \max\limits_{y'\neq y}\vec{p}_{t,y'} - \vec{p}_{t,y}\right) + \alpha \norm{O}^2_2,
@@ -768,6 +775,19 @@ each time step of the recurrence:
 initialization, we repeated each training experiment three times, and
 show the mean and standard deviation of these results in
 Table~\ref{snt-fgsa:tbl:rnn-res}.
+
+As we can see from the table, the LSTM model shows generally better
+scores than the GRU system on both training and test data.  The only
+aspect at which it yields slightly worse results than the latter
+approach is the precision of the sentiment spans, which, however, is
+more than compensated for by a much higher recall.  Moreover, the
+overfitting effect is significantly less pronounced than in the CRF
+case (where the \F{}-scores on the training and test data differed by
+a factor of three).  Nonetheless, both RNN systems achieve lower
+results than the linear-chain CRFs, which indicates the fact that
+deeply learned features still cannot capture the full extent of the
+information that a human expert can encode with manually defined
+attributes.
 
 \begin{table*}
   \begin{center}
@@ -884,18 +904,6 @@ Table~\ref{snt-fgsa:tbl:rnn-res}.
   \end{center}
 \end{table*}
 
-As we can see from the table, the LSTM model shows generally better
-scores than the GRU system on both training and test data.  The only
-aspect at which it yields slightly worse results than the latter
-approach is the precision of sentiment spans, which, however, is more
-than compensated for by a much higher recall.  Moreover, the
-overfitting effect is significantly less pronounced than in the CRF
-case (where the \F scores on the training and test data differed by a
-factor of three).  Nonetheless, both RNN systems achieve lower results
-than the linear-chain CRFs, which indicates the fact that deeply
-learned features still cannot capture the full extent of information
-which a human expert can encode with manually defined attributes.
-
 \section{Evaluation}
 
 After estimating the results of the most popular FGSA approaches with
@@ -931,7 +939,7 @@ tag as we did previously (which we call a \emph{broad} interpretation
 of the annotation scheme), we only assigned this label to the
 emotional expressions found in the corpus (which we term a
 \emph{narrow} interpretation of the scheme).  The difference between
-these two ways of interpreting the annotation scheme is shown in
+these two interpretations is shown in
 Examples~\ref{snt:fgsa:exmp:wide} and~\ref{snt:fgsa:exmp:narrow}.
 \begin{example}[Broad Sentiment
   Interpretation]\label{snt:fgsa:exmp:wide}
@@ -963,8 +971,6 @@ only assigned the \textsc{SNT} tag to the emotional expression
 enough to convey the main evaluative sense of the whole subjective
 statement.
 
-The results of the automatic systems for these two interpretations are
-given in Table~\ref{snt-fgsa:tbl:broad-narrow}.
 \begin{table*}[hbt!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1112,15 +1118,17 @@ given in Table~\ref{snt-fgsa:tbl:broad-narrow}.
   \end{center}
 \end{table*}
 
-As we can see from the table, the broad approach generally leads to
-notably lower scores for sentiment spans, but yields much better
-results for sources and targets of the opinions.  An opposite
-situation is observed with the narrow interpretation: even though the
-\F-values for sentiments are twice as high as in the broad case, the
-scores for the remaining opinion elements are up to seven percent
-lower~(consider, for instance, 0.31~\F{} attained by the linear-chain
-CRFs with the broad interpretation versus 0.24~\F{} achieved by this
-model with the narrow mapping).
+The results of the automatic systems with these two approaches are
+given in Table~\ref{snt-fgsa:tbl:broad-narrow}.  As we can see from
+the table, the broad interpretation generally leads to notably lower
+scores for the sentiment spans, but yields much better results for
+sources and targets of the opinions.  An opposite situation is
+observed with the narrow scheme: even though the \F-values for
+sentiments are twice as high as in the broad case, the scores for the
+remaining opinion elements are up to seven percent lower~(consider,
+for instance, 0.31~\F{} attained by the linear-chain CRFs with the
+broad interpretation versus 0.24~\F{} achieved by this model with the
+narrow mapping).
 
 An obvious explanation for these results is the expectedly better
 amenability of the narrow scheme to the prediction of sentiment
@@ -1128,12 +1136,12 @@ labels: since \textsc{sentiment} tags only get assigned to
 unequivocally polar terms, it becomes easier for the models to infer
 this class using their state features---especially morphological or
 lexical ones---or the learned word embeddings.  However, on the other
-hand, such short spans lead to disrupted label chains for other
+hand, such short spans lead to disrupted label chains for the other
 opinion-related elements, making sentiment tags be far apart from the
 spans of the respective sources and targets.  Consequently, these
 latter classes suffer from the lack of context and become heavily
 dependent on the state attributes too.  Although, this time, the
-effect of these attributes is rather negative, since, in contrast to
+effect of the state features is rather negative, since, in contrast to
 polar terms, being a holder or target of an opinion is not an inherent
 property of a lexical term, but arises solely from the context which
 this term appears in.
@@ -1146,14 +1154,14 @@ this name depends primarily on the sense of the whole statement rather
 than the name itself.  Consequently, state attributes might only
 increase our prior belief that certain words would rather appear in a
 subjective context, but cannot tell for sure whether they actually do
-so or not.  Therefore, the recognition of sources and targets of
-opinions becomes much harder, once the context information is deprived
-(as in the narrow case).\footnote{The negative effect of state
-  features on the prediction of sources and targets was actually
-  observed in our corpus, where one of the most frequently made
-  mistakes was the uncoditional assignment of the TRG tag to the word
-  ``Nordkorea'' (\emph{North Korea}) regardless of whether its
-  surrounding context was polar or not.}
+so or not.\footnote{The negative effect of state features on the
+  prediction of sources and targets was actually observed in our
+  corpus, where one of the most frequently made mistakes was the
+  uncoditional assignment of the TRG tag to the word ``Nordkorea''
+  (\emph{North Korea}) regardless of whether its surrounding context
+  was polar or not.}  Therefore, the recognition of sources and
+targets of opinions becomes much harder, once the context information
+is deprived (as in the narrow case).
 
 \begin{example}[Contextual Dependence of Target
   Elements]\label{snt:fgsa:trg-ctxt}
@@ -1168,9 +1176,9 @@ opinions becomes much harder, once the context information is deprived
 Since the lack of contextual links appeared to have a strong negative
 effect on the prediction of sources and targets, we decided to
 investigate whether redefining the way these links were established in
-the model would improve the results.  For this purpose, we implemented
-three possible extensions to the traditional first-order linear-chain
-CRF model, which are shown in Figure~\ref{fig:snt:ho-crf}:
+the models would improve the results.  For this purpose, we
+implemented three possible extensions to the traditional first-order
+linear-chain CRFs, which are shown in Figure~\ref{fig:snt:ho-crf}:
 \begin{itemize}
   \item higher-order linear-chain CRFs,
   \item first- and higher-order semi-Markov models, and
@@ -1205,7 +1213,7 @@ CRF model, which are shown in Figure~\ref{fig:snt:ho-crf}:
     nodes represent unobserved variables; gray circles denote observed
     input; feature functions are shown as squares (with black squares
     representing state features, and red rectangles denoting
-    transition functions).\label{fig:snt:ho-crf}}
+    transition factors).\label{fig:snt:ho-crf}}
 \end{figure*}
 
 In the first (higher-order) variant, instead of estimating the
@@ -1219,15 +1227,15 @@ the label suffix of the preceding unobserved state matched the tag
 prefix of the successor.  (For example, in the second-order case, we
 only connected the node TRG|SNT to the preceding nodes SNT|TRG,
 SRC|TRG, TRG|TRG, and NON|TRG via transition factors; since these were
-the only unobserved states whose last label matched the first tag of
+the only unobserved states whose last labels matched the first tag of
 the former node.)  Furthermore, instead of considering just one
 transition attribute between those states, as we did in the
 first-order case (e.g.,
 $f(\mathbf{x}_i, TRG, SNT) = 1.\text{ if }y_{i-1}=TRG\text{ and
-}y_i=SNT\text{ else }0.$), we took a sum of different transition
-features for each possible prefix length.  For instance, in the case
-of transition between the states NON|TRG and TRG|SNT, we took a sum of
-two transition functions:
+}y_i=SNT\text{ else }0.$), we took a sum of several transition
+features (one for each possible prefix length).  For instance, in the
+case of the transition between the states NON|TRG and TRG|SNT, we took
+a sum of two factors:
 \begin{equation*}
   f_1(\mathbf{x}_i, NON|TRG, SNT) = \begin{cases} 1, &
     \mbox{if } \mathbf{y}_{i-2} = NON\mbox{ and }\mathbf{y}_{i-1} = TRG\mbox{ and }\mathbf{y}_{i} =
@@ -1284,8 +1292,8 @@ underlying graph structure for this variant of CRFs, we used the
 automatically derived dependency trees, getting these analyses from
 the state-of-the-art dependency parser~\cite[Mate;][]{Bohnet:09}.
 Since these graphs were guaranteed to be acyclic, we could still apply
-the normal belief propagation method with exact inference, getting the
-same convergence guarantees as in the linear-chain case.
+the normal belief propagation method with an exact inference, getting
+the same convergence guarantees as in the linear-chain case.
 
 The results of these systems on the training and development sets are
 shown in Table~\ref{fgsa:tbl:crf-topologies}.
@@ -1323,12 +1331,12 @@ shown in Table~\ref{fgsa:tbl:crf-topologies}.
 
 As we can see from the scores, semi-Markov CRFs achieve better results
 at predicting sentiments and targets, but show a degradation in
-classifying sources of the opinions.  Moreover, second-order
-semi-Markov and linear-chain topologies outperform first-order models
-on targets and sources.  However, further increasing the order of
-these structures does not bring about any further improvements.
-Somewhat surprisingly, tree-structured CRFs show worse scores than
-their linear counterparts.
+classifying the sources of the opinions.  Moreover, second-order
+semi-Markov and linear-chain topologies outperform the first-order
+models on classifying targets and sources.  However, further
+increasing the order of these structures does not bring about any
+further improvements.  Somewhat surprisingly, tree-structured CRFs
+show even worse scores than their linear counterparts.
 
 In order to see whether the same tendencies would hold for the deep
 learning methods, we also implemented higher-order and tree-structured
@@ -1362,15 +1370,15 @@ solutions:
 \end{align*}
 
 The results of these modifications are shown in
-Table~\ref{fgsa:tbl:nn-topologies}, in which we can see that the
+Table~\ref{fgsa:tbl:nn-topologies}, from which we can see that the
 first-order LSTM model still outperforms all higher-order LSTM and GRU
 extensions on predicting targets and sources of the opinions.
 Moreover, first-order GRU also achieves the best scores on predicting
 sentiment spans among all compared models.  This time, again, none of
-the tree-structured extensions could outperform their linear-chain
-counterparts, which might be partially explained by the errors
-produced by the parser whose original target domain are
-standard-language news texts.
+the tree-structured extensions could outperform the linear-chain
+systems, which might be partially explained by the errors produced by
+the parser whose original target domain are standard-language news
+texts.
 
 \begin{table*}
   \begin{center}
@@ -1499,17 +1507,17 @@ reflecting the lemma of the parent token: ``meiste'' (\emph{most}) and
 ``rettungsschirme'' (\emph{bailout}), which typically indicate a
 target, and ``urlauberin'' (\emph{holiday}), which frequently
 correlates with sentiments.  Another common group of features are the
-lemma and form of the current token: here, we again can encounter
+lemma and form of the current token: here, we again encounter
 ``meisten'' (\emph{most}), which, however, indicates the absence of
 any sentiment entities at the current position; two other
 attributes---``anfechten'' (\emph{doubt}) and ``bezeichnete''
 (\emph{called})---represent the so-called \emph{direct speech events}
 and expectedly correlate with the sentiment tags; the remaining
 feature---``thomasopperman''---is a person name, which frequently
-serves as a target of an opinion.
+appeared as a target of an opinion in the corpus.
 
-An interesting pattern can be observed for transition attributes: As
-we can see from the results, the top-three transition features
+An interesting pattern can be observed for the transition attributes:
+As we can see from the results, the top-three transition features
 indicate a strong belief that an objective token is highly unlikely to
 be followed by a sentiment entity (hence, the high negative weights of
 the transitions emanating from \textsc{NON}).  It is, however, quite
@@ -1526,41 +1534,45 @@ words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
 
 \subsection{Effect of Word Embeddings}
 
-Similarly to the CRF features, we also investigated the impact of
-input embeddings on the net results of the RNN approaches.  For this
-purpose, instead of learning task-specific word representations we did
-in the initial experiments, we re-ran the training using two other
-embedding types:
+Similarly to the CRF features, we also investigated the impact of the
+input embeddings on the final results of the RNN approaches.  For this
+purpose, instead of learning task-specific word representations as we
+did in the initial experiments, we re-ran the training using two other
+available options:
 \begin{itemize}
-\item\emph{least-squares embeddings}, in which we again learned
-  task-specific word vectors, but additionally computed an optimal
-  transformation matrix $W$ using the method of ordinary least
-  squares:
+\item\emph{least-squares word vectors}, in which we again learned
+  task-specific word representations, but additionally computed an
+  optimal transformation matrix $W$ using the method of the ordinary
+  least squares:
   \begin{equation}\label{eq:fgsa:least-sq}
     W = \argmin_{W}\lVert V_{TS} - W^T\cdot V_{W2V}\rVert_F,
   \end{equation}
   where $V_{TS}$ stands for the matrix of task-specific word
   representations learned by the system, $V_{W2V}$ represents the
-  respective matrix of word2vec embeddings, and $\left\lVert\cdot\right\rVert_F$
-  is the Frobenius norm of the resulting difference.  With this
-  matrix, we then obtained the best possible approximations of
-  task-specific vectors for unknown words that were encountered in the
-  test set;
-\item finally, we also experimented with the normal \emph{word2vec
-    embeddings} which were learned with the standard options on the
-  German Twitter snapshot~\cite{Scheffler:14}.
+  respective matrix of word2vec embeddings, and
+  $\left\lVert\cdot\right\rVert_F$ is the Frobenius norm of the
+  resulting difference.  We then used the learned task-specific
+  representations for all known words encountered during testing, and
+  obtained the best possible task-specific approximations for all
+  unknown words by taking a dot product of the matrix $W$ with their
+  word2vec vectors;
+\item another option was to use the normal \emph{word2vec
+    embeddings}~\cite{Mikolov:13}, which we previously trained on the
+  German Twitter snapshot~\cite{Scheffler:14} using the default
+  options of the original word2vec implementation.  These embeddings
+  were kept fixed during the RNN training and did not get updated by
+  the optimization procedure.
 \end{itemize}
 
-The results of these modifications are given in
+The results for these alternatives are given in
 Table~\ref{snt-fgsa:tbl:embeddings}.  As we can see from the scores,
 the least-squares method significantly boosts the recall, which, in
 turn, leads to much higher macro-averaged \F-measures, outperforming
 all other compared approaches. The task-specific variant shows
 second-best results, mainly due to a higher precision of the targets
-and sources.  Last but not least, the word2vec approach still brings
-an improvement for the prediction of sentiment spans, but otherwise
-shows a notable degradation at literally every other opinion-related
-aspect.
+and sources.  Last but not least, the word2vec approach still improves
+the prediction of sentiment spans, but otherwise leads to a notable
+degradation at literally every other opinion-related aspect.
 
 \begin{table*}
   \begin{center}
@@ -1623,12 +1635,12 @@ preparing the data, we preprocessed all corpus tweets using the
 rule-based normalization procedure of~\citet{Sidarenka:13}.  In this
 approach, we
 \begin{itemize}
-\item replaced syntactically integrated Twitter-specific phenomena
-  (@-mentions, hyperlinks, e-mail addresses etc.) with special unified
-  tokens representing their semantic classes (e.g., ``\%Username'' for
+\item replaced syntactically integrated Twitter phenomena (@-mentions,
+  hyperlinks, e-mail addresses etc.) with special unified tokens
+  representing their semantic classes (e.g., ``\%Username'' for
   @-mentions, and ``\%URI'' for hyperlinks);
 \item removed these phenomena if they were syntactically independent
-  and did not play a potential role in the expression of sentiments
+  and did not play a potential role for the expression of sentiments
   (e.g., we stripped off all retweet mentions and hyperlinks appearing
   at the very end of the tweets if they were not preceded by a
   preposition);
@@ -1641,14 +1653,14 @@ approach, we
 \item and, finally, restored some common forms of misspellings (e.g.,
   ``zuguckn'' $\rightarrow$ ``zugucken'' (\emph{to watch}), ``Tach''
   $\rightarrow$ ``Tag'' (\emph{day}) etc.) using a set of
-  manually-defined rules.
+  manually-defined heuristic rules.
 \end{itemize}
 
 Even though these transformations were supposed to improve the
 grammaticality of the sentences, an opposite consequence of this
 normalization could be the loss of (potentially valuable) surface
 features.  In order to check, which of these effects had a stronger
-impact on the FGSA results, we repeated the evaluation once again,
+influence on the FGSA results, we repeated the evaluation once again,
 turning the preprocessing pipeline off this time.
 
 \begin{table*}[bht!]
@@ -1707,8 +1719,8 @@ Table~\ref{snt-fgsa:tbl:normalization}, text preprocessing was
 unequivocally beneficial to the sentiment classification as all of the
 best observed results were achieved exclusively with normalized text.
 The only aspect which benefited from keeping the input unchanged was
-the precision of target classification with GRU, which, in turn, led
-to a slightly higher (+0.4\%) macro-averaged \F-scores for this
+the precision of the target classification with GRU, which, in turn,
+led to a slightly higher (+0.4\%) macro-averaged \F-scores for this
 system.  Apart from that, all other aspects and classifiers showed a
 notable degradation when the preprocessing module was switched off.
 
@@ -1718,12 +1730,12 @@ Finally, to answer the question pointed out at the beginning of this
 chapter (how useful sentiment lexicons were extrinsically), we
 scrutinized the effect of the lexicon that we used in the CRF system
 \cite[Zurich Polarity List;][]{Clematide:10} in more detail.  For this
-purpose, we repeated the CRF experiments with all lexicon features
-removed from the input.  In addition to that, in order to see whether
+purpose, we repeated the CRF experiments after removing all lexicon
+features from the input.  In addition to that, in order to see whether
 the lexicon information would be beneficial to the RNN methods, we
 also re-evaluated the GRU and LSTM systems, appending the lexicon
-scores of input words to the respective embedding vectors.  (This
-additional part of the embeddings was kept fixed and did not get
+scores of the input words to their respective embedding vectors.
+(This additional part of the embeddings was kept fixed and did not get
 updated during training.)
 
 \begin{table*}
@@ -1781,13 +1793,13 @@ The results of these approaches with both configurations (with and
 without the lexicon) are shown in Table~\ref{snt-fgsa:tbl:lexicons}.
 Somewhat surprisingly, the removal of the lexicon data did not cause a
 severe drop of the CRF results: the biggest degradation here is
-observed for the \F-score of sentiment sources and amounts to only
+observed for the \F-score of the sentiment sources and amounts to only
 0.9\%.  Other sentiment-related aspects show even smaller losses, so
 that the final macro-averaged \F-measure achieved without the lexicon
 is only 0.5\% lower than the original score attained with the full
 feature set.
 
-An even more unexpected outcome represent the results of the RNN
+An even more unexpected outcome is observed for the results of the RNN
 methods where adding the lexicon values worsened the final
 classification scores: The macro-averaged \F-measure of the LSTM
 system, for instance, dropped down by almost 2\% from 0.288 to 0.27.
@@ -1801,12 +1813,13 @@ We can explain this degradation by the following possible reasons:
   of~-1), the decision boundary of the classifier could become more
   rigid, loosing its ability to separate classes which were located
   closely in the feature space;
-\item since the number of input features in the RNN methods was much
-  smaller than in the CRF approach (in the former case, the number of
-  features was actually the dimension of the word vectors (100 + 1)
-  whereas, in the CRF case, the number of state attributes only run up
-  to 15,047), the lexicon scores could get an unduly big influence,
-  outweighing all other embedding features.
+\item because the number of the input features in the RNN methods was
+  much smaller than in the CRF approach (in the former case, the
+  number of features was actually the dimension of the word vectors
+  (100 + 1 lexicon score) whereas, in the CRF case, the number of
+  state attributes only run up to 15,047), the lexicon scores could
+  get an unduly big influence, outweighing all other embedding
+  dimensions.
 \end{itemize}
 
 \section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
@@ -1821,20 +1834,21 @@ architectures (LSTM and GRU), reaching a macro-averaged \F-score
 of~0.287 on three opinion-relevant entity classes (sentiments,
 sources, and targets).
 
-Furtermore, a closer look at each of the settings of our experiments
+Furtermore, a closer look at each of the settings in our experiments
 revealed that:
 \begin{itemize}
-\item Higher sentiment scores can be achieved by narrowing the spans
-  of this class to the emotional expression only.  This, however,
-  might negatively affect the classification of other opinion entities
-  (sources and targets);
-\item Even though the context seems to play an important role in the
+\item Higher sentiment scores can be achieved by narrowing down the
+  text spans of this class to the emotional expression only.  This,
+  however, might negatively affect the classification of other opinion
+  entities (sources and targets);
+\item Even though the context seems to play an important role for the
   prediction, redefining the context flow in the models by changing
   their graph topologies (such as increasing the order of the
   dependencies or modifying the underlying graph structure from linear
   chains to trees) does not bring much improvement.  We could,
-  however, still improve the results of the traditional linear-chain
-  CRFs with their first- and second-order semi-Markov variants;
+  however, still outperform the results of the traditional
+  linear-chain CRFs with their first- and second-order semi-Markov
+  variants;
 \item In order to understand why the effect of topology changes was so
   little, we analyzed in more depth the features that were learned by
   the CRF model, coming to the conclusion that the large number state
@@ -1843,52 +1857,51 @@ revealed that:
 \item Nevertheless, a closer look at the top-scoring state and
   transition features showed that the CRF system could learn
   meaningful correlations.  However, an additional ablation test of
-  the state attributes revealed that different types of these features
-  had varying effects on different entity classes: while sentiment
+  the state attributes revealed that different types of features had
+  varying effects on different opinion entities: while sentiment
   classification benefited from all provided traits without exception,
   the prediction of sources profited most from lexical and complex
   attributes, whereas the analysis of targets was positively
-  influenced by morphological and syntactic attributes only;
-\item Similarly to the review of CRF features, we also analyzed the
-  effect of different embedding types on the net scores of the RNN
-  approaches, finding that task-specific word vectors with
-  least-squares fallback to word2vec embeddings yielded best overall
+  influenced by morphological and syntactic features only;
+\item Similarly to the review of the CRF features, we also analyzed
+  the effect of the different embedding types on the net scores of the
+  RNN approaches, finding that task-specific word vectors with a
+  least-square fallback to word2vec embeddings yielded best overall
   results;
 \item In the penultimate step, we revised the influence of the text
   normalization on the classification scores by rerunning all
   experiments on the original (unnormalized) messages.  This test
-  showed that preprocessing is an extremely helpful preparation step
+  showed that preprocessing is an extremely helpful preparation step,
   which might boost the FGSA results by up to 3\%;
 \item Finally, in the concluding part of the evaluation, we estimated
   the utility of the Zurich Polarity List~\cite{Clematide:10}---one of
-  the best-performing German sentiment lexicons; finding that the
-  lexicon features only marginally improved the CRF results, and had
-  an even negative effect on the scores achieved by the LSTM and GRU
+  the best-performing German sentiment lexicons to date; finding that
+  the lexicon features only marginally improved the CRF scores, and
+  had an even negative effect on the results of the LSTM and GRU
   approaches.
 \end{itemize}
 
 With these observations, we hope to have provided a better insight
 into the abilities of modern FGSA approaches, the importance of their
 hyper-parameter settings, and the general amenability of the German
-Twitter domain to the automatic extraction of fine-grained opinions.
-Even though we did our best to make the foregoing description and
-evaluation as comprehensive as possible, there still remain many
-potential avenues to explore and potential ways to improve the
-presented results: It would, for instance, be extremely helpful to
-evaluate other polarity lists (produced by different SLG methods) in
-combination with the described FGSA methods.\footnote{Unfortunately,
-  we were not able to do this analysis by ourselves due to
-  prohibitively long training times: a single run of an RNN classifier
-  was taking more than 27 hours on a very strong machine.}  Another
-interesting opportunity would be a modification of the CRF formalism
-in which the influence from the context would be equal or reciprocal
-to the sum of the state feature weights.  Finally, an ensemble of CRF
-and RNN systems would be a viable possibility for improving the scores
-of each of these systems.  We encourage interested readers to explore
-these ways in their future research, as we soon have to turn our
-attention to another big area of opinion mining in which the polarity
-lists might reveal their true power: the coarse-grained sentiment
-analysis.
+Twitter domain to an automatic extraction of fine-grained opinions.
+Even though we did our best to make this description and evaluation as
+comprehensive as possible, there still remain many potential avenues
+to explore and potential ways to improve the presented results: It
+would, for instance, be extremely helpful to evaluate other polarity
+lists (produced by different SLG methods) in combination with the
+described FGSA methods.\footnote{Unfortunately, we were not able to do
+  this analysis by ourselves due to prohibitively long training times:
+  a single run of an RNN classifier was taking more than 27 hours on a
+  very strong machine.}  Another interesting opportunity would be a
+modification of the CRF formalism in which the influence from the
+context would be autmatically equalized with the sum of the state
+feature weights.  Finally, an ensemble of the CRF and RNN systems
+would be a viable possibility for improving the scores of each of
+these systems.  We encourage interested readers to explore these ways
+in their future research, whereas we should soon turn our attention to
+another big area of opinion mining in which the polarity lists might
+unleash their full power: the coarse-grained sentiment analysis.
 
 \section{Related Work}
 
@@ -1906,7 +1919,7 @@ Afterwards, they analyzed the immediate context of these occurrences,
 looking for subjective terms from their manually compiled lexicon;
 and, finally, determined the overall orientation of these opinions,
 judging by the polarity scores of the lexicon terms and a set of
-heuristic rules which accounted for contextual changes.
+heuristic rules which accounted for the contextual changes.
 
 Similarly to this approach, \citet{Bethard:04} proposed a method for
 identifying subjective opinions and their holders, in which they first
@@ -1920,7 +1933,7 @@ subjective expressions pertaining to some pre-determined product
 aspects.
 
 One of the first attempts at automatically analyzing subjective
-opinions with conditional random fields was made by \citet{Choi:05},
+opinions with Conditional Random Fields was made by \citet{Choi:05},
 who combined a linear-chain CRF system with the unsupervised pattern
 extractor AutoSlog-TS~\cite{Riloff:96} in order to predict holders of
 opinions.  This approach showed a significant improvement over
@@ -1932,28 +1945,28 @@ entities.  For this purpose, they applied two CRF classifiers (one for
 each entity type), getting top-10 results from each of these systems.
 After obtaining these predictions, they pruned off invalid suggestions
 using a set of hard and soft constraints, whose weights were optimized
-through the integer linear programming.  This two-stage procedure not
-only improved the automatic recognition of sources and polar
-expressions, but also yielded an impressive \F-score of 0.689 on
+with a set of integer linear programming rules.  This two-stage
+procedure not only improved the automatic recognition of sources and
+polar expressions, but also yielded an impressive \F-score of 0.689 on
 predicting inter-entity links.
 
-With the release of the MPQA corpus \cite[cf.][]{Wiebe:05},
-fine-grained opinion-mining researchers have gradually shifted the
-focus of their work to the analysis of newspaper texts: For example,
-\citet{Breck:07} addressed the problem of predicting \emph{direct
-  speech events} (DSEs) and \emph{expressive subjective elements}
-(ESE), for which they also adopted the CRF approach, getting a
-substantial improvement over dictionary-based baselines.
-\citet{Choi:10} attempted to jointly predict boundaries, polarity, and
-intensity of subjective elements (DSEs and ESEs) with a single CRF
-classifier.  To this end, they applied the hierarchical parameter
-sharing technique \cite{Zhao:08}, letting their system differentiate
-between ten different sentiment classes (two classes for the presence
-or absence of an opinion times three polarities times three
-intensities), ensuring, however, that the parameters belonging to the
-same group (e.g., positive polarity) were shared among all the
-respective subclasses (e.g., positive sentiments with high, low, and
-middle intensities).
+With the release of the MPQA corpus \cite{Wiebe:05}, fine-grained
+opinion-mining researchers gradually shifted the focus of their work
+to the analysis of newspaper texts: For example, \citet{Breck:07}
+addressed the problem of predicting \emph{direct speech events} (DSEs)
+and \emph{expressive subjective elements} (ESE), for which they also
+adopted the CRF approach, getting a substantial improvement over
+dictionary-based baselines.  \citet{Choi:10} attempted to jointly
+predict boundaries, polarity, and intensity of subjective elements
+(DSEs and ESEs) with a single CRF classifier.  To this end, they
+applied the hierarchical parameter sharing technique
+of~\citet{Zhao:08}, letting their system differentiate between ten
+different sentiment classes (two classes for the presence or absence
+of an opinion times three polarity classes times three intensities),
+ensuring, however, that the parameters belonging to the same group
+(e.g., positive polarity) were shared among all of the respective
+subclasses (e.g., positive sentiments with high, low, and middle
+intensities).
 
 Instead of relying on just one most likely label assignment when
 predicting subjective expressions, \citet{Johansson:10a} explored the
@@ -2017,17 +2030,16 @@ matrix $W$ and the tensor $V$ were learned automatically during
 training.
 
 A recurrent approach to the FGSA problem was proposed
-by~\citet{Irsoy:14a} \cite[see also][]{Irsoy:14b}, who explored deep
-bidirectional neural networks for predicting DSEe and ESEs on the MPQA
-corpus.  In particular, they estimated the label probabilities
-$\vec{y}$ for the $t$-th token as:
+by~\citet{Irsoy:14a}, who explored deep bidirectional neural networks
+for predicting DSEe and ESEs on the MPQA corpus.  In particular, they
+estimated the label probabilities $\vec{y}$ for the $t$-th token as:
 \begin{align*}
   y_t = softmax\left(U_{\rightarrow}\cdot \vec{h}_t^{(L)} + U_{\leftarrow}\cdot \cev{h}_t^{(L)} + \vec{c}\right),
 \end{align*}
 where $\vec{h}_t^{(L)}$ and $\cev{h}_t^{(L)}$ were the outputs of the
 top-$L$ LSTM-levels computed from left to right and from right to left
 respectively; and $U_{\rightarrow}$, $U_{\leftarrow}$, and the bias
-term $\vec{c}$ were the other learned parameters which were used to
+term $\vec{c}$ were the other learned parameters, which were used to
 reduce the dimensions.  This system could outperform the previous
 state of the art set by \citet{Yang:12}, reaching a proportional
 \F-score of 66.01 for DSEs and 56.26 for ESEs.
