@@ -692,7 +692,7 @@ and the final hidden state $\vec{h}^{(t)}$ was computed as follows:
 
 Since the output vectors of these recurrences---$\vec{o}^{(t)}$ in the
 LSTM case, and $\vec{h}^{(t)}$ in the case of GRU---did not strictly
-represent probabilities of the lables (as their elements could also be
+represent probabilities of the labels (as their elements could also be
 negative, and their sum not necessarily run up to one), and, moreover,
 because the size of the final tagset (four tags: \textsc{SNT},
 \textsc{SRC}, \textsc{TRG}, and \textsc{NON}) was unequivocally too
@@ -1803,13 +1803,13 @@ An even more unexpected outcome is observed for the results of the RNN
 methods where adding the lexicon values worsened the final
 classification scores: The macro-averaged \F-measure of the LSTM
 system, for instance, dropped down by almost 2\% from 0.288 to 0.27.
-A similar sutuation is observed for the GRU approach, whose \F-score
+A similar situation is observed for the GRU approach, whose \F-score
 decreased from 0.271 to 0.263 after adding the lexicon information.
 We can explain this degradation by the following possible reasons:
 \begin{itemize}
 \item since the utilized polarity list did not provide a continuous
   ranking of its polar terms (all positive entries in this lexicon had
-  a unifom score of~+1, and all negative words had a negative value
+  a uniform score of~+1, and all negative words had a negative value
   of~-1), the decision boundary of the classifier could become more
   rigid, loosing its ability to separate classes which were located
   closely in the feature space;
@@ -1836,7 +1836,7 @@ architectures (LSTM and GRU), reaching a macro-averaged \F-score
 of~0.287 on three opinion-relevant entity classes (sentiments,
 sources, and targets).
 
-Furtermore, a closer look at each of the settings in our experiments
+Furthermore, a closer look at each of the settings in our experiments
 revealed that:
 \begin{itemize}
 \item Higher sentiment scores can be achieved by narrowing down the
@@ -1854,7 +1854,7 @@ revealed that:
 \item In order to understand why the effect of topology changes was so
   little, we analyzed in more depth the features that were learned by
   the CRF model, coming to the conclusion that the large number state
-  attributes massively predominated the final decisions, surpressing
+  attributes massively predominated the final decisions, suppressing
   the influence of the contextual flow;
 \item Nevertheless, a closer look at the top-scoring state and
   transition features showed that the CRF system could learn
@@ -1897,7 +1897,7 @@ described FGSA methods.\footnote{Unfortunately, we were not able to do
   a single run of an RNN classifier was taking more than 27 hours on a
   very strong machine.}  Another interesting opportunity would be a
 modification of the CRF formalism in which the influence from the
-context would be autmatically equalized with the sum of the state
+context would be automatically equalized with the sum of the state
 feature weights.  Finally, an ensemble of the CRF and RNN systems
 would be a viable possibility for improving the scores of each of
 these systems.  We encourage interested readers to explore these ways
