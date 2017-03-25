@@ -12,33 +12,33 @@
 \chapter{Fine-Grained Sentiment Analysis}\label{sec:snt:fgsa}
 
 Even though polar lexicons play a crucial role in opinion-mining
-research, they still only serve as a building block for achieving more
+research, they still serve only as a building block for achieving more
 challenging and more sophisticated objectives.  One of the most
-prominent such objectives is that of fine-grained sentiment analysis
+prominent such objectives is the fine-grained sentiment analysis
 (FGSA), which deals with the identification of subjective evaluative
 opinions (\emph{sentiments}), the holders of these opinions
 (\emph{sources}), and their respectively evaluated objects
 (\emph{targets}) in text.  Since an accurate automatic prediction of
 these elements would enable people to track public attitude to
 literally any object (e.g., a product, service, or political
-decision), FGSA is commonly regarded to be one of the most attractive,
-necessary, but, unfortunately, also challenging goals in computational
-linguistics.
+decision), FGSA is commonly considered to be one of the most
+attractive, necessary, but, unfortunately, also challenging goals in
+computational linguistics.
 
-Researchers usually consider this objective as a sequence labeling
-(SL) task, and address it with either of the two popular SL
-techniques: conditional random fields (CRFs) or recurrent neural
-networks (RNNs).  The former approach represents a discriminative
-probabilistic graphical framework, which relies on an extensive set of
-hand-crafted features; the latter model utilizes a recursive
-computational loop, which can learn feature representations completely
-automatically.  In this section, we are going to evaluate each of
-these methods in detail in order to find out which of these algorithms
-is better suited for the domain of German Twitter.  However, before we
-proceed with our evaluation, we should first make a short linguistic
-digression and briefly discuss the definition of textual spans, to
-which these approaches should assign their labels, and the evaluation
-metrics, with which we will estimate the quality of this assignment.
+Researchers usually regard this analysis as a sequence labeling (SL)
+task, and address it with either of the two popular SL techniques:
+conditional random fields (CRFs) or recurrent neural networks (RNNs).
+The former approach represents a discriminative probabilistic
+graphical framework, which relies on an extensive set of hand-crafted
+features; the latter methods utilize a recursive computational loop,
+which can learn feature representations completely automatically.  In
+this section, we are going to evaluate each of these systems in detail
+in order to find out which of these algorithms is better suited for
+the domain of German Twitter.  However, before we proceed with our
+evaluation, we should first make a short linguistic digression and
+briefly discuss the definition of textual spans, to which these
+approaches should assign their labels, and the evaluation metrics,
+with which we will estimate the quality of this assignment.
 
 \section{Definition of Sentiment, Target, and Source Spans}
 Despite some notable advances and an ongoing active research on
@@ -53,8 +53,8 @@ In contrast to these works, instead of relying on rather intuitive
 decisions of our coders, we explicitly provided a rule for determining
 opinions' boundaries by telling the experts to assign the
 \textsc{sentiment} label to ``\emph{minimal complete syntactic or
-  discourse-level units that include both the target of an opinion and
-  its actual evaluation}''.
+  discourse-level units that included both the target of an opinion
+  and its actual evaluation}''.
 
 % According to this instruction, during the annotation, linguists first
 % had to identify evaluated objects (targets) in text, then find the
@@ -72,11 +72,12 @@ Example~\ref{snt:fgsa:exmp:sent-anno1}:
   \noindent\sentiment{The new Pope is believed to be a sober, modest
     man.}
 \end{example}
-\noindent In this sentence, an expert had to label the complete clause
-as a sentiment, since this unit was the minimal syntactic constituent
-which included both the object of the evaluation---``der neue Papst''
-(\textit{the new pope})---and the evaluation itself---``bescheidener,
-zur\"uckgenommener Typ'' (\textit{a sober, modest man}).
+\noindent In this sentence, an expert had to label the complete
+sentence as a sentiment, since this unit was the minimal syntactic
+constituent which included both the object of the evaluation---``der
+neue Papst'' (\textit{the new pope})---and the evaluation
+itself---``bescheidener, zur\"uckgenommener Typ'' (\textit{a sober,
+  modest man}).
 
 We applied the same principles of minimality and completeness to the
 annotation of targets and sources, requiring the main components of
@@ -112,29 +113,29 @@ elements.
 \section{Evaluation Metrics}
 The next question which naturally arose after defining the span
 boundaries for human coders was that of the best way to compare these
-spans with automatically assigned labels.  One possibility to estimate
-the quality of such automatic assignment was to compute the precision,
-recall, and \F{}-scores using either the binary overlap or exact match
-metrics \cite[cf.][]{Choi:06,Breck:07} .  The former method considers
-an automatically labeled span as correct if it has at least one token
-in common with a labeled entity from the gold annotation.  The latter
-metric only regards as true positives those automatic spans which have
-absolutely identical boundaries with the expert's assignment.
-Unfortunately, both of these approaches are problematic to some
-extent: While the binary overlap might be overly optimistic, always
-assigning perfect scores to automatic spans which cover the whole
-sentence; the exact match metric might, vice versa, be too drastic,
-considering the whole assignment as false if only one (possibly
-irrelevant) token is missing.
+spans with the automatically assigned labels.  One possibility to
+estimate the quality of such automatic assignment was to compute the
+precision, recall, and \F{}-scores using either the binary overlap or
+exact match metrics \cite[cf.][]{Choi:06,Breck:07} .  The former
+method considers an automatically labeled span as correct if it has at
+least one token in common with a labeled entity from the gold
+annotation.  The latter metric only regards as true positives those
+automatic spans which have absolutely identical boundaries with the
+expert's assignment.  Unfortunately, both of these approaches are
+problematic to some extent: While the binary overlap might be overly
+optimistic, always assigning perfect scores to automatic spans which
+cover the whole sentence; the exact match metric might, vice versa, be
+too drastic, considering the whole assignment as false if only one
+(possibly irrelevant) token of it is missing.
 
 Instead of relying on these measures, we opted for the ``golden mean''
 solution to this problem that was proposed by \citet{Johansson:10a}.
 In their work, the authors introduced another way of estimating the
-quality of automatic label assignments, in which they penalized the
+quality of an automatic label assignment, in which they penalized the
 predicted spans proportionally to the number of tokens whose labels
 were different from the gold annotation.  More precisely, given a set
 of manually annotated entities $\mathcal{S}$ and automatically tagged
-spans $\widehat{\mathcal{S}}$, they estimated the precision of an
+spans $\widehat{\mathcal{S}}$, they estimated the precision of the
 automatic assignment as:
 \begin{equation}\label{eq:fgsa:jmmetric}
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
@@ -149,13 +150,13 @@ annotated entities:
     \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j),
 \end{equation*}
 and the $|\widehat{\mathcal{S}}|$ term denotes the total number of
-spans automatically labeled with the given tag.  Similarly to that,
-the recall of the assignment is estimated as:
+spans automatically labeled with the given tag.  Similarly, the recall
+of this assignment was estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
     \widehat{\mathcal{S}})}{|\mathcal{S}|},
 \end{equation*}
-and the \F{}-measure is normally computed as the harmonic mean of the
+and the \F{}-measure was normally computed as the harmonic mean of the
 precision and recall scores:
 \begin{equation*}
   F_1 = 2\times\frac{P \times R}{P + R}.
@@ -186,7 +187,7 @@ and preprocessed them using the rule-based normalization technique of
 %% polarity.  Furthemore, out-of-vocabulary words which could be
 %% converted to in-vocabulary terms with a pre-defined set of
 %% transformations were also normalized.
-Afterwards, we labeled the preprocessed data with their part-of-speech
+Afterwards, we labeled the normalized data with their part-of-speech
 tags using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger}
   Version 3.2 with the German parameter file UTF-8.} \cite{Schmid:95},
 and parsed the resulting sentences with the \texttt{Mate} dependency
@@ -201,7 +202,7 @@ the Needleman-Wunsch alignment algorithm~\cite{Needleman:70}.
 \section{Fine-Grained Sentiment Analysis with Conditional Random
   Fields}
 
-The first method that we evaluated on the obtained data was that of
+The first method which we evaluated on the obtained data was that of
 the conditional random fields.  First introduced by
 \citet{Lafferty:01}, CRFs had rapidly grown in popularity, turning
 into one of the most commonly used probabilistic frameworks, which had
@@ -210,12 +211,12 @@ been dominating the NLP field for more than a decade.
 The main reasons for the huge success of this model are:
 \begin{enumerate}[1)]
 \item the \emph{structural nature} of CRFs, which, in contrast to
-  single-entity classifiers such as logistic regression or SVM, make
+  single-entity classifiers, such as logistic regression or SVM, make
   their predictions over a sequence of covariates, trying to find the
-  most likely label assignment for the whole input chain and not only
+  most likely label assignment to the whole input chain and not only
   its individual elements;
 \item the \emph{discriminative power} of this framework, which, in
-  contrast to generative probabilistic models such as HMM
+  contrast to generative probabilistic models such as HMMs
   \cite{Rabiner:86}, optimizes the conditional probability
   $P(\boldsymbol{Y}|\boldsymbol{X})$ instead of maximizing the joint
   distribution $P(\boldsymbol{X},\boldsymbol{Y})$ and consequently can
@@ -247,7 +248,7 @@ The main reasons for the huge success of this model are:
   After normalizing these probabilities, we would get equal 50\%
   chances for each of the parties, which is fair regarding the token
   distribution in our corpus.  However, if we replace ``Merkel'' with
-  ``von der Leyen'' both in the training data and test example and
+  ``von der Leyen'' both in the training data and test example, and
   rerun this experiment once again, the probability would get
   significantly skewed towards the CDU class:
   \begin{align*}
@@ -264,9 +265,9 @@ The main reasons for the huge success of this model are:
   \texttt{CDU}, and a 10\% score for \texttt{SPD}, even though we only
   changed the name of the politician.
 
-  A different situation can be observed for discriminative models such
-  as maximum entropy classifier: Instead of optimizing the joint
-  distribution $P(\mathbf{x}, y)$ as it is done by generative
+  A different situation can be observed with discriminative models
+  such as maximum entropy classifier: Instead of optimizing the joint
+  distribution $P(\mathbf{x}, y)$ as it is done in the generative
   frameworks, discriminative systems seek to optimize the conditional
   likelihood $P(y|\mathbf{x})$ by maximizing the total probability of
   the training set $\sum_{i=1}^N\log P(y_i|\mathbf{x}_i, \mathbf{w})$.
@@ -336,7 +337,7 @@ The main reasons for the huge success of this model are:
     Figure~\ref{fig:snt:memm-crf}, we will first estimate the
     probability of the correct label sequence for the initial part of
     this sentence using the Maximum Entropy Markov Model (MEMM)---the
-    predecessor of the conditional random fields.  According to the
+    predecessor of the Conditional Random Fields.  According to the
     MEMM's definition, the probability of the correct labeling
     ($KON-ADV-NN-VA$) is equal to:
     \begin{align*}
@@ -347,12 +348,12 @@ The main reasons for the huge success of this model are:
     \end{align*}
     At the same time, the probability of the incorrect variant
     ($KON-ADV-ADJA-VA$) amounts to $\approx$ 0.323 and will therefore
-    be preferred during automatic tagging.
+    be preferred by an automatic tagger.
 
     A different situation is observed with the CRFs, where the
     normalizing factor in the denominator is computed over the whole
     input sequence without factorizing into individual terms for each
-    transition as it is done in the MEMM case.  That way, the
+    transition as it is done in the MEMM case.  This way, the
     probability of the correct labels would run up to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
@@ -409,9 +410,9 @@ together all feature weights that need to be optimized, it becomes
 prohibitively expensive to find the best solution to
 Equation~\ref{snt:fgsa:eq:crf-w} analytically with a single shot.  A
 possible remedy to this problem is to resort to other optimization
-techniques such as gradient descent, in which the weights of features
-are successively changed towards the direction of the gradient until
-the global minimum of the loss function is reached.
+techniques such as gradient descent, in which the weights of the
+features are successively changed towards the direction of the
+gradient until the global minimum of the loss function is reached.
 
 From Equation~\ref{snt:fgsa:eq:crf-ell}, we can see that the partial
 derivative of the log-likelihood function $\ell$ w.r.t. a single
@@ -431,17 +432,17 @@ term $N$---the size of the corpus---can in turn be transformed into:
 where the first term ($\E[f_j(\mathbf{x}, \mathbf{y})]$) is the
 expectation of the feature $f_j$ under the empirical distribution, and
 the second term ($\E_{\mathbf{w}}[f_j(\mathbf{x}, \mathbf{y})]$) is
-the same expectation under the model's parameters $\mathbf{w}$.  That
-way, the optimal solution to the log-likelihood objective in
+the same expectation under the model's parameters $\mathbf{w}$.  In
+other words, the optimal solution to the log-likelihood objective in
 Equation~\ref{snt:fgsa:eq:crf-ell} is the one, where the model's
 expectation of the features matches their (true) empirical expectation
 in the corpus.
 
-The marginal probabilities of the features, which are required for
-computing their expectation, can be estimated dynamically using the
-forward-backward (FB) algorithm \cite{Rabiner:90}, which is a
-particular case of the more general belief propagation method
-\cite[cf.][p.~81]{Barber:12}.
+The marginal probabilities of the feature attributes, which are
+required for computing these expectations, can be estimated
+dynamically using the forward-backward (FB) algorithm
+\cite{Rabiner:90}, which is a particular case of the more general
+belief propagation method \cite[cf.][p.~81]{Barber:12}.
 
 \noindent\textbf{Inference} Once the optimal feature weights are
 learned, one can unproblematically compute the most likely label
@@ -453,15 +454,15 @@ algorithm---``max-product'').
 
 \noindent\textbf{Features} A crucial component which accounts for a
 huge part of the success (or failure) of a CRF system are feature
-attributes which are defined by its developer.
+attributes which are defined by the developer.
 
-Traditionally, feature functions used in CRFs are divided into
-transition- and state-based ones.  The former attributes represent
-real- or binary-valued functions
-$f(\mathbf{x}, y'', y')\rightarrow\mathbb{R}$ associated with some
-data predicate $\phi(\mathbf{x})\rightarrow\mathbb{R}$ and the labels
-$y''$ and $y'$.  The value of such attribute at position $m$ in
-sequence $\mathbf{x}$ is usually defined as follows:
+Traditionally, feature functions in CRFs are divided into transition-
+and state-based ones.  The former attributes represent real- or
+binary-valued functions $f(\mathbf{x}, y'', y')\rightarrow\mathbb{R}$
+associated with some data predicate
+$\phi(\mathbf{x})\rightarrow\mathbb{R}$ and the labels $y''$ and $y'$.
+The value of such attribute at position $m$ in sequence $\mathbf{x}$
+is usually defined as:
 \begin{equation}
   f(\mathbf{x}_m, y'', y') = \begin{cases} \phi(\mathbf{x}_m), &
     \mbox{if } \mathbf{y}_{m-1} = y''\mbox{ and }\mathbf{y}_{m} =
@@ -521,10 +522,9 @@ lexico-syntactic features, which simultaneously combined several
 semantic and syntactic traits.  These included:
 \begin{itemize}
 \item the lemma of the syntactic parent;
-\item the part-of-speech tag and the polarity class of the
-  grandparent;
-\item the lemma of the child node + dependency relation connecting the
-  parent with this child;
+\item the part-of-speech tag and polarity class of the grandparent;
+\item the lemma of the child node + dependency relation between the
+  current token and this child;
 \item the PoS tag of the child node + its dependency relation + PoS
   tag of the current token;
 \item the lemma of the child node + its dependency relation + lemma of
@@ -551,12 +551,12 @@ co-occurred with the target classes in the corpus).
 Another notable tendency, which can be observed both on the training
 and test splits, is that the recall of the CRF system is generally
 lower than its precision.  This again can be attributed to the
-overfitting effect, due to which, less indicative features become more
-important than attributes which actually give rise to subjective
-evaluations.  Since the former features might not to appear in the
-test data or, even if they do, are unlikely to correlate with the
-sentiment entities, the model often fails to recognize sentiments in
-new contexts which do have important but underweight traits.
+overfitting effect, due to which, less indicative features became more
+important than attributes which actually gave rise to subjective
+evaluations.  Since the former features were unlikely to appear in the
+test data or, even if they did, rarely correlated with the sentiment
+entities, the model often failed to recognize sentiments in new
+contexts which did have important but underweight traits.
 
 \begin{table*}
   \begin{center}
@@ -605,11 +605,11 @@ key factors which account for this success are
   or CRFs where all features need to be defined by user; and
 \item \emph{the ability to deal with arbitrary sequence lengths},
   which advantageously distinguishes these approaches from other NN
-  architectures such as convolutional or standard feed-forward
-  networks where the size of all layers has to be constant.
+  architectures such as convolutional or plain feed-forward networks
+  where the size of all layers has to be constant.
 \end{enumerate}
 
-The main component which underlies any modern RNN system is a
+The main component which underlies any modern RNN approach is a
 fixed-size hidden vector $\vec{h}$, which gets recurrently updated
 over the input sequence $\mathbf{x}$, and is supposed to encode the
 meaning of the sequence seen so far.  The general form of this vector
@@ -623,7 +623,7 @@ the previous time step, and $\mathbf{x}^{(t)}$ is the input vector at
 position $t$.
 
 \textbf{LSTM} A fundamental problem which arises from the above
-formula is that the gradients of the trained parameters (the ones
+definition is that the gradients of the trained parameters (the ones
 involved in computing the $\vec{h}$ vector), rapidly vanish to zero or
 explode to infinity (depending on whether the absolute values of
 $\vec{h}$ are less or greater than one) as the length of the input
@@ -653,7 +653,7 @@ $\widetilde{c}^{(t)}$ for the current time step~$t$:
   \widetilde{c}^{(t)} &= tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c
   \cdot \vec{h}^{(t-1)} + \vec{b}_c\right),
 \end{align*}
-they estimated the \emph{final update} state~$\vec{c}^{(t)}$ by taking a
+they estimated the \emph{final update}~$\vec{c}^{(t)}$ by taking a
 weighted sum of the candidate update vector~$\widetilde{c}^{(t)}$ and
 the previous update value~$\vec{c}^{(t-1)}$:
 \begin{align*}
@@ -718,7 +718,7 @@ of~\citet{Tieleman:12}---as this algorithm showed both a faster
 convergence and superior classification results.
 
 Another important factor, which could significantly affect the
-training results, were the initial values of the model's parameters.
+training results, were the initial values of the models' parameters.
 As shown by~\citet{He:15}, an inappropriate initialization of neural
 network might lead to a complete stalling of the whole learning
 process.  Following the recommended practices~\cite{Saxe:13}, we used
@@ -731,7 +731,7 @@ set (where most of the instances represented objective statements
 without any sentiment tags), we ``over-sampled'' opinionated tweets
 (i.e., we randomly repeated some of the training microblogs containing
 sentiments until we reached an equal proportion of subjective and
-objective messages), and chose \emph{hinge-loss} as the optimized
+objective messages), and chose the \emph{hinge-loss} as the optimized
 objective function $L$:\footnote{Since most of the tokens in the
   over-sampled training set still had the \textsc{NONE} tag, the
   easiest way for a classifier to minimize the training error would be
