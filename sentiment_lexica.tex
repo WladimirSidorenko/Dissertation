@@ -19,42 +19,41 @@ is an automatic prediction of polar terms.
 % German sentiment lexicons (GSL), but were not marked as emo-expressions
 % in our data and, vice versa, were annotated as polar terms in the
 % corpus, but absent in the analyzed polarity lists.
-For this purpose, we are going to evaluate the existing German
-sentiment lexicons on our corpus.  Since almost all of these resources
-were created semi-automatically by first translating English polarity
-lists and then manually post-editing the translated entries, we will
-also look whether the original English sentiment lexicon generation
-(SLG) methods would produce comparable results when applied to German
-data directly.  Finally, we should analyze whether one of most popular
+For this purpose, we will first evaluate existing German sentiment
+lexicons on our corpus.  Since almost all of these resources were
+created semi-automatically by translating English polarity lists and
+manually post-editing these translations, we will also look whether
+the original methods which were used to produce the English source
+lexicons would yield comparable results when applied to German data
+directly.  Finally, we should analyze whether one of most popular
 areas of research in contemporary computational
 linguistics---distributed vector representations of words
-\cite{Mikolov:13}---could be a more perspective way for deriving new
+\cite{Mikolov:13}---could be a more perspective way for generating new
 domain-specific sentiment lexicons in an unsupervised way.  In the
-concluding step, we will investigate the effects of different
-hyper-parameters and seed sets on these automatic approaches,
-summarizing and concluding our findings in the last part of this
-section.
+concluding step, we will investigate the effects of different seed
+sets and hyper-parameters on these automatic approaches, summarizing
+and concluding our findings in the last part of this section.
 
 \section{Data}\label{subsec:snt-lex:data}
 
 In our experiments, we are going to use the complete data set labeled
 by one of the experts as a test corpus in order to model a situation
 where no annotated data are available during training (thus looking
-for the most efficient unsupervised SLG technique) but make the
-evaluation of tested methods as thorough as possible.  This set
-comprises a total of 6,040 positive and 3,055 negative terms.
+for the most efficient unsupervised lexicon generation technique), yet
+making the evaluation of the tested methods as thorough as possible.
+This set comprises a total of 6,040 positive and 3,055 negative terms.
 However, since many of these expressions represent emoticons, which,
 on the one hand, are a priory absent in common lexical taxonomies such
 as \textsc{WordNet} \cite{Miller:95,Miller:07} or \textsc{GermaNet}
-\cite{Hamp:97} and therefore not amenable to SLG approaches relying on
-these resources but, on the other hand, can be easily captured by
-regular expressions, we decided to exclude non-alphabetic smileys
+\cite{Hamp:97}, and therefore not amenable to the approaches which
+rely on these resources but, on the other hand, can be easily captured
+by regular expressions, we decided to exclude non-alphabetic smileys
 altogether from our study.  This left us with a set of 3,459 positive
 and 2,755 negative labeled terms (1,738 and 1,943 unique expressions
 respectively), whose $\kappa$-agreement run up to 0.59.  In addition
 to that, we also selected a small subset of 400 tweets from the other
-annotator as a development set for tuning hyper-parameters of
-different approaches.
+annotator as a development set for tuning the hyper-parameters of
+different methods.
 
 \section{Evaluation Metrics}\label{subsec:snt-lex:eval-metrics}
 
@@ -72,49 +71,49 @@ to comparing these lists with the General Inquirer lexicon \cite[GI;
 ][]{Stone:66}---a manually compiled set of 11,895 words annotated with
 their semantic categories---by taking the intersection of the two
 resources and estimating the percentage of matches in which
-automatically induced polar terms have the same polarity as the GI
+automatically induced polar terms had the same polarity as the GI
 entries.  This evaluation method, however, is somewhat problematic:
 First of all, it is not easily transferable to other languages, since
 even a manual translation of GI is not guaranteed to cover all
-language- and domain-specific polar expressions.  Secondly, due to the
-usage of intersection, this method does not penalize for a low recall
-so that a lexicon consisting of just two terms \textit{good}$^+$ and
-\textit{bad}$^-$ will have the highest possible score, often
+language- and domain-specific polar expressions.  Secondly, as the
+authors are typically analyzing only the intersection of the two
+resources, this method does not penalize for a low recall so that a
+lexicon consisting of just two terms \textit{good}$^+$ and
+\textit{bad}$^-$ will always have the highest possible score, often
 surpassing polarity lists with a greater number of entries.  Finally,
 such comparison does not account for polysemy.  As a result, an
 ambiguous word only one of whose (possibly rare) senses is subjective
 will always be ranked the same as a purely polar expression.
 
 Unfortunately, an extrinsic evaluation does not always provide a
-solution in this case, since, depending on the type of the extrinsic
-system (e.g., a document classifier), it might still presuppose a
-large data set for training other system components and, moreover,
-might yield overly high scores, which, however, are mainly due to
-these extrinsic components rather than the quality of the lexicon
+solution in this case either, since, depending on the type of the
+extrinsic system (e.g., a document classifier), it might still
+presuppose a large data set for training the system and, moreover,
+might yield overly high scores, which, however, might be mainly due to
+these other system's components rather than the quality of the lexicon
 itself.
 
 Instead of using these approaches, we opt for a direct comparison of
 the induced lexicons with an annotated corpus, since this type of
-evaluation allows us to solve at least three of the previously
-mentioned issues:
+evaluation allows us to solve at least three of the foregoing issues:
 \begin{inparaenum}[(i)]
   \item It does account for the recall,
   \item it does accommodate polysemous words,\footnote{The annotators
       of the PotTS corpus were asked to annotate a polar expression
       iff its actual sense in the respective context was polar.} and
   \item it does preclude intermediate modules which might artificially
-    boost the results.
+    boost the scores.
 \end{inparaenum}
 
-In particular, in order to check a lexicon against the PotTS data set,
+In particular, in order to check a lexicon against the PotTS corpus,
 we construct a case-insensitive trie \cite[pp. 492--512]{Knuth:98}
-from the lexicon entries and match this trie against the corpus text,
-simultaneously comparing these entries with the actual word forms and
-lemmas of corpus tokens.\footnote{We use the \texttt{TreeTagger}
+from the lexicon entries and apply this trie to the corpus annotation,
+simultaneously comparing its entries with the actual word forms and
+lemmas of the corpus tokens.\footnote{We use the \texttt{TreeTagger}
   \cite{Schmid:95} to obtain lemma forms for corpus tokens.} A match
 is considered correct iff the matched lexicon entry absolutely
 corresponds to the (possibly lemmatized) expert's annotation and has
-the same polarity as the one specified by the human coder.  That way,
+the same polarity as the one specified by the human coder.  This way,
 we estimate the precision, recall, and \F{}-score for each particular
 polarity class (positive, negative, and neutral), considering all
 words absent in the lexicon as neutral.
@@ -122,38 +121,38 @@ words absent in the lexicon as neutral.
 \section{Semi-Automatic Lexicons}
 
 We first use this metric to estimate the quality of the existing
-German sentiment lexicons.  The most prominent of these resources are:
+German sentiment lexicons:
 \begin{itemize}
-\item the \textbf{German Polarity Clues} (GPC) by
-  \citet{Waltinger:10}, which comprises 10,141 subjective entries
-  automatically translated from the English sentiment lexicons
-  Subjectivity Clues \cite{Wilson:05} and SentiSpin \cite{Takamura:05}
-  with a subsequent manual correction of these translations and
-  several synonyms and negated terms added by the authors;
+\item the \textbf{German Polarity Clues} \cite[GPC;][]{Waltinger:10},
+  which comprises 10,141 subjective entries automatically translated
+  from the English sentiment lexicons Subjectivity Clues
+  \cite{Wilson:05} and SentiSpin \cite{Takamura:05} with a subsequent
+  manual correction of these translations and several synonyms and
+  negated terms added by the authors;
 
-\item the \textbf{SentiWS} (SWS) lexicon introduced by
-  \citet{Remus:10}, which includes 1,818 positively and 1,650
-  negatively connoted terms, also providing their part-of-speech tags
-  and inflections (resulting in a total of 32,734 word forms).
-  Similarly to the GPC, the authors used an English sentiment
-  resource---the General Inquirer list by \citet{Stone:66}---to
-  bootstrap the entries for their lexicon, manually revising these
-  automatic translations afterwards.  In addition to that,
-  \citet{Remus:10} also expanded their polarity set with words and
-  phrases frequently co-occurring with positive and negative seed
-  lexemes using collocation information obtained from a corpus of
-  10,200 customer reviews or extracted from the German Collocation
-  Dictionary \cite{Quasthoff:10};
+\item the \textbf{SentiWS} \cite[SWS;][]{Remus:10}, which includes
+  1,818 positively and 1,650 negatively connoted terms, also providing
+  their part-of-speech tags and inflections (resulting in a total of
+  32,734 word forms).  Similarly to the GPC, the authors used an
+  English sentiment resource---the General Inquirer list of
+  \citet{Stone:66}---to bootstrap the entries for their lexicon,
+  manually revising these automatic translations afterwards.  In
+  addition to that, \citet{Remus:10} also expanded their polarity set
+  with words and phrases frequently co-occurring with positive and
+  negative seed lexemes using collocation statistics from a corpus of
+  10,200 customer reviews and the German Collocation Dictionary
+  \cite{Quasthoff:10};
 
-\item and, finally, the \textbf{Zurich Polarity List} (ZPL) developed
-  by \citet{Clematide:10}, which features 8,000 subjective entries
-  taken from GermaNet synsets \cite{Hamp:97}.  These synsets were
-  manually annotated with their prior polarities by human experts.
-  Since the authors, however, found the number of polar adjectives
-  obtained that way insufficient for running further classification
-  experiments, they automatically enriched their lexicon with more
-  attributive terms by analyzing conjoined collocations from a corpus
-  using the method of \citet{Hatzivassi:97}.
+\item and, finally, the \textbf{Zurich Polarity List}
+  \cite[ZPL;][]{Clematide:10}, which features 8,000 subjective entries
+  extracted from \textsc{GermaNet} synsets \cite{Hamp:97}.  These
+  synsets were manually annotated with their prior polarities by human
+  experts.  Since the authors, however, found the number of polar
+  adjectives obtained this way insufficient for running further
+  classification experiments, they automatically enriched their
+  lexicon with more attributive terms by analyzing conjoined
+  collocations from a corpus using the method of
+  \citet{Hatzivassi:97}.
 \end{itemize}
 % Since all of these lexicons were created semi-automatically by either
 % automatically translating English polarity lists and then manually
@@ -265,18 +264,18 @@ Table~\ref{snt-lex:tbl:gsl-res}.
   \end{center}
 \end{table}
 
-As can be seen from the table, the intersection of all three polarity
+As we can see from the table, the intersection of all three polarity
 lists achieves the best results on both positive and neutral classes,
 also yielding the best scores in terms of the macro- and
 micro-averaged $F$-measures.  One of the main reasons for this success
 is a relatively high precision of this list for all but the neutral
 polarity class, where it is outperformed by the union of all three
 resources.  Not surpisingly, the union also shows the highest recall
-of positive and negative terms among all compared polarity lists.
-Regarding the figures attained by the individual lexicons, the best
-results here are achieved by the SentiWS resource~\cite{Remus:10},
-which shows the highest \F{}-score for negative terms, and the Zurich
-Polarity List~\cite{Clematide:10}, which achieves the second best
+of positive and negative terms among all compared lists.  Regarding
+the figures attained by the individual lexicons, the best results here
+are achieved by the SentiWS resource~\cite{Remus:10}, which shows the
+highest \F{}-score for negative terms, and the Zurich Polarity
+List~\cite{Clematide:10}, which achieves the second best
 macro-averaged \F{}-result, coming very close to the scores attained
 by the intersection of the three resources.
 
@@ -285,78 +284,79 @@ by the intersection of the three resources.
 A natural question which arises upon the evaluation of the existing
 semi-automatic lexicons is how well fully automatic methods can
 perform in comparison with these lists.  According to
-\citet[p. 79]{Liu:12}, most of automatic SLG algorithms can be grouped
-into dictionary- and corpus-based ones.  The former systems induce
-polarity lists from monolingual thesauri or lexical databases such as
-the Macquarie Dictionary \cite{Bernard:86} or \textsc{WordNet}
-\cite{Miller:95}.  A clear advantage of these methods is their
-relatively high precision as they operate on carefully verified data
-enriched with hand-crafted meta information.  At the same time, this
-precision might come at the cost of a reduced recall especially for
-the domains where the language changes occur very rapidly, and new
-terms are being coined in a flash.  In contrast to this, corpus-based
-systems can operate directly on unannotated in-domain data, having a
-direct access to all neologisms, but they often have to deal with an
-extreme noisiness of their input and consequently suffer from a lower
-accuracy.  Since it was unclear which of these strengths and
-weaknesses would have a stronger influence on the net results, we
-decided to reimplement the most commonly used algorithms from both of
-these paradigms and evaluate them on our corpus.
+\citet[p. 79]{Liu:12}, most automatic sentiment lexicon generation
+(SLG) algorithms can be grouped into two groups: dictionary- and
+corpus-based ones.  The former systems induce polarity lists from
+monolingual thesauri or lexical databases such as the Macquarie
+Dictionary \cite{Bernard:86} or \textsc{WordNet} \cite{Miller:95}.  A
+clear advantage of these methods is their relatively high precision as
+they operate on carefully verified manual data enriched with
+hand-crafted meta information.  At the same time, this precision might
+come at the cost of a reduced recall especially for the domains where
+the language changes occur very rapidly, and new terms are being
+coined in a flash.  In contrast to this, corpus-based systems operate
+directly on unannotated in-domain data, having a direct access to all
+neologisms, but often have to deal with an extreme noisiness of their
+input and consequently suffer from a lower accuracy.  Since it was
+unclear which of these strengths and weaknesses would have a stronger
+influence on the net results, we decided to reimplement the most
+popular algorithms from both of these paradigms and evaluate them on
+our corpus.
 
 \subsection{Dictionary-Based Methods}
 
 The presumably first SLG system which inferred a set of polar terms
 form a manually created lexical database was proposed by
-\citet{Hu:04}.  In their work on sentiment classification and
-summarization of cutomer reviews, the authors determined semantic
-orientation of adjectives (which were supposed to be the most relevant
-part of speech for mining people's opinions) by taking a list of seed
-terms with known semantic orientation and propagating the polarity
-values of these words to their synonyms found in \textsc{WordNet}
-\cite{Miller:95}.  A similar procedure was applied to the antonymous
-relations with the polarity scores being reversed during the
-propagation.  The expansion continued until no more adjective could be
-reached via the synonymy-antonymy links.
+\citet{Hu:04}.  In their work, the authors determined the polarity of
+adjectives (which were supposed to be the most relevant part of speech
+for mining people's opinions) by taking a set of seed terms with known
+semantic orientations and propagating the polarity scores of these
+seeds to their synonyms found in \textsc{WordNet} \cite{Miller:95}.  A
+similar procedure was also applied to the antonyms with the polarity
+values being reversed during the propagation.  This expansion
+continued until no more adjective could be reached via the
+synonymy-antonymy links.
 % Unfortunately, no intrinsic evaluation of the resulting lexicon was
 % performed in this work---the authors only report their results on
 % recognizing subjective sentences and classifying their polarity, where
 % they attain average \F-scores of 0.667 and 0.842 respectively.
 
-Later on, this approach was refined by \citet{Blair-Goldensohn:08},
-who obtained polarity labels for new words by multiplying a vector
-$\vec{v}$ containing polarity scores of known seed terms (-1 for
-negative expressions and 1 for positive terms) with an adjacency
-matrix $A$ constructed from \textsc{WordNet} synsets.  The value of
-the adjacency cell $a_{ij}$ in this matrix was set to $\lambda=0.2$ if
-there was a synonymy link between the synsets $i$ and $j$ and to
-$-\lambda$ if these synsets were antonymous to each other.  By
-performing this multiplication multiple times and setting the vector
-$\vec{v}$ to the result of the previous iteration, the authors ensured
-that the polarity scores were propagated transitively through the
-network, decaying by a constant factor ($\lambda$) with the increasing
-path length from the original
+Later on, this approach was further refined by
+\citet{Blair-Goldensohn:08}, who obtained polarity labels for new
+words by multiplying a vector $\vec{v}$ containing polarity scores of
+known seed terms (-1 for negative expressions and 1 for positive
+terms) with an adjacency matrix $A$ constructed from \textsc{WordNet}
+synsets.  The value of the adjacency cell $a_{ij}$ in this matrix was
+set to $\lambda=0.2$ if there was a synonymy link between the synsets
+$i$ and $j$ and to $-\lambda$ if these synsets were antonymous to each
+other.  By performing this multiplication multiple times and setting
+the vector $\vec{v}$ to the result of the previous iteration, the
+authors ensured that the polarity scores were propagated transitively
+through the network, decaying by a constant factor ($\lambda$) with
+the increasing path length from the original
 seeds.% This method again was evaluated only extrinsically---the
 % authors tested their complete sentiment summarization system, which
 % used the sentiment scores for individual words as features for a
 % maximum-entropy classifier.
 
-With various modifications, the core idea of propagating the polarity
-classes through a lexical graph was adopted in almost all of the
+With various modifications, the core idea of propagating polarity
+scores through a lexical graph was adopted in almost all of the
 following dictionary-based works: \citet{Kim:04,Kim:06}, for instance,
 used a similar method to determine the polarity of adjectives and
-verbs given a small set of seed terms with known orientation.  In
-particular, the likelihood of a new word $w$ belonging to the class $c
-\in \{\textrm{positive, negative, neutral}\}$ was computed as:
+verbs given a small set of seed terms.  In particular, they estimated
+the likelihood of a new word $w$ belonging to a particular polarity
+class $c \in \{\textrm{positive, negative, neutral}\}$ as:
 \begin{equation*}
   P(c|w) = \argmax_{c}P(c)P(w|c) = \argmax_{c}P(c)\frac{\sum\limits_{i=1}^{n}count(syn_i, c)}{count(c)},
 \end{equation*}
-where $P(c)$ was the prior probability of the polar class (estimated
-as the number of words with the given orientation $c$ divided by the
-total number of terms considered), $count(syn_i, c)$ meant the number
-of times a seed term from class $c$ appeared in a synset of $w$, and
-$count(c)$ denoted the total number of synsets containing a seed item.
-Starting from a seed set of 34 adjectives and 44 verbs, the authors
-successively expanded their lexicon to a list of 18,192 terms. %  and
+where $P(c)$ is the prior probability of the polar class (estimated as
+the number of words with the given orientation $c$ divided by the
+total number of terms considered), $count(syn_i, c)$ means the number
+of times a seed term from the class $c$ appeared in a synset of $w$,
+and $count(c)$ denotes the total number of synsets containing a seed
+item.  Starting from a set of 34 adjectives and 44 verbs, the authors
+successively expanded their lexicon to a list of 18,192 polar
+items. % and
 % evaluated it on a manually labeled collection of 462 adjectives and
 % 502 verbs taken from the TOEFL test and analyzed by two human experts.
 % The reported average accuracy for this method run up to 68.48\% for
@@ -387,22 +387,22 @@ successively expanded their lexicon to a list of 18,192 terms. %  and
 
 One of the most popular dictionary-based approaches to date, however,
 was proposed by \citet{Esuli:06c}.  Starting with the positive and
-negative seed sets of \citet{Turney:03} and considering the rest of
+negative seed lists of \citet{Turney:03} and considering the rest of
 the terms as objective if these words neither appeared in the
-aforemention seed lists nor had a subjective tag in the General
+aforemention seed sets nor had a subjective tag in the General
 Inquirer lexicon \cite{Stone:66}, the authors successively expanded
-these sets for $k \in \{0, 2, 4, 6\}$ iterations by following the
-synonymy-antonymy links similarly to the method of \citet{Hu:04}.  In
-addition to that, in each of these steps, they trained two types of
-ternary classifiers---Rocchio and SVM---using tfidf-vectors of the
-training glosses (whose amount was different in each iteration) as
-input features.  In the concluding step, \citet{Esuli:06c} united
-these classifiers into one ensemble and assigned normalized class
-scores returned by this committee to the remaining \textsc{WordNet}
-synsets.\footnote{In contrast to other works, the method of
-  \citet{Esuli:06c} returns a 3-tuple of scores for each polarity
-  class (positive, negative, and neutral) without attempting to
-  classify them into these categories.}
+these polarity lists for $k \in \{0, 2, 4, 6\}$ iterations by
+following the synonymy-antonymy links similarly to the method of
+\citet{Hu:04}.  In addition to that, in each of these steps, they
+trained two types of ternary classifiers---Rocchio and SVM---using the
+tfidf-vectors of the training glosses (whose amount was different in
+each iteration) as their input features.  In the concluding step,
+\citet{Esuli:06c} united these classifiers into one ensemble and
+assigned normalized class scores returned by this committee to the
+remaining \textsc{WordNet} synsets.\footnote{In contrast to other
+  works, the method of \citet{Esuli:06c} returns a 3-tuple of scores
+  for each polarity class (positive, negative, and neutral) without
+  attempting to classify them into these categories.}
 % This time, the evaluation was run on both the intersection with the
 % GI~lexicon~\cite{Stone:66} and a manually annotated subset of
 % \textsc{WordNet} synsets, yielding 66\% accuracy for the former
@@ -413,19 +413,28 @@ synsets.\footnote{In contrast to other works, the method of
 % described in last paper as the most recent description of this
 % approach.}
 
-Another graph-based approach was proposed by \citet{Rao:09}.  In their
-work, the authors experimented with three different methods of
-assigning polarity scores to synsets:
-\begin{inparaenum}[\itshape a\upshape)]
-\item deterministic min-cut \cite{Blum:01},
-\item randomized min-cut \cite{Blum:04}, and
-\item the label propagation algorithm by \citet{Zhu:02}.
-\end{inparaenum}
-% An evaluation of these systems on the GI lexicon \cite{Stone:66}
-% showed significant improvement over the previous baselines of
-% \citet{Kamps:04} and \citet{Kim:06}.
+Other graph-based approaches were proposed by \citet{Rao:09}, who
+experimented with three different methods of assigning polarity scores
+to synsets:
+\begin{itemize}
+\item\emph{deterministic min-cut}~\cite{Blum:01}, in which they
+  determined an optimal partition of the \textsc{WordNet} graph by
+  first propagating polarity values from the known seed terms to their
+  synonyms and hypernyms and then looking for a minimum cut in which
+  terms with the same polarities would be allocated to the same
+  partition;
+\item since the approach of~\cite{Blum:01} was guaranteed to always
+  divide the graph in the same way even if many possible partitions
+  with the same costs were possible, the authors also explored the
+  \emph{randomized min-cut} method of~\cite{Blum:04} to see whether
+  other (better) ways of dividing the network were possible;
+\item finally, \citet{Rao:09} also compared both min-cut systems with
+  the label propagation algorithm of~\citet{Zhu:02}, which can
+  considered as a probabilistic variant of the method
+  of~\citet{Blair-Goldensohn:08}.
+\end{itemize}
 
-Other notable works on dictionary-based lexicon generation include
+Further notable works on dictionary-based lexicon generation include
 those by \citet{Mohammad:09}, who generated their seed set using
 antonymous morphological patterns (e.g.,
 \emph{logical}---\emph{illogical}, \emph{honest}---\emph{dishonest},
@@ -467,7 +476,7 @@ adjectives suggested by \citet{Turney:03}---\emph{good}$^+$,
 \emph{negative}$^-$, \emph{unfortunate}$^-$, \emph{wrong}$^-$, and
 \emph{inferior}$^-$---into German, getting a total of 20 seeds (10
 positive and 10 negative adjectives) due to multiple possible
-translations of the same words.\footnote{The reimplemented methods and
+translations of the same words.\footnote{All reimplemented methods and
   translated seed sets used in these experiments are available online
   at \url{https://github.com/WladimirSidorenko/SentiLex}.}
 Furthermore, to settle the differences between the binary and ternary
@@ -494,7 +503,7 @@ conected via the inter-synset links \texttt{has\_participle},
 \texttt{is\_entailed\_by}.\footnote{For the method of
   \citet{Esuli:06c}, we only used the inter-synset links, dispensing
   with the intra-synset connections, as those were the only relations
-  utilized in their original work.} We intentionally skipped the
+  utilized in the original work.} We intentionally skipped the
 relations \texttt{has\_hypernym} and \texttt{is\_related\_to} when
 constructing the graph, since hypernyms were not guaranteed to
 preserve the polarity of their children---e.g.,
@@ -502,10 +511,9 @@ preserve the polarity of their children---e.g.,
 in contrast to its immediate hyponyms ``gut'' (\emph{good}) and
 ``schlecht'' (\emph{bad})---and the relatedness links
 (\texttt{is\_related\_to}) could connect both synonyms and antonyms of
-the same term---e.g., this relation type simultaneoulsy holds between
-the words ``Form'' (\emph{shape}) and ``unf\"ormig''
-(\emph{misshapen}) and ``Dame'' (\emph{lady}) and ``damenhaft''
-(\emph{ladylike}).
+the same term---e.g., this relation simultaneoulsy holds between the
+words ``Form'' (\emph{shape}) and ``unf\"ormig'' (\emph{misshapen}),
+and ``Dame'' (\emph{lady}) and ``damenhaft'' (\emph{ladylike}).
 
 We fine-tuned the hyper-parameters of the evaluated approaches using
 grid search and optimizing the macro-averaged \F{}-score on the
@@ -683,7 +691,7 @@ agreed on the polarity of the analyzed term.
 The results of our reimplementations are shown in
 Table~\ref{snt-lex:tbl:lex-res}.  As can be seen from the table, the
 results of the automatic methods are significantly lower than the
-figures obtained by the semi-automatic lexicons.  The best
+figures obtained with the semi-automatic lexicons.  The best
 macro-averaged \F{}-score for all three classes (0.479) is attained by
 the method of \citet{Blair-Goldensohn:08}, which is still 0.11 points
 worse than the peak result achieved by the intersection of the GPC,
@@ -694,16 +702,16 @@ systems can achieve best scores on just some aspects of certain
 classes but can hardly attain best overall results in all categories.
 This is, for instance, the case for the positive and negative
 polarities, where the best precision is reached by the seed set in the
-first case and the label propagation algorithm by \citet{Rao:09} in
+first case and the label propagation algorithm of \citet{Rao:09} in
 the second case.  However, with respect to the recall, both of these
-polarity lists perform notably worse than the approach by
-\citet{Esuli:06c}.  Yet other systems---the matrix-vector method by
+polarity lists perform notably worse than the approach of
+\citet{Esuli:06c}.  Yet other systems---the matrix-vector method of
 \citet{Blair-Goldensohn:08} and the union of the three overall
 top-scoring systems respectively---reach the highest \F{}-scores for
 these two classes.  Nevertheless, we can still notice three main
 tendencies in this evaluation:
 \begin{inparaenum}[\itshape a\upshape)]
-\item the method by \citet{Esuli:06c} generally gets the highest
+\item the method of \citet{Esuli:06c} generally gets the highest
   recall of polar terms and, consequently, achieves the best precision
   in recognizing neutral words, but suffers from a low precision for
   the positive and negative polarities,
