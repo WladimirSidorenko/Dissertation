@@ -1062,7 +1062,7 @@ vectors).  In the latter approach, \citet{Vo:16} trained task-specific
 two-dimensional embeddings, also utilizing smileys as distantly
 supervised tags, and regarded the two elements of the resulting
 representations as positive and negative scores of the respective
-lexical terms.
+words.
 
 In order to estimate the potential of these approaches for an
 automatic generation of sentiment lexicons for German Twitter, we
@@ -1079,10 +1079,10 @@ NWEs:
 With the first approach, we used the embeddings of the seed terms to
 compute the centroids of the positive, negative, and objective
 clusters.  Afterwards, we assigned a new word $w$ to the polarity
-group whose centroid was the closest to the $w$'s vector.  We
-considered this distance to the cluster center as the polarity score
-of the word $w$, and sorted the resulting sentiment lexicon in the
-ascending order of these scores.
+group whose centroid was closest to the $w$'s vector.  We considered
+this distance to the cluster center as the polarity score of the word
+$w$, and sorted the resulting sentiment lexicon in the ascending order
+of these scores.
 
 %% Similarly, with the KNN method, we allocated each new word $w$ to the
 %% polarity class $c$ if the seed embeddings of this class appeared more
@@ -1092,15 +1092,16 @@ ascending order of these scores.
 A slightly different technique was used with the approach of the
 principal component analysis.  After normally decomposing the
 embedding matrix~$E\in\mathbb{R}^{w\times|V|}$ (with $w$ denoting the
-vector dimension (300),\footnote{Due to implementation specifics, the
-  initial embedding vectors had to be represented as columns.} and
-$|V|$ representing the vocabulary size) into its SVD components:
+dimension of the word vectors (300),\footnote{Due to implementation
+  specifics, the initial embedding vectors had to be represented as
+  columns.} and $|V|$ representing the vocabulary size) into its SVD
+components:
 \begin{align*}
   E = U \Sigma V^T,
 \end{align*}
 where the matrices $U$ and $V$ stand for the orthogonal bases of the
 row and column spaces of $E$ respectively, we looked for the row axis
-$v$ such that the embeddings of seed terms with opposite semantic
+$v$ such that the embeddings of the seed terms with opposite semantic
 orientations projected on this axis would be maximally far apart from
 each other.
 
@@ -1127,9 +1128,10 @@ the projections of terms from these disjoint sets, i.e.: {\small%
 where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the
 projection of a word embedding with the positive polarity on the line
 $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the
-respective projection of a negative seed term.\footnote{Since we are
-  only interested in finding the slope of the projection line, we
-  assume an intercept of zero.}
+respective projection of a negative seed term (see
+Figure~\ref{fig:linproj.L.M} for a visual explanation of this
+method).\footnote{Since we are only interested in finding the slope of
+  the projection line, we assume an intercept of zero.}
 
 Considering the $\argmax$ argument in Expression~\ref{eq:f} as our
 objective function $f$, we computed the gradient of this function
@@ -1149,8 +1151,7 @@ $i$-th iteration step: $\gamma = \Delta \cdot \vec{b}^i$.\footnote{A
   Appendix~\ref{chap:apdx:lex-grad} of this paper.}  With this
 gradient, we then trivially optimized the line~$\vec{b}$ using
 gradient ascent until we reached the global maximum of the
-function~$f$ (see Figure~\ref{fig:linproj.L.M} for a visual
-explanation of this method).
+function~$f$.
 
 % \begin{minipage}{0.4\textwidth}
 %   \centering
@@ -1190,25 +1191,26 @@ the global origin~$\vec{0}$ of the initial coordinate system:
   \begin{align}
     O_{\vec{b}} &= \mu_- + \frac{\mu_+ - \mu_-}{2}.
 \end{align}\normalsize}%
-where $\mu_-$ is the mean of the projected embeddings of negative seed
-terms: $\mu_- = \frac{\sum\vec{p'_-}}{|\mathcal{N}|}$; and $\mu_+$ is
-the respective mean for the projections of positive seed words.
-Eventually, we create the final list of polar terms, sorting them by
-the distance of their projections to the computed origin point in
-descending order (so that words whose projections are furthest away
-from the central point appear at the very beginning of the list) and
-assigning negative polarity to those terms whose projections are on
-the same side from the origin as the negative mean $\mu_-$.  The
-results of these methods are shown in
+The~$\mu_-$ term in the above equation represents the mean of the
+projected embeddings of the negative seed terms:
+$\mu_- = \frac{\sum\vec{p'_-}}{|\mathcal{N}|}$; and the~$\mu_+$
+variable stands for the respective mean of the projections of positive
+seeds.  Eventually, we created the final list of polar terms, sorting
+them by the distance of their projections to the computed origin point
+in descending order (so that words whose projections were furthest
+away from the central point appeared at the very beginning of the
+list) and assigning the negative polarity to those terms whose
+projections were on the same side from the origin as the negative mean
+$\mu_-$.  The results of these methods are shown in
 Table~\ref{snt-lex:tbl:nwe-meth}:
 
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.172\columnwidth} % first columm
+    \begin{tabular}{p{0.11\columnwidth} % first columm
         >{\centering\arraybackslash}p{0.06\columnwidth} % second columm
         *{9}{>{\centering\arraybackslash}p{0.07\columnwidth}} % next nine columns
-        *{2}{>{\centering\arraybackslash}p{0.053\columnwidth}}} % last two columns
+        *{2}{>{\centering\arraybackslash}p{0.059\columnwidth}}} % last two columns
       \toprule
       \multirow{2}*{\bfseries Lexicon} & %
       \multirow{2}{0.06\columnwidth}{\bfseries \# of Terms} & %
@@ -1248,22 +1250,32 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       &  &  & %
       & \\
 
-      %% file: 'data/results/ncentroids/ncentroids.word2vec.L.M.turney-littman-seedset.60'
+      %% file: data/results/ncentroids/ncentroids.vectors.word2vec.turney_littman-seedset_2003.txt
 
-      NC & 60 & 0.771 & 0.102 & 0.18 & %
-      0.568 & 0.017 & 0.033 & %
-      0.963 & 0.999 & 0.981 & %
-      0.398 & 0.962\\
+      % Class                     Precision              Recall                 F-score
+      % 5200
+      % positive                   0.770601             0.101975                 0.180115
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963176             0.999227                 0.980870
+      % Macro-average              0.767226             0.372780                 0.398086
 
-      %% file: 'data/results/knn/knn.word2vec.L.M.turney-littman-seedset.5120'
-      %% positive                   0.770601             0.101975                 0.180115
-      %% negative                   0.005488             0.017139                 0.008314
-      %% neutral                    0.961111             0.942958                 0.951948
-      %% Macro-average              0.579067             0.354024                 0.380125
-      KNN & 5,120 & 0.771 & 0.102 & 0.18 & %
-       0.005 & 0.017 & 0.008 & %
-       0.961 & 0.943 & 0.952 & %
-       0.38 & 0.908\\
+      NC & 5,200 & 0.771 & 0.102 & 0.18 & %
+       0.568 & 0.017 & 0.033 & %
+       0.963 & 0.999 & 0.981 & %
+       0.398 & 0.962\\
+
+      %% file: data/results/knn/knn.vectors.word2vec.turney_littman_2003.txt
+      % Class                     Precision              Recall                 F-score
+      % 5120
+      % positive                   0.028954             0.101975                 0.045102
+      % negative                   0.005488             0.017139                 0.008314
+      % neutral                    0.957841             0.865014                 0.909064
+      % Macro-average              0.330761             0.328042                 0.320826
+      % Micro-average              0.833480             0.833317                 0.833398
+      $k$-NN & 5,120 & 0.029 & 0.102 & 0.045 & %
+       0.01 & 0.02 & 0.01 & %
+       0.958 & 0.865 & 0.909 & %
+       0.321 & 0.833\\
 
       %% file: ''
 
@@ -1272,100 +1284,31 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
        &  &  & %
        & \\
 
-      %% file: ''
+      %% file: 'data/results/linproj/linproj.vectors.word2vec.turney_littman_2003.txt'
+      % Class                     Precision              Recall                 F-score
+      % 40
+      % positive                   0.770601             0.101975                 0.180115
+      % negative                   0.547619             0.017139                 0.033237
+      % neutral                    0.963188             0.999220                 0.980873
+      % Macro-average              0.760470             0.372778                 0.398075
+      % Micro-average              0.962397             0.962209                 0.962303
 
-      LP &  &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\\bottomrule
+      LP & 40 & 0.771 & 0.102 & 0.18 & %
+       0.548 & 0.017 & 0.033 & %
+       0.963 & 0.999 & 0.981 & %
+       0.398 & 0.962\\\bottomrule
     \end{tabular}
     \egroup
     \caption{Evaluation of NWE-based approaches.\\ {\small
-        TNG -- \citet{Tang:14a}, %
-        VO -- \citet{Vo:16}, %
+        TNG --- \citet{Tang:14a}, %
+        VO --- \citet{Vo:16}, %
         NC --- nearest centroids, %
-        KNN --- $k$-nearest neighbors, %
+        $k$-NN --- $k$-nearest neighbors, %
+        PCA --- principal component analysis, %
         LP --- linear projection}}%
     \label{snt-lex:tbl:nwe-meth}
   \end{center}
 \end{table}
-
-% A new family of lexicon induction methods builds on learned vector
-% representations of words -- the neural word embeddings
-% \cite{Mikolov:13}.
-
-% Vector command:
-% \begin{verbatim}
-% Adjusted Potts' Tokenizer
-
-% Sidarenka's Preprocessing (Smiley Replacement)
-
-% word2vec -train tokens.tok -output vectors.txt -size 400 -window 5 -min-count 4
-
-% Possible Improvements:
-
-% * use task specific vectors;
-
-% * decide what to do with smileys during evaluation;
-
-% * explore different cardinalities (not just 40-s bins);
-% \end{verbatim}
-
-% % k-NN: k^2 / \sum d_{ij}
-
-% The results of these methods are shown in Table~\ref{snt-lex:tbl:nwe-methods}.
-
-% \begin{table}[h]
-%   \begin{center}
-%     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-%     \begin{tabular}{p{0.1\columnwidth} % first columm
-%         *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-%         *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
-%       \toprule
-%           \multirow{2}*{\bfseries Lexicon} & %
-%           \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-%           \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-%           \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-%           \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
-
-%           & Precision & Recall & \F{} & %
-%           Precision & Recall & \F{} & %
-%           Precision & Recall & \F{} & & \\\midrule
-
-%           % cardinality 160
-%           NC & 75.7\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-%           24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
-%           96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-%           38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
-
-%           % cardinality 40
-%           KNN & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-%           23.4\stddev{40.6} & 1\stddev{1.8} & 1.8\stddev{3.4} & %
-%           96.3\stddev{0.8} & \textbf{99.9}\stddev{0.1} & \textbf{98.1}\stddev{0.4} & %
-%           38.6\stddev{3.2} & \textbf{96.2}\stddev{0.8}\\
-
-%           % cardinality 160
-%           PCA & 40.4\stddev{14.6} & \textbf{13.4}\stddev{5.8} & \textbf{19.5}\stddev{7.3} & %
-%           24.4\stddev{41.8} & 1\stddev{1.8} & 1.9\stddev{3.4} & %
-%           \textbf{96.4}\stddev{0.8} & 99.6\stddev{0.2} & 97.9\stddev{0.4} & %
-%           39.8\stddev{2.7} & 95.9\stddev{0.8}\\
-
-%           % cardinality 160
-%           LP & \textbf{75.8}\stddev{23.8} & 9.1\stddev{5.7} & 15.8\stddev{8.8} & %
-%           \textbf{29.4}\stddev{20.3} & \textbf{5.6}\stddev{4.5} & \textbf{9.2}\stddev{6.9} & %
-%           \textbf{96.4}\stddev{0.8} & 99.8\stddev{0.1} & 98\stddev{0.4} & %
-%           \textbf{41}\stddev{3.9} & 96.1\stddev{0.8}\\
-%           \bottomrule
-%     \end{tabular}
-%     \egroup
-%     \caption{Evaluation of embedding-based approaches.\\ {\small (NC
-%         -- nearest centroids, KNN -- k-nearest neighbors, PCA --
-%         principal component analysis, LP -- linear projection)}}
-%     \label{snt-lex:tbl:nwe-methods}
-%   \end{center}
-% \end{table}
 
 \section{Effect of Seed Sets}\label{subsec:snt-lex:eoss}
 
