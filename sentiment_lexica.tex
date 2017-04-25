@@ -1265,6 +1265,8 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
        0.398 & 0.962\\
 
       %% file: data/results/knn/knn.vectors.word2vec.turney_littman_2003.txt
+      % Computed using:
+      % ./scripts/eval_cardinality data/results/knn/knn.word2vec.turney_littman_2003.txt
       % Class                     Precision              Recall                 F-score
       % 5120
       % positive                   0.028954             0.101975                 0.045102
@@ -1277,12 +1279,20 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
        0.958 & 0.865 & 0.909 & %
        0.321 & 0.833\\
 
-      %% file: ''
+      %% file: data/results/pca/pca.vectors.word2vec.turney_littman_2003.txt
+      % Computed using:
+      % ./scripts/eval_cardinality data/results/pca/pca.word2vec.turney_littman_2003.txt
+      % Class                     Precision              Recall                 F-score
+      % 40
+      % positive                   0.672381             0.104038                 0.180194
+      % negative                   0.567901             0.017139                 0.033273
+      % neutral                    0.963204             0.998758                 0.980659
+      % Macro-average              0.734495             0.373312                 0.398042
 
-      PCA &  &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      PCA & 40 & 0.672 & 0.104 & 0.18 & %
+       0.568 & 0.017 & 0.033 & %
+       0.963 & 0.999 & 0.981 & %
+       0.398 & 0.962\\
 
       %% file: 'data/results/linproj/linproj.vectors.word2vec.turney_littman_2003.txt'
       % Class                     Precision              Recall                 F-score
@@ -1509,6 +1519,38 @@ stopping of the expansion.
                     LP --- linear projection%
                   }%
       }\label{snt-lex:tbl:emb-eff}
+    }
+  \end{center}
+\end{table}
+
+\section{Effect of Vector Normalization}\label{subsec:snt-lex:eowet}
+
+\begin{table}[thb!]
+  \begin{center}
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}%
+    \setlength{\belowrulesep}{0pt}\scriptsize
+    \begin{tabular}{p{0.15\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
+      \toprule
+      \multirow{2}*{\bfseries Lexicon} & \multicolumn{4}{c}{\bfseries Embedding Type}\\
+      & word2vec & task-specific + word2vec & task-specific + least squares & task-specific\\\midrule
+      NC &  &  &  & \\
+      KNN &  &  &  & \\
+      PCA &  &  &  & \\
+      LP &  &  &  & \\\bottomrule
+
+    \end{tabular}\egroup%
+    {
+      \captionsetup{justification=centering}
+      \caption{Macro-averaged
+        \F-scores of NWE-based methods depending on the embedding type.\\%
+                  {\small\itshape%
+                    NC --- nearest centroids, %
+                    KNN --- $k$-nearest neighbors, %
+                    PCA --- principal component analysis, %
+                    LP --- linear projection%
+                  }%
+      }\label{snt-lex:tbl:emb-evn}
     }
   \end{center}
 \end{table}
