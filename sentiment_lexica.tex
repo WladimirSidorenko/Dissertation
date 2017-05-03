@@ -256,7 +256,8 @@ Table~\ref{snt-lex:tbl:gsl-res}.
       0.51 & 0.901 \\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Evaluation of semi-automatic German sentiment lexicons.\\
+    \caption[Evaluation of semi-automatic German sentiment lexicons.]{
+      Evaluation of semi-automatic German sentiment lexicons.\\
       {\small GPC -- German Polarity Clues \cite{Waltinger:10}, SWS --
         SentiWS \cite{Remus:10}, ZPL -- Zurich Polarity Lexicon
         \cite{Clematide:10}}}
@@ -681,10 +682,11 @@ agreed on the polarity of the analyzed term.
       0.446 & 0.929\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Evaluation of dictionary-based approaches.\\ {\small HL
-        -- \citet{Hu:04}, BG -- \citet{Blair-Goldensohn:08}, KH --
-        \citet{Kim:04}, ES -- \citet{Esuli:06c}, RR -- \citet{Rao:09},
-        AR -- \citet{Awadallah:10}}}
+    \caption[Evaluation of dictionary-based approaches.]{Evaluation of
+      dictionary-based approaches.\\ {\small HL -- \citet{Hu:04}, BG
+        -- \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04}, ES --
+        \citet{Esuli:06c}, RR -- \citet{Rao:09}, AR --
+        \citet{Awadallah:10}}}
     \label{snt-lex:tbl:lex-res}
   \end{center}
 \end{table}
@@ -989,9 +991,10 @@ iterations in the method by \citet{Velikovich:10} to 20.
       0.418 & \textbf{0.962}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Evaluation of corpus-based approaches.\\ {\small TKM --
-        \citet{Takamura:05}, VEL -- \citet{Velikovich:10}, KIR --
-        \citet{Kiritchenko:14}, SEV -- \citet{Severyn:15}}}
+    \caption[Evaluation of corpus-based approaches.]{Evaluation of
+      corpus-based approaches.\\ {\small TKM -- \citet{Takamura:05},
+        VEL -- \citet{Velikovich:10}, KIR -- \citet{Kiritchenko:14},
+        SEV -- \citet{Severyn:15}}}
     \label{snt-lex:tbl:corp-meth}
   \end{center}
 \end{table}
@@ -1245,10 +1248,26 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       & \\
 
       % Class                     Precision              Recall                 F-score
-      VO &  &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      % 80
+      % positive                   0.588926             0.103448                 0.175984
+      % negative                   0.457143             0.017884                 0.034421
+      % neutral                    0.963216             0.998216                 0.980404
+      % Macro-average              0.669762             0.373183                 0.396936
+      % Micro-average              0.961416             0.961291                 0.961353
+
+      % Class                     Precision              Recall                 F-score
+      % 80
+      % positive                   0.588926             0.103448                 0.175984
+      % negative                   0.457143             0.017884                 0.034421
+      % neutral                    0.963216             0.998216                 0.980404
+      % Macro-average              0.669762             0.373183                 0.396936
+      % Micro-average              0.961416             0.961291                 0.961353
+
+      % Class                     Precision              Recall                 F-score
+      VO & 80 & 0.589 & 0.103 & 0.176 & %
+      0.457 & 0.018 & 0.034 & %
+      0.963 & 0.998 & 0.98 & %
+      0.397 & 0.961\\
 
       %% file: data/results/ncentroids/ncentroids.vectors.word2vec.turney_littman-seedset_2003.txt
 
@@ -1309,8 +1328,8 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
        0.398 & 0.962\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Evaluation of NWE-based approaches.\\ {\small
-        TNG --- \citet{Tang:14a}, %
+    \caption[Evaluation of NWE-based approaches.]{Evaluation of
+      NWE-based approaches.\\ {\small TNG --- \citet{Tang:14a}, %
         VO --- \citet{Vo:16}, %
         NC --- nearest centroids, %
         $k$-NN --- $k$-nearest neighbors, %
@@ -1386,7 +1405,9 @@ in Table~\ref{snt-lex:tbl:alt-seed-sets}.
       \\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Cardinality and composition of the alternative polarity lists.\\
+    \caption[Cardinality and composition of the alternative seed
+    lists.]{
+      Cardinality and composition of the alternative seed lists.\\
       (all cardinalities are given with respect to the resulting
       German translations)}
     \label{snt-lex:tbl:alt-seed-sets}
@@ -1510,14 +1531,15 @@ stopping of the expansion.
     \end{tabular}\egroup%
     {
       \captionsetup{justification=centering}
-      \caption{Macro-averaged
-        \F-scores of NWE-based methods depending on the embedding type.\\%
-                  {\small\itshape%
-                    NC --- nearest centroids, %
-                    KNN --- $k$-nearest neighbors, %
-                    PCA --- principal component analysis, %
-                    LP --- linear projection%
-                  }%
+      \caption[Macro-averaged \F-scores of NWE-based methods depending
+      on the embedding type.]{Macro-averaged \F-scores of NWE-based
+        methods depending on the embedding type.\\%
+        {\small\itshape%
+          NC --- nearest centroids, %
+          KNN --- $k$-nearest neighbors, %
+          PCA --- principal component analysis, %
+          LP --- linear projection%
+        }%
       }\label{snt-lex:tbl:emb-eff}
     }
   \end{center}
@@ -1542,14 +1564,15 @@ stopping of the expansion.
     \end{tabular}\egroup%
     {
       \captionsetup{justification=centering}
-      \caption{Macro-averaged
-        \F-scores of NWE-based methods depending on the embedding type.\\%
-                  {\small\itshape%
-                    NC --- nearest centroids, %
-                    KNN --- $k$-nearest neighbors, %
-                    PCA --- principal component analysis, %
-                    LP --- linear projection%
-                  }%
+      \caption[Macro-averaged \F-scores of NWE-based methods depending
+      on the vector normalization.]{Macro-averaged \F-scores of
+        NWE-based methods depending on the vector normalization.\\%
+        {\small\itshape%
+          NC --- nearest centroids, %
+          KNN --- $k$-nearest neighbors, %
+          PCA --- principal component analysis, %
+          LP --- linear projection%
+        }%
       }\label{snt-lex:tbl:emb-evn}
     }
   \end{center}
@@ -1647,7 +1670,9 @@ Table~\ref{tbl:snt-lex:dict:top-10}.
       \ttranslate{lumpig}{shabby}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Top ten polar terms produced by the dictionary-based methods.\\
+    \caption[Top ten polar terms produced by dictionary-based
+    methods.]{%
+      Top ten polar terms produced by dictionary-based methods.\\
       {\small ** -- the min-cut method of \citet{Rao:09} returns an
         unsorted set}}
     \label{tbl:snt-lex:dict:top-10}
@@ -1736,8 +1761,76 @@ methods.
       \ttranslate{Mailadresse}{mail address}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Top ten polar terms produced by the corpus-based methods.}
+    \caption[Top ten polar terms produced by corpus-based
+    methods.]{Top ten polar terms produced by corpus-based methods.}
     \label{tbl:snt-lex:crp:top-10}
+  \end{center}
+\end{table}
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.03\tabcolsep}\scriptsize
+    \begin{tabular}{%
+        >{\centering\arraybackslash}p{0.07\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.232\columnwidth}}} % last two columns
+      \toprule
+      \textbf{Rank} & %
+      \textbf{TKM} & \textbf{VEL} & \textbf{KIR} & %
+      \textbf{SEV} \\\midrule
+      1 & \ttranslate{Stockfotos}{stock photos} &%
+      \ttranslate{Wahl\-kampf\-ge\-schenk}{election gift} &%
+      \ttranslate{Suchmaschinen}{search engines} &%
+      \ttranslate{Scherwey}{Scherwey}\\
+
+      2 & \ttranslate{BMKS65}{BMKS65} &%
+      \ttranslate{Or\-dens\-ge\-schich\-te}{order history} &%
+      \ttranslate{\#gameinsight}{\#gameinsight} &%
+      \ttranslate{krebsen}{to crawl}\\
+
+      3 & \ttranslate{Ziya}{Ziya} &%
+      \ttranslate{Indologica}{Indologica} &%
+      \ttranslate{\#androidgames}{\#androidgames} &%
+      \ttranslate{kaschieren}{to conceal}\\
+
+      4 & \ttranslate{Shoafoundation}{shoah found.} &%
+      \ttranslate{Indologie}{Indology} &%
+      \ttranslate{Selamat}{selamat} &%
+      \ttranslate{Davis}{Davis}\\
+
+      5 & \ttranslate{T1199}{T1199} &%
+      \ttranslate{Energieverbrauch}{energy consumption} &%
+      \ttranslate{Pagi}{Pagi} &%
+      \ttranslate{\#Klassiker}{\#classics}\\
+
+      6 & \ttranslate{Emilay55}{Emilay55} &%
+      \ttranslate{Schimmelbildung}{mold formation} &%
+      \ttranslate{\#Sparwelt}{\#savingsworld} &%
+      \ttranslate{Nationalismus}{nationalism}\\
+
+      7 & \ttranslate{Eneramo}{Eneramo} &%
+      \ttranslate{Hygiene}{hygiene} &%
+      \ttranslate{\#Seittest}{\#Seittest} &%
+      \ttranslate{Kraftstoff}{fuel}\\
+
+      8 & \ttranslate{GotzeID}{GotzeID} &%
+      \ttranslate{wasserd}{waterp} &%
+      \ttranslate{Gameinsight}{Gameinsight} &%
+      \ttranslate{inaktiv}{idle}\\
+
+      9 & \ttranslate{BSH65}{BSH65} &%
+      \ttranslate{heizkostensparen}{saving heating costs} &%
+      \ttranslate{\#ipadgames}{\#ipadgames} &%
+      \ttranslate{8DD}{8DD}\\
+
+      10 & \ttranslate{Saymak.}{Saymak.} &%
+      \ttranslate{Re\-fe\-renz\-ar\-chi\-tek\-tu\-ren}{reference architectures} &%
+      \ttranslate{Fitnesstraining}{fitness training} &%
+      \ttranslate{Mailadresse}{mail address}\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Top ten polar terms produced by NWE-based
+    methods.]{Top ten polar terms produced by NWE-based methods.}
+    \label{tbl:snt-lex:NWE:top-10}
   \end{center}
 \end{table}
 
