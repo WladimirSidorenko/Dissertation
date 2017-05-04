@@ -1,26 +1,68 @@
-\chapter{Sentence-Level Sentiment Analysis}\label{sec:snt:slsa}
+\chapter{Coarse-Grained Sentiment Analysis}\label{sec:snt:cgsa}
 
-\section{Sentence-Level Sentiment Analysis with Deep Neural Networks}
+\section{Coarse-Grained Sentiment Analysis with Lexicon-Based Methods}
 
-\section{Sentence-Level Sentiment Analysis with Deep Neural Networks}
+\section{Coarse-Grained Sentiment Analysis with Traditional Supervised
+  Machine Learning Frameworks}
+
+\section{Coarse-Grained Sentiment Analysis with Deep Neural Networks}
 
 \section{Evaluation}
+\subsection{Effect of Distant Supervision}
+\subsection{Effect of Normalization}
+
+\section{Language and Domain Adaptation}
 
 \section{Related Work}
 
-Wiebe 2002, Riloff 2003
+\textbf{Lexicon-Based Methods}
 
-Nakagawa, 2010
+Bruce and Wiebe, 2004
+
+Hu and Liu, 2004
 
 \citet{Kim:04} experimented with three different methods of
 determining the overall polarity of a sentence:
 \begin{inparaenum}[(i)]
-  \item multiplying the signs of polar terms found in sentence,
+  \item by multiplying the signs of polar terms found in sentence,
   \item taking their sum, and
   \item taking the geometric mean of polarity scores;
 \end{inparaenum}
 finding that the first and last options worked best for the Document
 Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
+
+% Intensity Classification
+Polanyi and Zaenen (2006)
+
+\citet{Kennedy:06}
+
+Taboada and Grieve (2004)
+
+Taboada, Anthony, and Voll (2006)
+
+Finally, a veritably seminal work on lexicon-based approaches was
+introduced by~\citet{Taboada:11} who presented a manually compiled
+sentiment lexicon,\footnote{The authors hand-annotated all occurrences
+  of adjectives, nouns, and verbs found in a corpus of 400 Epinions
+  reviews with ordinal categories ranging from -5 to 5 which reflected
+  the semantic orientation of a term (positive vs. negative) and its
+  polar strength (weak vs. strong).} and used this resource to compute
+the overall \emph{semantic orientation} (SO) of text.  Inspired by the
+ideas of~\citet{Polanyi:06}, to make this calculation more precise,
+the authors also incorporated a set of additional heuristic rules by
+changing the prior polarity and intensity values of negated,
+itensified, and downtoned terms, ignoring irrealis sentences, and
+adjusting weights of specific sections of a document.  An extensive
+evaluation of this method showed a superior performance of the manual
+lexicon in comparison with other polarity lists including the
+Subjectivity Dictionary~\cite{Wilson:05}, Maryland Polarity
+Set~\cite{Mohammad:09}, and \textsc{SentiWordNet}~\cite{Esuli:06c}.
+Furthermore, the authors also proved the robustness of their SO
+computation procedure for other topics and domains, hypothesizing that
+lexion-based approaches were more domain-independent than traditional
+supervised learning techniques.
+
+\textbf{Traditional Supervised Machine Learning Frameworks}
 
 One of the first attempts to analyze message-level sentiments on
 Twitter was made by \citet{Go:09}.  For their experiments, the authors
@@ -31,12 +73,12 @@ Bayes, MaxEnt, and SVM classifier.  The best $F$-score for this
 two-class classification problem could be achieved by the last system
 and run up to 82.2\%.
 
-Similar work was also done by \citet{Pak:10}, who used the Na\"{\i}ve
+Similar work was also done by \citet{Pak:10} who used the Na\"{\i}ve
 Bayes approach to differentiate between neutral, positive, and
-negative microblogs; and \citet{Barbosa:10}, who gathered a collection
+negative microblogs; and \citet{Barbosa:10} who gathered a collection
 of 200,000 tweets, subsequently analyzing them with three publicly
 available sentiment web-services and training an SVM classifier on the
-results of these services.  In a similar way, \citet{Agarwal:11}
+results of these predictors.  In a similar way, \citet{Agarwal:11}
 compared a simple unigram-based SVM approach with two other
 full-fledged systems, one which relied on a rich set of manually
 defined features, and another used partial tree
@@ -62,13 +104,17 @@ underrepresented classes.  Later on, these results were further
 improved by the apporaches of~\citet{Hagen:15} and \citet{Deriu:16},
 which both relied on ensembles of multiple independent classifiers.
 
-\citet{Kobayashi:07}
+\cite{Nakagawa:10}
+
+Wiebe 2002, Riloff 2003
+
 Wiebe, Bruce, \& O'Hara 1999
 Hatzivassiloglou \& Wiebe 2000
 Wiebe 2000;
 Wiebe et al. 2002
 Yu \& Hatzivassiloglou 2003
 
+\textbf{Deep Neural Networks}
 
 \citet{Yessenalina:11}
 
@@ -106,5 +152,11 @@ function was redefined as follows:
 \end{align*}
 
 \citet{Wang:15}
+
+\textbf{Language and Domain Adaptation}
+\cite{Aue:05}
+\cite{Blitzer:07}
+Andreevskaia and Bergler, 2008
+
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
