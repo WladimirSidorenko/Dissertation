@@ -50,17 +50,17 @@ sentiment lexicon,\footnote{The authors hand-annotated all occurrences
 the overall \emph{semantic orientation} (SO) of text.  Inspired by the
 ideas of~\citet{Polanyi:06}, to make this calculation more precise,
 the authors also incorporated a set of additional heuristic rules by
-changing the prior polarity and intensity values of negated,
-itensified, and downtoned terms, ignoring irrealis sentences, and
-adjusting weights of specific sections of a document.  An extensive
-evaluation of this method showed a superior performance of the manual
-lexicon in comparison with other polarity lists including the
-Subjectivity Dictionary~\cite{Wilson:05}, Maryland Polarity
-Set~\cite{Mohammad:09}, and \textsc{SentiWordNet}~\cite{Esuli:06c}.
-Furthermore, the authors also proved the robustness of their SO
-computation procedure for other topics and domains, hypothesizing that
-lexion-based approaches were more domain-independent than traditional
-supervised learning techniques.
+changing the prior SO values of negated, itensified, and downtoned
+terms, ignoring irrealis sentences, and adjusting weights of specific
+sections of a document.  An extensive evaluation of this method showed
+a superior performance of the manual lexicon in comparison with other
+polarity lists including the Subjectivity Dictionary~\cite{Wilson:05},
+Maryland Polarity Set~\cite{Mohammad:09}, and
+\textsc{SentiWordNet}~\cite{Esuli:06c}.  Moreover, the authors also
+proved the robustness of their SO computation procedure for other
+topics and text genres, hypothesizing that lexion-based approaches
+were more domain-independent than traditional supervised learning
+techniques.
 
 \textbf{Traditional Supervised Machine Learning Frameworks}
 
@@ -154,9 +154,33 @@ function was redefined as follows:
 \citet{Wang:15}
 
 \textbf{Language and Domain Adaptation}
-\cite{Aue:05}
-\cite{Blitzer:07}
-Andreevskaia and Bergler, 2008
+
+One of the first works which pointed out the importance of domain
+adaptation in sentiment analysis was presented by~\citet{Aue:05}.  In
+their experiments, the authors trained separate SVM classifiers on
+four different document collections: movie revies, book reviews,
+customer feedback from a product support service, and a knowledge base
+data survey; finding that each classifier performed best when the
+training and test domains were the same.  In order to find an optimal
+way of overcoming this domain specificity, \citet{Aue:05} tried out
+four different options:
+\begin{inparaenum}[(i)]
+\item\label{sent-cgsa:lst:rel-wrk1} training a classifier on all but the target domain and applying
+  it to the latter;
+\item using the same procedure as in~\ref{sent-cgsa:lst:rel-wrk1}, but
+  limiting the features only to those which also frequently appeared
+  in the target texts;
+\item taking an ensemble of individual classifiers each of which was
+  trained on a different domain; and, finally,
+\item using a minimal subset of labeled in-domain data to train a
+  Na{\"i}ve Bayes system with the Expectation-Maximization
+  \cite[EM;][]{Dempster:77} algorithm.
+\end{inparaenum}
+The authors found the ensemble and EM options working best in these
+cross-domain settings, achieving an accuracy of up to 82.39\% on new
+unseen text genres.
+
+\cite{Blitzer:07} Andreevskaia and Bergler, 2008
 
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
