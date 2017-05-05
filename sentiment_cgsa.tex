@@ -2,16 +2,17 @@
 
 \section{Coarse-Grained Sentiment Analysis with Lexicon-Based Methods}
 
-\section{Coarse-Grained Sentiment Analysis with Traditional Supervised
-  Machine Learning Frameworks}
+\section{Coarse-Grained Sentiment Analysis with Machine Learning
+  Frameworks}
 
 \section{Coarse-Grained Sentiment Analysis with Deep Neural Networks}
+
+\section{Coarse-Grained Sentiment Analysis using Language and Domain
+  Adaptation}
 
 \section{Evaluation}
 \subsection{Effect of Distant Supervision}
 \subsection{Effect of Normalization}
-
-\section{Language and Domain Adaptation}
 
 \section{Related Work}
 
@@ -159,28 +160,53 @@ One of the first works which pointed out the importance of domain
 adaptation in sentiment analysis was presented by~\citet{Aue:05}.  In
 their experiments, the authors trained separate SVM classifiers on
 four different document collections: movie revies, book reviews,
-customer feedback from a product support service, and a knowledge base
-data survey; finding that each classifier performed best when the
-training and test domains were the same.  In order to find an optimal
-way of overcoming this domain specificity, \citet{Aue:05} tried out
-four different options:
+customer feedback from a product support service, and a feedback
+survey from a customer knowledge base; finding that each classifier
+performed best when applied to the same domain as it was trained on.
+In order to find an optimal way of overcoming this domain specificity,
+\citet{Aue:05} tried out four different options:
 \begin{inparaenum}[(i)]
-\item\label{sent-cgsa:lst:rel-wrk1} training a classifier on all but the target domain and applying
-  it to the latter;
-\item using the same procedure as in~\ref{sent-cgsa:lst:rel-wrk1}, but
-  limiting the features only to those which also frequently appeared
-  in the target texts;
+\item\label{sent-cgsa:lst:rel-wrk1} training one classifier on all but
+  the target domain and applying it to the latter;
+\item using the same procedure as above, but limiting the features to
+  only those which also appeared in the target texts;
 \item taking an ensemble of individual classifiers each of which was
-  trained on a different domain; and, finally,
+  trained on a different data collection; and, finally,
 \item using a minimal subset of labeled in-domain data to train a
-  Na{\"i}ve Bayes system with the Expectation-Maximization
+  Na{\"i}ve Bayes system with the expectation-maximization
   \cite[EM;][]{Dempster:77} algorithm.
 \end{inparaenum}
-The authors found the ensemble and EM options working best in these
-cross-domain settings, achieving an accuracy of up to 82.39\% on new
-unseen text genres.
+The authors found the ensemble and EM options working best for their
+cross-domain task, achieving an accuracy of up to 82.39\% for the
+two-class prediction (positive vs negative) on new unseen text genres.
 
-\cite{Blitzer:07} Andreevskaia and Bergler, 2008
+Another notable contribution to the domain adaptation research was
+made by~\citet{Blitzer:07}.  Relying on their previous work on
+structural correspondence learning~\cite{Blitzer:07}, in which they
+used a set of \emph{pivot features} (features which frequently
+appeared in both target and source domains) to find an optimal
+correspondence of the remaining attributes,\footnote{In particular,
+  the authors trained $m$ binary predictors for each of their $m$
+  pivot features in order to find other attributes which frequently
+  co-occurred with the pivots.  Afterwards, they composed these $m$
+  resulting weight vectors into a single matrix
+  $W := [\vec{w}_{1},\ldots,\vec{w}_{m}]$, took an SVD decomposition
+  of this matrix, and used the top $h$ left singular vectors to
+  translate source features to the new domain.} the authors refined
+their method by pre-selecting the pivots using their PMI scores and
+improving misaligned feature projections using a small set of labeled
+target examples.  With these modifications, \citeauthor{Blitzer:07}
+were able to reduce the average adaptation loss (the accuracy drop
+when transferring a classifier to a different domain) from 9.1 to
+4.9~percent when testing on the domains of book, dvd, electical
+appliances, and kitchen reviews.
 
+\citet{Yang:15} TODO
+
+Other important works on domain adaptation for sentiment analysis
+include those of~\citet{Read:05} TODO; \citet{Tan:07} TODO; and
+\citet{Andreevskaia:08}, who combined a lexicon- and an ML-based
+system into an ensemble, outperforming each of these systems in
+isolation.
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
