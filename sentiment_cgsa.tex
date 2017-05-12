@@ -212,22 +212,37 @@ and \citet{Andreevskaia:08}, who combined a lexicon- and an ML-based
 system into an ensemble, outperforming each of these systems in
 isolation.
 
-Furthermore, \citet{Glorot:11} stacked denoising autoencoders (SDA)
+Li Zong, 2008
 
-\citet{Chen:12} who proposed a marginalized version of this approach,
-in which they analytically computed the reconstruction matrix $W$ for
-the encoded input, and used both original and reconstructed features
-to predict the polarity labels on the target domain.
+Pan, 2010
+
+Another line of research was introduced by~\citet{Glorot:11} who
+proposed stacked denoising autoencoders (SDA)---a neural network
+architecture in which an input vector $\vec{x}$ was first mapped to a
+smaller representation $\vec{x}'$ via some function
+$h: \vec{x}\mapsto\vec{x}'$, and then restored to its approximate
+original state via an inverse transformation
+$g: \vec{x}'\mapsto\vec{x}''\approx\vec{x}$.  In their experiments,
+the authors optimized the parameters of the functions $h$ and $g$ on
+both target and source data, getting approximate representations of
+instances from both data sets; and then trained a linear SVM
+classifier on the restored representations of the source instances,
+subsequently applying this classifier to the target domain.  This
+approach was further refined by~\citet{Chen:12} who analytically
+computed the reconstruction function~$g$, and used both original and
+restored features to predict the polarity labels of the target
+data.\footnote{Both approaches were trained tested on the Amazon
+  Review Corpus of~\citet{Blitzer:07}.}
 
 
-Further notable contributions to domain adaptation in
-general were made by~\citet{Daume:07} who proposed to replicate each
-extracted feature three times and train the first replication on both
-domains, the second repetion only on source, and the third copy only
-on target domain, for which he assumed a small subset of labeled
-examples was available; \citet{Yang:15} who trained neural embeddings
-of features, trying to predict which instance attributes frequently
-co-occured with each other;
+Further notable contributions to domain adaptation in general were
+made by~\citet{Daume:07} who proposed to replicate each extracted
+feature three times and train the first replication on both domains,
+the second repetion only on source, and the third copy only on target
+domain, for which he assumed a small subset of labeled examples was
+available; \citet{Yang:15} who trained neural embeddings of features,
+trying to predict which instance attributes frequently co-occured with
+each other;
 
 \citet{Ganchev:10}
 
