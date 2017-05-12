@@ -1036,12 +1036,12 @@ appearing in a negative context---e.g., ``ein richtiger
 Bombenanschlag'' (\emph{a real bomb attack}) or ``ein richtiger
 Terrorist'' (\emph{a real terrorist}).  As a consequence of this,
 methods relying on distant supervision had to deal with an extremely
-unbalanced training set\footnote{The automatically labeled corpus that
-  we obtained for the approach by \citet{Kiritchenko:14} using these
-  seeds, for instance, had 716,210 positive versus 92,592 negative
-  training instances.}, and fell victim to this unjustified skewness,
-getting stuck in a local optimum from the very beginning of their
-training.  We will investigate later in
+unbalanced training set,\footnote{The automatically labeled corpus
+  that we obtained for the approach by \citet{Kiritchenko:14} using
+  these seeds, for instance, had 716,210 positive versus 92,592
+  negative training instances.} and fell victim to this unjustified
+skewness, getting stuck in a local optimum from the very beginning of
+their training.  We will investigate later in
 Section~\ref{subsec:snt-lex:eoss} whether the seed sets proposed by
 other authors could provide a remedy to this problem.
 
@@ -1056,16 +1056,23 @@ introduced by~\citet{Bengio:03} and further refined by
 applications~\cite{Manning:15}.  Unfortunately, to this day, the SLG
 task remained mainly untouched from these advances, up to a few
 exceptional works introduced by~\citet{Tang:14a} and \citet{Vo:16}.
-In the former method, the authors used a $k$-NN classifier in order to
-predict the polarity of hybrid word embeddings (\citeauthor{Tang:14a}
-considered the occurrences of positive and negative smileys as noisy
-labels for tweets' sentiments, and incorporated message-level polarity
-prediction as an additional training objective while learning the word
-vectors).  In the latter approach, \citet{Vo:16} trained task-specific
-two-dimensional embeddings, also utilizing smileys as distantly
-supervised tags, and regarded the two elements of the resulting
-representations as positive and negative scores of the respective
-words.
+In the former method, the authors used a large collection of noisily
+labeled tweets (to which they assigned polarity labels based on the
+occurrence of positive and negative smileys) in order to learn hybrid
+word embeddings.  In contrast to standard word2vec
+vectors~\cite{Mikolov:13} and task-specific
+representations~\cite{Collobert:11}, such embeddings were trained to
+predict both objectives---the cooccurrence of other words in their
+context and the overall polarity of the message they appeared in.  In
+the next step, \citet{Tang:14a} trained a simple one-layer
+feed-forward neural network on the aforementioned data collection, and
+then applied this classifier to each known embedding, considering its
+predicted score as the polarity value of the respective word or
+phrase.  Similarly, \citet{Vo:16} also adopted the distant supervision
+framework.  However, in contrast to the former method, they ab initio
+trained two-dimensional task-specific representations, and regarded
+the two elements of these vectors as positive and negative scores of
+the respective words.
 
 In order to estimate the potential of these approaches for an
 automatic generation of sentiment lexicons for German Twitter, we
