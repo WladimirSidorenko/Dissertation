@@ -109,7 +109,7 @@ In particular, in order to check a lexicon against the PotTS corpus,
 we construct a case-insensitive trie \cite[pp. 492--512]{Knuth:98}
 from the lexicon entries and apply this trie to the corpus annotation,
 simultaneously comparing its entries with the actual word forms and
-lemmas of the corpus tokens.\footnote{We use the \texttt{TreeTagger}
+lemmas of the corpus tokens.\footnote{We use the \textsc{TreeTagger}
   \cite{Schmid:95} to obtain lemma forms for corpus tokens.} A match
 is considered correct iff the matched lexicon entry absolutely
 corresponds to the (possibly lemmatized) expert's annotation and has
@@ -869,8 +869,8 @@ Snapshot \cite{Scheffler:14}---a collection of 24~M German microblogs,
 which we previously used to sample the data for our sentiment corpus.
 We constructed the collocation graph from the lemmatized word forms of
 this snapshot, skipping all words which appeared less than four times
-in the analyzed data.  We again were using the \texttt{TreeTagger}
-\cite{Schmid:95} for lemmatization, and \texttt{GermaNet} for deriving
+in the analyzed data.  We again were using the \textsc{TreeTagger}
+\cite{Schmid:95} for lemmatization, and \textsc{GermaNet} for deriving
 auxiliary semantic links between words for the method of
 \citet{Takamura:05}.  Similarly to the previous experiments, we
 fine-tuned all hyper-parameters (including the number of the induced
@@ -1057,63 +1057,122 @@ applications~\cite{Manning:15}.  Unfortunately, to this day, the SLG
 task remained mainly untouched from these advances, up to a few
 exceptional works introduced by~\citet{Tang:14a} and \citet{Vo:16}.
 In the former method, the authors used a large collection of noisily
-labeled tweets (to which they assigned polarity labels based on the
-occurrence of positive and negative smileys) in order to learn hybrid
-word embeddings.  In contrast to standard word2vec
+labeled tweets (they assigned polarity labels to these messages based
+on the occurrence of positive and negative smileys) in order to learn
+hybrid word embeddings.  In contrast to the standard word2vec
 vectors~\cite{Mikolov:13} and task-specific
 representations~\cite{Collobert:11}, such embeddings were trained to
-predict both objectives---the cooccurrence of other words in their
-context and the overall polarity of the message they appeared in.  In
-the next step, \citet{Tang:14a} trained a simple one-layer
-feed-forward neural network on the aforementioned data collection, and
-then applied this classifier to each known embedding, considering its
-predicted score as the polarity value of the respective word or
-phrase.  Similarly, \citet{Vo:16} also adopted the distant supervision
-framework.  However, in contrast to the former method, they ab initio
-trained two-dimensional task-specific representations, and regarded
-the two elements of these vectors as positive and negative scores of
-the respective words.
+predict both objectives---the cooccurrence of other words in the
+context and the overall polarity of a message the embedding's word
+appeared in.  In the next step, \citet{Tang:14a} trained a simple
+one-layer feed-forward neural network on the aforementioned vectors
+and labels, and applied this classifier to each learned embedding,
+considering its predicted score as the polarity value of the
+respective word or phrase.  Similarly, \citet{Vo:16} also adopted the
+distant supervision framework.  However, in contrast to the former
+method, they ab initio trained two-dimensional task-specific
+representations, and regarded the two elements of these vectors as
+positive and negative scores of the respective words.
 
 In order to estimate the potential of these approaches for an
 automatic generation of sentiment lexicons for German Twitter, we
-reimplemented these methods, extending them to three-way
-classification (positive, negative, and neutral), and also came up
-with three alternative solutions for obtaining polarity lists from
-NWEs:
+reimplemented these systems, extending them to three-way
+classification (positive, negative, and neutral), and applied them to
+distantly labeled instances from the German Twitter
+snapshot~\cite{Scheffler:14}, obtaining polarity labels for these
+microblogs with the help of the translated seed set
+of~\citet{Turney:03}.
+
+In addition to that, we also came up with four alternative solutions
+for generating polarity lists from NWEs:
 \begin{itemize}
-\item using the method of the nearest centroids,
-\item by applying the principal component analysis,
-\item and, finally, using the linear projection algorithm.
+\item the method of the nearest centroids,
+\item the $k$-NN algorithm;
+\item the prinicpal component analysis,
+\item and the linear projection method.
 \end{itemize}
 
-With the first approach, we used the embeddings of the seed terms to
+With the first approach, we used the embeddings of seed terms to
 compute the centroids of the positive, negative, and objective
 clusters.  Afterwards, we assigned a new word $w$ to the polarity
-group whose centroid was closest to the $w$'s vector.  We considered
+group whose centroid was the closest to its vector.  We considered
 this distance to the cluster center as the polarity score of the word
 $w$, and sorted the resulting sentiment lexicon in the ascending order
-of these scores.
+of these values.
 
-%% Similarly, with the KNN method, we allocated each new word $w$ to the
-%% polarity class $c$ if the seed embeddings of this class appeared more
-%% frequently among the neighbors of the $w$'s vector than the seed
-%% representations of any other polarity group.
+Similarly, with the $k$-NN algorithm, for every new word $w$, we
+looked for $k$ seed embeddings which were closest to the $w$'s vector
+representation, and allocated this term to the polarity class whose
+seeds appeared most frequently in its neighborhood.
 
 A slightly different technique was used with the approach of the
 principal component analysis.  After normally decomposing the
-embedding matrix~$E\in\mathbb{R}^{w\times|V|}$ (with $w$ denoting the
+embedding matrix~$E\in\mathbb{R}^{d\times|V|}$ (with $d$ denoting the
 dimension of the word vectors (300),\footnote{Due to implementation
   specifics, the initial embedding vectors had to be represented as
-  columns.} and $|V|$ representing the vocabulary size) into its SVD
-components:
+  columns.} and $|V|$ representing the vocabulary size) into its
+singular components:
 \begin{align*}
   E = U \Sigma V^T,
 \end{align*}
 where the matrices $U$ and $V$ stand for the orthogonal bases of the
 row and column spaces of $E$ respectively, we looked for the row axis
-$v$ such that the embeddings of the seed terms with opposite semantic
+$u$ such that the embeddings of the seed terms with opposite semantic
 orientations projected on this axis would be maximally far apart from
-each other.
+each other.  We first applied this method to find an axis
+$u_{\textrm{subj}}$ with the biggest distance between the projections
+of subjective (positive and negative) and neutral terms; and then used
+the same procedure to determine an axis $u_{\textrm{pol}}$ such that
+the projections of positive and negative terms on this line would be
+furthest away from each other.  Considering the inverse distance to
+the origins of these axes as subjectivity and polarity scores of the
+projected words, we considered the arithmetic mean of these values as
+the final lexicon score when including a word into the resulting
+polarity list.  The pseudo-code of this approach is shown in
+Algorithm~\ref{snt:lex:alg:pca}.
+\begin{algorithm}
+  \begin{algorithmic}
+    \Function{ExpandPCA}{$\mathcal{P}, \mathcal{N}, \mathcal{O}$, $E$}\Comment{$\mathcal{P}$ --- indices of positive terms,}
+    \Statex\Comment{$\mathcal{N}$ --- indices of negative terms,}
+    \Statex\Comment{$\mathcal{O}$ --- indices of objective terms, $E$ --- embedding matrix}
+    \State $U, \Sigma, V^\top\gets\textrm{SVD}(E)$;\Comment{obtain singular components of E}
+    \State $E'\gets\left(E^\top\cdot U\right)^\top$;\Comment{project E onto the eigenvectors of its row space}
+    \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get set of subjective terms}
+    \State $\textrm{u}_{\textrm{subj}}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets\textrm{FindAxis}(E', \mathcal{S}, \mathcal{O})$;\Comment{find
+      subjectivity axis}
+    \State $\textrm{u}_{\textrm{pol}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}\gets\textrm{FindAxis}(E', \mathcal{P}, \mathcal{N})$;\Comment{find
+      polarity axis}
+    \State scores$\gets\mathrm{ComputePolScores(E', \mathcal{S}\cup\mathcal{O},
+      u_{\textrm{subj}}, u_{\textrm{pol}}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}},
+      \mu_{\mathcal{P}}, \mu_{\mathcal{N}})}$;
+    \State\Return scores;
+    \EndFunction
+    \Statex
+    \Function{FindAxis}{$M, \mathcal{S}_1, \mathcal{S}_2$}
+    \State $\mu_1\gets 0$; $\mu_2\gets 0$;
+    \State axis$\gets 0$; max\_dist$\gets 0$;
+    \For{$i\gets 1$; $i <= rows(M)$; $i\gets i + 1$}
+    \State m$\gets M$[$i$];
+    \State dist$\gets\sum_{j_1\in\mathcal{S}_1,j_2\in\mathcal{S}_2}|$m[$j_1$] - m[$j_2$]$|$;
+    \If {dist $>$ max\_dist}
+    \State axis$\gets i$;
+    \State max\_dist$\gets$ dist;
+    \State $\mu_1\gets\frac{\sum_{j_1\in\mathcal{S}_1}\textrm{m}[j_1]}{|\mathcal{S}_1|}$;
+    \State $\mu_2\gets\frac{\sum_{j_2\in\mathcal{S}_2}\textrm{m}[j_2]}{|\mathcal{S}_2|}$;
+    \EndIf
+    \EndFor
+    \State\Return axis, $\mu_1$, $\mu_2$;
+    \EndFunction
+    \Statex
+    \Function{MergeScores}{$M, \mathcal{S}, u_{\textrm{subj}}, u_{\textrm{pol}},
+      \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}$}
+    \State scores $\gets$ [];
+    \State\Return scores;
+    \EndFunction
+  \end{algorithmic}
+  \caption[Sentiment lexicon generation using PCA.]{Sentiment lexicon
+    generation with the PCA algorithm.}\label{snt:lex:alg:pca}
+\end{algorithm}
 
 Since PCA, however, was not guaranteed to find the optimum polarity
 scale (the orthognal bases in SVD are typically computed using the
@@ -1158,7 +1217,7 @@ $\Delta = \vec{p}_{+}-\vec{p}_{-}$; and $\gamma$ stands for the dot
 product of this difference with the projection vector $\vec{b}$ at the
 $i$-th iteration step: $\gamma = \Delta \cdot \vec{b}^i$.\footnote{A
   detailed explanation of the gradient computation is given in
-  Appendix~\ref{chap:apdx:lex-grad} of this paper.}  With this
+  Appendix~\ref{chap:apdx:lex-grad} of this thesis.}  With this
 gradient, we then trivially optimized the line~$\vec{b}$ using
 gradient ascent until we reached the global maximum of the
 function~$f$.
@@ -1476,57 +1535,6 @@ stopping of the expansion.
   with different seed sets.}\label{snt:fig:sent-crp-lex-alt-seeds}
 \end{figure}
 
-% For convenience, we will summarize the results of three top-performing
-% configurations---the methods of \citet{Blair-Goldensohn:08},
-% \citet{Kim:04,Kim:06}, and the label-propagation approach of
-% \citet{Rao:09} used in combination with the initial seed sed of
-% \citet{Kim:04}---in Table~\ref{snt-lex:tbl:lex-kh-seedset} and use
-% these results as baselines in our later experiments.
-
-% \begin{table}[h]
-%   \begin{center}
-%     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-%     \begin{tabular}{p{0.1\columnwidth} % first columm
-%         *{9}{>{\centering\arraybackslash}p{0.078\columnwidth}} % next nine columns
-%         *{2}{>{\centering\arraybackslash}p{0.078\columnwidth}}} % last two columns
-%       \toprule
-%           \multirow{2}*{\bfseries Lexicon} & %
-%           \multicolumn{3}{c}{\bfseries Positive Expressions} & %
-%           \multicolumn{3}{c}{\bfseries Negative Expressions} & %
-%           \multicolumn{3}{c}{\bfseries Neutral Terms} & %
-%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
-%           \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-%           \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
-
-%           & Precision & Recall & \F{} & %
-%           Precision & Recall & \F{} & %
-%           Precision & Recall & \F{} & & \\\midrule
-
-%           BG & 22.7\stddev{6.5} & \textbf{29.9}\stddev{8.4} & 25.4\stddev{6.7} & %
-%           17.1\stddev{7.4} & \textbf{16.9}\stddev{7.2} & \textbf{16.6}\stddev{6.7} & %
-%           \textbf{97}\stddev{0.6} & 96.4\stddev{0.6} & 96.7\stddev{0.5} & %
-%           46.3\stddev{3.5} & 93.5\stddev{0.9}\\
-
-%           KH & 51.6\stddev{12.4} & 21.7\stddev{7.2} & \textbf{29.9}\stddev{8.1} & %
-%           38.9\stddev{24.7} & 7.5\stddev{4.9} & 12.2\stddev{7.8} & %
-%           96.7\stddev{0.7} & \textbf{99.4}\stddev{0.2} & \textbf{98}\stddev{0.4} & %
-%           \textbf{46.7}\stddev{3.9} & \textbf{96}\stddev{0.7}\\
-
-%           RR$_{\textrm{lbl-prop}}$ & \textbf{52.9}\stddev{15.2} & 18.4\stddev{6.5} & 26.7\stddev{8.2} & %
-%           \textbf{42.8}\stddev{29.7} & 8.9\stddev{5.8} & 14.1\stddev{8.8} & %
-%           96.6\stddev{0.7} & \textbf{99.4}\stddev{0.3} & \textbf{98}\stddev{0.4} & %
-%           46.3\stddev{4.3} & \textbf{96}\stddev{0.8}\\
-%           \bottomrule
-%     \end{tabular}
-%     \egroup
-%     \caption{Results of the top-scoring dictionary-based approaches
-%       with the best observed seed set configuration. {\small (BG --
-%         \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04,Kim:06}, RR
-%         -- \citet{Rao:09})}}
-%     \label{snt-lex:tbl:lex-kh-seedset}
-%   \end{center}
-% \end{table}
-
 \section{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
 
 \begin{table}[thb!]
@@ -1687,7 +1695,7 @@ Table~\ref{tbl:snt-lex:dict:top-10}.
     \egroup
     \caption[Top ten polar terms produced by dictionary-based
     methods.]{%
-      Top ten polar terms produced by dictionary-based methods.\\
+      Top ten polar terms produced by the dictionary-based methods.\\
       {\small ** -- the min-cut method of \citet{Rao:09} returns an
         unsorted set}}
     \label{tbl:snt-lex:dict:top-10}
@@ -1777,7 +1785,7 @@ methods.
     \end{tabular}
     \egroup
     \caption[Top ten polar terms produced by corpus-based
-    methods.]{Top ten polar terms produced by corpus-based methods.}
+    methods.]{Top ten polar terms produced by the corpus-based methods.}
     \label{tbl:snt-lex:crp:top-10}
   \end{center}
 \end{table}
@@ -1792,59 +1800,59 @@ methods.
       \textbf{Rank} & %
       \textbf{TKM} & \textbf{VEL} & \textbf{KIR} & %
       \textbf{SEV} \\\midrule
-      1 & \ttranslate{Stockfotos}{stock photos} &%
-      \ttranslate{Wahl\-kampf\-ge\-schenk}{election gift} &%
-      \ttranslate{Suchmaschinen}{search engines} &%
-      \ttranslate{Scherwey}{Scherwey}\\
+      1 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      2 & \ttranslate{BMKS65}{BMKS65} &%
-      \ttranslate{Or\-dens\-ge\-schich\-te}{order history} &%
-      \ttranslate{\#gameinsight}{\#gameinsight} &%
-      \ttranslate{krebsen}{to crawl}\\
+      2 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      3 & \ttranslate{Ziya}{Ziya} &%
-      \ttranslate{Indologica}{Indologica} &%
-      \ttranslate{\#androidgames}{\#androidgames} &%
-      \ttranslate{kaschieren}{to conceal}\\
+      3 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      4 & \ttranslate{Shoafoundation}{shoah found.} &%
-      \ttranslate{Indologie}{Indology} &%
-      \ttranslate{Selamat}{selamat} &%
-      \ttranslate{Davis}{Davis}\\
+      4 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      5 & \ttranslate{T1199}{T1199} &%
-      \ttranslate{Energieverbrauch}{energy consumption} &%
-      \ttranslate{Pagi}{Pagi} &%
-      \ttranslate{\#Klassiker}{\#classics}\\
+      5 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      6 & \ttranslate{Emilay55}{Emilay55} &%
-      \ttranslate{Schimmelbildung}{mold formation} &%
-      \ttranslate{\#Sparwelt}{\#savingsworld} &%
-      \ttranslate{Nationalismus}{nationalism}\\
+      6 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      7 & \ttranslate{Eneramo}{Eneramo} &%
-      \ttranslate{Hygiene}{hygiene} &%
-      \ttranslate{\#Seittest}{\#Seittest} &%
-      \ttranslate{Kraftstoff}{fuel}\\
+      7 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      8 & \ttranslate{GotzeID}{GotzeID} &%
-      \ttranslate{wasserd}{waterp} &%
-      \ttranslate{Gameinsight}{Gameinsight} &%
-      \ttranslate{inaktiv}{idle}\\
+      8 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      9 & \ttranslate{BSH65}{BSH65} &%
-      \ttranslate{heizkostensparen}{saving heating costs} &%
-      \ttranslate{\#ipadgames}{\#ipadgames} &%
-      \ttranslate{8DD}{8DD}\\
+      9 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\
 
-      10 & \ttranslate{Saymak.}{Saymak.} &%
-      \ttranslate{Re\-fe\-renz\-ar\-chi\-tek\-tu\-ren}{reference architectures} &%
-      \ttranslate{Fitnesstraining}{fitness training} &%
-      \ttranslate{Mailadresse}{mail address}\\\bottomrule
+      10 & \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{} &%
+      \ttranslate{}{}\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Top ten polar terms produced by NWE-based
-    methods.]{Top ten polar terms produced by NWE-based methods.}
+    methods.]{Top ten polar terms produced by the NWE-based methods.}
     \label{tbl:snt-lex:NWE:top-10}
   \end{center}
 \end{table}
