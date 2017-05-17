@@ -1105,6 +1105,76 @@ looked for $k$ seed embeddings which were closest to the $w$'s vector
 representation, and allocated this term to the polarity class whose
 seeds appeared most frequently in its neighborhood.
 
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{ExpandPCA}{$\mathcal{P}, \mathcal{N}, \mathcal{O}, \vars{E}$}\Comment{$\mathcal{P}$ --- indices of positive terms,}
+    \Statex\Comment{$\mathcal{N}$ --- indices of negative terms,}
+    \Statex\Comment{$\mathcal{O}$ --- indices of objective terms, $\vars{E}$ --- embedding matrix}
+    \State $\vars{U}, \Sigma, \vars{V}^\top\gets\func{SVD}(\vars{E})$;\Comment{obtain singular components of \vars{E}}
+    \State $\vars{E}'\gets\left(\vars{E}^\top\cdot \vars{U}\right)^\top$;\Comment{project \vars{E} onto the eigenvectors of its row space}
+    \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get set of subjective terms}
+    \State $\vars{u}_{subj}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets\func{FindAxis}(\vars{E}', \mathcal{S}, \mathcal{O})$;\Comment{find
+      subjectivity axis}
+    \State $\vars{u}_{pol}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}\gets\func{FindAxis}(\vars{E}', \mathcal{P}, \mathcal{N})$;\Comment{find polarity axis}
+    \State\Return $\func{ComputePolScores}(\vars{E}', \mathcal{S}\cup\mathcal{O},%
+      \vars{u}_{subj}, \vars{u}_{pol}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}},%
+      \mu_{\mathcal{P}}, \mu_{\mathcal{N}})$;
+    \EndFunction
+    \Statex
+    \Function{FindAxis}{$\vars{M}, \mathcal{S}_1, \mathcal{S}_2$}
+    \State $\mu_1\gets 0$; $\mu_2\gets 0$; \vars{axis} $\gets 0$; \vars{max\_dist} $\gets 0$;
+    \For{$\vars{i}\gets 1$; $\vars{i} <= \func{nrows}(\vars{M})$; $\vars{i}\gets\vars{i} + 1$}
+    \State \vars{m} $\gets$\vars{M[i]};
+    \State \vars{dist} $\gets\sum_{j_1\in\mathcal{S}_1,j_2\in\mathcal{S}_2}\left|\vars{m}[j_1] - \vars{m}[j_2]\right|$;
+    \If {\vars{dist} $>$ \vars{max\_dist}}
+    \State \vars{axis} $\gets$\vars{i}; \vars{max\_dist} $\gets$ \vars{dist};
+    \State $\mu_1\gets\frac{\sum_{j_1\in\mathcal{S}_1}\vars{m}[j_1]}{|\mathcal{S}_1|}$; $\mu_2\gets\frac{\sum_{j_2\in\mathcal{S}_2}\vars{m}[j_2]}{|\mathcal{S}_2|}$;
+    \EndIf
+    \EndFor
+    \State\Return\vars{axis}, $\mu_1$, $\mu_2$;
+    \EndFunction
+    \Statex
+    \Function{ComputePolScores}{$\vars{M}, \mathcal{S}, \vars{u}_{subj}, \vars{u}_{pol},
+      \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}$}
+    \State\vars{scores} $\gets []$;
+    \State\vars{max\_score}$_{subj}\gets\max\left(\max\left(|\vars{n}^\top - \mu_{\mathcal{S}}|,%
+        |\vars{n}^\top - \mu_{\mathcal{O}}|\right)\right)\forall \vars{n}\in\func{cols}(\vars{M})$;
+    \State\vars{max\_score}$_{pol}\gets\max\left(\max\left(|\vars{n}^\top - \mu_{\mathcal{P}}|,%
+        |\vars{n}^\top - \mu_{\mathcal{N}}|\right)\right)\forall\vars{n}\in\func{cols}(\vars{M})$;
+    \For{$\vars{i}\gets 1$; $\vars{i} <= \func{ncols}(\vars{M})$; $\vars{i}\gets\vars{i} + 1$}
+    \If {$\vars{i} \in \mathcal{S}$}
+    \State \textbf{continue};\Comment{known seeds will be added later by default}
+    \EndIf
+    \State \vars{n}$\gets$\vars{M[:, i]}$^\top$;\Comment{assign $i$-th column to \vars{n}}
+    \If {$|\vars{n} - \mu_{\mathcal{O}}| > |\vars{n} - \mu_{\mathcal{S}}|$}\Comment{if the $i$-th word is subjective}
+    \State\vars{score}$_{subj}\gets 1 + \frac{|\vars{n} - \mu_{\mathcal{S}}|}{\vars{max\_score}_{subj}}$;
+    \Else
+    \State\vars{score}$_{subj}\gets 1 - \frac{|\vars{n} - \mu_{\mathcal{O}}|}{\vars{max\_score}_{subj}}$;
+    \EndIf
+    \algstore{sentilex-pca}
+  \end{algorithmic}
+  \caption[Sentiment lexicon generation using PCA.]{Sentiment lexicon
+    generation with the PCA algorithm.}\label{snt:lex:alg:pca}
+\end{algorithm}
+
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \algrestore{sentilex-pca}
+    \If {$|\vars{n} - \mu_{\mathcal{N}}| > |\vars{n} - \mu_{\mathcal{P}}|$}\Comment{if the $i$-th word is positive}
+    \State\vars{polarity}$\gets$ positive;
+    \State\vars{score}$_{subj}\gets 1 \frac{|\vars{n} - \mu_{\mathcal{P}}|}{\vars{max\_score}_{subj}}$;
+    \Else
+    \State \vars{polarity}$\gets$ negative;
+    \State\vars{score}$_{subj}\gets \frac{|\vars{n} - \mu_{\mathcal{N}}|}{\vars{max\_score}_{subj}}$;
+    \EndIf
+    \State\func{append}(\vars{scores},
+    (\vars{i}, \vars{polarity}, $\vars{score}_{\textrm{subj}} + \vars{score}_{pol}$));
+    \EndFor
+    \State\Return\vars{scores};
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
 A slightly different technique was used with the approach of the
 principal component analysis.  After normally decomposing the
 embedding matrix~$E\in\mathbb{R}^{d\times|V|}$ (with $d$ denoting the
@@ -1126,53 +1196,10 @@ the same procedure to determine an axis $u_{\textrm{pol}}$ such that
 the projections of positive and negative terms on this line would be
 furthest away from each other.  Considering the inverse distance to
 the origins of these axes as subjectivity and polarity scores of the
-projected words, we considered the arithmetic mean of these values as
-the final lexicon score when including a word into the resulting
-polarity list.  The pseudo-code of this approach is shown in
+projected words, we considered the sum of these values as the final
+lexicon score when including a word into the resulting polarity list.
+The pseudo-code of this approach is shown in
 Algorithm~\ref{snt:lex:alg:pca}.
-\begin{algorithm}
-  \begin{algorithmic}
-    \Function{ExpandPCA}{$\mathcal{P}, \mathcal{N}, \mathcal{O}$, $E$}\Comment{$\mathcal{P}$ --- indices of positive terms,}
-    \Statex\Comment{$\mathcal{N}$ --- indices of negative terms,}
-    \Statex\Comment{$\mathcal{O}$ --- indices of objective terms, $E$ --- embedding matrix}
-    \State $U, \Sigma, V^\top\gets\textrm{SVD}(E)$;\Comment{obtain singular components of E}
-    \State $E'\gets\left(E^\top\cdot U\right)^\top$;\Comment{project E onto the eigenvectors of its row space}
-    \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get set of subjective terms}
-    \State $\textrm{u}_{\textrm{subj}}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets\textrm{FindAxis}(E', \mathcal{S}, \mathcal{O})$;\Comment{find
-      subjectivity axis}
-    \State $\textrm{u}_{\textrm{pol}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}\gets\textrm{FindAxis}(E', \mathcal{P}, \mathcal{N})$;\Comment{find
-      polarity axis}
-    \State scores$\gets\mathrm{ComputePolScores(E', \mathcal{S}\cup\mathcal{O},
-      u_{\textrm{subj}}, u_{\textrm{pol}}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}},
-      \mu_{\mathcal{P}}, \mu_{\mathcal{N}})}$;
-    \State\Return scores;
-    \EndFunction
-    \Statex
-    \Function{FindAxis}{$M, \mathcal{S}_1, \mathcal{S}_2$}
-    \State $\mu_1\gets 0$; $\mu_2\gets 0$;
-    \State axis$\gets 0$; max\_dist$\gets 0$;
-    \For{$i\gets 1$; $i <= rows(M)$; $i\gets i + 1$}
-    \State m$\gets M$[$i$];
-    \State dist$\gets\sum_{j_1\in\mathcal{S}_1,j_2\in\mathcal{S}_2}|$m[$j_1$] - m[$j_2$]$|$;
-    \If {dist $>$ max\_dist}
-    \State axis$\gets i$;
-    \State max\_dist$\gets$ dist;
-    \State $\mu_1\gets\frac{\sum_{j_1\in\mathcal{S}_1}\textrm{m}[j_1]}{|\mathcal{S}_1|}$;
-    \State $\mu_2\gets\frac{\sum_{j_2\in\mathcal{S}_2}\textrm{m}[j_2]}{|\mathcal{S}_2|}$;
-    \EndIf
-    \EndFor
-    \State\Return axis, $\mu_1$, $\mu_2$;
-    \EndFunction
-    \Statex
-    \Function{MergeScores}{$M, \mathcal{S}, u_{\textrm{subj}}, u_{\textrm{pol}},
-      \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}$}
-    \State scores $\gets$ [];
-    \State\Return scores;
-    \EndFunction
-  \end{algorithmic}
-  \caption[Sentiment lexicon generation using PCA.]{Sentiment lexicon
-    generation with the PCA algorithm.}\label{snt:lex:alg:pca}
-\end{algorithm}
 
 Since PCA, however, was not guaranteed to find the optimum polarity
 scale (the orthognal bases in SVD are typically computed using the
