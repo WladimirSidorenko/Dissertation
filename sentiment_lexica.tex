@@ -1113,15 +1113,15 @@ seeds appeared most frequently in its neighborhood.
     \State $\vars{U}, \Sigma, \vars{V}^\top\gets\func{SVD}(\vars{E})$;\Comment{obtain singular components of \vars{E}}
     \State $\vars{E}'\gets\left(\vars{E}^\top\cdot \vars{U}\right)^\top$;\Comment{project \vars{E} onto the eigenvectors of its row space}
     \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get set of subjective terms}
-    \State $\vars{u}_{subj}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets\func{FindAxis}(\vars{E}', \mathcal{S}, \mathcal{O})$;\Comment{find
+    \State $\vars{u}_{subj}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets\func{FindMeanAxis}(\vars{E}', \mathcal{S}, \mathcal{O})$;\Comment{find
       subjectivity axis}
     \State $\vars{u}_{pol}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}\gets\func{FindAxis}(\vars{E}', \mathcal{P}, \mathcal{N})$;\Comment{find polarity axis}
     \State\Return $\func{ComputePolScores}(\vars{E}', \mathcal{S}\cup\mathcal{O},%
-      \vars{u}_{subj}, \vars{u}_{pol}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}},%
-      \mu_{\mathcal{P}}, \mu_{\mathcal{N}})$;
+    \vars{u}_{subj}, \vars{u}_{pol}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}},%
+    \mu_{\mathcal{P}}, \mu_{\mathcal{N}})$;
     \EndFunction
     \Statex
-    \Function{FindAxis}{$\vars{M}, \mathcal{S}_1, \mathcal{S}_2$}
+    \Function{FindMeanAxis}{$\vars{M}, \mathcal{S}_1, \mathcal{S}_2$}
     \State $\mu_1\gets 0$; $\mu_2\gets 0$; \vars{axis} $\gets 0$; \vars{max\_dist} $\gets 0$;
     \For{$\vars{i}\gets 1$; $\vars{i} <= \func{nrows}(\vars{M})$; $\vars{i}\gets\vars{i} + 1$}
     \State \vars{m} $\gets$\vars{M[i]};
@@ -1137,20 +1137,33 @@ seeds appeared most frequently in its neighborhood.
     \Function{ComputePolScores}{$\vars{M}, \mathcal{S}, \vars{u}_{subj}, \vars{u}_{pol},
       \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}$}
     \State\vars{scores} $\gets []$;
-    \State\vars{max\_score}$_{subj}\gets\max\left(\max\left(|\vars{n}^\top - \mu_{\mathcal{S}}|,%
-        |\vars{n}^\top - \mu_{\mathcal{O}}|\right)\right)\forall \vars{n}\in\func{cols}(\vars{M})$;
-    \State\vars{max\_score}$_{pol}\gets\max\left(\max\left(|\vars{n}^\top - \mu_{\mathcal{P}}|,%
-        |\vars{n}^\top - \mu_{\mathcal{N}}|\right)\right)\forall\vars{n}\in\func{cols}(\vars{M})$;
+
+    \State\vars{O}$_{subj}\gets\mu_{\mathcal{S}} -
+    \mu_{\mathcal{O}}$;\Comment{Compute the origin of the
+      subjectivity axis.}
+
+    \State\vars{max\_score}$_{subj}\gets\max\left(\{|\vars{n}\lbrack\vars{u}_{subj}\rbrack%
+      - \vars{O}_{subj}| |\forall\vars{n}\in\func{cols}(\vars{M})\}\right)$;
+
+    \State\vars{O}$_{pol}\gets\mu_{\mathcal{P}} -
+    \mu_{\mathcal{N}}$;\Comment{Compute the origin of the polarity
+      axis.}
+
+    \State\vars{max\_score}$_{pol}\gets\max\left(\{|\vars{n}\lbrack\vars{u}_{pol}\rbrack%
+      - \vars{O}_{pol}| |\forall\vars{n}\in\func{cols}(\vars{M})\}\right)$;
+
     \For{$\vars{i}\gets 1$; $\vars{i} <= \func{ncols}(\vars{M})$; $\vars{i}\gets\vars{i} + 1$}
     \If {$\vars{i} \in \mathcal{S}$}
     \State \textbf{continue};\Comment{known seeds will be added later by default}
     \EndIf
     \State \vars{n}$\gets$\vars{M[:, i]}$^\top$;\Comment{assign $i$-th column to \vars{n}}
-    \If {$|\vars{n} - \mu_{\mathcal{O}}| > |\vars{n} - \mu_{\mathcal{S}}|$}\Comment{if the $i$-th word is subjective}
-    \State\vars{score}$_{subj}\gets 1 + \frac{|\vars{n} - \mu_{\mathcal{S}}|}{\vars{max\_score}_{subj}}$;
-    \Else
-    \State\vars{score}$_{subj}\gets 1 - \frac{|\vars{n} - \mu_{\mathcal{O}}|}{\vars{max\_score}_{subj}}$;
-    \EndIf
+
+    \If {$|\vars{n}\lbrack\vars{u}_{subj}\rbrack - \mu_{\mathcal{O}}| > %
+      |\vars{n}\lbrack\vars{u}_{subj}\rbrack - \mu_{\mathcal{S}}|$}%
+    \Comment{if the $i$-th word is subjective}
+
+    \State\vars{score}$_{subj}\gets 1 + %
+    \frac{|\vars{n}\lbrack\vars{u}_{subj}\rbrack - \vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
     \algstore{sentilex-pca}
   \end{algorithmic}
   \caption[Sentiment lexicon generation using PCA.]{Sentiment lexicon
@@ -1160,13 +1173,22 @@ seeds appeared most frequently in its neighborhood.
 \begin{algorithm}
   \begin{algorithmic}[1]
     \algrestore{sentilex-pca}
-    \If {$|\vars{n} - \mu_{\mathcal{N}}| > |\vars{n} - \mu_{\mathcal{P}}|$}\Comment{if the $i$-th word is positive}
+    \Else
+    \State\vars{score}$_{subj}\gets 1 - %
+    \frac{|\vars{n}\lbrack\vars{u}_{subj}\rbrack - \vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
+    \EndIf
+
+    \If {$|\vars{n}\lbrack\vars{u}_{pol}\rbrack - \mu_{\mathcal{N}}| > %
+      |\vars{n}\lbrack\vars{u}_{pol}\rbrack - \mu_{\mathcal{P}}|$}%
+    \Comment{if the $i$-th word is positive}
+
     \State\vars{polarity}$\gets$ positive;
-    \State\vars{score}$_{subj}\gets 1 \frac{|\vars{n} - \mu_{\mathcal{P}}|}{\vars{max\_score}_{subj}}$;
     \Else
     \State \vars{polarity}$\gets$ negative;
-    \State\vars{score}$_{subj}\gets \frac{|\vars{n} - \mu_{\mathcal{N}}|}{\vars{max\_score}_{subj}}$;
     \EndIf
+    \State\vars{score}$_{pol}\gets%
+    \frac{|\vars{n}\lbrack\vars{u}_{pol}\rbrack %
+      - \vars{O}_{pol}|}{\vars{max\_score}_{pol}}$;
     \State\func{append}(\vars{scores},
     (\vars{i}, \vars{polarity}, $\vars{score}_{\textrm{subj}} + \vars{score}_{pol}$));
     \EndFor
@@ -1207,9 +1229,10 @@ covariance matrix of $E$, and might therefore fail to capture semantic
 orientations if terms with opposite polarities occur in similar
 contexts), we additionally introduced our own \emph{linear projection
   method}, in which we explicitly adopted the aforementioned
-objective: Namely, given two sets of vectors for the positive and
-negative seed terms respectively (let us denote them as
-$\mathcal{P} = \{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and
+objective: Namely, given two sets of vectors with opposite semantic
+orientations (let us, for instance, denote the set of positive vectors
+as $\mathcal{P} = \{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and the set
+of negative embeddings as
 $\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$), find a
 projection line $\vec{b}$ which would maximize the distance between
 the projections of terms from these disjoint sets, i.e.: {\small%
@@ -1224,14 +1247,15 @@ the projections of terms from these disjoint sets, i.e.: {\small%
 where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the
 projection of a word embedding with the positive polarity on the line
 $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the
-respective projection of a negative seed term (see
-Figure~\ref{fig:linproj.L.M} for a visual explanation of this
-method).\footnote{Since we are only interested in finding the slope of
-  the projection line, we assume an intercept of zero.}
+respective projection of a negative seed term.
 
-Considering the $\argmax$ argument in Expression~\ref{eq:f} as our
-objective function $f$, we computed the gradient of this function
-w.r.t. the projection line $\vec{b}$:
+% (see Figure~\ref{fig:linproj.L.M} for a visual explanation of this
+% method).\footnote{Since we are only interested in finding the slope of
+%   the projection line, we assume an intercept of zero.}
+
+Considering the $\argmax$ argument in Expression~\ref{eq:f} as the
+objective function~$f$, we can compute the gradient of~$f$ with
+respect to the projection line~$\vec{b}$:
 
 {\small%
   \begin{align}
@@ -1239,15 +1263,14 @@ w.r.t. the projection line $\vec{b}$:
     \gamma\left(\Delta - \gamma\vec{b^{i}}\right),\label{eq:prj-line-grad}%
 \end{align}\normalsize}%
 where $\Delta$ is the difference between the positive and negative
-vectors $\vec{p}_{+}$ and $\vec{p}_{-}$:
+vectors~$\vec{p}_{+}$ and`$\vec{p}_{-}$:
 $\Delta = \vec{p}_{+}-\vec{p}_{-}$; and $\gamma$ stands for the dot
-product of this difference with the projection vector $\vec{b}$ at the
+product of this difference with the projection vector~$\vec{b}$ at the
 $i$-th iteration step: $\gamma = \Delta \cdot \vec{b}^i$.\footnote{A
   detailed explanation of the gradient computation is given in
   Appendix~\ref{chap:apdx:lex-grad} of this thesis.}  With this
-gradient, we then trivially optimized the line~$\vec{b}$ using
-gradient ascent until we reached the global maximum of the
-function~$f$.
+gradient, we then trivially optimize the line~$\vec{b}$ using gradient
+ascent until we reach the global maximum of the function~$f$.
 
 % \begin{minipage}{0.4\textwidth}
 %   \centering
@@ -1267,8 +1290,8 @@ function~$f$.
 \begin{figure}
   \centering
   \mbox{\includegraphics[height=15em]{img/sentilex_L_M}}
-  \caption[A visualization of the linear projection method in a
-  two-dimensional vector space.]{A visualization of the linear
+  \caption[Visualization of the linear projection method in a
+  two-dimensional vector space.]{Visualization of the linear
     projection method in a
     two-dimensional vector space.\\
     (\small$\vec{b}^0$ --- initial guess of the projection line;
@@ -1291,7 +1314,10 @@ The~$\mu_-$ term in the above equation represents the mean of the
 projected embeddings of the negative seed terms:
 $\mu_- = \frac{\sum\vec{p'_-}}{|\mathcal{N}|}$; and the~$\mu_+$
 variable stands for the respective mean of the projections of positive
-seeds.  Eventually, we created the final list of polar terms, sorting
+seeds.
+
+\todo[inline]{Add description of the two-stage procedure.}
+Eventually, we created the final list of polar terms, sorting
 them by the distance of their projections to the computed origin point
 in descending order (so that words whose projections were furthest
 away from the central point appeared at the very beginning of the
