@@ -1377,19 +1377,11 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       0.414 & 0.921\\
 
       % ./scripts/eval_cardinality data/results/vo/vo.word2vec.turney-littman-seedset.dflt-neut.txt
-      % Class                     Precision              Recall                 F-score
-      % 80
-      % positive                   0.588926             0.103448                 0.175984
-      % negative                   0.457143             0.017884                 0.034421
-      % neutral                    0.963216             0.998216                 0.980404
-      % Macro-average              0.669762             0.373183                 0.396936
-      % Micro-average              0.961416             0.961291                 0.961353
 
-      % Class                     Precision              Recall                 F-score
-      VO & 80 & 0.589 & 0.103 & 0.176 & %
-      0.457 & 0.018 & 0.034 & %
-      0.963 & 0.998 & 0.98 & %
-      0.397 & 0.961\\
+      VO &  &  &  &  & %
+       &  &  & %
+       &  &  & %
+       & \\
 
       %% file: data/results/ncentroids/ncentroids.vectors.word2vec.turney_littman-seedset_2003.txt
 
@@ -1628,12 +1620,15 @@ stopping of the expansion.
     \begin{tabular}{p{0.15\columnwidth} % first columm
         *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
       \toprule
-      \multirow{2}*{\bfseries Lexicon} & \multicolumn{4}{c}{\bfseries Embedding Type}\\
-      & length normalization & task-specific + word2vec & task-specific + least squares & task-specific\\\midrule
-      NC &  &  &  & \\
-      KNN &  &  &  & \\
-      PCA &  &  &  & \\
-      LP &  &  &  & \\\bottomrule
+      \multirow{2}*{\bfseries SLG Method} & \multicolumn{4}{c}{\bfseries Vecto Normalization}\\
+                                          & mean normalization + length normalization %
+                                          & mean normalization (-L) %
+                                          & length normalization (-M) %
+                                          & no normalization (-L -M)\\\midrule
+      NC & 0.398 &  &  & \\
+      $k$-NN & 0.468 &  &  & \\
+      PCA & 0.401 &  &  & \\
+      LP & 0.462 & 0.416 & 0.461 & 0.442\\\bottomrule
 
     \end{tabular}\egroup%
     {
@@ -1746,7 +1741,7 @@ Table~\ref{tbl:snt-lex:dict:top-10}.
     \egroup
     \caption[Top ten polar terms produced by dictionary-based
     methods.]{%
-      Top ten polar terms produced by the dictionary-based methods.\\
+      Top ten polar terms produced by dictionary-based methods.\\
       {\small ** -- the min-cut method of \citet{Rao:09} returns an
         unsorted set}}
     \label{tbl:snt-lex:dict:top-10}
@@ -1836,7 +1831,7 @@ methods.
     \end{tabular}
     \egroup
     \caption[Top ten polar terms produced by corpus-based
-    methods.]{Top ten polar terms produced by the corpus-based methods.}
+    methods.]{Top ten polar terms produced by corpus-based methods.}
     \label{tbl:snt-lex:crp:top-10}
   \end{center}
 \end{table}
@@ -1924,7 +1919,7 @@ methods.
     \end{tabular}
     \egroup
     \caption[Top ten polar terms produced by NWE-based
-    methods.]{Top ten polar terms produced by the NWE-based methods.}
+    methods.]{Top ten polar terms produced by NWE-based methods.}
     \label{tbl:snt-lex:NWE:top-10}
   \end{center}
 \end{table}
