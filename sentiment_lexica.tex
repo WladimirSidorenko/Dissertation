@@ -1138,15 +1138,15 @@ seeds appeared most frequently in its neighborhood.
       \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}$}
     \State\vars{scores} $\gets []$;
 
-    \State\vars{O}$_{subj}\gets\mu_{\mathcal{S}} -
-    \mu_{\mathcal{O}}$;\Comment{Compute the origin of the
+    \State\vars{O}$_{subj}\gets\frac{\mu_{\mathcal{S}} -
+    \mu_{\mathcal{O}}}{2}$;\Comment{Compute the origin of the
       subjectivity axis.}
 
     \State\vars{max\_score}$_{subj}\gets\max\left(\{|\vars{n}\lbrack\vars{u}_{subj}\rbrack%
       - \vars{O}_{subj}| |\forall\vars{n}\in\func{cols}(\vars{M})\}\right)$;
 
-    \State\vars{O}$_{pol}\gets\mu_{\mathcal{P}} -
-    \mu_{\mathcal{N}}$;\Comment{Compute the origin of the polarity
+    \State\vars{O}$_{pol}\gets\frac{\mu_{\mathcal{P}} -
+    \mu_{\mathcal{N}}}{2}$;\Comment{Compute the origin of the polarity
       axis.}
 
     \State\vars{max\_score}$_{pol}\gets\max\left(\{|\vars{n}\lbrack\vars{u}_{pol}\rbrack%
@@ -1190,7 +1190,9 @@ seeds appeared most frequently in its neighborhood.
     \frac{|\vars{n}\lbrack\vars{u}_{pol}\rbrack %
       - \vars{O}_{pol}|}{\vars{max\_score}_{pol}}$;
     \State\func{append}(\vars{scores},
-    (\vars{i}, \vars{polarity}, $\vars{score}_{\textrm{subj}} + \vars{score}_{pol}$));
+    (\vars{i}, \vars{polarity}, %
+    $\frac{1}{\vars{score}_{\textrm{subj}} + \vars{score}_{pol}}$));\Comment{The total score is inversed}
+    \Statex\Comment{as we sort the resulting polarity list in the ascending order.}
     \EndFor
     \State\Return\vars{scores};
     \EndFunction
@@ -1290,9 +1292,9 @@ ascent until we reach the global maximum of the function~$f$.
 \begin{figure}
   \centering
   \mbox{\includegraphics[height=15em]{img/sentilex_L_M}}
-  \caption[Visualization of the linear projection method in a
+  \caption[Visualization of the linear projection method in the
   two-dimensional vector space.]{Visualization of the linear
-    projection method in a
+    projection method in the
     two-dimensional vector space.\\
     (\small$\vec{b}^0$ --- initial guess of the projection line;
     $\vec{b}$ --- optimal projection vector; the distances between the
@@ -1355,9 +1357,9 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       % Macro-average              0.767226             0.372780                 0.398086
       % Micro-average              0.962404             0.962216                 0.962310
 
-      \textsc{Seed Set} & 20 & \textbf{0.771} & 0.102 & 0.18 & %
-      \textbf{0.568} & 0.017 & 0.033 & %
-      0.963 & \textbf{0.999} & 0.981 & %
+      \textsc{Seed Set} & 20 & 0.771 & 0.102 & 0.18 & %
+      0.568 & 0.017 & 0.033 & %
+      0.963 & 0.999 & 0.981 & %
       0.398 & 0.962\\
 
       % Class                     Precision              Recall                 F-score
@@ -1370,18 +1372,11 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
 
       % Class                     Precision              Recall                 F-score
       TNG & 1,600 & 0.088 & 0.153 & 0.112 & %
-      0.193 & \textbf{0.155} & \textbf{0.172} & %
-      \textbf{0.966} & 0.953 & 0.959 & %
+      0.193 & 0.155 & 0.172 & %
+      0.966 & 0.953 & 0.959 & %
       0.414 & 0.921\\
 
-      % Class                     Precision              Recall                 F-score
-      % 80
-      % positive                   0.588926             0.103448                 0.175984
-      % negative                   0.457143             0.017884                 0.034421
-      % neutral                    0.963216             0.998216                 0.980404
-      % Macro-average              0.669762             0.373183                 0.396936
-      % Micro-average              0.961416             0.961291                 0.961353
-
+      % ./scripts/eval_cardinality data/results/vo/vo.word2vec.turney-littman-seedset.dflt-neut.txt
       % Class                     Precision              Recall                 F-score
       % 80
       % positive                   0.588926             0.103448                 0.175984
@@ -1405,40 +1400,41 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       % neutral                    0.963176             0.999227                 0.980870
       % Macro-average              0.767226             0.372780                 0.398086
 
-      NC & 5,200 & \textbf{0.771} & 0.102 & 0.18 & %
-       \textbf{0.568} & 0.017 & 0.033 & %
-       0.963 & \textbf{0.999} & 0.981 & %
+      NC & 5,200 & 0.771 & 0.102 & 0.18 & %
+       0.568 & 0.017 & 0.033 & %
+       0.963 & 0.999 & 0.981 & %
        0.398 & 0.962\\
 
-      %% file: data/results/knn/knn.vectors.word2vec.turney_littman_2003.txt
+      %% file: data/results/knn/knn.word2vec.turney_littman_2003.txt
       % Computed using:
-      % ./scripts/eval_cardinality data/results/knn/knn.word2vec.turney_littman_2003.txt
+      % ./scripts/eval_cardinality data/results/knn/knn.turney_littman_2003.txt
       % Class                     Precision              Recall                 F-score
-      % 5120
-      % positive                   0.028954             0.101975                 0.045102
-      % negative                   0.005488             0.017139                 0.008314
-      % neutral                    0.957841             0.865014                 0.909064
-      % Macro-average              0.330761             0.328042                 0.320826
-      % Micro-average              0.833480             0.833317                 0.833398
-      $k$-NN & 5,120 & 0.029 & 0.102 & 0.045 & %
-       0.01 & 0.02 & 0.01 & %
-       0.958 & 0.865 & 0.909 & %
-       0.321 & 0.833\\
+      % 420
+      % positive                   0.485827             0.181845                 0.264637
+      % negative                   0.649867             0.091282                 0.160078
+      % neutral                    0.966192             0.995034                 0.980401
+      % Macro-average              0.700629             0.422720                 0.468372
+      % Micro-average              0.961439             0.961252                 0.961345
+      $k$-NN & 420 & 0.486 & 0.182 & 0.265 & %
+        0.65 & 0.091 & 0.16 & %
+        0.966 & 0.995 & 0.98 & %
+        0.468 & 0.961\\
 
       %% file: data/results/pca/pca.vectors.word2vec.turney_littman_2003.txt
       % Computed using:
       % ./scripts/eval_cardinality data/results/pca/pca.word2vec.turney_littman_2003.txt
       % Class                     Precision              Recall                 F-score
-      % 40
-      % positive                   0.672381             0.104038                 0.180194
-      % negative                   0.567901             0.017139                 0.033273
-      % neutral                    0.963204             0.998758                 0.980659
-      % Macro-average              0.734495             0.373312                 0.398042
+      % 280
+      % positive                   0.770601             0.101975                 0.180115
+      % negative                   0.316327             0.023100                 0.043056
+      % neutral                    0.963279             0.998582                 0.980613
+      % Macro-average              0.683402             0.374552                 0.401261
+      % Micro-average              0.961889             0.961701                 0.961795
 
-      PCA & 40 & 0.672 & 0.104 & 0.18 & %
-       \textbf{0.568} & 0.017 & 0.033 & %
-       0.963 & \textbf{0.999} & 0.981 & %
-       0.398 & 0.962\\
+      PCA & 280 & 0.771 & 0.102 & 0.18 & %
+        0.316 & 0.023 & 0.043 & %
+        0.963 & 0.999 & 0.981 & %
+        0.401 & 0.962\\
 
       %% file: 'data/results/linproj/linproj.vectors.word2vec.turney_littman_2003.txt'
       % Class                     Precision              Recall                 F-score
@@ -1449,10 +1445,10 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       % Macro-average              0.760470             0.372778                 0.398075
       % Micro-average              0.962397             0.962209                 0.962303
 
-      LP & 6,340 & 0.741 & \textbf{0.156} & \textbf{0.257} & %
+      LP & 6,340 & 0.741 & 0.156 & 0.257 & %
        0.436 & 0.088 & 0.147 & %
-       \textbf{0.966} & 0.998 & \textbf{0.982} & %
-       \textbf{0.462} & \textbf{0.963}\\\bottomrule
+       0.966 & 0.998 & 0.982 & %
+       0.462 & 0.963\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Evaluation of NWE-based approaches.]{Evaluation of
@@ -1565,7 +1561,7 @@ of \citet{Esuli:06c}.
   \centering
   \includegraphics[height=12em,width=\linewidth]{%
     img/sentilex-dict-alt-seed-sets.png}
-  \caption{Macro-averaged \F{}-scores of the dictionary-based approaches
+  \caption{Macro-averaged \F{}-scores of dictionary-based approaches
     with different seed sets.}\label{snt:fig:sent-dict-lex-alt-seeds}
 \end{figure}
 
@@ -1584,8 +1580,8 @@ stopping of the expansion.
   \centering
   \includegraphics[height=12em,width=\linewidth]{%
     img/sentilex-crp-alt-seed-sets.png}
-  \caption{Macro-averaged \F{}-scores of the corpus-based approaches
-  with different seed sets.}\label{snt:fig:sent-crp-lex-alt-seeds}
+  \caption{Macro-averaged \F{}-scores of corpus-based approaches with
+    different seed sets.}\label{snt:fig:sent-crp-lex-alt-seeds}
 \end{figure}
 
 \section{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
@@ -1597,12 +1593,14 @@ stopping of the expansion.
     \begin{tabular}{p{0.15\columnwidth} % first columm
         *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
       \toprule
-      \multirow{2}*{\bfseries Lexicon} & \multicolumn{4}{c}{\bfseries Embedding Type}\\
-      & word2vec & task-specific + word2vec & task-specific + least squares & task-specific\\\midrule
-      NC &  &  &  & \\
-      KNN &  &  &  & \\
-      PCA &  &  &  & \\
-      LP &  &  &  & \\\bottomrule
+      \multirow{2}*{\bfseries Lexicon} %
+      & \multicolumn{4}{c}{\bfseries Embedding Type}\\
+      & word2vec & task-specific + word2vec & task-specific + least squares %
+                                            & task-specific\\\midrule
+      NC & 0.398 & 0.398 & \textbf{0.401} & 0.399\\
+      $k$-NN & \textbf{0.468} & 0.43 & 0.398 & 0.392\\
+      PCA & 0.401 & 0.398 & 0.398 & \textbf{0.402}\\
+      LP & \textbf{0.462} & 0.441 & 0.398 & 0.399\\\bottomrule
 
     \end{tabular}\egroup%
     {
@@ -1631,7 +1629,7 @@ stopping of the expansion.
         *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
       \toprule
       \multirow{2}*{\bfseries Lexicon} & \multicolumn{4}{c}{\bfseries Embedding Type}\\
-      & word2vec & task-specific + word2vec & task-specific + least squares & task-specific\\\midrule
+      & length normalization & task-specific + word2vec & task-specific + least squares & task-specific\\\midrule
       NC &  &  &  & \\
       KNN &  &  &  & \\
       PCA &  &  &  & \\
@@ -1848,60 +1846,81 @@ methods.
     \bgroup \setlength\tabcolsep{0.03\tabcolsep}\scriptsize
     \begin{tabular}{%
         >{\centering\arraybackslash}p{0.07\columnwidth} % first columm
-        *{4}{>{\centering\arraybackslash}p{0.232\columnwidth}}} % last two columns
+        *{6}{>{\centering\arraybackslash}p{0.155\columnwidth}}} % last two columns
       \toprule
-      \textbf{Rank} & %
-      \textbf{TKM} & \textbf{VEL} & \textbf{KIR} & %
-      \textbf{SEV} \\\midrule
-      1 & \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \textbf{Rank} %
+      & \textbf{TNG} & \textbf{VO} & \textbf{NC} %
+      & \textbf{$k$-NN} & \textbf{PCA} & \textbf{LinProj} \\\midrule
 
-      2 & \ttranslate{}{} &%
+      1 & \ttranslate{internetvorr\"ate}{Internet inventories} &%
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{paion}{paion} &%
+      \ttranslate{eklig}{yukky} &%
+      \ttranslate{gwiyomi.}{gwiyomi.} &%
+      \ttranslate{dumm}{stupid}\\
 
-      3 & \ttranslate{}{} &%
+      2 & \ttranslate{\%user-playlist}{\%user playlist} &%
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{auf$\lrcorner$}{on$\lrcorner$} &%
+      \ttranslate{\"atzend}{lousy} &%
+      \ttranslate{seitens}{on the part of} &%
+      \ttranslate{eklig}{yukky}\\
 
-      4 & \ttranslate{}{} &%
+      3 & \ttranslate{dumm}{stupid} &%
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{folgen!}{follow!} &%
+      \ttranslate{l\"acherlich}{ridiculous} &%
+      \ttranslate{kritisieren}{to criticize} &%
+      \ttranslate{fies}{nasty}\\
 
-      5 & \ttranslate{}{} &%
+      4 & \ttranslate{wundersch\"n}{gorgeous} &%
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{teil8}{part8} &%
+      \ttranslate{doof}{dumb} &%
+      \ttranslate{nanda}{nanda} &%
+      \ttranslate{doof}{dumb}\\
 
-      6 & \ttranslate{}{} &%
+      5 & \ttranslate{\"olgem\"alde}{oil painting} &%
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{stanzmesser}{punch knife} &%
+      \ttranslate{dumm}{stupid} &%
+      \ttranslate{@deinskysport}{@deinskysport} &%
+      \ttranslate{bl\"od}{stupid}\\
 
-      7 & \ttranslate{}{} &%
+      6 & \ttranslate{\%user-video}{\%user video} &%
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{niedlichg\"ahn}{cuteyawn} &%
+      \ttranslate{wunderbar}{winderful} &%
+      \ttranslate{doubts}{doubts} &%
+      \ttranslate{komisch}{funny}\\
 
-      8 & \ttranslate{}{} &%
+      7 & \ttranslate{verlosen}{to raffle} & %
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{vrrrum}{vrrrum} &%
+      \ttranslate{toll}{great} &%
+      \ttranslate{temos}{temos} &%
+      \ttranslate{traurig}{sad}\\
 
-      9 & \ttranslate{}{} &%
+      8 & \ttranslate{w\"unschen}{to wish} &%
       \ttranslate{}{} &%
-      \ttranslate{}{} &%
-      \ttranslate{}{}\\
+      \ttranslate{good$\lrcorner$}{good$\lrcorner$} &%
+      \ttranslate{widerlich}{disgusting} &%
+      \ttranslate{temas}{temas} &%
+      \ttranslate{d\"amlich}{silly}\\
 
-      10 & \ttranslate{}{} &%
+      9 & \ttranslate{d\"amlich}{silly} &%
       \ttranslate{}{} &%
+      \ttranslate{nativepride}{nativepride} &%
+      \ttranslate{nervig}{annoying} &%
+      \ttranslate{balas}{balas} &%
+      \ttranslate{peinlich}{embarrassing}\\
+
+      10 & \ttranslate{peinlich}{embarrassing} &%
       \ttranslate{}{} &%
-      \ttranslate{}{}\\\bottomrule
+      \ttranslate{$\ulcorner$whistle$\lrcorner$}{$\ulcorner$whistle$\lrcorner$} &%
+      \ttranslate{schrecklich}{awful} &%
+      \ttranslate{hepi}{hepi} &%
+      \ttranslate{schei\ss{}en}{to crap}\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Top ten polar terms produced by NWE-based
