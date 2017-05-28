@@ -1057,19 +1057,20 @@ applications~\cite{Manning:15}.  Unfortunately, to this day, the SLG
 task remained mainly untouched from these advances, up to a few
 exceptional works introduced by~\citet{Tang:14a} and \citet{Vo:16}.
 In the former method, the authors used a large collection of noisily
-labeled tweets (they assigned polarity labels to these messages based
-on the occurrence of positive and negative smileys) in order to learn
-hybrid word embeddings.  In contrast to the standard word2vec
-vectors~\cite{Mikolov:13} and task-specific
-representations~\cite{Collobert:11}, such embeddings were trained to
-predict both objectives---the cooccurrence of other words in the
-context and the overall polarity of a message the embedding's word
-appeared in.  In the next step, \citet{Tang:14a} trained a simple
-one-layer feed-forward neural network on the aforementioned vectors
-and labels, and applied this classifier to each learned embedding,
-considering its predicted score as the polarity value of the
-respective word or phrase.  Similarly, \citet{Vo:16} also adopted the
-distant supervision framework.  However, in contrast to the former
+labeled tweets\footnote{\citet{Tang:14a} assigned polarity labels to
+  the messages based on the occurrence of positive and negative
+  smileys in these tweets.}  in order to learn hybrid word embeddings.
+In contrast to the standard word2vec vectors~\cite{Mikolov:13} and
+purely task-specific representations~\cite{Collobert:11}, such
+embeddings were trained to optimize both objectives---predicting the
+co-occurrence of other words in the nearby context and classifying the
+polarity type of the messages.  In the next step, \citet{Tang:14a}
+trained a simple one-layer feed-forward neural network on the
+aforementioned hybrid vectors, trying to predict the noisily obtained
+labels, and applied this classifier to each learned embedding in
+isolation, considering the predicted score as the polarity value of
+the respective word or phrase.  Similarly, \citet{Vo:16} also adopted
+the distant supervision framework.  However, in contrast to the former
 method, they ab initio trained two-dimensional task-specific
 representations, and regarded the two elements of these vectors as
 positive and negative scores of the respective words.
@@ -1092,7 +1093,7 @@ for generating polarity lists from NWEs:
 \item and the linear projection method.
 \end{itemize}
 
-With the first approach, we used the embeddings of seed terms to
+With the first approach, we used the embeddings of the seed terms to
 compute the centroids of the positive, negative, and objective
 clusters.  Afterwards, we assigned a new word $w$ to the polarity
 group whose centroid was the closest to its vector.  We considered
@@ -1103,7 +1104,7 @@ of these values.
 Similarly, with the $k$-NN algorithm, for every new word $w$, we
 looked for $k$ seed embeddings which were closest to the $w$'s vector
 representation, and allocated this term to the polarity class whose
-seeds appeared most frequently in its neighborhood.
+seeds appeared closest and most frequently in its neighborhood.
 
 \begin{algorithm}
   \begin{algorithmic}[1]
@@ -1112,7 +1113,7 @@ seeds appeared most frequently in its neighborhood.
     \Statex\Comment{$\mathcal{O}$ --- indices of objective terms, $\vars{E}$ --- embedding matrix}
     \State $\vars{U}, \Sigma, \vars{V}^\top\gets\func{SVD}(\vars{E})$;\Comment{obtain singular components of \vars{E}}
     \State $\vars{E}'\gets\left(\vars{E}^\top\cdot \vars{U}\right)^\top$;\Comment{project \vars{E} onto the eigenvectors of its row space}
-    \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get set of subjective terms}
+    \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get the set of subjective terms}
     \State $\vars{u}_{subj}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets\func{FindMeanAxis}(\vars{E}', \mathcal{S}, \mathcal{O})$;\Comment{find
       subjectivity axis}
     \State $\vars{u}_{pol}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}\gets\func{FindAxis}(\vars{E}', \mathcal{P}, \mathcal{N})$;\Comment{find polarity axis}
@@ -1202,10 +1203,10 @@ seeds appeared most frequently in its neighborhood.
 A slightly different technique was used with the approach of the
 principal component analysis.  After normally decomposing the
 embedding matrix~$E\in\mathbb{R}^{d\times|V|}$ (with $d$ denoting the
-dimension of the word vectors (300),\footnote{Due to implementation
-  specifics, the initial embedding vectors had to be represented as
-  columns.} and $|V|$ representing the vocabulary size) into its
-singular components:
+dimension of the word vectors (in our case $d = 300$),\footnote{Due to
+  implementation specifics, the initial embedding vectors had to be
+  represented as columns.} and $|V|$ representing the vocabulary size)
+into its singular components:
 \begin{align*}
   E = U \Sigma V^T,
 \end{align*}
@@ -1218,11 +1219,11 @@ $u_{\textrm{subj}}$ with the biggest distance between the projections
 of subjective (positive and negative) and neutral terms; and then used
 the same procedure to determine an axis $u_{\textrm{pol}}$ such that
 the projections of positive and negative terms on this line would be
-furthest away from each other.  Considering the inverse distance to
+furthest away from each other.  Considering the inverse distances to
 the origins of these axes as subjectivity and polarity scores of the
-projected words, we considered the sum of these values as the final
-lexicon score when including a word into the resulting polarity list.
-The pseudo-code of this approach is shown in
+projected words respectively, we considered the sum of these values as
+the final lexicon score when including a word into the resulting
+polarity list.  The pseudo-code of this approach is shown in
 Algorithm~\ref{snt:lex:alg:pca}.
 
 Since PCA, however, was not guaranteed to find the optimum polarity
@@ -1257,7 +1258,7 @@ respective projection of a negative seed term.
 
 Considering the $\argmax$ argument in Expression~\ref{eq:f} as the
 objective function~$f$, we can compute the gradient of~$f$ with
-respect to the projection line~$\vec{b}$:
+respect to the line~$\vec{b}$:
 
 {\small%
   \begin{align}
@@ -1271,8 +1272,8 @@ product of this difference with the projection vector~$\vec{b}$ at the
 $i$-th iteration step: $\gamma = \Delta \cdot \vec{b}^i$.\footnote{A
   detailed explanation of the gradient computation is given in
   Appendix~\ref{chap:apdx:lex-grad} of this thesis.}  With this
-gradient, we then trivially optimize the line~$\vec{b}$ using gradient
-ascent until we reach the global maximum of the function~$f$.
+gradient, we can trivially optimize the vector~$\vec{b}$ using
+gradient ascent until we reach the global maximum of the function~$f$.
 
 % \begin{minipage}{0.4\textwidth}
 %   \centering
@@ -1289,9 +1290,18 @@ ascent until we reach the global maximum of the function~$f$.
 %   \label{fig:linproj.L.M}
 % \end{minipage}
 
-\begin{figure}
+\begin{figure*}[htbp!]
   \centering
-  \mbox{\includegraphics[height=15em]{img/sentilex_L_M}}
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \mbox{\includegraphics[height=15em]{img/sentilex_subjectivity}}
+    \caption{Subjectivity line}
+  \end{subfigure}
+  \begin{subfigure}{.45\textwidth}
+    \centering
+    \mbox{\includegraphics[height=15em]{img/sentilex_polarity}}
+    \caption{Polarity line}
+  \end{subfigure}
   \caption[Visualization of the linear projection method in the
   two-dimensional vector space.]{Visualization of the linear
     projection method in the
@@ -1302,7 +1312,7 @@ ascent until we reach the global maximum of the function~$f$.
     orientations ($p^+$ and $p^-$) on these lines are highlighted in
     \textcolor{highlighter green}{green})}
   \label{fig:linproj.L.M}
-\end{figure}
+\end{figure*}
 
 After determining the optimal line~$\vec{b}$, we projected all known
 word embeddings on the slope of this vector, and determined its origin
@@ -1377,11 +1387,18 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       0.414 & 0.921\\
 
       % ./scripts/eval_cardinality data/results/vo/vo.word2vec.turney-littman-seedset.dflt-neut.txt
+      % Class                     Precision              Recall                 F-score
+      % 40
+      % positive                   0.117066             0.115237                 0.116144
+      % negative                   0.541176             0.017139                 0.033225
+      % neutral                    0.962872             0.980000                 0.971361
+      % Macro-average              0.540371             0.370792                 0.373577
+      % Micro-average              0.944228             0.944044                 0.944136
 
-      VO &  &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      VO & 40 & 0.117 & 0.115 & 0.116 & %
+       0.541 & 0.017 & 0.033 & %
+       0.963 & 0.98 & 0.971 & %
+       0.374 & 0.944\\
 
       %% file: data/results/ncentroids/ncentroids.vectors.word2vec.turney_littman-seedset_2003.txt
 
@@ -1620,15 +1637,15 @@ stopping of the expansion.
     \begin{tabular}{p{0.15\columnwidth} % first columm
         *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
       \toprule
-      \multirow{2}*{\bfseries SLG Method} & \multicolumn{4}{c}{\bfseries Vecto Normalization}\\
+      \multirow{2}*{\bfseries SLG Method} & \multicolumn{4}{c}{\bfseries Vector Normalization}\\
                                           & mean normalization + length normalization %
                                           & mean normalization (-L) %
                                           & length normalization (-M) %
                                           & no normalization (-L -M)\\\midrule
-      NC & 0.398 &  &  & \\
-      $k$-NN & 0.468 &  &  & \\
-      PCA & 0.401 &  &  & \\
-      LP & 0.462 & 0.416 & 0.461 & 0.442\\\bottomrule
+      NC & 0.398 & 0.398 & 0.398 & 0.398\\
+      $k$-NN & \textbf{0.468} & 0.418 & 0.467 & 0.417\\
+      PCA & 0.401 & 0.396 & 0.401 & 0.\textbf{405}\\
+      LP & \textbf{0.462} & 0.416 & 0.461 & 0.442\\\bottomrule
 
     \end{tabular}\egroup%
     {
@@ -1848,70 +1865,70 @@ methods.
       & \textbf{$k$-NN} & \textbf{PCA} & \textbf{LinProj} \\\midrule
 
       1 & \ttranslate{internetvorr\"ate}{Internet inventories} &%
-      \ttranslate{}{} &%
+      \ttranslate{guz}{guz} &%
       \ttranslate{paion}{paion} &%
       \ttranslate{eklig}{yukky} &%
       \ttranslate{gwiyomi.}{gwiyomi.} &%
       \ttranslate{dumm}{stupid}\\
 
       2 & \ttranslate{\%user-playlist}{\%user playlist} &%
-      \ttranslate{}{} &%
+      \ttranslate{nerelere}{nerelere} &%
       \ttranslate{auf$\lrcorner$}{on$\lrcorner$} &%
       \ttranslate{\"atzend}{lousy} &%
       \ttranslate{seitens}{on the part of} &%
       \ttranslate{eklig}{yukky}\\
 
       3 & \ttranslate{dumm}{stupid} &%
-      \ttranslate{}{} &%
+      \ttranslate{www.op}{www.op} &%
       \ttranslate{folgen!}{follow!} &%
       \ttranslate{l\"acherlich}{ridiculous} &%
       \ttranslate{kritisieren}{to criticize} &%
       \ttranslate{fies}{nasty}\\
 
-      4 & \ttranslate{wundersch\"n}{gorgeous} &%
-      \ttranslate{}{} &%
+      4 & \ttranslate{wundersch\"on}{gorgeous} &%
+      \ttranslate{fernsehfestival}{TV festival} &%
       \ttranslate{teil8}{part8} &%
       \ttranslate{doof}{dumb} &%
       \ttranslate{nanda}{nanda} &%
       \ttranslate{doof}{dumb}\\
 
       5 & \ttranslate{\"olgem\"alde}{oil painting} &%
-      \ttranslate{}{} &%
+      \ttranslate{positip}{positip} &%
       \ttranslate{stanzmesser}{punch knife} &%
       \ttranslate{dumm}{stupid} &%
       \ttranslate{@deinskysport}{@deinskysport} &%
       \ttranslate{bl\"od}{stupid}\\
 
       6 & \ttranslate{\%user-video}{\%user video} &%
-      \ttranslate{}{} &%
+      \ttranslate{arn}{arn} &%
       \ttranslate{niedlichg\"ahn}{cuteyawn} &%
       \ttranslate{wunderbar}{winderful} &%
       \ttranslate{doubts}{doubts} &%
       \ttranslate{komisch}{funny}\\
 
       7 & \ttranslate{verlosen}{to raffle} & %
-      \ttranslate{}{} &%
+      \ttranslate{asri}{asri} &%
       \ttranslate{vrrrum}{vrrrum} &%
       \ttranslate{toll}{great} &%
       \ttranslate{temos}{temos} &%
       \ttranslate{traurig}{sad}\\
 
       8 & \ttranslate{w\"unschen}{to wish} &%
-      \ttranslate{}{} &%
+      \ttranslate{bewerten}{to rate} &%
       \ttranslate{good$\lrcorner$}{good$\lrcorner$} &%
       \ttranslate{widerlich}{disgusting} &%
       \ttranslate{temas}{temas} &%
       \ttranslate{d\"amlich}{silly}\\
 
       9 & \ttranslate{d\"amlich}{silly} &%
-      \ttranslate{}{} &%
+      \ttranslate{nacht}{night} &%
       \ttranslate{nativepride}{nativepride} &%
       \ttranslate{nervig}{annoying} &%
       \ttranslate{balas}{balas} &%
       \ttranslate{peinlich}{embarrassing}\\
 
       10 & \ttranslate{peinlich}{embarrassing} &%
-      \ttranslate{}{} &%
+      \ttranslate{morgen}{morning} &%
       \ttranslate{$\ulcorner$whistle$\lrcorner$}{$\ulcorner$whistle$\lrcorner$} &%
       \ttranslate{schrecklich}{awful} &%
       \ttranslate{hepi}{hepi} &%
