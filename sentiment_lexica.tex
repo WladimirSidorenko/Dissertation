@@ -1122,31 +1122,31 @@ seeds appeared closest and most frequently in its neighborhood.
     \mu_{\mathcal{P}}, \mu_{\mathcal{N}})$;
     \EndFunction
     \Statex
-    \Function{FindMeanAxis}{$\vars{M}, \mathcal{S}_1, \mathcal{S}_2$}
+    \Function{FindMeanAxis}{$\vars{E}, \mathcal{S}_1, \mathcal{S}_2$}
     \State $\mu_1\gets 0$; $\mu_2\gets 0$; \vars{axis} $\gets 0$; \vars{max\_dist} $\gets 0$;
-    \For{$\vars{i}\gets 1$; $\vars{i} <= \func{nrows}(\vars{M})$; $\vars{i}\gets\vars{i} + 1$}
-    \State \vars{m} $\gets$\vars{M[i]};
-    \State \vars{dist} $\gets\sum_{j_1\in\mathcal{S}_1,j_2\in\mathcal{S}_2}\left|\vars{m}[j_1] - \vars{m}[j_2]\right|$;
+    \For{$\vars{i}\gets 1$; $\vars{i} <= \func{nrows}(\vars{E})$; $\vars{i}\gets\vars{i} + 1$}
+    \State \vars{e} $\gets$\vars{M[i]};
+    \State \vars{dist} $\gets\sum_{j_1\in\mathcal{S}_1,j_2\in\mathcal{S}_2}\left|\vars{e}[j_1] - \vars{e}[j_2]\right|$;
     \If {\vars{dist} $>$ \vars{max\_dist}}
     \State \vars{axis} $\gets$\vars{i}; \vars{max\_dist} $\gets$ \vars{dist};
-    \State $\mu_1\gets\frac{\sum_{j_1\in\mathcal{S}_1}\vars{m}[j_1]}{|\mathcal{S}_1|}$; $\mu_2\gets\frac{\sum_{j_2\in\mathcal{S}_2}\vars{m}[j_2]}{|\mathcal{S}_2|}$;
+    \State $\mu_1\gets\frac{\sum_{j_1\in\mathcal{S}_1}\vars{e}[j_1]}{|\mathcal{S}_1|}$; $\mu_2\gets\frac{\sum_{j_2\in\mathcal{S}_2}\vars{e}[j_2]}{|\mathcal{S}_2|}$;
     \EndIf
     \EndFor
     \State\Return\vars{axis}, $\mu_1$, $\mu_2$;
     \EndFunction
     \Statex
-    \Function{ComputePolScores}{$\vars{M}, \mathcal{S}, \vars{u}_{subj}, \vars{u}_{pol},
+    \Function{ComputePolScores}{$\vars{E}, \mathcal{S}, \vars{u}_{subj}, \vars{u}_{pol},
       \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}$}
     \State\vars{scores} $\gets []$;
 
-    \State\vars{O}$_{subj}\gets\frac{\mu_{\mathcal{S}} -
+    \State\vars{O}$_{subj}\gets\mu_{\mathcal{O}} + \frac{\mu_{\mathcal{S}} -
     \mu_{\mathcal{O}}}{2}$;\Comment{Compute the origin of the
       subjectivity axis.}
 
     \State\vars{max\_score}$_{subj}\gets\max\left(\{|\vars{n}\lbrack\vars{u}_{subj}\rbrack%
-      - \vars{O}_{subj}| |\forall\vars{n}\in\func{cols}(\vars{M})\}\right)$;
+      - \vars{O}_{subj}| |\forall\vars{n}\in\func{cols}(\vars{E})\}\right)$;
 
-    \State\vars{O}$_{pol}\gets\frac{\mu_{\mathcal{P}} -
+    \State\vars{O}$_{pol}\gets\mu_{\mathcal{N}} + \frac{\mu_{\mathcal{P}} -
     \mu_{\mathcal{N}}}{2}$;\Comment{Compute the origin of the polarity
       axis.}
 
@@ -1227,7 +1227,7 @@ polarity list.  The pseudo-code of this approach is shown in
 Algorithm~\ref{snt:lex:alg:pca}.
 
 Since PCA, however, was not guaranteed to find the optimum polarity
-scale (the orthognal bases in SVD are typically computed using the
+axis (the orthognal bases in SVD are typically computed using the
 covariance matrix of $E$, and might therefore fail to capture semantic
 orientations if terms with opposite polarities occur in similar
 contexts), we additionally introduced our own \emph{linear projection
@@ -1238,7 +1238,7 @@ as $\mathcal{P} = \{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and the set
 of negative embeddings as
 $\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$), find a
 projection line $\vec{b}$ which would maximize the distance between
-the projections of terms from these disjoint sets, i.e.: {\small%
+the projections of terms from these disjoint seed sets, i.e.: {\small%
 \begin{align}
   \small
   \vec{b} &=\argmax\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}%
@@ -1258,7 +1258,7 @@ respective projection of a negative seed term.
 
 Considering the $\argmax$ argument in Expression~\ref{eq:f} as the
 objective function~$f$, we can compute the gradient of~$f$ with
-respect to the line~$\vec{b}$:
+respect to~$\vec{b}$:
 
 {\small%
   \begin{align}
@@ -1266,14 +1266,14 @@ respect to the line~$\vec{b}$:
     \gamma\left(\Delta - \gamma\vec{b^{i}}\right),\label{eq:prj-line-grad}%
 \end{align}\normalsize}%
 where $\Delta$ is the difference between the positive and negative
-vectors~$\vec{p}_{+}$ and`$\vec{p}_{-}$:
+vectors~$\vec{p}_{+}$ and~$\vec{p}_{-}$:
 $\Delta = \vec{p}_{+}-\vec{p}_{-}$; and $\gamma$ stands for the dot
 product of this difference with the projection vector~$\vec{b}$ at the
 $i$-th iteration step: $\gamma = \Delta \cdot \vec{b}^i$.\footnote{A
   detailed explanation of the gradient computation is given in
   Appendix~\ref{chap:apdx:lex-grad} of this thesis.}  With this
-gradient, we can trivially optimize the vector~$\vec{b}$ using
-gradient ascent until we reach the global maximum of the function~$f$.
+gradient, we can easily optimize the vector~$\vec{b}$ using gradient
+ascent until we reach the global maximum of the function~$f$.
 
 % \begin{minipage}{0.4\textwidth}
 %   \centering
@@ -1306,19 +1306,20 @@ gradient ascent until we reach the global maximum of the function~$f$.
   two-dimensional vector space.]{Visualization of the linear
     projection method in the
     two-dimensional vector space.\\
-    (\small$\vec{b}^0$ --- initial guess of the projection line;
-    $\vec{b}$ --- optimal projection vector; the distances between the
-    respective projections of two sample seeds with opposite semantic
-    orientations ($p^+$ and $p^-$) on these lines are highlighted in
-    \textcolor{highlighter green}{green})}
-  \label{fig:linproj.L.M}
+    (\small $\vec{b}^0_{subj}$ and $\vec{b}^0_{pol}$ --- initial
+    guesses of the subjectivity and polarity lines; $\vec{b}_{subj}$
+    and $\vec{b}_{pol}$ --- optimal projection vectors; the distances
+    between the projections of sample seeds with opposite semantic
+    orientations ($\vec{p}_{\mathcal{S}}$ vs. $\vec{p}_{\mathcal{O}}$
+    and $\vec{p}_+$ vs. $\vec{p}_\_$ respectively) on these lines are
+    highlighted in \textcolor{highlighter green}{green})}
+  \label{fig:linproj}
 \end{figure*}
 
 After determining the optimal line~$\vec{b}$, we projected all known
 word embeddings on the slope of this vector, and determined its origin
 point~$O_{\vec{b}}$, which not necessarily had to be identical with
-the global origin~$\vec{0}$ of the initial coordinate system:
-{\small%
+the global origin~$O$ of the initial coordinate system: {\small%
   \begin{align}
     O_{\vec{b}} &= \mu_- + \frac{\mu_+ - \mu_-}{2}.
 \end{align}\normalsize}%
@@ -1326,17 +1327,163 @@ The~$\mu_-$ term in the above equation represents the mean of the
 projected embeddings of the negative seed terms:
 $\mu_- = \frac{\sum\vec{p'_-}}{|\mathcal{N}|}$; and the~$\mu_+$
 variable stands for the respective mean of the projections of positive
-seeds.
+seeds.  With this origin, we finally computed the subjectivity and
+polarty scores of the remaining terms with unknown semantic
+orientations.
 
-\todo[inline]{Add description of the two-stage procedure.}
-Eventually, we created the final list of polar terms, sorting
-them by the distance of their projections to the computed origin point
-in descending order (so that words whose projections were furthest
-away from the central point appeared at the very beginning of the
-list) and assigning the negative polarity to those terms whose
-projections were on the same side from the origin as the negative mean
-$\mu_-$.  The results of these methods are shown in
-Table~\ref{snt-lex:tbl:nwe-meth}:
+In particular, we first determined the subjectivity axis
+$\vec{b}_{subj}$ which maximized the mutual distance between the sets
+of subjective and objective words
+($\mathcal{S} = \mathcal{P} \cup \mathcal{N}$ and $\mathcal{O}$
+respectively), and then computed the subjectivity values for polar and
+neutral terms
+as~$s_{subj} = 1 + \frac{\delta_{subj}^i}{\delta_{subj}^{\max}}$ and
+$s_{subj} = 1 - \frac{\delta_{subj}^i}{\delta_{subj}^{\max}}$
+respectively, where $\delta_{subj}^i$ denotes the distance between the
+projection of the $i$-th term and the origin $O_{subj}$, and
+$\delta_{subj}^{\max}$ is the such maximum distance observed in the
+data.
+
+After obtaining subjectivity values, we similarly estimated polarity
+scores by first finding a projection line~$\vec{b}_{pol}$ which
+maximized the difference between the positive and negative seeds
+($\mathcal{P}$ and~$\mathcal{S}$); then computing the origin of this
+line~$O_{pol}$; and, finally, taking the
+term~$s_{pol} = 1 + \frac{\delta^i_{pol}}{\delta^{max}_{pol}}$ as the
+respective polarity value of the $i$-th term.
+
+In the concluding step, we joined the two score types (subjectivity
+and polarity) into a single score:
+{\small%
+  \begin{align}
+    s &= \frac{1}{s_{subj} + s_{pol}},
+\end{align}\normalsize}%
+and sorted the resulting term list in the ascending order of these
+ranks.  The pseudo-code of this method is shown in
+Algorithm~\ref{snt:lex:alg:linproj}, a visualization of the line
+optimization step (in the two-dimensional vector space) is provided in
+Figure~\ref{fig:linproj}.
+
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \Function{ExpandLinProj}{$\mathcal{P}, \mathcal{N}, \mathcal{O}, \vars{E}$}\Comment{$\mathcal{P}$ --- indices of positive terms,}
+    \Statex\Comment{$\mathcal{N}$ --- indices of negative terms,}
+    \Statex\Comment{$\mathcal{O}$ --- indices of objective terms, $\vars{E}$ --- embedding matrix}
+    \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get the set of subjective terms}
+    \State $\vars{proj}_{subj}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets%
+    \func{Project}(\mathcal{S}, \mathcal{O}, \vars{E})$;
+    \State $\vars{proj}_{pol}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}}%
+    \gets\func{Project}(\mathcal{P}, \mathcal{N}, \vars{E})$;
+    \State\Return $\func{ComputePolScores}(\vars{E}, \mathcal{S}\cup\mathcal{O},%
+    \vars{proj}_{subj}, \vars{proj}_{pol}, %
+    \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, \mu_{\mathcal{P}}, \mu_{\mathcal{N}})$;
+    \EndFunction
+    \Statex
+    \Function{Project}{$\mathcal{S}_1, \mathcal{S}_2, \vars{E}$}
+    \State $\vars{projs}\gets []$, $\mu_1\gets \vec{0}$; $\mu_2\gets \vec{0}$;
+    \State $\vec{b}\gets\func{FindAxis}(\mathcal{S}_1, \mathcal{S}_2)$;\Comment{Determine the optimum polarity/subjectivity axis}
+    \For{$\vars{i}\gets 1$; $\vars{i} <= \func{nrows}(\vars{E})$; $\vars{i}\gets\vars{i} + 1$}
+    \State $\vec{p}\gets\vec{b}*\vars{E}$[$i$]$\cdot\vec{b}$;\Comment{Project $i$-th embedding onto the axis}
+    \State $\func{append}(\vars{projs}, \vec{p})$;
+    \If{$\vars{j}\in\mathcal{S}_1$}\Comment{Update means of the polarity/subjectivity classes}
+    \State $\mu_1\gets\mu_1 + \vec{p}$;
+    \Else
+    \If{$\vars{k}\in\mathcal{S}_2$}
+    \State $\mu_2\gets\mu_2 + \vec{p}$;
+    \EndIf
+    \EndIf
+    \EndFor
+    \State\Return $\vars{projs}$, $\frac{\mu_1}{|\mathcal{S}_1|}$; $\frac{\mu_2}{|\mathcal{S}_2|}$;
+    \EndFunction
+    \Statex
+    \Function{FindAxis}{$\mathcal{S}_1, \mathcal{S}_2, \vars{E}$}
+    \State $\vec{b}\gets\vec{1}$; $\vars{prev\_dist}\gets \infty$;
+    \For{$\vars{i}\gets 1$; $\vars{i} \leqslant \vars{MAX\_ITERS}$; $\vars{i}\gets\vars{i} + 1$}
+    \State $\vec{b}\gets\frac{\vec{b}}{\norm{\vec{b}}}$;\Comment{Ensure the projection line
+      has a unit length}
+    \State$\vars{dist}\gets 0$;
+    \For{$\vars{j}\in\mathcal{S}_1$}
+    \State $\vec{p}_1\gets\vec{b}*\vars{E}$[$j$]$\cdot\vec{b}$;\Comment{Project a seed term from the first set}
+    \For{$\vars{k}\in\mathcal{S}_2$}
+    \State $\vec{p}_2\gets\vec{b}*\vars{E}$[$k$]$\cdot\vec{b}$;\Comment{Project a seed term from the second set}
+    \State$\vars{dist}\gets \vars{dist} + \norm{\vec{p}_1 - \vec{p}_2}$;\Comment{Accumulate the distance}
+    \Statex\Comment{between the two projections}
+    \EndFor
+    \EndFor
+    \algstore{sentilex-linproj-1}
+  \end{algorithmic}
+  \caption[Sentiment lexicon generation using linear
+  projection.]{Sentiment lexicon generation with the linear projection
+    algorithm.}\label{snt:lex:alg:linproj}
+\end{algorithm}
+
+\begin{algorithm}
+  \begin{algorithmic}[1]
+    \algrestore{sentilex-linproj-1}
+    \If{$\vars{prev\_dist}\neq\infty$ \textbf{and} $\vars{dist} - \vars{prev\_dist} < \epsilon$}
+    \State\textbf{break};\Comment{Break if the convergence criterion was reached}
+    \EndIf
+    \State $\vars{prev\_dist}\gets\vars{dist}$;
+    \State $\vec{b}\gets\vec{b} + \alpha*\nabla\vec{b}$;\Comment{Optimize the projection line}
+    \EndFor
+    \State\Return $\vec{b}$;
+    \EndFunction
+    \Statex
+    \Function{ComputePolScores}{$\vars{E}, \mathcal{S}, \vars{projections}_{subj}, %
+      \vars{projections}_{pol}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}, %
+      \mu_{\mathcal{P}}, \mu_{\mathcal{N}}$}
+    \State\vars{scores} $\gets []$;
+
+    \State\vars{O}$_{subj}\gets\mu_{\mathcal{O}} + \frac{\mu_{\mathcal{S}} -
+    \mu_{\mathcal{O}}}{2}$;\Comment{Compute the origin of the
+      subjectivity axis.}
+
+    \State\vars{max\_score}$_{subj}\gets\max\left(\{|\vars{p}_{subj}%
+      - \vars{O}_{subj}| |\forall\vars{p}_{subj}\in\vars{projections}_{subj}\}\right)$;
+
+    \State\vars{O}$_{pol}\gets\mu_{\mathcal{N}} + \frac{\mu_{\mathcal{P}} -
+    \mu_{\mathcal{N}}}{2}$;\Comment{Compute the origin of the polarity
+      axis.}
+
+    \State\vars{max\_score}$_{pol}\gets\max\left(\{|\vars{p}_{pol}%
+      - \vars{O}_{pol}| |\forall\vars{p}_{pol}\in\vars{projections}_{pol}\}\right)$;
+
+    \For{$\vars{i}\gets 1$; $\vars{i} <= \func{ncols}(\vars{M})$; $\vars{i}\gets\vars{i} + 1$}
+    \If {$\vars{i} \in \mathcal{S}$}
+    \State \textbf{continue};\Comment{known seeds will be added later by default}
+    \EndIf
+    \State $\vars{p}_{subj}$$\gets$\vars{projections}$_{subj}$[$i$];
+
+    \If {$|\vars{p}_{subj} - \mu_{\mathcal{O}}| > |\vars{p}_{subj} - \mu_{\mathcal{S}}|$}%
+    \Comment{if the $i$-th word is subjective}
+
+    \State\vars{score}$_{subj}\gets 1 + %
+    \frac{|\vars{p}_{subj} - \vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
+    \Else
+    \State\vars{score}$_{subj}\gets 1 - %
+    \frac{|\vars{p}_{subj} - \vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
+    \EndIf
+
+    \State $\vars{p}_{pol}\gets\vars{projections}_{pol}$[$i$];
+    \If {$|\vars{p}_{pol} - \mu_{\mathcal{N}}| > |\vars{p}_{pol} - \mu_{\mathcal{P}}|$}%
+    \Comment{if the $i$-th word is positive}
+
+    \State\vars{polarity}$\gets$ positive;
+    \Else
+    \State \vars{polarity}$\gets$ negative;
+    \EndIf
+    \State\vars{score}$_{pol}\gets%
+    1 + \frac{|\vars{p}_{pol} - \vars{O}_{pol}|}{\vars{max\_score}_{pol}}$;
+    \State\func{append}(\vars{scores},
+    (\vars{i}, \vars{polarity}, %
+    $\frac{1}{\vars{score}_{\textrm{subj}} + \vars{score}_{pol}}$));
+    \EndFor
+    \State\Return\vars{scores};
+    \EndFunction
+  \end{algorithmic}
+\end{algorithm}
+
+As we can see from the results in Table~\ref{snt-lex:tbl:nwe-meth}, :
 
 \begin{table}[h]
   \begin{center}
@@ -1367,9 +1514,9 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       % Macro-average              0.767226             0.372780                 0.398086
       % Micro-average              0.962404             0.962216                 0.962310
 
-      \textsc{Seed Set} & 20 & 0.771 & 0.102 & 0.18 & %
+      \textsc{Seed Set} & 20 & \textbf{0.771} & 0.102 & 0.18 & %
       0.568 & 0.017 & 0.033 & %
-      0.963 & 0.999 & 0.981 & %
+      0.963 & \textbf{0.999} & 0.981 & %
       0.398 & 0.962\\
 
       % Class                     Precision              Recall                 F-score
@@ -1382,8 +1529,8 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
 
       % Class                     Precision              Recall                 F-score
       TNG & 1,600 & 0.088 & 0.153 & 0.112 & %
-      0.193 & 0.155 & 0.172 & %
-      0.966 & 0.953 & 0.959 & %
+      0.193 & \textbf{0.155} & \textbf{0.172} & %
+      \textbf{0.966} & 0.953 & 0.959 & %
       0.414 & 0.921\\
 
       % ./scripts/eval_cardinality data/results/vo/vo.word2vec.turney-littman-seedset.dflt-neut.txt
@@ -1409,9 +1556,9 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       % neutral                    0.963176             0.999227                 0.980870
       % Macro-average              0.767226             0.372780                 0.398086
 
-      NC & 5,200 & 0.771 & 0.102 & 0.18 & %
+      NC & 5,200 & \textbf{0.771} & 0.102 & 0.18 & %
        0.568 & 0.017 & 0.033 & %
-       0.963 & 0.999 & 0.981 & %
+       0.963 & \textbf{0.999} & 0.981 & %
        0.398 & 0.962\\
 
       %% file: data/results/knn/knn.word2vec.turney_littman_2003.txt
@@ -1424,10 +1571,10 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       % neutral                    0.966192             0.995034                 0.980401
       % Macro-average              0.700629             0.422720                 0.468372
       % Micro-average              0.961439             0.961252                 0.961345
-      $k$-NN & 420 & 0.486 & 0.182 & 0.265 & %
-        0.65 & 0.091 & 0.16 & %
-        0.966 & 0.995 & 0.98 & %
-        0.468 & 0.961\\
+      $k$-NN & 420 & 0.486 & \textbf{0.182} & \textbf{0.265} & %
+        \textbf{0.65} & 0.091 & 0.16 & %
+        \textbf{0.966} & 0.995 & 0.98 & %
+        \textbf{0.468} & 0.961\\
 
       %% file: data/results/pca/pca.vectors.word2vec.turney_littman_2003.txt
       % Computed using:
@@ -1440,9 +1587,9 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
       % Macro-average              0.683402             0.374552                 0.401261
       % Micro-average              0.961889             0.961701                 0.961795
 
-      PCA & 280 & 0.771 & 0.102 & 0.18 & %
+      PCA & 280 & \textbf{0.771} & 0.102 & 0.18 & %
         0.316 & 0.023 & 0.043 & %
-        0.963 & 0.999 & 0.981 & %
+        0.963 & \textbf{0.999} & 0.981 & %
         0.401 & 0.962\\
 
       %% file: 'data/results/linproj/linproj.vectors.word2vec.turney_littman_2003.txt'
@@ -1456,8 +1603,8 @@ Table~\ref{snt-lex:tbl:nwe-meth}:
 
       LP & 6,340 & 0.741 & 0.156 & 0.257 & %
        0.436 & 0.088 & 0.147 & %
-       0.966 & 0.998 & 0.982 & %
-       0.462 & 0.963\\\bottomrule
+       \textbf{0.966} & 0.998 & \textbf{0.982} & %
+       0.462 & \textbf{0.963}\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Evaluation of NWE-based approaches.]{Evaluation of
@@ -1533,7 +1680,7 @@ in Table~\ref{snt-lex:tbl:alt-seed-sets}.
       adjectives & {\itshape gut, sch\"on, richtig, %
         schlecht, unsch\"on, falsch} & %
       polar terms translated from the seed set of \citet{Turney:03}; %
-      neutral terms added by us.\\
+      neutral terms added by us;\\
       \\\bottomrule
     \end{tabular}
     \egroup
@@ -1551,7 +1698,7 @@ alternative seed sets are shown in
 Figure~\ref{snt:fig:sent-dict-lex-alt-seeds}.  This time, we again can
 notice superior scores achieved by the method of
 \citet{Blair-Goldensohn:08}, which not only outperforms other systems
-on average but also seems to be less susceptible to the varying
+on average, but also seems to be less susceptible to the varying
 quality and size of different seeds.  The remaining methods typically
 achieve their best macro-averaged \F{}-results with either of the two
 top-performing initial polarity lists: the seed set of \citet{Kim:04}
