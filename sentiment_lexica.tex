@@ -1483,7 +1483,20 @@ Figure~\ref{fig:linproj}.
   \end{algorithmic}
 \end{algorithm}
 
-As we can see from the results in Table~\ref{snt-lex:tbl:nwe-meth}, :
+As we can see from the results in Table~\ref{snt-lex:tbl:nwe-meth},
+the linear projection method not only outperforms every other
+NWE-based algorithm in terms of the micro-averaged \F-score, but also
+surpasses the results of dictionary-, corpus-based, and semi-automatic
+approaches, being only 0.1~percent below the overall best \F-value
+achieved by the intersection the GPC~\cite{Waltinger:10},
+SWS~\cite{Remus:10}, and ZPL lexicons~\cite{Clematide:10}.  This
+method also achieves the second-best macro-averaged \F-result, being
+outpferformed by the $k$-NN algorithm, which, in general, establishes
+a very competitive baseline mainly due to a high precision of the
+recognized positive terms and a good recall of negative expressions.
+Finally, the third-best micro-average is attained by the algorithm
+of~\citet{Tang:14a}, which, however, suffers from a low precision of
+positive entries.
 
 \begin{table}[h]
   \begin{center}
@@ -1580,17 +1593,17 @@ As we can see from the results in Table~\ref{snt-lex:tbl:nwe-meth}, :
       % Computed using:
       % ./scripts/eval_cardinality data/results/pca/pca.word2vec.turney_littman_2003.txt
       % Class                     Precision              Recall                 F-score
-      % 280
+      % 40
       % positive                   0.770601             0.101975                 0.180115
-      % negative                   0.316327             0.023100                 0.043056
-      % neutral                    0.963279             0.998582                 0.980613
-      % Macro-average              0.683402             0.374552                 0.401261
-      % Micro-average              0.961889             0.961701                 0.961795
+      % negative                   0.528736             0.017139                 0.033201
+      % neutral                    0.963175             0.999186                 0.980850
+      % Macro-average              0.754171             0.372766                 0.398055
+      % Micro-average              0.962365             0.962177                 0.962271
 
-      PCA & 280 & \textbf{0.771} & 0.102 & 0.18 & %
-        0.316 & 0.023 & 0.043 & %
-        0.963 & \textbf{0.999} & 0.981 & %
-        0.401 & 0.962\\
+      PCA & 40 & 0.771 & 0.102 & 0.18 & %
+         0.529 & 0.017 & 0.033 & %
+         0.963 & \textbf{0.999} & 0.981 & %
+         0.398 & 0.962\\
 
       %% file: 'data/results/linproj/linproj.vectors.word2vec.turney_littman_2003.txt'
       % Class                     Precision              Recall                 F-score
