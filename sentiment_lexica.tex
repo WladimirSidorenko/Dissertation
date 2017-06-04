@@ -1058,19 +1058,19 @@ task remained mainly untouched from these advances, up to a few
 exceptional works introduced by~\citet{Tang:14a} and \citet{Vo:16}.
 In the former method, the authors used a large collection of noisily
 labeled tweets\footnote{\citet{Tang:14a} assigned polarity labels to
-  the messages based on the occurrence of positive and negative
-  smileys in these tweets.}  in order to learn hybrid word embeddings.
-In contrast to the standard word2vec vectors~\cite{Mikolov:13} and
-purely task-specific representations~\cite{Collobert:11}, such
-embeddings were trained to optimize both objectives---predicting the
+  messages based on the occurrence of positive and negative smileys in
+  these tweets.}  in order to learn hybrid word embeddings.  In
+contrast to the standard word2vec vectors~\cite{Mikolov:13} and purely
+task-specific representations~\cite{Collobert:11}, such embeddings
+were trained to optimize both objectives---predicting the
 co-occurrence of other words in the nearby context and classifying the
 polarity type of the messages.  In the next step, \citet{Tang:14a}
 trained a simple one-layer feed-forward neural network on the
-aforementioned hybrid vectors, trying to predict the noisily obtained
-labels, and applied this classifier to each learned embedding in
-isolation, considering the predicted score as the polarity value of
-the respective word or phrase.  Similarly, \citet{Vo:16} also adopted
-the distant supervision framework.  However, in contrast to the former
+aforementioned hybrid vectors, trying to predict the noisy labels, and
+applied this classifier to each learned embedding in isolation,
+considering the predicted score as the polarity value of the
+respective word or phrase.  Similarly, \citet{Vo:16} also adopted the
+distant supervision framework.  However, in contrast to the former
 method, they ab initio trained two-dimensional task-specific
 representations, and regarded the two elements of these vectors as
 positive and negative scores of the respective words.
@@ -1089,7 +1089,7 @@ for generating polarity lists from NWEs:
 \begin{itemize}
 \item the method of the nearest centroids,
 \item the $k$-NN algorithm;
-\item the prinicpal component analysis,
+\item the principal component analysis,
 \item and the linear projection method.
 \end{itemize}
 
@@ -1102,9 +1102,9 @@ $w$, and sorted the resulting sentiment lexicon in the ascending order
 of these values.
 
 Similarly, with the $k$-NN algorithm, for every new word $w$, we
-looked for $k$ seed embeddings which were closest to the $w$'s vector
-representation, and allocated this term to the polarity class whose
-seeds appeared closest and most frequently in its neighborhood.
+looked for $k$ seed embeddings which were closest to the $w$'s vector,
+and allocated this term to the polarity class whose seeds were nearest
+and appeared most frequently in its neighborhood.
 
 \begin{algorithm}
   \begin{algorithmic}[1]
@@ -1212,18 +1212,21 @@ into its singular components:
 \end{align*}
 where the matrices $U$ and $V$ stand for the orthogonal bases of the
 row and column spaces of $E$ respectively, we looked for the row axis
-$u$ such that the embeddings of the seed terms with opposite semantic
-orientations projected on this axis would be maximally far apart from
-each other.  We first applied this method to find an axis
-$u_{\textrm{subj}}$ with the biggest distance between the projections
-of subjective (positive and negative) and neutral terms; and then used
-the same procedure to determine an axis $u_{\textrm{pol}}$ such that
-the projections of positive and negative terms on this line would be
-furthest away from each other.  Considering the inverse distances to
-the origins of these axes as subjectivity and polarity scores of the
-projected words respectively, we considered the sum of these values as
-the final lexicon score when including a word into the resulting
-polarity list.  The pseudo-code of this approach is shown in
+$u\in U$ such that the embeddings of the seed terms with opposite
+semantic orientations projected on this axis would be maximally far
+apart from each other.
+
+We first applied this method to find an axis $u_{\textrm{subj}}$ which
+maximized the distance between the projections of subjective (positive
+and negative) and neutral terms; and then used the same procedure to
+determine an axis $u_{\textrm{pol}}$ such that the projections of
+positive and negative terms on this line would be furthest away from
+each other.  Considering the distances to the origins of these axes as
+subjectivity and polarity scores of the projected words respectively,
+we estimated the final lexicon score of newly added terms as the
+inverse sum of these values (i.e., one over the sum of both
+distances), and sorted the resulting list in the ascending order.  The
+pseudo-code of this approach is shown in
 Algorithm~\ref{snt:lex:alg:pca}.
 
 Since PCA, however, was not guaranteed to find the optimum polarity
@@ -1233,10 +1236,10 @@ orientations if terms with opposite polarities occur in similar
 contexts), we additionally introduced our own \emph{linear projection
   method}, in which we explicitly adopted the aforementioned
 objective: Namely, given two sets of vectors with opposite semantic
-orientations (let us, for instance, denote the set of positive vectors
-as $\mathcal{P} = \{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and the set
-of negative embeddings as
-$\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$), find a
+orientations (let us, for example, denote the set of positive vectors
+as~$\mathcal{P} = \{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and the set
+of negative embeddings
+as~$\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$), find a
 projection line $\vec{b}$ which would maximize the distance between
 the projections of terms from these disjoint seed sets, i.e.: {\small%
 \begin{align}
@@ -1327,39 +1330,34 @@ The~$\mu_-$ term in the above equation represents the mean of the
 projected embeddings of the negative seed terms:
 $\mu_- = \frac{\sum\vec{p'_-}}{|\mathcal{N}|}$; and the~$\mu_+$
 variable stands for the respective mean of the projections of positive
-seeds.  With this origin, we finally computed the subjectivity and
-polarty scores of the remaining terms with unknown semantic
-orientations.
+seeds.  % With this origin, we finally computed the subjectivity and
+% polarity scores of the remaining terms with unknown semantic
+% orientations.
 
-In particular, we first determined the subjectivity axis
-$\vec{b}_{subj}$ which maximized the mutual distance between the sets
-of subjective and objective words
-($\mathcal{S} = \mathcal{P} \cup \mathcal{N}$ and $\mathcal{O}$
-respectively), and then computed the subjectivity values for polar and
-neutral terms
-as~$s_{subj} = 1 + \frac{\delta_{subj}^i}{\delta_{subj}^{\max}}$ and
-$s_{subj} = 1 - \frac{\delta_{subj}^i}{\delta_{subj}^{\max}}$
-respectively, where $\delta_{subj}^i$ denotes the distance between the
-projection of the $i$-th term and the origin $O_{subj}$, and
-$\delta_{subj}^{\max}$ is the such maximum distance observed in the
-data.
+Similarly to the PCA method, we first applied this approach to
+determine the optimal subjectivity axis $\vec{b}_{subj}$ which
+maximized the mutual distance between the sets of subjective and
+objective words ($\mathcal{S} = \mathcal{P} \cup \mathcal{N}$ and
+$\mathcal{O}$), and then computed the subjectivity scores for polar
+and neutral terms
+as~$s^{pol}_{subj} = 1 + \frac{\delta_{subj}^i}{\delta_{subj}^{\max}}$ and
+$s^{neut}_{subj} = 1 - \frac{\delta_{subj}^i}{\delta_{subj}^{\max}}$
+respectively, where $\delta_{subj}^i$ stands for the distance between
+the projection of the $i$-th term and the origin $O_{subj}$, and
+$\delta_{subj}^{\max}$ denotes the maximum such distance observed in
+the data.
 
-After obtaining subjectivity values, we similarly estimated polarity
-scores by first finding a projection line~$\vec{b}_{pol}$ which
-maximized the difference between the positive and negative seeds
-($\mathcal{P}$ and~$\mathcal{S}$); then computing the origin of this
-line~$O_{pol}$; and, finally, taking the
-term~$s_{pol} = 1 + \frac{\delta^i_{pol}}{\delta^{max}_{pol}}$ as the
-respective polarity value of the $i$-th term.
+Afterwards, we similarly estimated the polarity scores by first
+finding a projection line~$\vec{b}_{pol}$ with the maximum difference
+between the projected positive and negative seeds ($\mathcal{P}$
+and~$\mathcal{S}$); then computing the origin of this line~$O_{pol}$;
+and, finally, calculating the polarity value of the $i$-th term
+as~$s_{pol} = 1 + \frac{\delta^i_{pol}}{\delta^{max}_{pol}}$.
 
 In the concluding step, we joined the two score types (subjectivity
-and polarity) into a single score:
-{\small%
-  \begin{align}
-    s &= \frac{1}{s_{subj} + s_{pol}},
-\end{align}\normalsize}%
-and sorted the resulting term list in the ascending order of these
-ranks.  The pseudo-code of this method is shown in
+and polarity) as described above: $s = \frac{1}{s_{subj} + s_{pol}}$,
+and, again, sorted the resulting list in the ascending order of these
+ranks.  The pseudo-code of this approach is shown in
 Algorithm~\ref{snt:lex:alg:linproj}, a visualization of the line
 optimization step (in the two-dimensional vector space) is provided in
 Figure~\ref{fig:linproj}.
@@ -1484,19 +1482,20 @@ Figure~\ref{fig:linproj}.
 \end{algorithm}
 
 As we can see from the results in Table~\ref{snt-lex:tbl:nwe-meth},
-the linear projection method not only outperforms every other
-NWE-based algorithm in terms of the micro-averaged \F-score, but also
-surpasses the results of dictionary-, corpus-based, and semi-automatic
-approaches, being only 0.1~percent below the overall best \F-value
-achieved by the intersection the GPC~\cite{Waltinger:10},
-SWS~\cite{Remus:10}, and ZPL lexicons~\cite{Clematide:10}.  This
-method also achieves the second-best macro-averaged \F-result, being
-outpferformed by the $k$-NN algorithm, which, in general, establishes
-a very competitive baseline mainly due to a high precision of the
-recognized positive terms and a good recall of negative expressions.
-Finally, the third-best micro-average is attained by the algorithm
-of~\citet{Tang:14a}, which, however, suffers from a low precision of
-positive entries.
+the linear projection method not only outperforms all other NWE-based
+algorithms in terms of the micro-averaged \F-score, but also surpasses
+the results of dictionary-, corpus-based, and semi-automatic systems,
+being only 0.1~percent below the overall best \F-value achieved by the
+intersection the GPC~\cite{Waltinger:10}, SWS~\cite{Remus:10}, and ZPL
+lexicons~\cite{Clematide:10}.  This method also achieves the
+second-best macro-averaged \F-result, falling against the $k$-NN
+algorithm, which, in general, establishes a very competitive baseline
+mainly due to a high precision of positive terms and a good recall of
+negative expressions.  The third-best micro-averaged \F{} is attained
+by the algorithm of~\citet{Tang:14a}, which, however, suffers from a
+low precision of positive entries.  Nevertheless, the results of the
+remaining methods are, unfortunately, even lower and hardly outperform
+the scores of the initial seed list.
 
 \begin{table}[h]
   \begin{center}
@@ -1719,14 +1718,14 @@ or the seed set of \citet{Esuli:06c}.  The former option works best
 for the label-propagation approach of \citet{Rao:09} and the random
 walk algorithm of \citet{Awadallah:10}.  Moreover, the results shown
 by the min-cut system \cite{Rao:09} and the original method of
-\citet{Kim:04} when used with this seed set are only slightly lower
-than their respective scores achieved with the best possible
+\citet{Kim:04} when used with these seeds are only slightly lower than
+their respective scores achieved with the best possible
 configuration---the seed list of \citet{Turney:02}.  The latter
 option---the seed set of \citet{Esuli:06c}---shows best results for
 the approaches of \citet{Hu:04} and the \textsc{SentiWordNet} method
 of \citet{Esuli:06c}.
 
-\begin{figure}[hbtp!]
+\begin{figure}[hbtp]
   \centering
   \includegraphics[height=12em,width=\linewidth]{%
     img/sentilex-dict-alt-seed-sets.png}
@@ -1745,13 +1744,57 @@ for this is again the ambiguity of the translated seeds, which causes
 a rapid decrease of the lexicon quality and, consequently, an early
 stopping of the expansion.
 
-\begin{figure}[hbtp!]
+Finally, for the NWE-based methods, whose scores are presented in
+Figure~\ref{snt:fig:sent-nwe-lex-alt-seeds}, we again can notice the
+superior results of the $k$-NN and linear projection algorithms.  This
+time, however, we also can see a complementary behavior of these two
+approaches on different seed sets: the $k$-NN system yields better
+results with the seed list of~\citet{Turney:03} than with the seeds
+proposed by~\citet{Hu:04}, and it also attains higher scores with the
+initial polar terms of~\citet{Remus:10} than with the ones suggested
+by~\citet{Esuli:05}.  An opposite situation is observed for the linear
+projection method, which achieves a macro-averaged \F-score of~0.478
+with the seed set of~\citet{Hu:04} versus 0.462 scored with the seeds
+of~\citet{Turney:03}, and also shows better scores with the seed list
+of~\citet{Esuli:05}~(0.456) than with the terms proposed
+by~\citet{Remus:10}~(0.449).  A common feature of both of these
+methods, however, is that they both achieve their best results with
+the seed set of~\citet{Kim:04}, with which the $k$-NN approach attains
+a macro-average of~0.508 and the linear projection algorithm reaches a
+remarkable \F-score of~0.513 points, surpassing all other automatic
+SLG method and establishing a new state-of-the-art landmark.
+
+\begin{figure}[hbtp]
   \centering
   \includegraphics[height=12em,width=\linewidth]{%
     img/sentilex-crp-alt-seed-sets.png}
   \caption{Macro-averaged \F{}-scores of corpus-based approaches with
     different seed sets.}\label{snt:fig:sent-crp-lex-alt-seeds}
 \end{figure}
+
+In conformity with the results in Table~\ref{snt-lex:tbl:nwe-meth},
+the third-best macro-averaged results with the most common seed
+sets---the ones suggested by~\citet{Turney:03}, \citet{Hu:04}, and
+\citet{Kim:04}---were attained with the method of~\citet{Tang:16}.
+This approach, however, yielded significantly worse scores when used
+with the seed lists of~\citet{Esuli:05} and \citet{Remus:10}.
+
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[height=12em,width=\linewidth]{%
+    img/sentilex-nwe-alt-seed-sets.png}
+  \caption{Macro-averaged \F{}-scores of NWE-based approaches with
+    different seed sets.}\label{snt:fig:sent-nwe-lex-alt-seeds}
+\end{figure}
+
+As to the other NWE-systems, we can see that all of the remaining SLG
+methods achieve their best results with the seed set
+of~\citet{Kim:04}, which is not surprising considering the much bigger
+size of this list.  Furthermore, the approaches of the nearest
+centroids and principal components show almost identical scores on all
+other seed collections.  Finally, the system of~\citet{Vo:16} performs
+similarly to the unexpanded seed sets, getting slighlty worse scores
+on the initial polarity list of~\citet{Turney:03}.
 
 \section{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
 
@@ -1768,7 +1811,7 @@ stopping of the expansion.
                                             & task-specific\\\midrule
       NC & 0.398 & 0.398 & \textbf{0.401} & 0.399\\
       $k$-NN & \textbf{0.468} & 0.43 & 0.398 & 0.392\\
-      PCA & 0.401 & 0.398 & 0.398 & \textbf{0.402}\\
+      PCA &  &  &  & \\
       LP & \textbf{0.462} & 0.441 & 0.398 & 0.399\\\bottomrule
 
     \end{tabular}\egroup%
@@ -1804,7 +1847,7 @@ stopping of the expansion.
                                           & no normalization (-L -M)\\\midrule
       NC & 0.398 & 0.398 & 0.398 & 0.398\\
       $k$-NN & \textbf{0.468} & 0.418 & 0.467 & 0.417\\
-      PCA & 0.401 & 0.396 & 0.401 & 0.\textbf{405}\\
+      PCA &  &  &  & \\
       LP & \textbf{0.462} & 0.416 & 0.461 & 0.442\\\bottomrule
 
     \end{tabular}\egroup%
