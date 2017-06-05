@@ -1045,7 +1045,7 @@ their training.  We will investigate later in
 Section~\ref{subsec:snt-lex:eoss} whether the seed sets proposed by
 other authors could provide a remedy to this problem.
 
-\subsection{NWE-Based Methods}
+\subsection{NWE-Based Methods}\label{subsec:snt:lex:nwe}
 
 Another group of SLG methods that we are going to explore in this
 section are algorithms which operate on distributed vector
@@ -1108,9 +1108,9 @@ and appeared most frequently in its neighborhood.
 
 \begin{algorithm}
   \begin{algorithmic}[1]
-    \Function{ExpandPCA}{$\mathcal{P}, \mathcal{N}, \mathcal{O}, \vars{E}$}\Comment{$\mathcal{P}$ --- indices of positive terms,}
-    \Statex\Comment{$\mathcal{N}$ --- indices of negative terms,}
-    \Statex\Comment{$\mathcal{O}$ --- indices of objective terms, $\vars{E}$ --- embedding matrix}
+    \Function{ExpandPCA}{$\mathcal{P}, \mathcal{N}, \mathcal{O}, \vars{E}$}\Comment{$\mathcal{P}$~--~indices of positive terms,}
+    \Statex\Comment{$\mathcal{N}$~--~indices of negative terms,}
+    \Statex\Comment{$\mathcal{O}$~--~indices of objective terms, $\vars{E}$~--~embedding matrix}
     \State $\vars{U}, \Sigma, \vars{V}^\top\gets\func{SVD}(\vars{E})$;\Comment{obtain singular components of \vars{E}}
     \State $\vars{E}'\gets\left(\vars{E}^\top\cdot \vars{U}\right)^\top$;\Comment{project \vars{E} onto the eigenvectors of its row space}
     \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get the set of subjective terms}
@@ -1309,9 +1309,9 @@ ascent until we reach the global maximum of the function~$f$.
   two-dimensional vector space.]{Visualization of the linear
     projection method in the
     two-dimensional vector space.\\
-    (\small $\vec{b}^0_{subj}$ and $\vec{b}^0_{pol}$ --- initial
+    (\small $\vec{b}^0_{subj}$ and $\vec{b}^0_{pol}$~--~initial
     guesses of the subjectivity and polarity lines; $\vec{b}_{subj}$
-    and $\vec{b}_{pol}$ --- optimal projection vectors; the distances
+    and $\vec{b}_{pol}$~--~optimal projection vectors; the distances
     between the projections of sample seeds with opposite semantic
     orientations ($\vec{p}_{\mathcal{S}}$ vs. $\vec{p}_{\mathcal{O}}$
     and $\vec{p}_+$ vs. $\vec{p}_\_$ respectively) on these lines are
@@ -1364,9 +1364,9 @@ Figure~\ref{fig:linproj}.
 
 \begin{algorithm}
   \begin{algorithmic}[1]
-    \Function{ExpandLinProj}{$\mathcal{P}, \mathcal{N}, \mathcal{O}, \vars{E}$}\Comment{$\mathcal{P}$ --- indices of positive terms,}
-    \Statex\Comment{$\mathcal{N}$ --- indices of negative terms,}
-    \Statex\Comment{$\mathcal{O}$ --- indices of objective terms, $\vars{E}$ --- embedding matrix}
+    \Function{ExpandLinProj}{$\mathcal{P}, \mathcal{N}, \mathcal{O}, \vars{E}$}\Comment{$\mathcal{P}$~--~indices of positive terms,}
+    \Statex\Comment{$\mathcal{N}$~--~indices of negative terms,}
+    \Statex\Comment{$\mathcal{O}$~--~indices of objective terms, $\vars{E}$~--~embedding matrix}
     \State $\mathcal{S}\gets\mathcal{P}\cup\mathcal{N}$;\Comment{get the set of subjective terms}
     \State $\vars{proj}_{subj}, \mu_{\mathcal{S}}, \mu_{\mathcal{O}}\gets%
     \func{Project}(\mathcal{S}, \mathcal{O}, \vars{E})$;
@@ -1620,12 +1620,12 @@ the scores of the initial seed list.
     \end{tabular}
     \egroup
     \caption[Evaluation of NWE-based approaches.]{Evaluation of
-      NWE-based approaches.\\ {\small TNG --- \citet{Tang:14a}, %
-        VO --- \citet{Vo:16}, %
-        NC --- nearest centroids, %
-        $k$-NN --- $k$-nearest neighbors, %
-        PCA --- principal component analysis, %
-        LP --- linear projection}}%
+      NWE-based approaches.\\ {\small TNG~--~\citet{Tang:14a}, %
+        VO~--~\citet{Vo:16}, %
+        NC~--~nearest centroids, %
+        $k$-NN~--~$k$-nearest neighbors, %
+        PCA~--~principal component analysis, %
+        LP~--~linear projection}}%
     \label{snt-lex:tbl:nwe-meth}
   \end{center}
 \end{table}
@@ -1798,6 +1798,48 @@ on the initial polarity list of~\citet{Turney:03}.
 
 \section{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
 
+Another important aspect which could notably influence the results of
+NWE-based algorithms was the type of embeddings, which we provided to
+these systems as input.  As already noted in
+Section~\ref{subsec:snt:lex:nwe}, the two most common kinds of such
+representations are the standard word2vec and task-specific
+vectors~\cite{Mikolov:13,Collobert:11}.  The former type seeks to find
+word represenatations which maximizes the probability of other lexes
+appearing in the nearby context, whereas the latter type tries to
+obtain word vectors which best suit a custom-defined objective (e.g.,
+predicting the semantic class of a whole sentence the respective word
+appears in).
+
+In order to see how these specifics could affect the net results of
+our NWE-algorithms, we additionally trained task-specific embeddings
+on the German Twitter snapshot~\cite{Scheffler:14}, considering the
+occurrence of positive and negative emoticons as noisy polarity
+labels.  In addition to that, we also explored two in-between
+solutions:
+\begin{itemize}
+\item training \emph{hybrid embeddings}, with which we simultaneously
+  optimized both objectives: prediction of the surrounding context and
+  noisy sentiment labels;
+\item and separately training both word2vec and task-specific vectors,
+  and then computing a transformation matrix~$W$ for mapping the
+  former type to the latter via the \emph{ordinary least squares}
+  method.  In the final step, we obtained an approximation of
+  task-specific embeddings for missing terms (i.e., the ones which did
+  not occur in the noisily labeled tweets) by multiplying their
+  word2vec representations with the matrix~$W$.
+\end{itemize}
+
+The macro-averaged \F-scores of our approaches with these alternative
+vector types are shown in Table~\ref{snt-lex:tbl:emb-eff}.  As we can
+see from the results, the $k$-NN and linear projection algorithms work
+best with the standard word2vec embeddings (with the overall best
+score (0.468) achieved by the $k$-NN approach), but their preformance
+degrades as the input vectors become more and more task-specific.  An
+opposite situation is observed for the nearest centroids and principal
+components systems, which show an improvement on purely task-specific
+and task-specific + least-squares vectors, but perform rather poorly
+on word2vec and hybrid embeddings.
+
 \begin{table}[thb!]
   \begin{center}
     \bgroup\setlength\tabcolsep{0.1\tabcolsep}%
@@ -1811,25 +1853,63 @@ on the initial polarity list of~\citet{Turney:03}.
                                             & task-specific\\\midrule
       NC & 0.398 & 0.398 & \textbf{0.401} & 0.399\\
       $k$-NN & \textbf{0.468} & 0.43 & 0.398 & 0.392\\
-      PCA &  &  &  & \\
+      PCA & 0.398 & 0.398 & 0.404 & \textbf{0.409}\\
       LP & \textbf{0.462} & 0.441 & 0.398 & 0.399\\\bottomrule
 
     \end{tabular}\egroup%
     {
       \captionsetup{justification=centering}
-      \caption[Macro-averaged \F-scores of NWE-based methods depending
-      on the embedding type.]{Macro-averaged \F-scores of NWE-based
-        methods depending on the embedding type.\\%
+      \caption[Macro-averaged \F-scores of NWE-based methods with
+      different embedding types.]{Macro-averaged \F-scores of
+        NWE-based methods with different embedding types.\\%
         {\small\itshape%
-          NC --- nearest centroids, %
-          KNN --- $k$-nearest neighbors, %
-          PCA --- principal component analysis, %
-          LP --- linear projection%
+          NC~--~nearest centroids, %
+          $k$-NN~--~$k$-nearest neighbors, %
+          PCA~--~principal component analysis, %
+          LP~--~linear projection%
         }%
       }\label{snt-lex:tbl:emb-eff}
     }
   \end{center}
 \end{table}
+
+In order to understand the reason for these differences, we projected
+the above-mentioned embeddings onto the two-dimensional vector space
+using the t-SNE method of~\citet{Maaten:08} and visualized words
+appearing in the PotTS corpus~\cite{Sidarenka:16}, specifically
+highlighting polar terms from the \citeauthor{Turney:03} seed set.
+Following the recommended practices for analyzing the outcome of
+t-SNE~\cite{Wattenberg:2016}, we generated these lower-dimensional
+projecions for different perplexity values: $p\in\{5, 30, 50\}$; and
+present the results of this visualization in
+Figure~\ref{snt:fig:tsne-seeds}.
+
+As we can see from the figure, task-specific vectors of polar terms
+(right column) tend to appear in the immediate vicinity of each other,
+but apart from the rest of the words.  Consequently, their centroids
+will most likely be far away from the center of the neutral terms,
+which partially explains the improved results of the NC algorithm on
+this embedding type.  However, at the same time, we also can notice
+the prevailing majority of the objective words will also have
+approximately the same number of subjective terms among their
+neighbors, being roughly equidistant away from them.  Therefore, the
+$k$-NN approach is likely to assign high polarity scores to many
+neutral entries, once the polar terms outweigh the known neutral seeds
+in their neighborhood.  Likewise, with the linear projection method,
+the optimal polarity line will obviously be equally parallel to both
+polar and neutral lexemes, assigning to them similarly high scores;
+and the subjectivity axis, which is supposed to help make the
+distinction between subjective and objective items, has apparently an
+insufficient effect to mitigate high polarity values of objective
+terms.
+
+\begin{figure}[hbtp]
+  \centering
+  \includegraphics[height=30em,width=\linewidth]{img/potts_embeddings.png}
+  \caption[Visualization of \citeauthor{Turney:03}'s seed set]{t-SNE
+    visualization of \citeauthor{Turney:03}'s seed set with different
+    embedding types.}\label{snt:fig:tsne-seeds}
+\end{figure}
 
 \section{Effect of Vector Normalization}\label{subsec:snt-lex:eowet}
 
@@ -1847,7 +1927,7 @@ on the initial polarity list of~\citet{Turney:03}.
                                           & no normalization (-L -M)\\\midrule
       NC & 0.398 & 0.398 & 0.398 & 0.398\\
       $k$-NN & \textbf{0.468} & 0.418 & 0.467 & 0.417\\
-      PCA &  &  &  & \\
+      PCA &  & 0.396 & 0.398 & 0.396\\
       LP & \textbf{0.462} & 0.416 & 0.461 & 0.442\\\bottomrule
 
     \end{tabular}\egroup%
@@ -1857,10 +1937,10 @@ on the initial polarity list of~\citet{Turney:03}.
       on the vector normalization.]{Macro-averaged \F-scores of
         NWE-based methods depending on the vector normalization.\\%
         {\small\itshape%
-          NC --- nearest centroids, %
-          KNN --- $k$-nearest neighbors, %
-          PCA --- principal component analysis, %
-          LP --- linear projection%
+          NC~--~nearest centroids, %
+          $k$-NN~--~$k$-nearest neighbors, %
+          PCA~--~principal component analysis, %
+          LP~--~linear projection%
         }%
       }\label{snt-lex:tbl:emb-evn}
     }
@@ -1986,8 +2066,8 @@ apparently objective terms but are also difficult to interpret in
 general, as they contain a substantial number of slang and advertising
 terms (e.g., ``BMKS65'', ``\#gameinsight'', ``\#androidgames'' etc.).
 This again supports the hypothesis that an extreme noisiness of the
-input domain might pose considerable difficulties to corpus-based
-methods.
+input domain might pose considerable difficulties to the corpus-based
+approaches.
 
 \begin{table}[h]
   \begin{center}
@@ -2144,31 +2224,31 @@ methods.
   \end{center}
 \end{table}
 
-\section{Discussion}
+% \section{Discussion}
 
-In general, as we can see from the results, all systems tested in this
-section performed notably worse than reported in their original
-papers.  We can explain this divergence by the following four reasons:
-\begin{enumerate}[1\upshape)]
-\item the evaluation metrics that we applied in our experiments were
-  considerably different from the testing methods used in the previous
-  works (we estimated the results on a real-life corpus, counting
-  every false positive and false negative match separately, whereas
-  the English approaches typically evaluated their results on the
-  intersection with the General Inquirer Lexicon \cite{Stone:66},
-  omitting false positive matches and therefore artifically boosting
-  their scores);
-\item both the domain and the language that we addressed in this
-  section were apparently more challenging than the standard English
-  form for which most of these methods had been developed;
-\item the notion of the synonymous relations used for the
-  dictionary-based approaches and the set of the initial seed terms
-  used by all methods could differ from the original settings of the
-  evaluated algorithms;
-\item finally, the underlying lexical taxonomy (\textsc{GermaNet}) and
-  the snapshot corpus were different from the resources that were
-  originally used for training the presented methods.
-\end{enumerate}
+% In general, as we can see from the results, all systems tested in this
+% section performed notably worse than reported in their original
+% papers.  We can explain this divergence by the following four reasons:
+% \begin{enumerate}[1\upshape)]
+% \item the evaluation metrics that we applied in our experiments were
+%   considerably different from the testing methods used in the previous
+%   works (we estimated the results on a real-life corpus, counting
+%   every false positive and false negative match separately, whereas
+%   the English approaches typically evaluated their results on the
+%   intersection with the General Inquirer Lexicon \cite{Stone:66},
+%   omitting false positive matches and therefore artifically boosting
+%   their scores);
+% \item both the domain and the language that we addressed in this
+%   section were apparently more challenging than the standard English
+%   form for which most of these methods had been developed;
+% \item the notion of the synonymous relations used for the
+%   dictionary-based approaches and the set of the initial seed terms
+%   used by all methods could differ from the original settings of the
+%   evaluated algorithms;
+% \item finally, the underlying lexical taxonomy (\textsc{GermaNet}) and
+%   the snapshot corpus were different from the resources that were
+%   originally used for training the presented methods.
+% \end{enumerate}
 
 
 % Since \textsc{GermaNet}, however, is significantly different from its
