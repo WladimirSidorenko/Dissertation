@@ -1903,15 +1903,97 @@ distinction between subjective and objective items, has apparently an
 insufficient effect to mitigate high polarity values of objective
 terms.
 
-\begin{figure}[hbtp]
+\begin{figure}[bht]
   \centering
   \includegraphics[height=30em,width=\linewidth]{img/potts_embeddings.png}
   \caption[Visualization of \citeauthor{Turney:03}'s seed set]{t-SNE
-    visualization of \citeauthor{Turney:03}'s seed set with different
-    embedding types.}\label{snt:fig:tsne-seeds}
+    visualization of PotTS' tokens and \citeauthor{Turney:03}'s seed
+    set with different embedding types.}\label{snt:fig:tsne-seeds}
 \end{figure}
 
 \section{Effect of Vector Normalization}\label{subsec:snt-lex:eowet}
+
+The final major factor which also could play a role in the quality of
+NWE-induced polarity lists was the length and mean normalization,
+which we had applied to word vectors before passing them to our
+algorithms.
+
+In the first stage of this preprocessing (during length
+normalization), we divided all embeddings by their Euclidean norm,
+setting all of them to unit length:
+\begin{align}
+  E' &= \frac{E}{\norm{E}}.
+\end{align}
+Afterwards, we mean-normalized the resulting vectors by subtracting
+their means and dividing by the standard deviation:
+\begin{align}
+  E'' &= \frac{E' -\mu_{E'}}{\sigma_{E'}},
+\end{align}
+ensuring this way that the final coordinates of the embeddings were
+centered around zero, and had a unit-variance in their distribution.
+
+To demonstrate the effect of these modifications, we applied these
+procedures to the two-dimensional sample vectors from
+Section~\ref{subsec:snt:lex:nwe} and present these results in
+Figure~\ref{snt-lex:fig:nwe-norms}. As we can see from the picture,
+the length normalization casts all embeddings on an $n$-dimensional
+sphere, increasing the distances vectors with greater mutual angles,
+but shortening these differences between those embeddings whose
+in-between angles are small.  Vice versa, with the mean normalization,
+the internal structure of the whole vector space is largely preserved
+(up to a few outliers which become closer to the mean), but their
+general distribution becomes more condensed (which we can recognize
+from the closer interval the embeddings appear in).  Finally, applying
+both normalizations (first normalizing the length, and then the mean)
+still makes the whole distrubtion spherical, but shifts the center of
+this sphere towards the location of most of its points.
+
+\begin{figure*}[htb]
+  {
+    \centering
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_not_normed.png}
+      \caption{Without normalization}\label{snt-lex:fig:nwe-no-norm}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_len_normed.png}
+      \caption{With length normalization}\label{snt-lex:fig:nwe-len-norm}
+    \end{subfigure}\\
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_mean_normed.png}
+      \caption{With mean normalization}\label{snt-lex:fig:nwe-mean-norm}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_len_mean_normed.png}
+      \caption{With length and mean normalization}\label{snt-lex:fig:nwe-mean-len-mean-norm}
+    \end{subfigure}
+  }
+  \caption{Polarity lines determined by the linear projection method
+    with different vector
+    normalization steps.}\label{snt-lex:fig:nwe-norms}
+\end{figure*}
+
+We reran our NWE-based algorithms without using these normalization
+steps and present the results of this evaluation in
+Table~\ref{snt-lex:tbl:emb-evn}.  As we can see from the scores, the
+method of the nearest centroids is almost indifferent to the vector
+preprocessing, showing the same performance in all modes.  However,
+the remaining three approaches ($k$-NN, PCA, and the linear
+projection) achieve their best results when both normalization types
+are used.  Although we should admit that this success is mostly due to
+the length normalization rather than mean scaling.  We can recognize
+this by comparing the scores in the first and third columns where the
+PCA algorithms shows identical results, and the scores for the $k$-NN
+and linear projection systems are only 0.1~\% lower when only length
+normalization is used.  We also can observe that pure mean-scaling has
+a strong negative effect on the perforance of the linear projection
+approach (pulling its scores down by 3~\% in comparison to the
+unnormalized vectors), but slightly improves the score of the $k$-NN
+system.
 
 \begin{table}[thb!]
   \begin{center}
@@ -1922,12 +2004,12 @@ terms.
       \toprule
       \multirow{2}*{\bfseries SLG Method} & \multicolumn{4}{c}{\bfseries Vector Normalization}\\
                                           & mean normalization + length normalization %
-                                          & mean normalization (-L) %
-                                          & length normalization (-M) %
-                                          & no normalization (-L -M)\\\midrule
-      NC & 0.398 & 0.398 & 0.398 & 0.398\\
+                                          & mean normalization %
+                                          & length normalization %
+                                          & no normalization\\\midrule
+      NC & \textbf{0.398} & \textbf{0.398} & \textbf{0.398} & \textbf{0.398}\\
       $k$-NN & \textbf{0.468} & 0.418 & 0.467 & 0.417\\
-      PCA &  & 0.396 & 0.398 & 0.396\\
+      PCA & \textbf{0.398} & 0.396 & \textbf{0.398} & 0.396\\
       LP & \textbf{0.462} & 0.416 & 0.461 & 0.442\\\bottomrule
 
     \end{tabular}\egroup%
