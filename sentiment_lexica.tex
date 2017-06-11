@@ -1875,22 +1875,22 @@ on word2vec and hybrid embeddings.
 
 In order to understand the reason for these differences, we projected
 the above-mentioned embeddings onto the two-dimensional vector space
-using the t-SNE method of~\citet{Maaten:08} and visualized words
+using the t-SNE method of~\citet{Maaten:08}, and visualized words
 appearing in the PotTS corpus~\cite{Sidarenka:16}, specifically
 highlighting polar terms from the \citeauthor{Turney:03} seed set.
-Following the recommended practices for analyzing the outcome of
-t-SNE~\cite{Wattenberg:2016}, we generated these lower-dimensional
-projecions for different perplexity values: $p\in\{5, 30, 50\}$; and
+Following the recommended practices for analyzing t-SNE's
+output~\cite{Wattenberg:2016}, we generated these lower-dimensional
+projections for different perplexity values: $p\in\{5, 30, 50\}$; and
 present the results of this visualization in
 Figure~\ref{snt:fig:tsne-seeds}.
 
 As we can see from the figure, task-specific vectors of polar terms
 (right column) tend to appear in the immediate vicinity of each other,
 but apart from the rest of the words.  Consequently, their centroids
-will most likely be far away from the center of the neutral terms,
-which partially explains the improved results of the NC algorithm on
-this embedding type.  However, at the same time, we also can notice
-the prevailing majority of the objective words will also have
+will most likely be far away from the center of neutral words, which
+partially explains better results of the NC algorithm on this
+embedding type.  However, at the same time, we also can notice the
+prevailing majority of objective expressions will also have
 approximately the same number of subjective terms among their
 neighbors, being roughly equidistant away from them.  Therefore, the
 $k$-NN approach is likely to assign high polarity scores to many
@@ -2123,7 +2123,7 @@ Table~\ref{tbl:snt-lex:dict:top-10}.
     \egroup
     \caption[Top ten polar terms produced by dictionary-based
     methods.]{%
-      Top ten polar terms produced by dictionary-based methods.\\
+      Top ten polar terms produced by the dictionary-based methods.\\
       {\small ** -- the min-cut method of \citet{Rao:09} returns an
         unsorted set}}
     \label{tbl:snt-lex:dict:top-10}
@@ -2141,17 +2141,17 @@ mainly objective terms, which, however, is rather due to the fact that
 this method performs a cluster-like partitioning of the lexical graph
 without actually ranking the words assigned to a cluster.
 
-A different situation is observed for the corpus-based systems as
+A different situation is observed with the corpus-based systems as
 shown in Table~\ref{tbl:snt-lex:crp:top-10}: The top-scoring polarity
 lists returned by all of these approaches not only include many
-apparently objective terms but are also difficult to interpret in
+apparently objective terms, but are also difficult to interpret in
 general, as they contain a substantial number of slang and advertising
-terms (e.g., ``BMKS65'', ``\#gameinsight'', ``\#androidgames'' etc.).
-This again supports the hypothesis that an extreme noisiness of the
-input domain might pose considerable difficulties to the corpus-based
-approaches.
+expressions (e.g., ``BMKS65'', ``\#gameinsight'', ``\#androidgames''
+etc.).  This again supports the hypothesis that an extreme noisiness
+of the input domain might pose considerable difficulties to
+corpus-based systems.
 
-\begin{table}[h]
+\begin{table}[hbt!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.03\tabcolsep}\scriptsize
     \begin{tabular}{%
@@ -2213,12 +2213,29 @@ approaches.
     \end{tabular}
     \egroup
     \caption[Top ten polar terms produced by corpus-based
-    methods.]{Top ten polar terms produced by corpus-based methods.}
+    methods.]{Top ten polar terms produced by the corpus-based methods.}
     \label{tbl:snt-lex:crp:top-10}
   \end{center}
 \end{table}
 
-\begin{table}[h]
+We can also observe a similar trend for the most NWE-based approaches,
+whose results are presented in Table~\ref{tbl:snt-lex:NWE:top-10}.  As
+we can see from the examples, many of these methods obviously overrate
+Internet-specific terms (e.g., ``\%user-playlist'', ``\%user-video'',
+``www.op''), and assign higher weights to foreign words (e.g.,
+``nerelere'', ``good'', ``nativepride'') and interjections (e.g.,
+``niedlichg\"ahn'' \emph{cuteyawn}, ``vrrrum'').  Two notable
+exceptions from this trend are the {$k$-NN} and linear projection
+systems, whose top-ten entries contain exclusively polar terms,
+supporting the promising findings from our previous evaluation.  At
+the same time, we also can notice a slight susceptibility of these
+approaches to the negative polarity class as eight out of ten highest
+ranked words in their results have negative semantic orientation.  One
+possible explanation for this could be a more pronounced distribution
+of negative expressions, which pushes the vectors of these terms to
+more distinguishable reasons than in the case of positive lexemes.
+
+\begin{table}[hbt!]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.03\tabcolsep}\scriptsize
     \begin{tabular}{%
@@ -2301,7 +2318,7 @@ approaches.
     \end{tabular}
     \egroup
     \caption[Top ten polar terms produced by NWE-based
-    methods.]{Top ten polar terms produced by NWE-based methods.}
+    methods.]{Top ten polar terms produced by the NWE-based methods.}
     \label{tbl:snt-lex:NWE:top-10}
   \end{center}
 \end{table}
@@ -2444,39 +2461,72 @@ approaches.
 
 \section{Summary and Conclusions}
 
-In this chapter, we presented a thorough evaluation of the most
-popular methods for an automatic generation of sentiment lexicons.
-For this purpose, we compared the results achieved by the common
-English polarity lists, which were semi-automatically translated into
-German, with the scores attained by the original English approaches,
-which were applied directly to German data.  In the latter case, we
-also juxtaposed automatic dictionary- and corpus-based systems in
-order to find out which of these paradigms was better suited for the
-inherently noisy Twitter domain.  As many of the corpus-based
-algorithms showed an extreme susceptibility to the unbalancedness of
-the training sets, we also proposed several novel SLG approaches,
-which derived polarity lists by using neural word embeddings trained
-on a big unlabeled tweet corpus.  In the concluding step, we analyzed
-the effect of different seed sets and hyper-parameters on the net
-results of the tested approaches, also explaining possible reasons for
-the success and failures of various systems.
+At the end of this chapter, we would like to recapitulate that, in
+this part, we presented a thorough review of the most popular
+sentiment lexicon generation methods.  For this purpose, we first
+revised existing SL evaluation techniques, also suggesting our own
+(stricter) way of estimating the quality of such resources.  With this
+proposed metric, we explicitly counted all false positive, false
+negative, and true positive occurrences of positive, negative, and
+neutral terms on a real-life sentiment corpus, and also computed the
+macro- and micro-averaged \F-scores of these polarity classes.  Using
+this procedure, we first evaluated the most popular semi-automatic
+German lexicons: the German Polarity Clues of~\citet{Waltinger:10},
+the SentiWS lexicon of~\citet{Remus:10}, and the Zurich Polarity List
+of~\citet{Clematide:10}, finding the last resource working best in
+terms of the macro-averaged results.  Afterwards, we estimated the
+quality of purelly automatically induced polarity lists that were
+created with either dictionary- or corpus-based SLG approaches, coming
+to the conclusion that the first group of methods generally produced
+much better lexicons and was less susceptible to the contentual
+noisiness of the Twitter domain.  In the next step, we introduced
+several novel SLG approaches which operated on neural embeddings of
+words, showing that at least two of them (the method of $k$ nearest
+neighbors and the linear projection algorithm) outperformed all other
+compared automatic SLG systems.  Last but not least, we explored the
+effect of different hyper-parameters and settings on the net results
+of these methods, rerunning them with alternative sets of initial seed
+terms, checking their performance on different kinds of embeddings,
+and estimating the impact of various vector normalization techniques.
 
-Based on our observations and experiments, we can formulate the main
-conclusions of this section as follows:
+Based on our observations and presented experiments, we can formulate
+the main conclusions and contributions of this part of the thesis as
+follows:
 \begin{itemize}
 \item semi-automatic translations of common English polarity lists
-  notably outperform automatic SLG methods which are applied to German
-  data;
+  notably outperform purely automatic SLG methods which are applied to
+  German data directly;
 \item despite their allegedly worse ability to accommodate new
   domains, dictionary-based approaches are still superior to
   corpus-based systems (at least in terms of an intrinsic evaluation);
-\item a potential weakness of the dictionary-based algorithms,
-  however, is their dependence on different hyper-parameters and the
-  size and composition of the initial seed sets;
-\item nevertheless, the effect of the seed sets might be even stronger
-  for the corpus-based approaches that rely on distant supervision if
-  the resulting noisy labeled training set becomes highly unbalanced;
-\item in this regard, NWE-based algorithms might be a much better
-  alternative to these methods for capturing domain-specific polar
-  words and expressions.
+\item a potential weakness of these algorithms though is their
+  dependence on various types of hyper-parameters and the existence of
+  rich manually annotated linguistic resources, which might not
+  necessarily be present for every language;
+\item in this regard, a viable alternative to dictionary-based methods
+  are SLG systems which induce polar lexicons from neural word
+  embeddings as they not only avoid the above limitations, but also
+  yield a competitive, if not better results;
+\item with at least two of such methods ($k$-NN and linear
+  projection), we were able to establish a new state of the art for
+  the macro- and micro-averaged \F-scores of automatically induced
+  sentiment lexicons;
+\item furthermore, an extensive evaluation of various sets of seed
+  terms revealed that the results of almost all tested SLG algorithms
+  crucially depend on the quality of their initial seeds, with larger
+  balanced seed sets, e.g, the one proposed by~\citet{Kim:04},
+  typically leading to much higher scores;
+\item we also checked how different types of embeddings were affecting
+  the performance of NWE-based SLG systems, noticing that the $k$-NN
+  and linear projection methods worked best with the standard word2vec
+  vectors, while the nearest centroids and PCA algorithms yielded
+  better results on task-specific embeddings;
+\item finally, we also saw that all NWE-based approaches benefited
+  from the mean-scaling and length normalization of word vectors,
+  getting an improvement by up to~5\% in the macro-averaged \F-score.
 \end{itemize}
+
+With that knowledge in mind, we move on to exploring further opinion
+mining fields: fine- and coarse-grained sentiment analysis, in which
+sentiment lexicons are traditionally considered as one of the most
+fundmental building blocks.
