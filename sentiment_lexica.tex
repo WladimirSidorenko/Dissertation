@@ -22,79 +22,79 @@ is an automatic prediction of polar terms.
 For this purpose, we will first evaluate existing German sentiment
 lexicons on our corpus.  Since almost all of these resources were
 created semi-automatically by translating English polarity lists and
-manually post-editing these translations, we will also look whether
-the original methods which were used to produce the English source
-lexicons would yield comparable results when applied to German data
-directly.  Finally, we should analyze whether one of most popular
+then manually post-editing these translations, we will also look
+whether the original methods that were used to produce the English
+source lexicons would yield comparable results when applied to German
+data directly.  Finally, we should analyze if one of most popular
 areas of research in contemporary computational
 linguistics---distributed vector representations of words
 \cite{Mikolov:13}---could be a more perspective way for generating new
-domain-specific sentiment lexicons in an unsupervised way.  In the
+domain-specific polarity lists in an unsupervised way.  In the
 concluding step, we will investigate the effects of different seed
-sets and hyper-parameters on these automatic approaches, summarizing
-and concluding our findings in the last part of this section.
+sets and hyper-parameters on these approaches, summarizing and
+concluding our findings in the last part of this section.
 
 \section{Data}\label{subsec:snt-lex:data}
 
-In our experiments, we are going to use the complete data set labeled
-by one of the experts as a test corpus in order to model a situation
-where no annotated data are available during training (thus looking
-for the most efficient unsupervised lexicon generation technique), yet
-making the evaluation of the tested methods as thorough as possible.
-This set comprises a total of 6,040 positive and 3,055 negative terms.
-However, since many of these expressions represent emoticons, which,
-on the one hand, are a priory absent in common lexical taxonomies such
-as \textsc{WordNet} \cite{Miller:95,Miller:07} or \textsc{GermaNet}
-\cite{Hamp:97}, and therefore not amenable to the approaches which
-rely on these resources but, on the other hand, can be easily captured
-by regular expressions, we decided to exclude non-alphabetic smileys
-altogether from our study.  This left us with a set of 3,459 positive
-and 2,755 negative labeled terms (1,738 and 1,943 unique expressions
-respectively), whose $\kappa$-agreement run up to 0.59.  In addition
-to that, we also selected a small subset of 400 tweets from the other
-annotator as a development set for tuning the hyper-parameters of
-different methods.
+In our subsequent experiments, we are going to use the complete data
+set labeled by one of the experts as a test corpus, thus modeling a
+situation where no annotated data are available during the training,
+yet still making the comparison of the tested methods as thorough as
+possible.  This set comprises a total of 6,040 positive and 3,055
+negative terms.  However, since many of these expressions represent
+emoticons, which, on the one hand, are a priori absent in common
+lexical taxonomies such as \textsc{WordNet} \cite{Miller:95,Miller:07}
+or \textsc{GermaNet} \cite{Hamp:97}, and therefore not amenable to the
+approaches which rely on these resources, but, on the other hand, can
+be easily captured by regular expressions, we decided to exclude
+non-alphabetic smileys altogether from our study.  This left us with a
+set of 3,459 positive and 2,755 negative labeled terms (1,738 and
+1,943 unique expressions respectively), whose $\kappa$-agreement run
+up to 0.59.  In addition to that, we also selected a small subset of
+400 tweets from the other annotator, and used these data as a
+development set for tuning the hyper-parameters of different methods.
 
 \section{Evaluation Metrics}\label{subsec:snt-lex:eval-metrics}
 
-An important question which needs to be addressed before we procceed
-with our experiments are the evaluation metrics that we should use to
-measure the quality of (semi-)automatic sentiment lexicons.  Usually,
-this quality is estimated either \textit{intrinsically} (i.e., taking
-a lexicon in isolation and immediately assessing its accuracy) or
-\textit{extrinsically} (i.e., considering the lexicon within the scope
-of a bigger application such as a supervised classifier which utilizes
-lexicon's entries as features).
+Another important question which needs to be addressed before we
+proceed with our experiments are the evaluation metrics that we should
+use to measure the quality of \mbox{(semi-)auto}\-ma\-tic sentiment
+lexicons.  Usually, this quality is estimated either
+\textit{intrinsically} (i.e., taking a lexicon in isolation and
+immediately assessing its accuracy) or \textit{extrinsically} (i.e.,
+considering the lexicon within the scope of a bigger application such
+as a supervised classifier which utilizes lexicon's entries as
+features).
 
 Traditionally, intrinsic evaluation of English polarity lists amounts
-to comparing these lists with the General Inquirer lexicon \cite[GI;
-][]{Stone:66}---a manually compiled set of 11,895 words annotated with
-their semantic categories---by taking the intersection of the two
-resources and estimating the percentage of matches in which
-automatically induced polar terms had the same polarity as the GI
+to comparing these resources with the General Inquirer lexicon
+\cite[GI; ][]{Stone:66}---a manually compiled set of 11,895 words
+annotated with their semantic categories---by taking the intersection
+of the two lists and estimating the percentage of matches in which
+automatically induced polar terms have the same polarity as the GI
 entries.  This evaluation method, however, is somewhat problematic:
-First of all, it is not easily transferable to other languages, since
-even a manual translation of GI is not guaranteed to cover all
-language- and domain-specific polar expressions.  Secondly, as the
-authors are typically analyzing only the intersection of the two
-resources, this method does not penalize for a low recall so that a
-lexicon consisting of just two terms \textit{good}$^+$ and
-\textit{bad}$^-$ will always have the highest possible score, often
-surpassing polarity lists with a greater number of entries.  Finally,
-such comparison does not account for polysemy.  As a result, an
-ambiguous word only one of whose (possibly rare) senses is subjective
-will always be ranked the same as a purely polar expression.
+First of all, it is not easily transferable to other languages,
+because even a manual translation of GI is not guaranteed to cover all
+language- and domain-specific polar expressions.  Secondly, since the
+authors typically analyze only the intersection of the two lexicons,
+this method does not penalize for a low recall so that a polarity list
+consisting of just two terms \textit{good}$^+$ and \textit{bad}$^-$
+will always have the highest possible score, often surpassing other
+resources with a greater number of entries.  Finally, such comparison
+does not account for polysemy.  As a result, an ambiguous word only
+one of whose (possibly rare) senses is subjective will always be
+ranked the same as a purely polar expression.
 
 Unfortunately, an extrinsic evaluation does not always provide a
-solution in this case either, since, depending on the type of the
-extrinsic system (e.g., a document classifier), it might still
+complete solution in this case either, since, depending on the type of
+the extrinsic system (e.g., a document classifier), it might still
 presuppose a large data set for training the system and, moreover,
 might yield overly high scores, which, however, might be mainly due to
-these other system's components rather than the quality of the lexicon
+the testbed system rather than the quality of the tested lexicon
 itself.
 
 Instead of using these approaches, we opt for a direct comparison of
-the induced lexicons with an annotated corpus, since this type of
+the induced polarity lists with an annotated corpus, as this type of
 evaluation allows us to solve at least three of the foregoing issues:
 \begin{inparaenum}[(i)]
   \item It does account for the recall,
@@ -102,25 +102,25 @@ evaluation allows us to solve at least three of the foregoing issues:
       of the PotTS corpus were asked to annotate a polar expression
       iff its actual sense in the respective context was polar.} and
   \item it does preclude intermediate modules which might artificially
-    boost the scores.
+    boost the results.
 \end{inparaenum}
 
 In particular, in order to check a lexicon against the PotTS corpus,
 we construct a case-insensitive trie \cite[pp. 492--512]{Knuth:98}
-from the lexicon entries and apply this trie to the corpus annotation,
-simultaneously comparing its entries with the actual word forms and
-lemmas of the corpus tokens.\footnote{We use the \textsc{TreeTagger}
-  \cite{Schmid:95} to obtain lemma forms for corpus tokens.} A match
-is considered correct iff the matched lexicon entry absolutely
-corresponds to the (possibly lemmatized) expert's annotation and has
-the same polarity as the one specified by the human coder.  This way,
-we estimate the precision, recall, and \F{}-score for each particular
-polarity class (positive, negative, and neutral), considering all
-words absent in the lexicon as neutral.
+from the lexicon entries, and apply this trie to the corpus
+annotation, simultaneously comparing its entries with the actual word
+forms and lemmas of the PotTS' tokens.\footnote{We use the
+  \textsc{TreeTagger} \cite{Schmid:95} to obtain lemma forms for
+  corpus tokens.} A match is considered as correct iff the matched
+lexicon entry absolutely corresponds to the (possibly lemmatized)
+expert's annotation, and has the same polarity as the one specified by
+the human coder.  This way, we estimate the precision, recall, and
+\F{}-score for each particular polarity class (positive, negative, and
+neutral), considering all words absent in the lexicon as neutral.
 
 \section{Semi-Automatic Lexicons}
 
-We first use this metric to estimate the quality of the existing
+We first applied this metric to estimate the quality of the existing
 German sentiment lexicons:
 \begin{itemize}
 \item the \textbf{German Polarity Clues} \cite[GPC;][]{Waltinger:10},
@@ -139,8 +139,8 @@ German sentiment lexicons:
   manually revising these automatic translations afterwards.  In
   addition to that, \citet{Remus:10} also expanded their polarity set
   with words and phrases frequently co-occurring with positive and
-  negative seed lexemes using collocation statistics from a corpus of
-  10,200 customer reviews and the German Collocation Dictionary
+  negative seed lexemes using PMI statistics from a corpus of 10,200
+  customer reviews and the German Collocation Dictionary
   \cite{Quasthoff:10};
 
 \item and, finally, the \textbf{Zurich Polarity List}
@@ -151,8 +151,7 @@ German sentiment lexicons:
   adjectives obtained this way insufficient for running further
   classification experiments, they automatically enriched their
   lexicon with more attributive terms by analyzing conjoined
-  collocations from a corpus using the method of
-  \citet{Hatzivassi:97}.
+  collocations using the method of \citet{Hatzivassi:97}.
 \end{itemize}
 % Since all of these lexicons were created semi-automatically by either
 % automatically translating English polarity lists and then manually
@@ -163,14 +162,14 @@ German sentiment lexicons:
 % remaining parts of this section.
 
 For our evaluation, we tested each of the three lexicons in
-isolation\footnote{For the sake of these experiments, we excluded the
+isolation,\footnote{For the sake of these experiments, we excluded the
   auxiliary words ``aus'' (\emph{from}), ``der'' (\emph{the}),
   ``keine'' (\emph{no}), ``nicht'' (\emph{not}), ``sein'' (\emph{to
     be}), ``was'' (\emph{what}), and ``wer'' (\emph{who}) with their
   inflection forms from the German Polarity Clues lexicon, since these
   entries significantly worsened the evaluation results.} and also
-evaluated their union and intersection, in order to check for
-``synergy'' effects.  The results of these computations are shown in
+evaluated their union and intersection in order to check for
+``synergy'' effects.  The results of this computation are shown in
 Table~\ref{snt-lex:tbl:gsl-res}.
 
 \begin{table}[h]
@@ -267,18 +266,23 @@ Table~\ref{snt-lex:tbl:gsl-res}.
 
 As we can see from the table, the intersection of all three polarity
 lists achieves the best results on both positive and neutral classes,
-also yielding the best scores in terms of the macro- and
-micro-averaged $F$-measures.  One of the main reasons for this success
-is a relatively high precision of this list for all but the neutral
-polarity class, where it is outperformed by the union of all three
-resources.  Not surpisingly, the union also shows the highest recall
-of positive and negative terms among all compared lists.  Regarding
-the figures attained by the individual lexicons, the best results here
-are achieved by the SentiWS resource~\cite{Remus:10}, which shows the
-highest \F{}-score for negative terms, and the Zurich Polarity
-List~\cite{Clematide:10}, which achieves the second best
-macro-averaged \F{}-result, coming very close to the scores attained
-by the intersection of the three resources.
+also attaining the highest macro- and micro-averaged overall
+$F$-scores.  One of the main reasons for this success is a relatively
+high precision of this set on all polarity classes except for the
+neutral one, where it is outperformed by the union of the three
+resources.  Not surprisingly, the union also shows the highest recall
+of positive and negative terms among all compared lexicons.  Regarding
+the scores attained by the individual polarity lists, we can notice
+the superior performance of the Zurich resource~\cite{Clematide:10},
+whose macro-averaged \F{}-measure comes very close to the one attained
+by the intersection of all three polarity sets.  The second-best
+results are achieved by the SentiWS lexicon of~\citet{Remus:10}, whose
+\F-score on the negative polarity class even outperforms the
+respective metric of the intersected lists by more than 5\%.  Finally,
+the German Polaity Clues of~\cite{Waltinger:10} show the lowest
+performance among all compared lexicons, which, however, does not
+prevent them from being a useful component in combination with other
+resources.
 
 \section{Automatic Methods}
 
@@ -286,8 +290,8 @@ A natural question which arises upon the evaluation of the existing
 semi-automatic lexicons is how well fully automatic methods can
 perform in comparison with these lists.  According to
 \citet[p. 79]{Liu:12}, most automatic sentiment lexicon generation
-(SLG) algorithms can be grouped into two groups: dictionary- and
-corpus-based ones.  The former systems induce polarity lists from
+(SLG) algorithms can be grouped into two major categories: dictionary-
+and corpus-based ones.  The former systems induce polarity lists from
 monolingual thesauri or lexical databases such as the Macquarie
 Dictionary \cite{Bernard:86} or \textsc{WordNet} \cite{Miller:95}.  A
 clear advantage of these methods is their relatively high precision as
@@ -2526,7 +2530,7 @@ follows:
   getting an improvement by up to~5\% in the macro-averaged \F-score.
 \end{itemize}
 
-With that knowledge in mind, we move on to exploring further opinion
+With this knowledge in mind, we move on to exploring further opinion
 mining fields: fine- and coarse-grained sentiment analysis, in which
-sentiment lexicons are traditionally considered as one of the most
+sentiment lexicons are traditionally considered to be one of the most
 fundmental building blocks.
