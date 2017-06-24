@@ -18,19 +18,34 @@
 
 \textbf{Lexicon-Based Methods}
 
+Vasileios Hatzivassiloglou and Janyce Wiebe. 2000. Ef- fects of
+adjective orientation and gradability on sen- tence subjectivity. In
+Conference on Computational Linguistics (COLING-2000).
+
 \todo[inline]{Das and Chen, 2001}
 
-\todo[inline]{P.D. Turney. Thumbs up or thumbs down? semantic
-  orientation applied to unsupervised classification of reviews. In
-  Proceedings of the 40th Annual Meeting of the Association for
-  Computational Linguistics (ACL 2002), pages 417-424, Philadelphia,
-  PA, 2002.}
+\todo[inline]{\citet{Turney:02}}
 
-\todo[inline]{Pang, Lee and Vaithyanathan 2002}
+\todo[inline]{}
 
-\todo[inline]{Bruce and Wiebe, 2004}
+More recently, Wiebe et al.  (2002) report on document-level
+subjectivity classification, using a k-nearest neighbor algorithm
+based on the total count of subjective words and phrases within each
+document.
 
-\todo[inline]{Hu and Liu, 2004}
+\todo[inline]{\citet{Hu:04}}
+
+\todo[inline]{}
+
+% Taboada et al., 2004
+Largely inspired by the Appraisal theory of~\citet{Martin:00},
+\citet{Taboada:04} enhanced the original method of~\citet{Turney:02}
+by increasing the weights of polar adjectives which occurred in the
+middle and at the end of a document, and also augmenting these values
+with the affect, judgement, and appreciation scores.  Similarly to
+polarity, the appraisal scores were calculated automatically by
+computing the PMI of their cooccurrence with different pronouns using
+a web search engine.
 
 \citet{Kim:04} experimented with three different methods of
 determining the overall polarity of a sentence:
@@ -73,8 +88,6 @@ to bring a statistically significant improvement, boosting the
 accuracy of the two-class prediction on a corpus of product and movie
 reviewa from 67.9 to 69.3\%.
 
-\todo[inline]{Taboada and Grieve (2004)}
-
 \todo[inline]{Taboada, Anthony, and Voll (2006)}
 
 Finally, a veritably seminal work on lexicon-based approaches was
@@ -99,7 +112,17 @@ topics and text genres, hypothesizing that lexion-based approaches
 were more domain-independent than traditional supervised learning
 techniques.
 
+\todo[inline]{\citet{Eisenstein:17}}
+
 \textbf{Traditional Supervised Machine Learning Frameworks}
+
+\todo[inline]{\citet{Pang:02}}
+
+Pang et al.  (2002) adopted a more direct approach, using super- vised
+machine learning with words and n-grams as features to predict
+orientation at the document level with up to 83\% precision.
+
+\todo[inline]{}
 
 One of the first attempts to analyze message-level sentiments on
 Twitter was made by \citet{Go:09}.  For their experiments, the authors
@@ -150,6 +173,32 @@ Hatzivassiloglou \& Wiebe 2000
 Wiebe 2000;
 Wiebe et al. 2002
 Yu \& Hatzivassiloglou 2003
+
+Bruce and Wiebe (1999) annotated 1,001 sentences as sub- jective or
+objective, and Wiebe et al. (1999) de- scribed a sentence-level Naive
+Bayes classifier using as features the presence or absence of
+particular syn- tactic classes (pronouns, adjectives, cardinal num-
+bers, modal verbs, adverbs), punctuation, and sen- tence position.
+
+More recently, Wiebe et al.  (2002) report on document-level
+subjectivity classi- fication, using a k-nearest neighbor algorithm
+based on the total count of subjective words and phrases within each
+document.
+
+A semi-supervised classification approach was proposed
+by~\citet{Yu:03}, who presented a three-stage method, in which they
+first distinguished between subjective and objective documents, then
+differentiated between polar and neutral sentences, and, finally,
+classified the polarity of opinionated clauses.  The authors used a
+Na{\"i}ve Bayes classifer for the document-level task, reaching a
+remarkable \F-score of~0.96 on this objective; and applied an ensemble
+of NB systems to predict the subjectivity of the sentences.  In the
+final step, they determined the semantic orientation of subjective
+clauses by averaging the polarity scores of their tokens, getting
+these scores from an automatically constructed sentiment
+lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
+attained an accuracy of~91\% on a set of 38 sentences which had a
+perfect inter-annotator agreement in their data.
 
 \textbf{Deep Neural Networks}
 
@@ -276,9 +325,5 @@ domain, for which he assumed a small subset of labeled examples was
 available; \citet{Yang:15} who trained neural embeddings of features,
 trying to predict which instance attributes frequently co-occured with
 each other;
-
-\citet{Ganchev:10}
-
-\todo[inline]{Add description}
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
