@@ -18,13 +18,14 @@
 
 \textbf{Lexicon-Based Methods}
 
-Vasileios Hatzivassiloglou and Janyce Wiebe. 2000. Ef- fects of
-adjective orientation and gradability on sen- tence subjectivity. In
-Conference on Computational Linguistics (COLING-2000).
+\todo[inline]{\citet{Hatzivassi:00}}
 
 \todo[inline]{Das and Chen, 2001}
 
 \todo[inline]{\citet{Turney:02}}
+
+The most commonly used method for this purpose is to average the SO of
+the words found in the text (Turney, 2002).
 
 \todo[inline]{}
 
@@ -47,6 +48,7 @@ polarity, the appraisal scores were calculated automatically by
 computing the PMI of their cooccurrence with different pronouns using
 a web search engine.
 
+% Kim and Hovy, 2004
 \citet{Kim:04} experimented with three different methods of
 determining the overall polarity of a sentence:
 \begin{inparaenum}[(i)]
@@ -88,8 +90,10 @@ to bring a statistically significant improvement, boosting the
 accuracy of the two-class prediction on a corpus of product and movie
 reviewa from 67.9 to 69.3\%.
 
-\todo[inline]{Taboada, Anthony, and Voll (2006)}
+\todo[inline]{\citet{Taboada:06}}
+% Taboada et al., 2006
 
+% Taboada et al., 2011
 Finally, a veritably seminal work on lexicon-based approaches was
 introduced by~\citet{Taboada:11} who presented a manually compiled
 sentiment lexicon,\footnote{The authors hand-annotated all occurrences
@@ -111,6 +115,29 @@ proved the robustness of their SO computation procedure for other
 topics and text genres, hypothesizing that lexion-based approaches
 were more domain-independent than traditional supervised learning
 techniques.
+
+% Musto et al., 2014
+A lexicon-based system created specifically for Twitter data was
+presented by~\citet{Musto:14}, who experimented with four different
+lexicons---\textsc{SentiWordNet}~\cite{Esuli:06c},
+\textsc{WordNet-Affect}~\cite{Strapparava:04},
+\textsc{MPQA}~\cite{Wiebe:05}, and
+\textsc{SenticNet}~\cite{Cambria:14}---and four distinct strategies of
+computing the overall polarity scores of tweets using these
+lexicons---\emph{basic}, \emph{normalized}, \emph{emphasized}, and
+\emph{normalized-emphasized}.  In all of these strategies, the authors
+first split the input messages into \emph{micro-phrases} based on the
+occurrence of punctuation marks and conjunctions; then calculated the
+polarity score of each of these segments by summing or averaging the
+lexicon scores of their tokens; and, finally, estimated the overall
+polarity of the whole tweet by summing or averaging the scores of its
+micro-phrases.  \citeauthor{Musto:14} obtained their best results
+(58.99\% accuracy on the SemEval-2013 dataset) with the
+\textsc{SentiWordNet} lexicon of~\citet{Esuli:06c}, using the
+normalized-emphasized approach, in which they averaged the polarity
+scores of segment tokens, boosting these values by 50\% for
+informative parts of speech; and regarded the sum of the segements'
+scores as the final overall polarity of the message.
 
 \todo[inline]{\citet{Eisenstein:17}}
 
