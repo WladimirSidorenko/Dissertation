@@ -18,25 +18,46 @@
 
 \textbf{Lexicon-Based Methods}
 
-\todo[inline]{\citet{Hatzivassi:00}}
+% Das and Chen, 2001; Turney, 2002;  Kim and Hovy, 2004
+The usage of lexicon-based approaches for estimating semantic
+orientation of complex text chunks dates back to the very origins of
+the sentiment analysis research in general: For example,
+\citet{Das:01} already used two purely lexicon-based and three
+machine-learning methods, which heavily relied on lexicon features, in
+an ensemble of five classifiers to predict the polarity of stock
+messages (buy, sell, or neutral), attaining an accuracy of 62\% on a
+corpus of several hundreds stock board messages.  \citet{Turney:02},
+while proposing his PMI method for automatically generating sentiment
+lexicons, also suggested computing the orientation of the whole review
+by averaging the sentiment scores of its terms found in the lexicon.
+With this approach, the author reached an accuracy of 74\% on a corpus
+of 410 manually labeled Epinions comments.  Finally, \citet{Kim:04}
+compared three different methods of determining the overall polarity
+of a sentence:
+\begin{inparaenum}[(i)]
+  \item by multiplying the signs of polar terms found in sentence,
+  \item taking their sum, and
+  \item taking the geometric mean of polarity scores;
+\end{inparaenum}
+finding that the first and last options worked best for the Document
+Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 
-\todo[inline]{Das and Chen, 2001}
+% Hatzivassiloglou and Wiebe, 2000
+\citet{Hatzivassi:00} proved, for instance, via statistical
+significance tests that the mere presence of a subjective or even just
+gradable adjective from a lexicon was a highly reliable indicator that
+the sentence it appeared in also was subjective.
 
-\todo[inline]{\citet{Turney:02}}
-
-The most commonly used method for this purpose is to average the SO of
-the words found in the text (Turney, 2002).
-
-\todo[inline]{}
-
-More recently, Wiebe et al.  (2002) report on document-level
-subjectivity classification, using a k-nearest neighbor algorithm
-based on the total count of subjective words and phrases within each
-document.
-
-\todo[inline]{\citet{Hu:04}}
-
-\todo[inline]{}
+% Hu and Liu, 2004
+Similarly, \citet{Hu:04} determined the semantic orientation of
+sentences in customer reviews by simply comparing the number of
+positive and negative terms found in these passages. Since the
+authors, however, were primarily interested in estimating the polarity
+towards particular product features mentioned in the clauses, they
+additionally applied a fallback strategy in case of a tie by checking
+which of the polar lexicon terms appeared closer to the features, and
+assuming the polarity of the preceding sentence if these numbers were
+also equal.
 
 % Taboada et al., 2004
 Largely inspired by the Appraisal theory of~\citet{Martin:00},
@@ -47,17 +68,6 @@ with the affect, judgement, and appreciation scores.  Similarly to
 polarity, the appraisal scores were calculated automatically by
 computing the PMI of their cooccurrence with different pronouns using
 a web search engine.
-
-% Kim and Hovy, 2004
-\citet{Kim:04} experimented with three different methods of
-determining the overall polarity of a sentence:
-\begin{inparaenum}[(i)]
-  \item by multiplying the signs of polar terms found in sentence,
-  \item taking their sum, and
-  \item taking the geometric mean of polarity scores;
-\end{inparaenum}
-finding that the first and last options worked best for the Document
-Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 
 % Polanyi and Zaenen, 2006
 An early analysis of lexicon-based approaches to sentiment analysis
@@ -90,8 +100,21 @@ to bring a statistically significant improvement, boosting the
 accuracy of the two-class prediction on a corpus of product and movie
 reviewa from 67.9 to 69.3\%.
 
-\todo[inline]{\citet{Taboada:06}}
 % Taboada et al., 2006
+Another important contribution to the development of lexicon-based
+approaches was made by~\citet{Taboada:06}, who compared three popular
+polarity lists---a PMI lexicon computed with the original method
+of~\citet{Turney:02} using the AltaVista's NEAR operator; a similar
+polarity list obtained with the help of Google's AND queries; and,
+finally, the manually compiled General Inquirer lexicon
+of~\citet{Stone:66}.  The authors evaluated these resources both
+intrinsically (by comparing them with GI entries) and extrinsically
+(by computing the polarity of 400 manually annotated Epinions
+reviews).  To estimate the overall polarity of a review for the second
+task, \citeauthor{Taboada:06} calculated the average SO value of all
+polar terms found in the review, obtaining these scores from the
+mean-normalized lexicons, and flipping the polarity sign to the
+opposite in case of the negation.
 
 % Taboada et al., 2011
 Finally, a veritably seminal work on lexicon-based approaches was
@@ -139,9 +162,16 @@ scores of segment tokens, boosting these values by 50\% for
 informative parts of speech; and regarded the sum of the segements'
 scores as the final overall polarity of the message.
 
-\todo[inline]{\citet{Eisenstein:17}}
-
 \textbf{Traditional Supervised Machine Learning Frameworks}
+
+\todo[inline]{\citet{Wiebe:99}}
+
+Wiebe et al. (1999) developed an automatic system to perform
+subjectivity tagging. In 10-fold cross valida- tion experiments
+applied to the corpus described above, a probabilistic classifier
+obtained an average accuracy on subjectivity tagging of 72.17\%, more
+than 20 percentage points higher than the baseline accuracy obtained
+by al- ways choosing the more frequent class.
 
 \todo[inline]{\citet{Pang:02}}
 
