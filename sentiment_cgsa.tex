@@ -141,26 +141,185 @@ techniques.
 
 % Musto et al., 2014
 A lexicon-based system created specifically for Twitter data was
-presented by~\citet{Musto:14}, who experimented with four different
-lexicons---\textsc{SentiWordNet}~\cite{Esuli:06c},
+presented by~\citet{Musto:14}, who examined four different strategies
+for computing the overall polarity scores of tweets---\emph{basic},
+\emph{normalized}, \emph{emphasized}, and
+\emph{normalized-emphasized}; checking these approaches with four
+distinct lexicons---\textsc{SentiWordNet}~\cite{Esuli:06c},
 \textsc{WordNet-Affect}~\cite{Strapparava:04},
 \textsc{MPQA}~\cite{Wiebe:05}, and
-\textsc{SenticNet}~\cite{Cambria:14}---and four distinct strategies of
-computing the overall polarity scores of tweets using these
-lexicons---\emph{basic}, \emph{normalized}, \emph{emphasized}, and
-\emph{normalized-emphasized}.  In all of these strategies, the authors
-first split the input messages into \emph{micro-phrases} based on the
-occurrence of punctuation marks and conjunctions; then calculated the
-polarity score of each of these segments by summing or averaging the
-lexicon scores of their tokens; and, finally, estimated the overall
-polarity of the whole tweet by summing or averaging the scores of its
-micro-phrases.  \citeauthor{Musto:14} obtained their best results
-(58.99\% accuracy on the SemEval-2013 dataset) with the
-\textsc{SentiWordNet} lexicon of~\citet{Esuli:06c}, using the
-normalized-emphasized approach, in which they averaged the polarity
-scores of segment tokens, boosting these values by 50\% for
-informative parts of speech; and regarded the sum of the segements'
-scores as the final overall polarity of the message.
+\textsc{SenticNet}~\cite{Cambria:14}.  In all of these strategies, the
+authors first split the input messages into \emph{micro-phrases} based
+on the occurrence of punctuation marks and conjunctions; then
+calculated the polarity score of each of these segments by summing
+(\emph{basic} and \emph{emphasized}) or averaging (\emph{normalized}
+and \emph{normalized-emphasized}) the lexicon scores of their tokens;
+and, finally, estimated the overall polarity of the whole tweet by
+summing or averaging the scores of the micro-phrases.
+\citeauthor{Musto:14} obtained their best results (58.99\% accuracy on
+the SemEval-2013 dataset) with the \textsc{SentiWordNet} lexicon
+of~\citet{Esuli:06c}, using the normalized-emphasized approach, in
+which they averaged the polarity scores of segment tokens, boosting
+these values by 50\% for informative parts of speech; and regarded the
+sum of the segements' scores as the final overall polarity of the
+message.
+
+\todo[inline]{\citet{Jurek:15}}
+
+\citet{Jurek:15}
+
+The sentiment lexicon constructed contains about 6300 words. It was
+generated manually with application of Sen- tiWordNet [28] as a
+baseline. Each word in the lexicon has assigned a value representing
+sentiment in the range of -100 (most negative) to 100 (most
+positive). From an empirical knowledge it is known that some of the
+positive and negative words sometime occur with neutral meaning in a
+sentence context.
+
+For example, sentence ``Enjoying my lazy Sunday!!'' represents a
+positive message that contains one positive (enjoying) and one
+negative (lazy) word. It may be difficult in such a case to decide
+between positive and negative. In an effort to alleviate this issue,
+besides the sen- timent value, for each word from the lexicon we
+estimated a conditional probability (denoted by P) as presented in
+Eq. 1.  P(positive | w) for positive w P(negative | w) for negative w
+
+Based on a set of labelled data, for each positive word we estimated
+the probability that a random message containing this word is
+positive. For the purpose of calculating the probabili- ties we
+applied a training data set provided by Stanford [29] that contains
+1.6 million (including 800,000 posi- tive and 800,000 negative)
+labelled tweets. The training dataset was created automatically based
+on the absence of emoticons within a message. It was assumed that any
+tweets with positive emoticons were positive and tweets with negative
+emoticons were negative. List of emoti- cons was applied as query for
+Twitter API and the col- lected messages were automatically labelled
+as positive or negative, depending on the type of emoticon they con-
+tained. The process of calculating the probabilities has been
+performed as follow. A sample of 100,000 positive and 100,000 negative
+tweets has been selected randomly.  Following this, for each word form
+the lexicon, denoted as w, its frequency among the selected positive
+and nega- tive messages was calculated. Depending if the word was
+positive or negative, the conditional probability was cal- culated as
+presented in Eq. 2.  In order to obtain more precise result, the
+process was repeated 100 times and the aver- age probability obtained
+for each word has been stored in the lexicon. The probabilities are
+referred to as pieces of evidence later in the paper.
+
+
+The most common approach to handling negation with a lexicon-based
+approach is by reversing the polar- ity of the lexicon item that
+stands next to the negator in a sentence [30] (e.g. good: 100 and not
+good: -100).  In our work we proposed to take a different approach.
+Rather than reversing the sentiment value we proposed to formulate a
+negating function that calculates the sentiment value of a negated
+word. First, we manually created a lexicon composed of 38 negating
+words. Fol- lowing this, applying the Twitter corpus, we selected most
+commonly used phrases containing negation of verbs and adjectives. In
+the next step, a group of 20 peo- ple was asked to rank the
+expressions from both of the list from most positive to most
+negative. Taking under consideration all the results, the final two
+rankings were estimated. Based on the two rankings we determined the
+most corresponding negating function represented as follow:
+
+$\max(\frac{S+100}{2}, 10)$ if $S < 0$
+
+$\min(\frac{S-100}{2}, -10)$ if $S > 0$
+
+Once a negation is recognised in a sentence, the first non-neutral
+word that occurs within the following three positions after the
+negator is searched. If a positive or negative word is identified, its
+new sentiment value is calculated by using Eq. (3) (e.g. enjoy: 20, do
+not enjoy: -40).
+
+In our approach 25 most frequently applied intensifiers were selected
+and then, depending on their polarity, they were divided into 3 cat-
+egories, namely downtoners, weak amplifiers and strong
+amplifiers. Empirically downtoners represent intensifiers that
+decrease value of the sentiment by 50 \%. Weak and strong amplifiers
+increase sentiment by 50 and 100 \%, respectively.
+
+None of the negators and intensifiers is included in the sentiment
+lexicon. Consequently, if they appear in a sentence surrounded by only
+neutral text, they are con- sidered as neutral words. However, if they
+appear in a neighbourhood of positive or negative words they are
+considered as non-neutral given that they influence the final
+sentiment of a sentence.
+
+Once all positive and negative words are identified in a sentence and
+their local context is verified, a combining process is performed in
+order to obtain the final sentiment value. In most of the existing
+approaches to sentiment analysis, the output of the process is repre-
+sented as a positive or negative class label. In our work we attempted
+to design a sentiment combining function that, based on the sentiment
+of single words, provides the absolute sentiment of the message as a
+normalised value from the range of -100 to 100. The motivation for
+such an approach was the possibility to analyse the sentiment in the
+degree of intensity as opposed to positive and negative only. Apart
+from the polarity, we wanted to be able to determine how strongly
+positive/ negative a sentence is and which of any two sentences is
+more positive/negative than the other.
+
+The combining function should be able to model the relation between
+sentences depending on the number of non- neutral words and the value
+of the sentiment they contain. In the first attempt an average was
+considered as a combining function for the sentiment within a message.
+This solution, however, did not provide an accurate differentiation
+between sentences. For example, for the two sentences presented below,
+based on the average we are not able to recognise correctly which
+sentence express more positive opinion. In this study, we proposed a
+new normalisation formula that combines the average sentiment of a
+sentence and the number of words to calculate the average. The idea
+was that, for a given average sentiment of a message, the dif- ference
+between the overall positive and overall negative sentiments should
+also depend on the number of positive and negative words in the
+message. Therefore, the over- all positive/negative sentiment should
+be represented as a product of the average sentiment and a coefficient
+that's value depends on the number of positive/negative words.
+Following this rationale, we developed the normalisation formulas,
+denoted by F P and F N that calculate the overall positive and
+negative sentiment in a sentence as follow:
+
+$F_p = \min\{\frac{A_p}{2 - \log(p\times W_p)}, 100\}$
+
+$F_n = \max\{\frac{A_n}{2 - \log(p\times W_n)}, 100\}$
+
+where $A_p$ P , A N stand for an average of positive and nega- tive
+sentiment respectively, and W P , W N represent the number of positive
+and negative words applied while cal- culating A P and A N ,
+respectively. The idea was to apply the logarithmic function in order
+to model the relation between the number of positive/negative words
+and F P / F N for a given value of the average positive/negative sen-
+timent in a sentence. The parameter p determines shape of the
+logarithmic function. The greater the value of p the faster the value
+of F P /F N increases as the number of non- neutral words changes. In
+order to determine the optimal value of p we performed a simple
+statistical analysis of 13,500 tweets and analyse non-neutral words'
+distribution across messages. Figure 1 demonstrated the results we
+obtained.
+
+Following the aforementioned evaluation, the formulas for calculating
+the overall positive and negative sentiment of a sentence were written
+as Eq. 6.
+
+$F_p = \min\{\frac{A_p}{2 - \log(p\times W_p + I_p)}, 100\}$
+
+$F_n = \max\{\frac{A_n}{2 - \log(p\times W_n + I_n)}, 100\}$
+
+where I P and I N stand for the number of intensifiers that refer
+respectively to positive and negative words in a sen- tence. Instead
+of decreasing or increasing values of word's sentiment by 50 or 100 \%
+, we simply decrease or increase the number of words by appropriate
+values of 0.5 or 1, respectively.
+
+As opposed to the train dataset, the Stanford test dataset was
+manually collected and labelled hence it is more appropriate for
+evaluation of the classification models' performance. It contains 177
+negative, 182 posi- tive and 139 neutral manually labelled tweets. The
+clas- sification accuracy of all the algorithms described in the
+previous section is presented in Table 1.
+
+\todo[inline]{Kolchyna et al., 2015}
 
 \textbf{Traditional Supervised Machine Learning Frameworks}
 
