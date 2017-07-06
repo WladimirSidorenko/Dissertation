@@ -307,8 +307,39 @@ authors achieved an accuracy of~77.3\% on the manually annotated
 subset of \citeauthor{Go:09}'s corpus, and reached 74.2\% on the IMDB
 corpus~\cite{Maas:11}.
 
-\todo[inline]{\citet{Kolchyna:15}}
 % Kolchyna et al., 2015
+Finally, \citet{Kolchyna:15} compared lexicon- and ML-based systems,
+evaluating these approaches on the SemEval-2013 data
+set~\cite{Nakov:13}.  For the former group of methods, the authors
+explored two different ways of estimating the overall polarity of a
+microblog:
+\begin{inparaenum}[(i)]
+\item by simply averaging the scores of the lexicon terms found in the
+  message, and
+\item by taking the signed logarithm of this average:
+\end{inparaenum}
+\begin{equation*}
+  \text{Score}_{\log} =
+  \begin{cases}
+    \text{sign}(\text{Score}_{\text{AVG}})\log_{10}(|\text{Score}_{\text{AVG}}|) & %
+    \text{if |Score}_{\text{AVG}}| > 0.1,\\
+    0, & \text{otherwise}.
+  \end{cases}
+\end{equation*}%
+To estimate the final label of the tweet, \citeauthor{Kolchyna:15}
+trained a $k$-means clustering algorithm, which utilized either of the
+above polarity scores as its features.  They showed that the
+logarithmic approach performed better than the simple average
+solution, yielding an accuracy of 61.74\% when used with a manually
+compiled lexicon enriched with colloquial and slang terms.  For
+ML-based methods, the authors proposed using cost-sensitive
+SVMs~\cite{Masnadi:12}, which allowed them to improve on the results
+of the top-performing system from the SemEval
+competition~\cite{Mohammad:13} by 4\%, reaching 0.71~macro-averaged
+\F{} on the two polarity classes (positive and negative).
+
+\todo[inline]{re-implement: Taboada (2011), Musto et al. (2014), Jurek
+  et al. (2015), Kolchyna (2015), }
 
 \textbf{Traditional Supervised Machine Learning Frameworks}
 
@@ -327,7 +358,10 @@ Pang et al.  (2002) adopted a more direct approach, using super- vised
 machine learning with words and n-grams as features to predict
 orientation at the document level with up to 83\% precision.
 
-\todo[inline]{}
+\todo[inline]{Barbosa and Feng, 2010}
+\todo[inline]{Tong, 2001}
+\todo[inline]{Morinaga, 2002}
+\todo[inline]{Kouloumpis, 2011}
 
 One of the first attempts to analyze message-level sentiments on
 Twitter was made by \citet{Go:09}.  For their experiments, the authors
