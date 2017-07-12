@@ -1,6 +1,8 @@
 \chapter{Coarse-Grained Sentiment Analysis}\label{sec:snt:cgsa}
 
-\section{Data Set}
+\section{Data}\label{sec:cgsa:data}
+
+\section{Data Set}\label{sec:cgsa:eval-metrics}
 
 \section{Coarse-Grained Sentiment Analysis with Lexicon-Based Methods}
 
@@ -266,15 +268,15 @@ competition~\cite{Mohammad:13} by 4\%, reaching 0.71~macro-averaged
 \section{Coarse-Grained Sentiment Analysis with ML-Based Methods}
 
 One of the first works on an automatic sentiment classification with
-ML-based methods was done by~\citet{Wiebe:99}, who trained a Na{\"i}ve
-Bayes system to differentiate between subjective and objective
-statements, relying primarily on binary features which reflected the
-presence of a pronoun, an adjective, a cardinal number, or a modal
-other than ``will'' in the analyzed sentence.  The authors achieved an
-accuracy of~72.17\%, outperforming the majority class baseline by more
-than 20~percentage points.  An even better result (81.5\%) could be
-reached when the data set was restricted only to the examples with the
-most confident annotations.
+ML-based methods was presented by~\citet{Wiebe:99}, who trained a
+Na{\"i}ve Bayes system to differentiate between subjective and
+objective statements, relying primarily on binary features which
+reflected the presence of a pronoun, an adjective, a cardinal number,
+or a modal other than ``will'' in the analyzed sentence.  The authors
+achieved an accuracy of~72.17\%, outperforming the majority class
+baseline by more than 20~percentage points.  An even better result
+(81.5\%) could be reached when the data set was restricted only to the
+examples with the most confident annotations.
 
 A further step in this direction was taken by~\citet{Pang:02}, who
 compared Na{\"i}ve Bayes, Maximum Entropy, and SVM approaches on the
@@ -318,11 +320,15 @@ perfect inter-annotator agreement in their data.
 
 \todo[inline]{\citet{Barbosa:10}}
 
-\todo[inline]{\citet{Nakagawa:10}}
-
 \todo[inline]{\citet{Pak:10}}
 
-\todo[inline]{\citet{Davidov:10}}
+\todo[inline]{}
+
+A slightly different task was addressed by~\citet{Davidov:10}, who
+sought to predict hashtags and emoticons occurring in tweets using a
+$k$-NN classifier trained on a large collection of messages.  The
+authors achieved an \F-measure of~0.31 on the former task, and reached
+an \F-score of~0.64 on predicting smileys.
 
 \citet{Kouloumpis:11} trained an AdaBoost
 classifier~\cite{Schapire:00} on two large collections of noisily
@@ -565,7 +571,9 @@ trying to predict which instance attributes frequently co-occured with
 each other;
 
 \section{Evaluation}
+\subsection{Effect of Lexicons}
 \subsection{Effect of Distant Supervision}
+\subsection{Effect of Word Embeddings}
 \subsection{Effect of Normalization}
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
