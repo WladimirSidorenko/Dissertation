@@ -318,11 +318,33 @@ lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
 attained an accuracy of~91\% on a set of 38 sentences which had a
 perfect inter-annotator agreement in their data.
 
+\todo[inline]{\citet{Read:05}}
+
+\todo[inline]{\citet{Go:09}}
+
 \todo[inline]{\citet{Barbosa:10}}
 
-\todo[inline]{\citet{Pak:10}}
-
 \todo[inline]{}
+
+In a similar way, \citet{Pak:10} gathered a collection of 300,000
+noisily labeled tweets, ensuring an even distribution of positive,
+negative, and neutral messages.  After a brief exploration of PoS tag
+statistics in these different classes, they presented a Na{\"i}ve
+Bayes system which utilized highly relevant binary part-of-speech and
+$n$-gram features.\footnote{\citet{Pak:10} determined the relevance of
+  a feature $f$ using a special \emph{salience} metric, which they
+  defined as a negative ratio between the minimum and maximum
+  conditional probabilities of this feature belonging to different
+  target classes:
+  \begin{equation*}
+    salience(f) = \frac{1}{N}\sum_{i=1}^{N-1}\sum_{j=i+1}^N 1 - \frac{\min(P(f, s_i), P(f, s_j))}{\max(P(f, s_i), P(f, s_j))}.
+  \end{equation*}
+  The $N$~term in this formula denotes the number of training
+  examples, and the expression $s_i$ means the sentiment class of the
+  $i$-th training instance.} With this approach, the authors attained
+an accuracy slighlty above 0.6 on the manually labeled test set
+of~\citet{Go:09}, also demonstrating a particular utility of bigrams,
+negation rules, and feature pruning heuristics.
 
 A slightly different task was addressed by~\citet{Davidov:10}, who
 sought to predict hashtags and emoticons occurring in tweets using a
