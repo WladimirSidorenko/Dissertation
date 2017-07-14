@@ -36,6 +36,44 @@ findings at the end of this chapter.
 
 \section{Evaluation Metrics}\label{sec:cgsa:eval-metrics}
 
+\todo[inline]{\citet{Nakov:13}}
+For both subtasks, the participating systems were
+required to perform a three-way classification - a
+particular marked phrase (for subtask A) or an en-
+tire message (for subtask B) was to be classified as
+positive, negative, or objective. For each system,
+we computed a score for predicting positive/negative
+phrases/messages vs. the other two classes.
+For instance, to compute positive precision, P pos ,
+we find the number of phrases/messages that a sys-
+tem correctly predicted to be positive, and we divide
+that number by the total number of messages it pre-
+dicted to be positive. To compute recall, for the pos-
+itive class, R pos , we find the number of messages
+correctly predicted to be positive and we divide that
+number by the total number of positive messages in
+the gold standard.
+We then calculate F-score for the positive labels,
+the harmonic average of precision and recall as fol-
+P pos R pos
+lows F pos = 2 P pos
++R pos . We carry out a similar
+computation to calculate F neg , which is F1 for neg-
+ative messages.
+The overall score for each system run is then
+given by the average of the F1-scores for the posi-
+tive and negative classes: F = (F pos + F neg )/2.
+
+Note that ignoring F neutral does not reduce the task to predicting
+positive vs. negative labels only (even though some participants have
+chosen to do so) since the gold standard still contains neutral labels
+which are to be predicted: F pos and F neg would suffer if these
+examples are labeled as posi- tive and/or negative instead of neutral.
+We provided participants with a scorer. In addi- tion to outputting
+the overall F-score, it produced a confusion matrix for the three
+prediction classes (positive, negative, and objective), and it also
+vali- dated the data submission format.
+
 \section{Data Preparation}\label{sec:cgsa:data}
 
 \section{Coarse-Grained Sentiment Analysis with Lexicon-Based
