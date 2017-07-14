@@ -6,41 +6,60 @@ polarity lists, and the difficulties of fine-grained sentiment
 analysis, we now move on to the presumably most popular opinion-mining
 objective in which we need to determine the overall polarity of a
 message.  Traditionally, this task has been addessed with either of
-three common groups of methods:
+three common method groups:
 \begin{inparaenum}[(i)]
   \item lexicon-based approaches,
-  \item machine-learning-inspired systems, and
-  \item deep-learning-based applications.
+  \item machine-learning-inspired (ML) systems, and
+  \item deep-learning-based (DL) applications.
 \end{inparaenum}
 In this chapter, we are going to scrutinize the most prominent
-representatives of each of these groups and also tackle a much more
+representatives of each of these paradigms and also tackle a much more
 ambitious goal, viz., whether we can achieve results comparable with
-the scores of these methods when both the language and the domain of
-the data we train on are completely different from the ones that are
-used for testing.
+the scores of these methods when the language of the data we train on
+is completely different from the language of the test set.
+
+We begin our comparison by first presenting the metrics that we will
+use for subsequent evaluation.  After a brief description of the data
+preparation step, we proceed to the actual estimation of lexicon-,
+ML-, and DL-based approaches, explaining and evaluating them in
+Sections~\ref{sec:cgsa:lexicon-based}, \ref{sec:cgsa:ml-based},
+and~\ref{sec:cgsa:dl-based} respectively.  Then,
+in~Section~\ref{sec:cgsa:domain-adaptation}, we also show which
+results can be obtained by using cross-lingual transfer, where we
+train a classifier on English microblogs and then adapt this system to
+German messages.  We conclude with an extensive evaluation of
+different hyperparameters and settings (including various types of
+sentiment lexicons, different kinds of word embeddings, the utility of
+the text normalization step and the impact of additional noisily
+labeled training data), summarizing our results and recapping our
+findings at the end of this chapter.
 
 \section{Evaluation Metrics}\label{sec:cgsa:eval-metrics}
 
 \section{Data Preparation}\label{sec:cgsa:data}
 
-\section{Coarse-Grained Sentiment Analysis with Lexicon-Based Methods}
+\section{Coarse-Grained Sentiment Analysis with Lexicon-Based
+  Methods}\label{sec:cgsa:lexicon-based}
 
 % Das and Chen, 2001; Turney, 2002;  Kim and Hovy, 2004
-The usage of lexicon-based approaches for estimating semantic
-orientation of complex text chunks dates back to the very origins of
-the sentiment analysis research in general: For example,
-\citet{Das:01} already used two purely lexicon-based and three
-machine-learning methods, which heavily relied on lexicon features, in
-an ensemble of five classifiers to predict the polarity of stock
-messages (buy, sell, or neutral), attaining an accuracy of 62\% on a
-corpus of several hundreds stock board messages.  \citet{Turney:02},
-while proposing his PMI method for automatically generating sentiment
-lexicons, also suggested computing the orientation of the whole review
-by averaging the sentiment scores of its terms found in the lexicon.
-With this approach, the author reached an accuracy of 74\% on a corpus
-of 410 manually labeled Epinions comments.  Finally, \citet{Kim:04}
-compared three different methods of determining the overall polarity
-of a sentence:
+The usage of lexicon-based approaches for estimating the semantic
+orientation of complete texts dates back to the very origins of the
+sentiment analysis research in general: For example, \citet{Das:01}
+already used an example of five classifiers (two of which were purely
+lexicon-based and the other three )
+
+two purely lexicon-based and three machine-learning
+methods, which heavily relied on lexicon features, in an ensemble of
+five classifiers to predict the polarity of stock messages (buy, sell,
+or neutral), attaining an accuracy of 62\% on a corpus of several
+hundreds stock board messages.  \citet{Turney:02}, while proposing his
+PMI method for automatically generating sentiment lexicons, also
+suggested computing the orientation of the whole review by averaging
+the sentiment scores of its terms found in the lexicon.  With this
+approach, the author reached an accuracy of 74\% on a corpus of 410
+manually labeled Epinions comments.  Finally, \citet{Kim:04} compared
+three different methods of determining the overall polarity of a
+sentence:
 \begin{inparaenum}[(i)]
   \item by multiplying the signs of polar terms found in sentence,
   \item taking their sum, and
@@ -284,7 +303,8 @@ competition~\cite{Mohammad:13} by 4\%, reaching 0.71~macro-averaged
   \end{center}
 \end{table}
 
-\section{Coarse-Grained Sentiment Analysis with ML-Based Methods}
+\section{Coarse-Grained Sentiment Analysis with ML-Based
+  Methods}\label{sec:cgsa:ml-based}
 
 One of the first works on an automatic sentiment classification with
 ML-based methods was presented by~\citet{Wiebe:99}, who trained a
@@ -636,7 +656,8 @@ on the three-class prediction task.
   \end{center}
 \end{table}
 
-\section{Coarse-Grained Sentiment Analysis with DL-Based Methods}
+\section{Coarse-Grained Sentiment Analysis with DL-Based
+  Methods}\label{sec:cgsa:dl-based}
 
 \citet{Yessenalina:11}
 
@@ -708,7 +729,7 @@ function was redefined as follows:
 \end{table}
 
 \section{Coarse-Grained Sentiment Analysis Using Language and Domain
-  Adaptation}
+  Adaptation}\label{sec:cgsa:domain-adaptation}
 
 One of the first works which pointed out the importance of domain
 adaptation for sentiment analysis was introduced by~\citet{Aue:05}.
