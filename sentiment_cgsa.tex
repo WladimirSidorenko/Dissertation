@@ -427,171 +427,28 @@ perfect inter-annotator agreement in their data.
 
 \todo[inline]{\citet{Read:05}}
 
-\todo[inline]{\citet{Go:09}}
-
-\todo[inline]{\citet{Barbosa:10}}
-
-In this paper, we propose an approach to automatically detect
-sentiments on Twit- ter messages (tweets) that explores some
-characteristics of how tweets are written and meta-information of the
-words that compose these messages. Moreover, we leverage sources of
-noisy labels as our training data. These noisy labels were provided by
-a few sentiment detection websites over twitter data. In our experi-
-ments, we show that since our features are able to capture a more
-abstract represen- tation of tweets, our solution is more ef- fective
-than previous ones and also more robust regarding biased and noisy
-data, which is the kind of data provided by these sources.
-
-In this paper, we propose a 2-step sentiment analysis classification
-method for Twitter, which first classifies messages as subjective and
-ob- jective, and further distinguishes the subjective tweets as
-positive or negative. To reduce the la- beling effort in creating
-these classifiers, instead of using manually annotated data to compose
-the training data, as regular supervised learning ap- proaches, we
-leverage sources of noisy labels as our training data. These noisy
-labels were pro- vided by a few sentiment detection websites over
-twitter data. To better utilize these sources, we verify the potential
-value of using and combining them, providing an analysis of the
-provided labels, examine different strategies of combining these
-sources in order to obtain the best outcome; and, propose a more
-robust feature set that captures a more abstract representation of
-tweets, composed by meta-information associated to words and spe-
-cific characteristics of how tweets are written. By using it, we aim
-to handle better: the problem of lack of information on tweets,
-helping on the generalization process of the classification algo-
-rithms; and the noisy and biased labels provided by those websites.
-
-We collected data from 3 differ- ent websites that provide almost
-real-time senti- ment detection for tweets: Twendz, Twitter Sen-
-timent and TweetFeel. To collect data, we issued a query containing a
-common stopword ``of'', as we are interested in collecting generic
-data, and retrieved tweets from these sites for three weeks, archiving
-the returned tweets along with their sen- timent labels. Table 1 shows
-more details about these sources. Two of the websites provide 3- class
-detection: positive, negative and neutral and one of them just 2-class
-detection. One thing to note is our crawling process obtained a very
-dif- ferent number of tweets from each website. This might be a result
-of differences among their sam- pling processes of Twitter stream or
-some kind of filtering process to output. For instance, a site may
-only present the tweets it has more confi- dence about their
-sentiment. In Section 3, we present a deep analysis of the data
-provided by these sources, showing if they are useful to build a
-sentiment classification.
-
-Our goal is to categorize a tweet into one of the three sentiment
-categories: positive, neutral or negative. Similar to (Pang and Lee,
-2004; Wil- son et al., 2005), we implement a 2-step sentiment
-detection framework. The first step targets on dis- tinguishing
-subjective tweets from non-subjective tweets (subjectivity
-detection). The second one further classifies the subjective tweets
-into posi- tive and negative, namely, the polarity detection.  Both
-classifiers perform prediction using an ab- stract representation of
-the sentences as features, as we show later in this section.
-
-We propose the use of two sets of features: meta- information about
-the words on tweets and char- acteristics of how tweets are written.
-
-Meta-features. Given a word in a tweet, we map it to its
-part-of-speech using a part-of-speech dictionary.  In addition to POS
-tags, we map the word to its prior subjectivity (weak and strong
-subjectivity), also used by (Wiebe and Riloff, 2005), and polarity
-(positive, negative and neutral). The prior polarity is switched from
-pos- itive to negative or vice-versa when a negative expression (as,
-e.g., ``don't'', ``never'') precedes the word.  We obtained the prior
-subjectivity and polarity information from subjectivity lexicon of
-about 8,000 words used in (Riloff and Wiebe, 2003) 2 . Although this
-is a very comprehensive list, slang and specific Web vocabulary are
-not present on it, e.g., words as ``yummy'' or ``ftw''.  For this
-reason, we collected popular words used on online discussions from
-many online sources and added them to this list.
-
-We exploited the syn- tax of the tweets to compose our features. They
-are: retweet; hashtag; reply; link, if the tweet con- tains a link;
-punctuation (exclamation and ques- tions marks); emoticons (textual
-expression rep- resenting facial expressions); and upper cases (the
-number of words that starts with upper case in the tweet).  The
-frequency of each feature in a tweet is di- vided by the number of the
-words in the tweet.
-
-As we mentioned before, the first step in our tweet sentiment
-detection is to predict the subjectivity of a given tweet. We decided
-to create a single clas- sifier by combining the objectivity sentences
-from Twendz and Twitter Sentiment (objectivity class) and the
-subjectivity sentences from all 3 sources.
-
-As we do not know the quality of the labels pro- vided by these
-sources, we perform a cleaning process over this data to assure some
-reasonable quality. These are the steps: 1. Disagreement removal: Same
-user's messages: we observed that the users with the highest number of
-messages in our dataset are usually those ones that post some
-objective messages, for example, ad- vertising some product or posting
-some job recruiting information. For this reason, we allowed in the
-training data only one message from the same user. Top opinion words:
-to clean the objective training set, we remove from this set tweets
-that contain the top-n opinion words in the subjectivity training set,
-e.g., words as cool, suck, awesome etc.
-
-To illustrate which of the proposed features are more effective for
-this task, the top-5 features in terms of information gain, based on
-our training data, are: positive polarity, link, strong subjec- tive,
-upper case and verbs.
-
-The second step of our sentiment detection ap- proach is polarity
-classification, i.e., predict- ing positive or negative sentiment on
-subjective tweets. In this section, first we analyze the qual- ity of
-the polarity labels provided by the three sources, and whether their
-combination has the potential to bring improvement.
-
-The features used in the polarity detection are the same ones used in
-the subjectivity detection.  However, as one would expect the set of
-the most discriminative features is different between the two
-tasks. For subjectivity detection, the top-5 features in terms of
-information gain, based on the training data, are: negative polarity,
-positive polarity, verbs, good emoticons and upper case.
-
-For the subjectivity detection, after the cleansing processing (see
-Section 3), the train- ing data contains about 200,000 tweets (roughly
-100,000 tweets were labeled by the sources as subjective ones and
-100,000 objective ones), and for polarity detection, 71046 positive
-and 79628 negative tweets. For test data, we manually la- beled 1,000
-tweets as positive, negative and neu- tral. We also built a
-development set (1,000 tweets) to tune the parameters of the
-classification algorithms.
-
-For the polarity detection task, we built a few classifiers to compare
-their performances: TwitterSA(single) and Twit- terSA(weights) are two
-classifiers we trained using combined data from the 3 sources.  The
-only difference is TwitterSA(weights) uses the modification of
-weighting the prior polarity of the words based on the train- ing
-data.  TwitterSA(voting) and Twit- terSA(maxconf) combine
-classification out- puts from 3 classifiers respectively trained from
-each source. TwitterSA(voting) uses majority voting to combine them
-and Twit- terSA(maxconf) picks the one with maxi- mum confidence
-score.
-
-Twit- terSA achieved lower error rate than both Uni- grams and
-ReviewSA. As a result, these num- bers confirm that features inferred
-from meta- information of words and specific syntax features from
-tweets are better indicators of the subjectiv- ity than
-unigrams. Another advantage of our ap- proach is since it uses only 20
-features, the train- ing and test times are much faster than using
-thou- sands of features like Unigrams. One of the rea- sons why
-TwitterSA obtained such a good perfor- mance was the process of data
-cleansing (see Sec- tion 3).
-
-We provide the results for polarity detection in Table 5. The best
-performance was ob- tained by TwitterSA(maxconf), which combines
-results of the 3 classifiers, respectively trained from each source,
-by taking the output by the most confident classifier, as the final
-predic- tion. TwitterSA(maxconf) was followed by Twit- terSA(weights)
-and TwitterSA(single)
-
-Unigrams also achieved comparable perfor- mances. However, when
-reducing the size of the training data, the performance gap between
-Twit- terSA and Unigrams is much wider. Figure 3 shows the error rate
-of both approaches.
-
 \todo[inline]{}
+
+The presumably first known attempt to adopt distant supervision for
+the sentiment analysis of Twitter data was made by~\citet{Go:09} who
+collected a set of 800,000 positive and 800,000 negative microblogs
+relying on emoticons as their noisy labels.  After stripping off these
+smileys from text, the authors trained three independent
+ML-classifiers (Na{\"i}ve Bayes, Maximum Entropy, and Support Vector
+Machines) on this collection, achieving their best results (82.7\%
+accuracy) with the NB and MaxEnt systems thaat utilized unigrams and
+bigrams as features.
+
+Another distantly supervised approach was presented
+by~\citet{Barbosa:10}, who gathered a collection of automatically
+labeled tweets from three popular sentiment web sites (Twendz, Twitter
+Sentiment, and TweetFeel), and trained two binary SVM systems on this
+corpus.  The first of these classifiers had to distinguish between
+subjective and objective microblogs, attaining an error rate of~18.1\%
+on a subset of 1,000 manually annotated messages.  In the next step,
+the second system had to determine the semantic orientation of
+opinionated posts (positive or negative), reaching an error rate
+of~18.7\% on this prediction.
 
 In a similar way, \citet{Pak:10} gathered a collection of 300,000
 noisily labeled tweets, ensuring an even distribution of positive,
