@@ -1,25 +1,26 @@
 \chapter{Coarse-Grained Sentiment Analysis}\label{sec:snt:cgsa}
 
-Having familiarized ourselves with the peculiarities of the sentiment
-corpus creation, the possibilities of automatically inducing new
-polarity lists, and the difficulties of fine-grained sentiment
-analysis, we now move on to the presumably most popular opinion-mining
+Having familiarized ourselves with the peculiarities of a sentiment
+corpus, the different possibilities to automatically induce new
+polarity lists, and the difficulties of fine-grained opinion mining,
+we now move on to the presumably most popular sentiment analysis
 objective in which we need to determine the overall polarity of a
 message.  Traditionally, this task has been addessed with either of
-three common method groups:
+three popular groups of methods:
 \begin{inparaenum}[(i)]
   \item lexicon-based approaches,
-  \item machine-learning-inspired (ML) systems, and
+  \item machine-learning (ML) systems, and
   \item deep-learning-based (DL) applications.
 \end{inparaenum}
 In this chapter, we are going to scrutinize the most prominent
 representatives of each of these paradigms and also tackle a much more
-ambitious goal, viz., whether we can achieve results comparable with
-the scores of these methods when the language of the data we train on
-is completely different from the language of the test set.
+ambitious goal, namely to check whether we can achieve results
+comparable with the scores of these methods when the language of the
+data we train on is completely different from the language of the test
+set.
 
-We begin our comparison by first presenting the metrics that we will
-use for subsequent evaluation.  After a brief description of the data
+We begin our comparison by first presenting metrics that we will use
+for subsequent evaluation.  After a brief description of the data
 preparation step, we proceed to the actual estimation of lexicon-,
 ML-, and DL-based approaches, explaining and evaluating them in
 Sections~\ref{sec:cgsa:lexicon-based}, \ref{sec:cgsa:ml-based},
@@ -27,52 +28,29 @@ and~\ref{sec:cgsa:dl-based} respectively.  Then,
 in~Section~\ref{sec:cgsa:domain-adaptation}, we also show which
 results can be obtained by using cross-lingual transfer, where we
 train a classifier on English microblogs and then adapt this system to
-German messages.  We conclude with an extensive evaluation of
-different hyperparameters and settings (including various types of
-sentiment lexicons, different kinds of word embeddings, the utility of
-the text normalization step and the impact of additional noisily
-labeled training data), summarizing our results and recapping our
-findings at the end of this chapter.
+German messages.  Finally, we will conclude with an extensive
+evaluation of different hyperparameters and settings (including
+various types of sentiment lexicons, different kinds of word
+embeddings, the utility of the text normalization step and the impact
+of additional noisily labeled training data), summarizing our results
+and recapping our findings at the end of this chapter.
 
 \section{Evaluation Metrics}\label{sec:cgsa:eval-metrics}
 
-\todo[inline]{\citet{Nakov:13}}
-For both subtasks, the participating systems were
-required to perform a three-way classification - a
-particular marked phrase (for subtask A) or an en-
-tire message (for subtask B) was to be classified as
-positive, negative, or objective. For each system,
-we computed a score for predicting positive/negative
-phrases/messages vs. the other two classes.
-For instance, to compute positive precision, P pos ,
-we find the number of phrases/messages that a sys-
-tem correctly predicted to be positive, and we divide
-that number by the total number of messages it pre-
-dicted to be positive. To compute recall, for the pos-
-itive class, R pos , we find the number of messages
-correctly predicted to be positive and we divide that
-number by the total number of positive messages in
-the gold standard.
-We then calculate F-score for the positive labels,
-the harmonic average of precision and recall as fol-
-P pos R pos
-lows F pos = 2 P pos
-+R pos . We carry out a similar
-computation to calculate F neg , which is F1 for neg-
-ative messages.
-The overall score for each system run is then
-given by the average of the F1-scores for the posi-
-tive and negative classes: F = (F pos + F neg )/2.
+To estimate the quality of the compared systems, we adopted two
+established evaluation metrics which are widely used for evaluating
+the results of coarse-grained SA approaches: macro-averaged \F-score
+over two major polarity classes~(positive and negative), which was
+used in the sentiment analysis track of the SemEval
+competition~\cite{Nakov:13,Rosenthal:14,Rosenthal:15}, and the
+micro-averaged \F-measure, which was used in the earlier works on
+coarse-grained opinion
+mining~\cite{Wiebe:99,Das:01,Read:05,Kennedy:06,} and the GermEval
+shared task~(Biemann~et~al.,~2017).
 
-Note that ignoring F neutral does not reduce the task to predicting
-positive vs. negative labels only (even though some participants have
-chosen to do so) since the gold standard still contains neutral labels
-which are to be predicted: F pos and F neg would suffer if these
-examples are labeled as posi- tive and/or negative instead of neutral.
-We provided participants with a scorer. In addi- tion to outputting
-the overall F-score, it produced a confusion matrix for the three
-prediction classes (positive, negative, and objective), and it also
-vali- dated the data submission format.
+\todo[inline]{Micro-averaged \F-score (Accuracy)}
+
+\todo[inline]{Macro-averaged \F-score over two classes}
 
 \section{Data Preparation}\label{sec:cgsa:data}
 
