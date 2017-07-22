@@ -4,12 +4,12 @@ Having familiarized ourselves with the peculiarities of a sentiment
 corpus, the different possibilities to automatically induce new
 polarity lists, and the difficulties of fine-grained opinion mining,
 we now move on to the presumably most popular sentiment analysis
-objective in which we need to determine the overall polarity of a
-message.  Traditionally, this task has been addessed with either of
-three popular groups of methods:
+objective---the coarse-grained analysis or CGSA, in which we need to
+determine the overall polarity of a message.  Traditionally, this task
+has been addessed with either of three popular groups of methods:
 \begin{inparaenum}[(i)]
   \item lexicon-based approaches,
-  \item machine-learning (ML) systems, and
+  \item machine-learning-based (ML) techniques, and
   \item deep-learning-based (DL) applications.
 \end{inparaenum}
 In this chapter, we are going to scrutinize the most prominent
@@ -21,7 +21,7 @@ set.
 
 We begin our comparison by first presenting metrics that we will use
 for subsequent evaluation.  After a brief description of the data
-preparation step, we proceed to the actual estimation of lexicon-,
+preparation step, we proceed to the actual estimation of the lexicon-,
 ML-, and DL-based approaches, explaining and evaluating them in
 Sections~\ref{sec:cgsa:lexicon-based}, \ref{sec:cgsa:ml-based},
 and~\ref{sec:cgsa:dl-based} respectively.  Then,
@@ -31,17 +31,17 @@ train a classifier on English microblogs and then adapt this system to
 German messages.  Finally, we will conclude with an extensive
 evaluation of different hyperparameters and settings (including
 various types of sentiment lexicons, different kinds of word
-embeddings, the utility of the text normalization step and the impact
+embeddings, the utility of the text normalization step, and the impact
 of additional noisily labeled training data), summarizing our results
 and recapping our findings at the end of this chapter.
 
 \section{Evaluation Metrics}\label{sec:cgsa:eval-metrics}
 
-To estimate the quality of the compared systems, we adopted two
-established evaluation metrics which are widely used for evaluating
-the results of coarse-grained SA approaches: macro-averaged \F-score
-over two major polarity classes~(positive and negative), which was
-used in the sentiment analysis track of the SemEval
+To estimate the quality of the compared systems, we use two
+established evaluation metrics which are commoly applied for measuring
+CGSA results: macro-averaged \F-score over two major polarity
+classes~(positive and negative), which was used in the sentiment
+analysis track of the SemEval
 competition~\cite{Nakov:13,Rosenthal:14,Rosenthal:15}, and the
 micro-averaged \F-measure, which was used in the earlier works on
 coarse-grained opinion
