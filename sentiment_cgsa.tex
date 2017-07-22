@@ -5,8 +5,10 @@ corpus, the different possibilities to automatically induce new
 polarity lists, and the difficulties of fine-grained opinion mining,
 we now move on to the presumably most popular sentiment analysis
 objective---the coarse-grained analysis or CGSA, in which we need to
-determine the overall polarity of a message.  Traditionally, this task
-has been addessed with either of three popular groups of methods:
+determine the overall polarity of a message.
+
+Traditionally, this task has been addessed with either of three
+popular groups of methods:
 \begin{inparaenum}[(i)]
   \item lexicon-based approaches,
   \item machine-learning-based (ML) techniques, and
@@ -16,41 +18,57 @@ In this chapter, we are going to scrutinize the most prominent
 representatives of each of these paradigms and also tackle a much more
 ambitious goal, namely to check whether we can achieve results
 comparable with the scores of these methods when the language of the
-data we train on is completely different from the language of the test
-set.
+domain we train on is completely different from the language of the
+test data.
 
-We begin our comparison by first presenting metrics that we will use
-for subsequent evaluation.  After a brief description of the data
-preparation step, we proceed to the actual estimation of the lexicon-,
-ML-, and DL-based approaches, explaining and evaluating them in
-Sections~\ref{sec:cgsa:lexicon-based}, \ref{sec:cgsa:ml-based},
+We begin our comparison by first presenting the metrics that we will
+use in our subsequent evaluation.  After a brief description of the
+data preparation step, we proceed to the actual estimation of popular
+lexicon-, ML-, and DL-based approaches, explaining and evaluating them
+in Sections~\ref{sec:cgsa:lexicon-based}, \ref{sec:cgsa:ml-based},
 and~\ref{sec:cgsa:dl-based} respectively.  Then,
 in~Section~\ref{sec:cgsa:domain-adaptation}, we also show which
 results can be obtained by using cross-lingual transfer, where we
 train a classifier on English microblogs and then adapt this system to
-German messages.  Finally, we will conclude with an extensive
-evaluation of different hyperparameters and settings (including
-various types of sentiment lexicons, different kinds of word
-embeddings, the utility of the text normalization step, and the impact
-of additional noisily labeled training data), summarizing our results
-and recapping our findings at the end of this chapter.
+German messages.  Finally, we conclude with an extensive evaluation of
+different hyperparameters and settings (including various types of
+sentiment lexicons, different kinds of word embeddings, the utility of
+the text normalization step, and the impact of additional noisily
+labeled training data), summarizing our results and recapping our
+findings at the end of this chapter.
 
 \section{Evaluation Metrics}\label{sec:cgsa:eval-metrics}
 
-To estimate the quality of the compared systems, we use two
-established evaluation metrics which are commoly applied for measuring
-CGSA results: macro-averaged \F-score over two major polarity
-classes~(positive and negative), which was used in the sentiment
-analysis track of the SemEval
-competition~\cite{Nakov:13,Rosenthal:14,Rosenthal:15}, and the
-micro-averaged \F-measure, which was used in the earlier works on
-coarse-grained opinion
-mining~\cite{Wiebe:99,Das:01,Read:05,Kennedy:06,} and the GermEval
-shared task~(Biemann~et~al.,~2017).
+To estimate the quality of the compared systems, we will use two
+established evaluation metrics which are commonly applied for
+measuring CGSA results: One of these metrics is the macro-averaged
+\F-score over the two major polarity classes~(positive and negative):
+{ \small%
+  \begin{equation*}
+    F_1 = \frac{F_{pos} + F_{neg}}{2}.
+  \end{equation*}%
+  \normalsize%
+}%
+This measure was first introduced by the organizers of the SemEval
+competition~\cite{Nakov:13,Rosenthal:14,Rosenthal:15} and has become a
+de facto standard not only for the SemEval dataset, but virtually for
+all related sentiment tasks and corpora.
 
-\todo[inline]{Micro-averaged \F-score (Accuracy)}
+The second metric is the micro-averaged \F-score over all three
+possible semantic orientations (positive, negative, and neutral),
+which basically corresponds to the accuracy over the whole labeled
+dataset~\cite[cf.][p.~577]{Manning:99}.  This measure both predates
+and supersedes the SemEval evaluation as it had already been applied
+in the very first works on coarse-grained opinion
+mining~\cite{Wiebe:99,Das:01,Read:05,Kennedy:06,Go:09} and was again
+reintroduced in the GermEval Shared Task on Sentiment
+Analysis~2017~\cite{Biemann:17}.
 
-\todo[inline]{Macro-averaged \F-score over two classes}
+Moreover, in addition to these two metrics, we will also give a
+detailed information on precision, recall, and \F-scores of each
+particular polarity class in order to get a better intuition about
+precise strengths, weaknesses, and biases of each evaluated CGSA
+method.
 
 \section{Data Preparation}\label{sec:cgsa:data}
 
