@@ -72,6 +72,34 @@ method.
 
 \section{Data Preparation}\label{sec:cgsa:data}
 
+Similarly to the data preparation steps made for fine-grained
+sentiment analysis, we preprocessed all tweets of the PotTS
+corpus~\cite{Sidarenka:16} using the text normalization system
+of~\citet{Sidarenka:13}, tokenized them with the same adjusted version
+of Potts'
+tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
+lemmatized and assigned part-of-speech tags to these tokens using the
+\texttt{TreeTagger}~of~\citet{Schmid:95}.  Furthermore, like in the
+previous chapter, we automatically obtained morphological features for
+each word and derived syntactic trees for each sentence with the help
+of the \texttt{Mate} dependency parser~of~\citet{Bohnet:13}. Apart
+from the PotTS dataset, we also applied this procedure to the
+microblogs of the German Twitter snapshot~\cite{Scheffler:14}, which
+we will use in our subsequent noisy supervision experiments.
+
+We again split the corpus data into a training, development, and test
+set, using 70\% of the tweets for learning models' parameters, 10\%
+for tuning and picking the optimal settings, and the remiaing 20\% for
+evaluating the results.  To obtain polarity labels for these
+microblogs, we used a simple heuristic: we assigned the positive
+(negative) class to all messages which contained exclusively positive
+(negative) sentiment, we deemed all tweets without any sentiment as
+neutral, and we skipped all posts containing opinions with opposite
+polarities.  Finally, to derive these classes for the snapshot tweets,
+we followed the procedure proposed by~\citet{Read:05}, assigning
+positive (negative) labels
+
+
 \section{Coarse-Grained Sentiment Analysis with Lexicon-Based
   Methods}\label{sec:cgsa:lexicon-based}
 
