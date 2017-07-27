@@ -103,34 +103,63 @@ emoticons.
 
 \todo[inline]{Add statistics on the noisily labeled corpus.}
 
-\section{Coarse-Grained Sentiment Analysis with Lexicon-Based
-  Methods}\label{sec:cgsa:lexicon-based}
+\section{Lexicon-Based Methods}\label{sec:cgsa:lexicon-based}
+
+The first group of approaches that we are going to explore in this
+chapter using the described data are lexicon-based (LB) systems.  Just
+like sentiment lexicons themselves, LB methods for coarse-grained
+opinion mining have attracted a lot of attention from the very
+inception of the sentiment analysis field.  Starting with the research
+of~\citet{Hatzivassi:00}, who proved with statistical significance
+tests that the mere occurrence of a subjective adjective from a
+polarity list was a highly reliable indicator of the whole sentence
+being subjective, more and more works dealing with the use of lexicons
+for determining the overall polarity of complete texts appeared on the
+scene.  For example, \citet{Das:01} already applied an ensemble of
+five classifiers (two of which were purely lexicon-based and the other
+three relied on lexicon features) to predict the polarity of stock
+messages (\emph{buy}, \emph{sell}, or \emph{neutral}), attaining an
+accuracy of 62\% on a corpus of several hundreds stock board messages.
+In contrast to this complex approach, \citet{Turney:02} simply
+determined the semantic orientation of the reviews by averaging the
+sentiment scores of their terms found in the automatically generated
+PMI lexicon.  With this approach, the author could reach an accuracy
+of 74\% on a corpus of 410 manually labeled Epinions comments.
+Following this line of research, \citet{Kim:04} compared three
+different approaches to determining the polarity of a sentence:
+\begin{inparaenum}[(i)]
+\item by multiplying the signs of its polar terms,
+\item by taking the sum of their scores, and
+\item by computing the geometric mean of these values;
+\end{inparaenum}
+finding the first and the last option working best on the Document
+Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
+
+
+\todo[inline]{}
 
 % Das and Chen, 2001; Turney, 2002;  Kim and Hovy, 2004
-The usage of lexicon-based approaches for estimating the semantic
+The usage of lexicon-based methods for estimating the semantic
 orientation of complete texts dates back to the very origins of the
 sentiment analysis research in general: For example, \citet{Das:01}
-already used an example of five classifiers (two of which were purely
-lexicon-based and the other three )
-
-two purely lexicon-based and three machine-learning
-methods, which heavily relied on lexicon features, in an ensemble of
-five classifiers to predict the polarity of stock messages (buy, sell,
-or neutral), attaining an accuracy of 62\% on a corpus of several
-hundreds stock board messages.  \citet{Turney:02}, while proposing his
-PMI method for automatically generating sentiment lexicons, also
-suggested computing the orientation of the whole review by averaging
-the sentiment scores of its terms found in the lexicon.  With this
-approach, the author reached an accuracy of 74\% on a corpus of 410
-manually labeled Epinions comments.  Finally, \citet{Kim:04} compared
-three different methods of determining the overall polarity of a
-sentence:
+already used an ensemble of five classifiers (two of which were purely
+lexicon-based and the other three relied on lexicon features) to
+predict the polarity of stock messages (buy, sell, or neutral),
+attaining an accuracy of 62\% on a corpus of several hundreds stock
+board messages.  \citet{Turney:02}, while proposing his PMI method for
+automatically generating sentiment lexicons, also determined the
+semantic orientation of reviews by averaging sentiment scores of their
+terms found in lexicon.  With this approach, the author reached an
+accuracy of 74\% on a corpus of 410 manually labeled Epinions
+comments.  Finally, \citet{Kim:04} compared three different approaches
+to determining the polarity of a sentence:
 \begin{inparaenum}[(i)]
-  \item by multiplying the signs of polar terms found in sentence,
-  \item taking their sum, and
-  \item taking the geometric mean of polarity scores;
+\item by multiplying the signs of its polar terms,
+\item by taking their sum, and
+\item by computing the geometric mean of the respective polarity
+  scores;
 \end{inparaenum}
-finding that the first and last options worked best for the Document
+finding the first and the last option working best on the Document
 Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 
 % Hatzivassiloglou and Wiebe, 2000
@@ -374,8 +403,7 @@ competition~\cite{Mohammad:13} by 4\%, reaching 0.71~macro-averaged
   \end{center}
 \end{table}
 
-\section{Coarse-Grained Sentiment Analysis with ML-Based
-  Methods}\label{sec:cgsa:ml-based}
+\section{Machine-Learning Based Methods}\label{sec:cgsa:ml-based}
 
 One of the first works on an automatic sentiment classification with
 ML-based methods was presented by~\citet{Wiebe:99}, who trained a
@@ -597,8 +625,7 @@ on the three-class prediction task.
   \end{center}
 \end{table}
 
-\section{Coarse-Grained Sentiment Analysis with DL-Based
-  Methods}\label{sec:cgsa:dl-based}
+\section{Deep-Learning Based Methods}\label{sec:cgsa:dl-based}
 
 \citet{Yessenalina:11}
 
