@@ -36,7 +36,7 @@
 % Übergib die Parameter an die Pakete
 \ProcessKeyvalOptions*
 
-\PassOptionsToClass{a4paper, 12pt, openright, twoside}{report}
+\PassOptionsToClass{a4paper, 12pt}{report}
 \ifx\DOT@report\@empty
   \LoadClass{report}
 \else

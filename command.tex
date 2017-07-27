@@ -1,7 +1,7 @@
 % FILE: appendixA.tex  Version 2.1
 % AUTHOR:
-% Universität Duisburg-Essen, Standort Duisburg
-% AG Prof. Dr. Günter Törner
+% UniversitÃ¤t Duisburg-Essen, Standort Duisburg
+% AG Prof. Dr. GÃ¼nter TÃ¶rner
 % Verena Gondek, Andy Braune, Henning Kerstan
 % Fachbereich Mathematik
 % Lotharstr. 65., 47057 Duisburg
@@ -28,6 +28,7 @@
 \usepackage{colortbl}           % \cellcolor (colored tables)
 \usepackage{dirtree}            % \dirtree (draw directory structure)
 \usepackage{etoolbox}           % \ifstrempty
+\usepackage{fancyhdr}
 \usepackage{footnote}
 \usepackage{graphicx}           % \scalebox
 \usepackage{hhline}             % \ifstrempty
@@ -114,6 +115,12 @@
 
 \newcommand{\specialcell}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+%% Header, Footer, and Page Layout
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\rfoot{\thepage}
+\pagestyle{fancy}
 
 %% Tikz
 \makeatletter
