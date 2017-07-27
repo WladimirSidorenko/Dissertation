@@ -98,8 +98,8 @@ opinions as neutral, and skipping all microblogs that contained
 sentiments with opposite semantic orientations.  Finally, to derive
 these classes for the snapshot posts, we followed the procedure
 proposed by~\citet{Read:05} and~\citet{Go:09}, and assigned the
-positive (negative) labels to the tweets which contained respective
-emoticons.
+positive (negative) labels to the tweets which contained the
+respective emoticons.
 
 \todo[inline]{Add statistics on the noisily labeled corpus.}
 
@@ -121,12 +121,13 @@ three relied on lexicon features) to predict the polarity of stock
 messages (\emph{buy}, \emph{sell}, or \emph{neutral}), attaining an
 accuracy of 62\% on a corpus of several hundreds stock board messages.
 In contrast to this complex approach, \citet{Turney:02} simply
-determined the semantic orientation of the reviews by averaging the
-sentiment scores of their terms found in the automatically generated
-PMI lexicon.  With this approach, the author could reach an accuracy
-of 74\% on a corpus of 410 manually labeled Epinions comments.
-Following this line of research, \citet{Kim:04} compared three
-different approaches to determining the polarity of a sentence:
+determined the \emph{semantic orientation} (SO) of the reviews by
+averaging the sentiment scores of their terms found in the
+automatically generated PMI lexicon.  With this approach, the author
+could reach an accuracy of 74\% on a corpus of 410 manually labeled
+Epinions comments.  Following this line of research, \citet{Kim:04}
+compared three different approaches to determining the polarity of a
+sentence:
 \begin{inparaenum}[(i)]
 \item by multiplying the signs of its polar terms,
 \item by taking the sum of their scores, and
@@ -135,129 +136,91 @@ different approaches to determining the polarity of a sentence:
 finding the first and the last option working best on the Document
 Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 
+% % Hu and Liu, 2004
+% Similarly, \citet{Hu:04} determined the semantic orientation of
+% sentences in customer reviews by simply comparing the number of
+% positive and negative terms found in these passages. Since the
+% authors, however, were primarily interested in estimating the polarity
+% towards particular product features mentioned in the clauses, they
+% additionally applied a fallback strategy in case of a tie by checking
+% which of the polar lexicon terms appeared closer to the features, and
+% assuming the polarity of the preceding sentence if these numbers were
+% also equal.
+
+% % Taboada et al., 2004
+% Largely inspired by the Appraisal theory of~\citet{Martin:00},
+% \citet{Taboada:04} enhanced the original method of~\citet{Turney:02}
+% by increasing the weights of polar adjectives which occurred in the
+% middle and at the end of a document, and also augmenting these values
+% with the affect, judgement, and appreciation scores.  Similarly to
+% polarity, the appraisal scores were calculated automatically by
+% computing the PMI of their cooccurrence with different pronouns using
+% a web search engine.
+
+% Polanyi and Zaenen, 2006; Kennedy and Inkpen, 2006
+In~\citeyear{Polanyi:06}, \citeauthor{Polanyi:06} presented an
+extensive overview and analysis of common lexicon-based approaches,
+arguing that, besides considering the lexical valence (i.e., semantic
+orientation) of polar terms, it was also necessary to incorporate
+syntactic, discourse-level, and extra-linguistic factors such as
+negations, intensifiers, modal operators (e.g., \emph{could} or
+\emph{might}), presuppositional items (e.g., \emph{barely} or
+\emph{failure}), irony, reported speech, discourse connectors, genre
+and attitude assessment, reported speech, multi-entity evaluation,
+etc.  This theoretical hypothesis was also proven empirically by
+\citet{Kennedy:06}, who compared two ways of determining the polarity
+of a customer review: In the first of these methods, they simply
+compared the numbers of positive and negative expressions appearing in
+text, assigning the review to the class with the greater number of
+terms.  In the second attempt, they enhanced the original system with
+additional information about contextual valence shifters, increasing
+or decreasing the sentiment score of a term if it was preceded by an
+intensifier or downtoner, and changing the polarity sign of this score
+to the opposite in case of a negation.  With this adjustment, the
+authors achieved a statistically significant improvement, boosting the
+accuracy of the two-class prediction on a corpus of product and movie
+reviews from 67.9 to 69.3\%.
+
+% Taboada et al., 2011
+Finally, a veritably seminal work on lexicon-based techniques for CGSA
+was introduced by~\citet{Taboada:11}, who presented a manually
+compiled polarity list\footnote{The authors hand-annotated all
+  occurrences of adjectives, nouns, and verbs found in a corpus of 400
+  Epinions reviews with ordinal categories ranging from -5 to 5 which
+  reflected the semantic orientation of a term (positive vs. negative)
+  and its polar strength (weak vs. strong).} and used this resource to
+estimate the overall semantic orientation of the text.  Drawing on the
+ideas of~\citet{Polanyi:06}, the authors also incorporated a set of
+additional heuristic rules into their computation by changing the
+prior SO values of negated, itensified, and downtoned terms, ignoring
+irrealis sentences, and adjusting the weights of specific document
+sections.  An extensive evaluation of this approach showed the
+superior performance of the manual lexicon in comparison with other
+polarity lists, including the Subjectivity
+Dictionary~\cite{Wilson:05}, Maryland Polarity Set~\cite{Mohammad:09},
+and \textsc{SentiWordNet}~\cite{Esuli:06c}.  Moreover, the authors
+also demonstrated the effectiveness of their method for other topics
+and text genres, hypothesizing that lexion-based approaches were in
+general more robust to domain shifts than traditional supervised
+learning techniques.
 
 \todo[inline]{}
 
-% Das and Chen, 2001; Turney, 2002;  Kim and Hovy, 2004
-The usage of lexicon-based methods for estimating the semantic
-orientation of complete texts dates back to the very origins of the
-sentiment analysis research in general: For example, \citet{Das:01}
-already used an ensemble of five classifiers (two of which were purely
-lexicon-based and the other three relied on lexicon features) to
-predict the polarity of stock messages (buy, sell, or neutral),
-attaining an accuracy of 62\% on a corpus of several hundreds stock
-board messages.  \citet{Turney:02}, while proposing his PMI method for
-automatically generating sentiment lexicons, also determined the
-semantic orientation of reviews by averaging sentiment scores of their
-terms found in lexicon.  With this approach, the author reached an
-accuracy of 74\% on a corpus of 410 manually labeled Epinions
-comments.  Finally, \citet{Kim:04} compared three different approaches
-to determining the polarity of a sentence:
-\begin{inparaenum}[(i)]
-\item by multiplying the signs of its polar terms,
-\item by taking their sum, and
-\item by computing the geometric mean of the respective polarity
-  scores;
-\end{inparaenum}
-finding the first and the last option working best on the Document
-Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
-
-% Hatzivassiloglou and Wiebe, 2000
-\citet{Hatzivassi:00} proved, for instance, via statistical
-significance tests that the mere presence of a subjective or even just
-gradable adjective from a lexicon was a highly reliable indicator that
-the sentence it appeared in also was subjective.
-
-% Hu and Liu, 2004
-Similarly, \citet{Hu:04} determined the semantic orientation of
-sentences in customer reviews by simply comparing the number of
-positive and negative terms found in these passages. Since the
-authors, however, were primarily interested in estimating the polarity
-towards particular product features mentioned in the clauses, they
-additionally applied a fallback strategy in case of a tie by checking
-which of the polar lexicon terms appeared closer to the features, and
-assuming the polarity of the preceding sentence if these numbers were
-also equal.
-
-% Taboada et al., 2004
-Largely inspired by the Appraisal theory of~\citet{Martin:00},
-\citet{Taboada:04} enhanced the original method of~\citet{Turney:02}
-by increasing the weights of polar adjectives which occurred in the
-middle and at the end of a document, and also augmenting these values
-with the affect, judgement, and appreciation scores.  Similarly to
-polarity, the appraisal scores were calculated automatically by
-computing the PMI of their cooccurrence with different pronouns using
-a web search engine.
-
-% Polanyi and Zaenen, 2006
-An early analysis of lexicon-based approaches to sentiment analysis
-was made by~\citet{Polanyi:06}, who argued that, besides considering
-the lexical valence (i.e., semantic orientation) of polar terms, it
-was also necessary to incorporate syntactic, discourse-level, and
-extra-linguistic factors such as negations, intensifiers, modal
-operators (e.g., \emph{could} or \emph{might}), presuppositional items
-(e.g., \emph{barely} or \emph{failure}), irony, reported speech,
-discourse connectors and structure, genre and attitude assessment,
-reported speech, multi-entity evaluation, and so on.
-
-% Kennedy and Inkpen, 2006
-This theoretical hypothesis was later proven empirically by
-\citet{Kennedy:06}, who compared two lexicon-based approaches:
-\begin{inparaenum}[(i)]
-\item simply counting positive and negative expressions, and assigning
-  the input text (a review) to the polarity class with the greater
-  number of found terms (considering a review as neutral if it had an
-  equal number of expressions with either polarities); and
-\item the same procedure as above, but additionally enhanced with the
-  information about contextual valence shifters~(intensifiers,
-  downtoners, and negations).
-\end{inparaenum}
-In the latter method, the authors swapped the polarity of a polar
-expression to the opposite if it followed a negation, and decreased or
-increased the score of this term by a constant factor if it was
-preceded by a diminisher or intensifier.  This enhancement was shown
-to bring a statistically significant improvement, boosting the
-accuracy of the two-class prediction on a corpus of product and movie
-reviewa from 67.9 to 69.3\%.
-
-% Taboada et al., 2006
-Another important contribution to the development of lexicon-based
-approaches was made by~\citet{Taboada:06}, who compared three popular
-polarity lists---a PMI lexicon computed with the original method
-of~\citet{Turney:02} using the AltaVista's NEAR operator; a similar
-polarity list obtained with the help of Google's AND queries; and,
-finally, the manually compiled General Inquirer lexicon
-of~\citet{Stone:66}.  The authors evaluated these resources both
-intrinsically (by comparing them with GI entries) and extrinsically
-(by computing the polarity of 400 manually annotated Epinions
-reviews).  To estimate the overall polarity of a review for the second
-task, \citeauthor{Taboada:06} calculated the average SO value of all
-polar terms found in the review, obtaining these scores from the
-mean-normalized lexicons, and flipping the polarity sign to the
-opposite in case of the negation.
-
-% Taboada et al., 2011
-Finally, a veritably seminal work on lexicon-based approaches was
-introduced by~\citet{Taboada:11} who presented a manually compiled
-sentiment lexicon,\footnote{The authors hand-annotated all occurrences
-  of adjectives, nouns, and verbs found in a corpus of 400 Epinions
-  reviews with ordinal categories ranging from -5 to 5 which reflected
-  the semantic orientation of a term (positive vs. negative) and its
-  polar strength (weak vs. strong).} and used this resource to compute
-the overall \emph{semantic orientation} (SO) of text.  Inspired by the
-ideas of~\citet{Polanyi:06}, to make this calculation more precise,
-the authors also incorporated a set of additional heuristic rules by
-changing the prior SO values of negated, itensified, and downtoned
-terms, ignoring irrealis sentences, and adjusting weights of specific
-sections of a document.  An extensive evaluation of this method showed
-a superior performance of the manual lexicon in comparison with other
-polarity lists including the Subjectivity Dictionary~\cite{Wilson:05},
-Maryland Polarity Set~\cite{Mohammad:09}, and
-\textsc{SentiWordNet}~\cite{Esuli:06c}.  Moreover, the authors also
-proved the robustness of their SO computation procedure for other
-topics and text genres, hypothesizing that lexion-based approaches
-were more domain-independent than traditional supervised learning
-techniques.
+% % Taboada et al., 2006
+% Another important contribution to the development of lexicon-based
+% approaches was made by~\citet{Taboada:06}, who compared three popular
+% polarity lists---a PMI lexicon computed with the original method
+% of~\citet{Turney:02} using the AltaVista's NEAR operator; a similar
+% polarity list obtained with the help of Google's AND queries; and,
+% finally, the manually compiled General Inquirer lexicon
+% of~\citet{Stone:66}.  The authors evaluated these resources both
+% intrinsically (by comparing them with GI entries) and extrinsically
+% (by computing the polarity of 400 manually annotated Epinions
+% reviews).  To estimate the overall polarity of a review for the second
+% task, \citeauthor{Taboada:06} calculated the average SO value of all
+% polar terms found in the review, obtaining these scores from the
+% mean-normalized lexicons, and flipping the polarity sign to the
+% opposite in case of the negation.
 
 % Musto et al., 2014
 A lexicon-based system created specifically for Twitter data was
