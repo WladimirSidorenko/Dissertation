@@ -204,8 +204,6 @@ and text genres, hypothesizing that lexion-based approaches were in
 general more robust to domain shifts than traditional supervised
 learning techniques.
 
-\todo[inline]{}
-
 % % Taboada et al., 2006
 % Another important contribution to the development of lexicon-based
 % approaches was made by~\citet{Taboada:06}, who compared three popular
@@ -223,40 +221,35 @@ learning techniques.
 % opposite in case of the negation.
 
 % Musto et al., 2014
-A lexicon-based system created specifically for Twitter data was
-presented by~\citet{Musto:14}, who examined four different strategies
-for computing the overall polarity scores of tweets---\emph{basic},
-\emph{normalized}, \emph{emphasized}, and
-\emph{normalized-emphasized}; checking these approaches with four
-distinct lexicons---\textsc{SentiWordNet}~\cite{Esuli:06c},
-\textsc{WordNet-Affect}~\cite{Strapparava:04},
+Lexicon-based systems also found their way into sentiment analysis of
+social media: An LB approach specifically tailored to Twitter data
+was, for instance, proposed by~\citet{Musto:14}, who examined four
+different ways of computing the overall polarity scores of microblogs:
+\emph{basic}, \emph{normalized}, \emph{emphasized}, and
+\emph{normalized-emphasized}; checking these strategies with four
+distinct lexicons: \textsc{Sen\-ti\-Word\-Net}~\cite{Esuli:06c},
+\textsc{Word\-Net-\-Affect}~\cite{Strapparava:04},
 \textsc{MPQA}~\cite{Wiebe:05}, and
-\textsc{SenticNet}~\cite{Cambria:14}.  In all of these strategies, the
-authors first split an input messages into \emph{micro-phrases} based
-on the occurrence of punctuation marks and conjunctions; then
-calculated the polarity score of each of these segments by summing
-(\emph{basic} and \emph{emphasized}) or averaging (\emph{normalized}
-and \emph{normalized-emphasized}) the lexicon scores of their tokens;
-and, finally, estimated the overall polarity of the whole tweet by
-summing or averaging the scores of the micro-phrases.
-\citeauthor{Musto:14} obtained their best results (58.99\% accuracy on
-the SemEval-2013 dataset) with the \textsc{SentiWordNet} lexicon
-of~\citet{Esuli:06c}, using the normalized-emphasized approach, in
-which they averaged the polarity scores of segment tokens, boosting
-these values by 50\% for informative parts of speech; and regarded the
-sum of the segements' scores as the final overall polarity of the
+\textsc{SenticNet}~\cite{Cambria:14}.  In all of these methods, the
+authors first split an input message into a list of
+\emph{micro-phrases} based on the occurrence of punctuation marks and
+conjunctions; then calculated the polarity score of each of these
+segments; and, finally, estimated the overall polarity of the tweet by
+uniting the scores of the micro-phrases.  \citeauthor{Musto:14}
+obtained their best results (58.99\% accuracy on the SemEval-2013
+dataset) with the normalized-emphasized approach, in which they
+averaged the polarity scores of segments' tokens, boosting these
+values by 50\% for informative parts of speech; and regarded the sum
+of the micro-phrase scores as the final overall polarity of the
 microblog.
 
+% the authors obtained their best results using the
+% \textsc{SentiWordNet} lexicon of~\citet{Esuli:06c}
+
 % Jurek et al., 2015
-Another Twitter-tailored approach was proposed by~\citet{Jurek:15}.
-Drawing on the ideas of~\citet{Taboada:11}, the authors introduced a
-new formula for estimating the polarity of a message, in which they
-explicitly encoded the presumably most important sentiment factors:
-polar terms, intensifiers, and negations.  In particular, given a
-message~$m$, \citet{Jurek:15} calculated the postive and negative
-scores ($F_p$ and $F_n$ respectively) of this microblog using the
-following equation:%
-{ \small%
+Another Twitter-aware system was presented by~\citet{Jurek:15}, who
+estimated the negative and positive polarity of a message ($F_p$ and
+$F_n$) using the following equations: { \small%
   \begin{align}
     F_P &= \min\left(\frac{A_P}{2 - \log(3.5\times W_P + I_P)}, 100\right),\\
     F_N &= \max\left(\frac{A_N}{2 - \log(3.5\times W_N + I_N)}, -100\right);\label{cgsa:eq:jurek}
@@ -265,34 +258,34 @@ following equation:%
 }%
 where $A_P$ and $A_N$ represent the average scores of positive and
 negative lexicon terms found in the tweet, $W_P$ and $W_N$ stand for
-the raw counts of these items, and $I_P$ and $I_N$ denote the number
-of intensifiers preceding the lexicon terms in the context.  In
-addition to that, in case of negation, the authors modified the
-individual polarity score $S_w$ of negated word $w$ as follows: {
-  \small%
-  \begin{equation*}
-neg(S_w) =
+the raw counts of such items, and $I_P$ and $I_N$ denote the number of
+intensifiers preceding the lexicon terms.  Furthermore, in case of a
+negation, the authors additionally modified the individual polarity
+scores $s_w$ of the negated words $w$'s while estimating the average
+polarity values as follows: { \small%
+  \begin{align}
+neg(s_w) =
     \begin{cases}
-        \min\left(\frac{S_w - 100}{2}, -10\right) & \text{if } S_w > 0,\\
-        \max\left(\frac{S_w + 100}{2}, 10\right), & \text{if } S_w < 0.
+        \min\left(\frac{s_w - 100}{2}, -10\right) & \text{if } s_w > 0,\\
+        \max\left(\frac{s_w + 100}{2}, 10\right), & \text{if } s_w < 0.
     \end{cases}
-\end{equation*}%
+\end{align}%
 \normalsize%
 }%
-Besides estimating the polarity scores $F_p$ and $F_n$,
-\citeauthor{Jurek:15} also computed the degree of subjectivity for the
-message by replacing the $A_P$ and $A_N$~terms in
-Equations~\ref{cgsa:eq:jurek} with averaged conditional probabilitites
-of polar terms.  These probabilities were calculated automatically on
-the noisily labeled data set of~\citet{Go:09} and reflected how likely
-a message was subjective given that a specific lexicon term appeared
-in its text.  In the final step, the authors assigned the message to
-the most probable polarity class if its overall polarity score was
-greater than 25 and the subjectivity value was more than 0.5,
-considering the tweet as neutral otherwise.  With this approach, the
-authors achieved an accuracy of~77.3\% on the manually annotated
-subset of \citeauthor{Go:09}'s corpus, and reached 74.2\% on the IMDB
-corpus~\cite{Maas:11}.
+Besides computing the polarity scores $F_p$ and $F_n$,
+\citeauthor{Jurek:15} also determined the subjectivity degree of the
+message by replacing the terms $A_P$ and $A_N$ in
+Equation~\ref{cgsa:eq:jurek} with averaged conditional probabilitites
+of the tweet being subjective given that the respective polar term
+appeared in it.\footnote{These probabilities were calculated
+  automatically on the noisily labeled data set of~\citet{Go:09}.}
+The authors considered a tweet as positive or negative if its overall
+polarity score was greater than 25 and the subjectivity value was more
+than 0.5.  This way, they achieved an accuracy of~77.3\% on the
+manually annotated subset of \citeauthor{Go:09}'s corpus, and reaching
+74.2\% on the IMDB corpus~\cite{Maas:11}.
+
+\todo[inline]{}
 
 % Kolchyna et al., 2015
 Finally, \citet{Kolchyna:15} compared lexicon- and ML-based systems,
