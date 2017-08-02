@@ -279,23 +279,20 @@ Equation~\ref{cgsa:eq:jurek} with averaged conditional probabilitites
 of the tweet being subjective given that the respective polar term
 appeared in it.\footnote{These probabilities were calculated
   automatically on the noisily labeled data set of~\citet{Go:09}.}
-The authors considered a tweet as positive or negative if its overall
-polarity score was greater than 25 and the subjectivity value was more
-than 0.5.  This way, they achieved an accuracy of~77.3\% on the
-manually annotated subset of \citeauthor{Go:09}'s corpus, and reaching
-74.2\% on the IMDB corpus~\cite{Maas:11}.
+The authors considered a microblog as positive or negative if its
+overall polarity score was greater than 25, and the subjectivity value
+was more than 0.5.  With this method, they achieved an accuracy
+of~77.3\% on the manually annotated subset of \citeauthor{Go:09}'s
+corpus and reached 74.2\% on the IMDB corpus~\cite{Maas:11}.
 
 \todo[inline]{}
 
 % Kolchyna et al., 2015
-Finally, \citet{Kolchyna:15} compared lexicon- and ML-based systems,
-evaluating these approaches on the SemEval-2013 data
-set~\cite{Nakov:13}.  For the former group of methods, the authors
-explored two different ways of estimating the overall polarity of a
-microblog:
+Finally, \citet{Kolchyna:15} also explored two different ways of
+estimating the overall polarity of a microblog:
 \begin{inparaenum}[(i)]
 \item by simply averaging the scores of the lexicon terms found in the
-  message, and
+  message and
 \item by taking the signed logarithm of this average:
 \end{inparaenum}
 \begin{equation*}
@@ -303,20 +300,21 @@ microblog:
   \begin{cases}
     \text{sign}(\text{Score}_{\text{AVG}})\log_{10}(|\text{Score}_{\text{AVG}}|) & %
     \text{if |Score}_{\text{AVG}}| > 0.1,\\
-    0, & \text{otherwise}.
+    0, & \text{otherwise};
   \end{cases}
 \end{equation*}%
-To estimate the final label of the tweet, \citeauthor{Kolchyna:15}
-trained a $k$-means clustering algorithm, which utilized either of the
-above polarity scores as its features.  They showed that the
-logarithmic approach performed better than the simple average
-solution, yielding an accuracy of 61.74\% when used with a manually
-compiled lexicon enriched with colloquial and slang terms.  For
-ML-based methods, the authors proposed using cost-sensitive
-SVMs~\cite{Masnadi:12}, which allowed them to improve on the results
-of the top-performing system from the SemEval
-competition~\cite{Mohammad:13} by 4\%, reaching 0.71~macro-averaged
-\F{} on the two polarity classes (positive and negative).
+comparing theses approaches on the SemEval-2013
+dataset~\cite{Nakov:13}.  The authors determined the final polarity
+class of a tweet with the help of $k$-means clustering, which utilized
+either of the above polarity scores as its features.  They showed that
+the logarithmic strategy performed better than the simple average
+solution, yielding an accuracy of 61.74\%.  In the final step,
+\citeauthor{Kolchyna:15} also checked whether these lexicon values
+could be useful features for an ML-based method.  For this purpose,
+they plugged the lexicon scores as additional input traits to a
+cost-sensitive SVM classifier~\cite{Masnadi:12}, getting almost five
+percent accuracy improvement (from 86.62 to 91.17) on the IMDB movie
+review dataset~\cite{Pang:02}.
 
 \todo[inline]{reimplement:}
 
