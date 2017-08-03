@@ -248,7 +248,7 @@ microblog.
 
 % Jurek et al., 2015
 Another Twitter-aware system was presented by~\citet{Jurek:15}, who
-estimated the negative and positive polarity of a message ($F_p$ and
+computed the negative and positive polarity of a message ($F_p$ and
 $F_n$) using the following equations: { \small%
   \begin{align}
     F_P &= \min\left(\frac{A_P}{2 - \log(3.5\times W_P + I_P)}, 100\right),\\
@@ -272,7 +272,7 @@ neg(s_w) =
 \end{align}%
 \normalsize%
 }%
-Besides computing the polarity scores $F_p$ and $F_n$,
+Besides estimating the polarity scores $F_p$ and $F_n$,
 \citeauthor{Jurek:15} also determined the subjectivity degree of the
 message by replacing the terms $A_P$ and $A_N$ in
 Equation~\ref{cgsa:eq:jurek} with averaged conditional probabilitites
@@ -281,15 +281,13 @@ appeared in it.\footnote{These probabilities were calculated
   automatically on the noisily labeled data set of~\citet{Go:09}.}
 The authors considered a microblog as positive or negative if its
 overall polarity score was greater than 25, and the subjectivity value
-was more than 0.5.  With this method, they achieved an accuracy
+was higher than 0.5.  With this method, they achieved an accuracy
 of~77.3\% on the manually annotated subset of \citeauthor{Go:09}'s
 corpus and reached 74.2\% on the IMDB corpus~\cite{Maas:11}.
 
-\todo[inline]{}
-
 % Kolchyna et al., 2015
 Finally, \citet{Kolchyna:15} also explored two different ways of
-estimating the overall polarity of a microblog:
+computing the overall polarity of a microblog:
 \begin{inparaenum}[(i)]
 \item by simply averaging the scores of the lexicon terms found in the
   message and
@@ -308,22 +306,26 @@ dataset~\cite{Nakov:13}.  The authors determined the final polarity
 class of a tweet with the help of $k$-means clustering, which utilized
 either of the above polarity scores as its features.  They showed that
 the logarithmic strategy performed better than the simple average
-solution, yielding an accuracy of 61.74\%.  In the final step,
+solution, yielding an accuracy of 61.74\%.  In addition to that,
 \citeauthor{Kolchyna:15} also checked whether these lexicon values
-could be useful features for an ML-based method.  For this purpose,
-they plugged the lexicon scores as additional input traits to a
-cost-sensitive SVM classifier~\cite{Masnadi:12}, getting almost five
-percent accuracy improvement (from 86.62 to 91.17) on the IMDB movie
-review dataset~\cite{Pang:02}.
+could serve as useful attributes for an ML-based method.  For this
+purpose, they retrained a cost-sensitive SVM
+classifier~\cite{Masnadi:12} after extending its $n$-gram feature set
+with lexicon features, getting almost five percent accuracy
+improvement (from 86.62 to 91.17) on the IMDB movie review
+dataset~\cite{Pang:02}.
 
-\todo[inline]{reimplement:}
+\todo[inline]{reimplement and describe the results of
+  \citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
+  \citet{Kolchyna:15}}
 
-\begin{itemize}
-\item Taboada (2011),
-\item Musto et al. (2014),
-\item Jurek et al. (2015),
-\item Kolchyna (2015)
-\end{itemize}
+In order to estimate the quality of these methods on the PotTS
+dataset, we reimplemented the approaches suggested
+by~\citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
+\citet{Kolchyna:15}, and applied these systems to the test set tweets
+described in Section~\ref{sec:cgsa:data}, tweaking the threshold
+values of the evaluated methods on the training and development data.
+The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
 
 \begin{table}[h]
   \begin{center}
@@ -344,15 +346,31 @@ review dataset~\cite{Pang:02}.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
 
-       &  &  &  & %
+       TBD &  &  &  & %
+       &  &  & %
+       &  &  & %
+       & \\
+
+       MST &  &  &  & %
+       &  &  & %
+       &  &  & %
+       & \\
+
+       JRK &  &  &  & %
+       &  &  & %
+       &  &  & %
+       & \\
+
+       KLCH &  &  &  & %
        &  &  & %
        &  &  & %
        & \\\bottomrule
-    \end{tabular}
+\end{tabular}
     \egroup
-    \caption[Evaluation of lexicon-based coarse-grained SA methods.]{
-      Evaluation of lexicon-based coarse-grained SA methods.\\
-      {\small }}
+    \caption[Evaluation of lexicon-based CGSA methods.]{
+      Evaluation of lexicon-based CGSA methods.\\
+      {\small TBD -- \citet{Taboada:11}, MST -- \citet{Musto:14}, JRK
+        -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
     \label{snt-cgsa:tbl:lex-res}
   \end{center}
 \end{table}
