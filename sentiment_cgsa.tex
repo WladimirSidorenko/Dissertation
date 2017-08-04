@@ -622,6 +622,162 @@ results on predicting the sentence-level polarity of user's blog
 posts~\cite{Potts:10} and also outperformed the system
 of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}.
 
+\todo[inline]{\citet{Severyn:15}}
+
+Briefly, we use an unsupervised neural language model to ini- tialize
+word embeddings that are further tuned by our deep learning model on a
+distant super- vised corpus. At a final stage, the pre-trained
+parameters of the network are used to initialize the model which is
+then trained on the super- vised training data from Semeval-2015.
+
+Turns out, providing the network with good ini- tialisation parameters
+makes all the difference in training an accurate model. We propose a
+three-step process we follow to train our deep learning model for
+sentiment classification. It can be summarized as follows: (i) word
+embeddings are initialized using a neural language model (Ronan
+Collobert, 2008; Mikolov et al., 2013) which is trained on a large un-
+supervised collection of tweets; (ii) we use our con- volutional
+neural network to further refine the em- beddings on a large distant
+supervised corpus (Go et al., 2009); (iii) the word embeddings and
+other parameters of the network obtained at the previous stage are
+used to initialize the network that is then trained on a supervised
+corpus from Semeval-2015.
+
+We apply our deep learning model on two sub- tasks of Semeval-2015
+Twitter Sentiment Analysis (Task 10) challenge (Rosenthal et al.,
+2015): phrase- level (subtask A) and message-level (subtask B).  Our
+system ranks 1st on the official test set of the phrase-level and 2nd
+on the message-level subtask.
+
+The input to our model are tweets each treated as a sequence of words:
+$[w i , .., w |s|]$, where each word is drawn from a vocabulary
+$V$. Words are represented by distributional vectors $w \in R^d$
+looked up in a word embeddings matrix $W \in R^{d\times|V|}$ .  This
+matrix is formed by concatentating embeddings of all words in $V$. For
+convenience and ease of lookup operations in $W$, words are mapped to
+indices $1, \ldots, |V|$.  For each input tweet s we build a sentence
+matrix $S \in R d\times|s|$ , where each column $i$ represents a word
+embedding $w_i$ at the corresponding position $i$ in a sentence.
+
+The aim of the convolutional layer is to extract patterns, i.e.,
+discriminative word sequences found within the input tweets that are
+common throughout the training instances.
+
+More formally, the convolution operation $\bigotimes$ between an input
+matrix $s \in R^{d\times|s|}$ and a filter $F \in R^{ d\timesm}$ of width $m$ results in a
+vector $c \in R ^{|s|+m-1}$ where each component is computed as follows:
+
+$X_i = (S * F)_i = \sum_{kj}(S [:,i-m+1:i] \bigotimes F) _{kj}$.
+where $\bigotimes$ is the element-wise multiplication and
+$S [:,i-m+1:i]$ is a matrix slice of size m along the
+columns. Note that the convolution filter is of the
+same dimensionality d as the input sentence matrix.
+
+So far we have described a way to compute a convolution between the
+input sentence matrix and a single filter. To form a richer
+representation of the data, deep learning models apply a set of
+filters that work in parallel generating multiple feature maps (also
+shown on Fig. 1). A set of filters form a fil- ter bank
+$F \in R^{n\times d\times m}$ sequentially convolved with the sentence
+matrix S and producing a feature map matrix
+$C \in R^{n\times(|s|-m+1)$.
+
+In practice, we also need to add a bias vector $b \in
+R^n$ to the result of a convolution - a single $b_i$ value
+for each feature map $c_i$. This allows the network to
+learn an appropriate threshold.
+
+To allow the network learn non-linear decision boundaries, each
+convolutional layer is typically followed by a non-linear activation
+function $\alpha()$ applied element-wise. Among the most common
+choices of activation functions are: sigmoid (or lo- gistic),
+hyperbolic tangent tanh, and a rectified lin- ear (ReLU) function
+defined as simply $\max(0, x)$ to ensure that feature maps are always
+positive.  We use ReLU in our model since, as shown in (Nair and
+Hinton, 2010), it speeds up the training and sometimes produces more
+accurate results.
+
+The output from the convolutional layer (passed through the activation
+function) are then passed to the pooling layer, whose goal is to
+aggregate the in- formation and reduce the representation.
+
+The output of the penultimate convolutional and pooling layers $x$ is
+passed to a fully connected softmax layer.
+
+The following parameters are optimized by our network:
+$\Theta = \{W; F; b; w s ; b s \},$ namely the word embeddings matrix
+$W$, filter weights and biases of the convolutional layer, the weight
+and bias of the softmax layers
+
+Convolutional neural networks live in the world of non-convex function
+optimization leading to locally optimal solutions. Hence, starting the
+optimization from a good point can be crucial to train an accurate
+model. We propose the following 3-step process to initialize the
+parameter weights of the network:
+
+1. Given that the largest parameter of the network is the word matrix
+W, it is crucial to feed the network with the high quality embeddings.
+We use a popular word2vec neural language model (Mikolov et al., 2013)
+to learn the word embeddings on an unsupervised tweet corpus.  For
+this purpose, we collect 50M tweets over the two-month period. We
+perform minimal prepro- cessing tokenizing the tweets, normalizing the
+URLs and author ids. To train the embeddings we use a skipgram model
+with window size 5 and filtering words with frequency less than 5.
+
+2. When dealing with small amounts of labelled data, starting from
+pre-trained word embeddings is a large step towards successfully
+training an accurate deep learning system. However, while the word
+embeddings obtained at the previous step should already capture
+important syntactic and semantic aspects of the words they represent,
+they are completely clueless about their sentiment behaviour. Hence,
+we use a distant supervision approach (Go et al., 2009) using our
+convolutional neural network to further refine the embeddings.
+
+3. Finally, we take the the parameters $\Theta$ of the net- work
+obtained at the previous step and use it to
+
+
+We test our model on two subtasks from Semeval-2015 Task 10:
+phrase-level (subtask A) and message-level (subtask B). The datasets
+use in Semeval-2015 are summarized in Table 1. We use train and dev
+from Twitter'13 for training and Twitter'13-test as a validation
+set. The other datasets are used for testing, whereas Twitter'15 is
+used to establish the official ranking of the systems.  Additionally,
+to pre-train the weights of our net- work, we use a large unsupervised
+corpus containing 50M tweets for training the word embeddings and a
+10M tweet corpus for distant supervision. The lat- ter corpus was
+built similarly to (Go et al., 2009), where tweets with positive
+emoticons, like ``:)'', are assumed to be positive, and tweets with
+negative emoticons, like ``:('', are labeled as negative. The dataset
+contains equal number of positive and nega- tive tweets.
+
+The parameters of our model were (chosen on the validation set) as
+follows: the width m of the convolution filters is set to 5 and the
+number of convolu- tional feature maps is 300. We use ReLU activation
+function and a simple max-pooling. The L2 regularization term is set
+to 1e-4, dropout is applied to the penultimate level with p = 0.5. The
+dimensionality of the word embeddings d is set to 100. For the
+phrase-level subtask the size of the word type embeddings, which
+encode tokens that span the target phrase or not, is set to 10.
+
+Table 2 summarizes the performance of our model on five test sets
+using three parameter initialization schemas. First, we observe that
+training the network with all parameters initialized completely at
+random results in a rather mediocre performance. This is due to a
+small size of the training set. Secondly, using embeddings pre-trained
+by a neural language model considerably boosts the
+performance. Finally, using a large distant supervised corpus to
+further tune the word embeddings to also capture the sentiment as-
+pect of the words they represent results in a further improvement
+across all test sets (except for a small drop on LiveJournal'14).
+
+The results from the official rankings for both subtasks A and B are
+summarized in Table 3. As we can see our system performs particularly
+well on subtask A ranking 1st on the official Twitter'15 set, while
+also showing excellent performance on all other test sets.
+
+\todo[inline]{}
+
 Later on, \citet{Socher:12} further improved these scores with the
 help of a recursive matrix-vectors space model (RMVSM), in which each
 word was associated with a 2-tuple of a vector and matrix---e.g.,
