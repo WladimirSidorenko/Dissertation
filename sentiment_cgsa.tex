@@ -390,76 +390,42 @@ consequence of this, with the emergence of new manually annotated
 corpora, lexicon-based systems have gradually been superseded by
 supervised machine-learning methods.
 
-\todo[inline]{}
+One of the first steps in this direction was taken
+by~\citet{Wiebe:99}, who used a Na{\"i}ve Bayes classifier to
+differentiate between subjective and objective statements.  Relying
+primarily on binary features which reflected the presence of a
+pronoun, an adjective, a cardinal number, or a modal verb in the
+analyzed sentence, the authors achieved an accuracy of~72.17\%,
+outperforming the majority class baseline by more than 20~percentage
+points.  An even better result (81.5\%) could be reached when the data
+set was restricted only to the examples with the most confident
+annotations.
 
-One of the first
+Further notable contributions to DL-based CGSA methods were made
+by~\citet{Pang:02}, who compared Na{\"i}ve Bayes, Maximum Entropy, and
+SVM systems on the polarity classification task for movie reviews,
+getting their best results (82.9\% accuracy) with the SVM approach
+that used only unigram features.
 
-Another important line of research on coarse-grained sentiment
-analysis relies on
-
-One of the first works on an automatic sentiment classification with
-ML-based methods was presented by~\citet{Wiebe:99}, who trained a
-Na{\"i}ve Bayes system to differentiate between subjective and
-objective statements, relying primarily on binary features which
-reflected the presence of a pronoun, an adjective, a cardinal number,
-or a modal other than ``will'' in the analyzed sentence.  The authors
-achieved an accuracy of~72.17\%, outperforming the majority class
-baseline by more than 20~percentage points.  An even better result
-(81.5\%) could be reached when the data set was restricted only to the
-examples with the most confident annotations.
-
-A further step in this direction was taken by~\citet{Pang:02}, who
-compared Na{\"i}ve Bayes, Maximum Entropy, and SVM approaches on the
-polarity classification task for movie reviews, getting their best
-results (82.9\% accuracy) with the SVM system that used only unigram
-features.
-
-\todo[inline]{}
-
-From Barbosa 2010: A variety of features have been exploited on the
-problem of sentiment detection (Pang and Lee, 2004; Pang et al., 2002;
-Wiebe et al., 1999; Wiebe and Riloff, 2005; Riloff et al., 2006).
-
-ReviewSA: this is the approach proposed by Pang and Lee (Pang and Lee,
-2004) for sentiment analysis in regular online re- views. It performs
-the subjectivity detec- tion on a sentence-level relying on the prox-
-imity between sentences to detect subjectiv- ity. The set of sentences
-predicted as subjec- tive is then classified as negative or positive
-in terms of polarity using the unigrams that compose the sentences. We
-used the imple- mentation provided by LingPipe (LingPipe, 2008);
-
-Unigrams: Pang et al. (Pang et al., 2002) showed unigrams are
-effective for sentiment detection in regular reviews. Based on that,
-we built unigram-based classifiers for the subjectivity and polarity
-detections over the training data. Another approach that uses un-
-igrams is the one used by TwitterSentiment website. For polarity
-detection, they select the positive examples for the training data
-from the tweets containing good emoticons and negative examples from
-tweets contain- ing bad emoticons. (Go et al., 2009). We built a
-polarity classifier using this approach (Unigrams-TS)
-
-
-
-Wiebe 2002, Riloff 2003
-
-Wiebe, Bruce, \& O'Hara 1999
-Hatzivassiloglou \& Wiebe 2000
-Wiebe 2000;
-Wiebe et al. 2002
-Yu \& Hatzivassiloglou 2003
-
+\todo[inline]{Bruce and Wiebe (1999)}
 Bruce and Wiebe (1999) annotated 1,001 sentences as sub- jective or
 objective, and Wiebe et al. (1999) de- scribed a sentence-level Naive
 Bayes classifier using as features the presence or absence of
 particular syn- tactic classes (pronouns, adjectives, cardinal num-
 bers, modal verbs, adverbs), punctuation, and sen- tence position.
 
+\todo[inline]{Hatzivassiloglou \& Wiebe 2000}
+
+\todo[inline]{Wiebe, 2002}
+
 More recently, Wiebe et al.  (2002) report on document-level
 subjectivity classi- fication, using a k-nearest neighbor algorithm
 based on the total count of subjective words and phrases within each
 document.
 
-\todo[inline]{}
+\todo[inline]{Riloff 2003}
+
+\todo[inline]{Yu \& Hatzivassiloglou 2003}
 
 A semi-supervised classification approach was proposed
 by~\citet{Yu:03}, who presented a three-stage method, in which they
@@ -476,7 +442,22 @@ lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
 attained an accuracy of~91\% on a set of 38 sentences which had a
 perfect inter-annotator agreement in their data.
 
+\todo[inline]{Pang and Lee, 2004}
+
+ReviewSA: this is the approach proposed by Pang and Lee (Pang and Lee,
+2004) for sentiment analysis in regular online re- views. It performs
+the subjectivity detec- tion on a sentence-level relying on the prox-
+imity between sentences to detect subjectiv- ity. The set of sentences
+predicted as subjec- tive is then classified as negative or positive
+in terms of polarity using the unigrams that compose the sentences. We
+used the imple- mentation provided by LingPipe (LingPipe, 2008);
+
+\todo[inline]{Wiebe and Riloff, 2005}
+
+\todo[inline]{Riloff et al., 2006}
+
 \todo[inline]{}
+
 
 To the best of our knowledge, the idea of utilizing web texts
 containing emoticons as noisily labeled training data was first
