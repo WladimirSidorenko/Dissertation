@@ -315,6 +315,8 @@ with lexicon features, getting almost five percent accuracy
 improvement (from 86.62 to 91.17) on the IMDB movie review
 dataset~\cite{Pang:02}.
 
+\todo[inline]{Hu/Liu and Kim/Hovy}
+
 \todo[inline]{reimplement and describe the results of
   \citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
   \citet{Kolchyna:15}}
@@ -407,25 +409,11 @@ SVM systems on the polarity classification task for movie reviews,
 getting their best results (82.9\% accuracy) with the SVM approach
 that used only unigram features.
 
-\todo[inline]{Bruce and Wiebe (1999)}
-Bruce and Wiebe (1999) annotated 1,001 sentences as sub- jective or
-objective, and Wiebe et al. (1999) de- scribed a sentence-level Naive
-Bayes classifier using as features the presence or absence of
-particular syn- tactic classes (pronouns, adjectives, cardinal num-
-bers, modal verbs, adverbs), punctuation, and sen- tence position.
+\todo[inline]{Wiebe:03}
 
-\todo[inline]{Hatzivassiloglou \& Wiebe 2000}
+\todo[inline]{Riloff:03}
 
-\todo[inline]{Wiebe, 2002}
-
-More recently, Wiebe et al.  (2002) report on document-level
-subjectivity classi- fication, using a k-nearest neighbor algorithm
-based on the total count of subjective words and phrases within each
-document.
-
-\todo[inline]{Riloff 2003}
-
-\todo[inline]{Yu \& Hatzivassiloglou 2003}
+\todo[inline]{}
 
 A semi-supervised classification approach was proposed
 by~\citet{Yu:03}, who presented a three-stage method, in which they
@@ -435,14 +423,78 @@ classified the polarity of opinionated clauses.  The authors used a
 Na{\"i}ve Bayes classifer for the document-level task, reaching a
 remarkable \F-score of~0.96 on this objective; and applied an ensemble
 of NB systems to predict the subjectivity of the sentences.  In the
-final step, they determined the semantic orientation of subjective
-clauses by averaging the polarity scores of their tokens, getting
-these scores from an automatically constructed sentiment
+final step, they determined the semantic orientation of a subjective
+clause by averaging the polarity scores of their tokens, getting these
+scores from an automatically constructed sentiment
 lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
 attained an accuracy of~91\% on a set of 38 sentences which had a
 perfect inter-annotator agreement in their data.
 
+\todo[inline]{Gamon, 2004}
+
+\todo[inline]{Wiebe et al., 2004}
+
+\todo[inline]{Wilson, Wiebe and Hwa, 2004}
+
+\todo[inline]{Wilson, Wiebe and Hwa, 2006}
+
 \todo[inline]{Pang and Lee, 2004}
+
+In (Pang and Lee, 2004), a mincut-based algorithm was proposed to
+classify each sentence as being subjective or objective. The algorithm
+works on a sentence graph of an opinion document, e.g., a review. The
+graph is first built based on local labeling consistencies (which
+produces an association score of two sentences) and individual
+sentence subjectivity score computed based on the probability produced
+by a traditional classification method (which produces a score for
+each sentence). Local labeling consistency means that sentences close
+to each other are more likely to have the same class label (subjective
+or objective). The mincut approach is able to improve individual
+sentence based subjectivity classification because of the local
+labeling consistencies. The purpose of this work was actually to
+remove objective sentences from reviews to improve document level
+sentiment classification.
+
+\todo[inline]{Cui, Mittal and Datar, 2006}
+
+\todo[inline]{Ng, Dasgupta and Arifin, 2006}
+
+\todo[inline]{Abbasi, Chen and Salem, 2008}
+
+\todo[inline]{Li, Zhang and Sindhwani, 2009}
+
+\todo[inline]{Dasgupta and Ng, 2009}
+
+\todo[inline]{Li et al., 2011}
+
+\todo[inline]{Zhou, Chen and Wang, 2010}
+
+\todo[inline]{Mejova and Srinivasan, 2011}
+
+\todo[inline]{Nakagawa, Inui and Kurohashi, 2010}
+
+\todo[inline]{Bickerstaffe and Zukerman, 2010}
+
+\todo[inline]{Li et al., 2010}
+
+\todo[inline]{Bespalov et al., 2011}
+
+In (Bespalov et al., 2011), sentiment classification was performed
+based on supervised latent n-gram analysis.
+
+\todo[inline]{Liu et al., 2010}
+
+\todo[inline]{Riloff, Patwardhan and Wiebe, 2006}
+
+Riloff, Patwardhan and Wiebe (2006) studied relationships among
+different features. They defined subsumption relationships among
+unigrams, n-grams and lexico-syntactic patterns. If a feature is
+subsumed by another, the subsumed feature is not needed. This can
+remove many redundant features.
+
+In (Liu et al., 2010), different linguistic features were compared for
+both blog and review sentiment classification.
+
 
 ReviewSA: this is the approach proposed by Pang and Lee (Pang and Lee,
 2004) for sentiment analysis in regular online re- views. It performs
@@ -458,6 +510,13 @@ used the imple- mentation provided by LingPipe (LingPipe, 2008);
 
 \todo[inline]{}
 
+\todo[inline]{Wang et al., 2011}
+
+In (Wang et al., 2011), the authors
+proposed a graph-based hashtag approach to classifying Twitter post
+sentiments
+
+\todo[inline]{}
 
 To the best of our knowledge, the idea of utilizing web texts
 containing emoticons as noisily labeled training data was first
@@ -599,6 +658,15 @@ on the three-class prediction task.
 \end{table}
 
 \section{Deep-Learning Based Methods}\label{sec:cgsa:dl-based}
+
+\todo[inline]{Lin, 1998}
+
+Since there was not a complete set of such expressions, it provided
+some seeds and then used distributional similarity (Lin, 1998) to find
+similar words, which were also likely to be subjectivity
+indicators. However, words found this way had low precision and high
+recall.
+
 
 \citet{Yessenalina:11}
 
