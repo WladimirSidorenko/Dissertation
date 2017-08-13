@@ -386,22 +386,27 @@ criticized for the rigidness of their classification\footnote{Since
   entries, considering these coefficients as constant, their decision
   boundaries frequently appear to be suboptimal as many terms might
   have different polarity and intensity values depending on the domain
-  of the text \cite[see][]{Yang:17}.} and the inability to accommodate
-additional, non-lexical factors into the final decisions.  As a
-consequence of this, with the emergence of new manually annotated
-corpora, lexicon-based systems have gradually been superseded by
-supervised machine-learning methods.
+  of the text \cite[see][]{Yang:17}.} and the inability to factor in
+additional, non-lexical attributes into the final decisions.
+Moreover, as noted by~\citet{Pang:02} and confirmed
+by~\citet{Riloff:03}, many of the linguistic expressions which
+actually correlate with the subjectivity and polarity of a sentence
+are very unlikely to be included into a sentiment lexicon by a human
+expert.  As a consequence of this, with the emergence of new manually
+annotated corpora, lexicon-based systems have gradually been
+superseded by supervised machine-learning techniques.
 
 One of the first steps in this direction was taken
 by~\citet{Wiebe:99}, who used a Na{\"i}ve Bayes classifier to
-differentiate between subjective and objective statements.  Relying
-primarily on binary features which reflected the presence of a
-pronoun, an adjective, a cardinal number, or a modal verb in the
-analyzed sentence, the authors achieved an accuracy of~72.17\%,
-outperforming the majority class baseline by more than 20~percentage
-points.  An even better result (81.5\%) could be reached when the data
-set was restricted only to the examples with the most confident
-annotations.
+differentiate between subjective and objective statements.  Using
+primarily binary features which reflected the presence of a pronoun,
+an adjective, a cardinal number, or a modal verb in the analyzed
+sentence, achieved an accuracy of~72.17\%, outperforming the majority
+class baseline by more than 20~percentage points.  An even better
+result (81.5\%) could be reached when the dataset was restricted only
+to the examples with the most confident annotations.
+
+\todo[inline]{\citet{Pang:02}}
 
 Further notable contributions to DL-based CGSA methods were made
 by~\citet{Pang:02}, who compared Na{\"i}ve Bayes, Maximum Entropy, and
@@ -409,11 +414,24 @@ SVM systems on the polarity classification task for movie reviews,
 getting their best results (82.9\% accuracy) with the SVM approach
 that used only unigram features.
 
-\todo[inline]{Wiebe:03}
+\todo[inline]{\citet{Riloff:03a}}
 
-\todo[inline]{Riloff:03}
+\citet{Riloff:03a} addressed the problem of inusfficient manually
+annotated sentiment resources by proposing a bootstrapping method for
+training a subjectivity classifier.  In this approach, the authors
+first applied two high-precision predictors to a large collection of
+unlabeled sentences in order to get an initial set of subjective and
+objective instances.  Afterwards, they used the AutoSlog-TS
+algorithm~\cite{Riloff:96} to extract expressions which strongly
+correlated with the subjective class and employed these phrases to
+classify the remaining sentences from the corpus.
+\citeauthor{Riloff:03a} repeated the last two steps (pattern
+extraction and expansion of the training set) multiple times to
+transitively learn new subjective phrases.  With the final system, the
+authors achieved a precision of 0.902 on recognizing polar sentences,
+with their recall running up to 0.401.
 
-\todo[inline]{}
+\todo[inline]{\citet{Yu:03}}
 
 A semi-supervised classification approach was proposed
 by~\citet{Yu:03}, who presented a three-stage method, in which they
@@ -431,6 +449,13 @@ attained an accuracy of~91\% on a set of 38 sentences which had a
 perfect inter-annotator agreement in their data.
 
 \todo[inline]{Gamon, 2004}
+
+In (Gamon et al., 2005), a semi-supervised learning algorithm was used
+to learn from a small set of labeled sentences and a large set of
+unlabeled sentences. The learning algorithm was based on Expectation
+Maximization (EM) using the naive Bayes as the base classifier (Nigam
+et al., 2000). This work performed three-class classification,
+positive, negative, and ``other'' (no opinion or mixed opinion).
 
 \todo[inline]{Wiebe et al., 2004}
 
