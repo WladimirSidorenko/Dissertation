@@ -389,12 +389,13 @@ criticized for the rigidness of their classification\footnote{Since
   of the text \cite[see][]{Yang:17}.} and the inability to factor in
 additional, non-lexical attributes into the final decisions.
 Moreover, as noted by~\citet{Pang:02} and confirmed
-by~\citet{Riloff:03}, many of the linguistic expressions which
-actually correlate with the subjectivity and polarity of a sentence
-are very unlikely to be included into a sentiment lexicon by a human
-expert.  As a consequence of this, with the emergence of new manually
-annotated corpora, lexicon-based systems have gradually been
-superseded by supervised machine-learning techniques.
+by~\citet{Riloff:03} and \citet{Gamon:04}, many of the linguistic
+expressions which actually correlate with the subjectivity and
+polarity of a sentence are very unlikely to be included into a
+sentiment lexicon by a human expert.  As a consequence of this, with
+the emergence of new manually annotated corpora, lexicon-based systems
+have gradually been superseded by supervised machine-learning
+techniques.
 
 One of the first steps in this direction was taken
 by~\citet{Wiebe:99}, who used a Na{\"i}ve Bayes classifier to
@@ -450,14 +451,17 @@ perfect inter-annotator agreement in their data.
 
 \todo[inline]{Gamon, 2004}
 
-In (Gamon et al., 2005), a semi-supervised learning algorithm was used
-to learn from a small set of labeled sentences and a large set of
-unlabeled sentences. The learning algorithm was based on Expectation
-Maximization (EM) using the naive Bayes as the base classifier (Nigam
-et al., 2000). This work performed three-class classification,
-positive, negative, and ``other'' (no opinion or mixed opinion).
-
-\todo[inline]{Wiebe et al., 2004}
+Another SVM approach was proposed by \citet{Gamon:04}, who used this
+classifier in conjunction with a rich set of linguistic
+(part-of-speech trigrams, constituent-specific length measures,
+context free phrase structure patterns, as well as part-of-speech
+information coupled with semantic relations) and surface features
+(word $n$-grams) to classify customer feedback into positive and
+negative messages.  The author achieved his best results (77.5\%
+accuracy and $\approx$0.77\F) using top 2,000 most useful features in
+terms of their log likelihood ratio.  Interestingly enough, quite
+competitive figures (74.5\% accuracy) could also be obtained by using
+linguistically motivated features only.
 
 \todo[inline]{Wilson, Wiebe and Hwa, 2004}
 
