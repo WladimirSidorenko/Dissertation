@@ -449,21 +449,36 @@ lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
 attained an accuracy of~91\% on a set of 38 sentences which had a
 perfect inter-annotator agreement in their data.
 
-\todo[inline]{Gamon, 2004}
+\todo[inline]{\citet{Gamon:04}}
 
-Another SVM approach was proposed by \citet{Gamon:04}, who used this
+Another SVM approach was proposed by~\citet{Gamon:04}, who used this
 classifier in conjunction with a rich set of linguistic
 (part-of-speech trigrams, constituent-specific length measures,
 context free phrase structure patterns, as well as part-of-speech
 information coupled with semantic relations) and surface features
-(word $n$-grams) to classify customer feedback into positive and
-negative messages.  The author achieved his best results (77.5\%
-accuracy and $\approx$0.77\F) using top 2,000 most useful features in
-terms of their log likelihood ratio.  Interestingly enough, quite
-competitive figures (74.5\% accuracy) could also be obtained by using
-linguistically motivated features only.
+(primarily word $n$-grams) to classify customer feedback into positive
+and negative messages.  The author achieved his best results (77.5\%
+accuracy and $\approx$0.77~\F) using top 2,000 features with the
+highest log likelihood ratios.  Interestingly enough,
+\citeauthor{Gamon:04} also could obtain quite competitive figures
+(74.5\% accuracy) by using linguistically motivated features only.
 
-\todo[inline]{Wilson, Wiebe and Hwa, 2004}
+\todo[inline]{\citet{Wilson:04}}
+
+A related problem, namely that of classifying the strength of
+opinions, was addressed by~\citet{Wilson:04}.  In particular, the
+authors proposed a wide variety of linguistic features (including
+automatically learned lexico-syntactic patterns similar to the ones
+used by~\citet{Riloff:03}, bags of words, and syntactic attributes
+such as lemma and PoS tag of the root of a dependency tree, lemmas and
+tags of its intermediate nodes and leaves, lexicalized relation
+tuples, i.e., tuples consisting of the lemma of a parent node, its
+grammatical relation to the child, and the lemma of the child itself,
+etc.), checking the utility of these attributes with three different
+classifiers: BoosTexter~\cite{Schapire:00}, Ripper~\cite{Cohen:95},
+and SVMLight~\cite{Joachims:99}.  \citet{Wilson:04} achieved their
+best results (55\%~accuracy and 0.991~mean squared error) with the
+BoosTexter approach when using all the introduced features.
 
 \todo[inline]{Wilson, Wiebe and Hwa, 2006}
 
