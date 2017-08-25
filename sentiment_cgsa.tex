@@ -481,22 +481,19 @@ Ripper~\cite{Cohen:95}, and SVMLight~\cite{Joachims:99}.
 0.991~mean squared error) with the BoosTexter approach when using all
 the introduced features.
 
-\todo[inline]{\citet{Pang:04}}
+\done[inline]{\citet{Pang:04}}
 
-In (Pang and Lee, 2004), a mincut-based algorithm was proposed to
-classify each sentence as being subjective or objective. The algorithm
-works on a sentence graph of an opinion document, e.g., a review. The
-graph is first built based on local labeling consistencies (which
-produces an association score of two sentences) and individual
-sentence subjectivity score computed based on the probability produced
-by a traditional classification method (which produces a score for
-each sentence). Local labeling consistency means that sentences close
-to each other are more likely to have the same class label (subjective
-or objective). The mincut approach is able to improve individual
-sentence based subjectivity classification because of the local
-labeling consistencies. The purpose of this work was actually to
-remove objective sentences from reviews to improve document level
-sentiment classification.
+\citet{Pang:04} proposed a two-stage procedure for classifying the
+overall semantic orientation of movie reviews (positive vs. negative):
+In the first step of this approach, they classified the sentences into
+subjective and objective ones (achieving 92\% accuracy for this task
+with the Na\"ive Bayes system) and then applied another Na\"ive Bayes
+classifier to determine the polarity of the review based on only
+subjective excerpts, getting a statistically significant improvement
+from~82.8 to~86.4\%.  The authors also experimented with the min-cut
+method to encode the idea that nearby sentence will likely share the
+same subjectivity class, but did not get any statistically significant
+improvement over the discourse-unaware baseline.
 
 \todo[inline]{\citet{Cui:06}}
 
