@@ -530,11 +530,24 @@ of bluntly considering all token sequences up to the order $n$ as new
 features, \citet{Ng:06} only took 5,000 most useful ones, measuring
 their utility with the weightes log-likelihood ratio \cite{Nigam:00}.
 
-\todo[inline]{\citet{Li:09}}
+\todo[inline]{\citet{Pang:05}}
 
-\todo[inline]{\citet{Dasgupta:09}}
+\done[inline]{\citet{Bickerstaffe:10}}
 
-\todo[inline]{\citet{Bickerstaffe:10}}
+\citet{Bickerstaffe:10} also considered the problem of multi-class
+rating prediction, addressing this task with a minimum-spanning-tree
+(MST) SVM approach.  In the initial step of this method, they first
+constructed a strongly connected graph whose vertices were associated
+with the most representative example (determined via the average
+all-pairs Tanimoto coefficient) of each star rating and edge weights
+represented the Tanimoto distances between these nodes.  Afterwards,
+they determined the MST of this graph using the Kruskal's
+algorithm~\cite[see][pp.~567--574]{Cormen:09} and, finally,
+constructed a decision tree from this MST, replacing the vertices with
+binary SVM classifiers, which had to discern the respective rating
+groups. An evaluation on the four-star review corpus
+of~\citet{Pang:05} showed an improvement by up to~7\% over the
+previous state of the art, boosting it to 59.37\% average accuracy.
 
 \todo[inline]{\citet{Li:10b}}
 
