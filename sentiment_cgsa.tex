@@ -530,22 +530,40 @@ of bluntly considering all token sequences up to the order $n$ as new
 features, \citet{Ng:06} only took 5,000 most useful ones, measuring
 their utility with the weightes log-likelihood ratio \cite{Nigam:00}.
 
-\todo[inline]{\citet{Pang:05}}
+\done[inline]{\citet{Pang:05}}
+
+\citet{Pang:05} addressed the problem of multi-class rating
+prediction, whose goal, in contrast to the normal positive
+vs. negative classification, was to determine the number of stars that
+an author might assign to his review.  In their experiments,
+\citeauthor{Pang:05} tried out three different strategies:
+\begin{inparaenum}[(i)]
+  \item one-versus-all SVM (OVA-SVM),
+  \item SVM regression,
+  \item and OVA-SVM with \emph{metric labeling}.
+\end{inparaenum}
+In the last approach, in addition to maximizing the score of the
+correct labels, the authors also explicitly encoded the objective of
+minimizing the absolute difference between the predicted labels of
+similar training examples (measuring this similarity with the
+percentage of positive sentences).  This strategy brought
+statistically significant improvements over the first two baselines,
+yielding an average accuracy of $\approx$52\%.
 
 \done[inline]{\citet{Bickerstaffe:10}}
 
-\citet{Bickerstaffe:10} also considered the problem of multi-class
-rating prediction, addressing this task with a minimum-spanning-tree
-(MST) SVM approach.  In the initial step of this method, they first
-constructed a strongly connected graph whose vertices were associated
-with the most representative example (determined via the average
-all-pairs Tanimoto coefficient) of each star rating and edge weights
-represented the Tanimoto distances between these nodes.  Afterwards,
-they determined the MST of this graph using the Kruskal's
+\citet{Bickerstaffe:10} also considered the rating prediction task,
+addressing this problem with the minimum-spanning-tree (MST) SVM
+approach.  In the initial step of this method, they constructed a
+strongly connected graph whose vertices were associated with the most
+representative example (determined via the average all-pairs Tanimoto
+coefficient) of each star rating and the edge weights represented the
+Tanimoto distances between those nodes.  Afterwards, they determined
+the MST of this graph using the Kruskal's
 algorithm~\cite[see][pp.~567--574]{Cormen:09} and, finally,
-constructed a decision tree from this MST, replacing the vertices with
-binary SVM classifiers, which had to discern the respective rating
-groups. An evaluation on the four-star review corpus
+constructed a decision tree from this MST, replacing the MST vertices
+with binary SVM classifiers, which had to discern the respective
+rating groups. An evaluation on the four-star review corpus
 of~\citet{Pang:05} showed an improvement by up to~7\% over the
 previous state of the art, boosting it to 59.37\% average accuracy.
 
