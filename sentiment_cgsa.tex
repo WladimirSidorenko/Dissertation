@@ -567,13 +567,31 @@ rating groups. An evaluation on the four-star review corpus
 of~\citet{Pang:05} showed an improvement by up to~7\% over the
 previous state of the art, boosting it to 59.37\% average accuracy.
 
-\todo[inline]{\citet{Li:10b}}
+\done[inline]{\citet{Li:10b}}
+
+\citet{Li:10b} addressed the problem of polarity shifting using
+machine-learning techniques.  For this purpose, the authors first
+selected most frequent and indicative features of the two main
+polarity classes (positive and negative), and then culled training
+instances containing these attributes whose labels, however, were
+different from the ones sugested by the features.  After obtaining
+this polarity shifted subset, \citeauthor{Li:10b} trained several
+linear support-vector classifiers, one of which had to distinguish
+between polarity-shifted and polarity-preserving sentences, the other
+two were to classify the semantic orientation of these two groups
+(i.e., one system had to predict the polarity of shifted instances,
+and the other one had to determine the semantic orientation of
+polarity-preserving ones), and the last one was trained on the
+complete original dataset---the product review corpus
+of~\citet{Blitzer:06}---again to predict the polarity of complete
+sentences disregarding their possible polarity shifts.  The authors
+achieved their best results~(80,9\% average accuracy) using a
+combination of the last three systems with a special meta-classifier
+joining their single decisions.
 
 \todo[inline]{\citet{Nakagawa:10}}
 
 \todo[inline]{\citet{Zhou:10}}
-
-\todo[inline]{\citet{Li:11}}
 
 \todo[inline]{\citet{Mejova:11}}
 
