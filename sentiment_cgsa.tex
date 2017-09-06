@@ -591,9 +591,197 @@ joining their single decisions.
 
 \todo[inline]{\citet{Nakagawa:10}}
 
-\todo[inline]{\citet{Zhou:10}}
-
 \todo[inline]{\citet{Mejova:11}}
+
+In this paper, we systematically explore feature defini- tion and
+selection strategies for sentiment polarity clas- sification. We begin
+by exploring basic questions, such as whether to use stemming, term
+frequency versus bi- nary weighting, negation-enriched features,
+n-grams or phrases. We then move onto more complex aspects including
+feature selection using frequency-based vo- cabulary trimming,
+part-of-speech and lexicon selec- tion (three types of lexicons), as
+well as using ex- pected Mutual Information (MI). Using three product
+and movie review datasets of various sizes, we show, for example, that
+some techniques are more beneficial for larger datasets than the
+smaller. A classifier trained on only few features ranked high by MI
+outperformed one trained on all features in large datasets, yet in
+small dataset this did not prove to be true. Finally, we per- form a
+space and computation cost analysis to further understand the merits
+of various feature types.
+
+To better understand the merit of current techniques, we study
+features for sentiment analysis along two dimensions. First, we
+examine the basic units extracted from texts: words, n-grams, and
+phrases. Second, we explore feature selection, considering both
+frequency-based and probabilistic strategies. Here, besides parts of
+speech (POS) we explore three different lexicons: one extracted from
+Affect Control Theoretical sociological studies of emotion (Mejova
+2010), and two extensions of WordNet: SentiWordNet (Esuli and
+Sebastiani 2006) and WordNet-Affect (Strapparava and Vlitutti 2004).
+
+We test these techniques on three datasets of various sizes.  We show
+that the size of the dataset affects the performance of some of the
+techniques. For example, using top few thousand features using mutual
+Information for large datasets improves the performance, whereas it
+proves too selective for the smaller dataset. Similarly, the effect of
+frequency- based feature selection on classifier performance differs
+for each dataset.
+
+We perform tests on three datasets. First comes from (Pang and Lee
+2004) and includes 1000 positive and 1000 negative movie reviews from
+IMDB. Second dataset comes from (Jindal and Liu 2007) and is a sample
+of 20,000 product reviews (taken out of 5,838,855 original documents
+for tractability). We sampled according to the polarity proportions in
+the original dataset, taking reviews with rating 5 to be posi- tive
+(17,480) and 1 to be negative (2,520). The third dataset is a subset
+of another multi-domain sentiment dataset which has been used in
+(Blitzer, Dredze, and Pereira 2007) with 21,972 positive and 16,576
+negative documents. Note that the last two datasets have unequal
+number of positive and negative reviews.  Classification was done
+using Weka sequential minimal optimization (SMO) algorithm for
+training a support vector classifiers (Platt 1998). We use an SVM for
+classification for two reasons. First, it is not our intention to
+determine the best classifier for the task, but the best feature set.
+Second, SVMs have been widely used in SA and in many cases outperform
+all other classifiers (Li and Zong 2008; Pang and Lee 2002). Our
+classifier was tested using 10-fold cross-validation.
+
+Words versus Stems Though one may certainly represent a document by
+the raw words in it, a classic technique in information retrieval is
+to stem the words to their morphological roots. Stemmed feature
+vectors are smaller in size, since they aggregate across occurrences
+of variants of a given word. Stemming has had mixed success in both
+informa- tion retrieval and text mining, and as (Dave, Lawrence, and
+Pennock 2003) we do not find it valuable for the task of po- larity
+classification. By not stemming the terms in run 1, the accuracy
+improves on average, but insignificantly compared to run 2. Although
+the improvement is more pronounced for Pang \& Lee dataset, with an
+increase of significance at p = 0.055 between runs 3 and 4 (which are
+otherwise iden- tical).
+
+A standard ap- proach in information retrieval is to use term
+frequency (TF) weights to indicate the relative importance of features
+in document representations. However, some research has shown that
+binary weighting (0 if the word appears in the document, 1 otherwise)
+is more beneficial for polarity clas- sification (Pang and Lee
+2002). In a study of the standard information retrieval weighting
+schemes in SA, (Paltoglou and Thelwall 2010) found that using binary
+features is bet- ter than raw term frequency, though a scaled TF
+version per- forms as well as binary.  Comparing run 2 (TF) to run 3
+(binary weights) as well as run 1 to run 4, we see insignificant
+changes in perfor- mance for all datasets. Note that there is, however
+a signifi- cant change in the F-measure for the negative class in
+Jindal dataset. Recall that this dataset is the most challenging as it
+contains only 12.6\% negative documents, resulting in a lower
+classification performance for this under-represented class. Because
+the minority class is often of interest, features that help
+classifying it bears study in further research.
+
+Negations such as not and never are often included in stopword lists,
+and hence are removed from the text analysis. Combined with other
+words, though, nega- tions reverse the polarity of words. Because
+polarity classification depends so much on negations, SA researchers
+have tried incorporating them into the feature vector. We take the
+approach of (Das and Chen 2001) who use a heuristic to identify
+negated words and create a new feature by appending NOT- to the words
+(for example, a phrase ``don't like'' results in feature
+NOT-like). Alas, adding negated-word fea- tures in run 5 has proven to
+be marginally useful.  Compared to otherwise identical run 1, the
+improvement has been made at insignificance levels for all of the
+three datasets.
+
+Negation phrases discussed above can be con- sidered as a special case
+of n-grams, which are ordered sets of words. The benefit of using
+n-grams instead of single words as features comes in being able to
+capture some de- pendencies between the words and the importance of
+indi- vidual phrases.  Runs 6 through 9 include n-gram features of n
+up to 3 (generated using CMU Toolkit http://www.speech.cs.
+cmu.edu). To test the effect of each level of n, all other aspects of
+the feature space were kept constant. It is clear that the higher
+n-grams alone decrease the accuracy for all datasets. Run 8, which
+includes 1- and 2-gram features, per- forms the best for the smallest
+dataset, and run 9, which in- cludes 1-, 2-, and 3-grams, is best for
+the other two. These results suggest that the n should be chosen
+appropriately for the size of the dataset.
+
+Since n-grams are often synthetic, in that they do not necessarily
+represent a semantically cohe- sive part of text, we explore the use
+of grammatical phrases as features. Using a CRF-based phrase chun- ker
+(http://jtextpro.sourceforge.net/), we break the text into phrases and
+use these as features. Like 2- and 3-grams, phrases alone do not
+outperform run 1. Further study is needed to determine the quality of
+the phrases produced by the tool, and possible benefits of using this
+feature space in combination with others.
+
+In Figure 1 we explore the merits of cutting off the ``tail'' of the
+vocabulary, that is, excluding the terms that appear fewer than c
+times in the dataset from the feature space. The decrease in the
+performance compared to full-vocabulary run was not significant at p <
+0.05 level up to c = 3 for Pang \& Lee, c = 4 for Jindal, and c = 1
+for Blitzer datasets (that is, when words appearing c times or less
+were excluded).  This means that we can get an equivalent performance
+from a classifier for Jindal dataset while excluding words that ap-
+pear 4 times or less in the dataset (leaving only 15.3\% of original
+vector set!). Notice the differing acceptable cutoffs for the three
+datasets, which suggests that classification of some datasets is more
+sensitive to rare words than of others.
+
+The performance of the classifier may also be improved by removing
+some of the less useful features. We use expected Mutual Informa- tion
+as a measurement of a feature's usefulness. We divide each dataset
+into training (60\%), tuning (20\%), and testing (20\%)
+subsets. Features were extracted from the training set and ordered by
+their MI scores. Top N were chosen to rep- resent the documents in the
+tuning set, with N varying from top few features to the size of the
+feature space. Finally, for each dataset an N was chosen to maximize
+performance, and the testing set was used to determine classifier
+perfor- mance at this cutoff.  Figure 2 shows the performance of the
+classifiers at var- ious cutoff points for the tuning sets. For all
+datasets, the performance drops off as the number of features
+approaches 100\% (the number of features in full feature space is
+differ- ent for each dataset). This means that when sorted by MI, the
+bottom features hurt the performance of the classifier.  Towards the
+top of the list, the performance differs between the relatively small
+Pang \& Lee dataset and the others, which are larger by an order of
+magnitude. We noted the best cut-off point for each dataset and use
+the testing set to get the accuracy scores of 0.798 (Pang \& Lee) at
+76\% cutoff, 0.911 (Jindal) at 1\%, and 0.837 (Blitzer) at 3\%.
+
+In particular for SA, certain POS have been determined to be more
+useful in classi- fication tasks. For example, adjectives, adverbs,
+and verbs have been used for sentiment classification (Benamara et al.
+2007; Chesley et al. 2006). If indeed adjectives are important factors
+in predicting sentiment polarity, limiting the feature space to only
+these may improve classifier performance by removing less useful
+words. We test this notion by retaining only words that are
+adjectives, verbs, and nouns in- dividually and in
+combination. Results can be seen in Table 2. For each dataset besides
+accuracy we present the number of features for each run. Although the
+best accuracy is achieved when all three parts of speech are used, the
+best improvement attained per feature is with adjectives, and sec-
+ondly with verbs, showing that these two parts of speech are indeed
+more helpful in polarity classification.
+
+
+Similarly, sentiment-annotated lexicons may be used for feature
+selection.  By selecting terms which are indicative of strong
+sentiment, less useful features may be excluded from the feature
+set. Popular lexicons are the extensions of WordNet
+(http://wordnet.princeton.edu/), a large lexical database of
+English. SentiWordNet, for example, contains polarity and objectivity
+labels for the WordNet terms (Esuli and Sebastiani 2006). In
+WordNet-Affect (Strapparava and Vlitutti 2004) take advantage of
+synsets - word groupings in Word- Net - to label each synset with
+affective labels. Both have been widely used in the community, and we
+use both lex- icons in our analysis. Furthermore, we use a lexicon de-
+rived from sociological studies on emotion, which we call the ACT
+(Affect Control Theory) lexicon (Mejova 2010).  The Affect Control
+Theory (ACT), SentiWordNet (SWN) and WordNet-Affect (WNA) lexicons
+contain 3997, 52902, and 2367 terms, respectively. The largest
+lexicon, SWN, provides the best performance for Pang \& Lee and
+Blitzer datasets. Yet in Jindal its performance is equivalent to the
+WNA run, making its improvement/feature ratio 25 times less than that
+of the WNA run.
 
 \todo[inline]{\citet{Bespalov:11}}
 
@@ -785,6 +973,7 @@ similar words, which were also likely to be subjectivity
 indicators. However, words found this way had low precision and high
 recall.
 
+\todo[inline]{\citet{Zhou:10}}
 
 \citet{Yessenalina:11}
 
