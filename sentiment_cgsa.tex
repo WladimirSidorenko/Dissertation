@@ -1,14 +1,14 @@
 \chapter{Coarse-Grained Sentiment Analysis}\label{sec:snt:cgsa}
 
-Having familiarized ourselves with the peculiarities of a sentiment
-corpus, the different possibilities to automatically induce new
+Having familiarized ourselves with the peculiarities of the creation
+of a sentiment corpus, the different ways to automatically induce new
 polarity lists, and the difficulties of fine-grained opinion mining,
 we now move on to the presumably most popular sentiment analysis
 objective---the coarse-grained analysis or CGSA, in which we need to
 determine the overall polarity of a message.
 
 Traditionally, this task has been addessed with either of three
-popular groups of methods:
+popular method groups:
 \begin{inparaenum}[(i)]
   \item lexicon-based approaches,
   \item machine-learning-based (ML) techniques, and
@@ -39,11 +39,10 @@ findings at the end of this chapter.
 
 \section{Evaluation Metrics}\label{sec:cgsa:eval-metrics}
 
-To estimate the quality of the compared systems, we will use two
-established evaluation metrics which are commonly applied for
-measuring CGSA results: One of these metrics is the macro-averaged
-\F-score over the two major polarity classes~(positive and negative):
-{ \small%
+To estimate the quality of the compared systems, we will rely on two
+established evaluation metrics which are commonly used for measuring
+CGSA results: One of these metrics is the macro-averaged \F-score over
+the two major polarity classes~(positive and negative): { \small%
   \begin{equation*}
     F_1 = \frac{F_{pos} + F_{neg}}{2}.
   \end{equation*}%
@@ -52,23 +51,42 @@ measuring CGSA results: One of these metrics is the macro-averaged
 This measure was first introduced by the organizers of the SemEval
 competition~\cite{Nakov:13,Rosenthal:14,Rosenthal:15} and has become a
 de facto standard not only for the SemEval dataset, but virtually for
-all related sentiment tasks and corpora.
+all related coarse-grained sentiment tasks and corpora.
 
 The second metric is the micro-averaged \F-score over all three
 possible semantic orientations (positive, negative, and neutral),
-which basically corresponds to the accuracy over the whole labeled
-dataset~\cite[cf.][p.~577]{Manning:99}.  This measure both predates
+which basically corresponds to the accuracy over the complete labeled
+dataset~\cite[see][p.~577]{Manning:99}.  This measure both predates
 and supersedes the SemEval evaluation as it had already been applied
 in the very first works on coarse-grained opinion
 mining~\cite{Wiebe:99,Das:01,Read:05,Kennedy:06,Go:09} and was again
-reintroduced in the GermEval Shared Task on Sentiment
-Analysis~2017~\cite{Biemann:17}.
+reintroduced at the GermEval Shared Task on Sentiment
+Analysis~2017~\cite{Wojatzki:17}.
 
 Moreover, in addition to these two metrics, we will also give a
 detailed information on precision, recall, and \F-scores of each
 particular polarity class in order to get a better intuition about
-precise strengths, weaknesses, and biases of each evaluated CGSA
-method.
+precise strengths, weaknesses, and biases of each evaluated method.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % last two columns
+      \toprule
+      \textbf{Dataset} & \multicolumn{3}{c}{\bfseries Polarity Class} & \textbf{Omitted}\\
+                       & \textbf{Positive} & \textbf{Negative} & \textbf{Neutral} & \\\midrule
+
+      \textbf{PotTS} & 3,394 & 1,541 & 2,901 & 156 \\
+      \textbf{SB10k} &  &  &  &  \\
+      \textbf{GTS} &  &  &  & \\\bottomrule
+\end{tabular}
+    \egroup
+    \caption{Polarity class distribution in the PotTS corpus and
+      German Twitter Snapshot (GTS).}
+    \label{snt-cgsa:tbl:corp-dist}
+  \end{center}
+\end{table}
 
 \section{Data Preparation}\label{sec:cgsa:data}
 
@@ -81,7 +99,7 @@ tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfu
 lemmatized and assigned part-of-speech tags to these tokens with the
 \texttt{TreeTagger} of~\citet{Schmid:95}.  Furthermore, like in the
 previous chapter, we automatically obtained morphological features for
-each word and induced syntactic trees for each sentence with the help
+each word, and induced syntactic trees for each sentence with the help
 of the \texttt{Mate} dependency parser~of~\citet{Bohnet:13}. Apart
 from the PotTS dataset, we also applied this procedure to the
 microblogs of the German Twitter snapshot~\cite{Scheffler:14}, which
@@ -93,39 +111,51 @@ picking the optimal hyperparameters, and the remaining 20\% for
 evaluating the results.  We inferred polarity labels for these
 microblogs with a simple heuristic rule, assigning the positive
 (negative) class to all messages which contained exclusively positive
-(negative) sentiments, considering all tweets without any polar
-opinions as neutral, and skipping all microblogs that contained
-sentiments with opposite semantic orientations.  Finally, to derive
-these classes for the snapshot posts, we followed the procedure
-proposed by~\citet{Read:05} and~\citet{Go:09}, and assigned the
-positive (negative) labels to the tweets which contained the
-respective emoticons.
+(negative) sentiments and skipping all microblogs that comprised
+opinions with opposite semantic orientations.  In cases when a
+sentiment was absent, we applied a fallback strategy, considering all
+tweets with only positive (negative) polar terms as positive
+(negative), disregarding posts that simultaneously featured
+expressions from both classes, and taking the rest of the corpus
+(i.e., messages with neither sentiments nor polar terms) as neutral
+instances.
+
+Finally, to derive these classes
+for the snapshot posts, we followed the procedure proposed
+by~\citet{Read:05} and~\citet{Go:09}, and assigned the positive
+(negative) labels to the tweets which contained the respective
+emoticons.
 
 \todo[inline]{Add statistics on the noisily labeled corpus.}
 
 \section{Lexicon-Based Methods}\label{sec:cgsa:lexicon-based}
 
-The first group of approaches that we are going to explore in this
+The first group of approaches which we are going to explore in this
 chapter using the described data are lexicon-based (LB) systems.  Just
 like sentiment lexicons themselves, LB methods for coarse-grained
 opinion mining have attracted a lot of attention from the very
 inception of the sentiment analysis field.  Starting with the research
-of~\citet{Hatzivassi:00}, who proved with statistical significance
-tests that the mere occurrence of a subjective adjective from a
-polarity list was a highly reliable indicator of the whole sentence
-being subjective, more and more works dealing with the use of lexicons
-for determining the overall polarity of complete texts appeared on the
-scene.  For example, \citet{Das:01} already applied an ensemble of
-five classifiers (two of which were purely lexicon-based and the other
-three relied on lexicon features) to predict the polarity of stock
-messages (\emph{buy}, \emph{sell}, or \emph{neutral}), attaining an
-accuracy of 62\% on a corpus of several hundreds stock board messages.
-In contrast to this complex approach, \citet{Turney:02} simply
-determined the \emph{semantic orientation} (SO) of the reviews by
-averaging the sentiment scores of their terms found in the
-automatically generated PMI lexicon.  With this approach, the author
-could reach an accuracy of 74\% on a corpus of 410 manually labeled
-Epinions comments.  Following this line of research, \citet{Kim:04}
+of~\citet{Hatzivassi:00}, who statistically proved that the mere
+occurrence of a subjective adjective from a polarity list was a highly
+reliable indicator of the whole sentence being subjective, more and
+more works dealing with the use of lexicons for determining the
+overall polarity of complete texts appeared on the scene.
+
+One of the first notable steps in this direction was made
+by~\citet{Das:01}, who proposed an ensemble of five classifiers (two
+of which were purely lexicon-based and the other three relied on
+lexicon features) to predict the polarity of stock messages
+(\emph{buy}, \emph{sell}, or \emph{neutral}), achieving an accuracy of
+62\% on a corpus of several hundreds stock board messages.  A much
+simpler method for a similar task was suggested by~\citet{Turney:02},
+who determined the \emph{semantic orientation} (SO) of reviews by
+averaging the PMI scores of their terms, obtaining these scores from
+an automatically generated sentiment lexicon.  With this approach, the
+author could reach an accuracy of 74\% on a corpus of 410 manually
+labeled Epinions comments.  In the same vein, \citet{Hi:04} computed
+the overall polarity of a sentence by comparing the numbers of
+positive and negative terms appearing in that sentence, reversing the
+orientation of the term in case of negation.  Finally, \citet{Kim:04}
 compared three different approaches to determining the polarity of a
 sentence:
 \begin{inparaenum}[(i)]
@@ -159,38 +189,38 @@ Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 
 % Polanyi and Zaenen, 2006; Kennedy and Inkpen, 2006
 In~\citeyear{Polanyi:06}, \citeauthor{Polanyi:06} presented an
-extensive overview and analysis of common lexicon-based approaches,
-arguing that, besides considering the lexical valence (i.e., semantic
-orientation) of polar terms, it was also necessary to incorporate
-syntactic, discourse-level, and extra-linguistic factors such as
-negations, intensifiers, modal operators (e.g., \emph{could} or
-\emph{might}), presuppositional items (e.g., \emph{barely} or
+extensive overview and analysis of common lexicon-based sentiment
+approaches, arguing that, besides considering the lexical valence
+(i.e., semantic orientation) of polar terms, it was also necessary to
+incorporate syntactic, discourse-level, and extra-linguistic factors
+such as negations, intensifiers, modal operators (e.g., \emph{could}
+or \emph{might}), presuppositional items (e.g., \emph{barely} or
 \emph{failure}), irony, reported speech, discourse connectors, genre
 and attitude assessment, reported speech, multi-entity evaluation,
 etc.  This theoretical hypothesis was also proven empirically by
-\citet{Kennedy:06}, who compared two ways of determining the polarity
-of a customer review: In the first of these methods, they simply
-compared the numbers of positive and negative expressions appearing in
-text, assigning the review to the class with the greater number of
-terms.  In the second attempt, they enhanced the original system with
-additional information about contextual valence shifters, increasing
-or decreasing the sentiment score of a term if it was preceded by an
-intensifier or downtoner, and changing the polarity sign of this score
-to the opposite in case of a negation.  With this adjustment, the
-authors achieved a statistically significant improvement, boosting the
-accuracy of the two-class prediction on a corpus of product and movie
-reviews from 67.9 to 69.3\%.
+\citet{Kennedy:06}, who investigated two ways to determine the
+polarity of a customer review: In the first of these methods, they
+simply compared the numbers of positive and negative expressions
+appearing in text, assigning the review to the class with the greater
+number of items.  In the second attempt, they enhanced the original
+system with additional information about contextual valence shifters,
+increasing or decreasing the sentiment score of a term if it was
+preceded by an intensifier or downtoner, and changing the polarity
+sign of this score to the opposite in case of a negation.  With this
+adjustment, the authors achieved a statistically significant
+improvement, boosting the accuracy of the two-class prediction on a
+corpus of product and movie reviews from 67.9 to 69.3\%.
 
 % Taboada et al., 2011
-Finally, a veritably seminal work on lexicon-based techniques for CGSA
-was introduced by~\citet{Taboada:11}, who presented a manually
-compiled polarity list\footnote{The authors hand-annotated all
-  occurrences of adjectives, nouns, and verbs found in a corpus of 400
-  Epinions reviews with ordinal categories ranging from -5 to 5 which
-  reflected the semantic orientation of a term (positive vs. negative)
-  and its polar strength (weak vs. strong).} and used this resource to
+Finally, a veritably seminal work on lexicon-based techniques was
+presented by~\citet{Taboada:11}, who introduced a manually compiled
+polarity list\footnote{The authors hand-annotated all occurrences of
+  adjectives, nouns, and verbs found in a corpus of 400 Epinions
+  reviews with ordinal categories ranging from -5 to 5 which reflected
+  the semantic orientation of a term (positive vs. negative) and its
+  polar strength (weak vs. strong).} and used this resource to
 estimate the overall semantic orientation of the text.  Drawing on the
-ideas of~\citet{Polanyi:06}, the authors also incorporated a set of
+ideas of~\citet{Polanyi:06}, the authors incorporated a set of
 additional heuristic rules into their computation by changing the
 prior SO values of negated, itensified, and downtoned terms, ignoring
 irrealis sentences, and adjusting the weights of specific document
@@ -202,7 +232,7 @@ and \textsc{SentiWordNet}~\cite{Esuli:06c}.  Moreover, the authors
 also demonstrated the effectiveness of their method for other topics
 and text genres, hypothesizing that lexion-based approaches were in
 general more robust to domain shifts than traditional supervised
-learning techniques.
+machine-learning techniques.
 
 % % Taboada et al., 2006
 % Another important contribution to the development of lexicon-based
@@ -221,26 +251,26 @@ learning techniques.
 % opposite in case of the negation.
 
 % Musto et al., 2014
-Lexicon-based systems also found their way into sentiment analysis of
-social media: An LB approach specifically tailored to Twitter data
-was, for instance, proposed by~\citet{Musto:14}, who examined four
-different ways of computing the overall polarity scores of microblogs:
-\emph{basic}, \emph{normalized}, \emph{emphasized}, and
-\emph{normalized-emphasized}; checking these strategies with four
+Lexicon-based systems have also found their way into sentiment
+analysis of social media: For example, one such approach, specifically
+tailored to Twitter data, was proposed by~\citet{Musto:14}, who
+examined four different ways to compute the overall polarity scores of
+microblogs: \emph{basic}, \emph{normalized}, \emph{emphasized}, and
+\emph{normalized-emphasized}; evaluating these strategies with four
 distinct lexicons: \textsc{Sen\-ti\-Word\-Net}~\cite{Esuli:06c},
 \textsc{Word\-Net-\-Affect}~\cite{Strapparava:04},
 \textsc{MPQA}~\cite{Wiebe:05}, and
 \textsc{SenticNet}~\cite{Cambria:14}.  In all of these methods, the
 authors first split an input message into a list of
 \emph{micro-phrases} based on the occurrence of punctuation marks and
-conjunctions; then calculated the polarity score of each of these
-segments; and, finally, estimated the overall polarity of the tweet by
-uniting the scores of the micro-phrases.  \citeauthor{Musto:14}
-obtained their best results (58.99\% accuracy on the SemEval-2013
-dataset) with the normalized-emphasized approach, in which they
-averaged the polarity scores of segments' tokens, boosting these
-values by 50\% for informative parts of speech; and regarded the sum
-of the micro-phrase scores as the final overall polarity of the
+conjunctions.  Afterwards, they calculated the polarity score of each
+of these segments and estimated the overall polarity of the whole
+tweet by uniting the scores of its micro-phrases.
+\citeauthor{Musto:14} obtained their best results (58.99\% accuracy on
+the SemEval-2013 dataset) with the normalized-emphasized approach, in
+which they averaged the polarity scores of segments' tokens, boosting
+these values by 50\% for informative parts of speech; and regarded the
+sum of the micro-phrase scores as the final overall polarity of the
 microblog.
 
 % the authors obtained their best results using the
@@ -249,7 +279,7 @@ microblog.
 % Jurek et al., 2015
 Another Twitter-aware system was presented by~\citet{Jurek:15}, who
 computed the negative and positive polarity of a message ($F_p$ and
-$F_n$) using the following equations: { \small%
+$F_n$ respectively) using the following equations: { \small%
   \begin{align}
     F_P &= \min\left(\frac{A_P}{2 - \log(3.5\times W_P + I_P)}, 100\right),\\
     F_N &= \max\left(\frac{A_N}{2 - \log(3.5\times W_N + I_N)}, -100\right);\label{cgsa:eq:jurek}
@@ -257,12 +287,14 @@ $F_n$) using the following equations: { \small%
   \normalsize%
 }%
 where $A_P$ and $A_N$ represent the average scores of positive and
-negative lexicon terms found in the tweet, $W_P$ and $W_N$ stand for
-the raw counts of such items, and $I_P$ and $I_N$ denote the number of
-intensifiers preceding the lexicon terms.  Furthermore, in case of a
-negation, the authors additionally modified the individual polarity
-scores $s_w$ of the negated words $w$'s while estimating the average
-polarity values as follows: { \small%
+negative lexicon terms found in the tweet:
+$A_p = \frac{\sum_{w\in\textrm{msg}}s^p_w}{\lVert\textrm{msg}\rVert}$,
+with $s^p_w$ denoting the positive lexicon score of the term $w$;
+$W_P$ and $W_N$ stand for the raw counts of polar tokens; and $I_P$
+and $I_N$ denote the number of intensifiers preceding these words.  In
+addition to that, prior to estimating the average values, the authors
+modified the polarity scores $s_w$ of negated words by applying the
+following heuristics: { \small%
   \begin{align}
 neg(s_w) =
     \begin{cases}
@@ -272,18 +304,19 @@ neg(s_w) =
 \end{align}%
 \normalsize%
 }%
-Besides estimating the polarity scores $F_p$ and $F_n$,
+Besides computing the polarity scores $F_p$ and $F_n$,
 \citeauthor{Jurek:15} also determined the subjectivity degree of the
 message by replacing the terms $A_P$ and $A_N$ in
 Equation~\ref{cgsa:eq:jurek} with averaged conditional probabilitites
-of the tweet being subjective given that the respective polar term
-appeared in it.\footnote{These probabilities were calculated
+of the tweet being subjective given the occurrences of the respective
+polar terms.\footnote{These probabilities were calculated
   automatically on the noisily labeled data set of~\citet{Go:09}.}
-The authors considered a microblog as positive or negative if its
-overall polarity score was greater than 25, and the subjectivity value
-was higher than 0.5.  With this method, they achieved an accuracy
-of~77.3\% on the manually annotated subset of \citeauthor{Go:09}'s
-corpus and reached 74.2\% on the IMDB corpus~\cite{Maas:11}.
+The authors considered a microblog as positive if its overall polarity
+score was greater than 25 and negative otherwise, provided that the
+subjectivity value of this message was higher than 0.5.  With this
+method, they achieved an accuracy of~77.3\% on the manually annotated
+subset of \citeauthor{Go:09}'s corpus and reached 74.2\% on the IMDB
+review corpus~\cite{Maas:11}.
 
 % Kolchyna et al., 2015
 Finally, \citet{Kolchyna:15} also explored two different ways of
@@ -315,9 +348,7 @@ with lexicon features, getting almost five percent accuracy
 improvement (from 86.62 to 91.17) on the IMDB movie review
 dataset~\cite{Pang:02}.
 
-\todo[inline]{Hu/Liu and Kim/Hovy}
-
-\todo[inline]{reimplement and describe the results of
+\todo[inline]{reimplement and describe the results of \citet{Hu:04},
   \citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
   \citet{Kolchyna:15}}
 
