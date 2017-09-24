@@ -68,78 +68,180 @@ detailed information on precision, recall, and \F-scores of each
 particular polarity class in order to get a better intuition about
 precise strengths, weaknesses, and biases of each evaluated method.
 
-\begin{table}[h]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.162\columnwidth} % first columm
-        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % last two columns
-      \toprule
-      \textbf{Dataset} & \multicolumn{3}{c}{\bfseries Polarity Class} & \textbf{Omitted}\\
-                       & \textbf{Positive} & \textbf{Negative} & \textbf{Neutral} & \\\midrule
-
-      \textbf{PotTS} & 3,394 & 1,541 & 2,901 & 156 \\
-      \textbf{SB10k} &  &  &  &  \\
-      \textbf{GTS} &  &  &  & \\\bottomrule
-\end{tabular}
-    \egroup
-    \caption{Polarity class distribution in the PotTS corpus and
-      German Twitter Snapshot (GTS).}
-    \label{snt-cgsa:tbl:corp-dist}
-  \end{center}
-\end{table}
-
 \section{Data Preparation}\label{sec:cgsa:data}
 
 Similarly to the data preparation steps used for fine-grained
-sentiment analysis, we preprocessed all tweets of the PotTS
-corpus~\cite{Sidarenka:16} with the text normalization system
+sentiment analysis, we preprocessed all tweets involved in our
+experiments with the text normalization system
 of~\citet{Sidarenka:13}, tokenized them using the same adjusted
 version of Potts'
 tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
 lemmatized and assigned part-of-speech tags to these tokens with the
-\texttt{TreeTagger} of~\citet{Schmid:95}.  Furthermore, like in the
+\texttt{TreeTagger} of \citet{Schmid:95}.  Moreover, like in the
 previous chapter, we automatically obtained morphological features for
 each word, and induced syntactic trees for each sentence with the help
-of the \texttt{Mate} dependency parser~of~\citet{Bohnet:13}. Apart
-from the PotTS dataset, we also applied this procedure to the
-microblogs of the German Twitter snapshot~\cite{Scheffler:14}, which
-will be used in our subsequent experiments on noisy supervision.
+of the \texttt{Mate} dependency parser
+\cite{Bohnet:13}. % Apart from the
+% PotTS dataset, we also applied this procedure to the microblogs of
+% the German Twitter snapshot~\cite{Scheffler:14}, which will be used
+% in our subsequent experiments on noisy supervision.
 
-We again divided the corpus data into a training, development, and
-test set, using 70\% of the tweets for learning, 10\% for tuning and
-picking the optimal hyperparameters, and the remaining 20\% for
-evaluating the results.  We inferred polarity labels for these
-microblogs with a simple heuristic rule, assigning the positive
-(negative) class to all messages which contained exclusively positive
-(negative) sentiments and skipping all microblogs that comprised
-opinions with opposite semantic orientations.  In cases when a
-sentiment was absent, we applied a fallback strategy, considering all
-tweets with only positive (negative) polar terms as positive
-(negative), disregarding posts that simultaneously featured
-expressions from both classes, and taking the rest of the corpus
-(i.e., messages with neither sentiments nor polar terms) as neutral
-instances.
+We again divided the PotTS corpus~\cite{Sidarenka:16} into a training,
+development, and test set, using 70\% of the tweets for learning, 10\%
+for tuning and picking the optimal hyperparameters, and the remaining
+20\% for evaluating the results.  We inferred polarity labels for
+these microblogs with a simple heuristic rule, assigning the positive
+(negative) class to all messages which had exclusively positive
+(negative) sentiments and skipping all microblogs that simultaneously
+contained multiple opinions with opposite semantic orientations.  In
+cases when a sentiment was absent, we applied a fallback strategy,
+considering all tweets with only positive (negative) polar terms as
+positive (negative), disregarding messages which featured expressions
+from both polarity classes, and taking the rest of the corpus (i.e.,
+posts without any sentiments nor polar terms) as neutral instances.
 
-Finally, to derive these classes
-for the snapshot posts, we followed the procedure proposed
-by~\citet{Read:05} and~\citet{Go:09}, and assigned the positive
-(negative) labels to the tweets which contained the respective
-emoticons.
+A few examples of such heuristically inferred labels are provided
+below:
+\begin{example}[Coarse-Grained Sentiment Annotations]\label{snt:cgsa:exmp:anno1}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Ich finde den Papst putzig \smiley{}}\\
+  \noindent I find the Pope cute \smiley{}.\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\[1.5em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape typisch Bayern kaum ist der neue Papst da und schon haben
+  sie ihn in der Tasche ...}\\
+  \noindent Typical Bavaria The new Pope is hardly there, as they already have him in their pocket\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}
+\end{example}
+As we can see from these sample messages, our simple rule provides
+reasonable decisions in most of the cases.  However, since this
+approach is still an approximation and consequently prone to errors,
+especially in the cases where the polarity of the whole microblog
+differs from the semantic orientation of its single tokens or is
+expressed without any explicit polar expressions at all (see
+Example~\ref{snt:cgsa:exmp:anno2}), we also decided to evaluate all
+CGSA methods presented in this chapter on another German Twitter
+corpus, which has been specifically annotated with message-level
+polarities---SB10k.
 
-\todo[inline]{Add statistics on the noisily labeled corpus.}
+\begin{example}[Erroneous Sentiment
+  Annotations]\label{snt:cgsa:exmp:anno2}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Unser Park, unser Geld, unsere Stadt! -NICHT unser Finanzminister! \smiley{} \#schmid \#spd \#s21 \#btw13}\\
+  \noindent Our park, our money, our city! -NOT our Finance Minister! \smiley{} \#schmid \#spd \#s21 \#btw13\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{green3}{positive*}}\\[1.5em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Auf die Lobby-FDP von heute kann Deutschland verzichten ...}\\
+  \noindent Germany can go without today's lobby FDP\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+The SB10k dataset was introduced by~\citet{Cieliebak:17}, and
+comprises a total of 9,738 tweets.  These messages were selected from
+a larger snapshot of 5M German microblogs gathered between August and
+November~2013.  To ensure lexical diversity and proportional polarity
+distribution in this corpus, the authors first divided all downloaded
+snapshot posts into 2,500 clusters using $k$-means with unigram
+features.  Afterwards, from each of these groups, they selected posts
+which simultaneously comprised at least one positive and one negative
+term from the German Polarity Clues lexicon~\cite{Waltinger:10}.  In
+the final step, each of these tweets was labeled by at least three
+experts from a pool of 34 different annotators, whose final agreement
+run up to 0.39 Krippendorff's $\alpha$.  Unfortunately, due to the
+restrictions of Twitter's terms of use (which only allow to distribute
+the ids of the annotated tweets along with their labels), we were able
+to retrieve merely 7,476 messages of this corpus, which nevertheless
+constitutes a substantial amount of data, comparable to the size of
+the PotTS dataset.
+
+In addition to the aforementioned corpora (PotTS and SB10k), we
+automatically annotated all microblogs of the German Twitter
+Snapshot~\cite{Scheffler:14}, following the procedure proposed
+by~\citet{Read:05} and~\citet{Go:09}, and assigning the positive
+(negative) class to the tweets which contained the respective
+emoticons.  However, in contrast to the previous two datasets, we will
+not use these tweets for evaluation, but solely utilize them for
+training in our distant supervision experiments.
+
+\todo[inline]{Add inter-annotator agreement of the PotTS corpus.}
+
+The resulting statistics on the number of messages and polarity
+distribution in the final data are shown in
+Table~\ref{snt-cgsa:tbl:corp-dist}.
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{6}{>{\centering\arraybackslash}p{0.13\columnwidth}}} % last two columns
+      \toprule
+      \textbf{Dataset} & \multicolumn{4}{c}{\bfseries Polarity Class}%
+      & \multicolumn{2}{c}{\bfseries Agreement}\\\cline{2-5}\cline{6-7}
+                       & \textbf{Positive} & \textbf{Negative} %
+                                           & \textbf{Neutral} & \textbf{Mixed*} %
+                                                              & $\alpha$ & $\kappa$\\\midrule
+
+      \textbf{PotTS} & 3,380 & 1,541 & 2,558 & 513 & & \\
+      \textbf{SB10k} & 1,717 & 1,130 & 4,629 & 0 & & \\
+      \textbf{GTS} & 3,326,829 & 350,775 & 19,453,669 & 73,776 & &\\\bottomrule
+\end{tabular}
+    \egroup
+    \caption{Polarity class distribution in PotTS, SB10k, and German
+      Twitter Snapshot (GTS).\\
+      \emph{(* -- the \emph{mixed} polarity was excluded from our
+        experiments)}}
+    \label{snt-cgsa:tbl:corp-dist}
+  \end{center}
+\end{table}
+
+As we can see, each of the datasets has its own unique composition of
+polar messages: The PotTS corpus, for example, shows a conspicuous
+bias towards the positive class with 42\% of the tweets belonging to
+this polarity.  We can partially explain this effect by the following
+reasons: first of all, it might be due to the coarseness of the
+heuristic rule that we applied to infer the labels for these messages;
+and, secondly, it might also stem from the initial selection criteria
+that we used to compile the data for this collection.  As you might
+remember, we a priori composed the major part of this dataset from
+microblogs which contained emoticons or had at least one polar
+expression from the SentiWS lexicon~\cite{Remus:10}.  Since most of
+these emoticons were positive (which is evident from the statistics of
+the German Twitter snapshot), the selected posts also became skewed
+towards this semantic orientation.
+
+The second most frequent group of the PotTS corpus is formed by
+neutral microblogs, which account for 32\% of the data.  Finally,
+negative posts represent the absolute minority of all instances
+(merely 19\%), which, however, is less surprising as the same tendency
+can be observed for the SB10k and German Twitter Snapshot too.
+
+Regarding the last two corpora, we can observe a more uniform (though
+not identical) behavior as both collections are dominated by neutral
+messages, which constitue 62\% of SB10k data and 84\% of the German
+Twitter Snapshot.  The positive class, again, makes up a big part of
+the data (23\% for SB10k and 14\% for the snapshot), but its influence
+this time is much less pronounced than in the PotTS case.  As
+mentioned above, the negative class is the least represented semantic
+representation across all three sources.  The only group which has
+even less instances than the negative class is the mixed polarity; we,
+however, will skip these messages in our experiments for the sake of
+simplicity and uniformity of the evaluation.\footnote{As we will see
+  later, some of the CGSA methods (especially the lexicon-based ones)
+  can hardly be extended to the prediction of more than three polarity
+  classes.}
 
 \section{Lexicon-Based Methods}\label{sec:cgsa:lexicon-based}
 
-The first group of approaches which we are going to explore in this
+The first group of approaches that we are going to explore in this
 chapter using the described data are lexicon-based (LB) systems.  Just
 like sentiment lexicons themselves, LB methods for coarse-grained
 opinion mining have attracted a lot of attention from the very
 inception of the sentiment analysis field.  Starting with the research
 of~\citet{Hatzivassi:00}, who statistically proved that the mere
 occurrence of a subjective adjective from a polarity list was a highly
-reliable indicator of the whole sentence being subjective, more and
-more works dealing with the use of lexicons for determining the
-overall polarity of complete texts appeared on the scene.
+reliable indicator that the whole sentence it appeared in was
+subjective, more and more works dealing with the use of lexicons for
+determining the overall polarity of complete texts appeared on the
+scene.
 
 One of the first notable steps in this direction was made
 by~\citet{Das:01}, who proposed an ensemble of five classifiers (two
@@ -152,7 +254,7 @@ who determined the \emph{semantic orientation} (SO) of reviews by
 averaging the PMI scores of their terms, obtaining these scores from
 an automatically generated sentiment lexicon.  With this approach, the
 author could reach an accuracy of 74\% on a corpus of 410 manually
-labeled Epinions comments.  In the same vein, \citet{Hi:04} computed
+labeled Epinions comments.  In the same vein, \citet{Hu:04} computed
 the overall polarity of a sentence by comparing the numbers of
 positive and negative terms appearing in that sentence, reversing the
 orientation of the term in case of negation.  Finally, \citet{Kim:04}
@@ -190,22 +292,22 @@ Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 % Polanyi and Zaenen, 2006; Kennedy and Inkpen, 2006
 In~\citeyear{Polanyi:06}, \citeauthor{Polanyi:06} presented an
 extensive overview and analysis of common lexicon-based sentiment
-approaches, arguing that, besides considering the lexical valence
-(i.e., semantic orientation) of polar terms, it was also necessary to
-incorporate syntactic, discourse-level, and extra-linguistic factors
-such as negations, intensifiers, modal operators (e.g., \emph{could}
-or \emph{might}), presuppositional items (e.g., \emph{barely} or
-\emph{failure}), irony, reported speech, discourse connectors, genre
-and attitude assessment, reported speech, multi-entity evaluation,
-etc.  This theoretical hypothesis was also proven empirically by
-\citet{Kennedy:06}, who investigated two ways to determine the
-polarity of a customer review: In the first of these methods, they
-simply compared the numbers of positive and negative expressions
-appearing in text, assigning the review to the class with the greater
-number of items.  In the second attempt, they enhanced the original
-system with additional information about contextual valence shifters,
-increasing or decreasing the sentiment score of a term if it was
-preceded by an intensifier or downtoner, and changing the polarity
+approaches existing at that time, arguing that, besides considering
+the lexical valence (i.e., semantic orientation) of polar terms, it
+was also necessary to incorporate syntactic, discourse-level, and
+extra-linguistic factors such as negations, intensifiers, modal
+operators (e.g., \emph{could} or \emph{might}), presuppositional items
+(e.g., \emph{barely} or \emph{failure}), irony, reported speech,
+discourse connectors, genre and attitude assessment, reported speech,
+multi-entity evaluation, etc.  This theoretical hypothesis was also
+proven empirically by \citet{Kennedy:06}, who investigated two ways to
+determine the polarity of a customer review: In the first of these
+methods, they simply compared the numbers of positive and negative
+expressions appearing in text, assigning the review to the class with
+the greater number of items.  In the second attempt, they enhanced the
+original system with additional information about contextual valence
+shifters, increasing or decreasing the sentiment score of a term if it
+was preceded by an intensifier or downtoner, and changing the polarity
 sign of this score to the opposite in case of a negation.  With this
 adjustment, the authors achieved a statistically significant
 improvement, boosting the accuracy of the two-class prediction on a
@@ -379,6 +481,11 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
 
+       HL &  &  &  & %
+       &  &  & %
+       &  &  & %
+       & \\
+
        TBD &  &  &  & %
        &  &  & %
        &  &  & %
@@ -402,7 +509,7 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
     \egroup
     \caption[Evaluation of lexicon-based CGSA methods.]{
       Evaluation of lexicon-based CGSA methods.\\
-      {\small TBD -- \citet{Taboada:11}, MST -- \citet{Musto:14}, JRK
+      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~-- \citet{Musto:14}, JRK
         -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
     \label{snt-cgsa:tbl:lex-res}
   \end{center}
