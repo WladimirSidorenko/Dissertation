@@ -91,12 +91,12 @@ development, and test set, using 70\% of the tweets for learning, 10\%
 for tuning and picking the optimal hyperparameters, and the remaining
 20\% for evaluating the results.  We inferred polarity labels for
 these microblogs with a simple heuristic rule, assigning the positive
-(negative) class to all messages which had exclusively positive
+(negative) class to the messages which had exclusively positive
 (negative) sentiments and skipping all microblogs that simultaneously
-contained multiple opinions with opposite semantic orientations.  In
-cases when a sentiment was absent, we applied a fallback strategy,
+contained multiple opinions with different semantic orientations.  In
+cases when a sentiment was absent, we resorted to a fallback strategy,
 considering all tweets with only positive (negative) polar terms as
-positive (negative), disregarding messages which featured expressions
+positive (negative) except for messages which featured expressions
 from both polarity classes, and taking the rest of the corpus (i.e.,
 posts without any sentiments nor polar terms) as neutral instances.
 
@@ -113,16 +113,15 @@ below:
   \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}
 \end{example}
-As we can see from these sample messages, our simple rule provides
-reasonable decisions in most of the cases.  However, since this
-approach is still an approximation and consequently prone to errors,
-especially in the cases where the polarity of the whole microblog
-differs from the semantic orientation of its single tokens or is
-expressed without any explicit polar expressions at all (see
-Example~\ref{snt:cgsa:exmp:anno2}), we also decided to evaluate all
-CGSA methods presented in this chapter on another German Twitter
-corpus, which has been specifically annotated with message-level
-polarities---SB10k.
+As we can see, our simple rule provides reasonable decisions in most
+of the cases.  However, since this approach is still an approximation
+and consequently prone to errors (especially in the cases where the
+polarity of the whole microblog differs from the semantic orientation
+of its single tokens or is expressed without any explicit polar
+expressions at all, see Example~\ref{snt:cgsa:exmp:anno2}), we also
+decided to evaluate all CGSA methods presented in this chapter on
+another German Twitter corpus, which has been specifically annotated
+with message-level polarities---SB10k.
 
 \begin{example}[Erroneous Sentiment
   Annotations]\label{snt:cgsa:exmp:anno2}
@@ -137,33 +136,34 @@ polarities---SB10k.
 \end{example}
 
 The SB10k dataset was introduced by~\citet{Cieliebak:17}, and
-comprises a total of 9,738 tweets.  These messages were selected from
-a larger snapshot of 5M German microblogs gathered between August and
+comprises a total of 9,738 tweets.  These messages were sampled from a
+larger snapshot of 5M German microblogs gathered between August and
 November~2013.  To ensure lexical diversity and proportional polarity
-distribution in this corpus, the authors first divided all downloaded
-snapshot posts into 2,500 clusters using $k$-means with unigram
-features.  Afterwards, from each of these groups, they selected posts
-which simultaneously comprised at least one positive and one negative
-term from the German Polarity Clues lexicon~\cite{Waltinger:10}.  In
-the final step, each of these tweets was labeled by at least three
-experts from a pool of 34 different annotators, whose final agreement
-run up to 0.39 Krippendorff's $\alpha$.  Unfortunately, due to the
+distribution in this corpus, the authors first split all posts of this
+snaphsot into 2,500 clusters using $k$-means algorithm with unigram
+features.  Afterwards, from each of these groups, they selected tweets
+with at least one positive and one negative term from the German
+Polarity Clues lexicon~\cite{Waltinger:10}.  Each of these messages
+was subsequently annotated by at least three human experts from a pool
+of 34 different coders.  The resulting inter-rater reliability (IRR)
+of these data run up to 0.39 Krippendorff's
+$\alpha$~\cite{Krippendorff:07}.  Unfortunately, due to the
 restrictions of Twitter's terms of use (which only allow to distribute
-the ids of the annotated tweets along with their labels), we were able
-to retrieve merely 7,476 messages of this corpus, which nevertheless
-constitutes a substantial amount of data, comparable to the size of
-the PotTS dataset.
+the ids of the microblogs along with their labels), we were able to
+retrieve merely 7,476 tweets of this corpus, which nevertheless
+constitute a substantial amount of data, comparable to the size of the
+PotTS dataset.
 
-In addition to the aforementioned corpora (PotTS and SB10k), we
-automatically annotated all microblogs of the German Twitter
+In addition to the aforementioned two corpora (PotTS and SB10k), we
+also automatically annotated all microblogs of the German Twitter
 Snapshot~\cite{Scheffler:14}, following the procedure proposed
 by~\citet{Read:05} and~\citet{Go:09}, and assigning the positive
 (negative) class to the tweets which contained the respective
-emoticons.  However, in contrast to the previous two datasets, we will
-not use these tweets for evaluation, but solely utilize them for
-training in our distant supervision experiments.
+emoticons.  However, in contrast to the previous datasets, we will not
+use these tweets for evaluation, but solely utilize them for training
+in our distant supervision experiments.
 
-The resulting statistics on the number of messages and polarity
+The resulting statistics on the number of messages and polarity class
 distribution in the final data are shown in
 Table~\ref{snt-cgsa:tbl:corp-dist}.
 \begin{table}[h]
@@ -194,54 +194,55 @@ Table~\ref{snt-cgsa:tbl:corp-dist}.
 \end{table}
 
 As we can see, each of the datasets has its own unique composition of
-polar messages: The PotTS corpus, for example, shows a conspicuous
-bias towards the positive class with 42\% of the tweets belonging to
+polar tweets: The PotTS corpus, for example, shows a conspicuous bias
+towards the positive class with 42\% of the microblogs belonging to
 this polarity.  We can partially explain this effect by the following
 reasons: first of all, it might be due to the coarseness of the
 heuristic rule that we applied to infer the labels for these messages;
 and, secondly, it might also stem from the initial selection criteria
 that we used to compile the data for this collection.  As you might
 remember, we a priori composed the major part of this dataset from
-microblogs which contained emoticons or had at least one polar
-expression from the SentiWS lexicon~\cite{Remus:10}.  Since most of
-these emoticons were positive (which is evident from the statistics of
-the German Twitter snapshot), the selected posts also became skewed
+tweets which contained smileys or had at least one polar expression
+from the SentiWS lexicon~\cite{Remus:10}.  Since most of these
+emoticons were positive (which is evident from the statistics of the
+German Twitter snapshot), the selected posts also became skewed
 towards this semantic orientation.
 
 The second most frequent group of the PotTS corpus is formed by
 neutral microblogs, which account for 32\% of the data.  Finally,
-negative posts represent the absolute minority of all instances
+negative messages represent the absolute minority of all tweets
 (merely 19\%), which, however, is less surprising as the same tendency
 can be observed for the SB10k and German Twitter Snapshot too.
 
 Regarding the last two corpora, we can observe a more uniform (though
 not identical) behavior as both collections are dominated by neutral
-messages, which constitue 62\% of SB10k data and 84\% of the German
+posts, which constitue 62\% of SB10k data and 84\% of the German
 Twitter Snapshot.  The positive class, again, makes up a big part of
-these datasets (23\% for SB10k and 14\% for the snapshot), but its
+these datasets (23\% of SB10k and 14\% of the snapshot), but its
 influence this time is much less pronounced than in the PotTS case.
-As mentioned above, negative tweets are the least represented semantic
-representation across all three sources.  The only group which has
-even less instances than this class is the mixed polarity.  We,
-however, will skip these messages in our experiments for the sake of
-simplicity and uniformity of the evaluation.\footnote{As we will see
-  later, some of the CGSA methods (especially the lexicon-based ones)
-  can hardly be extended to the prediction of more than three polarity
-  classes.}
+Finally, as we already mentioned, negative tweets are the least
+represented semantic representation across all three sources.  The
+only group which has even less instances than this class is the mixed
+polarity.  We, however, will skip the mixed orientation in our
+experiments for the sake of simplicity and uniformity of the
+evaluation.\footnote{As we will see later, some of the CGSA methods
+  (especially the lexicon-based ones) can hardly be extended to the
+  prediction of more than three polarity classes.}
 
-Finally, the results of the inter-rater reliability check confirm the
-superior quality of the PotTS corpus, which, even despite an
-approximate inference of its labels, still has an $\alpha$
-coefficient~\cite{Krippendorff:07} that is almost 1.7 times as high as
+Last but not least, the results of the inter-rater reliability check
+confirm the superior quality of the PotTS corpus, which, even despite
+an approximate label inference, still has an $\alpha$
+agreement~\cite{Krippendorff:07} that is almost 1.7 times as high as
 the respective score of SB10k (0.66 versus 0.39).  However, Cohen's
 $\kappa$ of these data (0.4), which is only available for this
 dataset, is merely on the verge between fair and moderate values.
 Nevertheless, since labels used in this experiments are ordinal rather
 than nominal in their nature (i.e., we can compute the \emph{distance}
-between distinct labels, which, for example, will be bigger for the
-pair positive vs. negative than for the pair positive vs. neutral), we
-find the Krippendorff's metric more appropriate for assessing the
-quality of the corpora for this task.
+between distinct labels, which, for example, would be bigger for the
+pair \emph{positive} vs. \emph{negative} than for the pair
+\emph{positive} vs. \emph{neutral}), we find the Krippendorff's metric
+more appropriate for assessing the quality of the annotation for this
+task.
 
 \section{Lexicon-Based Methods}\label{sec:cgsa:lexicon-based}
 
