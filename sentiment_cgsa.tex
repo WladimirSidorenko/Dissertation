@@ -163,8 +163,6 @@ emoticons.  However, in contrast to the previous two datasets, we will
 not use these tweets for evaluation, but solely utilize them for
 training in our distant supervision experiments.
 
-\todo[inline]{Add inter-annotator agreement of the PotTS corpus.}
-
 The resulting statistics on the number of messages and polarity
 distribution in the final data are shown in
 Table~\ref{snt-cgsa:tbl:corp-dist}.
@@ -180,12 +178,14 @@ Table~\ref{snt-cgsa:tbl:corp-dist}.
                                            & \textbf{Neutral} & \textbf{Mixed*} %
                                                               & $\alpha$ & $\kappa$\\\midrule
 
-      \textbf{PotTS} & 3,380 & 1,541 & 2,558 & 513 & & \\
-      \textbf{SB10k} & 1,717 & 1,130 & 4,629 & 0 & & \\
-      \textbf{GTS} & 3,326,829 & 350,775 & 19,453,669 & 73,776 & &\\\bottomrule
+      \textbf{PotTS} & 3,380 & 1,541 & 2,558 & 513 & 0.66 & 0.4\\
+      \textbf{SB10k} & 1,717 & 1,130 & 4,629 & 0 & 0.39 & NA\\
+      \textbf{GTS} & 3,326,829 & 350,775 & 19,453,669 & 73,776 & NA & NA\\\bottomrule
 \end{tabular}
     \egroup
-    \caption{Polarity class distribution in PotTS, SB10k, and German
+    \caption[Polarity class distribution in PotTS, SB10k, and the
+    German Twitter Snapshot.]{Polarity class distribution in PotTS,
+      SB10k, and the German
       Twitter Snapshot (GTS).\\
       \emph{(* -- the \emph{mixed} polarity was excluded from our
         experiments)}}
@@ -218,16 +218,30 @@ Regarding the last two corpora, we can observe a more uniform (though
 not identical) behavior as both collections are dominated by neutral
 messages, which constitue 62\% of SB10k data and 84\% of the German
 Twitter Snapshot.  The positive class, again, makes up a big part of
-the data (23\% for SB10k and 14\% for the snapshot), but its influence
-this time is much less pronounced than in the PotTS case.  As
-mentioned above, the negative class is the least represented semantic
+these datasets (23\% for SB10k and 14\% for the snapshot), but its
+influence this time is much less pronounced than in the PotTS case.
+As mentioned above, negative tweets are the least represented semantic
 representation across all three sources.  The only group which has
-even less instances than the negative class is the mixed polarity; we,
+even less instances than this class is the mixed polarity.  We,
 however, will skip these messages in our experiments for the sake of
 simplicity and uniformity of the evaluation.\footnote{As we will see
   later, some of the CGSA methods (especially the lexicon-based ones)
   can hardly be extended to the prediction of more than three polarity
   classes.}
+
+Finally, the results of the inter-rater reliability check confirm the
+superior quality of the PotTS corpus, which, even despite an
+approximate inference of its labels, still has an $\alpha$
+coefficient~\cite{Krippendorff:07} that is almost 1.7 times as high as
+the respective score of SB10k (0.66 versus 0.39).  However, Cohen's
+$\kappa$ of these data (0.4), which is only available for this
+dataset, is merely on the verge between fair and moderate values.
+Nevertheless, since labels used in this experiments are ordinal rather
+than nominal in their nature (i.e., we can compute the \emph{distance}
+between distinct labels, which, for example, will be bigger for the
+pair positive vs. negative than for the pair positive vs. neutral), we
+find the Krippendorff's metric more appropriate for assessing the
+quality of the corpora for this task.
 
 \section{Lexicon-Based Methods}\label{sec:cgsa:lexicon-based}
 
