@@ -535,16 +535,16 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
 Despite their immense popularity, linguistic plausibility, and
 simplicity to implement, lexicon-based approaches often have been
 criticized for the rigidness of their classification\footnote{Since
-  these systems only rely on the pre-computed weights of the lexicon
+  these systems only rely on the pre-computed weights of lexicon
   entries, considering these coefficients as constant, their decision
   boundaries frequently appear to be suboptimal as many terms might
   have different polarity and intensity values depending on the domain
-  of the text \cite[see][]{Yang:17}.} and the inability to factor in
-additional, non-lexical attributes into the final decisions.
-Moreover, as noted by~\citet{Pang:02} and confirmed
-by~\citet{Riloff:03} and \citet{Gamon:04}, many of the linguistic
-expressions which actually correlate with the subjectivity and
-polarity of a sentence are very unlikely to be included into a
+  of the text \cite[see][]{Eisenstein:17,Yang:17}.} and the inability
+to factor-in additional, non-lexical attributes into the final
+decisions.  Moreover, as noted by~\citet{Pang:02} and also confirmed
+empirically by~\citet{Riloff:03} and \citet{Gamon:04}, many of the
+linguistic expressions which actually correlate with subjectivity and
+polarity of a sentence (e.g., exclamation marks or) are very unlikely to be included into a
 sentiment lexicon by a human expert.  As a consequence of this, with
 the emergence of new manually annotated corpora, lexicon-based systems
 have gradually been superseded by supervised machine-learning
@@ -555,118 +555,32 @@ by~\citet{Wiebe:99}, who used a Na{\"i}ve Bayes classifier to
 differentiate between subjective and objective statements.  Using
 primarily binary features which reflected the presence of a pronoun,
 an adjective, a cardinal number, or a modal verb in the analyzed
-sentence, achieved an accuracy of~72.17\%, outperforming the majority
-class baseline by more than 20~percentage points.  An even better
-result (81.5\%) could be reached when the dataset was restricted only
-to the examples with the most confident annotations.
+sentence, the authors achieved an accuracy of~72.17\%, outperforming
+the majority class baseline by more than 20~percentage points.  An
+even better result (81.5\%) could be attained when the dataset was
+restricted only to the examples with the most confident annotations.
 
 \done[inline]{\citet{Pang:02}}
 
-Further notable contributions to DL-based CGSA methods were made
+Another notable contribution to the ML-based paradigm was made
 by~\citet{Pang:02}, who compared Na{\"i}ve Bayes, Maximum Entropy, and
 SVM systems on the polarity classification task for movie reviews,
-getting their best results (82.9\% accuracy) with the SVM approach
-that used only unigram features.
+getting their best results (82.9\% accuracy) with the support-vector
+method that used unigram features only.  These findings paved the way
+for the following general triumph of the SVM approach, which was
+dominating the whole CGSA research field for almost a decade.  For
+example, \citet{Gamon:04} trained this type of classifier on a rich
+set of linguistic (part-of-speech trigrams, constituent-specific
+length measures, context-free phrase-structure patterns, as well as
+part-of-speech information coupled with semantic relations) and
+surface features (primarily word $n$-grams) to distinguish between
+positive and negative customer feedback.  The author achieved his best
+results (77.5\% accuracy and $\approx$0.77~\F) using top 2,000
+features with the highest log likelihood
+ratios.  % Interestingly enough,
+% \citeauthor{Gamon:04} also could obtain quite competitive figures
+% (74.5\% accuracy) by using linguistically motivated features only.
 
-\done[inline]{\citet{Riloff:03a}}
-
-\citet{Riloff:03a} addressed the problem of inusfficient manually
-annotated sentiment resources by proposing a bootstrapping method for
-training a subjectivity classifier.  In this approach, the authors
-first applied two high-precision predictors to a large collection of
-unlabeled sentences in order to get an initial set of subjective and
-objective instances.  Afterwards, they used the AutoSlog-TS
-algorithm~\cite{Riloff:96} to extract expressions which strongly
-correlated with the subjective class and employed these phrases to
-classify the remaining sentences from the corpus.
-\citeauthor{Riloff:03a} repeated the last two steps (pattern
-extraction and expansion of the training set) multiple times to
-transitively learn new subjective phrases.  With the final system, the
-authors achieved a precision of 0.902 on recognizing polar sentences,
-with their recall running up to 0.401.
-
-\done[inline]{\citet{Yu:03}}
-
-A semi-supervised classification approach was proposed
-by~\citet{Yu:03}, who presented a three-stage method, in which they
-first distinguished between subjective and objective documents, then
-differentiated between polar and neutral sentences, and, finally,
-classified the polarity of opinionated clauses.  The authors used a
-Na{\"i}ve Bayes classifer for the document-level task, reaching a
-remarkable \F-score of~0.96 on this objective; and applied an ensemble
-of NB systems to predict the subjectivity of the sentences.  In the
-final step, they determined the semantic orientation of a subjective
-clause by averaging the polarity scores of their tokens, getting these
-scores from an automatically constructed sentiment
-lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
-attained an accuracy of~91\% on a set of 38 sentences which had a
-perfect inter-annotator agreement in their data.
-
-\done[inline]{\citet{Gamon:04}}
-
-Another SVM approach was proposed by~\citet{Gamon:04}, who used this
-classifier in conjunction with a rich set of linguistic
-(part-of-speech trigrams, constituent-specific length measures,
-context free phrase structure patterns, as well as part-of-speech
-information coupled with semantic relations) and surface features
-(primarily word $n$-grams) to classify customer feedback into positive
-and negative messages.  The author achieved his best results (77.5\%
-accuracy and $\approx$0.77~\F) using top 2,000 features with the
-highest log likelihood ratios.  Interestingly enough,
-\citeauthor{Gamon:04} also could obtain quite competitive figures
-(74.5\% accuracy) by using linguistically motivated features only.
-
-\done[inline]{\citet{Wilson:04,Wilson:06}}
-
-A related problem, namely that of classifying the strength of
-opinions, was addressed by~\citet{Wilson:04,Wilson:06}.  In
-particular, the authors proposed a wide variety of linguistic features
-(including automatically learned lexico-syntactic patterns similar to
-the ones used by~\citet{Riloff:03}, bags of words, and syntactic
-attributes such as lemma and PoS tag of the root of a dependency tree,
-lemmas and tags of its intermediate nodes and leaves, lexicalized
-relation tuples, i.e., tuples consisting of the lemma of a parent
-node, its grammatical relation to the child, and the lemma of the
-child itself, etc.), checking the utility of these attributes with
-three different classifiers: BoosTexter~\cite{Schapire:00},
-Ripper~\cite{Cohen:95}, and SVMLight~\cite{Joachims:99}.
-\citet{Wilson:04} achieved their best results (55\%~accuracy and
-0.991~mean squared error) with the BoosTexter approach when using all
-the introduced features.
-
-\done[inline]{\citet{Pang:04}}
-
-\citet{Pang:04} proposed a two-stage procedure for classifying the
-overall semantic orientation of movie reviews (positive vs. negative):
-In the first step of this approach, they classified the sentences into
-subjective and objective ones (achieving 92\% accuracy for this task
-with the Na\"ive Bayes system) and then applied another Na\"ive Bayes
-classifier to determine the polarity of the review based on only
-subjective excerpts, getting a statistically significant improvement
-from~82.8 to~86.4\%.  The authors also experimented with the min-cut
-method to encode the idea that nearby sentence will likely share the
-same subjectivity class, but did not get any statistically significant
-improvement over the discourse-unaware baseline.
-
-\done[inline]{\citet{Cui:06}}
-
-\citet{Cui:06} questioned the claim of~\citet{Pang:02} that
-higher-order $n$-grams worsen the classification results of an opinion
-mining system, hypothesizing that this finding was mostly due to the
-limited training set size of the latter authors.  To check this
-hypothesis, \citeauthor{Cui:06} collected a set of 320K product
-reviews from \url{froogle.google.com} and trained three different NL
-classifiers on these data: an online passive-agreessive
-system~\cite{Crammer:06}, the winnow algorithm~\cite{Hurst:04}, and a
-generative language model~\cite{Manning:99}.  The authors achieved
-their best results with the first option, getting 0.9007 overall
-\F-scores for both polarity classes and observing consistent
-improvements with the increasing order of $n$-grams.  Moreover,
-\citeauthor{Cui:06} also refuted another argument
-of~\citet{Pang:04}---namely, the need for skipping objective sentences
-while doing polarity classification---conjecturing that this step was
-only useful for certain domains such as movie or book reviews, but
-could not generalize to more technical genres.
 
 \done[inline]{\citet{Ng:06}}
 
@@ -702,6 +616,93 @@ similar training examples (measuring this similarity with the
 percentage of positive sentences).  This strategy brought
 statistically significant improvements over the first two baselines,
 yielding an average accuracy of $\approx$52\%.
+
+
+% \done[inline]{\citet{Riloff:03a}}
+
+% \citet{Riloff:03a} addressed the problem of inusfficient manually
+% annotated sentiment resources by proposing a bootstrapping method for
+% training a subjectivity classifier.  In this approach, the authors
+% first applied two high-precision predictors to a large collection of
+% unlabeled sentences in order to get an initial set of subjective and
+% objective instances.  Afterwards, they used the AutoSlog-TS
+% algorithm~\cite{Riloff:96} to extract expressions which strongly
+% correlated with the subjective class and employed these phrases to
+% classify the remaining sentences from the corpus.
+% \citeauthor{Riloff:03a} repeated the last two steps (pattern
+% extraction and expansion of the training set) multiple times to
+% transitively learn new subjective phrases.  With the final system, the
+% authors achieved a precision of 0.902 on recognizing polar sentences,
+% with their recall running up to 0.401.
+
+\done[inline]{\citet{Yu:03}}
+
+A semi-supervised classification approach was proposed
+by~\citet{Yu:03}, who presented a three-stage method, in which they
+first distinguished between subjective and objective documents, then
+differentiated between polar and neutral sentences, and, finally,
+classified the polarity of opinionated clauses.  The authors used a
+Na{\"i}ve Bayes classifer for the document-level task, reaching a
+remarkable \F-score of~0.96 on this objective; and applied an ensemble
+of NB systems to predict the subjectivity of the sentences.  In the
+final step, they determined the semantic orientation of a subjective
+clause by averaging the polarity scores of their tokens, getting these
+scores from an automatically constructed sentiment
+lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
+attained an accuracy of~91\% on a set of 38 sentences which had a
+perfect inter-annotator agreement in their data.
+
+% \done[inline]{\citet{Wilson:04,Wilson:06}}
+
+% A related problem, namely that of classifying the strength of
+% opinions, was addressed by~\citet{Wilson:04,Wilson:06}.  In
+% particular, the authors proposed a wide variety of linguistic features
+% (including automatically learned lexico-syntactic patterns similar to
+% the ones used by~\citet{Riloff:03}, bags of words, and syntactic
+% attributes such as lemma and PoS tag of the root of a dependency tree,
+% lemmas and tags of its intermediate nodes and leaves, lexicalized
+% relation tuples, i.e., tuples consisting of the lemma of a parent
+% node, its grammatical relation to the child, and the lemma of the
+% child itself, etc.), checking the utility of these attributes with
+% three different classifiers: BoosTexter~\cite{Schapire:00},
+% Ripper~\cite{Cohen:95}, and SVMLight~\cite{Joachims:99}.
+% \citet{Wilson:04} achieved their best results (55\%~accuracy and
+% 0.991~mean squared error) with the BoosTexter approach when using all
+% the introduced features.
+
+\done[inline]{\citet{Pang:04}}
+
+\citet{Pang:04} proposed a two-stage procedure for classifying the
+overall semantic orientation of movie reviews (positive vs. negative):
+In the first step of this approach, they classified the sentences into
+subjective and objective ones (achieving 92\% accuracy for this task
+with the Na\"ive Bayes system) and then applied another Na\"ive Bayes
+classifier to determine the polarity of the review based on only
+subjective excerpts, getting a statistically significant improvement
+from~82.8 to~86.4\%.  The authors also experimented with the min-cut
+method to encode the idea that nearby sentence will likely share the
+same subjectivity class, but did not get any statistically significant
+improvement over the discourse-unaware baseline.
+
+\done[inline]{\citet{Cui:06}}
+
+\citet{Cui:06} questioned the claim of~\citet{Pang:02} that
+higher-order $n$-grams worsen the classification results of an opinion
+mining system, hypothesizing that this finding was mostly due to the
+limited training set size of the latter authors.  To check this
+hypothesis, \citeauthor{Cui:06} collected a set of 320K product
+reviews from \url{froogle.google.com} and trained three different NL
+classifiers on these data: an online passive-agreessive
+system~\cite{Crammer:06}, the winnow algorithm~\cite{Hurst:04}, and a
+generative language model~\cite{Manning:99}.  The authors achieved
+their best results with the first option, getting 0.9007 overall
+\F-scores for both polarity classes and observing consistent
+improvements with the increasing order of $n$-grams.  Moreover,
+\citeauthor{Cui:06} also refuted another argument
+of~\citet{Pang:04}---namely, the need for skipping objective sentences
+while doing polarity classification---conjecturing that this step was
+only useful for certain domains such as movie or book reviews, but
+could not generalize to more technical genres.
 
 \todo[inline]{\citet{Wiebe:05a}}
 
@@ -1033,6 +1034,199 @@ frequencies as feature values.
 \todo[inline]{SemEval 2013}
 
 \todo[inline]{\citet{Mohammad:13}}
+
+Among submissions from 44 teams in a competition, our submissions
+stood first in both tasks on tweets, obtaining an F-score of 69.02 in
+the message-level task and 88.93 in the term-level task.  We also
+generated two large word-sentiment association lexicons, one from
+tweets with sentiment-word hashtags, and one from tweets with
+emoticons.  In the message-level task, the lexicon-based features
+provided a gain of 5 F-score points over all others.
+
+In this paper, we describe how we created two state-of-the-art SVM
+classifiers, one to detect the sentiment of messages such as tweets
+and SMS (message-level task) and one to detect the sentiment of a term
+within a message (term-level task).  We implemented a number of
+surface-form, semantic, and sentiment features. We also generated two
+large word-sentiment association lexicons, one from tweets with
+sentiment-word hashtags, and one from tweets with emoticons. The
+automatically generated lexicons were particularly useful. In the
+message-level task for tweets, they alone provided a gain of more than
+5 F-score points over and above that obtained using all other
+features. The lexicons are made freely available.
+
+The manually created lexicons we used include the NRC Emotion Lexicon
+(Mohammad and Turney, 2010; Mohammad and Yang, 2011) (about 14,000
+words), the MPQA Lexicon (Wilson et al., 2005) (about 8,000 words),
+and the Bing Liu Lexicon (Hu and Liu, 2004) (about 6,800 words).
+
+\textbf{Hashtag Lexicon:}
+
+We polled the Twitter API every four hours from April to December 2012
+in search of tweets with ei- ther a positive word hashtag or a
+negative word hash- tag. A collection of 78 seed words closely related
+to positive and negative such as \#good, \#excellent, \#bad, and
+\#terrible were used (32 positive and 36 negative). These terms were
+chosen from entries for positive and negative in the Roget's
+Thesaurus.  A set of 775,000 tweets were used to generate a large
+word-sentiment association lexicon. A tweet was considered positive if
+it had one of the 32 pos- itive hashtagged seed words, and negative if
+it had one of the 36 negative hashtagged seed words. The association
+score for a term w was calculated from these pseudo-labeled tweets as
+shown below:
+
+score(w) = PMI(w, positive) - PMI(w, negative) (1)
+
+where PMI stands for pointwise mutual informa- tion. A positive score
+indicates association with pos- itive sentiment, whereas a negative
+score indicates association with negative sentiment. The magni- tude
+is indicative of the degree of association. The final lexicon, which
+we will refer to as the NRC Hashtag Sentiment Lexicon has entries for
+54,129 unigrams and 316,531 bigrams. Entries were also generated for
+unigram-unigram, unigram-bigram, and bigram-bigram pairs that were not
+necessarily contiguous in the tweets corpus. Pairs with certain
+punctuations, `@' symbols, and some function words were removed. The
+lexicon has entries for 308,808 non-contiguous pairs.
+
+\textbf{Sentiment 140 Lexicon:}
+
+The sentiment140 corpus (Go et al., 2009) is a collection of 1.6
+million tweets that contain pos- itive and negative emoticons. The
+tweets are labeled positive or negative according to the emoticon. We
+generated a sentiment lexicon from this corpus in the same manner as
+described above (Sec- tion 2.2.1). This lexicon has entries for 62,468
+unigrams, 677,698 bigrams, and 480,010 noncontiguous pairs.
+
+We trained a Support Vector Machine (SVM) (Fan et al., 2008) on the
+training data provided.
+
+We normalized all URLs to http://someurl and all
+userids to @someuser. We tokenized and part-of-
+speech tagged the tweets with the Carnegie Mellon
+University (CMU) Twitter NLP tool (Gimpel et al.,
+2011). Each tweet was represented as a feature vec-
+tor made up of the following groups of features:
+
+- word ngrams: presence or absence of contigu-
+ous sequences of 1, 2, 3, and 4 tokens; non-
+contiguous ngrams (ngrams with one token re-
+placed by *);
+
+- character ngrams: presence or absence of con-
+tiguous sequences of 3, 4, and 5 characters;
+
+- all-caps: the number of words with all charac-
+ters in upper case;
+
+- POS: the number of occurrences of each part-
+of-speech tag;
+
+- hashtags: the number of hashtags;
+
+- lexicons: the following sets of features were
+generated for each of the three manually con-
+structed sentiment lexicons (NRC Emotion
+Lexicon, MPQA, Bing Liu Lexicon) and for
+each of the two automatically constructed lex-
+icons (Hashtag Sentiment Lexicon and Senti-
+ment140 Lexicon). Separate feature sets were
+produced for unigrams, bigrams, and non-
+contiguous pairs. The lexicon features were
+created for all tokens in the tweet, for each part-
+of-speech tag, for hashtags, and for all-caps to-
+kens. For each token w and emotion or po-
+larity p, we used the sentiment/emotion score
+score(w, p) to determine:
+
+-- total count of tokens in the tweet with score(w, p) > 0;
+
+-- total score = w$\in$tweet score(w, p);
+
+-- the maximal score = max w$\in$tweet score(w, p);
+
+-- the score of the last token in the tweet with score(w, p) > 0;
+
+-- emoticons: The polarity of an emoticon was
+determined with a regular expression adopted
+from Christopher Potts' tokenizing script: 4
+
+-- presence or absence of positive and nega-
+tive emoticons at any position in the tweet;
+
+-- whether the last token is a positive or neg-
+ative emoticon;
+
+- elongated words: the number of words with one
+character repeated more than two times, for ex-
+ample, `soooo';
+
+- clusters: The CMU pos-tagging tool provides
+the token clusters produced with the Brown
+clustering algorithm on 56 million English-
+language tweets. These 1,000 clusters serve as
+alternative representation of tweet content, re-
+ducing the sparcity of the token space.
+
+-- the presence or absence of tokens from
+each of the 1000 clusters;
+
+- negation: the number of negated contexts. Fol-
+lowing (Pang et al., 2002), we defined a negated
+context as a segment of a tweet that starts
+with a negation word (e.g., no, shouldn't) and
+ends with one of the punctuation marks: `,',
+`.', `:', `;', `!', `?'. A negated context af-
+fects the ngram and lexicon features: we add
+` NEG' suffix to each word following the nega-
+tion word (`perfect' becomes `perfect NEG').
+The `NEG' suffix is also added to polarity and
+emotion features (`POLARITY positive' be-
+comes `POLARITY positive NEG'). The list
+of negation words was adopted
+
+We trained the SVM classifier on the set of 9,912 annotated tweets
+(8,258 in the training set and 1,654 in the development set). We
+applied the model to the test set of 3,813 unseen tweets. The same
+model was applied unchanged to the other test set of 2,094 SMS
+messages as well.
+
+The results ob- tained by our system on the training set (ten-fold
+cross-validation), development set (when trained on the training set),
+and test sets (when trained on the combined set of tweets in the
+training and devel- opment sets) are shown in Table 2. The table also
+shows baseline results obtained by a majority clas- sifier that always
+predicts the most frequent class as output. Since the bottom-line
+F-score is based only on the F-scores of positive and negative classes
+(and not on neutral), the majority baseline chose the most frequent
+class among positive and negative, which in this case was the positive
+class. We also show baseline results obtained using an SVM and unigram
+features alone. Our system (SVM and all features) obtained a
+macro-averaged F-score of 69.02 on the tweet set and 68.46 on the SMS
+set. In the SemEval- 2013 competition, our submission ranked first on
+both datasets. There
+
+
+Table 3 shows the results of the ablation experi- ments where we
+repeat the same classification pro- cess but remove one feature group
+at a time. The most influential features for both datasets turned out
+to be the sentiment lexicon features: they provided gains of more than
+8.5\%. It is interesting to note that tweets benefited mostly from the
+automatic sen- timent lexicons (NRC Hashtag Lexicon and the Sen-
+timent140 Lexicon) whereas the SMS set benefited more from the manual
+lexicons (MPQA, NRC Emo- tion Lexicon, Bing Liu Lexicon). Among the
+au- tomatic lexicons, both the Hashtag Sentiment Lex- icon and the
+Sentiment140 Lexicon contributed to roughly the same amount of
+improvement in perfor- mance on the tweet set.
+
+The second most important feature group for the message-level task was
+that of ngrams (word and character ngrams).
+
+Attention to negations improved performance on both datasets. Removing
+the sentiment encoding features like hashtags, emoticons, and
+elongated words, had almost no impact on performance, but this is
+probably because the discriminating informa- tion in them was also
+captured by some other fea- tures such as character and word ngrams
+
 \todo[inline]{\citet{Guenther:13}}
 \todo[inline]{\citet{Reckman:13}}
 
