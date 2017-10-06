@@ -89,16 +89,18 @@ of the \texttt{Mate} dependency parser
 We again divided the PotTS corpus~\cite{Sidarenka:16} into a training,
 development, and test set, using 70\% of the tweets for learning, 10\%
 for tuning and picking the optimal hyperparameters, and the remaining
-20\% for evaluating the results.  We inferred polarity labels for
-these microblogs with a simple heuristic rule, assigning the positive
-(negative) class to the messages which had exclusively positive
-(negative) sentiments and skipping all microblogs that simultaneously
-contained multiple opinions with different semantic orientations.  In
-cases when a sentiment was absent, we resorted to a fallback strategy,
+20\% for evaluating the results.  We inferred the polarity labels for
+these microblogs with a simple heuristic rule akin to the one used
+by~\citet{Wiebe:05a}, and assigned the positive (negative) class to
+the messages which had exclusively positive (negative) sentiments,
+skipping all microblogs that simultaneously contained multiple
+opinions with different semantic orientations.  In cases when a
+sentiment was absent, we resorted to a fallback strategy by
 considering all tweets with only positive (negative) polar terms as
-positive (negative) except for messages which featured expressions
-from both polarity classes, and taking the rest of the corpus (i.e.,
-posts without any sentiments nor polar terms) as neutral instances.
+positive (negative), disregarding the messages which featured
+expressions from both polarity classes, and taking the rest of the
+corpus (i.e., posts with neither sentiments nor polar terms) as
+neutral instances.
 
 A few examples of such heuristically inferred labels are provided
 below:
@@ -704,137 +706,29 @@ while doing polarity classification---conjecturing that this step was
 only useful for certain domains such as movie or book reviews, but
 could not generalize to more technical genres.
 
-\todo[inline]{\citet{Wiebe:05a}}
+\done[inline]{\citet{Wiebe:05a}}
 
-This paper presents the results of developing subjectivity classifiers
-using only unannotated texts for training. The performance rivals that
-of previous supervised learning approaches. In addition, we advance
-the state of the art in objective sentence classification by learning
-extraction patterns associated with objectivity and creating objective
-classifiers that achieve substantially higher recall than previous
-work with comparable precision.
-
-The goal of our research is to develop learning methods to create
-classifiers that can distinguish subjective from objective
-sentences. We strive to develop systems that excel at subjective
-classification as well as objective classification.
-
-The texts used in our experiments are English language versions of
-articles from the world press. The data is from a variety of countries
-and publications and covers many different topics (it was obtained
-from the Foreign Broadcast Infor- mation Service (FBIS), a
-U.S. goverment agency). 535 texts from this collection have been
-manually annotated with respect to subjectivity as part of a U.S.
-government funded program on automatic question answering. 3 These
-manually annotated texts comprise the Multi-Perspective Question
-Answering (MPQA) corpus and are freely available at
-nrrc.mitre.org/NRRC/publications.htm.
-
-The test set used in our evaluations consists of 9,289 of the
-sentences in the MPQA corpus. None of this test data was used to
-produce any of the features included in our experiments. 5104 of the
-sentences in the test set (54.9\% of the data) are subjective
-according to the definitions given below. Thus, the accuracy of a
-baseline classifier that chooses the most frequent class is 54.9\%.
-Our unannotated text corpus consists of 298,809 sentences from the
-world press collection, and is distinct from the annotated MPQA
-corpus.
-
-As a starting point for our research, we reimplemented the high
-precision, low re- call subjective and objective classifiers that we
-previously developed [4]. We will refer to these as the rule-based
-classifiers because they do not involve learning but merely classify
-sentences by looking for well-established general subjectivity clues
-that have been previously published in the literature. 4 Some are
-drawn from manually developed resources, including entries from [6,
-7], Framenet lem- mas with frame element experiencer [8], and
-adjectives manually annotated for polarity [9]. Some were learned from
-corpora, including words distributionally similar to subjective seed
-words [10], n-grams [11, 12], and subjective nouns learned using
-extraction pattern (EP ) bootstrapping [5]. The clues were divided
-into strong and weak subjective clues, where strong subjective clues
-have subjec- tive meanings with high probability, and weak subjective
-clues have subjective meanings with lower probability.
-
-The rule-based subjective classifier classifies a sentence as
-subjective if it contains two or more strong subjective clues
-(otherwise, it does not label the sentence). In contrast, the
-rule-based objective classifier looks for the absence of clues: it
-classifies a sentence as objective if there are no strong subjective
-clues in the current sentence, there is at most one strong subjective
-clue in the previous and next sentence combined, and at most 2 weak
-subjective clues in the current, previous, and next sentence combined
-(otherwise, it does not label the sentence).
-
-Our research uses these rule-based classifiers to generate training
-data for subsequent learning algorithms, which we will describe in the
-coming sections.  Figure 1 shows the first stage of the training data
-creation process. The rule- based subjective classifier is applied to
-the unlabeled corpus to identify sentences that it can label as
-subjective. Similarly, the rule-based objective classifier iden-
-tifies sentences that it can label as objective. These subjective and
-objective sentences form our initial training set.
-
-On the annotated test set, the rule-based subjective classifier
-achieved 34.2\% subjective recall and 90.4\% subjective precision. The
-rule-based objective clas- sifier achieved 30.7\% objective recall and
-82.4\% objective precision. Based on these results, we expect that the
-initial training set generated by these classi- fiers is of relatively
-high quality. Of the 298,809 sentences in the unannotated text corpus,
-the rule-based classifiers labeled 52,918 sentences as subjective and
-47,528 as objective, creating a training set of over 100,000
-sentences.
-
-Consequently, we also decided to explore the idea of learning
-extraction pat- terns that are correlated with objectivity and then
-using them as features in a machine learning algorithm. To learn
-extraction patterns, we used the AutoSlog- TS [13] algorithm because
-it does not need annotated texts for training. Instead, AutoSlog-TS
-requires one set of ``relevant'' texts and one set of ``irrelevant''
-texts.  Extraction patterns are created by applying a set of syntactic
-templates to the corpus. The syntactic constructions recognized by
-AutoSlog-TS are described in [13] and reflect syntactic relationships
-identified by a shallow parser.
-
-Next, we incorporated the learned EPs into the rule-based classifiers
-as follows. The subjective patterns were added to the set of strong
-subjective clues, which are used by both the subjective and objective
-rule-based classifiers. The strategy used by the rule-based subjective
-classifier remained the same. However, the strategy used by the
-rule-based objective classifier was augmented as follows: in addition
-to its previous rules, a sentence is also labeled as objective if it
-contains no strong subjective clues but at least one objective
-EP. Note that adding the subjective EPs to the set of strong
-subjective clues works to decrease the recall of the objective
-classifier because it looks for the absence of subjectivity
-clues. To balance that effect, the additional test for objective EPs
-can serve to increase the recall of the objective classifier.
-
-The initial training data used by the naive Bayes classifier was
-generated by the rule-based classifiers, which simply look for the
-presence or absence of a set of general subjectivity clues. There are
-obvious concerns associated with this type of automatically created
-training data, such as potential biases introduced by the rules. A
-related concern is that the training sentences will be similar to one
-another and less heterogenous than the set of sentences that the
-classifier will ultimately be applied to.
-
-We therefore saw an opportunity to try to improve the classifier by
-gen- erating a new training set using the classifier itself. The naive
-Bayes classifier uses a greater variety of features than the
-rule-based classifiers and it exploits a probabilistic model to make
-classification decisions based on combinations of these features. We
-hypothesized that the naive Bayes classifier might be able to reliably
-label a different, and perhaps more diverse, set of sentences in the
-unlabeled corpus than the rule-based classifiers did.
-
-The recall of the learned patterns improved substantially using the
-new train- ing set, with just a minor drop in precision: subjective
-precision of the subjective patterns decreased from 74.5\% to 73.1\%,
-and objective precision of the objective patterns decreased from
-71.3\% to 68.9\%, while subjective recall of the subjec- tive patterns
-increased from 59.8\% to 66.2\% and objective recall of the objective
-patterns increased from 11.7\% to 17.0\%.
+A semi-supervised approach to sentence-level subjectivity prediction
+was proposed by~\citet{Wiebe:05a}.  Using an existing rule-based
+sentiment system, the authors classified a large set of unlabeled
+sentences from newspaper articles into subjective and objective ones,
+achieving 34.2\% recall and 90.4\% precision for the former class and
+getting 30.7\% recall and 82.4\% precision for the latter orientation.
+Afterwards, with the help of the AutoSlog-TS
+algorithm~\cite{Riloff:96}, they extracted frequent lexico-syntactic
+patterns that strongly correlated with the subjectivity of a sentence,
+and trained a Na{\"i}ve Bayes system, considering the occurrences of
+the learned patterns as features.  In an attempt to improve the
+results of this approach even further, \citeauthor{Wiebe:05a} also
+implemented a self-improvement strategy in which they relabeled the
+original unannotated dataset with the obtained NB classifier, then
+took one half of the most confidently classified sentences as a new
+training set, and extracted new subjectivity patterns, retraining the
+Na{\"i}ve Bayes module on the updated set of features.  With this
+final classifier, the authors attained an accuracy of 73.8\% on
+predicting the subjectivity of sentences in the MPQA
+corpus~\cite{Wiebe:05}, coming close to the results achieved by a
+fully supervised ML approach (76\%).
 
 \todo[inline]{\citet{Riloff:06}}
 
