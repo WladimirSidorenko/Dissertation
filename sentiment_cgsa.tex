@@ -812,203 +812,44 @@ the datasets of \citet{Pang:04}, \citet{Jindal:07}, and
 bi-gram and tri-gram features without negation when using term
 frequencies as feature values.
 
-\todo[inline]{SemEval}
 
 \todo[inline]{SemEval 2013}
 
-\todo[inline]{\citet{Mohammad:13}}
+\done[inline]{\citet{Mohammad:13}}
 
-Among submissions from 44 teams in a competition, our submissions
-stood first in both tasks on tweets, obtaining an F-score of 69.02 in
-the message-level task and 88.93 in the term-level task.  We also
-generated two large word-sentiment association lexicons, one from
-tweets with sentiment-word hashtags, and one from tweets with
-emoticons.  In the message-level task, the lexicon-based features
-provided a gain of 5 F-score points over all others.
-
-In this paper, we describe how we created two state-of-the-art SVM
-classifiers, one to detect the sentiment of messages such as tweets
-and SMS (message-level task) and one to detect the sentiment of a term
-within a message (term-level task).  We implemented a number of
-surface-form, semantic, and sentiment features. We also generated two
-large word-sentiment association lexicons, one from tweets with
-sentiment-word hashtags, and one from tweets with emoticons. The
-automatically generated lexicons were particularly useful. In the
-message-level task for tweets, they alone provided a gain of more than
-5 F-score points over and above that obtained using all other
-features. The lexicons are made freely available.
-
-The manually created lexicons we used include the NRC Emotion Lexicon
-(Mohammad and Turney, 2010; Mohammad and Yang, 2011) (about 14,000
-words), the MPQA Lexicon (Wilson et al., 2005) (about 8,000 words),
-and the Bing Liu Lexicon (Hu and Liu, 2004) (about 6,800 words).
-
-\textbf{Hashtag Lexicon:}
-
-We polled the Twitter API every four hours from April to December 2012
-in search of tweets with ei- ther a positive word hashtag or a
-negative word hash- tag. A collection of 78 seed words closely related
-to positive and negative such as \#good, \#excellent, \#bad, and
-\#terrible were used (32 positive and 36 negative). These terms were
-chosen from entries for positive and negative in the Roget's
-Thesaurus.  A set of 775,000 tweets were used to generate a large
-word-sentiment association lexicon. A tweet was considered positive if
-it had one of the 32 pos- itive hashtagged seed words, and negative if
-it had one of the 36 negative hashtagged seed words. The association
-score for a term w was calculated from these pseudo-labeled tweets as
-shown below:
-
-score(w) = PMI(w, positive) - PMI(w, negative) (1)
-
-where PMI stands for pointwise mutual informa- tion. A positive score
-indicates association with pos- itive sentiment, whereas a negative
-score indicates association with negative sentiment. The magni- tude
-is indicative of the degree of association. The final lexicon, which
-we will refer to as the NRC Hashtag Sentiment Lexicon has entries for
-54,129 unigrams and 316,531 bigrams. Entries were also generated for
-unigram-unigram, unigram-bigram, and bigram-bigram pairs that were not
-necessarily contiguous in the tweets corpus. Pairs with certain
-punctuations, `@' symbols, and some function words were removed. The
-lexicon has entries for 308,808 non-contiguous pairs.
-
-\textbf{Sentiment 140 Lexicon:}
-
-The sentiment140 corpus (Go et al., 2009) is a collection of 1.6
-million tweets that contain pos- itive and negative emoticons. The
-tweets are labeled positive or negative according to the emoticon. We
-generated a sentiment lexicon from this corpus in the same manner as
-described above (Sec- tion 2.2.1). This lexicon has entries for 62,468
-unigrams, 677,698 bigrams, and 480,010 noncontiguous pairs.
-
-We trained a Support Vector Machine (SVM) (Fan et al., 2008) on the
-training data provided.
-
-We normalized all URLs to http://someurl and all
-userids to @someuser. We tokenized and part-of-
-speech tagged the tweets with the Carnegie Mellon
-University (CMU) Twitter NLP tool (Gimpel et al.,
-2011). Each tweet was represented as a feature vec-
-tor made up of the following groups of features:
-
-- word ngrams: presence or absence of contigu-
-ous sequences of 1, 2, 3, and 4 tokens; non-
-contiguous ngrams (ngrams with one token re-
-placed by *);
-
-- character ngrams: presence or absence of con-
-tiguous sequences of 3, 4, and 5 characters;
-
-- all-caps: the number of words with all charac-
-ters in upper case;
-
-- POS: the number of occurrences of each part-
-of-speech tag;
-
-- hashtags: the number of hashtags;
-
-- lexicons: the following sets of features were
-generated for each of the three manually con-
-structed sentiment lexicons (NRC Emotion
-Lexicon, MPQA, Bing Liu Lexicon) and for
-each of the two automatically constructed lex-
-icons (Hashtag Sentiment Lexicon and Senti-
-ment140 Lexicon). Separate feature sets were
-produced for unigrams, bigrams, and non-
-contiguous pairs. The lexicon features were
-created for all tokens in the tweet, for each part-
-of-speech tag, for hashtags, and for all-caps to-
-kens. For each token w and emotion or po-
-larity p, we used the sentiment/emotion score
-score(w, p) to determine:
-
--- total count of tokens in the tweet with score(w, p) > 0;
-
--- total score = w$\in$tweet score(w, p);
-
--- the maximal score = max w$\in$tweet score(w, p);
-
--- the score of the last token in the tweet with score(w, p) > 0;
-
--- emoticons: The polarity of an emoticon was
-determined with a regular expression adopted
-from Christopher Potts' tokenizing script: 4
-
--- presence or absence of positive and nega-
-tive emoticons at any position in the tweet;
-
--- whether the last token is a positive or neg-
-ative emoticon;
-
-- elongated words: the number of words with one
-character repeated more than two times, for ex-
-ample, `soooo';
-
-- clusters: The CMU pos-tagging tool provides
-the token clusters produced with the Brown
-clustering algorithm on 56 million English-
-language tweets. These 1,000 clusters serve as
-alternative representation of tweet content, re-
-ducing the sparcity of the token space.
-
--- the presence or absence of tokens from
-each of the 1000 clusters;
-
-- negation: the number of negated contexts. Fol-
-lowing (Pang et al., 2002), we defined a negated
-context as a segment of a tweet that starts
-with a negation word (e.g., no, shouldn't) and
-ends with one of the punctuation marks: `,',
-`.', `:', `;', `!', `?'. A negated context af-
-fects the ngram and lexicon features: we add
-` NEG' suffix to each word following the nega-
-tion word (`perfect' becomes `perfect NEG').
-The `NEG' suffix is also added to polarity and
-emotion features (`POLARITY positive' be-
-comes `POLARITY positive NEG'). The list
-of negation words was adopted
-
-We trained the SVM classifier on the set of 9,912 annotated tweets
-(8,258 in the training set and 1,654 in the development set). We
-applied the model to the test set of 3,813 unseen tweets. The same
-model was applied unchanged to the other test set of 2,094 SMS
-messages as well.
-
-The results ob- tained by our system on the training set (ten-fold
-cross-validation), development set (when trained on the training set),
-and test sets (when trained on the combined set of tweets in the
-training and devel- opment sets) are shown in Table 2. The table also
-shows baseline results obtained by a majority clas- sifier that always
-predicts the most frequent class as output. Since the bottom-line
-F-score is based only on the F-scores of positive and negative classes
-(and not on neutral), the majority baseline chose the most frequent
-class among positive and negative, which in this case was the positive
-class. We also show baseline results obtained using an SVM and unigram
-features alone. Our system (SVM and all features) obtained a
-macro-averaged F-score of 69.02 on the tweet set and 68.46 on the SMS
-set. In the SemEval- 2013 competition, our submission ranked first on
-both datasets. There
-
-
-Table 3 shows the results of the ablation experi- ments where we
-repeat the same classification pro- cess but remove one feature group
-at a time. The most influential features for both datasets turned out
-to be the sentiment lexicon features: they provided gains of more than
-8.5\%. It is interesting to note that tweets benefited mostly from the
-automatic sen- timent lexicons (NRC Hashtag Lexicon and the Sen-
-timent140 Lexicon) whereas the SMS set benefited more from the manual
-lexicons (MPQA, NRC Emo- tion Lexicon, Bing Liu Lexicon). Among the
-au- tomatic lexicons, both the Hashtag Sentiment Lex- icon and the
-Sentiment140 Lexicon contributed to roughly the same amount of
-improvement in perfor- mance on the tweet set.
-
-The second most important feature group for the message-level task was
-that of ngrams (word and character ngrams).
-
-Attention to negations improved performance on both datasets. Removing
-the sentiment encoding features like hashtags, emoticons, and
-elongated words, had almost no impact on performance, but this is
-probably because the discriminating informa- tion in them was also
-captured by some other fea- tures such as character and word ngrams
+Finally, with the introduction of the SemEval competition in sentiment
+analysis of
+Twitter~\cite{Nakov:13,Rosenthal:14,Rosenthal:15,Nakov:16}, a plethora
+of new CGSA applications have appeared on the scientific scene, most
+of which relied on traditional supervised machine-learning techniques.
+One of the most prominent and arguably well-known such systems was
+proposed by~\citet{Mohammad:13}, who trained a linear SVM classifier
+on an extensive set of linguistic features including character and
+token $n$-grams, Brown clusters~\cite{Brown:92}, statistics on
+part-of-speech tags, punctuation marks, elongated words etc.  However,
+the most useful type of attributes, as noted by the authors, turned
+out to be features that reflected information from various sentiment
+lexicons.  In particular, depending on the type of the polarity list
+from which such information was extracted, the authors introduced two
+types of lexicon attributes: \emph{manual} and \emph{automatic} ones.
+The former group was computed with the help of the NRC emotion
+lexicon~\cite{Mohammad:13a}, MPQA polarity list~\cite{Wilson:05}, and
+Bing Liu's manually compiled polarity set~\cite{Hu:04}.  For each of
+these resources and for each of the non-neutral polarity classes
+(positive and negative), \citeauthor{Mohammad:13} calculated the total
+sum of the lexicon scores for all message tokens and also separately
+estimated these statistics for each particular part-of-speech tag,
+considering them as additional attributes.  Automatic features were
+obtained using automatically generated Sentiment140 and Hashtag
+Sentiment Base polarity lists \cite{Kiritchenko:14}.  Again, for each
+of these lexicons, for each of the two polarity classes, the authors
+produced four features representing the number of tokens with non-zero
+scores, the sum and the maximum of all respective lexicon values for
+all tweet tokens, and the score of the last term.  This final system
+ranked first in the inaugural run of the SemEval task, attaining
+0.69~\F-score on the three-way classification task, with the automatic
+lexicon features alone accounting for at least five percent boost in
+the performance of this model.
 
 \todo[inline]{\citet{Guenther:13}}
 \todo[inline]{\citet{Reckman:13}}
