@@ -730,138 +730,27 @@ predicting the subjectivity of sentences in the MPQA
 corpus~\cite{Wiebe:05}, coming close to the results achieved by a
 fully supervised ML approach (76\%).
 
-\todo[inline]{\citet{Riloff:06}}
+\done[inline]{\citet{Riloff:06}}
 
-Riloff, Patwardhan and Wiebe (2006) studied relationships among
-different features. They defined subsumption relationships among
-unigrams, n-grams and lexico-syntactic patterns. If a feature is
-subsumed by another, the subsumed feature is not needed. This can
-remove many redundant features.
-
-We analyze two feature representations that have been used for opinion
-analysis: Ngrams and Extraction Patterns. Information extraction (IE)
-patterns are lexico-syntactic patterns that represent expressions
-which identify role relationships.  For example, the pattern ``<subj>
-ActVP(recommended)'' extracts the subject of active-voice instances of
-the verb ``recommended'' as the recommender.  The pattern ``<subj>
-PassVP(recommended)'' extracts the subject of passive-voice instances
-of ``recommended'' as the object being recommended.
-
-Our goal is to use the subsumption hierarchy to identify Ngram and
-extraction pattern features that are more strongly associated with
-opinions than simpler features. We used three types of features in our
-research: unigrams, bigrams, and IE patterns.
-
-We created a subsumption hierarchy that defines the representational
-scope of different types of features. We will say that feature A
-representationally subsumes feature B if the set of text spans that
-match feature A is a superset of the set of text spans that match
-feature B. For example, the unigram ``happy'' subsumes the bigram
-``very happy'' because the set of text spans that match ``happy''
-includes the text spans that match ``very happy''.
-
-To estimate the quality of a feature, we use Information Gain (IG)
-because that has been shown to work well as a metric for feature
-selection (Forman, 2003). We will say that feature A behaviorally
-subsumes feature B if two criteria are met: (1) A representationally
-subsumes B, and (2) IG(A) $\geq$ IG(B) $\delta$, where $\delta$ is a
-parameter representing an acceptable margin of performance dif-
-ference. For example, if $\delta$=0 then condition (2) means that
-feature A is just as valuable as feature B because its information
-gain is the same or higher. If $\delta$>0 then feature A is allowed to
-be a little worse than feature B, but within an acceptable
-margin. For example, $\delta$=.0001 means that A's information gain
-may be up to .0001 lower than B's information gain, and that is
-considered to be an acceptable performance difference (i.e., A is good
-enough that we are comfortable discarding B in favor of the more
-general feature A).
-
-Note that based on the subsumption hierarchy shown in Figure 2, all
-1Grams will always survive the subsumption process because they
-cannot be subsumed by any other types of features. Our goal is to
-identify complex features that are worth adding to a set of unigram
-features.
-
-We used three opinion-related data sets for our analyses and
-experiments: the OP data set created by (Wiebe et al., 2004), the
-Polarity data set 5 created by (Pang and Lee, 2004), and the MPQA data
-set created by (Wiebe et al., 2005).
-
-Polarity data sets involve document-level opinion classification,
-while the MPQA data set involves sentence-level classification.
-
-The OP data consists of 2,452 documents from the Penn Treebank (Marcus
-et al., 1993). Metadata tags assigned by the Wall Street Journal
-define the opinion/non-opinion classes: the class of any document
-labeled Editorial, Letter to the Editor, Arts \& Leisure Review, or
-Viewpoint by the Wall Street Journal is opinion, and the class of
-documents in all other categories (such as Business and News) is
-non-opinion. This data set is highly skewed, with only 9\% of the
-documents belonging to the opinion class. Consequently, a trivial (but
-useless) opinion classifier that labels all documents as nonopinion
-articles would achieve 91\% accuracy.  The Polarity data consists of
-700 positive and 700 negative reviews from the Internet Movie Database
-(IMDb) archive. The positive and negative classes were derived from
-author ratings expressed in stars or numerical values. The MPQA data
-consists of English language versions of articles from the world
-press. It contains 9,732 sentences that have been manually annotated
-for subjective expressions. The opinion/non-opinion classes are
-derived from the lower-level annotations: a sentence is an opinion
-if it contains a subjective expression of medium or higher
-intensity; otherwise, it is a non-opinion sentence. 55\% of the
-sentences belong to the opinion class.
-
-When creating opinion classifiers, people often throw in a variety of
-features and trust the machine learning algorithm to figure out how
-to make the best use of them. However, we hypothesized that
-classifiers may perform better if we can proactively eliminate
-features that are not necesary because they are subsumed by other
-features. In this section, we present a series of experiments to ex-
-plore this hypothesis. First, we present the results for an SVM
-classifier trained using different sets of unigram, bigram, and
-extraction pattern features, both before and after
-subsumption. Next, we evaluate a standard feature selection approach
-as an alternative to subsumption and then show that combining
-subsumption with standard feature selection produces the best
-results of all.
-
-To see whether feature subsumption can improve classification
-performance, we trained an SVM classifier for each of the three
-opinion data sets.  We used the SVM light (Joachims, 1998) package
-with a linear kernel. For the Polarity and OP data we discarded all
-features that have frequency < 5, and for the MPQA data we discarded
-features that have frequency < 2 because this data set is sub-
-stantially smaller. All of our experimental results are averages over
-3-fold cross-validation.  First, we created 4 baseline classifiers: a
-1Gram classifier that uses only the unigram features; a 1+2Gram
-classifier that uses unigram and bigram features; a 1+EP classifier
-that uses unigram and extraction pattern features, and a 1+2+EP
-classifier that uses all three types of features. Next, we created
-analogous 1+2Gram, 1+EP, and 1+2+EP classifiers but applied the
-subsumption hierarchy first to eliminate unnecessary features be-
-fore training the classifier. We experimented with three delta values
-for the subsumption process: $\delta$=.0005, .001, and .002.
-
-Figures 7, 8, and 9 show the results. The subsumption process
-produced small but consistent improvements on all 3 data sets. For
-example, Figure 8 shows the results on the OP data, where all of the
-accuracy values produced after subsumption (the rightmost 3 columns)
-are higher than the accuracy values produced without subsumption
-(the Base[line] column). For all three data sets, the best overall
-accuracy (shown in boldface) was always achieved after subsumption.
-
-On all 3 data sets, traditional feature selection performs worse than
-the baseline in some cases, and it virtually never outperforms the
-best classifier trained after subsumption (but without feature
-selection). Furthermore, the combination of subsumption plus feature
-selection generally performs best of all, and nearly always
-outperforms feature selection alone. For all 3 data sets, our best ac-
-curacy results were achieved by performing subsumption prior to
-feature selection. The best accuracy results are 99.0\% on the OP
-data, 83.1\% on the Polarity data, and 75.4\% on the MPQA data.  For
-the OP data, the improvement over baseline for both accuracy and
-F-measure are statistically significant at the p < 0.05 level (paired
-t-test).
+\citet{Riloff:06} addressed the problem of redundant features,
+hypothesizing that correlated attributes (such as unigram
+``\emph{happy}'' and bigram ``\emph{very happy}'') would rather harm
+the performance of a classifier than improve its accuracy.  To prove
+this hypothesis, the authors defined two kinds of redundancy relations
+which could exist between intersecting input traits:
+\emph{representational} and \emph{behavioral} subsumption.  The former
+former type was assumed to hold between features~$A$ and $B$ if all
+occurrences of the attribute~$A$ were a strict superset of the
+occurrences of~$B$.  The behavioral subsumption meant that the
+information gain (IG) \cite{Forman:03} of the feture $B$ was at most
+some negligible value $\delta$ lower than the respective IG score of
+the attribute $A$.  In their experiments, \citeauthor{Riloff:06}
+observed that the accuracy of an SVM classifier indeed increased (from
+81.7 to 82.7\% on the IMDBP dataset and from 74.4 to 74.9\% on the
+MPQA corpus) after they excluded all attributes that were
+representationally and behaviorally subsumed by other features.  These
+improvements even outperformed the gains that could be achieved with
+traditional feature selection methods.
 
 \done[inline]{\citet{Bickerstaffe:10}}
 
