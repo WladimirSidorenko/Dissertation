@@ -875,19 +875,32 @@ $n$-grams, word clusters, disambiguated senses, and lexicon scores of
 message tokens.  Similarly to the NRC-Canada system
 of~\citet{Mohammad:13}, the authors made heavy use of various kinds of
 polarity lists including AFINN-111~\cite{Nielsen:11}, Liu's Opinion
-Lexicon~\cite{\cite{Hu:04}} , General Inquirer~\cite{Stone:66}, MPQA
-Polarity List \cite{Wiebe:05a}, NRC Hashtag and Sentiment140
-Lexicon~\cite{Mohammad:13}, and SentiWordNet~\cite{Esuli:06a}.
-However, contrary to \citeauthor{Mohammad:13}'s approach,
-\citeauthor{Miura:14} also applied a whole set of preprocessing steps
-such as spelling correction, part-of-speech tagging with
-lemmatization, and a special weighting scheme for underrepresented
-polarity classes.  These enhancements, combined with a carefully tuned
-LogLinear classifier, allowed the authors to boost the sentiment
-classification results on SemEval~2014 test set to 0.71 average \F
-(measure on the two main polarity classes---positive and negative).
+Lexicon~\cite{Hu:04} , General Inquirer~\cite{Stone:66}, MPQA Polarity
+List \cite{Wiebe:05a}, NRC Hashtag and Sentiment140
+Lexicon~\cite{Mohammad:13}, and
+\textsc{SentiWordNet}~\cite{Esuli:06a}.  However, contrary to
+\citeauthor{Mohammad:13}'s approach, \citeauthor{Miura:14} also
+applied a whole set of preprocessing steps such as spelling
+correction, part-of-speech tagging with lemmatization, and a special
+weighting scheme for underrepresented polarity classes.  These
+enhancements, combined with a carefully tuned LogLinear classifier,
+allowed the authors to boost the sentiment classification results on
+SemEval~2014 test set to 0.71 average \F (measure on the two main
+polarity classes---positive and negative).
 
-\todo[inline]{\citet{Guenther:14}}
+\done[inline]{\citet{Guenther:14}}
+
+In the same vein, \citet{Guenther:14} improved their results from the
+previous SemEval run (from 0.654 to 0.691 two-class \F) by extending
+their original system with a Twitter-aware
+tokenizer~\cite{Owoputi:13}, spelling normalization module, and a
+significantly increased of lexicon-based features (this time, instead
+of simply relying on the \textsc{SentiWordNet} resource,
+\citeauthor{Guenther:14} harnessed a whole ensemble of various
+polarity lists including Liu's opinion list, MPQA subjectivity
+lexicon, and TwittrAttr polarity resource).  As proved by the ablation
+tests, the last change was of particular use to the classification
+accuracy, improving the scores by almost five percent.
 
 \todo[inline]{SemEval 2015}
 \todo[inline]{\citet{Hagen:15}}
@@ -1095,14 +1108,14 @@ function was redefined as follows:
 
 \todo[inline]{\citet{Tang:14b}}
 
-In this paper, we develop a deep learn- ing system for message-level
-Twitter sen- timent classification. Among the 45 sub- mitted systems
+In this paper, we develop a deep learning system for message-level
+Twitter sentiment classification. Among the 45 submitted systems
 including the SemEval 2013 participants, our system (Coooolll) is
 ranked 2nd on the Twitter2014 test set of SemEval 2014 Task
 9. Coooolll is built in a supervised learning framework by
 concatenating the sentiment-specific word embedding (SSWE) features
 with the state-of-the-art hand-crafted features.  We develop a neural
-network with hybrid loss function 1 to learn SSWE, which en- codes the
+network with hybrid loss function 1 to learn SSWE, which encodes the
 sentiment information of tweets in the continuous representation of
 words.  To obtain large-scale training corpora, we train SSWE from 10M
 tweets collected by positive and negative emoticons, without any
@@ -1207,11 +1220,11 @@ tweets. The reason is that the sentiment-specific word embedding is
 learned from the positive/negative supervision of tweets through
 emoticons, which is tailored for positive/negative classification of
 tweets. From Table 3 (right table), we find that the performance of
-positive/negative Twitter classification is con- sistent with the
-performance of 3-class classifica- tion. SSWE performs comparable to
+positive/negative Twitter classification is consistent with the
+performance of 3-class classification. SSWE performs comparable to
 STATE on T3 and T4, and yields better performance (1.62\% and 1.45\%
 improvements on T3 and T4, respectively) through feature
-combination. SSWE outperform- s W2V by large margins (more than 10\%)
+combination. SSWE outperforms W2V by large margins (more than 10\%)
 on T3 and T4, which further verifies the effectiveness of
 sentiment-specific word embedding.
 
