@@ -853,27 +853,40 @@ the performance of this model.
 
 \done[inline]{\citet{Guenther:13}}
 
-An akin solution (linear SVM with a rich set of features) was
-presented by~\citet{Guenther:13}.  Similarly to~\citet{Mohammad:13},
-the authors used unmodified and lemmatized unigrams, word clusters,
-and lexicon features.  However, in contrast to the previous system,
-this application utilized only one polarity list---that
+A similar solution (linear SVM with a rich set of features) was
+presented by~\citet{Guenther:13}.  Akin to~\citet{Mohammad:13}, the
+authors used unmodified and lemmatized unigrams, word clusters, and
+lexicon features.  However, in contrast to the previous system, this
+application utilized only one polarity list---that
 of~\citet{Esuli:05}.  Partially due to this fact,
 \citeauthor{Guenther:13} found the word cluster attribute working best
-among all features in the defined feature set, followed by the stemmed
-unigram attributes.  This method also yielded competitive results
-(0.653~\F) on the message-level polarity task, attaining second place
-in this competition.
-
-\done[inline]{\citet{Reckman:13}}
-
-\citet{Reckman:13} proposed a completely rule-based system, which
-nevertheless achieved 0.662~\F on the message classification task.
+among all features, followed by the stemmed unigram attributes.  This
+method also yielded competitive results (0.653~\F) on the
+message-level polarity task, attaining second place in this
+competition.
 
 \todo[inline]{SemEval 2014}
 
-\todo[inline]{\citet{Miura:14}}
-\todo[inline]{\citet{Tang:14b}}
+\done[inline]{\citet{Miura:14}}
+
+Later on these results were further improved by~\citet{Miura:14}, who
+also utilized a supervised ML approach with character and word
+$n$-grams, word clusters, disambiguated senses, and lexicon scores of
+message tokens.  Similarly to the NRC-Canada system
+of~\citet{Mohammad:13}, the authors made heavy use of various kinds of
+polarity lists including AFINN-111~\cite{Nielsen:11}, Liu's Opinion
+Lexicon~\cite{\cite{Hu:04}} , General Inquirer~\cite{Stone:66}, MPQA
+Polarity List \cite{Wiebe:05a}, NRC Hashtag and Sentiment140
+Lexicon~\cite{Mohammad:13}, and SentiWordNet~\cite{Esuli:06a}.
+However, contrary to \citeauthor{Mohammad:13}'s approach,
+\citeauthor{Miura:14} also applied a whole set of preprocessing steps
+such as spelling correction, part-of-speech tagging with
+lemmatization, and a special weighting scheme for underrepresented
+polarity classes.  These enhancements, combined with a carefully tuned
+LogLinear classifier, allowed the authors to boost the sentiment
+classification results on SemEval~2014 test set to 0.71 average \F
+(measure on the two main polarity classes---positive and negative).
+
 \todo[inline]{\citet{Guenther:14}}
 
 \todo[inline]{SemEval 2015}
@@ -1079,6 +1092,128 @@ function was redefined as follows:
   W_1\cdot\vec{w}_2
   \end{bmatrix}\right)
 \end{align*}
+
+\todo[inline]{\citet{Tang:14b}}
+
+In this paper, we develop a deep learn- ing system for message-level
+Twitter sen- timent classification. Among the 45 sub- mitted systems
+including the SemEval 2013 participants, our system (Coooolll) is
+ranked 2nd on the Twitter2014 test set of SemEval 2014 Task
+9. Coooolll is built in a supervised learning framework by
+concatenating the sentiment-specific word embedding (SSWE) features
+with the state-of-the-art hand-crafted features.  We develop a neural
+network with hybrid loss function 1 to learn SSWE, which en- codes the
+sentiment information of tweets in the continuous representation of
+words.  To obtain large-scale training corpora, we train SSWE from 10M
+tweets collected by positive and negative emoticons, without any
+manual annotation. Our system can be easily re-implemented with the
+publicly available sentiment-specific word embedding.
+
+In this paper, we develop a deep learning system for Twitter
+sentiment classification. Firstly, we learn sentiment-specific word
+embedding (SSWE) (Tang et al., 2014), which encodes the sentiment
+information of text into the continuous representation of words
+(Mikolov et al., 2013; Sun et al., 2014). Afterwards, we concatenate
+the SSWE features with the state-of-the-art hand-crafted features
+(Mohammad et al., 2013), and build the sentiment classifier with the
+benchmark dataset from SemEval 2013 (Nakov et al., 2013). To learn
+SSWE, we develop a tailored neural network, which incorporates the
+supervision from sentiment polarity of tweets in the hybrid loss
+function. We learn SSWE from tweets, leveraging massive tweets with
+emoticons as distantsupervised corpora without any manual annota-
+tions.
+
+Our system (Coooolll) is ranked 2nd on the Twitter2014 test set, along
+with the SemEval 2013 participants owning larger training data than
+us. The performance of only using SSWE as features is comparable to
+the state- of-the-art hand-crafted features (detailed in Table 3),
+which verifies the effectiveness of the sentiment-specific word
+embedding.
+
+In our system, the feature representation of tweet is composed of two
+parts, the sentiment-specific word embedding features (SS-WE features)
+and the state-of-the-art hand-crafted features (STATE features).  In
+this part, we first describe the neural network for learning
+sentiment-specific word embedding.  Then, we generate the SSWE
+features of a tweet from the embedding of words it contains.  Our
+neural network is an extension of the traditional C\&W model
+(Collobert et al., 2011), as illustrated in Figure 2. Unlike C\&W
+model that learns word embedding by only modeling syntactic contexts
+of words, we develop SSWE u , which captures the sentiment information
+of sentences as well as the syntactic contexts of words. Given an
+original (or corrupted) ngram and the sentiment polarity of a sentence
+as the input, SSWE u predicts a two-dimensional vector for each
+input ngram.  The two scalars (f 0 u , f 1 u ) stand for language
+model score and sentiment score of the input ngram
+
+We re-implement the state-of-the-art hand-crafted
+features (Mohammad et al., 2013) for Twitter sen-
+timent classification. The STATE features are de-
+scribed below.
+
+-- All-Caps. The number of words with all char-
+acters in upper case.
+
+-- Emoticons. We use the presence of positive
+(or negative) emoticons and whether the last
+unit of a segmentation is emoticon 3 .
+
+-- Elongated Units. The number of elongated
+words (with one character repeated more than
+two times), such as gooood.
+
+-- Sentiment Lexicon. We utilize several senti-
+ment lexicons 4 to generate features. We ex-
+plore the number of sentiment words, the s-
+core of last sentiment words, the total senti-
+ment score and the maximal sentiment score
+for each lexicon.
+
+-- Negation. The number of individual nega-
+tions 5 within a tweet.
+
+-- Punctuation. The number of contiguous se-
+quences of dot, question mark and exclama-
+tion mark.
+
+-- Cluster. The presence of words from each
+of the 1,000 clusters from the Twitter NLP
+tool (Gimpel et al., 2011).
+
+-- Ngrams. The presence of word ngrams (1-4)
+and character ngrams (3-5).
+
+On positive/negative/neutral classification of tweets as listed in
+Table 3 (left table), we find that the learned sentiment-specific word
+embedding features (SSWE) performs comparable with the
+state-of-the-art hand-crafted features (STATE), especially on the
+Twitter-relevant test sets (T3 and T4) 7 . After feature combination,
+Coooolll yields 4.22\% and 3.07\% improvement by macroF1 on T3 and
+T4,which verifies the effectiveness of SSWE by learning discriminate
+features from massive data for Twitter sentiment classifi-
+cation. From the 45 teams, Coooolll gets the Rank 5/2/3/2 on T1-T4
+respectively, along with the SemEval 2013 participants owning larger
+training data. We also comparing SSWE with the contextbased word
+embedding (W2V), which don't capture the sentiment supervision of
+tweets. We find that W2V is not effective enough for Twitter sen-
+timent classification as there is a big gap between W2V and SSWE on
+T1-T4. The reason is that W2V does not capture the sentiment
+information of text, which is crucial for sentiment analysis tasks and
+effectively leveraged for learning the sentiment-specific word
+embedding.
+
+We also conduct experiments on the positive/negative classification of
+tweets. The reason is that the sentiment-specific word embedding is
+learned from the positive/negative supervision of tweets through
+emoticons, which is tailored for positive/negative classification of
+tweets. From Table 3 (right table), we find that the performance of
+positive/negative Twitter classification is con- sistent with the
+performance of 3-class classifica- tion. SSWE performs comparable to
+STATE on T3 and T4, and yields better performance (1.62\% and 1.45\%
+improvements on T3 and T4, respectively) through feature
+combination. SSWE outperform- s W2V by large margins (more than 10\%)
+on T3 and T4, which further verifies the effectiveness of
+sentiment-specific word embedding.
 
 \citet{Wang:15}
 
