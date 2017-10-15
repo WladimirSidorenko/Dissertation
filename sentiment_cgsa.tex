@@ -929,8 +929,7 @@ This way, \citeauthor{Hamdan:15} achieved 0.643~\F on the SemEval-2015
 test get, getting third place among all competitors.
 
 \todo[inline]{SemEval 2016}
-\todo[inline]{\citet{Deriu:16}}
-\todo[inline]{\citet{Rouvier:16}}
+
 \todo[inline]{\citet{Xu:16}}
 
 
@@ -1174,6 +1173,176 @@ of~\citeauthor{Go:09}, and, finally, fine-tuned the parameters of
 their network on the officially released SemEval data.  Due to these
 improvements, the final system attained a competitive result of
 0.6459~two-class~\F{} on the message-level polarity subtask.
+
+\todo[inline]{\citet{Deriu:16}}
+
+In this paper, we propose a classifier for
+predicting message-level sentiments of En-
+glish micro-blog messages from Twitter. Our
+method builds upon the convolutional sen-
+tence embedding approach proposed by (Sev-
+eryn and Moschitti, 2015a; Severyn and Mos-
+chitti, 2015b). We leverage large amounts of
+data with distant supervision to train an en-
+semble of 2-layer convolutional neural net-
+works whose predictions are combined using
+a random forest classifier. Our approach was
+evaluated on the datasets of the SemEval-2016
+competition (Task 4) outperforming all other
+approaches for the Message Polarity Classifi-
+cation task.
+
+In this work, we use a dis- tant supervision approach to leverage large
+amounts of data in order to train a 2-layer CNN 1 , extend- ing the
+1-layer architecture proposed by (Severyn and Moschitti, 2015a). More
+specifically, we train a neural network using the following
+three-phase procedure: i) creation of word embeddings for ini-
+tialization of the first layer; ii) distant supervised phase, where
+the network weights and word embed- dings are trained to capture
+aspects related to senti- ment; and iii) supervised phase, where the
+network is trained on the provided supervised training data.  We also
+combine the predictions of several neural networks using a random
+forest meta-classifier. The proposed approach was evaluated on the
+datasets of the SemEval-2016 competition, Task 4 (Nakov et al., 2016)
+2 for which it reaches state-of-the-art re- sults.
+
+Each word is associated to a vec- tor representation, which consists
+in a d-dimensional vector. A sentence (or tweet) is represented by the
+concatenation of the representations of its n constituent words. This
+yields a matrix $X \in R d\times n$ , which is used as input to the
+convolutional neural network.
+
+A concatenation of all vectors in a sentence produces
+a feature vector c $in$ R n--h+1 . The vectors c are
+then aggregated over all m filters into a feature map
+matrix C $in$ R m $\times$ (n--h+1) . The filters are learned
+during the training phase of the neural network using
+a procedure detailed in the next section
+
+The output of the convolutional layer is passed through a non-linear
+activation function, before entering a pooling layer. The latter ag-
+gregates vector elements by taking the maximum over a fixed set of
+non-overlapping intervals. The resulting pooled feature map matrix has
+the form: n--h+1 C pooled $in$ R m $\times$ s , where s is the length
+of each interval. In the case of overlapping intervals with a stride
+value s t , the pooled feature map matrix has m $\times$ n--h+1--s s
+the form C pooled $in$ Rt. Depending on whether the borders are
+included or not, the result of the fraction is rounded up or down
+respectively.
+
+A fully connected hidden layer computes the transformation $\alpha$(W
+* x + b), where W $in$ R m$ imes$m is the weight matrix, b $in$ IR m
+the bias, and $\alpha$ the rectified linear (relu) activation function
+(Nair and Hinton, 2010). The output vector of this layer, x $in$ R m ,
+corresponds to the sentence embeddings for each tweet.
+
+Finally, the outputs of the final pooling layer x $in$ R m are fully
+connected to a soft-max regression layer, which returns the class
+$\hat{y}$ $in$ [1, K] with largest probability.
+
+Training the neural net- work consists in learning the set of
+parameters $\Theta = {X, F_1 , b_1 , F_2 , b_2 , W, a}$, where $X$ is
+the sentence matrix, with each row containing the d-dimensional
+embedding vector for a specific word; $F_i$ , $b_i$ (i = {1, 2}) the
+filter weights and biases of the first and second convolutional
+layers; W the concatenation of the weights $w_j$ for every output
+class in the softmax layer; and a the bias of the soft-max layer.
+
+We combine the results of the two 2-layer CNN de- scribed in Section
+2.1 with the intent of increasing the generalizability of the final
+classifier.  This is achieved relying on two systems trained using
+dif- ferent procedures as well as different word embeddings. The
+network parameters of the two CNNs are summarized in Table 1. The
+preprocessing and train- ing phases of the two systems are described
+below.
+
+Preprocessing and word embeddings.  The word embeddings are
+initialized using word2vec (Mikolov et al., 2013a) and then trained
+using an unlabelled corpus of 200M tweets. We apply a skipgram model
+of window size 5 and filter words that occur less than 5 times
+(Severyn and Moschitti, 2015b). The dimensionality of the vector
+representation is set to $d = 52$.
+
+During a first distant-supervised phase, we use emoticons to infer the
+polarity of a balanced set of 90M tweets (Read, 2005; Go et al.,
+2009).  The resulting dataset contains 45M tweets for both the
+positive and negative class. The neural network is trained on these
+90M tweets for one epoch, before training for 10 to 15 epochs on the
+labelled data provided by SemEval-2016. The word-embeddings X $in$ R
+d$ imes$n , are updated during both the distant and the supervised
+training phases, as back-propagation is applied through the entire
+network.
+
+A corpus of 90M tweets 3 (30M contain positive emoticons, 30M negative
+ones and 30M contain none) is employed to create embedding vectors
+of d = 50 dimensions using GloVe (Pennington et al., 2014).  Words
+which appear less than 5 times are discarded.  Additionally, special
+flags $in$ {0, 1} are assigned to some words, by appending a flag vector
+to their word embeddings. Four different flags can be set, marking
+(i) words that belong to hashtags, (ii) words that have been elongated
+(e.g. 'hellooo', which is mapped to the same vector as 'hello'), (iii)
+words in which all characters are capitalized, and (iv) punctuations
+that are repeated more than three times (e.g.  '!!!!' and '!!!' being
+mapped to the same vector).
+
+In the distant supervised phase, the network is trained for one
+epoch on a set of 60M tweets, containing an equal amount of samples
+with positive and negative emoticons. Similarly to System I, this
+pre-trained network is further refined by supervised training for
+about 15 epochs on the SemEval-2016 data. We apply L 2 regularization
+to reduce overfitting to the cost function (negative log likelihood)
+by adding a penalty of the form of $\lambda\lVert \theta \rVert^2_2$ ,
+with regularization strength 4 $\lambda$, where $\theta \in\Theta$
+are the network parameters of each layer.
+
+Each aforementioned system outputs three real values $\hat{y}$
+corresponding to the three sentiment classes.  In addition, it outputs
+the categorical value for the predicted sentiment class. The
+meta-classifier uses these values (sentiment class and categorical
+value of systems I and II) as input features. We trained a random
+forest using the Weka (Hall et al., 2009) library on the training
+data. We selected the number of trees (300), maximum depth of the
+forest (2) and the number of features used per random selection (18)
+as to obtain the best overall performance over the previous years'
+test sets.
+
+Before extracting features, the tweets were preprocessed using the
+following proce- dure:
+
+-- URLs and usernames were substituted by a re- placement token
+
+-- The text was lowercased
+
+-- The NLTK twitter tokenizer was employed in System I and a
+customized version of the CMU ARK Twitter Part-of-Speech Tagger
+(Gimpel et al., 2011) in System II
+
+The final system (FS) using the meta-classifier trained on the outputs
+of systems S1a-f and S2, achieves the highest accuracy on the 2016
+test set with the competition-winning F1-score of 63.30\%.  These
+results improve the score of the best performing subsystem (S1b) by
+0.57 points. For the 2015 test set, FS shows an improvement of 0.35
+points with respect to the score of the best subsystem (S1f).
+
+\done[inline]{\citet{Rouvier:16}}
+
+Another approach building on the work of~\citet{Severyn:15} was
+proposed by~\citet{Rouvier:16}.  In contrast to the former systems
+which utilized sentiment-flavored pre-trained word vectors with a
+single convolutional layer, the authors simultaneously harnesses three
+different types of embeddings (word2vec, word2vec specific to
+particular parts of speech, and sentiment-tailored emeddings) each of
+which was trained with a separate set of convolutional filters.
+Besides training deep representations, the authors also used
+hand-crafted features such as sentiment lexicons, emoticons,
+information about elongated words, punctuation marks, and capitalized
+tokens, training a multi-layer perceptron on these attributes.  In the
+final step, \citeauthor{Rouvier:16} joined the outputs of the deep
+convolutions and perceptron into a single vector, subsequently passing
+this vector to two fully connected neural network layers with softmax
+non-linearity.  This way, the authors achieved 0.63~\F{} on the
+SemEval-2016 test set, getting second rank in this shared task.
+
 
 \todo[inline]{\citet{Wang:15}}
 
