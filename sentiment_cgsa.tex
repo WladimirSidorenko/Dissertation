@@ -928,11 +928,6 @@ attribute and class weighting as it was done by~\citet{Guenther:14}.
 This way, \citeauthor{Hamdan:15} achieved 0.643~\F on the SemEval-2015
 test get, getting third place among all competitors.
 
-\todo[inline]{SemEval 2016}
-
-\todo[inline]{\citet{Xu:16}}
-
-
 \todo[inline]{}
 
 To the best of our knowledge, the idea of utilizing web texts
@@ -1174,6 +1169,8 @@ their network on the officially released SemEval data.  Due to these
 improvements, the final system attained a competitive result of
 0.6459~two-class~\F{} on the message-level polarity subtask.
 
+\todo[inline]{SemEval 2016}
+
 \todo[inline]{\citet{Deriu:16}}
 
 In this paper, we propose a classifier for
@@ -1327,9 +1324,9 @@ points with respect to the score of the best subsystem (S1f).
 \done[inline]{\citet{Rouvier:16}}
 
 Another approach building on the work of~\citet{Severyn:15} was
-proposed by~\citet{Rouvier:16}.  In contrast to the former systems
-which utilized sentiment-flavored pre-trained word vectors with a
-single convolutional layer, the authors simultaneously harnesses three
+proposed by~\citet{Rouvier:16}.  In contrast to the former system
+which utilized only pre-trained sentiment-flavored word vectors with a
+single convolutional layer, the authors simultaneously harnessed three
 different types of embeddings (word2vec, word2vec specific to
 particular parts of speech, and sentiment-tailored emeddings) each of
 which was trained with a separate set of convolutional filters.
@@ -1337,12 +1334,34 @@ Besides training deep representations, the authors also used
 hand-crafted features such as sentiment lexicons, emoticons,
 information about elongated words, punctuation marks, and capitalized
 tokens, training a multi-layer perceptron on these attributes.  In the
-final step, \citeauthor{Rouvier:16} joined the outputs of the deep
-convolutions and perceptron into a single vector, subsequently passing
-this vector to two fully connected neural network layers with softmax
-non-linearity.  This way, the authors achieved 0.63~\F{} on the
-SemEval-2016 test set, getting second rank in this shared task.
+final step, \citeauthor{Rouvier:16} joined the outputs of the two
+downstream classifiers (deep convolutions and perceptron) into a
+single vector, subsequently passing this vector to two fully connected
+neural network layers with softmax non-linearity at the end.  This
+way, the authors achieved 0.63~\F{} on the SemEval-2016 test set,
+getting second rank in this shared task.
 
+\done[inline]{\citet{Xu:16}}
+
+\citet{Xu:16} also chose an ensemble approach to coarse-grained
+opinion mining of tweets.  In particular, the authors combined a
+convolutional system with 300 filters of widths three, four, and five
+(using 100 filters for each given width); an LSTM
+classifier~\cite{Hochreiter:97}, taking its output vector from the
+last time step $t$ as the final vote; and a special Bayesian wordvec
+system, which was trained to maximize the probability of a token given
+its surrounding context and the label of the tweet, maximizing this
+probability with the prior likelihood of the respective polarity.
+\citeauthor{Xu:16} united the decisions of these subsystems using soft
+weighting scheme:
+\begin{equation*}
+  y^* = \sum_i w_i y_i,\textrm{, s.t.} \sum_i w_i = 1, \forall i: w_i \geq 0,
+\end{equation*}
+where $y_i$ is the score of the label $y$ returned by the $i$-th
+classifier, and $w_i$ denotes an automatically learned weight for this
+prediction.  This submission achieved 0.617~\F{} on the two polarity
+classes (positive and negative), getting third place among all
+participating submissions.
 
 \todo[inline]{\citet{Wang:15}}
 
