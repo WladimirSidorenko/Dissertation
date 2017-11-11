@@ -13,7 +13,7 @@
 % und der
 % DNB - Deutsche Nationalbibliothek
 
-\part{Discourse-Augmented Sentiment Analysis}
+\chapter{Discourse-Augmented Sentiment Analysis}
 
 %% \section{Introduction to Discourse Analysis}
 %% \subsection{Definitions and Related Work}
@@ -31,6 +31,24 @@
 \subsection{Analysis of Results}
 
 \subsection{Related Work}
+
+\done[inline]{\citet{Bickerstaffe:10}}
+
+\citet{Bickerstaffe:10} also considered the rating prediction task,
+addressing this problem with the minimum-spanning-tree (MST) SVM
+approach.  In the initial step of this method, they constructed a
+strongly connected graph whose vertices were associated with the most
+representative example (determined via the average all-pairs Tanimoto
+coefficient) of each star rating and the edge weights represented the
+Tanimoto distances between those nodes.  Afterwards, they determined
+the MST of this graph using the Kruskal's
+algorithm~\cite[see][pp.~567--574]{Cormen:09} and, finally,
+constructed a decision tree from this MST, replacing the MST vertices
+with binary SVM classifiers, which had to discern the respective
+rating groups. An evaluation on the four-star review corpus
+of~\citet{Pang:05} showed an improvement by up to~7\% over the
+previous state of the art, boosting it to 59.37\% average accuracy.
+
 
 \todo[inline]{\citet{Pang:02}}
 Pang et al. (2002) propose three different machine learning methods to
