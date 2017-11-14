@@ -253,12 +253,11 @@ chapter using the described data are lexicon-based (LB) systems.  Just
 like sentiment lexicons themselves, LB methods for coarse-grained
 opinion mining have attracted a lot of attention from the very
 inception of the sentiment analysis field.  Starting with the research
-of~\citet{Hatzivassi:00}, who statistically proved that the mere
+of~\citet{Hatzivassi:00}, who gave a statistical proof that the mere
 occurrence of a subjective adjective from a polarity list was a highly
-reliable indicator that the whole sentence it appeared in was
-subjective, more and more works dealing with the use of lexicons for
-determining the overall polarity of complete texts appeared on the
-scene.
+reliable indicator of the whole sentence being subjective, more and
+more works dealing with the use of lexicons for determining the
+overall polarity or subjectivity of texts appeared on the scene.
 
 One of the first notable steps in this direction was made
 by~\citet{Das:01}, who proposed an ensemble of five classifiers (two
@@ -268,15 +267,14 @@ lexicon features) to predict the polarity of stock messages
 62\% on a corpus of several hundreds stock board messages.  A much
 simpler method for a similar task was suggested by~\citet{Turney:02},
 who determined the \emph{semantic orientation} (SO) of reviews by
-averaging the PMI scores of their terms, obtaining these scores from
-an automatically generated sentiment lexicon.  With this approach, the
+averaging the PMI scores of their terms, getting these scores from an
+automatically generated sentiment lexicon.  With this approach, the
 author could reach an accuracy of 74\% on a corpus of 410 manually
 labeled Epinions comments.  In the same vein, \citet{Hu:04} computed
 the overall polarity of a sentence by comparing the numbers of
-positive and negative terms appearing in that sentence, reversing the
-orientation of the term in case of negation.  Finally, \citet{Kim:04}
-compared three different approaches to determining the polarity of a
-sentence:
+positive and negative terms appearing in it, reversing the orientation
+of terms in case of negation.  Finally, \citet{Kim:04} compared three
+different approaches to determining the polarity of a sentence:
 \begin{inparaenum}[(i)]
 \item by multiplying the signs of its polar terms,
 \item by taking the sum of their scores, and
@@ -310,8 +308,8 @@ Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 In~\citeyear{Polanyi:06}, \citeauthor{Polanyi:06} presented an
 extensive overview and analysis of common lexicon-based sentiment
 approaches existing at that time, arguing that, besides considering
-the lexical valence (i.e., semantic orientation) of polar terms, it
-was also necessary to incorporate syntactic, discourse-level, and
+the lexical valence (i.e., semantic orientation) of polar expressions,
+it was also necessary to incorporate syntactic, discourse-level, and
 extra-linguistic factors such as negations, intensifiers, modal
 operators (e.g., \emph{could} or \emph{might}), presuppositional items
 (e.g., \emph{barely} or \emph{failure}), irony, reported speech,
@@ -320,8 +318,8 @@ multi-entity evaluation, etc.  This theoretical hypothesis was also
 proven empirically by \citet{Kennedy:06}, who investigated two ways to
 determine the polarity of a customer review: In the first of these
 methods, they simply compared the numbers of positive and negative
-expressions appearing in text, assigning the review to the class with
-the greater number of items.  In the second attempt, they enhanced the
+terms appearing in a text, assigning the review to the class with the
+greater number of items.  In the second attempt, they enhanced the
 original system with additional information about contextual valence
 shifters, increasing or decreasing the sentiment score of a term if it
 was preceded by an intensifier or downtoner, and changing the polarity
@@ -342,10 +340,10 @@ estimate the overall semantic orientation of the text.  Drawing on the
 ideas of~\citet{Polanyi:06}, the authors incorporated a set of
 additional heuristic rules into their computation by changing the
 prior SO values of negated, itensified, and downtoned terms, ignoring
-irrealis sentences, and adjusting the weights of specific document
-sections.  An extensive evaluation of this approach showed the
-superior performance of the manual lexicon in comparison with other
-polarity lists, including the Subjectivity
+irrealis and interrgative sentences, and adjusting weights of specific
+document sections.  An extensive evaluation of this approach showed
+the superior performance of the manual lexicon in comparison with
+other polarity lists, including the Subjectivity
 Dictionary~\cite{Wilson:05}, Maryland Polarity Set~\cite{Mohammad:09},
 and \textsc{SentiWordNet}~\cite{Esuli:06c}.  Moreover, the authors
 also demonstrated the effectiveness of their method for other topics
@@ -398,7 +396,7 @@ microblog.
 % Jurek et al., 2015
 Another Twitter-aware system was presented by~\citet{Jurek:15}, who
 computed the negative and positive polarity of a message ($F_p$ and
-$F_n$ respectively) using the following equations: { \small%
+$F_n$ respectively) using the following formulae: { \small%
   \begin{align}
     F_P &= \min\left(\frac{A_P}{2 - \log(3.5\times W_P + I_P)}, 100\right),\\
     F_N &= \max\left(\frac{A_N}{2 - \log(3.5\times W_N + I_N)}, -100\right);\label{cgsa:eq:jurek}
@@ -407,8 +405,8 @@ $F_n$ respectively) using the following equations: { \small%
 }%
 where $A_P$ and $A_N$ represent the average scores of positive and
 negative lexicon terms found in the tweet:
-$A_p = \frac{\sum_{w\in\textrm{msg}}s^p_w}{\lVert\textrm{msg}\rVert}$,
-with $s^p_w$ denoting the positive lexicon score of the term $w$;
+$A_p = \frac{\sum_{w\in\textrm{msg}}s^p_w}{\lVert\textrm{msg}\rVert}$
+(with $s^p_w$ denoting the positive lexicon score of the term $w$);
 $W_P$ and $W_N$ stand for the raw counts of polar tokens; and $I_P$
 and $I_N$ denote the number of intensifiers preceding these words.  In
 addition to that, prior to estimating the average values, the authors
@@ -539,88 +537,211 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
 Despite their immense popularity, linguistic plausibility, and
 simplicity to implement, lexicon-based approaches often have been
 criticized for the rigidness of their classification\footnote{Since
-  these systems only rely on the pre-computed weights of lexicon
+  these systems only rely on the precomputed weights of lexicon
   entries, considering these coefficients as constant, their decision
   boundaries frequently appear to be suboptimal as many terms might
   have different polarity and intensity values depending on the domain
-  of the text \cite[see][]{Eisenstein:17,Yang:17}.} and the inability
-to factor-in additional, non-lexical attributes into the final
+  \cite[see][]{Eisenstein:17,Yang:17}.} and the inability to
+incorporate additional, non-lexical attributes into the final
 decisions.  Moreover, as noted by~\citet{Pang:02} and also confirmed
 empirically by~\citet{Riloff:03} and \citet{Gamon:04}, many of the
-linguistic expressions which actually correlate with subjectivity and
-polarity of a sentence (e.g., exclamation marks or) are very unlikely to be included into a
-sentiment lexicon by a human expert.  As a consequence of this, with
-the emergence of new manually annotated corpora, lexicon-based systems
-have gradually been superseded by supervised machine-learning
-techniques.
+linguistic expressions which actually correlate with the subjectivity
+or polarity of a sentence (e.g., exclamation marks or spelling
+variations) are very unlikely to be included into a sentiment lexicon
+even by a human expert.  As a consequence of this, with the emergence
+of new manually annotated corpora, lexicon-based systems have been
+gradually superseded by supervised machine-learning techniques.
 
 One of the first steps in this direction was taken
 by~\citet{Wiebe:99}, who used a Na{\"i}ve Bayes classifier to
 differentiate between subjective and objective statements.  Using
 primarily binary features which reflected the presence of a pronoun,
 an adjective, a cardinal number, or a modal verb in the analyzed
-sentence, the authors achieved an accuracy of~72.17\%, outperforming
-the majority class baseline by more than 20~percentage points.  An
-even better result (81.5\%) could be attained when the dataset was
-restricted only to the examples with the most confident annotations.
+sentence, the authors achieved an accuracy of~72.17\% on this
+two-class prediction task, outperforming the majority class baseline
+by more than 20~percent.  An even better result (81.5\%) could be
+reached when the dataset was restricted only to the examples with the
+most confident annotations.
 
-\done[inline]{\citet{Pang:02}}
+Inspired by the success of this approach,~\citet{Yu:03} presented a
+more elaborated system, in which they first distinguished between
+subjective and objective documents, then differentiated between polar
+and neutral sentences, and, finally, classified the polarity of the
+opinionated clauses.  As in the previous case, the authors used a
+Na{\"i}ve Bayes predictor for the document-level task, reaching a
+remarkable \F-score of~0.96 on this objective; and applied an ensemble
+of NB systems to predict the subjectivity of single sentences.  To
+determine the semantic orientation of a subjective clause,
+\citeauthor{Yu:03} averaged the polarity scores of its tokens,
+obtaining these scores from an automatically constructed sentiment
+lexicon~\cite{Hatzivassi:97}.  This way, they attained an accuracy
+of~91\% on a set of 38 sentences which had a perfect inter-annotator
+agreement in their data.
 
-Another notable contribution to the ML-based paradigm was made
-by~\citet{Pang:02}, who compared Na{\"i}ve Bayes, Maximum Entropy, and
-SVM systems on the polarity classification task for movie reviews,
-getting their best results (82.9\% accuracy) with the support-vector
-method that used unigram features only.  These findings paved the way
-for the following general triumph of the SVM approach, which was
-dominating the whole CGSA research field for almost a decade.  For
-example, \citet{Gamon:04} trained this type of classifier on a rich
-set of linguistic (part-of-speech trigrams, constituent-specific
-length measures, context-free phrase-structure patterns, as well as
-part-of-speech information coupled with semantic relations) and
-surface features (primarily word $n$-grams) to distinguish between
-positive and negative customer feedback.  The author achieved his best
-results (77.5\% accuracy and $\approx$0.77~\F) using top 2,000
-features with the highest log likelihood
-ratios.  % Interestingly enough,
+Yet another multi-stage Na{\"i}ve Bayes model was proposed by
+\citet{Pang:04}, who tried to classify the overall semantic
+orientation of movie reviews (positive vs. negative) by first dividing
+the sentences into subjective and objective ones (achieving 92\%
+accuracy on this subtask) and then predicting the overall polarity of
+a review using only subjective passages.  With this architecture, the
+authors achieved statistically significant improvements over the
+baseline method (in which they commonly considered all sentences
+disregarding their subjectivity), boosting the accuracy of polarity
+classification from~82.8 to~86.4\%.
+
+In order to check the effectiveness of the Na{\"i}ve Bayes approach,
+\citet{Pang:02} compared the results of NB, MaxEnt, and SVM systems on
+the movie review classification task, attempting to predict whether a
+review was perceived as thumbs up or thumbs down.  In contrast to the
+previous works, they found the SVM classifier working best for this
+objective, yielding 82.9\% accuracy when used with unigram features
+only.  This conclusion paved the way for the following general triumph
+of the support-vector approach, which was dominating the whole CGSA
+research field for almost a decade ever since.  For example,
+\citet{Gamon:04} also trained an SVM predictor on a rich set of
+linguistic and surface-level features (including part-of-speech
+trigrams, context-free phrase-structure patterns, and part-of-speech
+information coupled with semantic relations) to distinguish between
+positive and negative customer feedback, achieving 77.5\% accuracy and
+$\approx$0.77~\F{} by using only top 2,000 attributes which had the
+highest log-likelihood ratios with the target
+classes.  % Interestingly enough,
 % \citeauthor{Gamon:04} also could obtain quite competitive figures
 % (74.5\% accuracy) by using linguistically motivated features only.
-
-
-\done[inline]{\citet{Ng:06}}
-
-The results of~\citet{Pang:04} were further improved by~\citet{Ng:06}
-who simultaneously addressed two classification problems:
-distinguishing whether a given passage was a review or not and
-determining the polarity of a review text.  The authors attained
-impressive results (99.8\% accuracy) for the former task, using only
-an SVM classifier with unigram features.  Moreover, they also
-outperformed the then state of the art on the \citet{Pang:04}'s
-corpus, boosting the accuracy from~87.1 to~90.5\%.  These changes were
-mostly due to a smarter use of higher-order $n$-grams, where, instead
-of bluntly considering all token sequences up to the order $n$ as new
-features, \citet{Ng:06} only took 5,000 most useful ones, measuring
-their utility with the weightes log-likelihood ratio \cite{Nigam:00}.
-
-\done[inline]{\citet{Pang:05}}
-
-\citet{Pang:05} addressed the problem of multi-class rating
-prediction, whose goal, in contrast to the normal positive
-vs. negative classification, was to determine the number of stars that
-an author might assign to his review.  In their experiments,
-\citeauthor{Pang:05} tried out three different strategies:
+Furthermore, \citet{Pang:05} addressed the problem of multi-class
+rating, trying to predict the number of stars that an author could
+assign to a review.  For this purpose, they compared three different
+SVM types:
 \begin{inparaenum}[(i)]
-  \item one-versus-all SVM (OVA-SVM),
-  \item SVM regression,
-  \item and OVA-SVM with \emph{metric labeling}.
+\item one-versus-all SVM (OVA-SVM),
+\item SVM regression,
+\item and OVA-SVM with \emph{metric labeling};
 \end{inparaenum}
-In the last approach, in addition to maximizing the score of the
-correct labels, the authors also explicitly encoded the objective of
-minimizing the absolute difference between the predicted labels of
-similar training examples (measuring this similarity with the
-percentage of positive sentences).  This strategy brought
-statistically significant improvements over the first two baselines,
-yielding an average accuracy of $\approx$52\%.
+getting their best results ($\approx$52\%~accuracy) with the last
+option.
+% \citet{Pang:05}
+% In the last approach, in addition to maximizing the score of the
+% correct labels, the authors also explicitly encoded the objective of
+% minimizing the absolute difference between the predicted labels of
+% similar training examples (measuring this similarity with the
+% percentage of positive sentences).  This strategy brought
+% statistically significant improvements over the first two baselines,
+% yielding an average accuracy of $\approx$52\%.
+Finally, \citet{Ng:06} proposed another multi-stage SVM system, where
+they first classified whether the given text was a review or not and
+then tried to predict its polarity in case it was.  Due to a better
+usage of higher-order $n$-grams (where, instead of bluntly considering
+all token sequences up to the length $n$ as new features, the authors
+only took 5,000 most useful ones, measuring their utility with the
+weighted log-likelihood ratio), \citet{Ng:06} even improved the then
+state of the art on the \citet{Pang:04}'s corpus, boosting the
+accuracy of polarity classification from~87.1 to~90.5\%.
 
+% \todo[inline]{Feature Selection}
+% \done[inline]{\citet{Li:10b}}
+
+% \citet{Li:10b} addressed the problem of polarity shifting using
+% machine-learning techniques.  For this purpose, the authors first
+% selected most frequent and indicative features of the two main
+% polarity classes (positive and negative), and then culled training
+% instances containing these attributes whose labels, however, were
+% different from the ones sugested by the features.  After obtaining
+% this polarity shifted subset, \citeauthor{Li:10b} trained several
+% linear support-vector classifiers, one of which had to distinguish
+% between polarity-shifted and polarity-preserving sentences, the other
+% two were to classify the semantic orientation of these two groups
+% (i.e., one system had to predict the polarity of shifted instances,
+% and the other one had to determine the semantic orientation of
+% polarity-preserving ones), and the last one was trained on the
+% complete original dataset---the product review corpus
+% of~\citet{Blitzer:06}---again to predict the polarity of complete
+% sentences disregarding their possible polarity shifts.  The authors
+% achieved their best results~(80,9\% average accuracy) using a
+% combination of the last three systems with a special meta-classifier
+% joining their single decisions.
+
+% \done[inline]{\citet{Wiebe:05a}}
+
+% A semi-supervised approach to sentence-level subjectivity prediction
+% was proposed by~\citet{Wiebe:05a}.  Using an existing rule-based
+% sentiment system, the authors classified a large set of unlabeled
+% sentences from newspaper articles into subjective and objective ones,
+% achieving 34.2\% recall and 90.4\% precision for the former class and
+% getting 30.7\% recall and 82.4\% precision for the latter orientation.
+% Afterwards, with the help of the AutoSlog-TS
+% algorithm~\cite{Riloff:96}, they extracted frequent lexico-syntactic
+% patterns that strongly correlated with the subjectivity of a sentence,
+% and trained a Na{\"i}ve Bayes system, considering the occurrences of
+% the learned patterns as features.  In an attempt to improve the
+% results of this approach even further, \citeauthor{Wiebe:05a} also
+% implemented a self-improvement strategy in which they relabeled the
+% original unannotated dataset with the obtained NB classifier, then
+% took one half of the most confidently classified sentences as a new
+% training set, and extracted new subjectivity patterns, retraining the
+% Na{\"i}ve Bayes module on the updated set of features.  With this
+% final classifier, the authors attained an accuracy of 73.8\% on
+% predicting the subjectivity of sentences in the MPQA
+% corpus~\cite{Wiebe:05}, coming close to the results achieved by a
+% fully supervised ML approach (76\%).
+
+% \done[inline]{\citet{Riloff:06}}
+
+% \citet{Riloff:06} addressed the problem of redundant features,
+% hypothesizing that correlated attributes (such as unigram
+% ``\emph{happy}'' and bigram ``\emph{very happy}'') would rather harm
+% the performance of a classifier than improve its accuracy.  To prove
+% this hypothesis, the authors defined two kinds of redundancy relations
+% which could exist between intersecting input traits:
+% \emph{representational} and \emph{behavioral} subsumption.  The former
+% former type was assumed to hold between features~$A$ and $B$ if all
+% occurrences of the attribute~$A$ were a strict superset of the
+% occurrences of~$B$.  The behavioral subsumption meant that the
+% information gain (IG) \cite{Forman:03} of the feture $B$ was at most
+% some negligible value $\delta$ lower than the respective IG score of
+% the attribute $A$.  In their experiments, \citeauthor{Riloff:06}
+% observed that the accuracy of an SVM classifier indeed increased (from
+% 81.7 to 82.7\% on the IMDBP dataset and from 74.4 to 74.9\% on the
+% MPQA corpus) after they excluded all attributes that were
+% representationally and behaviorally subsumed by other features.  These
+% improvements even outperformed the gains that could be achieved with
+% traditional feature selection methods.
+
+% \todo[inline]{Higher-order $n$-grams}
+
+% \done[inline]{\citet{Ng:06}}
+
+% Further on, \citet{Ng:06} simultaneously addressed two classification
+% problems: distinguishing whether a given text snippet was a review or
+% not and determining the polarity of the review.  The authors attained
+% impressive results (99.8\% accuracy) for the former task, using only
+% SVM with unigram features.  Moreover, they also outperformed the then
+% state of the art on the \citet{Pang:04}'s corpus, boosting the
+% accuracy from~87.1 to~90.5\%.  These changes were mostly due to a
+% smarter use of higher-order $n$-grams, where, instead of bluntly
+% considering all token sequences up to the order $n$ as new features,
+% \citet{Ng:06} only took 5,000 most useful ones, measuring their
+% utility with the weightes log-likelihood ratio \cite{Nigam:00}.
+
+% \done[inline]{\citet{Mejova:11}}
+
+% \citet{Mejova:11} investigated the effect of different features on
+% various datasets---the movie review corpus of~\citet{Pang:04}, the
+% product reviews gathered by~\citet{Jindal:07}, and the customer
+% feedback dataset of~\citet{Blitzer:06}, coming to the conclusion that,
+% in general, preserving the original form of tokens (i.e., keeping the
+% original token forms instead of lemmas) and using their frequency
+% scores instead of binary values was beneficial to the results on all
+% test sets.  The use of different $n$-gram lengths, however, had a
+% mixed effect with the best scores typically yielded by the union of
+% uni-, bi-, and tri-gram features.  Last but not least, they found the
+% negation heuristics proposed by~\citet{Das:01} (adding the
+% \texttt{\_NOT} suffix to all tokens following a negation up to the
+% first punctuation) leading to only marginal improvements.  The authors
+% achieved their best results (87.5\%, 94.7\%, and 89.6\% accuracy on
+% the datasets of \citet{Pang:04}, \citet{Jindal:07}, and
+% \citet{Blitzer:06}, respectively) with the union of unnormalized uni-,
+% bi-gram and tri-gram features without negation when using term
+% frequencies as feature values.
 
 % \done[inline]{\citet{Riloff:03a}}
 
@@ -639,23 +760,6 @@ yielding an average accuracy of $\approx$52\%.
 % authors achieved a precision of 0.902 on recognizing polar sentences,
 % with their recall running up to 0.401.
 
-\done[inline]{\citet{Yu:03}}
-
-A semi-supervised classification approach was proposed
-by~\citet{Yu:03}, who presented a three-stage method, in which they
-first distinguished between subjective and objective documents, then
-differentiated between polar and neutral sentences, and, finally,
-classified the polarity of opinionated clauses.  The authors used a
-Na{\"i}ve Bayes classifer for the document-level task, reaching a
-remarkable \F-score of~0.96 on this objective; and applied an ensemble
-of NB systems to predict the subjectivity of the sentences.  In the
-final step, they determined the semantic orientation of a subjective
-clause by averaging the polarity scores of their tokens, getting these
-scores from an automatically constructed sentiment
-lexicon~\cite{Hatzivassi:97}.  With this approach, \citeauthor{Yu:03}
-attained an accuracy of~91\% on a set of 38 sentences which had a
-perfect inter-annotator agreement in their data.
-
 % \done[inline]{\citet{Wilson:04,Wilson:06}}
 
 % A related problem, namely that of classifying the strength of
@@ -673,147 +777,6 @@ perfect inter-annotator agreement in their data.
 % \citet{Wilson:04} achieved their best results (55\%~accuracy and
 % 0.991~mean squared error) with the BoosTexter approach when using all
 % the introduced features.
-
-\done[inline]{\citet{Pang:04}}
-
-\citet{Pang:04} proposed a two-stage procedure for classifying the
-overall semantic orientation of movie reviews (positive vs. negative):
-In the first step of this approach, they classified the sentences into
-subjective and objective ones (achieving 92\% accuracy for this task
-with the Na\"ive Bayes system) and then applied another Na\"ive Bayes
-classifier to determine the polarity of the review based on only
-subjective excerpts, getting a statistically significant improvement
-from~82.8 to~86.4\%.  The authors also experimented with the min-cut
-method to encode the idea that nearby sentence will likely share the
-same subjectivity class, but did not get any statistically significant
-improvement over the discourse-unaware baseline.
-
-\done[inline]{\citet{Cui:06}}
-
-\citet{Cui:06} questioned the claim of~\citet{Pang:02} that
-higher-order $n$-grams worsen the classification results of an opinion
-mining system, hypothesizing that this finding was mostly due to the
-limited training set size of the latter authors.  To check this
-hypothesis, \citeauthor{Cui:06} collected a set of 320K product
-reviews from \url{froogle.google.com} and trained three different NL
-classifiers on these data: an online passive-agreessive
-system~\cite{Crammer:06}, the winnow algorithm~\cite{Hurst:04}, and a
-generative language model~\cite{Manning:99}.  The authors achieved
-their best results with the first option, getting 0.9007 overall
-\F-scores for both polarity classes and observing consistent
-improvements with the increasing order of $n$-grams.  Moreover,
-\citeauthor{Cui:06} also refuted another argument
-of~\citet{Pang:04}---namely, the need for skipping objective sentences
-while doing polarity classification---conjecturing that this step was
-only useful for certain domains such as movie or book reviews, but
-could not generalize to more technical genres.
-
-\done[inline]{\citet{Wiebe:05a}}
-
-A semi-supervised approach to sentence-level subjectivity prediction
-was proposed by~\citet{Wiebe:05a}.  Using an existing rule-based
-sentiment system, the authors classified a large set of unlabeled
-sentences from newspaper articles into subjective and objective ones,
-achieving 34.2\% recall and 90.4\% precision for the former class and
-getting 30.7\% recall and 82.4\% precision for the latter orientation.
-Afterwards, with the help of the AutoSlog-TS
-algorithm~\cite{Riloff:96}, they extracted frequent lexico-syntactic
-patterns that strongly correlated with the subjectivity of a sentence,
-and trained a Na{\"i}ve Bayes system, considering the occurrences of
-the learned patterns as features.  In an attempt to improve the
-results of this approach even further, \citeauthor{Wiebe:05a} also
-implemented a self-improvement strategy in which they relabeled the
-original unannotated dataset with the obtained NB classifier, then
-took one half of the most confidently classified sentences as a new
-training set, and extracted new subjectivity patterns, retraining the
-Na{\"i}ve Bayes module on the updated set of features.  With this
-final classifier, the authors attained an accuracy of 73.8\% on
-predicting the subjectivity of sentences in the MPQA
-corpus~\cite{Wiebe:05}, coming close to the results achieved by a
-fully supervised ML approach (76\%).
-
-\done[inline]{\citet{Riloff:06}}
-
-\citet{Riloff:06} addressed the problem of redundant features,
-hypothesizing that correlated attributes (such as unigram
-``\emph{happy}'' and bigram ``\emph{very happy}'') would rather harm
-the performance of a classifier than improve its accuracy.  To prove
-this hypothesis, the authors defined two kinds of redundancy relations
-which could exist between intersecting input traits:
-\emph{representational} and \emph{behavioral} subsumption.  The former
-former type was assumed to hold between features~$A$ and $B$ if all
-occurrences of the attribute~$A$ were a strict superset of the
-occurrences of~$B$.  The behavioral subsumption meant that the
-information gain (IG) \cite{Forman:03} of the feture $B$ was at most
-some negligible value $\delta$ lower than the respective IG score of
-the attribute $A$.  In their experiments, \citeauthor{Riloff:06}
-observed that the accuracy of an SVM classifier indeed increased (from
-81.7 to 82.7\% on the IMDBP dataset and from 74.4 to 74.9\% on the
-MPQA corpus) after they excluded all attributes that were
-representationally and behaviorally subsumed by other features.  These
-improvements even outperformed the gains that could be achieved with
-traditional feature selection methods.
-
-\done[inline]{\citet{Bickerstaffe:10}}
-
-\citet{Bickerstaffe:10} also considered the rating prediction task,
-addressing this problem with the minimum-spanning-tree (MST) SVM
-approach.  In the initial step of this method, they constructed a
-strongly connected graph whose vertices were associated with the most
-representative example (determined via the average all-pairs Tanimoto
-coefficient) of each star rating and the edge weights represented the
-Tanimoto distances between those nodes.  Afterwards, they determined
-the MST of this graph using the Kruskal's
-algorithm~\cite[see][pp.~567--574]{Cormen:09} and, finally,
-constructed a decision tree from this MST, replacing the MST vertices
-with binary SVM classifiers, which had to discern the respective
-rating groups. An evaluation on the four-star review corpus
-of~\citet{Pang:05} showed an improvement by up to~7\% over the
-previous state of the art, boosting it to 59.37\% average accuracy.
-
-\done[inline]{\citet{Li:10b}}
-
-\citet{Li:10b} addressed the problem of polarity shifting using
-machine-learning techniques.  For this purpose, the authors first
-selected most frequent and indicative features of the two main
-polarity classes (positive and negative), and then culled training
-instances containing these attributes whose labels, however, were
-different from the ones sugested by the features.  After obtaining
-this polarity shifted subset, \citeauthor{Li:10b} trained several
-linear support-vector classifiers, one of which had to distinguish
-between polarity-shifted and polarity-preserving sentences, the other
-two were to classify the semantic orientation of these two groups
-(i.e., one system had to predict the polarity of shifted instances,
-and the other one had to determine the semantic orientation of
-polarity-preserving ones), and the last one was trained on the
-complete original dataset---the product review corpus
-of~\citet{Blitzer:06}---again to predict the polarity of complete
-sentences disregarding their possible polarity shifts.  The authors
-achieved their best results~(80,9\% average accuracy) using a
-combination of the last three systems with a special meta-classifier
-joining their single decisions.
-
-\done[inline]{\citet{Mejova:11}}
-
-\citet{Mejova:11} investigated the effect of different features on
-various datasets---the movie review corpus of~\citet{Pang:04}, the
-product reviews gathered by~\citet{Jindal:07}, and the customer
-feedback dataset of~\citet{Blitzer:06}, coming to the conclusion that,
-in general, preserving the original form of tokens (i.e., keeping the
-original token forms instead of lemmas) and using their frequency
-scores instead of binary values was beneficial to the results on all
-test sets.  The use of different $n$-gram lengths, however, had a
-mixed effect with the best scores typically yielded by the union of
-uni-, bi-, and tri-gram features.  Last but not least, they found the
-negation heuristics proposed by~\citet{Das:01} (adding the
-\texttt{\_NOT} suffix to all tokens following a negation up to the
-first punctuation) leading to only marginal improvements.  The authors
-achieved their best results (87.5\%, 94.7\%, and 89.6\% accuracy on
-the datasets of \citet{Pang:04}, \citet{Jindal:07}, and
-\citet{Blitzer:06}, respectively) with the union of unnormalized uni-,
-bi-gram and tri-gram features without negation when using term
-frequencies as feature values.
-
 
 \done[inline]{SemEval 2013}
 
