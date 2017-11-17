@@ -386,9 +386,9 @@ tweet by uniting the scores of its micro-phrases.
 \citeauthor{Musto:14} obtained their best results (58.99\% accuracy on
 the SemEval-2013 dataset) with the normalized-emphasized approach, in
 which they averaged the polarity scores of segments' tokens, boosting
-these values by 50\% for informative parts of speech; and regarded the
-sum of the micro-phrase scores as the final overall polarity of the
-microblog.
+these values by 50\% for informative parts of speech (adjectives,
+nouns, and adverbs); and considered the sum of the micro-phrase scores
+as the final overall polarity of the microblog.
 
 % the authors obtained their best results using the
 % \textsc{SentiWordNet} lexicon of~\citet{Esuli:06c}
@@ -490,7 +490,7 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
       \multicolumn{3}{c}{\bfseries Positive} & %
       \multicolumn{3}{c}{\bfseries Negative} & %
       \multicolumn{3}{c}{\bfseries Neutral} & %
-      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
       \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
       \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
@@ -503,15 +503,61 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
        &  &  & %
        & \\
 
+       % Taboada Commands:
+       % -----------------
+       % cgsa_sentiment train -t musto -l cgsa/data/lexicons/sws.manual.txt \
+       % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+       %
+       % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+       % > data/PotTS/preprocessed/predicted/taboada/taboada.test
+       %
+       % cgsa_evaluate data/PotTS/preprocessed/test/ \
+       % data/PotTS/preprocessed/predicted/taboada/taboada.test
+       %
+       % Taboada Results:
+       % ----------------
+       % f1_abs: 0.416703; f1_cnt: 0.229631; f1_mean: 0.416719
+       % best F1: 0.416719; self._thresholds: [-0.00039999999999999975, 0.00030000000000000014];
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % negative       0.25      0.15      0.18       287
+       % neutral       0.37      0.70      0.49       558
+       % positive       0.46      0.21      0.29       680
+       % avg / total       0.39      0.38      0.34      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 23.81%
+       % Micro-Averaged F1-Score (All Classes): 37.9016%
+
        TBD & 0.46 & 0.21 & 0.29 & %
        0.25 & 0.15 & 0.18 & %
        0.37 & 0.7 & 0.49 & %
        0.238 & 0.379\\
 
-       MST &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+       % Musto Commands:
+       % -----------------
+       % cgsa_sentiment train -t musto -l cgsa/data/lexicons/sws.manual.txt \
+       % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+       %
+       % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+       % > data/PotTS/preprocessed/predicted/musto/musto.test
+       %
+       % cgsa_evaluate data/PotTS/preprocessed/test/ \
+       % data/PotTS/preprocessed/predicted/musto/musto.test
+       %
+       % Musto Results:
+       % ----------------
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.46      0.26      0.34       680
+       % negative       0.23      0.19      0.21       287
+       % neutral       0.37      0.60      0.46       558
+       % avg / total       0.38      0.37      0.36      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 27.29%
+       % Micro-Averaged F1-Score (All Classes): 37.2459%
+
+       MST & 0.46 & 0.26 & 0.34 & %
+       0.23 & 0.19 & 0.21 & %
+       0.37 & 0.6 & 0.46 & %
+       0.273 & 0.372\\
 
        JRK &  &  &  & %
        &  &  & %
@@ -531,6 +577,12 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
     \label{snt-cgsa:tbl:lex-res}
   \end{center}
 \end{table}
+
+% Thresholds:
+% Taboada: [-0.00039999999999999975, 0.00030000000000000014] (mean scores);
+% Musto: [-8.571428571428569e-05, 0.0005882352941176471];
+%
+%
 
 \section{Machine-Learning Based Methods}\label{sec:cgsa:ml-based}
 
@@ -634,7 +686,7 @@ usage of higher-order $n$-grams (where, instead of bluntly considering
 all token sequences up to the length $n$ as new features, the authors
 only took 5,000 most useful ones, measuring their utility with the
 weighted log-likelihood ratio), \citet{Ng:06} even improved the then
-state of the art on the \citet{Pang:04}'s corpus, boosting the
+state of the art on the \citeauthor{Pang:04}'s corpus, boosting the
 accuracy of polarity classification from~87.1 to~90.5\%.
 
 % \todo[inline]{Feature Selection}
@@ -777,6 +829,8 @@ accuracy of polarity classification from~87.1 to~90.5\%.
 % \citet{Wilson:04} achieved their best results (55\%~accuracy and
 % 0.991~mean squared error) with the BoosTexter approach when using all
 % the introduced features.
+
+However, a real game changer in the sentiment analysis research field
 
 \done[inline]{SemEval 2013}
 
