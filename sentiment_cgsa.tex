@@ -166,7 +166,7 @@ use these tweets for evaluation, but solely utilize them for training
 in our distant supervision experiments.
 
 The resulting statistics on the number of messages and polarity class
-distribution in the final data are shown in
+distribution in these data are shown in
 Table~\ref{snt-cgsa:tbl:corp-dist}.
 \begin{table}[h]
   \begin{center}
@@ -254,18 +254,19 @@ like sentiment lexicons themselves, LB methods for coarse-grained
 opinion mining have attracted a lot of attention from the very
 inception of the sentiment analysis field.  Starting with the research
 of~\citet{Hatzivassi:00}, who gave a statistical proof that the mere
-occurrence of a subjective adjective from a polarity list was a highly
-reliable indicator of the whole sentence being subjective, more and
-more works dealing with the use of lexicons for determining the
-overall polarity or subjectivity of texts appeared on the scene.
+occurrence of a subjective adjective from an automatically compiled
+polarity list was a highly reliable indicator of the whole sentence
+being subjective, more and more works dealing with the use of lexicons
+for determining the overall polarity of the text appeared on the
+scene.
 
 One of the first notable steps in this direction was made
 by~\citet{Das:01}, who proposed an ensemble of five classifiers (two
-of which were purely lexicon-based and the other three relied on
-lexicon features) to predict the polarity of stock messages
+of which were purely lexicon-based and the other three heavily relied
+on lexicon features) to predict the polarity of stock messages
 (\emph{buy}, \emph{sell}, or \emph{neutral}), achieving an accuracy of
 62\% on a corpus of several hundreds stock board messages.  A much
-simpler method for a similar task was suggested by~\citet{Turney:02},
+simpler method for a related task was suggested by~\citet{Turney:02},
 who determined the \emph{semantic orientation} (SO) of reviews by
 averaging the PMI scores of their terms, getting these scores from an
 automatically generated sentiment lexicon.  With this approach, the
@@ -307,26 +308,27 @@ Undestanding Corpus.\footnote{\url{http://duc.nist.gov/}}
 % Polanyi and Zaenen, 2006; Kennedy and Inkpen, 2006
 In~\citeyear{Polanyi:06}, \citeauthor{Polanyi:06} presented an
 extensive overview and analysis of common lexicon-based sentiment
-approaches existing at that time, arguing that, besides considering
-the lexical valence (i.e., semantic orientation) of polar expressions,
-it was also necessary to incorporate syntactic, discourse-level, and
+methods existing at that time, arguing that, besides considering the
+lexical valence (i.e., semantic orientation) of polar expressions, it
+was also necessary to incorporate syntactic, discourse-level, and
 extra-linguistic factors such as negations, intensifiers, modal
 operators (e.g., \emph{could} or \emph{might}), presuppositional items
 (e.g., \emph{barely} or \emph{failure}), irony, reported speech,
-discourse connectors, genre and attitude assessment, reported speech,
+discourse connectors, genre, attitude assessment, reported speech,
 multi-entity evaluation, etc.  This theoretical hypothesis was also
 proven empirically by \citet{Kennedy:06}, who investigated two ways to
-determine the polarity of a customer review: In the first of these
-methods, they simply compared the numbers of positive and negative
-terms appearing in a text, assigning the review to the class with the
-greater number of items.  In the second attempt, they enhanced the
-original system with additional information about contextual valence
-shifters, increasing or decreasing the sentiment score of a term if it
-was preceded by an intensifier or downtoner, and changing the polarity
-sign of this score to the opposite in case of a negation.  With this
-adjustment, the authors achieved a statistically significant
-improvement, boosting the accuracy of the two-class prediction on a
-corpus of product and movie reviews from 67.9 to 69.3\%.
+determine the polarity of customer reviews: In the first of these
+approaches, they simply compared the numbers of positive and negative
+terms appearing in a text, assigning the analyzed review to the class
+with the greater number of items.  In the second attempt, they
+enhanced the original system with additional information about
+contextual valence shifters, increasing or decreasing the sentiment
+score of a term if it was preceded by an intensifier or downtoner, and
+changing the polarity sign of this score to the opposite in case of a
+negation.  With this adjustment, the authors achieved a statistically
+significant improvement, boosting the accuracy of the two-class
+prediction on a corpus of product and movie reviews from 67.9 to
+69.3\%.
 
 % Taboada et al., 2011
 Finally, a veritably seminal work on lexicon-based techniques was
@@ -340,10 +342,10 @@ estimate the overall semantic orientation of the text.  Drawing on the
 ideas of~\citet{Polanyi:06}, the authors incorporated a set of
 additional heuristic rules into their computation by changing the
 prior SO values of negated, itensified, and downtoned terms, ignoring
-irrealis and interrgative sentences, and adjusting weights of specific
-document sections.  An extensive evaluation of this approach showed
-the superior performance of the manual lexicon in comparison with
-other polarity lists, including the Subjectivity
+irrealis and interrogative sentences, and adjusting the weights of
+specific document sections.  An extensive evaluation of this approach
+showed the superior performance of the manual lexicon in comparison
+with other polarity lists including the Subjectivity
 Dictionary~\cite{Wilson:05}, Maryland Polarity Set~\cite{Mohammad:09},
 and \textsc{SentiWordNet}~\cite{Esuli:06c}.  Moreover, the authors
 also demonstrated the effectiveness of their method for other topics
@@ -368,26 +370,27 @@ machine-learning techniques.
 % opposite in case of the negation.
 
 % Musto et al., 2014
-Lexicon-based systems have also found their way into sentiment
-analysis of social media: For example, one such approach, specifically
-tailored to Twitter data, was proposed by~\citet{Musto:14}, who
-examined four different ways to compute the overall polarity scores of
-microblogs: \emph{basic}, \emph{normalized}, \emph{emphasized}, and
+It is therefore less surprisingly that lexicon-based systems have also
+quickly found their way into sentiment analysis of social media: For
+example, one such approach, specifically tailored to Twitter data, was
+proposed by~\citet{Musto:14}, who examined four different ways to
+compute the overall polarity scores of microblogs: \emph{basic},
+\emph{normalized}, \emph{emphasized}, and
 \emph{normalized-emphasized}; evaluating these strategies with four
 distinct lexicons: \textsc{Sen\-ti\-Word\-Net}~\cite{Esuli:06c},
 \textsc{Word\-Net-\-Affect}~\cite{Strapparava:04},
 \textsc{MPQA}~\cite{Wiebe:05}, and
 \textsc{SenticNet}~\cite{Cambria:14}.  In all of these methods, the
-authors first split an input message into a list of
+authors first split the input message into a list of
 \emph{micro-phrases} based on the occurrence of punctuation marks and
-conjunctions.  Afterwards, they calculated the polarity score of each
+conjunctions.  Afterwards, they calculated the polarity score for each
 of these segments and estimated the overall polarity of the whole
 tweet by uniting the scores of its micro-phrases.
 \citeauthor{Musto:14} obtained their best results (58.99\% accuracy on
 the SemEval-2013 dataset) with the normalized-emphasized approach, in
 which they averaged the polarity scores of segments' tokens, boosting
 these values by 50\% for informative parts of speech (adjectives,
-nouns, and adverbs); and considered the sum of the micro-phrase scores
+nouns, and adverbs) and considering the sum of the micro-phrase scores
 as the final overall polarity of the microblog.
 
 % the authors obtained their best results using the
@@ -396,7 +399,7 @@ as the final overall polarity of the microblog.
 % Jurek et al., 2015
 Another Twitter-aware system was presented by~\citet{Jurek:15}, who
 computed the negative and positive polarity of a message ($F_p$ and
-$F_n$ respectively) using the following formulae: { \small%
+$F_n$ respectively) using the following equations: { \small%
   \begin{align}
     F_P &= \min\left(\frac{A_P}{2 - \log(3.5\times W_P + I_P)}, 100\right),\\
     F_N &= \max\left(\frac{A_N}{2 - \log(3.5\times W_N + I_N)}, -100\right);\label{cgsa:eq:jurek}
@@ -404,9 +407,9 @@ $F_n$ respectively) using the following formulae: { \small%
   \normalsize%
 }%
 where $A_P$ and $A_N$ represent the average scores of positive and
-negative lexicon terms found in the tweet:
-$A_p = \frac{\sum_{w\in\textrm{msg}}s^p_w}{\lVert\textrm{msg}\rVert}$
-(with $s^p_w$ denoting the positive lexicon score of the term $w$);
+negative lexicon terms found in the tweet
+($A_p = \frac{\sum_{w\in\textrm{msg}}s^p_w}{\lVert\textrm{msg}\rVert}$
+with $s^p_w$ denoting the positive lexicon score of the term $w$);
 $W_P$ and $W_N$ stand for the raw counts of polar tokens; and $I_P$
 and $I_N$ denote the number of intensifiers preceding these words.  In
 addition to that, before estimating the average values, the authors
@@ -421,20 +424,20 @@ neg(s_w) =
 \end{align}%
 \normalsize%
 }%
-Moreover, besides computing the polarity scores $F_p$ and $F_n$,
+Furthermore, besides computing the polarity scores $F_p$ and $F_n$,
 \citeauthor{Jurek:15} also determined the subjectivity degree of the
 message by replacing the $A_P$ and $A_N$ terms in
-Equation~\ref{cgsa:eq:jurek} with averaged conditional probabilitites
-of the tweet being subjective given the occurrences of the respective
-polar terms.\footnote{These probabilities were calculated
-  automatically on the noisily labeled data set of~\citet{Go:09}.}
-The authors considered a microblog as neutral if its absolute polarity
-was less than 25 and the subjectivity value was not greater than 0.5.
-Otherwise, they assigned a positive or negative label to this message
-depending on the sign of the polarity score.  With this approach,
-\citeauthor{Jurek:15} achieved an accuracy of~77.3\% on the manually
-annotated subset of \citeauthor{Go:09}'s corpus and reached 74.2\% on
-the IMDB review corpus~\cite{Maas:11}.
+Equation~\ref{cgsa:eq:jurek} with an average of conditional
+probabilitites of the tweet being subjective given the occurrences of
+the respective polar terms.\footnote{These probabilities were
+  calculated automatically on the noisily labeled data set
+  of~\citet{Go:09}.}  The authors considered a microblog as neutral if
+its absolute polarity was less than 25 and the subjectivity value was
+not greater than 0.5.  Otherwise, they assigned a positive or negative
+label to this message depending on the sign of the polarity score.
+With this approach, \citeauthor{Jurek:15} achieved an accuracy
+of~77.3\% on the manually annotated subset of \citeauthor{Go:09}'s
+corpus and reached 74.2\% on the IMDB review corpus~\cite{Maas:11}.
 
 % Kolchyna et al., 2015
 Finally, \citet{Kolchyna:15} also explored two different ways of
@@ -454,31 +457,29 @@ computing the overall polarity of a microblog:
 \end{equation*}%
 comparing theses approaches on the SemEval-2013
 dataset~\cite{Nakov:13}.  The authors determined the final polarity
-class of a tweet with the help of $k$-means clustering, which utilized
-either of the above polarity scores as its features.  They showed that
-the logarithmic strategy performed better than the simple average
-solution, yielding an accuracy of 61.74\%.  In addition to that,
-\citeauthor{Kolchyna:15} also checked whether these lexicon values
-could serve as useful attributes for an ML-based method.  For this
-purpose, they retrained a cost-sensitive SVM
-classifier~\cite{Masnadi:12} after extending its $n$-gram feature set
-with lexicon features, getting almost five percent accuracy
-improvement (from 86.62 to 91.17) on the IMDB movie review
-dataset~\cite{Pang:02}.
+class of a tweet using $k$-means clustering, which utilized both of
+the above polarity values as features.  They showed that the
+logarithmic strategy performed better than the simple average
+solution, yielding an accuracy of 61.74\%.  % In addition to that,
+% \citeauthor{Kolchyna:15} also checked whether plain lexicon scores
+% could serve as useful attributes for an ML-based method.  For this
+% purpose, they retrained a cost-sensitive SVM
+% classifier~\cite{Masnadi:12} after extending its $n$-gram feature
+% set with lexicon features, getting almost five percent accuracy
+% improvement (from 86.62 to 91.17) on the IMDB movie review
+% dataset~\cite{Pang:02}.
+
+In order to estimate the quality of these methods on the PotTS and
+SB10k datasets, we reimplemented the approaches of~\citet{Taboada:11},
+\citet{Musto:14}, \citet{Jurek:15}, and \citet{Kolchyna:15}, and
+applied these systems to the test set tweets described in
+Section~\ref{sec:cgsa:data}.
+
+
+The results of this evaluation are shown in
+Table~\ref{snt-cgsa:tbl:lex-res}.
 
 \todo[inline]{describe lexicon normalization steps}
-
-\todo[inline]{reimplement and describe the results of \citet{Hu:04},
-  \citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
-  \citet{Kolchyna:15}}
-
-In order to estimate the quality of these methods on the PotTS
-dataset, we reimplemented the approaches suggested
-by~\citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
-\citet{Kolchyna:15}, and applied these systems to the test set tweets
-described in Section~\ref{sec:cgsa:data}, tweaking the threshold
-values of the evaluated methods on the training and development data.
-The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
 
 \begin{table}[h]
   \begin{center}
@@ -499,10 +500,35 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
 
-       HL &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+       % Hu-Liu Commands:
+       % -----------------
+       % cgsa_sentiment train -t musto -l cgsa/data/lexicons/zrch.manual.txt \
+       % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+       %
+       % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+       % > data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
+       %
+       % cgsa_evaluate data/PotTS/preprocessed/test/ \
+       % data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
+       %
+       % Hu-Liu Results:
+       % ----------------
+       % cgsa_evaluate data/PotTS/preprocessed/test/ \
+       % data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.44      0.15      0.23       680
+       % negative       0.22      0.14      0.17       287
+       % neutral       0.36      0.72      0.48       558
+       % avg / total       0.37      0.36      0.31      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 19.77%
+       % Micro-Averaged F1-Score (All Classes): 35.8689%
+
+      HL & \textbf{0.44} & 0.15 & 0.23 & %
+       \textbf{0.22} & \textbf{0.14} & \textbf{0.17} & %
+       0.36 & 0.72 & 0.48 & %
+       \textbf{0.198} & 0.359\\
 
        % Taboada Commands:
        % -----------------
@@ -519,17 +545,17 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
        % ----------------
        % General Statistics:
        % precision    recall  f1-score   support
-       % positive       0.41      0.08      0.14       680
-       % negative       0.25      0.11      0.15       287
-       % neutral       0.36      0.82      0.50       558
-       % avg / total       0.36      0.36      0.27      1525
-       % Macro-Averaged F1-Score (Positive and Negative Classes): 14.66%
-       % Micro-Averaged F1-Score (All Classes): 35.7377%
+       % positive       0.44      0.13      0.20       680
+       % negative       0.22      0.12      0.16       287
+       % neutral       0.37      0.76      0.49       558
+       % avg / total       0.37      0.36      0.30      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 17.99%
+       % Micro-Averaged F1-Score (All Classes): 36.0656%
 
-       TBD & 0.41 & 0.08 & 0.14 & %
-        0.25 & 0.11 & 0.15 & %
-        0.36 & 0.82 & 0.5 & %
-        0.147 & 0.357\\
+       TBD & \textbf{0.44} & 0.13 & 0.2 & %
+        \textbf{0.22} & 0.12 & 0.16 & %
+        \textbf{0.37} & \textbf{0.76} & \textbf{0.49} & %
+        0.18 & 0.36\\
 
        % Musto Commands:
        % -----------------
@@ -554,7 +580,7 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
        % Micro-Averaged F1-Score (All Classes): 35.1475%
 
        MST & 0.43 & 0.14 & 0.22 & %
-        0.21 & 0.14 & 0.17 & %
+        0.21 & \textbf{0.14} & \textbf{0.17} & %
         0.36 & 0.71 & 0.48 & %
         0.193 & 0.351\\
 
@@ -580,15 +606,93 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
        % Macro-Averaged F1-Score (Positive and Negative Classes): 15.95%
        % Micro-Averaged F1-Score (All Classes): 37.1803%
 
-      JRK & 0.42 & 0.25 & 0.31 & %
+      JRK & 0.42 & \textbf{0.25} & \textbf{0.31} & %
        0.05 & 0.00 & 0.01 & %
        0.36 & 0.71 & 0.48 & %
-       0.16 & 0.371\\
+       0.16 & \textbf{0.371}\\
 
-       KLCH &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\\bottomrule
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.42      0.12      0.19       680
+       % negative       0.17      0.08      0.11       287
+       % neutral       0.35      0.76      0.48       558
+       % avg / total       0.35      0.35      0.28      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 14.99%
+       % Micro-Averaged F1-Score (All Classes): 34.6230%
+
+      KLCH & 0.42 & 0.12 & 0.19 & %
+       0.17 & 0.08 & 0.11 & %
+       0.35 & \textbf{0.76} & 0.48 & %
+       0.15 & 0.346\\
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+
+      % cgsa_evaluate data/SB10k/preprocessed/test/ \
+      % data/SB10k/preprocessed/predicted/hu-liu/hu-liu.test
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.44      0.33      0.38       354
+      % negative       0.21      0.23      0.22       212
+      % neutral       0.65      0.70      0.67       930
+      % avg / total       0.54      0.54      0.54      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 29.79%
+      % Micro-Averaged F1-Score (All Classes): 54.4786%
+      HL & \textbf{0.44} & \textbf{0.33} & \textbf{0.38} & %
+        0.21 & 0.23 & 0.22 & %
+        0.65 & 0.7 & 0.67 & %
+        0.298 & 0.545\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.44      0.33      0.38       354
+        % negative       0.19      0.20      0.19       212
+        % neutral       0.66      0.72      0.69       930
+        % avg / total       0.54      0.55      0.54      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 28.68%
+        % Micro-Averaged F1-Score (All Classes): 55.2139%
+      TBD & \textbf{0.44} & \textbf{0.33} & \textbf{0.38} & %
+        0.19 & 0.2 & 0.19 & %
+        0.66 & 0.72 & 0.69 & %
+        0.267 & 0.552\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.39      0.29      0.33       354
+        % negative       0.23      0.26      0.25       212
+        % neutral       0.65      0.69      0.67       930
+        % avg / total       0.53      0.53      0.53      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 29.03%
+        % Micro-Averaged F1-Score (All Classes): 53.4091%
+      MST & 0.39 & 0.29 & 0.33 & %
+        0.23 & \textbf{0.26} & 0.25 & %
+        0.65 & 0.69 & 0.67 & %
+        0.29 & 0.534\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.40      0.30      0.35       354
+        % negative       0.34      0.21      0.26       212
+        % neutral       0.68      0.80      0.73       930
+        % avg / total       0.56      0.60      0.57      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.19%
+        % Micro-Averaged F1-Score (All Classes): 59.8930%
+      JRK & 0.4 & 0.3 & 0.35 & %
+        \textbf{0.34} & 0.21 & \textbf{0.26} & %
+        \textbf{0.68} & 0.8 & 0.73 & %
+        \textbf{0.302} & 0.599\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.43      0.18      0.25       354
+        % negative       0.25      0.08      0.12       212
+        % neutral       0.66      0.91      0.76       930
+        % avg / total       0.55      0.62      0.55      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 18.24%
+        % Micro-Averaged F1-Score (All Classes): 61.8984%
+      KLCH & 0.43 & 0.18 & 0.25 & %
+        0.25 & 0.08 & 0.12 & %
+        0.66 & \textbf{0.91} & \textbf{0.76} & %
+        0.182 & \textbf{0.619}\\\bottomrule
 \end{tabular}
     \egroup
     \caption[Evaluation of lexicon-based CGSA methods.]{
@@ -599,16 +703,32 @@ The results of this evaluation are shown in Table~\ref{snt-cgsa:tbl:lex-res}.
   \end{center}
 \end{table}
 
-% Thresholds:
+\todo[inline]{reimplement and describe the results of \citet{Hu:04},
+  \citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
+  \citet{Kolchyna:15}}
+
+% Thresholds (PotTS):
+% Hu-Liu: F1: 0.415769; thresholds: [-0.30000000000000004, 0];
+% uses negation;
 % Taboada: f1_abs: 0.349700; f1_cnt: 0.194517; f1_mean: 0.352276
 % best F1: 0.352276; self._thresholds: [-0.10000000000000002, 0.14]; (mean scores)
-% uses negation, intensification, irrealis;
+% uses: negation, intensification, irrealis;
 % Musto: F1: 0.420251; thresholds: [-0.033333333333333326, 0.02500000000000009];
-% uses negation;
+% uses: negation;
 % Jurek: F1: F1: 0.317588; thresholds: [-0.0053197382707281865, 0.0017843579564678833];
-% uses negation and intensifiers;
+% uses: negation and intensifiers;
+% Kolchyna:
+% uses: negation;
 
-\section{Machine-Learning Based Methods}\label{sec:cgsa:ml-based}
+% Thresholds (SB10k):
+% Hu-Liu: F1: 0.422754; thresholds: [-0.30000000000000004, 0.7];
+% Taboada: f1_abs: 0.424474; f1_cnt: 0.140922; f1_mean: 0.424332
+% best F1: 0.424474; self._thresholds: [-0.2799999999999999, 0.8];
+% Musto: F1: 0.425264; thresholds: [-0.08333333333333333, 0.2125];
+% Jurek: F1: 0.441522; thresholds: [-0.0094822406941572363, 0.10091421749114796];
+% Kolchyna:
+
+\section{Machine-Learning Methods}\label{sec:cgsa:ml-based}
 
 Despite their immense popularity, linguistic plausibility, and
 simplicity to implement, lexicon-based approaches often have been
@@ -1043,7 +1163,7 @@ test get, getting third place among all competitors.
   \end{center}
 \end{table}
 
-\section{Deep-Learning Based Methods}\label{sec:cgsa:dl-based}
+\section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
 \todo[inline]{Lin, 1998}
 
@@ -1406,6 +1526,173 @@ expressions), the authors achieved a macro-averaged \F-measure of~0.68
 on the three-class prediction task.
 
 \subsection{Effect of Word Embeddings}
-\subsection{Effect of Normalization}
+\subsection{Effect of Text Normalization}
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Method} & %
+      \multicolumn{3}{c}{\bfseries Positive} & %
+      \multicolumn{3}{c}{\bfseries Negative} & %
+      \multicolumn{3}{c}{\bfseries Neutral} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.44      0.15      0.22       691
+      % negative       0.14      0.08      0.10       296
+      % neutral       0.34      0.72      0.46       542
+      % avg / total       0.35      0.34      0.28      1529
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 16.23%
+      % Micro-Averaged F1-Score (All Classes): 33.6167%
+      HL & 0.44 & 0.15 & 0.22 & %
+        0.14 & 0.08 & 0.1 & %
+        0.34 & 0.72 & 0.46 & %
+        0.162 & 0.336\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.45      0.13      0.20       691
+        % negative       0.15      0.07      0.10       296
+        % neutral       0.34      0.75      0.47       542
+        % avg / total       0.35      0.34      0.28      1529
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 14.87%
+        % Micro-Averaged F1-Score (All Classes): 33.8784%
+      TBD & 0.45 & 0.13 & 0.2 & %
+        0.15 & 0.07 & 0.1 & %
+        0.34 & 0.75 & 0.47 & %
+        0.149 & 0.339\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.44      0.14      0.21       691
+        % negative       0.15      0.09      0.12       296
+        % neutral       0.34      0.71      0.46       542
+        % avg / total       0.35      0.33      0.28      1529
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 16.50%
+        % Micro-Averaged F1-Score (All Classes): 33.3551%
+      MST & 0.44 & 0.14 & 0.21 & %
+        0.15 & 0.09 & 0.12 & %
+        0.34 & 0.71 & 0.46 & %
+        0.165 & 0.334\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.45      0.18      0.25       691
+        % negative       0.13      0.07      0.09       296
+        % neutral       0.35      0.71      0.47       542
+        % avg / total       0.35      0.35      0.30      1529
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 17.11%
+        % Micro-Averaged F1-Score (All Classes): 34.5324%
+      JRK & 0.45 & 0.18 & 0.25 & %
+        0.13 & 0.07 & 0.09 & %
+        0.35 & 0.71 & 0.47 & %
+        0.171 & 0.345\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.45      0.87      0.60       691
+        % negative       0.12      0.05      0.07       296
+        % neutral       0.38      0.04      0.08       542
+        % avg / total       0.36      0.42      0.31      1529
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 33.52%
+        % Micro-Averaged F1-Score (All Classes): 41.9882%
+      KLCH & 0.45 & 0.87 & 0.6 & %
+        0.12 & 0.05 & 0.07 & %
+        0.38 & 0.04 & 0.08 & %
+        0.335 & 0.42 \\\bottomrule
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+
+      % hu-liu
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.43      0.32      0.37       354
+      % negative       0.20      0.22      0.21       212
+      % neutral       0.65      0.70      0.67       930
+      % avg / total       0.53      0.54      0.54      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 29.03%
+      % Micro-Averaged F1-Score (All Classes): 54.2112%
+
+      HL & 0.43 & 0.32 & 0.37 & %
+        0.2 & 0.22 & 0.21 & %
+        0.65 & 0.7 & 0.67 & %
+        0.29 & 0.542\\
+
+        % taboada
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.43      0.31      0.36       354
+        % negative       0.19      0.19      0.19       212
+        % neutral       0.65      0.72      0.69       930
+        % avg / total       0.53      0.55      0.54      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 27.57%
+        % Micro-Averaged F1-Score (All Classes): 54.8797%
+      TBD & 0.43 & 0.31 & 0.36 & %
+        0.19 & 0.19 & 0.19 & %
+        0.65 & 0.72 & 0.69 & %
+        0.276 & 0.549\\
+
+        % musto
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.38      0.35      0.36       354
+        % negative       0.23      0.27      0.25       212
+        % neutral       0.66      0.65      0.65       930
+        % avg / total       0.53      0.52      0.53      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.72%
+        % Micro-Averaged F1-Score (All Classes): 52.3396%
+      MST & 0.38 & 0.35 & 0.36 & %
+        0.23 & 0.27 & 0.25 & %
+        0.66 & 0.65 & 0.65 & %
+        0.307 & 0.523\\
+
+        % jurek
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.41      0.32      0.36       354
+        % negative       0.33      0.21      0.26       212
+        % neutral       0.68      0.79      0.73       930
+        % avg / total       0.57      0.60      0.58      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.94%
+        % Micro-Averaged F1-Score (All Classes): 59.6925%
+      JRK & 0.41 & 0.32 & 0.36 & %
+        0.33 & 0.21 & 0.26 & %
+        0.68 & 0.79 & 0.73 & %
+        0.309 & 0.597\\
+
+        % kolchyna
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.38      0.12      0.19       354
+        % negative       0.20      0.12      0.15       212
+        % neutral       0.66      0.89      0.75       930
+        % avg / total       0.53      0.60      0.53      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 16.73%
+        % Micro-Averaged F1-Score (All Classes): 59.6925%
+      KLCH & 0.38 & 0.12 & 0.19 & %
+        0.2 & 0.12 & 0.15 & %
+        0.66 & 0.89 & 0.75 & %
+        0.167 & 0.597\\\bottomrule
+\end{tabular}
+    \egroup
+    \caption[Results of CGSA Methods without Text Normalization.]{
+      Results of CGSA methods without text normalization.\\
+      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~-- \citet{Musto:14}, JRK
+        -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
+    \label{snt-cgsa:tbl:res-without-normalization}
+  \end{center}
+\end{table}
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
