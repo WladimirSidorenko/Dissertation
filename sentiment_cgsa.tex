@@ -469,17 +469,46 @@ solution, yielding an accuracy of 61.74\%.  % In addition to that,
 % improvement (from 86.62 to 91.17) on the IMDB movie review
 % dataset~\cite{Pang:02}.
 
-In order to estimate the quality of these methods on the PotTS and
-SB10k datasets, we reimplemented the approaches of~\citet{Taboada:11},
+As it was unclear how all of these works would perform on the PotTS
+and SB10k corpora, we reimplemented the approaches of~\citet{Hu:04}
+(as a relatively simple baseline), \citet{Taboada:11},
 \citet{Musto:14}, \citet{Jurek:15}, and \citet{Kolchyna:15}, and
-applied these systems to the test set tweets described in
-Section~\ref{sec:cgsa:data}.
+applied these systems to the test sets of the aforementioned data.
 
+Following our comparison in Chapter~\ref{chap:snt:lex}, we chose the
+Zurich Polarity List as the primary sentiment lexicon for the tested
+methods.  However, a significant drawback of this resource, which
+unfortunately slipped through our evaluation, is that most of its
+entries are weighted uniformly, having a polarity score of either 0.7
+or 1.  We decided to keep the original values as is, and only
+multiplied the polarity scores of the negative terms by -1 as all of
+the tested approaches presupposed different score signs for terms with
+opposite semantic orientations (plus for the positive entries and
+minus for the negative ones).\footnote{We will investigate the impact
+  of other lexicons with presumably better scoring later in
+  Section~\ref{cgsa:subsec:eval:lexicons}.}
 
-The results of this evaluation are shown in
+Furthermore, since all of the systems except for that
+of~\citet{Kolchyna:15} by default returned continuous real values, but
+our evaluation required discrete polarity labels (\emph{positive},
+\emph{negative}, or \emph{neutral}) instead, we discretized the
+results of these approaches using the following simple procedure: We
+first determined the optimal threshold values for the scores of each
+particular polar class on the training and development
+sets,\footnote{Since none of the methods required training or involved
+  any sophisticated hyper-parameters, we used both training and
+  development data to optimize the threshold scores.} and then derived
+polarity labels for new test messages by comparing their predicted SO
+score with these thresholds.  To achieve the former objective (i.e.,
+find the optimal thresholds), we exhaustively searched through all
+unique polarity values assigned to the training and development
+instances and checked whether using this value as a boundary between
+two adjacent polarity classes (sorted in ascending order of their
+positivity) would increase the overall macro-\F{} on the train and dev
+sets.
+
+The final results of this evaluation are shown in
 Table~\ref{snt-cgsa:tbl:lex-res}.
-
-\todo[inline]{describe lexicon normalization steps}
 
 \begin{table}[h]
   \begin{center}
@@ -501,29 +530,42 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
       Precision & Recall & \F{} & & \\\midrule
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
-       % Hu-Liu Commands:
-       % -----------------
-       % cgsa_sentiment train -t musto -l cgsa/data/lexicons/zrch.manual.txt \
-       % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
-       %
-       % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
-       % > data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
-       %
-       % cgsa_evaluate data/PotTS/preprocessed/test/ \
-       % data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
-       %
-       % Hu-Liu Results:
-       % ----------------
-       % cgsa_evaluate data/PotTS/preprocessed/test/ \
-       % data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
-       % General Statistics:
-       % precision    recall  f1-score   support
-       % positive       0.44      0.15      0.23       680
-       % negative       0.22      0.14      0.17       287
-       % neutral       0.36      0.72      0.48       558
-       % avg / total       0.37      0.36      0.31      1525
-       % Macro-Averaged F1-Score (Positive and Negative Classes): 19.77%
-       % Micro-Averaged F1-Score (All Classes): 35.8689%
+      % Thresholds (PotTS):
+      % Hu-Liu: F1: 0.415769; thresholds: [-0.30000000000000004, 0];
+      % uses negation;
+      % Taboada: f1_abs: 0.349700; f1_cnt: 0.194517; f1_mean: 0.352276
+      % best F1: 0.352276; self._thresholds: [-0.10000000000000002, 0.14]; (mean scores)
+      % uses: negation, intensification, irrealis;
+      % Musto: F1: 0.420251; thresholds: [-0.033333333333333326, 0.02500000000000009];
+      % uses: negation;
+      % Jurek: F1: F1: 0.317588; thresholds: [-0.0053197382707281865, 0.0017843579564678833];
+      % uses: negation and intensifiers;
+      % Kolchyna:
+      % uses: negation;
+
+      % Hu-Liu Commands:
+      % -----------------
+      % cgsa_sentiment train -t musto -l cgsa/data/lexicons/zrch.manual.txt \
+      % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+      %
+      % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+      % > data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
+      %
+      % cgsa_evaluate data/PotTS/preprocessed/test/ \
+      % data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
+      %
+      % Hu-Liu Results:
+      % ----------------
+      % cgsa_evaluate data/PotTS/preprocessed/test/ \
+      % data/PotTS/preprocessed/predicted/hu-liu/hu-liu.test
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.44      0.15      0.23       680
+      % negative       0.22      0.14      0.17       287
+      % neutral       0.36      0.72      0.48       558
+      % avg / total       0.37      0.36      0.31      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 19.77%
+      % Micro-Averaged F1-Score (All Classes): 35.8689%
 
       HL & \textbf{0.44} & 0.15 & 0.23 & %
        \textbf{0.22} & \textbf{0.14} & \textbf{0.17} & %
@@ -626,6 +668,13 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
        0.15 & 0.346\\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+      % Thresholds (SB10k):
+      % Hu-Liu: F1: 0.422754; thresholds: [-0.30000000000000004, 0.7];
+      % Taboada: f1_abs: 0.424474; f1_cnt: 0.140922; f1_mean: 0.424332
+      % best F1: 0.424474; self._thresholds: [-0.2799999999999999, 0.8];
+      % Musto: F1: 0.425264; thresholds: [-0.08333333333333333, 0.2125];
+      % Jurek: F1: 0.441522; thresholds: [-0.0094822406941572363, 0.10091421749114796];
+      % Kolchyna:
 
       % cgsa_evaluate data/SB10k/preprocessed/test/ \
       % data/SB10k/preprocessed/predicted/hu-liu/hu-liu.test
@@ -703,30 +752,34 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
   \end{center}
 \end{table}
 
+As we can see from the figures, the performance of the tested methods
+is fairly varied across different polarity classes and datasets: For
+example, the most simple approach of~\citet{Hu:04} achieves
+surprisingly good results on the PotTS corpus, attaining the highest
+precision on the positive class and also yielding the best scores for
+negative messages, which in turn leads to superior macro-averaged \F{}
+for all classes.  The more elaborate analyzer of~\citet{Taboada:11},
+which can be viewed as an extension of \citeauthor{Hu:04}'s system,
+can still keep up the high precision of the predicted positive and
+negative microblogs, and even significantly improves on the results
+for the neutral class, but nevertheless looses 0.018 overall
+macro-\F{} against the first system due to a lower recall of positive
+and negative tweets.  A better performance in this respect is shown by
+the remaining three methods, each of which sets up a new recall
+benchmark for one of the polarity classes: The MST analyzer, for
+example, gets the best recall score for the negative class, the JRK
+system noticeably boosts the results for the positive polarity, and
+the approach of~\citet{Kolchyna:15} attains the best recall of neutral
+messages, being on a par with the results of~\citet{Taboada:11}.
+Mostly due to this high recall on the most numerous positive class,
+the classifier of~\citet{Jurek:15} also reached the highest
+micro-averaged \F{}-score among all competitors on this dataset.
+
 \todo[inline]{reimplement and describe the results of \citet{Hu:04},
   \citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
   \citet{Kolchyna:15}}
 
-% Thresholds (PotTS):
-% Hu-Liu: F1: 0.415769; thresholds: [-0.30000000000000004, 0];
-% uses negation;
-% Taboada: f1_abs: 0.349700; f1_cnt: 0.194517; f1_mean: 0.352276
-% best F1: 0.352276; self._thresholds: [-0.10000000000000002, 0.14]; (mean scores)
-% uses: negation, intensification, irrealis;
-% Musto: F1: 0.420251; thresholds: [-0.033333333333333326, 0.02500000000000009];
-% uses: negation;
-% Jurek: F1: F1: 0.317588; thresholds: [-0.0053197382707281865, 0.0017843579564678833];
-% uses: negation and intensifiers;
-% Kolchyna:
-% uses: negation;
-
-% Thresholds (SB10k):
-% Hu-Liu: F1: 0.422754; thresholds: [-0.30000000000000004, 0.7];
-% Taboada: f1_abs: 0.424474; f1_cnt: 0.140922; f1_mean: 0.424332
-% best F1: 0.424474; self._thresholds: [-0.2799999999999999, 0.8];
-% Musto: F1: 0.425264; thresholds: [-0.08333333333333333, 0.2125];
-% Jurek: F1: 0.441522; thresholds: [-0.0094822406941572363, 0.10091421749114796];
-% Kolchyna:
+\subsection{Polarity-Changing Factors}\label{subsec:cgsa:lex-methods:pol-change}
 
 \section{Machine-Learning Methods}\label{sec:cgsa:ml-based}
 
@@ -1454,7 +1507,10 @@ participating submissions.
 % each other;
 
 \section{Evaluation}
-\subsection{Effect of Lexicons}
+\subsection{Effect of Lexicons}\label{cgsa:subsec:eval:lexicons}
+
+\todo[inline]{describe lexicon normalization steps}
+
 \subsection{Effect of Distant Supervision}
 \todo[inline]{}
 
