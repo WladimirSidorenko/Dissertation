@@ -753,33 +753,45 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
 \end{table}
 
 As we can see from the figures, the performance of the tested methods
-is fairly varied across different polarity classes and datasets: For
+is widely varies across different polarity classes and datasets: For
 example, the most simple approach of~\citet{Hu:04} achieves
 surprisingly good results on the PotTS corpus, attaining the highest
 precision on the positive class and also yielding the best scores for
-negative messages, which in turn leads to superior macro-averaged \F{}
-for all classes.  The more elaborate analyzer of~\citet{Taboada:11},
-which can be viewed as an extension of \citeauthor{Hu:04}'s system,
-can still keep up the high precision of the predicted positive and
-negative microblogs, and even significantly improves on the results
-for the neutral class, but nevertheless looses 0.018 overall
-macro-\F{} against the first system due to a lower recall of positive
-and negative tweets.  A better performance in this respect is shown by
-the remaining three methods, each of which sets up a new recall
-benchmark for one of the polarity classes: The MST analyzer, for
-example, gets the best recall score for the negative class, the JRK
-system noticeably boosts the results for the positive polarity, and
-the approach of~\citet{Kolchyna:15} attains the best recall of neutral
-messages, being on a par with the results of~\citet{Taboada:11}.
-Mostly due to this high recall on the most numerous positive class,
-the classifier of~\citet{Jurek:15} also reached the highest
-micro-averaged \F{}-score among all competitors on this dataset.
+negative messages, which in turn leads to a superior macro-averaged
+\F{} for all classes.  The more elaborate analyzer
+of~\citet{Taboada:11}, which can be viewed as an extension of
+\citeauthor{Hu:04}'s system, can still keep up the high precision of
+the predicted positive and negative microblogs, and even significantly
+improves on the results for the neutral class, but nevertheless looses
+0.018 overall macro-\F{} against the first system due to a lower
+recall of positive and negative tweets.  A better performance in this
+respect is shown by the remaining three methods, each of which
+establishes a new recall benchmark for at least one of the considered
+polarity classes: The MST analyzer, for instance, sets the best recall
+score for the negative class, the JRK system noticeably boosts the
+results for the positive polarity, and the approach
+of~\citet{Kolchyna:15} attains the best recall value for neutral
+messages, being on par with the results of~\citet{Taboada:11}.  Mostly
+due to this high recall on the dominating positive polarity class, the
+classifier of~\citet{Jurek:15} also reaches the highest micro-averaged
+\F{}-score among all competitors on this dataset.
 
-\todo[inline]{reimplement and describe the results of \citet{Hu:04},
-  \citet{Taboada:11}, \citet{Musto:14}, \citet{Jurek:15}, and
-  \citet{Kolchyna:15}}
+A different situation can be observed with the SB10k dataset.  This
+time, both the method of~\citet{Hu:04} and that of~\citet{Taboada:11}
+reach almost identical scores on the positive class, outperforming
+other systems on this polarity, but fail to surpass the scores of the
+alternative analyzers on any other metric.  Furthermore, similarly to
+the previous experiment, the MST approach again shows the highest
+recall of negative microblogs, but since this class is by far the most
+underrepresented one in both corpora, the overall \F{} metrics are not
+affected by this success.  Finally, the last two classifiers---JRK and
+KLCH---show quite promising figures for the negative and neutral
+classes, also attaining the best micro- and macro-averaged \F{}-scores
+(0.302 and 0.619 respectively) on all polarity classes.
 
 \subsection{Polarity-Changing Factors}\label{subsec:cgsa:lex-methods:pol-change}
+
+\subsection{Error Analysis}\label{subsec:cgsa:lex-methods:err-analysis}
 
 \section{Machine-Learning Methods}\label{sec:cgsa:ml-based}
 
