@@ -481,12 +481,19 @@ methods.  However, a significant drawback of this resource, which
 unfortunately slipped through our evaluation, is that most of its
 entries are weighted uniformly, having a polarity score of either 0.7
 or 1.  We decided to keep the original values as is, and only
-multiplied the polarity scores of the negative terms by -1 as all of
-the tested approaches presupposed different score signs for terms with
-opposite semantic orientations (plus for the positive entries and
-minus for the negative ones).\footnote{We will investigate the impact
-  of other lexicons with presumably better scoring later in
-  Section~\ref{cgsa:subsec:eval:lexicons}.}
+multiplied the scores of negative terms by -1 as all of the tested
+approaches presupposed different score signs for terms with opposite
+semantic orientations (plus for positive entries and minus for the
+negative ones).\footnote{We will investigate the impact of other
+  lexicons with presumably better scoring later in
+  Section~\ref{cgsa:subsec:eval:lexicons}.}  Moreover, because some
+analyzers (e.g., \citet{Taboada:11} and \citet{Musto:14}) expected
+part-of-speech tagged entries, we automatically tagged all terms of
+this polarity list using \texttt{TreeTagger} \cite{Schmid:95},
+assigning to them their most probable tag sequences and (to address
+ambiguity) PoS sequences whose probability was at least a half of the
+maximal one, duplicating the entries if such alternative variant was
+present.
 
 Furthermore, since all of the systems except for that
 of~\citet{Kolchyna:15} by default returned continuous real values, but
