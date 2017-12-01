@@ -798,6 +798,14 @@ classes, also attaining the best micro- and macro-averaged \F{}-scores
 
 \subsection{Polarity-Changing Factors}\label{subsec:cgsa:lex-methods:pol-change}
 
+Since one of the most important components of any lexicon-based CGSA
+approach is the analysis of factors which might significantly affect
+the prior semantic orientation of polar terms, we decided to recheck
+the utility of this module for different systems.  In order to do so,
+we successively deactivated one by one parts of the systems which
+analyzed different phenomena of the surrounding context and recomputed
+their scores after these changes.
+
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1037,10 +1045,28 @@ classes, also attaining the best micro- and macro-averaged \F{}-scores
       Evaluation of lexicon-based CGSA methods.\\
       {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~-- \citet{Musto:14}, JRK
         -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
-    \label{snt-cgsa:tbl:lex-res}
+    \label{snt-cgsa:tbl:lex-res-ablation}
   \end{center}
 \end{table}
 
+As we can see from the results in
+Table~\ref{snt-cgsa:tbl:lex-res-ablation}, the top-performing systems
+(HL and JRK for the PotTS corpus and JRK and KLCH for the SB10k
+dataset) typically achieve their best ranks with all context-analysis
+factors switched on.  The only exception to this, is the
+macro-averaged \F{}-score of the JRK method on the SB10k test set,
+which gets slightly better (from 0.302 to 0.303) when the intensifiers
+of polar terms are ignored.  At the same time, other approaches rather
+benefit from the deactivation of their context modules, showing a
+constant improvement of their macro-averaged results.  As to the
+micro-averaged scores, the situation is much more varied: While the
+method of~\citet{Taboada:11} profits from the switched-off negation
+and intensification handling, its accuracy drops when the remaining
+polarity-switching factors (irrealis, interrogative clauses, quotes,
+etc.) are ignored.  Yet another situation is observed with the systems
+of~\citet{Musto:14} and \citet{Kolchyna:15}, whose accuracy improves
+on the PotTS corpus, but degrades on the SB10k dataset when the
+negation handling is deactivated.
 
 \subsection{Error Analysis}\label{subsec:cgsa:lex-methods:err-analysis}
 
