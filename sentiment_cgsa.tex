@@ -791,6 +791,122 @@ classes, also attaining the best micro- and macro-averaged \F{}-scores
 
 \subsection{Polarity-Changing Factors}\label{subsec:cgsa:lex-methods:pol-change}
 
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.15\columnwidth} % first columm
+        *{10}{>{\centering\arraybackslash}p{0.082\columnwidth}}}
+      \toprule
+      \multirow{2}{0.15\columnwidth}{%
+      \bfseries Deactivated\newline Polarity-Changing\newline Factor} & %
+      \multicolumn{10}{c}{\bfseries CGSA System}\\
+      & \multicolumn{2}{c}{\bfseries HL} & \multicolumn{2}{c}{\bfseries TBD} %
+      & \multicolumn{2}{c}{\bfseries MST} %
+      & \multicolumn{2}{c}{\bfseries JRK} & \multicolumn{2}{c}{\bfseries KLCH}\\
+      \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7} %
+      \cmidrule(lr){8-9}\cmidrule(lr){10-11} \\
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{}\\\midrule
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}PotTS}\\
+      None & 0.198 & 0.359 & 0.18 & 0.36 & 0.193 & 0.351 %
+      & 0.16 & 0.371 & 0.15 & 0.346\\
+
+      % Training hu-liu
+      % Testing hu-liu
+      % Evaluating hu-liu
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.22      0.13      0.16       287
+      % neutral       0.36      0.72      0.48       558
+      % positive       0.44      0.15      0.23       680
+      % avg / total       0.37      0.36      0.31      1525
+
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 19.68%
+      % Micro-Averaged F1-Score (All Classes): 35.8033%
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.23      0.13      0.16       287
+      % neutral       0.37      0.76      0.49       558
+      % positive       0.44      0.13      0.20       680
+      % avg / total       0.37      0.36      0.30      1525
+
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 18.21%
+      % Micro-Averaged F1-Score (All Classes): 36.1311%
+      % Training musto
+      % Testing musto
+      % Evaluating musto
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.22      0.14      0.17       287
+      % neutral       0.36      0.71      0.48       558
+      % positive       0.44      0.15      0.23       680
+      % avg / total       0.37      0.36      0.31      1525
+
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 19.77%
+      % Micro-Averaged F1-Score (All Classes): 35.5410%
+      % Training jurek
+      % Testing jurek
+      % Evaluating jurek
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.23      0.09      0.13       287
+      % neutral       0.36      0.75      0.49       558
+      % positive       0.45      0.17      0.25       680
+      % avg / total       0.38      0.37      0.32      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 19.17%
+      % Micro-Averaged F1-Score (All Classes): 36.9836%
+
+      % Training kolchyna
+      % Testing kolchyna
+      % Evaluating kolchyna
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.22      0.10      0.14       287
+      % neutral       0.36      0.78      0.49       558
+      % positive       0.41      0.10      0.16       680
+      % avg / total       0.35      0.35      0.28      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 15.16%
+      % Micro-Averaged F1-Score (All Classes): 35.2131%
+
+      Negation &  &  &  &  &  &  %
+      &  &  &  & \\
+
+      Intensification &  &  &  &  &  &  %
+      &  &  &  & \\
+
+      Others &  &  &  &  &  &  %
+      &  &  &  & \\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}SB10k}\\
+      None & 0.298 & 0.545 & 0.267 & 0.552 & 0.29 & 0.534 %
+      & 0.302 & 0.599 & 0.182 & 0.619\\
+
+      Negation &  &  &  &  &  &  %
+      &  &  &  & \\
+
+      Intensification &  &  &  &  &  &  %
+      &  &  &  & \\
+
+      Others &  &  &  &  &  &  %
+      &  &  &  & \\\bottomrule
+\end{tabular}
+    \egroup
+    \caption[Evaluation of lexicon-based CGSA methods.]{
+      Evaluation of lexicon-based CGSA methods.\\
+      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~-- \citet{Musto:14}, JRK
+        -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
+    \label{snt-cgsa:tbl:lex-res}
+  \end{center}
+\end{table}
+
+
 \subsection{Error Analysis}\label{subsec:cgsa:lex-methods:err-analysis}
 
 \section{Machine-Learning Methods}\label{sec:cgsa:ml-based}
