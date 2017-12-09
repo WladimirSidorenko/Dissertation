@@ -796,84 +796,23 @@ competitors with regard to the micro-averaged value on the SB10k
 corpus.
 
 Finally, the system of~\citet{Kolchyna:15} shows very strong recall
-and \F{}-scores for the neutral class on both datasets, also
-achieve=ing the best accuracy (0.606) on the SB10k data.
-Nevertheless, its quality on the remaining two polarities (positive
-and negative) is fairly suboptimal with the \F{}-scores for these
-semantic orientations ranking last or second to last on both tweet
-sets.
-
-% For example, the most simple approach of~\citet{Hu:04} achieves
-% surprisingly good results on the PotTS corpus, attaining the highest
-% precision on the positive class and also yielding quite competitive
-% scores for negative messages, which in turn leads to a superior
-% macro-averaged \F{} (0.237) for all classes.  The more elaborate
-% analyzer of~\citet{Taboada:11}, which can be viewed as an extension of
-% \citeauthor{Hu:04}'s system, can still keep up the high precision of
-% predicted positive microblogs, and even improves on the precision of
-% the negative and neutral classes, but nevertheless looses 0.012
-% overall macro-\F{} against the first system due to a lower recall of
-% subjective tweets.  A better performance in this respect is shown by
-% the remaining three methods, each of which establishes a new recall
-% benchmark for at least one polarity group: The MST analyzer, for
-% instance, sets the best recall score for the negative class, the JRK
-% system noticeably boosts the results for the positive orientation, and
-% the approach of~\citet{Kolchyna:15} attains the best recall value for
-% neutral messages, being on par with the results of~\citet{Taboada:11}.
-% Mostly due to this high recall on the dominating positive polarity
-% class, the classifier of~\citet{Jurek:15} also reaches the highest
-% micro-averaged \F{}-score among all competitors on this dataset.
-
-% A slightly different situation can be observed with the SB10k dataset.
-% This time, the method of~\citet{Hu:04} clearly dominates its
-% competitors on the positive class, but fails to surpass the
-% alternative approaches on any other metric.  As in the previous case,
-% the Taboada system preserves the high precision of positive tweets,
-% and even performs a bit better on the neutral polarity, but falls
-% against the former system in terms of the macro-averaged scores due to
-% a lower recall.  Similarly to the foregoing experiment, the MST
-% approach again shows the highest recall of negative microblogs, but
-% rather poor macro- and micro-\F{} results, since the negative class is
-% by far the most underrepresented one in either corpora and the overall
-% performace is not affected by this success.  Finally, the last two
-% classifiers---JRK and KLCH---show quite promising figures for the
-% negative and neutral polarities, with the system of~\citet{Jurek:15}
-% setting up a new record for the micro- and macro-averaged \F{}-scores
-% (0.302 and 0.619 respectively) on this corpus.
-
-% As we can see from the figures, the performance of tested methods
-% varies widely across different polarity classes, but follows more or
-% less the same pattern on both datasets: For example, the most simple
-% approach of~\citet{Hu:04} achieves surprisingly good results for the
-% positive semantic orientation and also attains the best precision of
-% neutral tweets.  This in turn leads to the highest observed macro
-% \F{}-scores on both corpora (0.329 on PotTS and 0.421 on SB10k).  The
-% method of~\citet{Musto:14} outperforms all other systems on the
-% negative polarity class, which is mostly due to the good recall of
-% negative messages.  However, since this orientation is by far the most
-% underrepresented one in both tweebanks, this analyzer only ranks
-% second in terms of the overall macro-\F{} and gets the third-best
-% micro-averaged result among all competitors.  Finally, the analyzers
-% of~\citet{Jurek:15} and \citet{Kolchyna:15} reveal competing,
-% complementary behavior with respect to the remaining metrics: The
-% former system, for instance, attains the highest recall and \F{} of
-% neutral tweets on the PotTS corpus, and yields the best precision of
-% negative messages on the SB10k data.  At the same time, this situation
-% is mirror-iverted for the latter method, which achieves the highest
-% precision of negative microblogs on PotTS and supasses other
-% approaches w.r.t. the recall and \F{} of neutral microblogs on the
-% SB10k corpus, attaining this way the highest macro-averaged
-% \F{}-measure on both datasets.
+and \F{}-scores for the neutral class on both datasets, also achieving
+the best accuracy (0.606) on the SB10k data.  Nevertheless, its
+quality on the remaining two polarities (positive and negative) is
+fairly suboptimal with the \F{}-scores for these semantic orientations
+ranking last or second to last on both tweet sets.
 
 \subsection{Polarity-Changing Factors}\label{subsec:cgsa:lex-methods:pol-change}
 
-Since one of the most important components of any lexicon-based CGSA
-approach is the analysis of factors which might significantly affect
-the prior polarity of polar terms, we decided to recheck the utility
-of these modules for the above methods.  In order to do so, we
-deactivated one by one parts of the systems which analyzed different
-phenomena of the surrounding context and recomputed the \F{}-scores
-after these changes.
+Since the analysis of context factors is commonly considered as one of
+the most important components of any lexicon-based CGSA method and
+because the system with the simplest approach to this task achieved
+suprisingly good scores, outperforming other more sophisticated
+competitors, we decided to recheck the utility of this step for the
+above analyzers.  In order to do so, we successively deactivated one
+by one parts of the classifiers which analyzed different phenomena of
+the surrounding context and recomputed their \F{}-scores after these
+changes.
 
 \begin{table}[h]
   \begin{center}
@@ -921,8 +860,8 @@ after these changes.
       % negative       0.54      0.39      0.45       287
       % neutral       0.62      0.78      0.69       558
       % avg / total       0.67      0.67      0.67      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 59.53%
-      % Micro-Averaged F1-Score (All Classes): 67.2131%
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 59.63%
+      % Micro-Averaged F1-Score (All Classes): 67.2787%
 
       % Training musto
       % Testing musto
@@ -959,7 +898,7 @@ after these changes.
       % avg / total       0.52      0.46      0.42      1525
       % Macro-Averaged F1-Score (Positive and Negative Classes): 29.82%
       % Micro-Averaged F1-Score (All Classes): 46.2951%
-      --Negation & 0.622 & \textbf{0.691} & 0.595 & 0.672 & \textbf{0.641} & %
+      --Negation & 0.622 & \textbf{0.691} & 0.596 & 0.672 & \textbf{0.641} & %
        0.7 & 0.357 & 0.473 & 0.298 & 0.463\\
 
 
@@ -986,7 +925,6 @@ after these changes.
        % avg / total       0.50      0.47      0.44      1525
        % Macro-Averaged F1-Score (Positive and Negative Classes): 33.94%
        % Micro-Averaged F1-Score (All Classes): 46.6885%
-
       --Intensification & \NA{} & \NA{} & 0.595 & 0.672 & \NA{} &  %
       \NA{} & 0.339 & 0.467 & \NA{} & \NA{}\\
 
@@ -994,7 +932,14 @@ after these changes.
       % Testing taboada
       % Evaluating taboada
       % General Statistics:
-      --Other Modifiers & \NA{} & \NA{} & 0.321 & 0.391 & \NA{} &  %
+      % precision    recall  f1-score   support
+      % positive       0.77      0.75      0.76       680
+      % negative       0.54      0.41      0.47       287
+      % neutral       0.64      0.75      0.69       558
+      % avg / total       0.68      0.68      0.68      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 61.29%
+      % Micro-Averaged F1-Score (All Classes): 68.3934%
+      --Other Modifiers & \NA{} & \NA{} & 0.613 & 0.684 & \NA{} &  %
       \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\
 
       \multicolumn{11}{c}{\cellcolor{cellcolor}SB10k}\\
@@ -1055,9 +1000,9 @@ after these changes.
       % Evaluating kolchyna
       % General Statistics:
       % precision    recall  f1-score   support
+      % positive       0.41      0.18      0.25       354
       % negative       0.27      0.15      0.19       212
       % neutral       0.66      0.88      0.76       930
-      % positive       0.41      0.18      0.25       354
       % avg / total       0.55      0.61      0.56      1496
       % Macro-Averaged F1-Score (Positive and Negative Classes): 21.78%
       % Micro-Averaged F1-Score (All Classes): 60.8957%
@@ -1095,58 +1040,63 @@ after these changes.
       % Evaluating taboada
       % General Statistics:
       % precision    recall  f1-score   support
-      % positive       0.77      0.75      0.76       680
-      % negative       0.54      0.41      0.47       287
-      % neutral       0.64      0.75      0.69       558
-      % avg / total       0.68      0.68      0.68      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 61.29%
-      % Micro-Averaged F1-Score (All Classes): 68.3934%
-      --Other Modifiers & \NA{} & \NA{} & 0.613 & 0.684 & \NA{} &  %
+      % positive       0.48      0.61      0.54       354
+      % negative       0.25      0.31      0.27       212
+      % neutral       0.72      0.61      0.66       930
+      % avg / total       0.60      0.57      0.58      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 40.61%
+      % Micro-Averaged F1-Score (All Classes): 56.6176%
+      --Other Modifiers & \NA{} & \NA{} & 0.406 & 0.566 & \NA{} &  %
       \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\\bottomrule
 \end{tabular}
     \egroup
-    \caption[Evaluation of polarity-changing factors for lexicon-based CGSA methods.]{
-      Evaluation of polarity-changing factors for lexicon-based CGSA methods.\\
-      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~-- \citet{Musto:14}, JRK
-        -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
+    \caption[Evaluation of polarity-changing factors in lexicon-based
+    CGSA methods.]{
+      Evaluation of polarity-changing factors in lexicon-based CGSA methods.\\
+      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
+        \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
+        \citet{Kolchyna:15}}}
     \label{snt-cgsa:tbl:lex-res-ablation}
   \end{center}
 \end{table}
 
 \todo[inline]{Describe evaluation}
 
-% As we can see from the results in
-% Table~\ref{snt-cgsa:tbl:lex-res-ablation}, various methods respond in
-% different ways to this ablation: For example, the scores of the HL
-% system improve on the PotTS corpus, but degrade on the SB10k dataset
-% after negation handling has been switched off.  The same situation can
-% be observed with the approaches of~\citet{Musto:14}
-% and~\citet{Jurek:15}.  The Taboada method, however, clearly benefits
-% from these changes on both PotTS and SB10k data.  Yet completely
-% different is the reaction of the \citeauthor{Kolchyna:15}'s analyzer,
-% whose performance drops on the PotTS corpus, but the micro-averaged
-% \F{}-score increases on SB10k tweets.
+As we can see from the results in
+Table~\ref{snt-cgsa:tbl:lex-res-ablation}, various methods respond in
+different ways to this ablation: For example, the scores of the
+\citeauthor{Hu:04} system improve on the PotTS corpus, but degrade on
+the SB10k dataset after negation handling has been switched off.  The
+same situation can be observed with the analyzers of \citet{Musto:14}
+and~\citet{Jurek:15}.  The analyzer of~\citet{Taboada:11}, however,
+benefits from this deactivation in both cases, and the approach
+of~\citet{Kolchyna:15} vice versa shows a performance drop on either
+dataset with the only exception being the micro-averaged \F{} on the
+SB10k data, which unexpectedly improves from 0.606 to 0.609.  A closer
+look at the figures revealed that this change is mostly due to the
+increased bias of this classifier towards the neutral class: The
+recall of this orientation raised from 0.86 to 0.88 and consequently
+pushed up the overall accuracy on all messages.
 
-% As to the intensification handling, we can see that only two
-% approaches (TBD and JRK) have this component at all.  Similarly to the
-% previous case, the Taboada system profits from the deactivation of
-% this module, with its macro- and micro-averaged \F{}-scores increasing
-% by $\approx\expnumber{1}{-3}$ on PotTS data and
-% $\approx\expnumber{7}{-3}$ on the SB10k corpus.  A more varied
-% situation is observed with the analyzer of~\citet{Jurek:15}, whose
-% PotTS results are almost unaffected by these changes, but the
-% macro-averaged \F{} slightly increases and the micro-averaged score
-% slightly decreases on the \citeauthor{Cieliebak:17}'s dataset.
+As to the intensification handling, we can see that only two
+approaches (TBD and JRK) have this feature at all.  Similarly to the
+previous case, the Taboada system profits from switching off this
+module, with its macro- and micro-averaged \F{}-scores going up by
+$\approx\expnumber{2}{-3}$ on PotTS and $\approx\expnumber{8}{-3}$ on
+the SB10k corpus.  A more varied situation is observed with the
+analyzer of~\citet{Jurek:15}, whose PotTS results are virtually
+unaffected by these changes, but the macro-averaged \F{} slightly
+increases and the micro-averaged score slightly decreases on
+\citeauthor{Cieliebak:17}'s dataset.
 
-% Finally, ``other modifiers'' (such as irrealis and interrogative
-% clauses) are only considered as a polarity-changing factor by the
-% method of~\citet{Taboada:11} and, as we can see from the figures,
-% actually do there more harm than good: deactivating this part boosts
-% the macro-averaged \F{}-scores on PotTS and SB10k
-% by~$\expnumber{11}{-3}$ and~$\expnumber{14}{-3}$ respectively.  At the
-% same time, the micro-averaged result of this system climbs from 0.39
-% to 0.391 on the former dataset, but drops from~0.569 to~0.566 on the
-% latter corpus.
+Finally, ``other modifiers'' (such as irrealis and interrogative
+clauses) are only included as a polarity-changing factor into the
+system of~\citet{Taboada:11} and, as we can see from the figures, do
+there rather more harm than good: deactivating this part boosts the
+macro-averaged \F{}-scores on PotTS and SB10k by~$\expnumber{2}{-2}$
+and~$\expnumber{14}{-3}$ respectively.  At the same time, the
+micro-averaged result of this system climbs from 0.671 to 0.684 on the
+former dataset, but drops from~0.569 to~0.566 on the latter corpus.
 
 \subsection{Error Analysis}\label{subsec:cgsa:lex-methods:err-analysis}
 
