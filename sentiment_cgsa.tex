@@ -580,17 +580,16 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
        % ----------------
        % General Statistics:
        % precision    recall  f1-score   support
-       % positive       0.78      0.71      0.74       680
-       % negative       0.54      0.38      0.45       287
-       % neutral       0.62      0.78      0.69       558
+       % positive       0.77      0.71      0.74       680
+       % negative       0.54      0.39      0.45       287
+       % neutral       0.63      0.77      0.69       558
        % avg / total       0.67      0.67      0.67      1525
-       % Macro-Averaged F1-Score (Positive and Negative Classes): 59.34%
-       % Micro-Averaged F1-Score (All Classes): 67.0820%
-
-      TBD & \textbf{0.78} & 0.71 & 0.74 & %
-        \textbf{0.54} & 0.38 & 0.45 & %
-        0.62 & 0.78 & 0.69 & %
-        0.593 & 0.671\\
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 59.66%
+       % Micro-Averaged F1-Score (All Classes): 67.4098%
+      TBD & \textbf{0.77} & 0.71 & 0.74 & %
+        \textbf{0.54} & 0.39 & 0.45 & %
+        0.63 & 0.77 & 0.69 & %
+        0.597 & 0.674\\
 
        % Musto Commands:
        % -----------------
@@ -704,12 +703,13 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
         % negative       0.24      0.27      0.25       212
         % neutral       0.72      0.63      0.67       930
         % avg / total       0.59      0.57      0.58      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 39.18%
-        % Micro-Averaged F1-Score (All Classes): 56.8850%
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 39.33%
+        % Micro-Averaged F1-Score (All Classes): 57.0187%
+
       TBD & 0.48 & 0.6 & 0.53 & %
         0.24 & 0.27 & 0.25 & %
         0.72 & 0.63 & 0.67 & %
-        0.392 & 0.569\\
+        0.393 & 0.57\\
 
         % Training musto
         % Testing musto
@@ -1060,28 +1060,26 @@ changes.
   \end{center}
 \end{table}
 
-\todo[inline]{Describe evaluation}
-
 As we can see from the results in
 Table~\ref{snt-cgsa:tbl:lex-res-ablation}, various methods respond in
 different ways to this ablation: For example, the scores of the
 \citeauthor{Hu:04} system improve on the PotTS corpus, but degrade on
-the SB10k dataset after negation handling has been switched off.  The
-same situation can be observed with the analyzers of \citet{Musto:14}
+the SB10k dataset after switching off the negation handling.  The same
+situation can be observed with the analyzers of \citet{Musto:14}
 and~\citet{Jurek:15}.  The analyzer of~\citet{Taboada:11}, however,
 benefits from this deactivation in both cases, and the approach
 of~\citet{Kolchyna:15} vice versa shows a performance drop on either
 dataset with the only exception being the micro-averaged \F{} on the
 SB10k data, which unexpectedly improves from 0.606 to 0.609.  A closer
-look at the figures revealed that this change is mostly due to the
-increased bias of this classifier towards the neutral class: The
+look at the figures revealed that the latter change is mostly due to
+the increased bias of this classifier towards the neutral class: The
 recall of this orientation raised from 0.86 to 0.88 and consequently
 pushed up the overall accuracy on all messages.
 
 As to the intensification handling, we can see that only two
-approaches (TBD and JRK) have this feature at all.  Similarly to the
-previous case, the Taboada system profits from switching off this
-module, with its macro- and micro-averaged \F{}-scores going up by
+approaches (TBD and JRK) have this component at all.  Similarly to the
+previous case, the Taboada system profits from removing this module,
+with its macro- and micro-averaged \F{}-scores going up by
 $\approx\expnumber{2}{-3}$ on PotTS and $\approx\expnumber{8}{-3}$ on
 the SB10k corpus.  A more varied situation is observed with the
 analyzer of~\citet{Jurek:15}, whose PotTS results are virtually
@@ -1091,8 +1089,8 @@ increases and the micro-averaged score slightly decreases on
 
 Finally, ``other modifiers'' (such as irrealis and interrogative
 clauses) are only included as a polarity-changing factor into the
-system of~\citet{Taboada:11} and, as we can see from the figures, do
-there rather more harm than good: deactivating this part boosts the
+system of~\citet{Taboada:11} and, as we can see from the figures,
+rather do there more harm than good: deactivating this part boosts the
 macro-averaged \F{}-scores on PotTS and SB10k by~$\expnumber{2}{-2}$
 and~$\expnumber{14}{-3}$ respectively.  At the same time, the
 micro-averaged result of this system climbs from 0.671 to 0.684 on the
@@ -1100,44 +1098,258 @@ former dataset, but drops from~0.569 to~0.566 on the latter corpus.
 
 \subsection{Error Analysis}\label{subsec:cgsa:lex-methods:err-analysis}
 
-In order to get an even better intuition about the strengths and
-weaknesses of the above methods and understand the way these
-classifiers work, we collected a set of errors which were made by just
-one of the systems and discuss a few of these erroneous cases here in
-some detail.
-
-insight into the way the above methods
+In order to get a better intuition about the strengths and weaknesses
+of each particular classifier and understand the way these methods
+work, we additionally collected a set of errors which were specific to
+only one of above the systems and will discuss some of these cases
+here in detail.
 
 \todo[inline]{provide examples of errors made by different methods}
 
-\begin{example}[Error Made by the System of~\citeauthor{Hu:04}]\label{snt:cgsa:exmp:hu-liu-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape none}\\[0.65em]
-  \noindent none\\[0.65em]
+The first such error, which has been made by the system
+of~\citet{Taboada:11}, is shown in
+Example~\ref{snt:cgsa:exmp:taboada-error-0}.  Here, a strongly
+positive tweet describing one's excitement about a technical report
+has been erroneously classified as neutral despite the presence of the
+prototypical positive term ``gut'' (\emph{good}) in its superlative
+form ``beste'' (\emph{best}).  Unfortunately, it is the degree of
+comparison which becomes fatal in this case: According to the
+implementation of~\citet{Taboada:11}, any superlative adjective has to
+be preceded the definite article and verb predicate in order to be
+considered as a polar term for the final SO computation.  Even though
+the adjective ``beste'' (\emph{best}) can fulfill the first criterion
+(it immediately follows the determiner ``der'' [\emph{the}]), the lack
+of the preceding verb nevertheless nullifies its effect
+
+\begin{example}[Error Made by the System of~\citeauthor{Taboada:11}]\label{snt:cgsa:exmp:taboada-error-0}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Der beste Microsoft Knowledgebase-Artikel, den ich je gelesen habe.}\\[0.65em]
+  \noindent The best Microsoft-Knowledgebase article I've ever read.\\[0.65em]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{midnightblue}{negative*}}
+    \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-% \begin{example}[Error Made by the System of~\citeauthor{Taboada:11}]\label{snt:cgsa:exmp:taboada-error}
-%   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape habe shon gedacht du erkennst mich nicht mer \%PosSmiley aber jetzt ist ia alles wieder im gr\"unen bereich \%PosSmiley \%PosSmiley}\\[0.65em]
-%   \noindent Thought you wouldn't recognize me anymre \%PosSmiley  but now everything is fine \%PosSmiley \%PosSmiley\\[0.65em]
-%   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
-%     \upshape\textcolor{green3}{positive}}\\
-%  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-%     \upshape\textcolor{midnightblue}{negative*}}
-% \end{example}
+Another error of this method is shown in
+Example~\ref{snt:cgsa:exmp:taboada-error-1}.  This time, the presence
+of the colloquial term ``verarschen'' (\emph{cheat}) suggests that the
+tweet at hand is negative.  Unfortunately, the occurrence of the modal
+verb ``wollt'' (\emph{wanna}) is interpreted by the system as irrealis
+and prevents further SO calculation, assigning score zero which falls
+into the neutral range.
 
+\begin{example}[Error Made by the System of~\citeauthor{Taboada:11}]\label{snt:cgsa:exmp:taboada-error-1}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Die Konklave w\"ahlt den Papst und dann sagen sie Gott war es - Wollt ihr mich verarschen ?!}\\[0.65em]
+  \noindent The conclave elects the Pope and then they say it was God - do you wanna cheat me?!\\[0.65em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{midnightblue}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
 
-%% Hu-Liu
+At this point, we already can conclude that the main flaw of the TBD
+approach stems from its overly coarse rules, which in addition rarely
+hold in the Twitter domain.  In order to check this claim, we
+temporarily deactivated the above two heuristics (predicate check for
+superlative adjectives and irrealis blocking by model verbs) and
+recomputed the scores, getting in both cases an improvement by almost
+one percent on either corpus.  Nevertheless, we can easily imagine
+that applying this classifier to longer and more formal texts, such as
+newspapers, would yield significantly better results as the analyzer
+would not depend on just one occurrence of a polar term in the input
+and moreover its rules would presumably be better suited for these
+data.
 
-%% Taboada
+Returning back to the error analysis, let us look at another erroneous
+case in Example~\ref{snt:cgsa:exmp:musto-error-0}. This time, the
+system of~\citet{Musto:14} has incorrectly assigned the neutral label
+to a positive tweet despite the presence of the polar term ``gut''
+(\emph{good}), which appears in the Zurich sentiment lexicon with the
+highest possible positive value 1.0.  As it turns out, the occurrence
+of just one polar expression in a sentence is insufficient for this
+classifier: Even though this term score gets boosted by 1.5 because
+adjectives belong to informative parts of speech, during the final SO
+computation, this value is divided by 7 (the length of the sentence)
+and becomes 0.214, which is below the threshold for the positive class
+(0.267).
 
-%% Musto
+\begin{example}[Error Made by the System of~\citeauthor{Musto:14}]\label{snt:cgsa:exmp:musto-error-0}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    Mensch Meier , Mensch Meier ! Das sieht gut aus f\"ur
+    die \%User :}\\[0.65em]
+  \noindent Gosh Meier , Gosh Meier ! It looks good for
+  the \%User :\\[0.65em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{midnightblue}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+As it turns out, this kind of mistakes is the most common type of
+errors characteristic to this system.  Furher examples of such
+incorrect decisions are given in Example~\ref{snt:cgsa:exmp:musto-error-1}:
+\begin{example}[Error Made by the System of~\citeauthor{Musto:14}]\label{snt:cgsa:exmp:musto-error-1}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    Der \%User tut echt geile musik machen . Nichts mit Boyband hier .}\\[0.65em]
+  \noindent The \%User is really making great music . Nothing with Boyband here .\\[0.65em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{midnightblue}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}\\[1.3em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    Diese S5E5 Episode mit den Zug\"uberfall war wieder genial ! BreakingBad}\\[0.65em]
+  \noindent This S5E5 episode with the tran robbery was brilliant again ! BreakingBad\\[0.65em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{midnightblue}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}\\[1.3em]
+\end{example}
 
 %% Jurek
 
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 311920233352937472	Erst Messi und jetzt Gott es oberster Messdiener . Argentinien ist das Land der Stunde ! Viel Erfolg Papst Franziskus I. htt ...
+
+% <<<	gold:	positive
+% >>>	predicted:	negative
+% 385089037037744128	Dissertationen waren früher auch nicht viel länger ... %PosSmiley Herzliche Gratulation !
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 311902158415077376	Juhu neuer Papst , weist er Rauch ! %PosSmiley Die Möwe war ein Zeichen ! %PosSmiley konklave
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 392580051595984896	Mit 27 MdBs stellt die JU die grösste junge Gruppe im Bundestag : Eine starke Stimme für generationengerechte Politik ! btko ...
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 382494978645442560	Ist kuschlig heute ! %PosSmiley Gleich erst du CDU / CSU - Fraktionssitzung . Ob der Platz reicht ? btw13 ...
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 332962707231891457	heuteshow fdp Das Wir entscheidet ! Also gehen wir ins Bett %PosSmiley
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 327722680243609601	viel besser. viel , viel viel ... mir guckt nur keiner mehr in die Augen beim Reden - aber das wird schon %PosSmiley
+
+% <<<	gold:	positive
+% >>>	predicted:	negative
+% 324636464329658369	Warum fordern die Grünen keine Frauenquote in der ( männl %PosSmiley Homoehe ? Dann stimmt sogar CSU vor Freude zu . %PosSmiley annewill
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 347019360482766849	habe shon gedacht du erkennst mich nicht mer %PosSmiley aber jetzt ist ia alles wieder im grünen bereich %PosSmiley %PosSmiley
+
+% <<<	gold:	negative
+% >>>	predicted:	positive
+% 367003785593229313	Normal bin ich ja nicht der mensch dwer sich beschwert wegen dem essen aber diese Pizza von Joeys ... boah wie ekelhaft
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 374959750985039872	SIEG ! Chemie gewinnt 2-0 gegen Osnabrück %PosSmiley liga3
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 335512032541564929	23.05 . 2013 : Volles Haus zur SPD Geburtstagsparty in Leipzig und ich werde dabei sein %PosSmiley %Link
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 326070261013172224	Gibt ' s noch nicht zu kaufen im Kino meiner Wahl . Steht aber auf der Todo - Liste ! %PosSmiley
+
 %% Kolchyna
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 376131308205789184	träum was schönes .
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 373941923326595073	Dafür ist FranzFerdinand ' s Right Thoughts , Right Words , Right Action herrlich retro ( und kein bisschen lahm ) %PosSmiley
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 371646489833267200	Romantischer Kitsch .
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 371021250321068032	Die LINKE veröffentlicht Kurzwahlprogramm in leichter Sprache . Vorbildlich ! %Link Teilhabe Inklusion B ...
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 368299716284784640	Uh , %User holt sich Smail Morabit , ex %User . Schwieriger Charakter . Könnte schief gehen . Gewaltig sogar
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 365854323822960640	herrliche Stücke ...
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 365613671407300608	Mukke machen war wieder mega gut ! Jetzt wird erstmal schön geschlafen ! gutenacht welt
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 374982614110994432	das war als Witz gemeint weil dad Bild so heiss aussieht %PosSmiley
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 395144449090932736	danke für die Aufklärung ! Wieder was gelernt ! %PosSmiley Na , Du wirst schon noch richtig wach heute %PosSmiley Oh , SAP - Kurs geht weiter . Bussi
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 374883699772624896	Deprimierend ... king kings queen queens könig königin herrscher ungerecht unfair life leben ...
+
+% <<<	gold:	positive
+% >>>	predicted:	negative
+% 353237584949952512	Ich empfehle Niklas Luhmanns Analyse des CDU - Wahlprogramms zur geneigten Lektüre %PosSmiley
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 375358608264802304	Zusammen Einsam sein . Wer hat den Mist eigentlich erfunden . Wieso kann man nicht einfach zusammen die Einsamkeit wegkuscheln ?!
+
+% <<<	gold:	negative
+% >>>	predicted:	positive
+% 337658209634504704	Hörte böse Zungen witzeln : Angela Merkel ist zu 150 Jahre SPD gekommen , um ihre Wähler zu begrüssen * feix *
+
+% <<<	gold:	positive
+% >>>	predicted:	negative
+% 322653906926710784	habe eine 4 in Mathe %PosSmiley ( ich weiss , das ist immer noch schlecht aber hauptsache positiv )
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 326338041977380865	das Hört sich echt Super an ! %PosSmiley macht sami nicht auch so ein Video ? Noah süsse beste Freunde ! %User isilie saminator
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 368727002632564736	Mann köpft aus 14 m deutlich vorbei ! Schade ! Kämpfen , Männer !
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 377113110752280576	New York Fashion Week . Genau vor meiner Haustür . Schade , dass mich Fashion ungefähr null interessiert . Call me Andrea . NewYork
+
+% <<<	gold:	positive
+% >>>	predicted:	neutral
+% 318856086482481153	Europawahl - Prognose Deutschland 31.03 . 2013 %Link Die AfD mit 3 Prozent noch vor der FDP ! Das gibt Hoffnung .
+
+% <<<	gold:	positive
+% >>>	predicted:	negative
+% 379603474402791424	Ich gratuliere der FDP zum grandiosen Erfolg in Bayern
+
+% <<<	gold:	negative
+% >>>	predicted:	positive
+% 361148414999793664	FDP - MdB %User ist in HH bei einer Demo gegen Überwachung durch Geheimdienst du von der Bühne geschubst und verletzt w ...
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 373195320462934016	Fies . Fieser . Düsseldorf .
+
+% <<<	gold:	negative
+% >>>	predicted:	neutral
+% 366962769502814212	Vorsicht Horror pur ... %NegSmiley %Link
+
+
 
 % \begin{example}[Error]\label{snt:cgsa:exmp:hl-error}
 %   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Ich finde den Papst putzig \smiley{}}\\
@@ -1168,7 +1380,7 @@ linguistic expressions which actually correlate with the subjectivity
 or polarity of a sentence (e.g., exclamation marks or spelling
 variations) are very unlikely to be included into a sentiment lexicon
 even by a human expert.  As a consequence of this, with the emergence
-of new manually annotated corpora, lexicon-based systems have been
+of manually annotated corpora, lexicon-based systems have been
 gradually superseded by supervised machine-learning techniques.
 
 One of the first steps in this direction was taken
@@ -1995,16 +2207,17 @@ on the three-class prediction task.
         % Evaluating taboada
         % General Statistics:
         % precision    recall  f1-score   support
-        % positive       0.64      0.24      0.35       691
-        % negative       0.47      0.26      0.34       296
+        % positive       0.65      0.24      0.36       691
+        % negative       0.46      0.27      0.34       296
         % neutral       0.41      0.83      0.55       542
-        % avg / total       0.53      0.45      0.42      1529
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 34.43%
-        % Micro-Averaged F1-Score (All Classes): 45.3891%
-      TBD & 0.64 & 0.24 & 0.35 & %
-        0.47 & 0.26 & 0.34 & %
+        % avg / total       0.53      0.46      0.42      1529
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 34.81%
+        % Micro-Averaged F1-Score (All Classes): 45.6508%
+
+      TBD & 0.65 & 0.24 & 0.36 & %
+        0.46 & 0.27 & 0.34 & %
         0.41 & 0.83 & 0.55 & %
-        0.344 & 0.454\\
+        0.348 & 0.457\\
 
         % Training musto
         % Testing musto
@@ -2077,17 +2290,16 @@ on the three-class prediction task.
         % Evaluating taboada
         % General Statistics:
         % precision    recall  f1-score   support
-        % positive       0.41      0.38      0.40       354
-        % negative       0.21      0.23      0.22       212
+        % positive       0.41      0.37      0.39       354
+        % negative       0.21      0.24      0.22       212
         % neutral       0.65      0.66      0.66       930
         % avg / total       0.53      0.53      0.53      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.82%
-        % Micro-Averaged F1-Score (All Classes): 53.4091%
-
-      TBD & 0.41 & 0.38 & 0.4 & %
-        0.21 & 0.23 & 0.22 & %
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.77%
+        % Micro-Averaged F1-Score (All Classes): 53.3422%
+      TBD & 0.41 & 0.37 & 0.39 & %
+        0.21 & 0.24 & 0.22 & %
         0.65 & 0.66 & 0.66 & %
-        0.308 & 0.534\\
+        0.308 & 0.533\\
 
         % Training musto
         % Testing musto
