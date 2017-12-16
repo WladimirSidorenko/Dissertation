@@ -1104,8 +1104,6 @@ work, we additionally collected a set of errors which were specific to
 only one of above the systems and will discuss some of these cases
 here in detail.
 
-\todo[inline]{provide examples of errors made by different methods}
-
 The first such error, which has been made by the system
 of~\citet{Taboada:11}, is shown in
 Example~\ref{snt:cgsa:exmp:taboada-error-0}.  Here, a strongly
@@ -1115,253 +1113,215 @@ prototypical positive term ``gut'' (\emph{good}) in its superlative
 form ``beste'' (\emph{best}).  Unfortunately, it is the degree of
 comparison which becomes fatal in this case: According to the
 implementation of~\citet{Taboada:11}, any superlative adjective has to
-be preceded the definite article and verb predicate in order to be
+be preceded the definite article and a verb predicate in order to be
 considered as a polar term for the final SO computation.  Even though
 the adjective ``beste'' (\emph{best}) can fulfill the first criterion
 (it immediately follows the determiner ``der'' [\emph{the}]), the lack
-of the preceding verb nevertheless nullifies its effect
+of preceding verb nevertheless nullifies its effect.
 
 \begin{example}[Error Made by the System of~\citeauthor{Taboada:11}]\label{snt:cgsa:exmp:taboada-error-0}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Der beste Microsoft Knowledgebase-Artikel, den ich je gelesen habe.}\\[0.65em]
-  \noindent The best Microsoft-Knowledgebase article I've ever read.\\[0.65em]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Der beste Microsoft Knowledgebase-Artikel, den ich je gelesen habe.}\\
+  \noindent The best Microsoft-Knowledgebase article I've ever read.\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-Another error of this method is shown in
+\noindent Another error of this method is shown in
 Example~\ref{snt:cgsa:exmp:taboada-error-1}.  This time, the presence
-of the colloquial term ``verarschen'' (\emph{cheat}) suggests that the
-tweet at hand is negative.  Unfortunately, the occurrence of the modal
-verb ``wollt'' (\emph{wanna}) is interpreted by the system as irrealis
-and prevents further SO calculation, assigning score zero which falls
-into the neutral range.
+of the colloquial term ``verarschen'' (\emph{to hoax}) suggests that
+the tweet at hand is negative.  Unfortunately, the occurrence of
+another verb (``wollt'' [\emph{wanna}]) is interpreted by the system
+as an irrealis hint and consequently prevents further SO calculation,
+assigning the neutral score zero to the whole message.
 
 \begin{example}[Error Made by the System of~\citeauthor{Taboada:11}]\label{snt:cgsa:exmp:taboada-error-1}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Die Konklave w\"ahlt den Papst und dann sagen sie Gott war es - Wollt ihr mich verarschen ?!}\\[0.65em]
-  \noindent The conclave elects the Pope and then they say it was God - do you wanna cheat me?!\\[0.65em]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{midnightblue}{positive}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Die Konklave w\"ahlt den Papst und dann sagen sie Gott war es - Wollt ihr mich verarschen ?!}\\
+  \noindent The conclave elects the Pope and then they say it was God - do you wanna hoax me?!\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-At this point, we already can conclude that the main flaw of the TBD
-approach stems from its overly coarse rules, which in addition rarely
-hold in the Twitter domain.  In order to check this claim, we
-temporarily deactivated the above two heuristics (predicate check for
-superlative adjectives and irrealis blocking by model verbs) and
-recomputed the scores, getting in both cases an improvement by almost
-one percent on either corpus.  Nevertheless, we can easily imagine
-that applying this classifier to longer and more formal texts, such as
-newspapers, would yield significantly better results as the analyzer
-would not depend on just one occurrence of a polar term in the input
-and moreover its rules would presumably be better suited for these
-data.
+At this point, we already can see that the main flaws of the TBD
+approach apparently stem from its overly coarse rules, which in
+addition rarely hold in the Twitter domain.\footnote{In order to check
+  this claim, we tried to temporarily deactivate the above two
+  heuristics (predicate check for superlative adjectives and irrealis
+  blocking by model verbs) and recomputed the scores of this system,
+  getting in both cases an improvement by almost one percent on either
+  corpus.}  In this regard, we can easily imagine that applying this
+classifier to longer and more formal texts such as newspapers or
+journal articles would yield significantly better results as the
+analyzer would not depend on just one occurrence of a polar term in
+the input and its rules would presumably be better suited for these
+better formed data.
 
-Returning back to the error analysis, let us look at another erroneous
-case in Example~\ref{snt:cgsa:exmp:musto-error-0}. This time, the
-system of~\citet{Musto:14} has incorrectly assigned the neutral label
-to a positive tweet despite the presence of the polar term ``gut''
-(\emph{good}), which appears in the Zurich sentiment lexicon with the
-highest possible positive value 1.0.  As it turns out, the occurrence
-of just one polar expression in a sentence is insufficient for this
-classifier: Even though this term score gets boosted by 1.5 because
-adjectives belong to informative parts of speech, during the final SO
-computation, this value is divided by 7 (the length of the sentence)
-and becomes 0.214, which is below the threshold for the positive class
+Returning back to our error analysis, let us look at another erroneous
+case shown in Example~\ref{snt:cgsa:exmp:musto-error-0}. This time,
+the system of~\citet{Musto:14} has incorrectly assigned the neutral
+label to a positive tweet even though the positive term ``gut''
+(\emph{good}) again appears in this message.  As it turns out, the
+occurrence of this word is still insufficient for the classifier to
+predict the poositive class despite the fact that it has the highest
+possible positive score in the lexicon (1.0), which in addition is
+multiplied with a boosting coefficient of 1.5 as the word belongs to
+an informative part of speech.  The crushing factor in this case is
+the length of the tweet: since this approach relies on an average of
+SO scores for all words in a sentence, the value 1.5 of the only
+positive word gets divided by 7 (the length of the sentence) and drops
+down to 0.214, which is below the threshold for the positive class
 (0.267).
 
 \begin{example}[Error Made by the System of~\citeauthor{Musto:14}]\label{snt:cgsa:exmp:musto-error-0}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    Mensch Meier , Mensch Meier ! Das sieht gut aus f\"ur
-    die \%User :}\\[0.65em]
-  \noindent Gosh Meier , Gosh Meier ! It looks good for
-  the \%User :\\[0.65em]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{midnightblue}{positive}}\\
+    Mensch Meier, Mensch Meier! Das sieht gut aus f\"ur
+    die \%User:}\\
+  \noindent Gosh Meier, Gosh Meier! It looks good for
+  the \%User:\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-As it turns out, this kind of mistakes is the most common type of
-errors characteristic to this system.  Furher examples of such
-incorrect decisions are given in Example~\ref{snt:cgsa:exmp:musto-error-1}:
-\begin{example}[Error Made by the System of~\citeauthor{Musto:14}]\label{snt:cgsa:exmp:musto-error-1}
+\noindent As it turns out, this kind of mistakes is by far the most
+common type of errors characteristic to the MST system.  Further
+examples of such incorrect decisions are provided in
+Example~\ref{snt:cgsa:exmp:musto-error-1}:
+\begin{example}[Errors Made by the System of~\citeauthor{Musto:14}]\label{snt:cgsa:exmp:musto-error-1}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    Der \%User tut echt geile musik machen . Nichts mit Boyband hier .}\\[0.65em]
-  \noindent The \%User is really making great music . Nothing with Boyband here .\\[0.65em]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{midnightblue}{positive}}\\
+    Der \%User tut echt geile musik machen. Nichts mit Boyband hier.}\\
+  \noindent The \%User is really making great music. Nothing with Boyband here.\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{black}{neutral*}}\\[1.3em]
+    \upshape\textcolor{black}{neutral*}}\\[2\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    Diese S5E5 Episode mit den Zug\"uberfall war wieder genial ! BreakingBad}\\[0.65em]
-  \noindent This S5E5 episode with the tran robbery was brilliant again ! BreakingBad\\[0.65em]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{midnightblue}{positive}}\\
+    Diese S5E5 Episode mit den Zug\"uberfall war wieder genial! BreakingBad}\\
+  \noindent This S5E5 episode with tran robbery was brilliant again! BreakingBad\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{black}{neutral*}}\\[1.3em]
+    \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-%% Jurek
+A different kind of problems is experienced by the approach
+of~\citet{Jurek:15}, which apparently has difficulties with correctly
+predicting the positive class.  A deeper analysis of its
+misclassifications revealed that the reason for it is relatively
+simple: As you might remeber from the description of this system, this
+classifier is the only one which uses conditional probabilities of
+polar terms instead of their lexicon values.  This probabilities had
+to be estimated on a big noisily labeled corpus, which in our case was
+the German Twitter Snapshot and which unfortunately is extremely
+biased towards the positive class (see
+Table~\ref{snt-cgsa:tbl:corp-dist}).  As a consequence of this,
+positive lexicon entries got assigned extremely high likelihood values
+so that even the occurrence of one such term outweighed the effect of
+multiple negative expressions.  This is for instance the case in
+Example~\ref{snt:cgsa:exmp:jurek-error-0} where the (questionable)
+positive expression ``Ok'' has a score greater than the absolute sum
+of two negative values for the terms ``sich beschweren'' (\emph{to
+  complain}) and ``ekelhaft'' (\emph{disgusting}).
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 311920233352937472	Erst Messi und jetzt Gott es oberster Messdiener . Argentinien ist das Land der Stunde ! Viel Erfolg Papst Franziskus I. htt ...
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 385089037037744128	Dissertationen waren früher auch nicht viel länger ... %PosSmiley Herzliche Gratulation !
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 311902158415077376	Juhu neuer Papst , weist er Rauch ! %PosSmiley Die Möwe war ein Zeichen ! %PosSmiley konklave
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 392580051595984896	Mit 27 MdBs stellt die JU die grösste junge Gruppe im Bundestag : Eine starke Stimme für generationengerechte Politik ! btko ...
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 382494978645442560	Ist kuschlig heute ! %PosSmiley Gleich erst du CDU / CSU - Fraktionssitzung . Ob der Platz reicht ? btw13 ...
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 332962707231891457	heuteshow fdp Das Wir entscheidet ! Also gehen wir ins Bett %PosSmiley
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 327722680243609601	viel besser. viel , viel viel ... mir guckt nur keiner mehr in die Augen beim Reden - aber das wird schon %PosSmiley
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 324636464329658369	Warum fordern die Grünen keine Frauenquote in der ( männl %PosSmiley Homoehe ? Dann stimmt sogar CSU vor Freude zu . %PosSmiley annewill
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 347019360482766849	habe shon gedacht du erkennst mich nicht mer %PosSmiley aber jetzt ist ia alles wieder im grünen bereich %PosSmiley %PosSmiley
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 367003785593229313	Normal bin ich ja nicht der mensch dwer sich beschwert wegen dem essen aber diese Pizza von Joeys ... boah wie ekelhaft
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 374959750985039872	SIEG ! Chemie gewinnt 2-0 gegen Osnabrück %PosSmiley liga3
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 335512032541564929	23.05 . 2013 : Volles Haus zur SPD Geburtstagsparty in Leipzig und ich werde dabei sein %PosSmiley %Link
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 326070261013172224	Gibt ' s noch nicht zu kaufen im Kino meiner Wahl . Steht aber auf der Todo - Liste ! %PosSmiley
+\begin{example}[Error Made by the System of~\citeauthor{Jurek:15}]\label{snt:cgsa:exmp:jurek-error-0}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    Normal bin ich ja nicht der mensch dwer sich beschwert wegen dem essen aber diese Pizza von Joeys... boah wie ekelhaft}\\
+  \noindent Ok I'm not a person who complains about food but this pizza from Joeys... Damn it's so disgusting\\[0.65em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{green3}{positive*}}\\
+\end{example}
 
 %% Kolchyna
+The same problem also afflicts the system of~\citeauthor{Kolchyna:15},
+whose error example is given in~\ref{snt:cgsa:exmp:kolchyna-error-0}.
+In contrast to the previos approaches which mainly rely manually
+designed heuristic rules, this method makes its decisions using a
+trained $k$-NN classifier.  Nevertheless, its prediction in the
+provided case is still incorrect as it evidently confuses the postive
+class with a neutral tweet.
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 376131308205789184	träum was schönes .
+\begin{example}[Error Made by the System of~\citeauthor{Kolchyna:15}]\label{snt:cgsa:exmp:kolchyna-error-0}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    das H\"ort sich echt Super an! \%PosSmiley macht sami nicht auch so ein Video? Noah s\"usse beste Freunde! \heart \%User isilie saminator}\\
+  \noindent It sounds really fantastic! \%PosSmiley won't sami also make such a video? Noah's sweet best friends! \heart \%User isilie saminator\\[0.65em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}\\
+\end{example}
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 373941923326595073	Dafür ist FranzFerdinand ' s Right Thoughts , Right Words , Right Action herrlich retro ( und kein bisschen lahm ) %PosSmiley
+\noindent In order to better understand the reason for this
+misclassification, we first looked at the initial SO scores computed
+by the Kolchyna analyzer (as you might remember, the internal $k$-NN
+predictor of this system takes the average SO value of all polar terms
+found in the message and the logarithm thereof as features).  As it
+turned out, both of these scores (mean SO and its log) were relatively
+high, amounting to 33.42 and 2.52 respectively.  However, a closer
+look at the selected nearest neighbors revealed that even despite such
+high SO values top three of its closest neighboring instances still
+were neutral.  Below, we provide the full list of five nearest
+neighbors along with their labels and distances to the classified
+example:
 
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 371646489833267200	Romantischer Kitsch .
+\begin{enumerate}
+\item \textcolor{darkred}{\bfseries Tweet:}: ``Not in my backyard'' -Mentalit\"at dt. Politik: ``N\"achster Castor geht wohl doch nach Gorleben... -\%Link antiatom''\\
+  \textit{``Not in my backyard'' -Mentality of German politics: ``Next Castor will probably still got to Gorleben... -\%Link antiatom''}\\
+  \textcolor{darkred}{\bfseries Label:}~\textcolor{black}{neutral}\\
+  \textcolor{darkred}{\bfseries Distance:}~$\expnumber{6.83}{-03}$;
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 371021250321068032	Die LINKE veröffentlicht Kurzwahlprogramm in leichter Sprache . Vorbildlich ! %Link Teilhabe Inklusion B ...
+\item \textcolor{darkred}{\bfseries Tweet:}: Kanzlerin im Google-Hangout: ``Die Technik soll sich mal bem\"uhen''\\
+  \textit{Chancellor in Google-Hangout: ``The technology should make an effort''}\\
+  \textcolor{darkred}{\bfseries Label:}~\textcolor{black}{neutral}\\
+  \textcolor{darkred}{\bfseries Distance:}~$\expnumber{1.6}{-02}$;\label{snt:cgsa:exmp:kolchyna-error-0.1}
 
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 368299716284784640	Uh , %User holt sich Smail Morabit , ex %User . Schwieriger Charakter . Könnte schief gehen . Gewaltig sogar
+\item \textcolor{darkred}{\bfseries Tweet:}: Kanzlerin im Google-Hangout: ``Die Technik soll sich mal bem\"uhen''\\
+  \textit{Chancellor in Google-Hangout: ``The technology should make an effort''}\\
+  \textcolor{darkred}{\bfseries Label:}~\textcolor{black}{neutral}\\
+  \textcolor{darkred}{\bfseries Distance:}~$\expnumber{1.6}{-02}$;\label{snt:cgsa:exmp:kolchyna-error-0.2}
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 365854323822960640	herrliche Stücke ...
+\item \textcolor{darkred}{\bfseries Tweet:}: W\"unsche mir ein Format wie zdflogin auch f\"ur das \%User. Viele Themen, klare Aussagen. Sch\"ones Special \%User zur Landtagswahl! \%PosSmiley\\
+  \textit{Wish \%User had a format like zdflogin. Many topics, clear statements. Nice Special \%User zur Landtagswahl! \%PosSmiley}\\
+  \textcolor{darkred}{\bfseries Label:}~\textcolor{green3}{positive}\\
+  \textcolor{darkred}{\bfseries Distance:}~$\expnumber{2.1}{-02}$;
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 365613671407300608	Mukke machen war wieder mega gut ! Jetzt wird erstmal schön geschlafen ! gutenacht welt
+\item \textcolor{darkred}{\bfseries Tweet:}: Ich bin ja so gespannt ob die FDP im September erst den Zahn\"arzten und dann den Apothekern mit Geschenken dankt, oder anders rum...\\
+  \textit{I'm so curous whether FDP will first give gifts to dentists and then to pharmacists in September, or whether it'll be vice versa}\\
+  \textcolor{darkred}{\bfseries Label:}~\textcolor{green3}{positive}\\
+  \textcolor{darkred}{\bfseries Distance:}~$\expnumber{4.12}{-02}$;
+\end{enumerate}
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 374982614110994432	das war als Witz gemeint weil dad Bild so heiss aussieht %PosSmiley
+\noindent Even more surprisingly, the SO scores of these top neutral
+instances were indeed positive: In the first microblog, for example,
+the system recognized two polar terms: ``Not'' (\emph{Not}) which was
+confused with ``Not'' (\emph{distress}) and ``n\"achster''
+(\emph{next}).  Another polar expression (``sich bem\"uhen'' [\emph{to
+  make an effort}]) was found in
+messages~\ref{snt:cgsa:exmp:kolchyna-error-0.1}
+and~\ref{snt:cgsa:exmp:kolchyna-error-0.2}.  Despite the fact that two
+of these items (``Not'' and ``sich bem\"uhen'') had negative labels in
+the sentiment lexicon, their conditional probability of being
+associated with the positive class was more than 10 times bigger than
+the chance to appear the negative polarity (at least according to our
+estimations on the noisily labeled PotTS corpus). This positive
+probablity bias was also the main reason for many other errors made by
+this approach.
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 395144449090932736	danke für die Aufklärung ! Wieder was gelernt ! %PosSmiley Na , Du wirst schon noch richtig wach heute %PosSmiley Oh , SAP - Kurs geht weiter . Bussi
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 374883699772624896	Deprimierend ... king kings queen queens könig königin herrscher ungerecht unfair life leben ...
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 353237584949952512	Ich empfehle Niklas Luhmanns Analyse des CDU - Wahlprogramms zur geneigten Lektüre %PosSmiley
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 375358608264802304	Zusammen Einsam sein . Wer hat den Mist eigentlich erfunden . Wieso kann man nicht einfach zusammen die Einsamkeit wegkuscheln ?!
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 337658209634504704	Hörte böse Zungen witzeln : Angela Merkel ist zu 150 Jahre SPD gekommen , um ihre Wähler zu begrüssen * feix *
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 322653906926710784	habe eine 4 in Mathe %PosSmiley ( ich weiss , das ist immer noch schlecht aber hauptsache positiv )
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 326338041977380865	das Hört sich echt Super an ! %PosSmiley macht sami nicht auch so ein Video ? Noah süsse beste Freunde ! %User isilie saminator
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 368727002632564736	Mann köpft aus 14 m deutlich vorbei ! Schade ! Kämpfen , Männer !
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 377113110752280576	New York Fashion Week . Genau vor meiner Haustür . Schade , dass mich Fashion ungefähr null interessiert . Call me Andrea . NewYork
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 318856086482481153	Europawahl - Prognose Deutschland 31.03 . 2013 %Link Die AfD mit 3 Prozent noch vor der FDP ! Das gibt Hoffnung .
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 379603474402791424	Ich gratuliere der FDP zum grandiosen Erfolg in Bayern
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 361148414999793664	FDP - MdB %User ist in HH bei einer Demo gegen Überwachung durch Geheimdienst du von der Bühne geschubst und verletzt w ...
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 373195320462934016	Fies . Fieser . Düsseldorf .
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 366962769502814212	Vorsicht Horror pur ... %NegSmiley %Link
-
-
-
-% \begin{example}[Error]\label{snt:cgsa:exmp:hl-error}
-%   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Ich finde den Papst putzig \smiley{}}\\
-%   \noindent I find the Pope cute \smiley{}.\\
-%   \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
-%     \upshape\textcolor{green3}{positive}}\\[1.5em]
-%   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape typisch Bayern kaum ist der neue Papst da und schon haben
-%   sie ihn in der Tasche ...}\\
-%   \noindent Typical Bavaria The new Pope is hardly there, as they already have him in their pocket\\
-%   \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
-%     \upshape\textcolor{midnightblue}{negative}}
-% \end{example}
+As you can see, lexicon-based methods experience various kinds of
+problems with prediicting the polarity of short casually written
+microblogs: Some of these systems still apply rules which are too
+domain-specific and do not generalize to Twitter posts, others rely on
+noisy statistics which might be extraordinarily skewed towards just
+one polarity.  At this point, we apparently should check whether other
+approaches to this task (those which rely on completely different
+paradigms such as machine or deep learning) will also be susceptible
+to these errors.  To do so, let us first move to the next major
+group---classical machine-learning techniques.
 
 \section{Machine-Learning Methods}\label{sec:cgsa:ml-based}
 
