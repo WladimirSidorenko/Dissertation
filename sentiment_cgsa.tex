@@ -1611,82 +1611,78 @@ showed that these two feature groups (i.e., manual and automatic
 lexicon attributes) gave an improvement by almost five \F{}-score
 points, outperforming in this regard all other traits.
 
-\done[inline]{\citet{Guenther:13}}
-
-A similar solution (linear SVM with a rich set of features) was
-presented by~\citet{Guenther:13}.  Akin to~\citet{Mohammad:13}, the
-authors used unmodified and lemmatized unigrams, word clusters, and
-lexicon features.  However, in contrast to the previous system, this
+Another notable submission---the system created
+by~\citet{Guenther:13}---also relied on a linear SVM predictor with a
+rich set of features.  Similarly to~\citet{Mohammad:13}, the authors
+used unmodified and lemmatized unigrams, word clusters, and lexicon
+features.  However, in contrast to the previous approach, this
 application utilized only one polarity list---that
 of~\citet{Esuli:05}.  Partially due to this fact,
-\citeauthor{Guenther:13} found the word cluster attribute working best
+\citeauthor{Guenther:13} found the word cluster traits working best
 among all features, followed by the stemmed unigram attributes.  This
-method also yielded competitive results (0.653~\F) on the
-message-level polarity task, attaining second place in this
-competition.
+method also yielded competitive results (0.653~\F{}) on the
+message-level polarity task, attaining second place in this iteration.
 
-\done[inline]{SemEval 2014}
+Later on, \citet{Guenther:14} further improved their results (from
+0.653 to 0.691 two-class \F) by extending the original system with a
+Twitter-aware tokenizer~\cite{Owoputi:13}, spelling normalization
+module, and a significantly increased set of lexicon-based features:
+In particular, instead of simply relying on \textsc{SentiWordNet},
+\citeauthor{Guenther:14} applied a whole ensemble of various polarity
+lists including Liu's opinion lexicon, MPQA subjectivity list, and
+TwittrAttr polarity resource.  As shown by the authors, the last
+change was of particular use to the classification accuracy, improving
+the macro-\F{} by almost four percent.
 
-\done[inline]{\citet{Miura:14}}
+An even better score on this task, could be attained by the approach
+of~\citet{Miura:14}, who also utilized a supervised ML classifier with
+character and word $n$-grams, word clusters, disambiguated senses, and
+lexicon scores of message tokens as features.  Similarly to the
+systems of~\citet{Mohammad:13} and \citet{Guenther:14}, the authors
+made heavy use of various kinds of polarity lists including
+AFINN-111~\cite{Nielsen:11}, Liu's Opinion Lexicon~\cite{Hu:04} ,
+General Inquirer~\cite{Stone:66}, MPQA Polarity List \cite{Wiebe:05a},
+NRC Hashtag and Sentiment140 Lexicon~\cite{Mohammad:13}, and
+\textsc{SentiWordNet}~\cite{Esuli:06a}, additionally applying a whole
+set of preprocessing steps such as spelling correction, part-of-speech
+tagging with lemmatization, and a special weighting scheme for
+underrepresented classes.  Due to these enhancements, combined with a
+carefully tuned LogLinear classifier, \citet{Miura:14} were able to
+boost the sentiment classification results on SemEval~2014 test set
+to~0.71~\F{}$^{+/-}$.
 
-Later on these results were further improved by~\citet{Miura:14}, who
-also utilized a supervised ML approach with character and word
-$n$-grams, word clusters, disambiguated senses, and lexicon scores of
-message tokens.  Similarly to the NRC-Canada system
-of~\citet{Mohammad:13}, the authors made heavy use of various kinds of
-polarity lists including AFINN-111~\cite{Nielsen:11}, Liu's Opinion
-Lexicon~\cite{Hu:04} , General Inquirer~\cite{Stone:66}, MPQA Polarity
-List \cite{Wiebe:05a}, NRC Hashtag and Sentiment140
-Lexicon~\cite{Mohammad:13}, and
-\textsc{SentiWordNet}~\cite{Esuli:06a}.  However, contrary to
-\citeauthor{Mohammad:13}'s approach, \citeauthor{Miura:14} also
-applied a whole set of preprocessing steps such as spelling
-correction, part-of-speech tagging with lemmatization, and a special
-weighting scheme for underrepresented polarity classes.  These
-enhancements, combined with a carefully tuned LogLinear classifier,
-allowed the authors to boost the sentiment classification results on
-SemEval~2014 test set to 0.71 average \F (measure on the two main
-polarity classes---positive and negative).
+Even though SVM- and traditional ML-based approaches continued playing
+a significant role in the following SemEval runs, they have gradually
+been superseded by more powerful ensemble- and deep-learning based
+methods~\cite[e.g., ][]{Hagen:15,Deriu:16,Xu:16}, some of which will
+be covered in the next section.  At this point, however, let us first
+look at what results we can expect from the previously described
+systems.  For this purpose, we have reimplemented the approaches of
+\citet{Gamon:04}, \citet{Mohammad:13}, and \citet{Guenther:14}, and
+applied these classifiers to PotTS and SB10k data.  The scores of
+these methods are shown in Table~\ref{snt-cgsa:tbl:ml-res}.
 
-\done[inline]{\citet{Guenther:14}}
+% A different approach to the coarse-grained sentiment-analysis task was
+% proposed by~\citet{Hagen:15}, who, instead of developing their own
+% method from scratch, united four already existing solutions
+% (\citet{Mohammad:13}, \citet{Guenther:13}, \citet{Proisl:13}, and
+% \citet{Miura:14}) into a single ensemble, taking the average of the
+% predicted scores as the final decision of the complete system.  This
+% way, the authors achieved 0.648~\F{} on the SemEval-2015 test set,
+% attaining first place among 40 participants.
 
-In the same vein, \citet{Guenther:14} improved their results from the
-previous SemEval run (from 0.654 to 0.691 two-class \F) by extending
-their original system with a Twitter-aware
-tokenizer~\cite{Owoputi:13}, spelling normalization module, and a
-significantly increased of lexicon-based features (this time, instead
-of simply relying on the \textsc{SentiWordNet} resource,
-\citeauthor{Guenther:14} harnessed a whole ensemble of various
-polarity lists including Liu's opinion list, MPQA subjectivity
-lexicon, and TwittrAttr polarity resource).  As proved by the ablation
-tests, the last change was of particular use to the classification
-accuracy, improving the scores by almost five percent.
+% \done[inline]{\citet{Hamdan:15}}
 
-\done[inline]{SemEval 2015}
-
-\done[inline]{\citet{Hagen:15}}
-
-A different approach to the coarse-grained sentiment-analysis task was
-proposed by~\citet{Hagen:15}, who, instead of developing their own
-method from scratch, united four already existing solutions
-(\citet{Mohammad:13}, \citet{Guenther:13}, \citet{Proisl:13}, and
-\citet{Miura:14}) into a single ensemble, taking the average of the
-predicted scores as the final decision of the complete system.  This
-way, the authors achieved 0.648~\F{} on the SemEval-2015 test set,
-attaining first place among 40 participants.
-
-\done[inline]{\citet{Hamdan:15}}
-
-Another supervised machine-learning system was proposed
-by~\citet{Hamdan:15}, who also used an extensive set of features such
-as word $n$-grams, negation existence, sentiment lexicons and
-$Z$-score, which reflected the strength of statistical correlation
-between a given term $t$ and the target class $c$ in the distribution
-\cite[cf.][]{Hamdan:14}.  Similarly to~\citet{Mohammad:13}, the
-authors used an extensive set of lexicon features, and also applied
-attribute and class weighting as it was done by~\citet{Guenther:14}.
-This way, \citeauthor{Hamdan:15} achieved 0.643~\F on the SemEval-2015
-test get, getting third place among all competitors.
+% Another supervised machine-learning system was proposed
+% by~\citet{Hamdan:15}, who also used an extensive set of features such
+% as word $n$-grams, negation existence, sentiment lexicons and
+% $Z$-score, which reflected the strength of statistical correlation
+% between a given term $t$ and the target class $c$ in the distribution
+% \cite[cf.][]{Hamdan:14}.  Similarly to~\citet{Mohammad:13}, the
+% authors used an extensive set of lexicon features, and also applied
+% attribute and class weighting as it was done by~\citet{Guenther:14}.
+% This way, \citeauthor{Hamdan:15} achieved 0.643~\F on the SemEval-2015
+% test get, getting third place among all competitors.
 
 % One of the first attempts to analyze message-level sentiments on
 % Twitter was made by \citet{Go:09}.  For their experiments, the authors
@@ -1747,18 +1743,194 @@ test get, getting third place among all competitors.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
 
-       &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\\bottomrule
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+
+       % Gamon Commands:
+       % ------------------
+       % cgsa_sentiment train -t gamon -g -l cgsa/data/lexicons/zrch.manual.txt
+       % -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt
+       % data/PotTS/preprocessed/{train,dev}/*.tsv
+       %
+       % Best parameters for gamon: {'clf__C': 0.01}
+       %
+       % cgsa_sentiment test  -m cgsa/data/models/cgsa.model \
+       % data/PotTS/preprocessed/test/*.tsv > \
+       % data/PotTS/preprocessed/predicted/gamon/gamon.zrch.linproj.test
+       %
+       % cgsa_evaluate data/SB10k/preprocessed/test/ \
+       % data/PotTS/preprocessed/predicted/gamon/gamon.zrch.linproj.test
+       %
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.67      0.73      0.70       680
+       % negative       0.35      0.15      0.21       287
+       % neutral       0.60      0.72      0.66       558
+       % avg / total       0.59      0.62      0.59      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 45.30%
+       % Micro-Averaged F1-Score (All Classes): 61.7049%
+
+       GMN & 0.67 & 0.73 & 0.7 & %
+       0.35 & 0.15 & 0.21 & %
+       0.6 & 0.72 & 0.66 & %
+       0.453 & 0.617\\
+
+       % Mohammad Commands:
+       % ------------------
+       % cgsa_sentiment train  -t mohammad -g -l cgsa/data/lexicons/zrch.manual.txt \
+       % -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt \
+       % data/PotTS/preprocessed/{train,dev}/*.tsv
+       %
+       % Best C: 0.01
+       %
+       % cgsa_sentiment test  -m cgsa/data/models/cgsa.model \
+       % data/PotTS/preprocessed/test/*.tsv > \
+       % data/PotTS/preprocessed/predicted/mohammad/mohammad.zrch.linproj.test
+       %
+       % cgsa_evaluate data/PotTS/preprocessed/test/ \
+       % data/PotTS/preprocessed/predicted/mohammad/mohammad.zrch.linproj.test
+       %
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.79      0.77      0.78       680
+       % negative       0.58      0.56      0.57       287
+       % neutral       0.73      0.76      0.74       558
+       % avg / total       0.73      0.73      0.73      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 67.41%
+       % Micro-Averaged F1-Score (All Classes): 72.7213%
+       MHM & \textbf{0.79} & 0.77 & \textbf{0.78} & %
+       \textbf{0.58} & \textbf{0.56} & \textbf{0.57} & %
+       \textbf{0.73} & \textbf{0.76} & \textbf{0.74} & %
+       \textbf{0.674} & \textbf{0.727}\\
+
+       % Guenther Commands:
+       % ------------------
+       % cgsa_sentiment train -t guenther -g -l cgsa/data/lexicons/zrch.manual.txt
+       % -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt
+       % data/PotTS/preprocessed/{train,dev}/*.tsv
+       %
+       % Best parameters for guenther: l1_ratio: 0.01, clf__alpha: 0.0001
+       %
+       % cgsa_sentiment test  -m cgsa/data/models/cgsa.model \
+       % data/PotTS/preprocessed/test/*.tsv > \
+       % data/PotTS/preprocessed/predicted/guenther/guenther.zrch.linproj.test
+       %
+       % cgsa_evaluate data/SB10k/preprocessed/test/ \
+       % data/PotTS/preprocessed/predicted/guenther/guenther.zrch.linproj.test
+       %
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.71      0.80      0.75       680
+       % negative       0.55      0.45      0.50       287
+       % neutral       0.68      0.63      0.65       558
+       % avg / total       0.67      0.67      0.67      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 62.41%
+       % Micro-Averaged F1-Score (All Classes): 67.3443%
+
+       GNT & 0.71 & \textbf{0.8} & 0.75 & %
+       0.55 & 0.45 & 0.5 & %
+       0.68 & 0.63 & 0.65 & %
+       0.624 & 0.673\\
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+
+       % Gamon Commands:
+       % ------------------
+       % cgsa_sentiment train -t gamon -g -l cgsa/data/lexicons/zrch.manual.txt
+       % -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt
+       % data/SB10k/preprocessed/{train,dev}/*.tsv
+       %
+       % Best parameters for gamon: {'clf__C': 0.01}
+       %
+       % cgsa_sentiment test  -m cgsa/data/models/cgsa.model \
+       % data/SB10k/preprocessed/test/*.tsv > \
+       % data/SB10k/preprocessed/predicted/gamon/gamon.zrch.linproj.test
+       %
+       % cgsa_evaluate data/SB10k/preprocessed/test/ \
+       % data/SB10k/preprocessed/predicted/gamon/gamon.zrch.linproj.test
+       %
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.65      0.45      0.53       354
+       % negative       0.38      0.08      0.13       212
+       % neutral       0.72      0.93      0.81       930
+       % avg / total       0.65      0.70      0.65      1496
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 32.88%
+       % Micro-Averaged F1-Score (All Classes): 69.8529%
+
+      GMN & 0.65 & 0.45 & 0.53 & %
+       0.38 & 0.08 & 0.13 & %
+       0.72 & \textbf{0.93} & 0.81 & %
+       0.329 & 0.699\\
+
+       % Mohammad Commands:
+       % ------------------
+       % cgsa_sentiment train  -t mohammad -g -l cgsa/data/lexicons/zrch.manual.txt \
+       % -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt \
+       % data/SB10k/preprocessed/{train,dev}/*.tsv
+       %
+       % Best C: 0.01
+       %
+       % cgsa_sentiment test  -m cgsa/data/models/cgsa.model \
+       % data/SB10k/preprocessed/test/*.tsv > \
+       % data/SB10k/preprocessed/predicted/mohammad/mohammad.zrch.linproj.test
+       %
+       % cgsa_evaluate data/SB10k/preprocessed/test/ \
+       % data/SB10k/preprocessed/predicted/mohammad/mohammad.zrch.linproj.test
+       %
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.71      0.65      0.68       354
+       % negative       0.51      0.40      0.45       212
+       % neutral       0.80      0.87      0.84       930
+       % avg / total       0.74      0.75      0.74      1496
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 56.36%
+       % Micro-Averaged F1-Score (All Classes): 75.2005%
+
+       MHM & \textbf{0.71} & \textbf{0.65} & \textbf{0.68} & %
+        \textbf{0.51} & \textbf{0.4} & \textbf{0.45} & %
+        \textbf{0.8} & 0.87 & \textbf{0.84} & %
+        \textbf{0.564} & \textbf{0.752}\\
+
+       % Guenther Commands:
+       % ------------------
+       % cgsa_sentiment train -t guenther -g -l cgsa/data/lexicons/zrch.manual.txt
+       % -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt
+       % data/SB10k/preprocessed/{train,dev}/*.tsv
+       %
+       % Best parameters for guenther: l1_ratio: 0.01, clf__alpha: 0.0001
+       %
+       % cgsa_sentiment test  -m cgsa/data/models/cgsa.model \
+       % data/SB10k/preprocessed/test/*.tsv > \
+       % data/SB10k/preprocessed/predicted/guenther/guenther.zrch.linproj.test
+       %
+       % cgsa_evaluate data/SB10k/preprocessed/test/ \
+       % data/SB10k/preprocessed/predicted/guenther/guenther.zrch.linproj.test
+       %
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.67      0.62      0.64       354
+       % negative       0.44      0.28      0.34       212
+       % neutral       0.78      0.87      0.82       930
+       % avg / total       0.70      0.72      0.71      1496
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 49.11%
+       % Micro-Averaged F1-Score (All Classes): 72.3930%
+
+       GNT & 0.67 & 0.62 & 0.64 & %
+       0.44 & 0.28 & 0.34 & %
+       0.78 & 0.87 & 0.82 & %
+       0.491 & 0.724\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Evaluation of ML-based coarse-grained SA methods.]{
       Evaluation of ML-based coarse-grained SA methods.\\
-      {\small }}
+      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13}, GNT~--
+        \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res}
   \end{center}
 \end{table}
+
+\todo[inline]{Describe evaluation of \citet{Gamon:04},
+  \citet{Mohammad:13}, and \citet{Guenther:14}}
 
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
