@@ -1336,10 +1336,10 @@ criticized for the rigidness of their classification\footnote{Since
 incorporate additional, non-lexical attributes into the final
 decisions.  Moreover, as noted by~\citet{Pang:02} and also confirmed
 empirically by~\citet{Riloff:03} and \citet{Gamon:04}, many linguistic
-expressions which actually correlate with the subjectivity or polarity
-of a sentence (e.g., exclamation marks or spelling variations) are
-very unlikely to be included into a sentiment lexicon even by human
-experts.  As a consequence of this, with the emergence of manually
+expressions which actually correlate with subjectivity and polarity of
+a sentence (e.g., exclamation marks or spelling variations) are very
+unlikely to be included into a sentiment lexicon even by a human
+expert.  As a consequence of this, with the emergence of manually
 annotated corpora, lexicon-based systems have been gradually
 superseded by supervised machine-learning techniques.
 
@@ -1355,19 +1355,19 @@ reached when the dataset was restricted only to those examples which
 the annotators were most confident about.
 
 Inspired by the success of this approach,~\citet{Yu:03} presented a
-more elaborated system, in which they first distinguished between
-subjective and objective documents, then differentiated between
-neutral and polar sentences, and, finally, classified the polarity of
-the latter ones.  As in the previous case, the authors used a
-Na{\"i}ve Bayes predictor for the document-level task, reaching a
-remarkable \F-score of~0.96 on this objective; and applied an ensemble
-of NB systems to predict the subjectivity of single sentences.  To
-determine the semantic orientation of a subjective clause,
-\citeauthor{Yu:03} averaged the polarity scores of its tokens,
-obtaining these scores from an automatically constructed sentiment
-lexicon~\cite{Hatzivassi:97}.  This way, they attained an accuracy
-of~91\% on a set of 38 sentences which had a perfect inter-annotator
-agreement in their data.
+more elaborated system in which they first distinguished between
+subjective and objective documents, then differentiated between polar
+and neutral sentences, and, finally, determined the semantic
+orientation of opinionated clauses.  As in the previous case, the
+authors used a Na{\"i}ve Bayes predictor for the document-level task,
+reaching a remarkable \F-score of~0.96 on this objective; and applied
+an ensemble of NB systems to predict the subjectivity of single
+sentences.  To determine the semantic orientation of subjective
+clauses, \citeauthor{Yu:03} averaged the polarity scores of their
+tokens, obtaining these scores from an automatically constructed
+sentiment lexicon~\cite{Hatzivassi:97}.  This way, they attained an
+accuracy of~91\% on a set of 38 sentences that had a perfect
+inter-annotator agreement.
 
 Yet another multi-stage Na{\"i}ve Bayes model was proposed by
 \citet{Pang:04}, who tried to classify the overall semantic
@@ -1377,7 +1377,7 @@ accuracy on this subtask) and then predicting the overall polarity of
 a review using only subjective passages.  With this architecture, the
 authors achieved a statistically significant improvement over the
 baseline method (in which they traditionally predicted the polarity of
-the text using all sentences), boosting the accuracy of SO
+the text using all of its sentences), boosting the accuracy of SO
 classification from~82.8 to~86.4\%.
 
 In order to check the effectiveness of the Na{\"i}ve Bayes approach,
@@ -1424,8 +1424,8 @@ and then tried to predict its polarity.  Due to a better usage of
 higher-order $n$-grams (where, instead of na{\"i}vely considering all
 token sequences up to the length $n$ as new features, the authors only
 took 5,000 most useful ones, measuring their utility with the weighted
-log-likelihood ratio), \citet{Ng:06} even improved the then state of
-the art on the \citeauthor{Pang:04}'s corpus, boosting the accuracy of
+log-likelihood ratio), \citet{Ng:06} even improved the state of the
+art on the \citeauthor{Pang:04}'s corpus, boosting the accuracy of
 polarity classification from~87.1 to~90.5\%.
 
 % \todo[inline]{Feature Selection}
@@ -1569,31 +1569,31 @@ polarity classification from~87.1 to~90.5\%.
 % 0.991~mean squared error) with the BoosTexter approach when using all
 % the introduced features.
 
-However, the real game change in the CGSA research field happened with
-the introduction of the SemEval shared task on Sentiment Analysis in
+However, a real game change in the CGSA research field happened with
+the introduction of the SemEval shared task on sentiment analysis in
 Twitter~\cite{Nakov:13}.  Starting from its inaugural run
 in~\citeyear{Nakov:13}, this competition has rapidly caught the
-attention of the NLP community, being rerun five times and attracting
-more than 40 active participants every year.
+attention of the broader NLP community, being rerun five times and
+attracting more than 40 active participants every year.
 
 It is not surprising that the first winning systems in this task
 closely followed in the footsteps of the advances in opinion mining
 literature at that time.  For example, the two top-scoring submissions
-in the first iteration~\cite{Mohammad:13,Guenther:13} both relied on
-the SVM algorithm for classification: The first of these
-approaches---an analyzer developed by~\citet{Mohammad:13}---was the
-absolute winner of the initial run, scoring impressive 0.69
-macro-averaged two-class \F{} on the provided Twitter test set.  The
-key to the success of this method was an extensive set of linguistic
-features devised by the authors, which included character and token
-$n$-grams, Brown clusters~\cite{Brown:92}, statistics on
-part-of-speech tags, punctuation marks, elongated words etc.  However,
-the most useful type of attributes, turned out to be features that
-reflected information from various sentiment lexicons.  In particular,
-depending on the type of the polarity list from which such information
-was extracted, \citeauthor{Mohammad:13} introduced two types of
-lexicon attributes: \emph{manual} and \emph{automatic} ones.  The
-former group was computed with the help of the NRC emotion
+in the initial iteration~\cite{Mohammad:13,Guenther:13} both relied on
+the SVM algorithm: The first of these approaches---an analyzer
+developed by~\citet{Mohammad:13}---was the absolute winner of
+SemEval~2013, scoring impressive 0.69 macro-averaged two-class \F{} on
+the provided Twitter corpus.  The key to the success of this method
+was an extensive set of linguistic features devised by the authors,
+which included character and token $n$-grams, Brown
+clusters~\cite{Brown:92}, statistics on part-of-speech tags,
+punctuation marks, elongated words etc.  However, the most useful type
+of attributes according to a feature ablation test turned out to be
+features that reflected information from various sentiment lexicons.
+In particular, depending on the type of the polarity list from which
+such information was extracted, \citeauthor{Mohammad:13} introduced
+two types of lexicon attributes: \emph{manual} and \emph{automatic}
+ones.  The former group was computed with the help of the NRC emotion
 lexicon~\cite{Mohammad:13a}, MPQA polarity list~\cite{Wilson:05}, and
 Bing Liu's manually compiled polarity set~\cite{Hu:04}.  For each of
 these resources and for each of the non-neutral polarity classes
@@ -1601,15 +1601,15 @@ these resources and for each of the non-neutral polarity classes
 lexicon scores for all message tokens and also separately calculated
 these statistics for each particular part-of-speech tag, considering
 them as additional attributes.  Automatic features were obtained using
-automatically generated Sentiment140 and Hashtag Sentiment Base
-polarity lists \cite{Kiritchenko:14}.  Again, for each of these
-lexicons, for each of the two polarity classes, the authors produced
-four features representing the number of tokens with non-zero scores,
-the sum and the maximum of all respective lexicon values for all tweet
-tokens, and the score of the last term.  The subsequent ablation test
-showed that these two feature groups (i.e., manual and automatic
-lexicon attributes) gave an improvement by almost five \F{}-score
-points, outperforming in this regard all other traits.
+the Sentiment140 and Hashtag Sentiment Base polarity lists
+\cite{Kiritchenko:14}.  Again, for each of these lexicons, for each of
+the two polarity classes, the authors produced four features
+representing the number of tokens with non-zero scores, the sum and
+the maximum of all respective lexicon values for all words, and the
+score of the last term in the tweet.  These two feature groups (manual
+and automatic lexicon attributes) improved the macro-averaged
+\F{}$^{+/-}$-score by almost five percentage points, outperforming in
+this regard all other traits.
 
 Another notable submission---the system created
 by~\citet{Guenther:13}---also relied on a linear SVM predictor with a
@@ -1619,20 +1619,21 @@ features.  However, in contrast to the previous approach, this
 application utilized only one polarity list---that
 of~\citet{Esuli:05}.  Partially due to this fact,
 \citeauthor{Guenther:13} found the word cluster traits working best
-among all features, followed by the stemmed unigram attributes.  This
-method also yielded competitive results (0.653~\F{}) on the
-message-level polarity task, attaining second place in this iteration.
+among all features.  This method also yielded competitive results
+(0.653~\F{}$^{+/-}$) on the message-level polarity task, attaining
+second place in this iteration.
 
 Later on, \citet{Guenther:14} further improved their results (from
 0.653 to 0.691 two-class \F) by extending the original system with a
 Twitter-aware tokenizer~\cite{Owoputi:13}, spelling normalization
 module, and a significantly increased set of lexicon-based features:
-In particular, instead of simply relying on \textsc{SentiWordNet},
-\citeauthor{Guenther:14} applied a whole ensemble of various polarity
-lists including Liu's opinion lexicon, MPQA subjectivity list, and
-TwittrAttr polarity resource.  As shown by the authors, the last
-change was of particular use to the classification accuracy, improving
-the macro-\F{} by almost four percent.
+In particular, instead of simply relying on
+\textsc{SentiWordNet}~\cite{Esuli:05}, \citeauthor{Guenther:14}
+applied a whole ensemble of various polarity lists including Liu's
+opinion lexicon, MPQA subjectivity list, and TwittrAttr polarity
+resource.  As shown by the authors, the last change was of particular
+use to the classification accuracy, improving the macro-\F{}$^{+/-}$
+by almost four percent.
 
 An even better score on this task, could be attained by the approach
 of~\citet{Miura:14}, who also utilized a supervised ML classifier with
@@ -1642,7 +1643,7 @@ systems of~\citet{Mohammad:13} and \citet{Guenther:14}, the authors
 made heavy use of various kinds of polarity lists including
 AFINN-111~\cite{Nielsen:11}, Liu's Opinion Lexicon~\cite{Hu:04} ,
 General Inquirer~\cite{Stone:66}, MPQA Polarity List \cite{Wiebe:05a},
-NRC Hashtag and Sentiment140 Lexicon~\cite{Mohammad:13}, and
+NRC Hashtag and Sentiment140 Lexicon~\cite{Mohammad:13}, as well as
 \textsc{SentiWordNet}~\cite{Esuli:06a}, additionally applying a whole
 set of preprocessing steps such as spelling correction, part-of-speech
 tagging with lemmatization, and a special weighting scheme for
