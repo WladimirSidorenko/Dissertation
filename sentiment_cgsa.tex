@@ -1652,16 +1652,53 @@ carefully tuned LogLinear classifier, \citet{Miura:14} were able to
 boost the sentiment classification results on SemEval~2014 test set
 to~0.71~\F{}$^{+/-}$.
 
-Even though SVM- and traditional ML-based approaches continued playing
-a significant role in the following SemEval runs, they have gradually
-been superseded by more powerful ensemble- and deep-learning based
-methods~\cite[e.g., ][]{Hagen:15,Deriu:16,Xu:16}, some of which will
-be covered in the next section.  At this point, however, let us first
-look at what results we can expect from the previously described
-systems.  For this purpose, we have reimplemented the approaches of
-\citet{Gamon:04}, \citet{Mohammad:13}, and \citet{Guenther:14}, and
-applied these classifiers to PotTS and SB10k data.  The scores of
-these methods are shown in Table~\ref{snt-cgsa:tbl:ml-res}.
+In order to see how this family of methods would perform on our
+Twitter corpora, we have reimplemented the approaches of
+\citet{Gamon:04}, \citet{Mohammad:13}, and \citet{Guenther:14} with
+the following modifications: For the feature extraction in the system
+of~\citet{Gamon:04}, we utilized the available dependency analyses
+from the \texttt{MateParser}~\cite{Bohnet:09} instead of constituency
+trees, considering each node of the dependency tree as a syntactic
+constituent and regarding the two-tuple of the form
+(\texttt{dependency-link-to-the-parent}, \texttt{PoS-tag-of-the-node})
+as the name of this constituent (for example, a finite verb at the
+root node of the tree was mapped to the constituent (\texttt{--},
+\texttt{VVFIN}), where \texttt{--} was the name of the root relation).
+Furthermore, due to the unavailability of Brown clusters for German,
+we had to remove this attribute altogether from the feature sets of
+\citeauthor{Mohammad:13}'s and \citeauthor{Guenther:14}'s methods.
+However, because the former system relied on two types of lexicon
+attributes---manual and automatic ones, we used two polarity lists for
+these approaches---the Zurich Sentiment Lexicon
+of~\citet{Clematide:10} as manual resource and the Linear Projection
+Lexicon as automatically generated polar set---and not just the Zurich
+lexicon as we did in our previous experiments on lexicon-based
+methods.  All remaining attributes and training specifics were kept
+maximally close to the original descriptions.
+
+The results of our reimplementations are shown in
+Table~\ref{snt-cgsa:tbl:ml-res}.  As we can see from the scores, the
+system of~\citet{Mohammad:13} clearly dominates its competitors on
+both corpora. This holds for all presented metrics except for the
+recall of positive tweets on the PotTS dataset and neutral messages on
+the SB10k data, where this approach is outperformed by the analyzers
+of \citet{Guenther:14} and \citet{Gamon:04} respectively.  In any
+other respect, however, the results of the MHM classifier are notably
+higher than those of the GNT method, sometimes surpassing this
+analyzer by up to 12 percent (this is, for instance, the case for the
+recall of negative microblogs on the SB10k corpus).  This margin
+becomes even larger if we compare the scores of the Mohammad's system
+with the performance of \citeauthor{Gamon:04}'s predictor, which is by
+far the weakest ML system in our survey.  This weakness, though, is
+less surprising regarding the fact that \citeauthor{Gamon:04}'s
+approach is purely grammar-based and relies only on information about
+part-of-speech tags and constituency structure without any lexicon
+traits or even plain lexical $n$-gram features.  Partially due to
+these restrictions, the results of this analyzer are even worse than
+the average scores of lexicon-based methods, which is not the case for
+the analyzers of~\citet{Mohammad:13} and \citet{Guenther:14} that rely
+on more sophisticated feature sets.
+
 
 % A different approach to the coarse-grained sentiment-analysis task was
 % proposed by~\citet{Hagen:15}, who, instead of developing their own
@@ -1922,18 +1959,35 @@ these methods are shown in Table~\ref{snt-cgsa:tbl:ml-res}.
        0.491 & 0.724\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of ML-based coarse-grained SA methods.]{
-      Evaluation of ML-based coarse-grained SA methods.\\
-      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13}, GNT~--
-        \citet{Guenther:14}}}
+    \caption[Evaluation of ML-based CGSA methods.]{
+      Evaluation of ML-based CGSA methods.\\
+      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
+        GNT~-- \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res}
   \end{center}
 \end{table}
 
-\todo[inline]{Describe evaluation of \citet{Gamon:04},
-  \citet{Mohammad:13}, and \citet{Guenther:14}}
+\subsection{Effect of Classifiers}\label{subsec:cgsa:ml-methods:classifiers-analysis}
+\todo[inline]{Evaluate and describe different classifiers.}
+
+\subsection{Effect of Features}\label{subsec:cgsa:ml-methods:classifiers-analysis}
+\todo[inline]{Perform and describe feature ablation test.}
+
+\subsection{Error Analysis}\label{subsec:cgsa:ml-methods:err-analysis}
+\todo[inline]{Make and describe an error analysis.}
 
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
+
+Even though SVM- and traditional ML-based approaches continued playing
+a significant role in the following SemEval runs, they have gradually
+been superseded by more powerful ensemble- and deep-learning based
+methods~\cite[e.g., ][]{Hagen:15,Deriu:16,Xu:16}, some of which will
+be covered in the next section.  At this point, however, let us first
+look at what results we can expect from the already described systems.
+For this purpose, we have reimplemented the approaches of
+\citet{Gamon:04}, \citet{Mohammad:13}, and \citet{Guenther:14}, and
+applied these classifiers to PotTS and SB10k data.  The scores of
+these methods are shown in Table~\ref{snt-cgsa:tbl:ml-res}.
 
 \todo[inline]{Lin, 1998}
 
