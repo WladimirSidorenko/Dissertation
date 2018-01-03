@@ -1967,14 +1967,533 @@ on more sophisticated feature sets.
   \end{center}
 \end{table}
 
-\subsection{Effect of Classifiers}\label{subsec:cgsa:ml-methods:classifiers-analysis}
-\todo[inline]{Evaluate and describe different classifiers.}
-
 \subsection{Effect of Features}\label{subsec:cgsa:ml-methods:classifiers-analysis}
 \todo[inline]{Perform and describe feature ablation test.}
 
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.15\columnwidth} % first columm
+        *{10}{>{\centering\arraybackslash}p{0.082\columnwidth}}}
+      \toprule
+      \multirow{2}{0.15\columnwidth}{%
+      \bfseries Polarity-Changing\newline Factors} & %
+      \multicolumn{10}{c}{\bfseries System Scores}\\
+      & \multicolumn{2}{c}{\bfseries HL} & \multicolumn{2}{c}{\bfseries TBD} %
+      & \multicolumn{2}{c}{\bfseries MST} %
+      & \multicolumn{2}{c}{\bfseries JRK} & \multicolumn{2}{c}{\bfseries KLCH}\\%
+      \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7} %
+      \cmidrule(lr){8-9}\cmidrule(lr){10-11}
+
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{}\\\midrule
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}PotTS}\\
+      All & 0.615 & 0.685 & 0.593 & 0.671 & 0.606 & 0.675 %
+      & 0.339 & 0.467 & 0.468 & 0.651\\
+
+      % Training hu-liu
+      % Testing hu-liu
+      % Evaluating hu-liu
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.76      0.77      0.76       680
+      % negative       0.55      0.43      0.48       287
+      % neutral       0.67      0.73      0.70       558
+      % avg / total       0.69      0.69      0.69      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 62.21%
+      % Micro-Averaged F1-Score (All Classes): 69.1148%
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.78      0.71      0.74       680
+      % negative       0.54      0.39      0.45       287
+      % neutral       0.62      0.78      0.69       558
+      % avg / total       0.67      0.67      0.67      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 59.63%
+      % Micro-Averaged F1-Score (All Classes): 67.2787%
+
+      % Training musto
+      % Testing musto
+      % Evaluating musto
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.76      0.78      0.77       680
+      % negative       0.57      0.47      0.51       287
+      % neutral       0.68      0.72      0.70       558
+      % avg / total       0.69      0.70      0.70      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 64.05%
+      % Micro-Averaged F1-Score (All Classes): 69.9672%
+
+      % Training jurek
+      % Testing jurek
+      % Evaluating jurek
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.61      0.32      0.42       680
+      % negative       0.47      0.22      0.30       287
+      % neutral       0.43      0.80      0.56       558
+      % avg / total       0.52      0.47      0.45      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 35.67%
+      % Micro-Averaged F1-Score (All Classes): 47.3443%
+
+      % Training kolchyna
+      % Testing kolchyna
+      % Evaluating kolchyna
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.66      0.24      0.35       680
+      % negative       0.35      0.19      0.24       287
+      % neutral       0.44      0.87      0.58       558
+      % avg / total       0.52      0.46      0.42      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 29.82%
+      % Micro-Averaged F1-Score (All Classes): 46.2951%
+      --Negation & 0.622 & \textbf{0.691} & 0.596 & 0.672 & \textbf{0.641} & %
+       0.7 & 0.357 & 0.473 & 0.298 & 0.463\\
+
+
+       % Training taboada
+       % Testing taboada
+       % Evaluating taboada
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.77      0.71      0.74       680
+       % negative       0.54      0.39      0.45       287
+       % neutral       0.62      0.78      0.69       558
+       % avg / total       0.67      0.67      0.67      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 59.53%
+       % Micro-Averaged F1-Score (All Classes): 67.2131%
+
+       % Training jurek
+       % Testing jurek
+       % Evaluating jurek
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.60      0.31      0.41       680
+       % negative       0.42      0.20      0.27       287
+       % neutral       0.43      0.80      0.56       558
+       % avg / total       0.50      0.47      0.44      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 33.94%
+       % Micro-Averaged F1-Score (All Classes): 46.6885%
+      --Intensification & \NA{} & \NA{} & 0.595 & 0.672 & \NA{} &  %
+      \NA{} & 0.339 & 0.467 & \NA{} & \NA{}\\
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.77      0.75      0.76       680
+      % negative       0.54      0.41      0.47       287
+      % neutral       0.64      0.75      0.69       558
+      % avg / total       0.68      0.68      0.68      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 61.29%
+      % Micro-Averaged F1-Score (All Classes): 68.3934%
+      --Other Modifiers & \NA{} & \NA{} & 0.613 & 0.684 & \NA{} &  %
+      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}SB10k}\\
+
+      All & \textbf{0.421} & 0.577 & 0.392 & 0.569 & 0.395 & 0.568 %
+      & 0.351 & 0.592 & 0.235 & 0.606\\
+
+      % Training hu-liu
+      % Testing hu-liu
+      % Evaluating hu-liu
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.26      0.31      0.28       212
+      % neutral       0.73      0.62      0.67       930
+      % positive       0.48      0.63      0.55       354
+      % avg / total       0.61      0.58      0.59      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 41.46%
+      % Micro-Averaged F1-Score (All Classes): 57.5535%
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.24      0.28      0.26       212
+      % neutral       0.72      0.63      0.67       930
+      % positive       0.48      0.60      0.53       354
+      % avg / total       0.60      0.57      0.58      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 39.50%
+      % Micro-Averaged F1-Score (All Classes): 57.1524%
+
+      % Training musto
+      % Testing musto
+      % Evaluating musto
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.26      0.31      0.28       212
+      % neutral       0.70      0.63      0.67       930
+      % positive       0.45      0.51      0.48       354
+      % avg / total       0.58      0.56      0.57      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 38.07%
+      % Micro-Averaged F1-Score (All Classes): 55.8824%
+
+      % Training jurek
+      % Testing jurek
+      % Evaluating jurek
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.31      0.17      0.22       212
+      % neutral       0.69      0.74      0.71       930
+      % positive       0.40      0.42      0.41       354
+      % avg / total       0.57      0.59      0.57      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 31.55%
+      % Micro-Averaged F1-Score (All Classes): 58.6230%
+
+      % Training kolchyna
+      % Testing kolchyna
+      % Evaluating kolchyna
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.41      0.18      0.25       354
+      % negative       0.27      0.15      0.19       212
+      % neutral       0.66      0.88      0.76       930
+      % avg / total       0.55      0.61      0.56      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 21.78%
+      % Micro-Averaged F1-Score (All Classes): 60.8957%
+      --Negation & 0.415 & 0.576 & 0.395 & 0.572 & 0.381 & %
+        0.559 & 0.316 & 0.586 & 0.218 & \textbf{0.609}\\
+
+        % Training taboada
+        % Testing taboada
+        % Evaluating taboada
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % negative       0.25      0.28      0.26       212
+        % neutral       0.73      0.63      0.67       930
+        % positive       0.48      0.61      0.54       354
+        % avg / total       0.60      0.58      0.58      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 39.95%
+        % Micro-Averaged F1-Score (All Classes): 57.5535%
+
+        % Training jurek
+        % Testing jurek
+        % Evaluating jurek
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % negative       0.36      0.26      0.30       212
+        % neutral       0.69      0.74      0.71       930
+        % positive       0.40      0.40      0.40       354
+        % avg / total       0.58      0.59      0.58      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 35.18%
+        % Micro-Averaged F1-Score (All Classes): 59.0241%
+      --Intensification & \NA{} & \NA{} & 0.4 & 0.576 & \NA{} &  %
+      \NA{} & 0.352 & 0.59 & \NA{} & \NA{}\\
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.48      0.61      0.54       354
+      % negative       0.25      0.31      0.27       212
+      % neutral       0.72      0.61      0.66       930
+      % avg / total       0.60      0.57      0.58      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 40.61%
+      % Micro-Averaged F1-Score (All Classes): 56.6176%
+      --Other Modifiers & \NA{} & \NA{} & 0.406 & 0.566 & \NA{} &  %
+      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\\bottomrule
+\end{tabular}
+    \egroup
+    \caption[Evaluation of polarity-changing factors in lexicon-based
+    CGSA methods.]{
+      Evaluation of polarity-changing factors in lexicon-based CGSA methods.\\
+      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
+        \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
+        \citet{Kolchyna:15}}}
+    \label{snt-cgsa:tbl:ml-res-ablation}
+  \end{center}
+\end{table}
+
+\subsection{Effect of Classifiers}\label{subsec:cgsa:ml-methods:classifiers-analysis}
+\todo[inline]{Evaluate and describe different classifiers.}
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.15\columnwidth} % first columm
+        *{10}{>{\centering\arraybackslash}p{0.082\columnwidth}}}
+      \toprule
+      \multirow{2}{0.15\columnwidth}{%
+      \bfseries Polarity-Changing\newline Factors} & %
+      \multicolumn{10}{c}{\bfseries System Scores}\\
+      & \multicolumn{2}{c}{\bfseries HL} & \multicolumn{2}{c}{\bfseries TBD} %
+      & \multicolumn{2}{c}{\bfseries MST} %
+      & \multicolumn{2}{c}{\bfseries JRK} & \multicolumn{2}{c}{\bfseries KLCH}\\%
+      \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7} %
+      \cmidrule(lr){8-9}\cmidrule(lr){10-11}
+
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
+      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{}\\\midrule
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}PotTS}\\
+      All & 0.615 & 0.685 & 0.593 & 0.671 & 0.606 & 0.675 %
+      & 0.339 & 0.467 & 0.468 & 0.651\\
+
+      % Training hu-liu
+      % Testing hu-liu
+      % Evaluating hu-liu
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.76      0.77      0.76       680
+      % negative       0.55      0.43      0.48       287
+      % neutral       0.67      0.73      0.70       558
+      % avg / total       0.69      0.69      0.69      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 62.21%
+      % Micro-Averaged F1-Score (All Classes): 69.1148%
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.78      0.71      0.74       680
+      % negative       0.54      0.39      0.45       287
+      % neutral       0.62      0.78      0.69       558
+      % avg / total       0.67      0.67      0.67      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 59.63%
+      % Micro-Averaged F1-Score (All Classes): 67.2787%
+
+      % Training musto
+      % Testing musto
+      % Evaluating musto
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.76      0.78      0.77       680
+      % negative       0.57      0.47      0.51       287
+      % neutral       0.68      0.72      0.70       558
+      % avg / total       0.69      0.70      0.70      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 64.05%
+      % Micro-Averaged F1-Score (All Classes): 69.9672%
+
+      % Training jurek
+      % Testing jurek
+      % Evaluating jurek
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.61      0.32      0.42       680
+      % negative       0.47      0.22      0.30       287
+      % neutral       0.43      0.80      0.56       558
+      % avg / total       0.52      0.47      0.45      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 35.67%
+      % Micro-Averaged F1-Score (All Classes): 47.3443%
+
+      % Training kolchyna
+      % Testing kolchyna
+      % Evaluating kolchyna
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.66      0.24      0.35       680
+      % negative       0.35      0.19      0.24       287
+      % neutral       0.44      0.87      0.58       558
+      % avg / total       0.52      0.46      0.42      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 29.82%
+      % Micro-Averaged F1-Score (All Classes): 46.2951%
+      --Negation & 0.622 & \textbf{0.691} & 0.596 & 0.672 & \textbf{0.641} & %
+       0.7 & 0.357 & 0.473 & 0.298 & 0.463\\
+
+
+       % Training taboada
+       % Testing taboada
+       % Evaluating taboada
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.77      0.71      0.74       680
+       % negative       0.54      0.39      0.45       287
+       % neutral       0.62      0.78      0.69       558
+       % avg / total       0.67      0.67      0.67      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 59.53%
+       % Micro-Averaged F1-Score (All Classes): 67.2131%
+
+       % Training jurek
+       % Testing jurek
+       % Evaluating jurek
+       % General Statistics:
+       % precision    recall  f1-score   support
+       % positive       0.60      0.31      0.41       680
+       % negative       0.42      0.20      0.27       287
+       % neutral       0.43      0.80      0.56       558
+       % avg / total       0.50      0.47      0.44      1525
+       % Macro-Averaged F1-Score (Positive and Negative Classes): 33.94%
+       % Micro-Averaged F1-Score (All Classes): 46.6885%
+      --Intensification & \NA{} & \NA{} & 0.595 & 0.672 & \NA{} &  %
+      \NA{} & 0.339 & 0.467 & \NA{} & \NA{}\\
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.77      0.75      0.76       680
+      % negative       0.54      0.41      0.47       287
+      % neutral       0.64      0.75      0.69       558
+      % avg / total       0.68      0.68      0.68      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 61.29%
+      % Micro-Averaged F1-Score (All Classes): 68.3934%
+      --Other Modifiers & \NA{} & \NA{} & 0.613 & 0.684 & \NA{} &  %
+      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}SB10k}\\
+
+      All & \textbf{0.421} & 0.577 & 0.392 & 0.569 & 0.395 & 0.568 %
+      & 0.351 & 0.592 & 0.235 & 0.606\\
+
+      % Training hu-liu
+      % Testing hu-liu
+      % Evaluating hu-liu
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.26      0.31      0.28       212
+      % neutral       0.73      0.62      0.67       930
+      % positive       0.48      0.63      0.55       354
+      % avg / total       0.61      0.58      0.59      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 41.46%
+      % Micro-Averaged F1-Score (All Classes): 57.5535%
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.24      0.28      0.26       212
+      % neutral       0.72      0.63      0.67       930
+      % positive       0.48      0.60      0.53       354
+      % avg / total       0.60      0.57      0.58      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 39.50%
+      % Micro-Averaged F1-Score (All Classes): 57.1524%
+
+      % Training musto
+      % Testing musto
+      % Evaluating musto
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.26      0.31      0.28       212
+      % neutral       0.70      0.63      0.67       930
+      % positive       0.45      0.51      0.48       354
+      % avg / total       0.58      0.56      0.57      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 38.07%
+      % Micro-Averaged F1-Score (All Classes): 55.8824%
+
+      % Training jurek
+      % Testing jurek
+      % Evaluating jurek
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % negative       0.31      0.17      0.22       212
+      % neutral       0.69      0.74      0.71       930
+      % positive       0.40      0.42      0.41       354
+      % avg / total       0.57      0.59      0.57      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 31.55%
+      % Micro-Averaged F1-Score (All Classes): 58.6230%
+
+      % Training kolchyna
+      % Testing kolchyna
+      % Evaluating kolchyna
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.41      0.18      0.25       354
+      % negative       0.27      0.15      0.19       212
+      % neutral       0.66      0.88      0.76       930
+      % avg / total       0.55      0.61      0.56      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 21.78%
+      % Micro-Averaged F1-Score (All Classes): 60.8957%
+      --Negation & 0.415 & 0.576 & 0.395 & 0.572 & 0.381 & %
+        0.559 & 0.316 & 0.586 & 0.218 & \textbf{0.609}\\
+
+        % Training taboada
+        % Testing taboada
+        % Evaluating taboada
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % negative       0.25      0.28      0.26       212
+        % neutral       0.73      0.63      0.67       930
+        % positive       0.48      0.61      0.54       354
+        % avg / total       0.60      0.58      0.58      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 39.95%
+        % Micro-Averaged F1-Score (All Classes): 57.5535%
+
+        % Training jurek
+        % Testing jurek
+        % Evaluating jurek
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % negative       0.36      0.26      0.30       212
+        % neutral       0.69      0.74      0.71       930
+        % positive       0.40      0.40      0.40       354
+        % avg / total       0.58      0.59      0.58      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 35.18%
+        % Micro-Averaged F1-Score (All Classes): 59.0241%
+      --Intensification & \NA{} & \NA{} & 0.4 & 0.576 & \NA{} &  %
+      \NA{} & 0.352 & 0.59 & \NA{} & \NA{}\\
+
+      % Training taboada
+      % Testing taboada
+      % Evaluating taboada
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.48      0.61      0.54       354
+      % negative       0.25      0.31      0.27       212
+      % neutral       0.72      0.61      0.66       930
+      % avg / total       0.60      0.57      0.58      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 40.61%
+      % Micro-Averaged F1-Score (All Classes): 56.6176%
+      --Other Modifiers & \NA{} & \NA{} & 0.406 & 0.566 & \NA{} &  %
+      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\\bottomrule
+\end{tabular}
+    \egroup
+    \caption[Evaluation of polarity-changing factors in lexicon-based
+    CGSA methods.]{
+      Evaluation of polarity-changing factors in lexicon-based CGSA methods.\\
+      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
+        \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
+        \citet{Kolchyna:15}}}
+    \label{snt-cgsa:tbl:ml-res-classifiers}
+  \end{center}
+\end{table}
+
 \subsection{Error Analysis}\label{subsec:cgsa:ml-methods:err-analysis}
 \todo[inline]{Make and describe an error analysis.}
+
+\begin{example}[Error Made by the System of~\citeauthor{Gamon:04}]\label{snt:cgsa:exmp:gamon-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
+  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+\begin{example}[Error Made by the System of~\citeauthor{Mohammad:13}]\label{snt:cgsa:exmp:mohammad-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
+  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+\begin{example}[Error Made by the System of~\citeauthor{Guenther:14}]\label{snt:cgsa:exmp:guenther-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
+  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
 
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
