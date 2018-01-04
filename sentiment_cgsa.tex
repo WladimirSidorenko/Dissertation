@@ -1194,14 +1194,14 @@ Example~\ref{snt:cgsa:exmp:musto-error-1}:
 \begin{example}[Errors Made by the System of~\citeauthor{Musto:14}]\label{snt:cgsa:exmp:musto-error-1}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     Der \%User tut echt geile musik machen. Nichts mit Boyband hier.}\\
-  \noindent The \%User is really making great music. Nothing with Boyband here.\\[\exampleSep]
+  \noindent The \%User is making really great music. Nothing with Boyband here.\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{black}{neutral*}}\\[2\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     Diese S5E5 Episode mit den Zug\"uberfall war wieder genial! BreakingBad}\\
-  \noindent This S5E5 episode with tran robbery was brilliant again! BreakingBad\\[\exampleSep]
+  \noindent This S5E5 episode with train robbery was brilliant again! BreakingBad\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
@@ -1656,8 +1656,8 @@ In order to see how this family of methods would perform on our
 Twitter corpora, we have reimplemented the approaches of
 \citet{Gamon:04}, \citet{Mohammad:13}, and \citet{Guenther:14} with
 the following modifications: For the feature extraction in the system
-of~\citet{Gamon:04}, we utilized the available dependency analyses
-from the \texttt{MateParser}~\cite{Bohnet:09} instead of constituency
+of~\citet{Gamon:04}, we used the available dependency analyses from
+the \texttt{MateParser}~\cite{Bohnet:09} instead of constituency
 trees, considering each node of the dependency tree as a syntactic
 constituent and regarding the two-tuple of the form
 (\texttt{dependency-link-to-the-parent}, \texttt{PoS-tag-of-the-node})
@@ -1670,97 +1670,10 @@ we had to remove this attribute altogether from the feature sets of
 However, because the former system relied on two types of lexicon
 attributes---manual and automatic ones, we used two polarity lists for
 these approaches---the Zurich Sentiment Lexicon
-of~\citet{Clematide:10} as manual resource and the Linear Projection
-Lexicon as automatically generated polar set---and not just the Zurich
-lexicon as we did in our previous experiments on lexicon-based
-methods.  All remaining attributes and training specifics were kept
-maximally close to the original descriptions.
-
-The results of our reimplementations are shown in
-Table~\ref{snt-cgsa:tbl:ml-res}.  As we can see from the scores, the
-system of~\citet{Mohammad:13} clearly dominates its competitors on
-both corpora. This holds for all presented metrics except for the
-recall of positive tweets on the PotTS dataset and neutral messages on
-the SB10k data, where this approach is outperformed by the analyzers
-of \citet{Guenther:14} and \citet{Gamon:04} respectively.  In any
-other respect, however, the results of the MHM classifier are notably
-higher than those of the GNT method, sometimes surpassing this
-analyzer by up to 12 percent (this is, for instance, the case for the
-recall of negative microblogs on the SB10k corpus).  This margin
-becomes even larger if we compare the scores of the Mohammad's system
-with the performance of \citeauthor{Gamon:04}'s predictor, which is by
-far the weakest ML system in our survey.  This weakness, though, is
-less surprising regarding the fact that \citeauthor{Gamon:04}'s
-approach is purely grammar-based and relies only on information about
-part-of-speech tags and constituency structure without any lexicon
-traits or even plain lexical $n$-gram features.  Partially due to
-these restrictions, the results of this analyzer are even worse than
-the average scores of lexicon-based methods, which is not the case for
-the analyzers of~\citet{Mohammad:13} and \citet{Guenther:14} that rely
-on more sophisticated feature sets.
-
-
-% A different approach to the coarse-grained sentiment-analysis task was
-% proposed by~\citet{Hagen:15}, who, instead of developing their own
-% method from scratch, united four already existing solutions
-% (\citet{Mohammad:13}, \citet{Guenther:13}, \citet{Proisl:13}, and
-% \citet{Miura:14}) into a single ensemble, taking the average of the
-% predicted scores as the final decision of the complete system.  This
-% way, the authors achieved 0.648~\F{} on the SemEval-2015 test set,
-% attaining first place among 40 participants.
-
-% \done[inline]{\citet{Hamdan:15}}
-
-% Another supervised machine-learning system was proposed
-% by~\citet{Hamdan:15}, who also used an extensive set of features such
-% as word $n$-grams, negation existence, sentiment lexicons and
-% $Z$-score, which reflected the strength of statistical correlation
-% between a given term $t$ and the target class $c$ in the distribution
-% \cite[cf.][]{Hamdan:14}.  Similarly to~\citet{Mohammad:13}, the
-% authors used an extensive set of lexicon features, and also applied
-% attribute and class weighting as it was done by~\citet{Guenther:14}.
-% This way, \citeauthor{Hamdan:15} achieved 0.643~\F on the SemEval-2015
-% test get, getting third place among all competitors.
-
-% One of the first attempts to analyze message-level sentiments on
-% Twitter was made by \citet{Go:09}.  For their experiments, the authors
-% collected a set of 1,600,000 tweets containing smileys.  Based on
-% these emoticons, they automatically derived polarity classes for these
-% messages (positive or negative) and used them to train a Na\"{\i}ve
-% Bayes, MaxEnt, and SVM classifier.  The best $F$-score for this
-% two-class classification problem could be achieved by the last system
-% and run up to 82.2\%.
-
-% Similar work was also done by \citet{Pak:10} who used the Na\"{\i}ve
-% Bayes approach to differentiate between neutral, positive, and
-% negative microblogs; and \citet{Barbosa:10} who gathered a collection
-% of 200,000 tweets, subsequently analyzing them with three publicly
-% available sentiment web-services and training an SVM classifier on the
-% results of these predictors.  In a similar way, \citet{Agarwal:11}
-% compared a simple unigram-based SVM approach with two other
-% full-fledged systems, one which relied on a rich set of manually
-% defined features, and another used partial tree
-% kernels~\cite{Moschitti:06}.  The authors evaluated these methods on a
-% commercially acquired corpus of 8,753 foreign-language tweets, which
-% were automatically translated into English, finding that a combination
-% of these methods worked best for both two- and three-way prediction
-% tasks.
-
-% The state-of-the-art results for message level polarity prediction on
-% tweets were established by~\citet{Mohammad:13}, whose system (a
-% supervised SVM classifier) used a rich set of various features
-% including word and character n-grams, PoS statistics, Brown
-% clusters~\cite{Brown:92}, etc., and also strongly benefitted from
-% automatic corpus-based polarity lists---Sentiment~140 and NRC
-% Hashtag~\cite{Mohammad:12,Kiritchenko:14}.  This approach ranked first
-% at the SemEval competition~2013~\cite{Nakov:13} and anchieved the
-% fourth place on the rerun of this task one year
-% later~\cite{Rosenthal:14}, being outperformed by the supervised
-% logistic regression approach of~\citet{Miura:14}, who used a heavy
-% preprocessing of the data and a special balancing scheme for
-% underrepresented classes.  Later on, these results were further
-% improved by the apporaches of~\citet{Hagen:15} and \citet{Deriu:16},
-% which both relied on ensembles of multiple independent classifiers.
+of~\citet{Clematide:10} as a manual resource and the Linear Projection
+Lexicon as an automatically generated polarity set.  All remaining
+attributes and training specifics were kept maximally close to the
+original descriptions.
 
 \begin{table}[h]
   \begin{center}
@@ -1967,251 +1880,141 @@ on more sophisticated feature sets.
   \end{center}
 \end{table}
 
-\subsection{Effect of Features}\label{subsec:cgsa:ml-methods:classifiers-analysis}
+The results of our reimplementations are shown in
+Table~\ref{snt-cgsa:tbl:ml-res}.  As we can see from the scores, the
+system of~\citet{Mohammad:13} clearly dominates its competitors on
+both corpora. This holds for all presented metrics except for the
+recall of positive tweets on the PotTS dataset and neutral messages on
+the SB10k data, where it is outperformed by the analyzers of
+\citet{Guenther:14} and \citet{Gamon:04} respectively.  In any other
+respect, however, the results of the MHM classifier are notably higher
+than those of the GNT method, sometimes surpassing the latter analyzer
+by up to 12 percent (this is, for instance, the case for the recall of
+negative microblogs on the SB10k corpus).  This margin becomes even
+larger if we compare the scores of Mohammad's system with the
+performance of \citeauthor{Gamon:04}'s predictor, which is by far the
+weakest ML method in our survey.  This weakness, however, is less
+surprising regarding the fact that \citeauthor{Gamon:04}'s approach is
+purely grammar-based and relies only on information about
+part-of-speech tags and constituency nodes without any lexicon traits
+or even plain $n$-gram features.  Partially due to these limited input
+attributes, the results of this analyzer are even worse than the
+average scores of lexicon-based methods, which in turn succumb to the
+classifiers of~\citet{Mohammad:13} and \citet{Guenther:14} that
+utilize more sophisticated feature sets.
+
+
+% A different approach to the coarse-grained sentiment-analysis task was
+% proposed by~\citet{Hagen:15}, who, instead of developing their own
+% method from scratch, united four already existing solutions
+% (\citet{Mohammad:13}, \citet{Guenther:13}, \citet{Proisl:13}, and
+% \citet{Miura:14}) into a single ensemble, taking the average of the
+% predicted scores as the final decision of the complete system.  This
+% way, the authors achieved 0.648~\F{} on the SemEval-2015 test set,
+% attaining first place among 40 participants.
+
+% \done[inline]{\citet{Hamdan:15}}
+
+% Another supervised machine-learning system was proposed
+% by~\citet{Hamdan:15}, who also used an extensive set of features such
+% as word $n$-grams, negation existence, sentiment lexicons and
+% $Z$-score, which reflected the strength of statistical correlation
+% between a given term $t$ and the target class $c$ in the distribution
+% \cite[cf.][]{Hamdan:14}.  Similarly to~\citet{Mohammad:13}, the
+% authors used an extensive set of lexicon features, and also applied
+% attribute and class weighting as it was done by~\citet{Guenther:14}.
+% This way, \citeauthor{Hamdan:15} achieved 0.643~\F on the SemEval-2015
+% test get, getting third place among all competitors.
+
+% One of the first attempts to analyze message-level sentiments on
+% Twitter was made by \citet{Go:09}.  For their experiments, the authors
+% collected a set of 1,600,000 tweets containing smileys.  Based on
+% these emoticons, they automatically derived polarity classes for these
+% messages (positive or negative) and used them to train a Na\"{\i}ve
+% Bayes, MaxEnt, and SVM classifier.  The best $F$-score for this
+% two-class classification problem could be achieved by the last system
+% and run up to 82.2\%.
+
+% Similar work was also done by \citet{Pak:10} who used the Na\"{\i}ve
+% Bayes approach to differentiate between neutral, positive, and
+% negative microblogs; and \citet{Barbosa:10} who gathered a collection
+% of 200,000 tweets, subsequently analyzing them with three publicly
+% available sentiment web-services and training an SVM classifier on the
+% results of these predictors.  In a similar way, \citet{Agarwal:11}
+% compared a simple unigram-based SVM approach with two other
+% full-fledged systems, one which relied on a rich set of manually
+% defined features, and another used partial tree
+% kernels~\cite{Moschitti:06}.  The authors evaluated these methods on a
+% commercially acquired corpus of 8,753 foreign-language tweets, which
+% were automatically translated into English, finding that a combination
+% of these methods worked best for both two- and three-way prediction
+% tasks.
+
+% The state-of-the-art results for message level polarity prediction on
+% tweets were established by~\citet{Mohammad:13}, whose system (a
+% supervised SVM classifier) used a rich set of various features
+% including word and character n-grams, PoS statistics, Brown
+% clusters~\cite{Brown:92}, etc., and also strongly benefitted from
+% automatic corpus-based polarity lists---Sentiment~140 and NRC
+% Hashtag~\cite{Mohammad:12,Kiritchenko:14}.  This approach ranked first
+% at the SemEval competition~2013~\cite{Nakov:13} and anchieved the
+% fourth place on the rerun of this task one year
+% later~\cite{Rosenthal:14}, being outperformed by the supervised
+% logistic regression approach of~\citet{Miura:14}, who used a heavy
+% preprocessing of the data and a special balancing scheme for
+% underrepresented classes.  Later on, these results were further
+% improved by the apporaches of~\citet{Hagen:15} and \citet{Deriu:16},
+% which both relied on ensembles of multiple independent classifiers.
+
+\subsection{Feature Analysis}\label{subsec:cgsa:ml-methods:feature-analysis}
 \todo[inline]{Perform and describe feature ablation test.}
+
+Because input features appeared to play a crucial role for the success
+of ML-based approaches, we decided to investigate this factor in a bit
+more detail and performed an ablation test for each of the tested
+classifiers, removing one of their feature groups at a time and
+re-estimating their scores.
 
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.15\columnwidth} % first columm
-        *{10}{>{\centering\arraybackslash}p{0.082\columnwidth}}}
+    \begin{tabular}{p{0.2\columnwidth} % first columm
+        *{6}{>{\centering\arraybackslash}p{0.13097\columnwidth}}}
       \toprule
       \multirow{2}{0.15\columnwidth}{%
-      \bfseries Polarity-Changing\newline Factors} & %
-      \multicolumn{10}{c}{\bfseries System Scores}\\
-      & \multicolumn{2}{c}{\bfseries HL} & \multicolumn{2}{c}{\bfseries TBD} %
-      & \multicolumn{2}{c}{\bfseries MST} %
-      & \multicolumn{2}{c}{\bfseries JRK} & \multicolumn{2}{c}{\bfseries KLCH}\\%
-      \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7} %
-      \cmidrule(lr){8-9}\cmidrule(lr){10-11}
+      \bfseries Features} & %
+      \multicolumn{6}{c}{\bfseries System Scores}\\
+      & \multicolumn{2}{c}{\bfseries GMN} & \multicolumn{2}{c}{\bfseries MHM} %
+      & \multicolumn{2}{c}{\bfseries GNT}\\%
+      \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
 
-      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
-      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{}\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}PotTS}\\
-      All & 0.615 & 0.685 & 0.593 & 0.671 & 0.606 & 0.675 %
-      & 0.339 & 0.467 & 0.468 & 0.651\\
+      \multicolumn{7}{c}{\cellcolor{cellcolor}PotTS}\\
+      All & 0.453 & 0.617 & 0.674 & 0.727 & 0.624 & 0.673\\
+      --Constituents & 0.388 & 0.545 & \NA{} & \NA{} & \NA{} & \NA{}\\
+      --PoS Tags & 0.417 & 0.607 & 0.669 & 0.721 & \NA{} & \NA{}\\
+      --Character Features & \NA{} & \NA{} & 0.671 & 0.734 & \NA{} & \NA{}\\
+      --Token Features & \NA{} & \NA{} & 0.659 & 0.704 & 0.0 & 0.366\\
+      --Automatic Lexicons & \NA{} & \NA{} & 0.667 & 0.717 & 0.613 & 0.666\\
+      --Manual Lexicons & \NA{} & \NA{} & 0.665 & 0.715 & 0.617 & 0.675\\
 
-      % Training hu-liu
-      % Testing hu-liu
-      % Evaluating hu-liu
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.76      0.77      0.76       680
-      % negative       0.55      0.43      0.48       287
-      % neutral       0.67      0.73      0.70       558
-      % avg / total       0.69      0.69      0.69      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 62.21%
-      % Micro-Averaged F1-Score (All Classes): 69.1148%
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.78      0.71      0.74       680
-      % negative       0.54      0.39      0.45       287
-      % neutral       0.62      0.78      0.69       558
-      % avg / total       0.67      0.67      0.67      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 59.63%
-      % Micro-Averaged F1-Score (All Classes): 67.2787%
-
-      % Training musto
-      % Testing musto
-      % Evaluating musto
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.76      0.78      0.77       680
-      % negative       0.57      0.47      0.51       287
-      % neutral       0.68      0.72      0.70       558
-      % avg / total       0.69      0.70      0.70      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 64.05%
-      % Micro-Averaged F1-Score (All Classes): 69.9672%
-
-      % Training jurek
-      % Testing jurek
-      % Evaluating jurek
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.61      0.32      0.42       680
-      % negative       0.47      0.22      0.30       287
-      % neutral       0.43      0.80      0.56       558
-      % avg / total       0.52      0.47      0.45      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 35.67%
-      % Micro-Averaged F1-Score (All Classes): 47.3443%
-
-      % Training kolchyna
-      % Testing kolchyna
-      % Evaluating kolchyna
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.66      0.24      0.35       680
-      % negative       0.35      0.19      0.24       287
-      % neutral       0.44      0.87      0.58       558
-      % avg / total       0.52      0.46      0.42      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 29.82%
-      % Micro-Averaged F1-Score (All Classes): 46.2951%
-      --Negation & 0.622 & \textbf{0.691} & 0.596 & 0.672 & \textbf{0.641} & %
-       0.7 & 0.357 & 0.473 & 0.298 & 0.463\\
-
-
-       % Training taboada
-       % Testing taboada
-       % Evaluating taboada
-       % General Statistics:
-       % precision    recall  f1-score   support
-       % positive       0.77      0.71      0.74       680
-       % negative       0.54      0.39      0.45       287
-       % neutral       0.62      0.78      0.69       558
-       % avg / total       0.67      0.67      0.67      1525
-       % Macro-Averaged F1-Score (Positive and Negative Classes): 59.53%
-       % Micro-Averaged F1-Score (All Classes): 67.2131%
-
-       % Training jurek
-       % Testing jurek
-       % Evaluating jurek
-       % General Statistics:
-       % precision    recall  f1-score   support
-       % positive       0.60      0.31      0.41       680
-       % negative       0.42      0.20      0.27       287
-       % neutral       0.43      0.80      0.56       558
-       % avg / total       0.50      0.47      0.44      1525
-       % Macro-Averaged F1-Score (Positive and Negative Classes): 33.94%
-       % Micro-Averaged F1-Score (All Classes): 46.6885%
-      --Intensification & \NA{} & \NA{} & 0.595 & 0.672 & \NA{} &  %
-      \NA{} & 0.339 & 0.467 & \NA{} & \NA{}\\
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.77      0.75      0.76       680
-      % negative       0.54      0.41      0.47       287
-      % neutral       0.64      0.75      0.69       558
-      % avg / total       0.68      0.68      0.68      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 61.29%
-      % Micro-Averaged F1-Score (All Classes): 68.3934%
-      --Other Modifiers & \NA{} & \NA{} & 0.613 & 0.684 & \NA{} &  %
-      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}SB10k}\\
-
-      All & \textbf{0.421} & 0.577 & 0.392 & 0.569 & 0.395 & 0.568 %
-      & 0.351 & 0.592 & 0.235 & 0.606\\
-
-      % Training hu-liu
-      % Testing hu-liu
-      % Evaluating hu-liu
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.26      0.31      0.28       212
-      % neutral       0.73      0.62      0.67       930
-      % positive       0.48      0.63      0.55       354
-      % avg / total       0.61      0.58      0.59      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 41.46%
-      % Micro-Averaged F1-Score (All Classes): 57.5535%
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.24      0.28      0.26       212
-      % neutral       0.72      0.63      0.67       930
-      % positive       0.48      0.60      0.53       354
-      % avg / total       0.60      0.57      0.58      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 39.50%
-      % Micro-Averaged F1-Score (All Classes): 57.1524%
-
-      % Training musto
-      % Testing musto
-      % Evaluating musto
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.26      0.31      0.28       212
-      % neutral       0.70      0.63      0.67       930
-      % positive       0.45      0.51      0.48       354
-      % avg / total       0.58      0.56      0.57      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 38.07%
-      % Micro-Averaged F1-Score (All Classes): 55.8824%
-
-      % Training jurek
-      % Testing jurek
-      % Evaluating jurek
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.31      0.17      0.22       212
-      % neutral       0.69      0.74      0.71       930
-      % positive       0.40      0.42      0.41       354
-      % avg / total       0.57      0.59      0.57      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 31.55%
-      % Micro-Averaged F1-Score (All Classes): 58.6230%
-
-      % Training kolchyna
-      % Testing kolchyna
-      % Evaluating kolchyna
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.41      0.18      0.25       354
-      % negative       0.27      0.15      0.19       212
-      % neutral       0.66      0.88      0.76       930
-      % avg / total       0.55      0.61      0.56      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 21.78%
-      % Micro-Averaged F1-Score (All Classes): 60.8957%
-      --Negation & 0.415 & 0.576 & 0.395 & 0.572 & 0.381 & %
-        0.559 & 0.316 & 0.586 & 0.218 & \textbf{0.609}\\
-
-        % Training taboada
-        % Testing taboada
-        % Evaluating taboada
-        % General Statistics:
-        % precision    recall  f1-score   support
-        % negative       0.25      0.28      0.26       212
-        % neutral       0.73      0.63      0.67       930
-        % positive       0.48      0.61      0.54       354
-        % avg / total       0.60      0.58      0.58      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 39.95%
-        % Micro-Averaged F1-Score (All Classes): 57.5535%
-
-        % Training jurek
-        % Testing jurek
-        % Evaluating jurek
-        % General Statistics:
-        % precision    recall  f1-score   support
-        % negative       0.36      0.26      0.30       212
-        % neutral       0.69      0.74      0.71       930
-        % positive       0.40      0.40      0.40       354
-        % avg / total       0.58      0.59      0.58      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 35.18%
-        % Micro-Averaged F1-Score (All Classes): 59.0241%
-      --Intensification & \NA{} & \NA{} & 0.4 & 0.576 & \NA{} &  %
-      \NA{} & 0.352 & 0.59 & \NA{} & \NA{}\\
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.48      0.61      0.54       354
-      % negative       0.25      0.31      0.27       212
-      % neutral       0.72      0.61      0.66       930
-      % avg / total       0.60      0.57      0.58      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 40.61%
-      % Micro-Averaged F1-Score (All Classes): 56.6176%
-      --Other Modifiers & \NA{} & \NA{} & 0.406 & 0.566 & \NA{} &  %
-      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\\bottomrule
-\end{tabular}
+      \multicolumn{7}{c}{\cellcolor{cellcolor}SB10k}\\
+      All & 0.329 & 0.699 & 0.564 & 0.752 & 0.491 & 0.724\\
+      --Constituents & 0.127 & 0.646 & \NA{} & \NA{} & \NA{} & \NA{}\\
+      --PoS Tags & 0.301 & 0.7 & 0.57 & 0.757 & \NA{} & \NA{}\\
+      --Character Features & \NA{} & \NA{} & 0.546 & 0.753 & \NA{} & \NA{}\\
+      --Token Features & \NA{} & \NA{} & 0.559 & 0.741 & 0.046 & 0.62\\
+      --Automatic Lexicons & \NA{} & \NA{} & 0.54 & 0.753 & 0.517 & 0.735\\
+      --Manual Lexicons & \NA{} & \NA{} & 0.553 & 0.751 & 0.51 & 0.739\\\bottomrule
+    \end{tabular}
     \egroup
-    \caption[Evaluation of polarity-changing factors in lexicon-based
-    CGSA methods.]{
-      Evaluation of polarity-changing factors in lexicon-based CGSA methods.\\
-      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
-        \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
-        \citet{Kolchyna:15}}}
+    \caption[Feature-ablation test of ML-based CGSA methods.]{
+      Feature-ablation test of ML-based CGSA methods.\\
+      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
+        GNT~-- \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res-ablation}
   \end{center}
 \end{table}
@@ -2222,245 +2025,35 @@ on more sophisticated feature sets.
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.15\columnwidth} % first columm
-        *{10}{>{\centering\arraybackslash}p{0.082\columnwidth}}}
+    \begin{tabular}{p{0.2\columnwidth} % first columm
+        *{6}{>{\centering\arraybackslash}p{0.13097\columnwidth}}}
       \toprule
       \multirow{2}{0.15\columnwidth}{%
-      \bfseries Polarity-Changing\newline Factors} & %
-      \multicolumn{10}{c}{\bfseries System Scores}\\
-      & \multicolumn{2}{c}{\bfseries HL} & \multicolumn{2}{c}{\bfseries TBD} %
-      & \multicolumn{2}{c}{\bfseries MST} %
-      & \multicolumn{2}{c}{\bfseries JRK} & \multicolumn{2}{c}{\bfseries KLCH}\\%
-      \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7} %
-      \cmidrule(lr){8-9}\cmidrule(lr){10-11}
+      \bfseries Features} & %
+      \multicolumn{6}{c}{\bfseries System Scores}\\
+      & \multicolumn{2}{c}{\bfseries GMN} & \multicolumn{2}{c}{\bfseries MHM} %
+      & \multicolumn{2}{c}{\bfseries GNT}\\%
+      \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(lr){6-7}
 
-      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
-      & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{} %
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{}\\\midrule
 
-      \multicolumn{11}{c}{\cellcolor{cellcolor}PotTS}\\
-      All & 0.615 & 0.685 & 0.593 & 0.671 & 0.606 & 0.675 %
-      & 0.339 & 0.467 & 0.468 & 0.651\\
+      \multicolumn{7}{c}{\cellcolor{cellcolor}PotTS}\\
+      SVM &  &  &  &  &  & \\
+      Na{\"i}ve Bayes &  &  &  &  &  & \\
+      Logistic Regression &  &  &  &  &  & \\
 
-      % Training hu-liu
-      % Testing hu-liu
-      % Evaluating hu-liu
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.76      0.77      0.76       680
-      % negative       0.55      0.43      0.48       287
-      % neutral       0.67      0.73      0.70       558
-      % avg / total       0.69      0.69      0.69      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 62.21%
-      % Micro-Averaged F1-Score (All Classes): 69.1148%
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.78      0.71      0.74       680
-      % negative       0.54      0.39      0.45       287
-      % neutral       0.62      0.78      0.69       558
-      % avg / total       0.67      0.67      0.67      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 59.63%
-      % Micro-Averaged F1-Score (All Classes): 67.2787%
-
-      % Training musto
-      % Testing musto
-      % Evaluating musto
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.76      0.78      0.77       680
-      % negative       0.57      0.47      0.51       287
-      % neutral       0.68      0.72      0.70       558
-      % avg / total       0.69      0.70      0.70      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 64.05%
-      % Micro-Averaged F1-Score (All Classes): 69.9672%
-
-      % Training jurek
-      % Testing jurek
-      % Evaluating jurek
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.61      0.32      0.42       680
-      % negative       0.47      0.22      0.30       287
-      % neutral       0.43      0.80      0.56       558
-      % avg / total       0.52      0.47      0.45      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 35.67%
-      % Micro-Averaged F1-Score (All Classes): 47.3443%
-
-      % Training kolchyna
-      % Testing kolchyna
-      % Evaluating kolchyna
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.66      0.24      0.35       680
-      % negative       0.35      0.19      0.24       287
-      % neutral       0.44      0.87      0.58       558
-      % avg / total       0.52      0.46      0.42      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 29.82%
-      % Micro-Averaged F1-Score (All Classes): 46.2951%
-      --Negation & 0.622 & \textbf{0.691} & 0.596 & 0.672 & \textbf{0.641} & %
-       0.7 & 0.357 & 0.473 & 0.298 & 0.463\\
-
-
-       % Training taboada
-       % Testing taboada
-       % Evaluating taboada
-       % General Statistics:
-       % precision    recall  f1-score   support
-       % positive       0.77      0.71      0.74       680
-       % negative       0.54      0.39      0.45       287
-       % neutral       0.62      0.78      0.69       558
-       % avg / total       0.67      0.67      0.67      1525
-       % Macro-Averaged F1-Score (Positive and Negative Classes): 59.53%
-       % Micro-Averaged F1-Score (All Classes): 67.2131%
-
-       % Training jurek
-       % Testing jurek
-       % Evaluating jurek
-       % General Statistics:
-       % precision    recall  f1-score   support
-       % positive       0.60      0.31      0.41       680
-       % negative       0.42      0.20      0.27       287
-       % neutral       0.43      0.80      0.56       558
-       % avg / total       0.50      0.47      0.44      1525
-       % Macro-Averaged F1-Score (Positive and Negative Classes): 33.94%
-       % Micro-Averaged F1-Score (All Classes): 46.6885%
-      --Intensification & \NA{} & \NA{} & 0.595 & 0.672 & \NA{} &  %
-      \NA{} & 0.339 & 0.467 & \NA{} & \NA{}\\
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.77      0.75      0.76       680
-      % negative       0.54      0.41      0.47       287
-      % neutral       0.64      0.75      0.69       558
-      % avg / total       0.68      0.68      0.68      1525
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 61.29%
-      % Micro-Averaged F1-Score (All Classes): 68.3934%
-      --Other Modifiers & \NA{} & \NA{} & 0.613 & 0.684 & \NA{} &  %
-      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}SB10k}\\
-
-      All & \textbf{0.421} & 0.577 & 0.392 & 0.569 & 0.395 & 0.568 %
-      & 0.351 & 0.592 & 0.235 & 0.606\\
-
-      % Training hu-liu
-      % Testing hu-liu
-      % Evaluating hu-liu
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.26      0.31      0.28       212
-      % neutral       0.73      0.62      0.67       930
-      % positive       0.48      0.63      0.55       354
-      % avg / total       0.61      0.58      0.59      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 41.46%
-      % Micro-Averaged F1-Score (All Classes): 57.5535%
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.24      0.28      0.26       212
-      % neutral       0.72      0.63      0.67       930
-      % positive       0.48      0.60      0.53       354
-      % avg / total       0.60      0.57      0.58      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 39.50%
-      % Micro-Averaged F1-Score (All Classes): 57.1524%
-
-      % Training musto
-      % Testing musto
-      % Evaluating musto
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.26      0.31      0.28       212
-      % neutral       0.70      0.63      0.67       930
-      % positive       0.45      0.51      0.48       354
-      % avg / total       0.58      0.56      0.57      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 38.07%
-      % Micro-Averaged F1-Score (All Classes): 55.8824%
-
-      % Training jurek
-      % Testing jurek
-      % Evaluating jurek
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % negative       0.31      0.17      0.22       212
-      % neutral       0.69      0.74      0.71       930
-      % positive       0.40      0.42      0.41       354
-      % avg / total       0.57      0.59      0.57      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 31.55%
-      % Micro-Averaged F1-Score (All Classes): 58.6230%
-
-      % Training kolchyna
-      % Testing kolchyna
-      % Evaluating kolchyna
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.41      0.18      0.25       354
-      % negative       0.27      0.15      0.19       212
-      % neutral       0.66      0.88      0.76       930
-      % avg / total       0.55      0.61      0.56      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 21.78%
-      % Micro-Averaged F1-Score (All Classes): 60.8957%
-      --Negation & 0.415 & 0.576 & 0.395 & 0.572 & 0.381 & %
-        0.559 & 0.316 & 0.586 & 0.218 & \textbf{0.609}\\
-
-        % Training taboada
-        % Testing taboada
-        % Evaluating taboada
-        % General Statistics:
-        % precision    recall  f1-score   support
-        % negative       0.25      0.28      0.26       212
-        % neutral       0.73      0.63      0.67       930
-        % positive       0.48      0.61      0.54       354
-        % avg / total       0.60      0.58      0.58      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 39.95%
-        % Micro-Averaged F1-Score (All Classes): 57.5535%
-
-        % Training jurek
-        % Testing jurek
-        % Evaluating jurek
-        % General Statistics:
-        % precision    recall  f1-score   support
-        % negative       0.36      0.26      0.30       212
-        % neutral       0.69      0.74      0.71       930
-        % positive       0.40      0.40      0.40       354
-        % avg / total       0.58      0.59      0.58      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 35.18%
-        % Micro-Averaged F1-Score (All Classes): 59.0241%
-      --Intensification & \NA{} & \NA{} & 0.4 & 0.576 & \NA{} &  %
-      \NA{} & 0.352 & 0.59 & \NA{} & \NA{}\\
-
-      % Training taboada
-      % Testing taboada
-      % Evaluating taboada
-      % General Statistics:
-      % precision    recall  f1-score   support
-      % positive       0.48      0.61      0.54       354
-      % negative       0.25      0.31      0.27       212
-      % neutral       0.72      0.61      0.66       930
-      % avg / total       0.60      0.57      0.58      1496
-      % Macro-Averaged F1-Score (Positive and Negative Classes): 40.61%
-      % Micro-Averaged F1-Score (All Classes): 56.6176%
-      --Other Modifiers & \NA{} & \NA{} & 0.406 & 0.566 & \NA{} &  %
-      \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\\bottomrule
-\end{tabular}
+      \multicolumn{7}{c}{\cellcolor{cellcolor}SB10k}\\
+      SVM &  &  &  &  &  & \\
+      Na{\"i}ve Bayes &  &  &  &  &  & \\
+      Logistic Regression &  &  &  &  &  & \\\bottomrule
+    \end{tabular}
     \egroup
-    \caption[Evaluation of polarity-changing factors in lexicon-based
-    CGSA methods.]{
-      Evaluation of polarity-changing factors in lexicon-based CGSA methods.\\
-      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
-        \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
-        \citet{Kolchyna:15}}}
+    \caption[Feature-ablation test of ML-based CGSA methods.]{
+      Feature-ablation test of ML-based CGSA methods.\\
+      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
+        GNT~-- \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res-classifiers}
   \end{center}
 \end{table}
