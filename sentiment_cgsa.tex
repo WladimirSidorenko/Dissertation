@@ -2010,7 +2010,7 @@ recomputing their scores.
     \end{tabular}
     \egroup
     \caption[Feature-ablation test of ML-based CGSA methods.]{
-      Feature-ablation test of ML-based CGSA methods.\\
+      Results of the feature-ablation test for ML-based CGSA methods.\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~-- \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res-ablation}
@@ -2088,7 +2088,7 @@ featuring nine unigrams and one bigram among its top-ten entries.
       \toprule
       \multirow{2}{0.05\columnwidth}{Rank} & \multicolumn{3}{c}{\bfseries GMN} & %
                       \multicolumn{3}{c}{\bfseries MHM} & %
-                      \multicolumn{3}{c}{\bfseries GNT}\\\cline{2-10}
+                      \multicolumn{3}{c}{\bfseries GNT}\\\cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
       & Feature & Label & Weight & Feature & Label & Weight %
       & Feature & Label & Weight\\\midrule
           1 & NK-ITJ| & POS & 0.457 & * & NEUT & 0.131 & hate & NEG & 1.86 \\
@@ -2111,7 +2111,27 @@ featuring nine unigrams and one bigram among its top-ten entries.
 \end{table}
 
 \subsection{Effect of Classifiers}\label{subsec:cgsa:ml-methods:classifiers-analysis}
-\todo[inline]{Evaluate and describe different classifiers.}
+
+Another important factor which could significantly affect the quality
+of ML-based approaches was the underlying classification method that
+was used to optimize feature weights and make final predictions.  Even
+though most of the studies agreed on the superior performance of
+support vector machines on this task \cite[see
+][]{Pang:02,Gamon:04,Mohammad:13}, we decided to question these
+conclusions as well and reran our experiments, replacing the linear
+SVC predictor with the Na\"ive Bayes and Logistic Regression
+algorithms.
+
+Somewhat surprisingly, these changes indeed lead to an improvement,
+especially in the case of the logistic classifier, which yield the
+best macro- and micro-averaged scores for the systems of
+\citet{Mohammad:13} and \citet{Guenther:14} on the PotTS corpus (see
+Table~\ref{snt-cgsa:tbl:ml-res-classifiers}) and also produce the
+highest micro-\F{} results for these two approaches on the SB10k data.
+Nevertheless, the SVM algorithm still remains a competitive option in
+particular for the feature-sparse method of~\citet{Gamon:04}, but also
+with respect to the macro-\F{} of Mohammmad's and G\"unther's
+analyzers.
 
 \begin{table}[h]
   \begin{center}
@@ -2148,6 +2168,13 @@ featuring nine unigrams and one bigram among its top-ten entries.
     \label{snt-cgsa:tbl:ml-res-classifiers}
   \end{center}
 \end{table}
+
+Even though our results somewhat contradict previous findings in
+literature, we would advise against premature generalizations and
+conclusions and stress the fact that different classifiers might have
+fairly varying results on different datasets.  Therefore, the superior
+scores of the logistic regression on our corpora do not preclude
+better SVM results on the official English SemEval data.
 
 \subsection{Error Analysis}\label{subsec:cgsa:ml-methods:err-analysis}
 \todo[inline]{Make and describe an error analysis.}
@@ -2480,6 +2507,10 @@ participating submissions.
 % trying to predict which instance attributes frequently co-occured with
 % each other;
 
+\subsection{Effect of Word Embeddings}
+
+\subsection{Error Analysis}
+
 \section{Evaluation}
 \subsection{Effect of Lexicons}\label{cgsa:subsec:eval:lexicons}
 
@@ -2555,7 +2586,6 @@ micro-blogging features (such as emoticons, abbreviations, and slang
 expressions), the authors achieved a macro-averaged \F-measure of~0.68
 on the three-class prediction task.
 
-\subsection{Effect of Word Embeddings}
 \subsection{Effect of Text Normalization}
 \begin{table}[h]
   \begin{center}
