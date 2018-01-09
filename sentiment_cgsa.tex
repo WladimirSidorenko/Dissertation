@@ -1883,26 +1883,25 @@ original descriptions.
 The results of our reimplementations are shown in
 Table~\ref{snt-cgsa:tbl:ml-res}.  As we can see from the scores, the
 system of~\citet{Mohammad:13} clearly dominates its competitors on
-both corpora. This holds for all presented metrics except for the
-recall of positive tweets on the PotTS dataset and neutral messages on
-the SB10k data, where it is outperformed by the analyzers of
+both corpora. This holds for all presented metrics except the recall
+of positive tweets on the PotTS dataset and neutral messages on the
+SB10k data, where it is outperformed by the analyzers of
 \citet{Guenther:14} and \citet{Gamon:04} respectively.  In any other
 respect, however, the results of the MHM classifier are notably higher
-than those of the GNT method, sometimes surpassing the latter analyzer
-by up to 12 percent (this is, for instance, the case for the recall of
-negative microblogs on the SB10k corpus).  This margin becomes even
-larger if we compare the scores of Mohammad's system with the
-performance of \citeauthor{Gamon:04}'s predictor, which is by far the
-weakest ML method in our survey.  This weakness, however, is less
-surprising regarding the fact that \citeauthor{Gamon:04}'s approach is
-purely grammar-based and relies only on information about
-part-of-speech tags and constituency nodes without any lexicon traits
-or even plain $n$-gram features.  Partially due to these limited input
-attributes, the results of this analyzer are even worse than the
-average scores of lexicon-based methods, which in turn succumb to the
-classifiers of~\citet{Mohammad:13} and \citet{Guenther:14} that
-utilize more sophisticated feature sets.
-
+than those of the GNT method, sometimes surpassing it by up to 12
+percent (this is, for instance, the case for the recall of negative
+microblogs on the SB10k corpus).  This margin becomes even larger if
+we compare the scores of Mohammad's system with the performance of
+\citeauthor{Gamon:04}'s predictor, which is by far the weakest ML
+method in our survey.  This weakness, however, is less surprising
+regarding the fact that \citeauthor{Gamon:04}'s approach is purely
+grammar-based and relies only on information about part-of-speech tags
+and constituency parses without any lexicon traits or even plain
+$n$-gram features.  Partially due to these limited input attributes,
+the results of this analyzer are even worse than the average scores of
+lexicon-based methods, which in is not the case for the classifiers
+of~\citet{Mohammad:13} and \citet{Guenther:14} that rely on more
+sophisticated feature sets.
 
 % A different approach to the coarse-grained sentiment-analysis task was
 % proposed by~\citet{Hagen:15}, who, instead of developing their own
@@ -1967,13 +1966,12 @@ utilize more sophisticated feature sets.
 % which both relied on ensembles of multiple independent classifiers.
 
 \subsection{Feature Analysis}\label{subsec:cgsa:ml-methods:feature-analysis}
-\todo[inline]{Perform and describe feature ablation test.}
 
 Because input features appeared to play a crucial role for the success
-of ML-based approaches, we decided to investigate this factor in a bit
-more detail and performed an ablation test for each of the tested
-classifiers, removing one of their feature groups at a time and
-re-estimating their scores.
+of ML-based approaches, we decided to investigate the impact of this
+factor in more detail and performed an ablation test for each of the
+tested classifiers, removing one of their feature groups at a time and
+recomputing their scores.
 
 \begin{table}[h]
   \begin{center}
@@ -1993,22 +1991,22 @@ re-estimating their scores.
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{}\\\midrule
 
       \multicolumn{7}{c}{\cellcolor{cellcolor}PotTS}\\
-      All & 0.453 & 0.617 & 0.674 & 0.727 & 0.624 & 0.673\\
+      All & \textbf{0.453} & \textbf{0.617} & \textbf{0.674} & 0.727 & \textbf{0.624} & 0.673\\
       --Constituents & 0.388 & 0.545 & \NA{} & \NA{} & \NA{} & \NA{}\\
       --PoS Tags & 0.417 & 0.607 & 0.669 & 0.721 & \NA{} & \NA{}\\
-      --Character Features & \NA{} & \NA{} & 0.671 & 0.734 & \NA{} & \NA{}\\
+      --Character Features & \NA{} & \NA{} & 0.671 & \textbf{0.734} & \NA{} & \NA{}\\
       --Token Features & \NA{} & \NA{} & 0.659 & 0.704 & 0.0 & 0.366\\
       --Automatic Lexicons & \NA{} & \NA{} & 0.667 & 0.717 & 0.613 & 0.666\\
-      --Manual Lexicons & \NA{} & \NA{} & 0.665 & 0.715 & 0.617 & 0.675\\
+      --Manual Lexicons & \NA{} & \NA{} & 0.665 & 0.715 & 0.617 & \textbf{0.675}\\
 
       \multicolumn{7}{c}{\cellcolor{cellcolor}SB10k}\\
-      All & 0.329 & 0.699 & 0.564 & 0.752 & 0.491 & 0.724\\
+      All & \textbf{0.329} & 0.699 & 0.564 & 0.752 & 0.491 & 0.724\\
       --Constituents & 0.127 & 0.646 & \NA{} & \NA{} & \NA{} & \NA{}\\
-      --PoS Tags & 0.301 & 0.7 & 0.57 & 0.757 & \NA{} & \NA{}\\
+      --PoS Tags & 0.301 & \textbf{0.7} & \textbf{0.57} & \textbf{0.757} & \NA{} & \NA{}\\
       --Character Features & \NA{} & \NA{} & 0.546 & 0.753 & \NA{} & \NA{}\\
       --Token Features & \NA{} & \NA{} & 0.559 & 0.741 & 0.046 & 0.62\\
-      --Automatic Lexicons & \NA{} & \NA{} & 0.54 & 0.753 & 0.517 & 0.735\\
-      --Manual Lexicons & \NA{} & \NA{} & 0.553 & 0.751 & 0.51 & 0.739\\\bottomrule
+      --Automatic Lexicons & \NA{} & \NA{} & 0.54 & 0.753 & \textbf{0.517} & 0.735\\
+      --Manual Lexicons & \NA{} & \NA{} & 0.553 & 0.751 & 0.51 & \textbf{0.739}\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Feature-ablation test of ML-based CGSA methods.]{
@@ -2016,6 +2014,99 @@ re-estimating their scores.
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~-- \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res-ablation}
+  \end{center}
+\end{table}
+
+As we can see from the results in
+Table~\ref{snt-cgsa:tbl:ml-res-ablation}, the approach
+of~\citet{Gamon:04} typically achieves its best performance when all
+of the input attributes (PoS tags and syntactic constituents) are
+active.  This is for instance the case for the micro- and
+macro-averaged \F{} on the PotTS corpus, and also holds for the
+two-class macro-\F{} on the SB10k data.  The only exception to this
+general tendency is the micro-averaged \F{}-score on the latter
+dataset, which shows a slight improvement (from 0.699 to 0.7) when the
+part-of-speech features are removed.
+
+Similarly, the analyzer of~\citet{Mohammad:13} seems to rather suffer
+than benefit from PoS attributes as they decrease its micro-averaged
+scores by almost $\expnumber{7}{-2}$ on PotTS and
+$\expnumber{5}{-2}$~\F{} on SB10k.  One possible reason for this
+degradation could be the differences in the utilized PoS taggers and
+tagsets: Whereas the original \citeauthor{Mohammad:13}'s classifier
+relied on a special Twitter-aware tagger \cite{Owoputi:13}, whose tags
+were explicitly adjusted to the peculiarities of social media texts
+(such as at-mentions and hashtags), we instead used the output of the
+standard \texttt{TreeTagger} \cite{Schmid:95}, which, besides lacking
+any Twitter-specific information, was also trained on a completely
+different text genre (newspaper articles) and therefore a priori could
+not produce reliable output.  Consequently, the effect of these traits
+is rather harmful, and the only aspect where they come in handy is the
+macro-averaged \F{} on the PotTS corpus, which decreases by
+$\expnumber{3}{-3}$ after their deletion.
+
+An even more controversial situation is observed with the analyzer
+of~\citet{Guenther:14}. Even though this system lacks any
+part-of-speech attributes, its reaction to the removal of other
+features (first of all token and lexicon traits) is quite unexpected.
+For example, the macro-averaged \F{}-scores on both corpora drop
+almost to zero when the information about tokens is excluded.  On the
+other hand, the deactivation of manual lexicons surprisingly improves
+the micro-averaged results on both datasets and also increases the
+macro-\F{}$^{+/-}$ on the SB10k data.  We also notice a similar
+(though less pronounced) tendency with automatic lexicon features:
+their ablation lowers the scores on PotTS, but improves both results
+on SB10k.  We can partially explain this negative effect of lexicon
+traits by the coarseness of these features in
+\citeauthor{Guenther:14}'s analyzer: This classifier only used binary
+attributes reflecting whether the given tweet had more positive or
+more negative terms from the lexicon.
+
+Besides analyzing the utility of each particular feature group, we
+also decided to have a look at top-10 most relevant attributes learned
+by each of classifier.  The summarized overview in
+Table~\ref{fgsa:tbl:ml:to10-features} partially confirms our previous
+findings: For example, the most useful traits for the analyzer
+of~\citet{Gamon:04} are attributes reflecting the information about
+both constuents and part-of-speech tags, with five of its ten entries
+involving the interjection tag, which appears to be especially
+important for predicting the positive class.  On the other hand, the
+system of~\citet{Mohammad:13} seems to rely more on token and
+character $n$-grams, as nine out of ten attributes belong to either of
+these two categories. The only outlier in this respect is the
+\texttt{Last\%QMarkCnt} attribute (line 2), which denotes the presence
+of a question mark in the analyzed message and is apparently a
+reliable indicator of neutral tweets.  Finally, the classifier
+of~\citet{Guenther:14} almost exclusively prefers lexical $n$-grams,
+featuring nine unigrams and one bigram among its top-ten entries.
+
+\begin{table}[hbt]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \begin{tabular}{>{\centering\arraybackslash}p{0.05\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.092\columnwidth}}} % next four columns
+      \toprule
+      \multirow{2}{0.05\columnwidth}{Rank} & \multicolumn{3}{c}{\bfseries GMN} & %
+                      \multicolumn{3}{c}{\bfseries MHM} & %
+                      \multicolumn{3}{c}{\bfseries GNT}\\\cline{2-10}
+      & Feature & Label & Weight & Feature & Label & Weight %
+      & Feature & Label & Weight\\\midrule
+          1 & NK-ITJ| & POS & 0.457 & * & NEUT & 0.131 & hate & NEG & 1.86 \\
+          2 & DM-ITJ| & POS & 0.334 & Last\-\%QMark\-Cnt & NEUT & 0.088 & sick & NEG & 1.7\\
+          3 & V-DM-I & POS & 0.244 & s-c & NEG & 0.079 & kahretsinn & NEG & 1.69\\
+          4 & N-NK-I & POS & 0.24 & *-\%possmiley & POS & 0.067 & dasisaberschade & NEG & 1.69\\
+          5 & MO-ITJ| & POS & 0.211 & c-h-e-i-s & NEG & 0.064 & Anziehen & POS & 1.67\\
+          6 & A-DM-I & POS & 0.196 & h-a-h & POS & 0.064 & \textbackslash{}x016434 & POS & 1.65\\
+          7 & A-MO-I & POS & 0.191 & t-\textvisiblespace{}-. & NEG & 0.064 & p\"archenabend & POS & 1.65\\
+          8 & NK-ITJ & POS & 0.165 & geil & POS & 0.062 & derien\heart\heart & POS & 1.65\\
+          9 & NK-\$. & NEUT & 0.16 & *-? & NEUT & 0.062 & sch\"on-nicht & POS & 1.56\\
+          10 & DM-ITJ & POS & 0.157 & ? & NEUT & 0.061 & applause & POS & 1.5\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Top-10 features learned by CGSA classifiers.]{Top-10
+      features learned by ML-based CGSA methods.\\{\small (sorted by
+        the absolute values of their weights)}}
+    \label{fgsa:tbl:ml:to10-features}
   \end{center}
 \end{table}
 
@@ -2040,14 +2131,14 @@ re-estimating their scores.
       & Macro\newline \F{}$^{+/-}$ & Micro\newline \F{}\\\midrule
 
       \multicolumn{7}{c}{\cellcolor{cellcolor}PotTS}\\
-      SVM &  &  &  &  &  & \\
-      Na{\"i}ve Bayes &  &  &  &  &  & \\
-      Logistic Regression &  &  &  &  &  & \\
+      SVM & \textbf{0.453} & \textbf{0.617} & 0.674 & 0.727 & \textbf{0.624} & 0.673\\
+      Na{\"i}ve Bayes & 0.432 & 0.577 & 0.635 & 0.675 & 0.567 & 0.59\\
+      Logistic Regression & 0.431 & 0.612 & \textbf{0.677} & \textbf{0.741} & \textbf{0.624} & \textbf{0.688}\\
 
       \multicolumn{7}{c}{\cellcolor{cellcolor}SB10k}\\
-      SVM &  &  &  &  &  & \\
-      Na{\"i}ve Bayes &  &  &  &  &  & \\
-      Logistic Regression &  &  &  &  &  & \\\bottomrule
+      SVM & 0.329 & \textbf{0.699} & \textbf{0.564} & 0.752 & 0.491 & 0.724\\
+      Na{\"i}ve Bayes & \textbf{0.351} & 0.637 & 0.516 & 0.755 & 0.453 & 0.675\\
+      Logistic Regression & 0.309 & 0.693 & 0.553 & \textbf{0.772} & \textbf{0.512} & \textbf{0.75}\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Feature-ablation test of ML-based CGSA methods.]{
