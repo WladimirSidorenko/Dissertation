@@ -2179,189 +2179,95 @@ better SVM results on the official English SemEval data.
 \subsection{Error Analysis}\label{subsec:cgsa:ml-methods:err-analysis}
 \todo[inline]{Make and describe an error analysis.}
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 376131308205789184	träum was schönes .
+Similarly to our experiments in the previous section, we also decided
+to have a closer look at the errors produced by each of the tested
+systems.  For this purpose, we again collected misclassications that
+were unique to only one of the classifiers, and provide some examples
+of these error cases below.
 
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 391900414636875776	pony erfolgreich geschnitten trotz zittriger hände , yeha
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 335510050363817984	Von der Steinbrück SPD erwarte ich ja nichts mehr . Aber die Netzkompetenz mit " Feminismus " ist schon irre : ...
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 373556798344949761	Krasses ding ! Bayern zeigt moral . Chechz doch noch bezwungen .
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 365854323822960640	herrliche Stücke ...
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 374836815858913280	Vielen Dank . Wieder einmal sehr schöne AL ' s bei Animexx ausgesucht . : &gt;
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 394823773490515968	Auf was für absolut bescheuerte Ideen Menschen kommen . %NegSmiley lastRT
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 318496698680868864	 Dieses Land ist so scheisse , warum dafür Politik machen ?  = Weil sonst die Scheisse Politik für dieses Land macht !
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 324763447223001088	Abschaffung der kalten Progression : Dass die SPD nicht einmal diese kleine Erleichterung für Arbeitnehmer mitmachen will , schürt Misstrauen .
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 323889817609986049	Der beste Microsoft Knowledgebase - Artikel , den ich je gelesen habe .
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 365157939419422721	Erfolgreich geduscht !
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 311958681459757057	Das ist das zynische . Über Themen labern , Leute schlecht machen . Wenn nicht der Papst damit Thema wäre , kein Wort . Ich hasse das .
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 372460155486896128	Soviel Fairness muss sein . Gratulation dem Team von Schalke04 %PosSmiley
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 389763404468330496	Genial %User zeigt ab Ende Oktober HardKnocks trainingscamp amfootball ischgefreimir
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 327325118802055168	Shit ! Mein Hund muss morgen zum Tierarzt und bekommt seine Wolfskralle gezogen / operiert . %NegSmiley
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 328250971127951360	Wie kann man morgens rausgehen und sich einen Scheiss darum kümmern wie man aussieht ?!
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 395507843425525760	Endlich online : Meine Eindrücke vom twitcook07 . Danke an %User für den netten Abend :
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 322253122204487680	wieso habe ich keine follower ? %NegSmiley
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 394523687581663232	Unsere Goldene Hochzeit war Super Danke das ihr alle hier ward . Es war Super
-
-% <<<	gold:	neutral
-% >>>	predicted:	positive
-% 320088556687212545	schwarzgeld. steueroase. vermächtnisse . damit sollte sich die cdu eigentlich auskennen .
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 312132781817872386	 Mit dem neuen Papst hofft die Welt auf mehr Gerechtigkeit ...  qualitätsjournalismus
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 312064352662454272	Steh aufn neuen auserwählten Papst nicht .. %NegSmiley
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 371013724665937921	in hd und Zeitlupe sieht alles geil aus
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 327461912042422272	Ich knuddl meine TL ganz dolle &lt; ( *-* ) &gt;
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 318856086482481153	Europawahl - Prognose Deutschland 31.03 . 2013 %Link Die AfD mit 3 Prozent noch vor der FDP ! Das gibt Hoffnung .
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 379603474402791424	Ich gratuliere der FDP zum grandiosen Erfolg in Bayern
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 368116303724576768	Also Herr Schleimorial is schon Super . Bringt mich immer zum lachen .
-
-\begin{example}[Error Made by the System of~\citeauthor{Gamon:04}]\label{snt:cgsa:exmp:gamon-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
-  \noindent \\[\exampleSep]
+The first wrong result that we are going to analyze in detail is shown
+in Example~\ref{snt:cgsa:exmp:gamon-error} and was produced by the
+system of~\citet{Gamon:04}.
+\begin{example}[Error Made by the System of~\citeauthor{Gamon:04}]\label{snt:cgsa:exmp:mohammad-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Das ist das zynische. \"Uber Themen labern, Leute schlecht machen. Wenn nicht der Papst damit Thema w\"are, kein Wort. Ich hasse das.}\\
+  \noindent It's cynical.  To babble about topics, to talk people
+  down.  If the topic wouldn't be about the Pope, no word. I
+  hate this.\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
-    \upshape\textcolor{green3}{positive}}\\
+    \upshape\textcolor{midnightblue}{negative}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{black}{neutral*}}
+    \upshape\textcolor{green3}{positive*}}
 \end{example}
+\noindent{} In this case, the classifier incorrectly assigned a
+positive label to a clearly negative microblog despite the presence
+of multiple negatively connoted terms (``zynische''
+[\emph{cynical}], ``labern'' [\emph{to babble}], ``schlecht machen''
+[\emph{to talk down}], and ``hasse'' [\emph{to hate}]) in this
+message.  The reason for this is quite simple: As we already noted
+in the foregoing description, this method is completely
+unlexicalized and relies only on grammatical information while
+making its predictions.  In particular, for this microblog, the
+top-5 most important features (ranked by the absolute values of
+their coefficients) were:
+\begin{enumerate}
+\item \texttt{PD-ADJA} (\textcolor{black}{neutral}): -0.62896911412,
+\item \texttt{---VVINF} (\textcolor{midnightblue}{negative}): 0.517300341184,
+\item \texttt{PD-ADJA} (\textcolor{green3}{positive}): 0.505413668274,
+\item \texttt{---VVINF} (\textcolor{green3}{positive}): -0.346990702756,
+\item \texttt{CJ-VVINF} (\textcolor{green3}{positive}):
+  0.303311030403.
+\end{enumerate}
+As you can see, none of these attributes reflects any information
+about the lexical terms appearing in the tweet, and the system simply
+prefers the positive class, judging from the occurrence of a predicate
+adjective (\texttt{PD-ADJA}) and coordinately conjoined infinitive
+(\texttt{CJ-VVINF}).
 
-% <<<	gold:	neutral
-% >>>	predicted:	positive
-% 373552746559188992	Die Bomben meiner Stadt machen BOOM , BOOM , BOOM !
-
-% <<<	gold:	neutral
-% >>>	predicted:	positive
-% 374468368369463297	SPD - Flyer im Zug . Oje , Steinbrück hat im tvduell wirklich seinen Kernsatz vergeigt nawieauchimmer
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 391483190701228032	das klingt richtig gut ! Was für eine hast du denn ? ( u v u ) %PosSmiley3
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 318807837742604288	EU - Politik : Vor allem politisch marktfremd verfälschte Import - Anreize haben Wirtschaft in EU - Peripherie zerstört ht ...
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 364659072924000256	Wer hat dir eig. deinen neuen Avatar gemacht ? Sieht echt klasse aus !
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 332960462138388480	Habt ihr der FDP dabei mal zugeguckt ? Die sind auch nicht schlecht .
-
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 379872759389913088	Yay ! %PosSmiley In Wiesbaden wird es weiter keine NPD - Plakate geben , das Verwaltungsgericht hat Eilantrag zurückgewiesen :
+The next error shown in Example~\ref{snt:cgsa:exmp:mohammad-error} was
+made by the system of~\citet{Mohammad:13}.  This time, a positive
+tweet was misclassified as neutral.  However, the reason for this
+erroneous decision is completely different.  As we can see from the
+list of the highest ranked features provided below:
+\begin{enumerate}
+\item \texttt{*} (\textcolor{black}{neutral}): 0.131225868029,
+\item \texttt{*} (\textcolor{midnightblue}{negative}): -0.0840804221845,
+\item \texttt{\%PoS-CARD} (\textcolor{black}{neutral}): 0.0833658576233,
+\item \texttt{\%PoS-ADJD} (\textcolor{black}{neutral}): -0.069745190018,
+\item \texttt{t-\textvisiblespace{}-n} (\textcolor{green3}{positive}): 0.0556721202587;
+\end{enumerate}
+this analyzer draws its conclusions mainly from rather general, though
+excessively heavy weighted features (such a the placeholder token
+\texttt{*} or PoS-tag traits \texttt{\%PoS-CARD} and
+\texttt{\%PoS-ADJD}), and consequently succumbs to the general neutral
+bias.
 
 \begin{example}[Error Made by the System of~\citeauthor{Mohammad:13}]\label{snt:cgsa:exmp:mohammad-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
-  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape das
+    klingt richtig gut! Was f\"ur eine hast du denn? (uvu) \%PosSmiley3}\\
+  \noindent It sounds really great.  Which one do you have? (uvu) \%PosSmiley3\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-% <<<	gold:	positive
-% >>>	predicted:	negative
-% 326221492968886272	Höhö , ich muss heute erst zur dritten Stunde in die Schule %PosSmiley
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 318257372902600704	Der CDU Stadtverband Merzig wünscht ein frohes und erholsames Osterfest !
-
-% <<<	gold:	negative
-% >>>	predicted:	neutral
-% 324652225697832961	unsere Lobbyismus verseuchte Politik ist die grösste mafiöse Vereinigung . Aber %User nimmt ' s gelassen bestimmt ... Gewohnheit
-
-% <<<	gold:	negative
-% >>>	predicted:	positive
-% 380334464066265088	Den cdu - Wählern traue ich durchaus zu der fdp 8 bis 9% zu bescheren ! Die sind so borniert , nicht nur in Niedersachsen !
-
-% <<<	gold:	positive
-% >>>	predicted:	neutral
-% 311987087937261568	Voll nett dass der Papst versprochen hat uns in seine Nachtgebete einzubeziehen . Wir sollten als Ausgleich gleich beim B ...
+Finally, the last example (\ref{snt:cgsa:exmp:guenther-error}) shows
+another wrong decision, where a negative microblog was incorrectly
+analyzed as positive by the method of~\citet{Guenther:14}, even though
+the negative term ``borniert'' (\emph{narrow-minded}) was present in
+both utilized sentiment lexicons.  This is again explained by the
+prevalence of rather general features (e.g., \texttt{8},
+\texttt{nicht-nur_NEG}, \texttt{nur_NEG}, etc.) and their too high
+bias towards the majority class in the PotTS dataset.
 
 \begin{example}[Error Made by the System of~\citeauthor{Guenther:14}]\label{snt:cgsa:exmp:guenther-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
-  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Den CDU-W\"ahlern traue ich durchaus zu der FDP 8 bis 9\% zu bescheren! Die sind so borniert, nicht nur in Niedersachsen!}\\
+  \noindent I don't put giving 8 to 9\% to the FDP past the CDU-voters!  They are so narrow-minded, not only in Lower Saxony!\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
-    \upshape\textcolor{green3}{positive}}\\
+    \upshape\textcolor{midnightblue}{negative}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{black}{neutral*}}
+    \upshape\textcolor{green3}{positive}}
 \end{example}
-
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
 Even though SVM- and traditional ML-based approaches continued playing
