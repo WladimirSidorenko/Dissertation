@@ -2268,35 +2268,84 @@ bias towards the majority class in the PotTS dataset.
     \upshape\textcolor{green3}{positive}}
 \end{example}
 
+As the final remark, we should however note that albeit this type of
+mistakes is distinctive of the classifiers of~\citet{Mohammad:13} and
+\citet{Guenther:14}, in general, these systems perform fairly well,
+and most of their misclassifications represent rather arguable cases,
+where even a human expert would doubt about the correct prediction.
+
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
-Even though SVM- and traditional ML-based approaches continued playing
-a significant role in the following SemEval runs, they have gradually
-been superseded by more powerful ensemble- and deep-learning based
-methods~\cite[e.g., ][]{Hagen:15,Deriu:16,Xu:16}, some of which will
-be covered in the next section.  At this point, however, let us first
-look at what results we can expect from the already described systems.
-For this purpose, we have reimplemented the approaches of
-\citet{Gamon:04}, \citet{Mohammad:13}, and \citet{Guenther:14}, and
-applied these classifiers to PotTS and SB10k data.  The scores of
-these methods are shown in Table~\ref{snt-cgsa:tbl:ml-res}.
+Even though traditional ML-based approaches still yield competitve
+results and play an important role in sentiment analysis of newspaper
+texts and social media posts, they are gradually giving place to
+allegedly more powerful and in some sense more intuitive deep learning
+(DL) methods.  As we already mentioned in the previous chapter, in
+contrast to standard supervised classifiers with human-engineered
+attributes, these methods induce their optimal input representation
+along with feature weights automatically during training, and, in some
+cases, might produce even better features than those devised by a
+human person.  Another important advantage of this paradigm is a more
+straightforward way to implement the ``compositionality'' of language
+\cite{Frege:1892}: whereas traditional classifiers usually consider
+each instance as a \emph{bag of features} and predict its label based
+on the sum of these feature values multiplied with their weights, DL
+approaches first try to combine the represenation of each part of this
+instance (typically sentence tokens) into a single whole and then
+deduce the class from this joint embedding.
 
-\todo[inline]{Lin, 1998}
+\todo[inline]{\citet{Choi:08}}
 
-Since there was not a complete set of such expressions, it provided
-some seeds and then used distributional similarity (Lin, 1998) to find
-similar words, which were also likely to be subjectivity
-indicators. However, words found this way had low precision and high
-recall.
+Choi and Cardie (2008) hand-code compositional rules in or- der to
+model compositional effects of combining different words in the
+phrase. The hand-coded rules are based on domain knowledge and used to
+learn the effects of combining words in the phrase.
 
-\todo[inline]{\citet{Bespalov:11}}
+\todo[inline]{Moilanen and Pulman 2007}
 
-In (Bespalov et al., 2011), sentiment classification was performed
-based on supervised latent n-gram analysis.
+One notable exception is Moilanen and Pulman (2007), who propose a
+compositional semantic approach to assign a positive or negative
+sentiment to newspaper article titles. However, their knowledge-based
+approach presupposes the existence of a sentiment lexicon and a set of
+symbolic compositional rules.
+
+\todo[inline]{\citet{Nakagawa:10}}
+
+Another recent work that tries to model the compositional semantics of
+combining different words is Nakagawa et. al. (2010), which proposes a
+model that learns the effects of combining different words using
+phrase/sentence dependency parse trees and an initial polarity
+dictionary. They present a learning method that employs hidden
+variables for sentiment classification: given the polarity of a
+sentence and the a priori polarities of its words, they learn how to
+model the interactions between words with head-modifier relations in
+the dependency tree.
 
 \todo[inline]{\citet{Zhou:10}}
 
-\citet{Yessenalina:11}
+\done[inline]{\citet{Yessenalina:11}}
+
+Another important work on modelling the compositionality of language
+was presented by~\citet{Yessenalina:11}, who proposed a matrix-space
+approach to phrase-level sentiment analysis.  In this method, the
+authors represented each word $w$ as a matrix
+$W_{w}\in\mathbb{R}^{m\times m}$ and computed the sentiment score of
+the phrase $x^i = w^i_1, w^i_2, \ldots, w^i_{|x^i|}$ as the product of
+its token matrices, multiplying the final result with vectors
+$\vec{u}$ and $\vec{v}\in\mathbb{R}^m$ to obtain an integer score
+$\xi^i$:
+\begin{align*}
+  \xi^i =& \vec{u}^\top\left(\prod_{j=1}^{|x^i|}W_{w^i_j}\right)\vec{v}.
+\end{align*}
+The authors subsequently used this score to jointly predict the
+intensity and polarity of the phrase on a five-level ordinal sentiment
+scale, deriving the optimal thresholds for this scale automatically
+dirung training.  With this approach, the authors outperformed the
+PRank algorithm and bag-of-words ordered logistic regression on the
+MPQA corpus~\cite{Wiebe:05}, attaining the lowest ranking loss of
+(0.6375) among these systems.
+
+\done[inline]{\citet{Socher:11}}
 
 A real breakthrough in the use of deep neural networks for the
 sentence-level sentiment analysis happened with the pioneering work
