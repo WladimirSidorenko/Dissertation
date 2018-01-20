@@ -2362,43 +2362,53 @@ PRank algorithm and bag-of-words ordered logistic regression on the
 MPQA corpus~\cite{Wiebe:05}, attaining the lowest ranking loss of
 (0.6375) among these systems.
 
-\done[inline]{\citet{Socher:11}}
+\done[inline]{\citet{Socher:11}, \citet{Socher:12}}
 
 A real breakthrough in the use of deep neural networks for the
 sentence-level sentiment analysis happened with the pioneering work
-of~\citet{Socher:11}, who first introduced a recursive autoencoder
+of~\citet{Socher:11} who first introduced a recursive autoencoder
 (RAE).  In this system, the authors obtained a fixed-width vector
 representation for complex phrases $\vec{v}$ by recursively merging
-the vectors of adjacent tokens (say $\vec{w}_1$ and $\vec{w}_2$),
-first multiplying these vectors with a compositional matrix $W$ and
-then applying a non-linear function ($softmax$) to the resulting
-product:
-\begin{align*}
+the vectors of their descendant tokens (e.g., $\vec{w}_1$ and
+$\vec{w}_2$) over a binarized dependency tree, first multiplying these
+vectors with a compositional matrix $W$ and then applying a non-linear
+function ($softmax$) to the resulting product:
+\begin{align}
   \vec{c} &= softmax\left(W\cdot\begin{bmatrix}
   \vec{w}_1\\
   \vec{w}_2
   \end{bmatrix}\right)
-\end{align*}
+\end{align}
 Using a max-margin classifier on top of the resulting phrase
 representation, \citet{Socher:11} could improve the state-of-the-art
 results on predicting the sentence-level polarity of user's blog
 posts~\cite{Potts:10} and also outperformed the system
-of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}.
+of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}, achieving
+86.4\% accuracy on predicting contextual polarity of polar terms.
 
-Later on, \citet{Socher:12} further improved these scores with the
-help of a recursive matrix-vectors space model (RMVSM), in which each
-word was associated with a 2-tuple of a vector and matrix---e.g.,
-$(\vec{w}_1, W_1)$ and $(\vec{w}_2, W_2)$---and the compositionality
-function was redefined as follows:
+\done[inline]{Socher:12}
+
+Later on, \citet{Socher:12} further improved this system by
+associating an additional matrix $W_i$ with each word in the tree, and
+performing the inference over both vector and matrix representations:
 \begin{align*}
-  \vec{c} &= softmax\left(W\cdot\begin{bmatrix}
-  W_2\cdot\vec{w}_1\\
-  W_1\cdot\vec{w}_2
-  \end{bmatrix}\right)
+  \vec{w}_p = g\left(W_v \begin{bmatrix}W_r\cdot \vec{w}_l\\
+      W_l\cdot \vec{w}_r\end{bmatrix} \right);\\
+  \vec{W}_p = W_m \cdot \begin{bmatrix}W_l;\\
+    W_r\end{bmatrix};
 \end{align*}
-
-
-\todo[inline]{Socher:12}
+where $\vec{w}_p\in\mathbb{R}^n$ stands for the vector embedding of
+the parent node, $\vec{w}_l$ and $\vec{w}_r$ represents the vectors of
+its left and right children, and
+$W_p, W_l, W_r \in \mathbb{R}^{n\times n}$ denote the respective
+matrices associated with these nodes.  The compositionality matrices
+$W_v\in\mathbb{R}^{n\times 2n}$ and $W_m\in\mathbb{R}^{n\times 2n}$
+were shared across all instances and learned along with word-specific
+parameters during the training process.  This model, called
+Matrix-Vector Recursive Neural Network (MVRNN), surpassed the RAE
+system on the IMDB movie revie corpus \cite{Pang:05}, yielding an
+overall Kullback-Leibler divergence between the probability of
+assigned labels and correct assignments of~0.91.
 
 \todo[inline]{Socher:13}
 
