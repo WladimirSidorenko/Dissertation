@@ -2362,7 +2362,7 @@ PRank algorithm and bag-of-words ordered logistic regression on the
 MPQA corpus~\cite{Wiebe:05}, attaining the lowest ranking loss of
 (0.6375) among these systems.
 
-\done[inline]{\citet{Socher:11}, \citet{Socher:12}}
+\done[inline]{\citet{Socher:11}}
 
 A real breakthrough in the use of deep neural networks for the
 sentence-level sentiment analysis happened with the pioneering work
@@ -2374,10 +2374,10 @@ $\vec{w}_2$) over a binarized dependency tree, first multiplying these
 vectors with a compositional matrix $W$ and then applying a non-linear
 function ($softmax$) to the resulting product:
 \begin{align}
-  \vec{c} &= softmax\left(W\cdot\begin{bmatrix}
+  \vec{c} &= softmax\left(W\begin{bmatrix}
   \vec{w}_1\\
   \vec{w}_2
-  \end{bmatrix}\right)
+  \end{bmatrix}\right)\label{cgsa:eq:socher-11}
 \end{align}
 Using a max-margin classifier on top of the resulting phrase
 representation, \citet{Socher:11} could improve the state-of-the-art
@@ -2389,28 +2389,55 @@ of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}, achieving
 \done[inline]{Socher:12}
 
 Later on, \citet{Socher:12} further improved this system by
-associating an additional matrix $W_i$ with each word in the tree, and
-performing the inference over both vector and matrix representations:
+associating an additional matrix $W_i$ with each word $w_i$ in the
+tree, and performing the inference over both vector and matrix
+representations:
 \begin{align*}
-  \vec{w}_p = g\left(W_v \begin{bmatrix}W_r\cdot \vec{w}_l\\
-      W_l\cdot \vec{w}_r\end{bmatrix} \right);\\
-  \vec{W}_p = W_m \cdot \begin{bmatrix}W_l;\\
+  \vec{w}_p = tanh\left(W_v \begin{bmatrix}W_r\vec{w}_l\\
+      W_l \vec{w}_r\end{bmatrix} \right);\\
+  W_p = W_m \begin{bmatrix}W_l;\\
     W_r\end{bmatrix};
 \end{align*}
 where $\vec{w}_p\in\mathbb{R}^n$ stands for the vector embedding of
-the parent node, $\vec{w}_l$ and $\vec{w}_r$ represents the vectors of
+the parent node, $\vec{w}_l$ and $\vec{w}_r$ represent the vectors of
 its left and right children, and
 $W_p, W_l, W_r \in \mathbb{R}^{n\times n}$ denote the respective
 matrices associated with these nodes.  The compositionality matrices
 $W_v\in\mathbb{R}^{n\times 2n}$ and $W_m\in\mathbb{R}^{n\times 2n}$
-were shared across all instances and learned along with word-specific
+are shared across all instances and learned along with word-specific
 parameters during the training process.  This model, called
 Matrix-Vector Recursive Neural Network (MVRNN), surpassed the RAE
-system on the IMDB movie revie corpus \cite{Pang:05}, yielding an
-overall Kullback-Leibler divergence between the probability of
-assigned labels and correct assignments of~0.91.
+system on the IMDB movie review corpus \cite{Pang:05}, attaining 0.91
+Kullback-Leibler divergence between the probabilities of correct and
+predicted assignments of~0.91.
 
-\todo[inline]{Socher:13}
+\done[inline]{\citet{Socher:13}}
+
+Finally, \citet{Socher:13} presented yet another improvement---the
+Recursive Neural Tensor Network (RNTN), in which they again used
+vector representation of words, but enhanced the original
+matrix-vector multiplication from Equation~\ref{cgsa:eq:socher-11}
+with an additional tensor product:
+\begin{align*}
+  \vec{c} &= softmax\left(\begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+  \end{bmatrix}^{\top}V^{[1:d]}\begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+  \end{bmatrix}
+            + W\begin{bmatrix}
+  \vec{w}_1\\
+  \vec{w}_2
+\end{bmatrix}\right),\label{cgsa:eq:socher-11}
+\end{align*}
+where $\vec{w}_1, \vec{w}_2\in\mathbb{R}^n$, and
+$W\in\mathbb{R}^{n\times 2n}$ are defined as previously; and $V$
+represents a $2n\times 2n\times n$-dimensional tensor.  By reducing
+this way the number of model parameters in comparison with the MVRNN,
+the authors gained a significant improvement, boosting the accuracy of
+predictions on the newly introduced Stanford Sentiment Treebank from
+82.9 to 85.4\%.
 
 \done[inline]{\citet{Tang:14b}}
 
