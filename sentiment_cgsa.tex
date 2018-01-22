@@ -2557,9 +2557,32 @@ tweets, attaining 84\% accuracy on distinguishing between positive and
 negative microblogs from the SemEval-2013 corpus \cite{Nakov:13}.
 
 
-\todo[inline]{\citet{Baziotis:17}}
+\done[inline]{\citet{Baziotis:17}, \citet{Cliche:17}}
 
-\todo[inline]{\citet{Cliche:17}}
+Another LSTM-based approach to sentiment analysis on Twitter was
+proposed by~\citet{Baziotis:17}, who used two layers of bidirectional
+LSTMs, concatenating the hidden states of the left-to-right LSTM
+($\vec{h}^{(i)}_{\rightarrow}\in\mathbb{R}^{150}$) with the respective
+hidden units of the right-to-left recurence
+($\vec{h}^{(i)}_{\leftarrow}\in\mathbb{R}^{150}$):
+$\vec{h}^{(i)} = [\vec{h}^{(i)}_{\rightarrow},
+\vec{h}^{(i)}_{\leftarrow}]\in\mathbb{R}^{300}$; and passing the
+resulting concatenation to another BiLSTM.  Before making the final
+prediction, the authors multiplied the hidden outputs of the second
+BiLSTM layer with a special attention matrix $W_h$, adding an
+attention bias $\vec{b}_h$ in order to give more importance to some
+specific tweet regions:
+\begin{align}
+  \vec{e}_i =& tanh\left(W_h\vec{h}_i+\vec{b}_h\right);\\
+  A =& \frac{\exp(\vec{e}_i)}{\sum_{t=1}^T\exp(\vec{e}_t)};\\
+  \vec{r} =& A\vec{h};
+\end{align}
+and then fed the resulting vector $\vec{r}\in\mathbb{R}^{300}$ into
+the final fully connected layer with softmax non-linearity.  With this
+approach, \citet{Baziotis:17} got first place in SemEval-2017 Task~4
+\cite{Rosenthal:17}, achieving 0.675~\F{}$^{+/-}$ and being on a par
+with the system of~\citet{Cliche:17} who used an ensemble of LSTM and
+convolutional networks trained with different parameters.
 
 \todo[inline]{\citet{Rouvier:17}}
 
