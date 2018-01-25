@@ -2277,124 +2277,114 @@ where even a human expert would doubt about the correct prediction.
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
 Even though traditional ML-based approaches still yield competitve
-results and play an important role in sentiment analysis of newspaper
-texts and social media posts, they are gradually giving place to
+results and play an important role in the sentiment analysis of
+newspaper texts and social media, they are gradually giving place to
 allegedly more powerful and in some sense more intuitive deep learning
 (DL) methods.  As we already mentioned in the previous chapter, in
-contrast to standard supervised classifiers with human-engineered
-attributes, these methods induce their optimal input representation
-along with feature weights automatically during training, and, in some
-cases, might produce even better features than those devised by a
+contrast to standard supervised techniques with human-engineered
+attributes, DL systems induce their optimal input representation along
+with feature weights completely automatically during training, and, in
+some cases, might produce even better features than those devised by a
 human person.  Another important advantage of this paradigm is a more
 straightforward way to implement the ``compositionality'' of language
-\cite{Frege:1892}: whereas traditional classifiers usually consider
-each instance as a \emph{bag of features} and predict its label based
-on the sum of these feature values multiplied with their weights, DL
-approaches first try to combine the represenation of each part of this
-instance (typically sentence tokens) into a single whole and then
-deduce the class from this joint embedding.
+\cite{Frege:1892}: Whereas conventional classifiers usually consider
+each instance as a \emph{bag of features} and predict the label based
+on the sum of these features' values multiplied with their respective
+coefficients, DL approaches first try to combine the represenation of
+each part of this instance (typically sentence tokens) into a single
+whole and then deduce the final class from this joint embedding.
 
-\todo{Unite into a single ``compositionality'' paragraph.}
+% \todo{Unite into a single ``compositionality'' paragraph.}
 
-\done[inline]{Moilanen and Pulman 2007}
+% \done[inline]{Moilanen and Pulman 2007}
 
-Among the first who explicitly applied the principle of
-compositionality to the task of coarse-grained sentiment anlysis were
-\citet{Moilanen:07}.  In their work on sentiment composition, the
-authors first determined the polarity of terminal nodes in an
-automatically costructed syntactic tree, and then used a meticulously
-developed set of manual rules in a bottom-up fashion to propagate
-semantic orientation of descendants to their grammatical parent nodes.
-Considering the polarity of the root as the sentiment class of the
-whole sentence, \citet{Moilanen:07} achieved 91.33\% accuracy in
-predicting the polarities of news headlines from SemEval-2007
-\cite{Strapparava:07}.
+% Among the first who explicitly applied the principle of
+% compositionality to the task of coarse-grained sentiment anlysis were
+% \citet{Moilanen:07}.  In their work on sentiment composition, the
+% authors first determined the polarity of terminal nodes in an
+% automatically costructed syntactic tree, and then used a meticulously
+% developed set of manual rules in a bottom-up fashion to propagate
+% semantic orientation of descendants to their grammatical parent nodes.
+% Considering the polarity of the root as the sentiment class of the
+% whole sentence, \citet{Moilanen:07} achieved 91.33\% accuracy in
+% predicting the polarities of news headlines from SemEval-2007
+% \cite{Strapparava:07}.
 
-\done[inline]{\citet{Choi:08}}
+% \done[inline]{\citet{Choi:08}}
 
-\citet{Choi:08} directly incorporated compositional semantic
-heuristics into the training and inference procedure of their method.
-For this purpose, the authors first used a simple SVM classifier to
-predict a hidden semantic class
-$z_i\in\{\textrm{positive}, \textrm{negative}, \textrm{negator},
-\textrm{none}\}$ for each token $x_i$ of the input sequence
-$\mathbf{x}:=\left(x_1,\ldots,x_i\right)$, and then applied a set of
-hand-coded semantic rules (such as ``swap the polarity to the opposite
-if the preceding token was a negator'') to derive the overall semantic
-orientation of the whole instance.  With this two-stage system,
-\citet{Choi:08} were able to outperform both a purely rule-based
-approach and bag-of-features SVM method, reaching 90.7\% accuracy on
-predicting the contextual polarity of polar terms in the MPQA corpus
-\cite{Wiebe:05}.
+% \citet{Choi:08} directly incorporated compositional semantic
+% heuristics into the training and inference procedure of their method.
+% For this purpose, the authors first used a simple SVM classifier to
+% predict a hidden semantic class
+% $z_i\in\{\textrm{positive}, \textrm{negative}, \textrm{negator},
+% \textrm{none}\}$ for each token $x_i$ of the input sequence
+% $\mathbf{x}:=\left(x_1,\ldots,x_i\right)$, and then applied a set of
+% hand-coded semantic rules (such as ``swap the polarity to the opposite
+% if the preceding token was a negator'') to derive the overall semantic
+% orientation of the whole instance.  With this two-stage system,
+% \citet{Choi:08} were able to outperform both a purely rule-based
+% approach and bag-of-features SVM method, reaching 90.7\% accuracy on
+% predicting the contextual polarity of polar terms in the MPQA corpus
+% \cite{Wiebe:05}.
 
-\done[inline]{\citet{Nakagawa:10}}
+% \done[inline]{\citet{Nakagawa:10}}
 
-Another compositional method was proposed by~\citet{Nakagawa:10}, who
-applied tree-structured CRFs to automatically derived dependency
-trees, trying to predict the polarity of the root and considering
-semantic orientation of intermediate nodes as hidden variables.  Using
-an extensive set of features including sentiment lexicons and polarity
-reversal lists, the authors achieved 86.1\% accuracy on the MPQA
-corpus \cite{Wiebe:05}, outperforming plain rule-based and
-bag-of-features approaches.
+% Another compositional method was proposed by~\citet{Nakagawa:10}, who
+% applied tree-structured CRFs to automatically derived dependency
+% trees, trying to predict the polarity of the root and considering
+% semantic orientation of intermediate nodes as hidden variables.  Using
+% an extensive set of features including sentiment lexicons and polarity
+% reversal lists, the authors achieved 86.1\% accuracy on the MPQA
+% corpus \cite{Wiebe:05}, outperforming plain rule-based and
+% bag-of-features approaches.
 
-\todo{Unite into a single ``early DL'' paragraph.}
-
-\done[inline]{\citet{Yessenalina:11}}
-
-Another important work on modelling the compositionality of language
-was presented by~\citet{Yessenalina:11}, who proposed a matrix-space
-approach to phrase-level sentiment analysis.  In this method, the
-authors represented each word $w$ as a matrix
-$W_{w}\in\mathbb{R}^{m\times m}$ and computed the sentiment score of
-the phrase $x^i = w^i_1, w^i_2, \ldots, w^i_{|x^i|}$ as the product of
-its token matrices, multiplying the final result with vectors
-$\vec{u}$ and $\vec{v}\in\mathbb{R}^m$ to obtain an integer score
-$\xi^i$:
+Among the first who explicitly adopted this compositionality principle
+in a DL-based sentiment system were \citet{Yessenalina:11}.  In their
+proposed matrix-space approach, the authors represented each word $w$
+of a phrase $x^i = w^i_1, w^i_2, \ldots, w^i_{|x^i|}$ as a matrix
+$W_{w}\in\mathbb{R}^{m\times m}$ and computed the sentiment score
+$\xi^i$ of this phrase as a product of its token matrices, multiplying
+the final result with two vectors ($\vec{u}$ and
+$\vec{v}\in\mathbb{R}^m$):
 \begin{align*}
   \xi^i =& \vec{u}^\top\left(\prod_{j=1}^{|x^i|}W_{w^i_j}\right)\vec{v}.
 \end{align*}
-The authors subsequently used this score to jointly predict the
-intensity and polarity of the phrase on a five-level ordinal sentiment
-scale, deriving the optimal thresholds for this scale automatically
-dirung training.  With this approach, the authors outperformed the
-PRank algorithm and bag-of-words ordered logistic regression on the
-MPQA corpus~\cite{Wiebe:05}, attaining the lowest ranking loss of
-(0.6375) among these systems.
+They subsequently compared the resulting value with automatically
+derived thresholds to jointly predict the intensity and polarity of
+the phrase on a five-level sentiment scale (ranging from very negative
+to very positive), attaining 0.6375 ranking loss on the MPQA
+corpus~\cite{Wiebe:05}. %  With this method, \citet{Yessenalina:11}
+% outperformed the PRank algorithm and bag-of-words ordered logistic
+% regression on the MPQA corpus~\cite{Wiebe:05}, attaining the lowest
+% ranking loss (0.6375) among these systems.
 
-\done[inline]{\citet{Socher:11}}
-
-A real breakthrough in the use of deep neural networks for the
-sentence-level sentiment analysis happened with the pioneering work
-of~\citet{Socher:11} who first introduced a recursive autoencoder
-(RAE).  In this system, the authors obtained a fixed-width vector
-representation for complex phrases $\vec{v}$ by recursively merging
-the vectors of their descendant tokens (e.g., $\vec{w}_1$ and
-$\vec{w}_2$) over a binarized dependency tree, first multiplying these
+Almost contemporarily with this work, \citet{Socher:11} introduced a
+deep recursive autoencoder (RAE) in which they obtained a fixed-width
+vector representation for complex phrases $\vec{w}_p$ by recursively
+merging the vectors of their tokens (e.g., $\vec{w}_l$ and
+$\vec{w}_r$) over a binarized dependency tree, first multiplying these
 vectors with a compositional matrix $W$ and then applying a non-linear
 function ($softmax$) to the resulting product:
 \begin{align}
-  \vec{c} &= softmax\left(W\begin{bmatrix}
-  \vec{w}_1\\
-  \vec{w}_2
+  \vec{w}_p &= softmax\left(W\begin{bmatrix}
+      \vec{w}_l\\
+      \vec{w}_r
   \end{bmatrix}\right)\label{cgsa:eq:socher-11}
 \end{align}
-Using a max-margin classifier on top of the resulting phrase
-representation, \citet{Socher:11} could improve the state-of-the-art
-results on predicting the sentence-level polarity of user's blog
+Using a max-margin classifier on top of the resulting representation,
+\citet{Socher:11} could improve the state-of-the-art results on
+predicting the sentence-level polarity of user's blog
 posts~\cite{Potts:10} and also outperformed the system
 of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}, achieving
 86.4\% accuracy on predicting contextual polarity of polar terms.
 
-\done[inline]{Socher:12}
-
-Later on, \citet{Socher:12} further improved this system by
-associating an additional matrix $W_i$ with each word $w_i$ in the
-tree, and performing the inference over both vector and matrix
+Later on, \citet{Socher:12} further improved this approach by
+associating an additional matrix $W_w$ with each vocabulary word $w$
+and performing the inference over both vector and matrix
 representations:
 \begin{align*}
   \vec{w}_p = tanh\left(W_v \begin{bmatrix}W_r\vec{w}_l\\
-      W_l \vec{w}_r\end{bmatrix} \right);\\
+      W_l \vec{w}_r\end{bmatrix} \right),\\
   W_p = W_m \begin{bmatrix}W_l;\\
     W_r\end{bmatrix};
 \end{align*}
@@ -2404,173 +2394,167 @@ its left and right children, and
 $W_p, W_l, W_r \in \mathbb{R}^{n\times n}$ denote the respective
 matrices associated with these nodes.  The compositionality matrices
 $W_v\in\mathbb{R}^{n\times 2n}$ and $W_m\in\mathbb{R}^{n\times 2n}$
-are shared across all instances and learned along with word-specific
+were shared across all instances and learned along with word-specific
 parameters during the training process.  This model, called
 Matrix-Vector Recursive Neural Network (MVRNN), surpassed the RAE
-system on the IMDB movie review corpus \cite{Pang:05}, attaining 0.91
+system on the IMDB movie review dataset \cite{Pang:05}, attaining 0.91
 Kullback-Leibler divergence between the probabilities of correct and
-predicted assignments of~0.91.
+predicted assignments.
 
-\done[inline]{\citet{Socher:13}}
-
-Finally, \citet{Socher:13} presented yet another improvement---the
-Recursive Neural Tensor Network (RNTN), in which they again used
-vector representation of words, but enhanced the original
-matrix-vector multiplication from Equation~\ref{cgsa:eq:socher-11}
-with an additional tensor product:
+Yet another improvement---the Recursive Neural Tensor Network
+(RNTN)---was presented by~\citet{Socher:13}.  In this system, the
+authors again opted for a vector representation of words, but enhanced
+the original matrix-vector product from
+Equation~\ref{cgsa:eq:socher-11} with an additional tensor
+multiplication:
 \begin{align*}
-  \vec{c} &= softmax\left(\begin{bmatrix}
-  \vec{w}_1\\
-  \vec{w}_2
+  \vec{w}_p &= softmax\left(\begin{bmatrix}
+  \vec{w}_l\\
+  \vec{w}_r
   \end{bmatrix}^{\top}V^{[1:d]}\begin{bmatrix}
-  \vec{w}_1\\
-  \vec{w}_2
+  \vec{w}_l\\
+  \vec{w}_r
   \end{bmatrix}
             + W\begin{bmatrix}
-  \vec{w}_1\\
-  \vec{w}_2
+  \vec{w}_l\\
+  \vec{w}_r
 \end{bmatrix}\right),\label{cgsa:eq:socher-11}
 \end{align*}
-where $\vec{w}_1, \vec{w}_2\in\mathbb{R}^n$, and
-$W\in\mathbb{R}^{n\times 2n}$ are defined as previously; and $V$
-represents a $2n\times 2n\times n$-dimensional tensor.  By reducing
-this way the number of model parameters in comparison with the MVRNN,
-the authors gained a significant improvement, boosting the accuracy of
-predictions on the newly introduced Stanford Sentiment Treebank from
-82.9 to 85.4\%.
+where $\vec{w}_p, \vec{w}_l, \vec{w}_r\in\mathbb{R}^n$, and
+$W\in\mathbb{R}^{n\times 2n}$ are defined as previousl and denote the
+word embeddings and compositionality matrix respectively; and $V$
+represents a $2n\times 2n\times n$-dimensional tensor.  By increasing
+this way the number of parameters in comparison with the RAE approach,
+but significantly reducing their number with respect to the MVRNN
+method, the authors gained a significant improvement of the results,
+boosting the classification accuracy on their own Stanford Sentiment
+Treebank from 82.9 to 85.4\%.
 
-\done[inline]{\citet{Tang:14b}}
-
-A hybrid approach to coarse-grained sentiment analysis was proposed by
-\citet{Tang:14b}, who trained a linear SVM classifier on top of
-sentiment-specific word embeddings and hand-crafted features.  To
-obtain the former representations, \citeauthor{Tang:14b} devised a
-simple feed-forward neural network similar to the one used
-by~\citet{Collobert:11}, which, for each token $t$, had to predict the
-probability that this token appeared in the surrounding context and
-the likelihood that $t$ occurred in a positive or negative microblog.
-Since this training required a substantial amount of data, the authors
-leveraged a big collection of automatically downloaded tweets,
-obtaining noisy sentiment labels for these microblogs with the distant
-supervision method of~\citet{Go:09}.  The second part of this
-system---manually designed features---were mostly inspired by the work
-of~\citet{Mohammad:13} and included $n$-grams, word clusters,
-information about emoticons, negtaion, elongated characters and
-punctuation marks.  Combining these different traits into a single
-feature vector resulted significantly improved classification
-accuracy, yielding 0.701~\F{} on the SemEval-2014 test set (second
-place among all competing systems).
-
-\done[inline]{\citet{Severyn:15}}
-
-An important breakthrough in the usage of deep learning methods for
-sentiment analysis on Twitter happened with the
+However, a real breakthrough in the usage of deep learning methods for
+sentiment analysis of Twitter happened with the
 work~\citet{Severyn:15}, whose proposed feed-forward DL system ranked
-first in Subtask~10~A (phrase-level polarity prediction) at
-SemEval~2015 \cite{Rosenthal:15} and achieved second place in
-Subtask~10~B (message-level classification).  Drawing on the ideas
-of~\citet{Kalchbrenner:14}, the authors devised a simple convolutional
-network which, taking sentiment-flavored pretrained word2vec vectors
-as input, multiplied these embeddings with 300 distinct convolutional
-kernels each of width five, subsequently passing the results of this
-multiplication to a piecewise linear ReLU filter and densely connected
-softmax layer.  An important aspect of this method which accounted for
-a huge part of its success was a special initialization scheme
-introduced by the authors.  In this inital process,
-\citeauthor{Severyn:15} first trained Twitter-specific word2vec
-vectors on a large collection of downloaded tweets, then pretrained
-the complete system, incuding matrix weights and emeddings, on noisily
-labeled microblogs of this corpus, leveraging the approach
-of~\citeauthor{Go:09}, and, finally, fine-tuned the parameters of
-their network on the officially released SemEval data.  Due to these
-improvements, the final system attained a competitive result of
-0.6459~two-class~\F{} on the message-level polarity subtask.
+first in SemEval-2015 Subtask~10~A (phrase-level polarity prediction)
+\cite{Rosenthal:15} and achieved second place in Subtask~10~B
+(message-level classification) of this competition.  Mainly drawing on
+the ideas of~\citet{Kalchbrenner:14}, the authors devised a simple
+convolutional network in which they multiplied pretrained word
+embeddings with 300 distinct convolutional kernels each of width five,
+and then passed the results of this multiplication to a piecewise
+linear ReLU filter with a densely connected softmax layer.  An
+important aspect of this approach which accounted for a huge part of
+its success was a special multi-stage initialization that was used to
+set the initial values of model's parameters: In the first step of
+this procedure, \citeauthor{Severyn:15} obtained Twitter-specific word
+embeddings by applying the word2vec algorithm to a large corpus of
+downloaded tweets.  Afterwards, they preadjusted the complete system
+including the word vectors, convolutional filters, and inter-layer
+matrices by training their model on a big set of noisily labeled
+microblogs from this collection.  Finally, they fine-tuned the
+parameters of the network on the officially released SemEval data,
+attaining a superior result of 0.6459~two-class~\F{} on the
+message-level polarity subtask.
 
-\done[inline]{SemEval 2016}
+Later on, this system was further improved by \citet{Deriu:16}, who
+increased the number of convolutional layers (applying two layers
+instead of one) and simultaneously trained two such models (using
+word2vec vectors as input for the first one and passing GloVe
+embeddings \cite{Pennington:14} to the second), joining their output
+at the end and achieving this way 0.671~\F$^{+/-}$ on the SemEval-2015
+data.  A similar enhancement was also proposed by~\citet{Rouvier:16},
+who likewise utilized three different types of embeddings (word2vec,
+word2vec specific to particular parts of speech, and
+sentiment-tailored vectors), training separate sets of convolutions
+for each of these types.
 
-\done[inline]{\citet{Deriu:16}}
+% \done[inline]{SemEval 2016}
 
-\citet{Deriu:16} extended the system of~\citet{Severyn:15} by
-increasing the number of convolutional layers (using two layers
-instead of just one).  Furthermore, to improve the generalizability of
-their system, the authors trained two such networks with different
-types of input embeddings, taking pretrained word2vec
-vectors~\cite{Mikolov:13} for one classifier and using GloVe
-embeddings~\cite{Pennington:14} for another one.  Similarly to
-\citet{Severyn:15}, \citeauthor{Deriu:16} first fine-tuned these word
-representations on a big collection of tweets, maximizing the context
-prediction objective.  Afterwards, they pretrained the parameters of
-the networks including embeddings and convolutional filters on a big
-set of noisily labeled tweets, and, finally, put the finishing touches
-on the weights of these systems by training them on the officially
-released SemEval data.  The authors united the predictions of both
-networks by training a random forest classifier on top of their output
-vectors, establishing a new state of the art (0.633~\F{}) on the
-SemEval-2016 data.
+% \done[inline]{\citet{Deriu:16}}
 
-\done[inline]{\citet{Rouvier:16}}
+% \citet{Deriu:16} extended the system of~\citet{Severyn:15} by
+% increasing the number of convolutional layers (using two layers
+% instead of just one).  Furthermore, to improve the generalizability of
+% their system, the authors trained two such networks with different
+% types of input embeddings, taking pretrained word2vec
+% vectors~\cite{Mikolov:13} for one classifier and using GloVe
+% embeddings~\cite{Pennington:14} for another one.  Similarly to
+% \citet{Severyn:15}, \citeauthor{Deriu:16} first fine-tuned these word
+% representations on a big collection of tweets, maximizing the context
+% prediction objective.  Afterwards, they pretrained the parameters of
+% the networks including embeddings and convolutional filters on a big
+% set of noisily labeled tweets, and, finally, put the finishing touches
+% on the weights of these systems by training them on the officially
+% released SemEval data.  The authors united the predictions of both
+% networks by training a random forest classifier on top of their output
+% vectors, establishing a new state of the art (0.633~\F{}) on the
+% SemEval-2016 data.
 
-Another approach building on the work of~\citet{Severyn:15} was
-proposed by~\citet{Rouvier:16}.  In contrast to the former system
-which utilized only pre-trained sentiment-flavored word vectors with a
-single convolutional layer, the authors simultaneously harnessed three
-different types of embeddings (word2vec, word2vec specific to
-particular parts of speech, and sentiment-tailored emeddings) each of
-which was trained with a separate set of convolutional filters.
-Besides training deep representations, the authors also used
-hand-crafted features such as sentiment lexicons, emoticons,
-information about elongated words, punctuation marks, and capitalized
-tokens, training a separate multi-layer perceptron on these
-attributes.  In the final step, \citeauthor{Rouvier:16} joined the
-outputs of the two downstream classifiers (deep convolutions and
-perceptron) into a single vector, subsequently passing this vector to
-two fully connected neural network layers with softmax non-linearity
-at the end.  This way, the authors achieved 0.63~\F{} on the
-SemEval-2016 test set, getting second rank in this shared task.
+% \done[inline]{\citet{Rouvier:16}}
 
-\done[inline]{\citet{Xu:16}}
+% Another approach building on the work of~\citet{Severyn:15} was
+% proposed by~\citet{Rouvier:16}.  In contrast to the former system
+% which utilized only pre-trained sentiment-flavored word vectors with a
+% single convolutional layer, the authors simultaneously harnessed three
+% different types of embeddings (word2vec, word2vec specific to
+% particular parts of speech, and sentiment-tailored emeddings) each of
+% which was trained with a separate set of convolutional filters.
+% Besides training deep representations, the authors also used
+% hand-crafted features such as sentiment lexicons, emoticons,
+% information about elongated words, punctuation marks, and capitalized
+% tokens, training a separate multi-layer perceptron on these
+% attributes.  In the final step, \citeauthor{Rouvier:16} joined the
+% outputs of the two downstream classifiers (deep convolutions and
+% perceptron) into a single vector, subsequently passing this vector to
+% two fully connected neural network layers with softmax non-linearity
+% at the end.  This way, the authors achieved 0.63~\F{} on the
+% SemEval-2016 test set, getting second rank in this shared task.
 
-\citet{Xu:16} also chose an ensemble approach to coarse-grained
-opinion mining of tweets.  In particular, the authors combined a
-convolutional system with 300 filters of widths three, four, and five
-(using 100 filters for each given width); an LSTM
-classifier~\cite{Hochreiter:97}, taking its output vector from the
-last time step $t$ as the final vote; and a special Bayesian wordvec
-system, which was trained to maximize the probability of a token given
-its surrounding context and the label of the tweet, maximizing this
-probability with the prior likelihood of the respective polarity.
-\citeauthor{Xu:16} united the decisions of these subsystems using soft
-weighting scheme:
-\begin{equation*}
-  y^* = \sum_i w_i y_i,\textrm{, s.t.} \sum_i w_i = 1, \forall i: w_i \geq 0,
-\end{equation*}
-where $y_i$ is the score of the label $y$ returned by the $i$-th
-classifier, and $w_i$ denotes an automatically learned weight for this
-prediction.  This submission achieved 0.617~\F{} on the two polarity
-classes (positive and negative), getting third place among all
-participating submissions.
+% \done[inline]{\citet{Wang:15}}
 
-\done[inline]{\citet{Wang:15}}
+% \citet{Wang:15} used an LSTM network to predict the polarity of
+% tweets, attaining 84\% accuracy on distinguishing between positive and
+% negative microblogs from the SemEval-2013 corpus \cite{Nakov:13}.
 
-\citet{Wang:15} used an LSTM network to predict the polarity of
-tweets, attaining 84\% accuracy on distinguishing between positive and
-negative microblogs from the SemEval-2013 corpus \cite{Nakov:13}.
+% \todo[inline]{\citet{Xu:16}}
+%
+% \citet{Xu:16} also chose an ensemble approach to coarse-grained
+% opinion mining of tweets.  In particular, the authors combined a
+% convolutional system with 300 filters of widths three, four, and five
+% (using 100 filters for each given width); an LSTM
+% classifier~\cite{Hochreiter:97}, taking its output vector from the
+% last time step $t$ as the final vote; and a special Bayesian wordvec
+% system, which was trained to maximize the probability of a token given
+% its surrounding context and the label of the tweet, maximizing this
+% probability with the prior likelihood of the respective polarity.
+% \citeauthor{Xu:16} united the decisions of these subsystems using soft
+% weighting scheme:
+% \begin{equation*}
+%   y^* = \sum_i w_i y_i,\textrm{, s.t.} \sum_i w_i = 1, \forall i: w_i \geq 0,
+% \end{equation*}
+% where $y_i$ is the score of the label $y$ returned by the $i$-th
+% classifier, and $w_i$ denotes an automatically learned weight for this
+% prediction.  This submission achieved 0.617~\F{} on the two polarity
+% classes (positive and negative), getting third place among all
+% participating submissions.
 
 
-\done[inline]{\citet{Baziotis:17}, \citet{Cliche:17}, \citet{Rouvier:17}}
+% \done[inline]{\citet{Baziotis:17}, \citet{Cliche:17},
+% \citet{Rouvier:17}}
 
-Another LSTM-based approach to sentiment analysis on Twitter was
-proposed by~\citet{Baziotis:17}, who used two layers of bidirectional
-LSTMs, concatenating the hidden states of the left-to-right LSTM
+Even though convolutional approaches still yield competitive results,
+in recent time, they have gradually been superseded by recurrent
+networks \cite{Xu:16,Wang:15}.  One of the most prominent such systems
+was newly propsoed by~\citet{Baziotis:17}, who used two layers of
+bidirectional LSTMs, concatenating the hidden states of the
+left-to-right recurrence
 ($\vec{h}^{(i)}_{\rightarrow}\in\mathbb{R}^{150}$) with the respective
-hidden units of the right-to-left recurence
+hidden units of the right-to-left loop
 ($\vec{h}^{(i)}_{\leftarrow}\in\mathbb{R}^{150}$):
 $\vec{h}^{(i)} = [\vec{h}^{(i)}_{\rightarrow},
 \vec{h}^{(i)}_{\leftarrow}]\in\mathbb{R}^{300}$; and passing the
-resulting concatenation to another BiLSTM.  Before making the final
-prediction, the authors multiplied the hidden outputs of the second
-BiLSTM layer with a special attention matrix $W_h$, adding an
-attention bias $\vec{b}_h$ in order to give more importance to some
+result of this concatenation to the next RNN layer.  Before making the
+final prediction, the authors multiplied the outputs of the second
+BiLSTM with a special attention matrix $W_h$, adding to it an
+attention bias $\vec{b}_h$ in order to give more importance to
 specific tweet regions:
 \begin{align}
   \vec{e}_i =& tanh\left(W_h\vec{h}_i+\vec{b}_h\right);\\
@@ -2578,12 +2562,44 @@ specific tweet regions:
   \vec{r} =& A\vec{h};
 \end{align}
 and then fed the resulting vector $\vec{r}\in\mathbb{R}^{300}$ into
-the final fully connected layer with softmax non-linearity.  With this
-approach, \citet{Baziotis:17} got first place (0.675~\F{}$^{+/-}$) in
-SemEval-2017 Task~4 \cite{Rosenthal:17}, being on a par with the
-system of~\citet{Cliche:17} and even outperforming the method
-of~\citet{Rouvier:17}, which both relied on ensembles of LSTM and
-convolutional networks trained with different parameters.
+the final densely connected layer with softmax non-linearity.  With
+this approach, \citet{Baziotis:17} got first place
+(0.675~\F{}$^{+/-}$) in SemEval-2017 Task~4 \cite{Rosenthal:17}, being
+on a par with the system of~\citet{Cliche:17} and even outperforming
+the method of~\citet{Rouvier:17}, which both relied on ensembles of
+LSTM and convolutional networks that had been trained with different
+parameters.
+
+% \done[inline]{\citet{Tang:14b}}
+
+% A hybrid approach to coarse-grained sentiment analysis was proposed by
+% \citet{Tang:14b}, who trained a linear SVM classifier on top of
+% sentiment-specific word embeddings and hand-crafted features.  To
+% obtain the former representations, \citeauthor{Tang:14b} devised a
+% simple feed-forward neural network similar to the one used
+% by~\citet{Collobert:11}, which, for each token $t$, had to predict the
+% probability that this token appeared in the surrounding context and
+% the likelihood that $t$ occurred in a positive or negative microblog.
+% Since this training required a substantial amount of data, the authors
+% leveraged a big collection of automatically downloaded tweets,
+% obtaining noisy sentiment labels for these microblogs with the distant
+% supervision method of~\citet{Go:09}.  The second part of this
+% system---manually designed features---were mostly inspired by the work
+% of~\citet{Mohammad:13} and included $n$-grams, word clusters,
+% information about emoticons, negtaion, elongated characters and
+% punctuation marks.  Combining these different traits into a single
+% feature vector resulted significantly improved classification
+% accuracy, yielding 0.701~\F{} on the SemEval-2014 test set (second
+% place among all competing systems).
+
+\todo[inline]{Devise own method}
+
+\todo[inline]{Reimplement the approach of Yessenalina and Cardie (2011)}
+\todo[inline]{Reimplement the approach Socher et al. (2011)}
+\todo[inline]{Reimplement the approach Socher et al. (2012)}
+\todo[inline]{Reimplement the approach Socher et al. (2013)}
+\todo[inline]{Reimplement the approach Severyn and Moschitti et al. (2015)}
+\todo[inline]{Reimplement the approach Severyn and Baziotis et al. (2017)}
 
 \begin{table}[h]
   \begin{center}
