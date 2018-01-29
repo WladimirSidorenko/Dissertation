@@ -1875,7 +1875,7 @@ original descriptions.
     \caption[Evaluation of ML-based CGSA methods.]{
       Evaluation of ML-based CGSA methods.\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
-        GNT~-- \citet{Guenther:14}}}
+        GNT~--~\citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res}
   \end{center}
 \end{table}
@@ -2195,7 +2195,7 @@ system of~\citet{Gamon:04}.
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{green3}{positive*}}
+    \upshape\textcolor{green3}{positive*}}\label{snt:cgsa:exmp:gamon-error}
 \end{example}
 \noindent{} In this case, the classifier incorrectly assigned a
 positive label to a clearly negative microblog despite the presence
@@ -2543,11 +2543,10 @@ for each of these types.
 Even though convolutional approaches still yield competitive results,
 in recent time, they have gradually been superseded by recurrent
 networks \cite{Xu:16,Wang:15}.  One of the most prominent such systems
-was newly propsoed by~\citet{Baziotis:17}, who used two layers of
-bidirectional LSTMs, concatenating the hidden states of the
-left-to-right recurrence
-($\vec{h}^{(i)}_{\rightarrow}\in\mathbb{R}^{150}$) with the respective
-hidden units of the right-to-left loop
+was newly proposed by~\citet{Baziotis:17}, who used two bidirectional
+LSTM layers, concatenating the hidden states of the left-to-right
+recurrence ($\vec{h}^{(i)}_{\rightarrow}\in\mathbb{R}^{150}$) with the
+respective hidden units of the right-to-left loop
 ($\vec{h}^{(i)}_{\leftarrow}\in\mathbb{R}^{150}$):
 $\vec{h}^{(i)} = [\vec{h}^{(i)}_{\rightarrow},
 \vec{h}^{(i)}_{\leftarrow}]\in\mathbb{R}^{300}$; and passing the
@@ -2567,8 +2566,8 @@ this approach, \citet{Baziotis:17} got first place
 (0.675~\F{}$^{+/-}$) in SemEval-2017 Task~4 \cite{Rosenthal:17}, being
 on a par with the system of~\citet{Cliche:17} and even outperforming
 the method of~\citet{Rouvier:17}, which both relied on ensembles of
-LSTM and convolutional networks that had been trained with different
-parameters.
+LSTM and convolutional networks that had been previously trained with
+different parameters.
 
 % \done[inline]{\citet{Tang:14b}}
 
@@ -2620,16 +2619,125 @@ parameters.
       Precision & Recall & \F{} & %
       Precision & Recall & \F{} & & \\\midrule
 
-       &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\\bottomrule
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+
+      Y\&C &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+       RAE &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+       MVRNN &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+       RNTN &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+        % Severyn Commands:
+        % -----------------
+        % cgsa_sentiment train -t severyn \
+        % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+        % > data/PotTS/preprocessed/predicted/severyn/severyn.test
+        %
+        % cgsa_evaluate data/PotTS/preprocessed/test/ \
+        % data/PotTS/preprocessed/predicted/severyn/severyn.test
+        %
+        % Severyn Results:
+        % ----------------
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.82      0.72      0.77       680
+        % negative       0.36      0.45      0.40       287
+        % neutral       0.66      0.67      0.66       558
+        % avg / total       0.67      0.65      0.66      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 58.40%
+        % Micro-Averaged F1-Score (All Classes): 65.0492%
+
+      SEV & 0.82 & 0.72 & 0.77 & %
+        0.36 & 0.45 & 0.4 & %
+        0.66 & 0.67 & 0.66 & %
+        0.584 & 0.65\\
+
+       BAZ &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+       LBA &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+
+            Y\&C &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+       RAE &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+       MVRNN &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+       RNTN &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+        % Severyn Commands:
+        % -----------------
+        % cgsa_sentiment train -t severyn \
+        % data/SB10k/preprocessed/train/*.tsv data/SB10k/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/SB10k/preprocessed/test/*.tsv\
+        % > data/SB10k/preprocessed/predicted/severyn/severyn.test
+        %
+        % cgsa_evaluate data/SB10k/preprocessed/test/ \
+        % data/SB10k/preprocessed/predicted/severyn/severyn.test
+        %
+        % Severyn Results:
+        % ----------------
+        % precision    recall  f1-score   support
+        % positive       0.24      0.88      0.37       354
+        % negative       0.00      0.00      0.00       212
+        % neutral       0.57      0.12      0.19       930
+        % avg / total       0.41      0.28      0.21      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 18.65%
+        % Micro-Averaged F1-Score (All Classes): 27.8743%
+       SEV & 0.24 & 0.88 & 0.37 & %
+        0.0 & 0.0 & 0.0 & %
+        0.57 & 0.12 & 0.19 & %
+        0.187 & 0.279\\
+
+       BAZ &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+       LBA &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based coarse-grained SA methods.]{
-      Evaluation of DL-based coarse-grained SA methods.\\
-      {\small }}
-    \label{snt-cgsa:tbl:ml-res}
+    \caption[Evaluation of DL-based CGSA methods.]{
+      Evaluation of DL-based CGSA methods.\\
+      {\small Y\&C~--~\citet{Yessenalina:11}, RAE~--~Recursive
+        Auto-Encoder \cite{Socher:11}, MVRNN~--~Matrix-Vector RNN
+        \cite{Socher:12}, RNTN~--~Recursive Neural-Tensor Network
+        \cite{Socher:13}, SEV~--~\citet{Severyn:15},
+        BAZ~--~\citet{Baziotis:17}, LBA~--~lexicon-based attention}}
+    \label{snt-cgsa:tbl:dl-res}
   \end{center}
 \end{table}
 
@@ -2901,7 +3009,7 @@ on the three-class prediction task.
       KLCH & 0.61 & 0.23 & 0.33 & %
         0.33 & 0.21 & 0.26 & %
         0.41 & 0.82 & 0.55 & %
-        0.295 & 0.435 \\\bottomrule
+        0.295 & 0.435 \\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
 
