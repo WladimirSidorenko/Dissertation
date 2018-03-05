@@ -26,16 +26,12 @@ use in our subsequent evaluation.  After a brief description of the
 data preparation step, we proceed to the actual estimation of popular
 lexicon-, ML-, and DL-based approaches, explaining and evaluating them
 in Sections~\ref{sec:cgsa:lexicon-based}, \ref{sec:cgsa:ml-based},
-and~\ref{sec:cgsa:dl-based} respectively.  Then,
-in~Section~\ref{sec:cgsa:domain-adaptation}, we also show which
-results can be obtained by using cross-lingual transfer, where we
-train a classifier on English microblogs and then adapt this system to
-German messages.  Finally, we conclude with an extensive evaluation of
-different hyperparameters and settings (including various types of
-sentiment lexicons, different kinds of word embeddings, the utility of
-the text normalization step, and the impact of additional noisily
-labeled training data), summarizing our results and recapping our
-findings at the end of this chapter.
+and~\ref{sec:cgsa:dl-based} respectively.  Finally, we conclude with
+an extensive evaluation of different hyperparameters and settings
+(including various types of sentiment lexicons, different kinds of
+word embeddings, the utility of the text normalization step, and the
+impact of additional noisily labeled training data), summarizing our
+results and recapping our findings at the end of this chapter.
 
 \section{Evaluation Metrics}\label{sec:cgsa:eval-metrics}
 
@@ -2593,12 +2589,22 @@ different parameters.
 
 \todo[inline]{Devise own method}
 
-\todo[inline]{Reimplement the approach of Yessenalina and Cardie (2011)}
-\todo[inline]{Reimplement the approach Socher et al. (2011)}
-\todo[inline]{Reimplement the approach Socher et al. (2012)}
-\todo[inline]{Reimplement the approach Socher et al. (2013)}
-\todo[inline]{Reimplement the approach Severyn and Moschitti et al. (2015)}
-\todo[inline]{Reimplement the approach Severyn and Baziotis et al. (2017)}
+To evaluate the performance of these methods on the PotTS and SB10k
+data, we have reimplemented the approaches of~\citet{Yessenalina:11},
+\citet{Socher:11,Socher:12,Socher:13}, \citet{Severyn:15},
+and~\citet{Baziotis:17}, and also applied our lexicon-based attention
+mechanism to the aforementioned corpora.  For the sake of uniformity
+and simplicity, we used task-specific word embeddings of
+size~$\mathbb{R}^{100}$ in all systems, optimizing these vectors along
+with other parameters during training.  Moreover, we also unified the
+final activation part and cost function of all networks, using a
+densely connected softmax layer as the final module of their
+architectures and optimizing their weights w.r.t. the categorical
+hinge loss on the training set, but picking the setting which yielded
+the highest accuracy on the validation data.
+
+The results of this evaluation are shown in
+Table~\ref{snt-cgsa:tbl:dl-res}.
 
 \begin{table}[h]
   \begin{center}
@@ -2621,23 +2627,92 @@ different parameters.
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
 
-      Y\&C &  &  &  & %
+        % Yessenalina Commands:
+        % -----------------
+        % cgsa_sentiment train -t yessenalina \
+        % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+        % > data/PotTS/preprocessed/predicted/yessenalina/yessenalina.test
+        %
+        % cgsa_evaluate data/PotTS/preprocessed/test/ \
+        % data/PotTS/preprocessed/predicted/yessenalina/yessenalina.test
+        %
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.62      0.65      0.63       680
+        % negative       0.58      0.11      0.18       287
+        % neutral       0.51      0.70      0.59       558
+        % avg / total       0.57      0.56      0.53      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 40.84%
+        % Micro-Averaged F1-Score (All Classes): 56.3279%
+      Y\&C & 0.62 & 0.65 & 0.63 & %
+        0.58 & 0.11 & 0.18 & %
+        0.51 & 0.7 & 0.59 & %
+        0.408 & 0.563\\
+
+        % RAE Commands:
+        % -----------------
+        % cgsa_sentiment train -t rnn \
+        % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+        % > data/PotTS/preprocessed/predicted/rnn/rnn.test
+        %
+        % cgsa_evaluate data/PotTS/preprocessed/test/ \
+        % data/PotTS/preprocessed/predicted/rnn/rnn.test
+        %
+        % RAE Results:
+        % ----------------
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.48      0.22      0.30       680
+        % negative       0.19      0.08      0.11       287
+        % neutral       0.37      0.73      0.49       558
+        % avg / total       0.39      0.38      0.33      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 20.45%
+        % Micro-Averaged F1-Score (All Classes): 37.7705%
+
+      RAE & 0.48 & 0.22 & 0.3 & %
+         0.19 & 0.08 & 0.11 & %
+         0.37 & 0.73 & 0.49 & %
+         0.205 & 0.378\\
+
+        % MVRNN Commands:
+        % -----------------
+        % cgsa_sentiment train -t mvrnn \
+        % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+        % > data/PotTS/preprocessed/predicted/mvrnn/mvrnn.test
+        %
+        % cgsa_evaluate data/PotTS/preprocessed/test/ \
+        % data/PotTS/preprocessed/predicted/mvrnn/mvrnn.test
+        %
+        % MVRNN Results:
+        % ----------------
+      MVRNN &  &  &  & %
         &  &  & %
         &  &  & %
         & \\
 
-       RAE &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
-       MVRNN &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+        % RNTN Commands:
+        % -----------------
+        % cgsa_sentiment train -t rntn \
+        % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+        % > data/PotTS/preprocessed/predicted/rntn/rntn.test
+        %
+        % cgsa_evaluate data/PotTS/preprocessed/test/ \
+        % data/PotTS/preprocessed/predicted/rntn/rntn.test
+        %
+        % RNTN Results:
+        % ----------------
        RNTN &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+         &  &  & %
+         &  &  & %
+         & \\
 
         % Severyn Commands:
         % -----------------
@@ -2652,40 +2727,109 @@ different parameters.
         %
         % Severyn Results:
         % ----------------
+
+      SEV &  &  &  & %
+         &  &  & %
+         &  &  & %
+         & \\
+
+        % Baziotis Commands:
+        % -----------------
+        % cgsa_sentiment train -t baziotis \
+        % data/PotTS/preprocessed/train/*.tsv data/PotTS/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/PotTS/preprocessed/test/*.tsv\
+        % > data/PotTS/preprocessed/predicted/baziotis/baziotis.test
+        %
+        % cgsa_evaluate data/PotTS/preprocessed/test/ \
+        % data/PotTS/preprocessed/predicted/baziotis/baziotis.test
+        %
+        % Baziotis Results:
+        % ----------------
+
+      BAZ &  &  &  & %
+         &   &  & %
+         &  &  & %
+         & \\
+
+        % lexicon-based attention (non-trainable) and standard attention
         % General Statistics:
+        % 'precision', 'predicted', average, warn_for)
         % precision    recall  f1-score   support
-        % positive       0.82      0.72      0.77       680
-        % negative       0.36      0.45      0.40       287
-        % neutral       0.66      0.67      0.66       558
-        % avg / total       0.67      0.65      0.66      1525
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 58.40%
-        % Micro-Averaged F1-Score (All Classes): 65.0492%
+        % positive       0.45      1.00      0.62       680
+        % negative       0.00      0.00      0.00       287
+        % neutral       0.00      0.00      0.00       558
+        % avg / total       0.20      0.45      0.28      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
+        % Micro-Averaged F1-Score (All Classes): 44.5902%
 
-      SEV & 0.82 & 0.72 & 0.77 & %
-        0.36 & 0.45 & 0.4 & %
-        0.66 & 0.67 & 0.66 & %
-        0.584 & 0.65\\
-
-       BAZ &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
-       LBA &  &  &  & %
+        % lexicon-based attention (trainable)
+        % General Statistics:
+        % 'precision', 'predicted', average, warn_for)
+        % precision    recall  f1-score   support
+        % positive       0.45      1.00      0.62       680
+        % negative       0.00      0.00      0.00       287
+        % neutral       0.00      0.00      0.00       558
+        % avg / total       0.20      0.45      0.28      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
+        % Micro-Averaged F1-Score (All Classes): 44.5902%
+      LBA &  &  &  & %
         &  &  & %
         &  &  & %
         & \\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
 
-            Y\&C &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+      % Yessenalina Commands:
+      % -----------------
+      % cgsa_sentiment train -t yessenalina \
+      % data/SB10k/preprocessed/train/*.tsv data/SB10k/preprocessed/dev/*.tsv
+      %
+      % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/SB10k/preprocessed/test/*.tsv\
+      % > data/SB10k/preprocessed/predicted/yessenalina/yessenalina.test
+      %
+      % cgsa_evaluate data/SB10k/preprocessed/test/ \
+      % data/SB10k/preprocessed/predicted/yessenalina/yessenalina.test
+      %
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.71      0.39      0.50       354
+      % negative       0.75      0.07      0.13       212
+      % neutral       0.70      0.97      0.82       930
+      % avg / total       0.71      0.71      0.64      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 31.47%
+      % Micro-Averaged F1-Score (All Classes): 70.5214%
+       Y\&C & 0.71 & 0.39 & 0.5 & %
+        0.75 & 0.07 & 0.13 & %
+        0.7 & 0.97 & 0.82 & %
+        0.315 & 0.705\\
 
-       RAE &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+        % RAE Commands:
+        % -------------
+        % cgsa_sentiment train -t rnn \
+        % data/SB10k/preprocessed/train/*.tsv data/SB10k/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/SB10k/preprocessed/test/*.tsv\
+        % > data/SB10k/preprocessed/predicted/rnn/rnn.test
+        %
+        % cgsa_evaluate data/SB10k/preprocessed/test/ \
+        % data/SB10k/preprocessed/predicted/rnn/rnn.test
+        %
+        % RAE Results:
+        % ------------
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.22      0.02      0.04       354
+        % negative       0.19      0.36      0.25       212
+        % neutral       0.64      0.73      0.68       930
+        % avg / total       0.47      0.51      0.47      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 14.59%
+        % Micro-Averaged F1-Score (All Classes): 50.8690%
+       RAE & 0.22 & 0.02 & 0.04 & %
+         0.19 & 0.36 & 0.25 & %
+         0.64 & 0.73 & 0.68 & %
+         0.146 & 0.509\\
+
        MVRNN &  &  &  & %
         &  &  & %
         &  &  & %
@@ -2708,22 +2852,30 @@ different parameters.
         %
         % Severyn Results:
         % ----------------
-        % precision    recall  f1-score   support
-        % positive       0.24      0.88      0.37       354
-        % negative       0.00      0.00      0.00       212
-        % neutral       0.57      0.12      0.19       930
-        % avg / total       0.41      0.28      0.21      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 18.65%
-        % Micro-Averaged F1-Score (All Classes): 27.8743%
-       SEV & 0.24 & 0.88 & 0.37 & %
-        0.0 & 0.0 & 0.0 & %
-        0.57 & 0.12 & 0.19 & %
-        0.187 & 0.279\\
 
+       SEV &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+        % Baziotis Commands:
+        % -----------------
+        % cgsa_sentiment train -t baziotis \
+        % data/SB10k/preprocessed/train/*.tsv data/SB10k/preprocessed/dev/*.tsv
+        %
+        % cgsa_sentiment test -m cgsa/data/models/cgsa.model data/SB10k/preprocessed/test/*.tsv\
+        % > data/SB10k/preprocessed/predicted/baziotis/baziotis.test
+        %
+        % cgsa_evaluate data/SB10k/preprocessed/test/ \
+        % data/SB10k/preprocessed/predicted/baziotis/baziotis.test
+        %
+        % Baziotis Results:
+        % ----------------
        BAZ &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+         &   &  & %
+         &  &  & %
+         & \\
+
        LBA &  &  &  & %
         &  &  & %
         &  &  & %
@@ -2831,7 +2983,321 @@ different parameters.
 
 \subsection{Effect of Word Embeddings}
 
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Method} & %
+      \multicolumn{3}{c}{\bfseries Positive} & %
+      \multicolumn{3}{c}{\bfseries Negative} & %
+      \multicolumn{3}{c}{\bfseries Neutral} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+         % Commands:
+         % cgsa_sentiment train -t rnn --w2v data/PotTS/preprocessed/train/*.tsv \
+         % data/PotTS/preprocessed/dev/*.tsv
+         % cgsa_sentiment -v test data/PotTS/preprocessed/test/*.tsv > \
+         % data/PotTS/preprocessed/predicted/rnn/rnn.word2vec.test
+         % cgsa_evaluate data/PotTS/preprocessed/test/ \
+         % data/PotTS/preprocessed/predicted/rnn/rnn.word2vec.test
+         % General Statistics:
+         % precision    recall  f1-score   support
+         % positive       0.45      0.53      0.48       680
+         % negative       0.16      0.21      0.18       287
+         % neutral       0.35      0.23      0.28       558
+         % avg / total       0.36      0.36      0.35      1525
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 33.35%
+         % Micro-Averaged F1-Score (All Classes): 35.7377%
+      RAE & 0.45 & 0.53 & 0.48 & %
+         0.16 & 0.21 & 0.18 & %
+         0.35 & 0.23 & 0.28 & %
+         0.334 & 0.357\\
+
+         % Commands:
+         % cgsa_sentiment train -t rntn --w2v data/PotTS/preprocessed/train/*.tsv \
+         % data/PotTS/preprocessed/dev/*.tsv
+         % cgsa_sentiment -v test data/PotTS/preprocessed/test/*.tsv > \
+         % data/PotTS/preprocessed/predicted/rntn/rntn.word2vec.test
+         % cgsa_evaluate data/PotTS/preprocessed/test/ \
+         % data/PotTS/preprocessed/predicted/rntn/rntn.word2vec.test
+         % Results:
+         % General Statistics:
+         % precision    recall  f1-score   support
+         % positive       0.46      0.82      0.59       680
+         % negative       0.17      0.03      0.06       287
+         % neutral       0.40      0.18      0.25       558
+         % avg / total       0.38      0.44      0.36      1525
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 32.15%
+         % Micro-Averaged F1-Score (All Classes): 43.5410%
+      RNTN & 0.46 & 0.82 & 0.59 & %
+         0.17 & 0.03 & 0.06 & %
+         0.4 & 0.18 & 0.25 & %
+         0.322 & 0.435\\
+
+         % Commands:
+         % cgsa_sentiment train -t severyn --w2v data/PotTS/preprocessed/train/*.tsv \
+         % data/PotTS/preprocessed/dev/*.tsv
+         % cgsa_sentiment -v test data/PotTS/preprocessed/test/*.tsv > \
+         % data/PotTS/preprocessed/predicted/severyn/severyn.word2vec.test
+         % cgsa_evaluate data/PotTS/preprocessed/test/ data/PotTS/preprocessed/predicted/severyn/severyn.word2vec.test
+         % Results:
+         % precision    recall  f1-score   support
+         % positive       0.71      0.75      0.73       680
+         % negative       0.50      0.47      0.48       287
+         % neutral       0.68      0.65      0.66       558
+         % avg / total       0.66      0.66      0.66      1525
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 60.75%
+         % Micro-Averaged F1-Score (All Classes): 66.1639%
+      SEV & 0.71 & 0.75 & 0.73 & %
+         0.5 & 0.47 & 0.48 & %
+         0.68 & 0.65 & 0.66 & %
+         0.608 & 0.662\\
+
+         % Commands:
+         % cgsa_sentiment train -t baziotis --w2v data/SB10k/preprocessed/train/*.tsv \
+         % data/SB10k/preprocessed/dev/*.tsv
+         % cgsa_sentiment -v test data/SB10k/preprocessed/test/*.tsv > \
+         % data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
+         % cgsa_evaluate data/SB10k/preprocessed/test/ data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
+         % Results:
+         % General Statistics:
+         % precision    recall  f1-score   support
+         % positive       0.80      0.76      0.78       680
+         % negative       0.56      0.53      0.54       287
+         % neutral       0.70      0.77      0.73       558
+         % avg / total       0.72      0.72      0.72      1525
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 66.18%
+         % Micro-Averaged F1-Score (All Classes): 72.0000%
+      BAZ & 0.8 & 0.76 & 0.78 & %
+         0.56 & 0.53 & 0.54 & %
+         0.7 & 0.77 & 0.73 & %
+         0.662 & 0.72\\
+
+      LBA &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+         % Commands:
+         % cgsa_sentiment train -t rnn --w2v data/SB10k/preprocessed/train/*.tsv \
+         % data/SB10k/preprocessed/dev/*.tsv
+         % cgsa_sentiment -v test data/SB10k/preprocessed/test/*.tsv > \
+         % data/SB10k/preprocessed/predicted/rnn/rnn.word2vec.test
+         % cgsa_evaluate data/SB10k/preprocessed/test/ \
+         % data/SB10k/preprocessed/predicted/rnn/rnn.word2vec.test
+         % General Statistics:
+         % precision    recall  f1-score   support
+         % positive       0.55      0.10      0.17       354
+         % negative       0.17      0.01      0.02       212
+         % neutral       0.64      0.98      0.78       930
+         % avg / total       0.55      0.63      0.52      1496
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 9.46%
+         % Micro-Averaged F1-Score (All Classes): 63.3690%
+       RAE & 0.55 & 0.1 & 0.17 & %
+         0.17 & 0.01 & 0.02 & %
+         0.64 & 0.98 & 0.78 & %
+         0.095 & 0.634\\
+
+         % General Statistics:
+         % precision    recall  f1-score   support
+         % positive       0.00      0.00      0.00       354
+         % negative       0.00      0.00      0.00       212
+         % neutral       0.62      1.00      0.77       930
+         % avg / total       0.39      0.62      0.48      1496
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 0.00%
+         % Micro-Averaged F1-Score (All Classes): 62.1658%
+
+      RNTN & 0.0 & 0.0 & 0.0 & %
+        0.0 & 0.0 & 0.0 & %
+        0.62 & 1.0 & 0.77 & %
+        0.0 & 0.622\\
+
+         % Commands:
+         % cgsa_sentiment train -t severyn --w2v data/SB10k/preprocessed/train/*.tsv \
+         % data/SB10k/preprocessed/dev/*.tsv
+         % cgsa_sentiment -v test data/SB10k/preprocessed/test/*.tsv > \
+         % data/SB10k/preprocessed/predicted/severyn/severyn.word2vec.test
+         % cgsa_evaluate data/SB10k/preprocessed/test/ data/SB10k/preprocessed/predicted/severyn/severyn.word2vec.test
+         % Results:
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.61      0.62      0.61       354
+        % negative       0.49      0.35      0.41       212
+        % neutral       0.80      0.84      0.82       930
+        % avg / total       0.71      0.72      0.71      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 51.12%
+        % Micro-Averaged F1-Score (All Classes): 72.1257%
+      SEV & 0.61 & 0.62 & 0.61 & %
+          0.49 & 0.35 & 0.41 & %
+          0.8 & 0.84 & 0.82 & %
+          0.511 & 0.721\\
+
+         % Commands:
+         % cgsa_sentiment train -t baziotis --w2v data/SB10k/preprocessed/train/*.tsv \
+         % data/SB10k/preprocessed/dev/*.tsv
+         % cgsa_sentiment -v test data/SB10k/preprocessed/test/*.tsv > \
+         % data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
+         % cgsa_evaluate data/SB10k/preprocessed/test/ data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
+         % Results:
+         % General Statistics:
+         % precision    recall  f1-score   support
+         % positive       0.63      0.68      0.65       354
+         % negative       0.52      0.40      0.45       212
+         % neutral       0.82      0.84      0.83       930
+         % avg / total       0.73      0.74      0.73      1496
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 55.12%
+         % Micro-Averaged F1-Score (All Classes): 73.7968%
+      BAZ & 0.63 & 0.68 & 0.65 & %
+         0.52 & 0.4  & 0.45 & %
+         0.82 & 0.84 & 0.83 & %
+         0.551 & 0.738\\
+
+      LBA &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Evaluation of DL-based CGSA methods with pretrained word2vec vectors.]{
+      Evaluation of DL-based CGSA methods with pretrained word2vec vectors.\\
+      {\small RAE~--~Recursive
+        Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
+        \cite{Socher:13}, SEV~--~\citet{Severyn:15},
+        BAZ~--~\citet{Baziotis:17}, LBA~--~lexicon-based attention}}
+    \label{snt-cgsa:tbl:dl-res-word2vec}
+  \end{center}
+\end{table}
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Method} & %
+      \multicolumn{3}{c}{\bfseries Positive} & %
+      \multicolumn{3}{c}{\bfseries Negative} & %
+      \multicolumn{3}{c}{\bfseries Neutral} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+      RAE &  &  &  & %
+         &  &  & %
+         &  &  & %
+         & \\
+
+      RNTN &  &  &  & %
+         &  &  & %
+         &  &  & %
+         & \\
+
+      SEV &  &  &  & %
+         &  &  & %
+         &  &  & %
+         & \\
+
+      BAZ &  &  &  & %
+         &  &  & %
+         &  &  & %
+         & \\
+
+      LBA &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+       RAE &  &  &  & %
+         &  &  & %
+         &  &  & %
+         & \\
+
+      RNTN &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+      SEV &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+      BAZ &  &  &  & %
+         &   &  & %
+         &  &  & %
+         & \\
+
+      LBA &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Evaluation of DL-based CGSA methods with pretrained least-square embeddings.]{
+      Evaluation of DL-based CGSA methods with pretrained least-square embeddings.\\
+      {\small RAE~--~Recursive
+        Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
+        \cite{Socher:13}, SEV~--~\citet{Severyn:15},
+        BAZ~--~\citet{Baziotis:17}, LBA~--~lexicon-based attention}}
+    \label{snt-cgsa:tbl:dl-res-lstsq}
+  \end{center}
+\end{table}
+
 \subsection{Error Analysis}
+
+\begin{example}[Error Made by the System of~\citeauthor{Socher:11}]\label{snt:cgsa:exmp:socher11-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
+  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+\begin{example}[Error Made by the System of~\citeauthor{Severyn:15}]\label{snt:cgsa:exmp:severyn-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
+  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+\begin{example}[Error Made by the System of~\citeauthor{Baziotis:17}]\label{snt:cgsa:exmp:baziotis-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
+  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+\begin{example}[Error Made by the LBA System]\label{snt:cgsa:exmp:lba-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
+  \noindent \\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
 
 \section{Evaluation}
 \subsection{Effect of Lexicons}\label{cgsa:subsec:eval:lexicons}
