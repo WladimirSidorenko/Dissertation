@@ -585,6 +585,126 @@ contexts which did have important but underweight traits.
   \end{center}
 \end{table*}
 
+\subsection{Effect of Features}
+
+Since redefining the graph topologies of the presented models did not
+bring the expected improvements, we decided to investigate the effect
+of the input provided to these systems on their net results, and also
+analyze more thoroughly what these models have actually learned from
+this input.  For this purpose, we first performed an ablation test of
+the CRF's state features, removing one feature group at a time and
+rechecking the performance of the model on the development set.
+
+\begin{table}[hbt]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.14\columnwidth} % first columm
+        *{6}{>{\centering\arraybackslash}p{0.13\columnwidth}}} % next five columns
+      \toprule
+          \multirow{2}{0.2\columnwidth}{\bfseries Element} &
+          \multirow{2}{0.1\columnwidth}{\bfseries Original\newline \F-Score} &
+          \multicolumn{5}{c}{\bfseries \F-Score after Feature Removal}\\\cline{3-7}
+          & & Formal & Morphological & Lexical & Syntactic & Complex\\\midrule
+
+          Sentiment & 0.346 & 0.343\negdelta{0.003} & 0.344\negdelta{0.002} & 0.326\negdelta{0.02} & 0.345\negdelta{0.001} & 0.324\negdelta{0.022}\\
+          Source & 0.309 & 0.321\posdelta{0.012} & 0.313\posdelta{0.004} & 0.265\negdelta{0.044} & 0.359\posdelta{0.05} & 0.271\negdelta{0.038}\\
+          Target & 0.26 & 0.282\posdelta{0.022} & 0.252\negdelta{0.008} & 0.263\posdelta{0.003} & 0.233\negdelta{0.027} & 0.263\posdelta{0.003}\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Results of the feature ablation tests for the CRF
+    model.]{Results of the feature ablation tests for the CRF
+      model.\\{\small\itshape (negative changes w.r.t. the original
+        scores on the development set are shown in
+        \textsuperscript{\textcolor{red3}{red}}; positive changes are
+        depicted in \textsuperscript{\textcolor{seagreen}{green}}
+        superscripts)\footnotemark}}
+    \label{tbl:ablation}
+  \end{center}
+\end{table}
+
+The results of this test are shown in
+Table~\ref{tbl:ablation}.\footnotetext{Negative changes indicate good
+  features in this context, since their removal leads to a degradation
+  of results.}  As we can see from the table, all feature types turn
+out to be useful for predicting sentiments as their removal
+unequivocally leads to a degradation of the scores.  This quality
+drop, however, is usually quite small, suggesting that other attribute
+types can easily make up for the removed ones.  A different situation
+is observed for sources and targets though.  In the first case,
+removing formal, morphological, and syntactic features shows a
+strongly positive effect, improving the \F-results for sources by up
+to five percent.  However, removing lexical and lexico-syntactic
+features, on the contrary, worsens these results, tearing the
+\F-scores down by up to 4.4\%.  Except for the formal group, all these
+attributes behave completely differently when applied to targets,
+which seem to benefit from morphological and syntactic features, while
+suffering a slight degradation from lexical and complex attributes.
+
+\begin{table}[hbt]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \begin{tabular}{>{\centering\arraybackslash}p{0.05\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.22\columnwidth}}} % next four columns
+      \toprule
+          \multirow{2}{0.2\columnwidth}{Rank} &
+          \multicolumn{2}{c}{\bfseries Top-10 State Features} &
+          \multicolumn{2}{c}{\bfseries Top-10 Transition Features}\\\cline{2-5}
+          & Feature & Score & Feature & Score\\\midrule
+
+          1 & prntLemma=meiste $\rightarrow$ TRG & 18.68 & NON $\rightarrow$ TRG & -7.01\\
+          2 & prntLemma=rettungsschirme $\rightarrow$ TRG & 18.3 & NON $\rightarrow$ SRC & -6.85\\
+          3 & initChar=sty $\rightarrow$ NON & -16.04  & NON $\rightarrow$ SNT & -5.39\\
+          4 & form=meisten $\rightarrow$ NON & 15.99 & TRG $\rightarrow$ SRC & -2.99\\
+          5 & prntLemma=urlauberin $\rightarrow$ SNT & 14.74 & NON $\rightarrow$ NON & 2.69\\
+          6 & lemma=anfechten  $\rightarrow$ SNT & 14.07 & SRC $\rightarrow$ NON & -2.59\\
+          7 & form=thomasoppermann  $\rightarrow$ TRG & 13.44 & SNT $\rightarrow$ SNT & 2.54\\
+          8 & form=bezeichnete $\rightarrow$ SNT & 13.25 & TRG $\rightarrow$ TRG & 2.31\\
+          9 & deprel[0]|deprel[1]=NK|AMS $\rightarrow$ NON & 12.92 & SRC $\rightarrow$ SRC & 2.19\\
+          10 & trailChar=te. $\rightarrow$ NON & 12.77 & SRC $\rightarrow$ TRG & -2.07\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Top-10 state and transition features learned by the CRF
+    model.]{Top-10 state and transition features learned by the CRF
+      model.\\{\small (sorted by the absolute values of their
+        weights)}}
+    \label{fgsa:tbl:ablation}
+  \end{center}
+\end{table}
+
+In order to get a better overview of the learned model's parameters,
+we also extracted top ten state and transition features ranked by the
+absolute values of their learned weights (see
+Table~\ref{fgsa:tbl:ablation}).  As can be seen from the statistics,
+three of the five highest ranked state attributes are complex features
+reflecting the lemma of the parent token: ``meiste'' (\emph{most}) and
+``rettungsschirme'' (\emph{bailout}), which typically indicate a
+target, and ``urlauberin'' (\emph{holiday}), which frequently
+correlates with sentiments.  Another common group of features are the
+lemma and form of the current token: here, we again encounter
+``meisten'' (\emph{most}), which, however, indicates the absence of
+any sentiment entities at the current position; two other
+attributes---``anfechten'' (\emph{doubt}) and ``bezeichnete''
+(\emph{called})---represent the so-called \emph{direct speech events}
+and expectedly correlate with the sentiment tags; the remaining
+feature---``thomasopperman''---is a person name, which frequently
+appeared as a target of an opinion in the corpus.
+
+An interesting pattern can be observed for the transition attributes:
+As we can see from the results, the top-three transition features
+indicate a strong belief that an objective token is highly unlikely to
+be followed by a sentiment entity (hence, the high negative weights of
+the transitions emanating from \textsc{NON}).  It is, however, quite
+common that a \textsc{NON} tag will precede another \textsc{NON}
+instance (cf. line 5 of the table).  Other transition attributes also
+mainly reflect plausible regularities: It is, for instance, uncommon
+that a target of an opinion will appear immediately before a source
+(\textsc{TRG}$\rightarrow$\textsc{SRC} $= -2.99$); in the same vein,
+it is rather uncommon that a source tag will precede a target
+(\textsc{SRC}$\rightarrow$\textsc{TRG} $= -2.07$); nonetheless, is is
+perfectly acceptable that the same tag will continue over multiple
+words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
+\textsc{TRG}$\rightarrow$\textsc{TRG} $= 2.31$).
+
 \section{Recurrent Neural Networks}
 
 A competitive alternative to the conditional random fields are deep
@@ -899,6 +1019,100 @@ attributes.
     \caption{Results of fine-grained sentiment analysis with recurrent
       neural networks.}
     \label{snt-fgsa:tbl:rnn-res}
+  \end{center}
+\end{table*}
+
+\subsection{Effect of Word Embeddings}
+
+Similarly to the CRF features, we also investigated the impact of the
+input embeddings on the final results of the RNN approaches.  For this
+purpose, instead of learning task-specific word representations as we
+did in the initial experiments, we re-ran the training using two other
+available options:
+\begin{itemize}
+\item\emph{least-squares word vectors}, in which we again learned
+  task-specific word representations, but additionally computed an
+  optimal transformation matrix $W$ using the method of the ordinary
+  least squares:
+  \begin{equation}\label{eq:fgsa:least-sq}
+    W = \argmin_{W}\lVert V_{TS} - W^T\cdot V_{W2V}\rVert_F,
+  \end{equation}
+  where $V_{TS}$ stands for the matrix of task-specific word
+  representations learned by the system, $V_{W2V}$ represents the
+  respective matrix of word2vec embeddings, and
+  $\left\lVert\cdot\right\rVert_F$ is the Frobenius norm of the
+  resulting difference.  We then used the learned task-specific
+  representations for all known words encountered during testing, and
+  obtained the best possible task-specific approximations for all
+  unknown words by taking a dot product of the matrix $W$ with their
+  word2vec vectors;
+\item another option was to use the normal \emph{word2vec
+    embeddings}~\cite{Mikolov:13}, which we previously trained on the
+  German Twitter snapshot~\cite{Scheffler:14} using the default
+  options of the original word2vec implementation.  These embeddings
+  were kept fixed during the RNN training and did not get updated by
+  the optimization procedure.
+\end{itemize}
+
+The results for these alternatives are given in
+Table~\ref{snt-fgsa:tbl:embeddings}.  As we can see from the scores,
+the least-squares method significantly boosts the recall, which, in
+turn, leads to much higher macro-averaged \F-measures, outperforming
+all other compared approaches. The task-specific variant shows
+second-best results, mainly due to a higher precision of the targets
+and sources.  Last but not least, the word2vec approach still improves
+the prediction of sentiment spans, but otherwise leads to a notable
+degradation at literally every other opinion-related aspect.
+
+\begin{table*}
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{1}{>{\centering\arraybackslash}p{0.136\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
+      \multicolumn{3}{c}{\bfseries Source} & %
+      \multicolumn{3}{c}{\bfseries Target} & %
+      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\\cline{2-10}
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} &\\\midrule
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Task-Specific Embeddings}\\
+
+      LSTM & 0.283 & 0.288 & 0.278 & %
+       \textbf{0.293} & 0.372 & 0.328 & %
+       \textbf{0.254} & 0.27 & \textbf{0.259} & 0.288\\
+
+      GRU & 0.287 & 0.246 & 0.263 & %
+       0.287 & 0.405 & \textbf{0.335} & %
+       0.252 & 0.205 & 0.216 & 0.271\\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}Least-Squares Embeddings}\\
+
+      LSTM & 0.268 & \textbf{0.37} & 0.307 & %
+      0.261 & \textbf{0.414} & 0.314 & %
+      0.223 & \textbf{0.275} & 0.245 & \textbf{0.289}\\
+
+      GRU & 0.256 & 0.341 & 0.291 & %
+       0.267 & 0.395 & 0.318 & %
+       0.229 & 0.262 & 0.245 & 0.285\\
+
+      \multicolumn{11}{c}{\cellcolor{cellcolor}word2vec Embeddings}\\
+
+      LSTM & \textbf{0.291} & 0.329 & \textbf{0.309} & %
+       0.2 & 0.311 & 0.244 & %
+       0.221 & 0.219 & 0.22 & 0.257\\
+
+      GRU & 0.273 & 0.355 & 0.301 & %
+       0.207 & 0.353 & 0.257 & %
+       0.213 & 0.26 & 0.233 & 0.264\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption{Results of fine-grained sentiment analysis with different
+      types of word embeddings.}
+    \label{snt-fgsa:tbl:embeddings}
   \end{center}
 \end{table*}
 
@@ -1414,220 +1628,6 @@ texts.
   \end{center}
 \end{table*}
 
-\subsection{Effect of Features}
-
-Since redefining the graph topologies of the presented models did not
-bring the expected improvements, we decided to investigate the effect
-of the input provided to these systems on their net results, and also
-analyze more thoroughly what these models have actually learned from
-this input.  For this purpose, we first performed an ablation test of
-the CRF's state features, removing one feature group at a time and
-rechecking the performance of the model on the development set.
-
-\begin{table}[hbt]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.14\columnwidth} % first columm
-        *{6}{>{\centering\arraybackslash}p{0.13\columnwidth}}} % next five columns
-      \toprule
-          \multirow{2}{0.2\columnwidth}{\bfseries Element} &
-          \multirow{2}{0.1\columnwidth}{\bfseries Original\newline \F-Score} &
-          \multicolumn{5}{c}{\bfseries \F-Score after Feature Removal}\\\cline{3-7}
-          & & Formal & Morphological & Lexical & Syntactic & Complex\\\midrule
-
-          Sentiment & 0.346 & 0.343\negdelta{0.003} & 0.344\negdelta{0.002} & 0.326\negdelta{0.02} & 0.345\negdelta{0.001} & 0.324\negdelta{0.022}\\
-          Source & 0.309 & 0.321\posdelta{0.012} & 0.313\posdelta{0.004} & 0.265\negdelta{0.044} & 0.359\posdelta{0.05} & 0.271\negdelta{0.038}\\
-          Target & 0.26 & 0.282\posdelta{0.022} & 0.252\negdelta{0.008} & 0.263\posdelta{0.003} & 0.233\negdelta{0.027} & 0.263\posdelta{0.003}\\\bottomrule
-    \end{tabular}
-    \egroup
-    \caption[Results of the feature ablation tests for the CRF
-    model.]{Results of the feature ablation tests for the CRF
-      model.\\{\small\itshape (negative changes w.r.t. the original
-        scores on the development set are shown in
-        \textsuperscript{\textcolor{red3}{red}}; positive changes are
-        depicted in \textsuperscript{\textcolor{seagreen}{green}}
-        superscripts)\footnotemark}}
-    \label{tbl:ablation}
-  \end{center}
-\end{table}
-
-The results of this test are shown in
-Table~\ref{tbl:ablation}.\footnotetext{Negative changes indicate good
-  features in this context, since their removal leads to a degradation
-  of results.}  As we can see from the table, all feature types turn
-out to be useful for predicting sentiments as their removal
-unequivocally leads to a degradation of the scores.  This quality
-drop, however, is usually quite small, suggesting that other attribute
-types can easily make up for the removed ones.  A different situation
-is observed for sources and targets though.  In the first case,
-removing formal, morphological, and syntactic features shows a
-strongly positive effect, improving the \F-results for sources by up
-to five percent.  However, removing lexical and lexico-syntactic
-features, on the contrary, worsens these results, tearing the
-\F-scores down by up to 4.4\%.  Except for the formal group, all these
-attributes behave completely differently when applied to targets,
-which seem to benefit from morphological and syntactic features, while
-suffering a slight degradation from lexical and complex attributes.
-
-\begin{table}[hbt]
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
-    \begin{tabular}{>{\centering\arraybackslash}p{0.05\columnwidth} % first columm
-        *{4}{>{\centering\arraybackslash}p{0.22\columnwidth}}} % next four columns
-      \toprule
-          \multirow{2}{0.2\columnwidth}{Rank} &
-          \multicolumn{2}{c}{\bfseries Top-10 State Features} &
-          \multicolumn{2}{c}{\bfseries Top-10 Transition Features}\\\cline{2-5}
-          & Feature & Score & Feature & Score\\\midrule
-
-          1 & prntLemma=meiste $\rightarrow$ TRG & 18.68 & NON $\rightarrow$ TRG & -7.01\\
-          2 & prntLemma=rettungsschirme $\rightarrow$ TRG & 18.3 & NON $\rightarrow$ SRC & -6.85\\
-          3 & initChar=sty $\rightarrow$ NON & -16.04  & NON $\rightarrow$ SNT & -5.39\\
-          4 & form=meisten $\rightarrow$ NON & 15.99 & TRG $\rightarrow$ SRC & -2.99\\
-          5 & prntLemma=urlauberin $\rightarrow$ SNT & 14.74 & NON $\rightarrow$ NON & 2.69\\
-          6 & lemma=anfechten  $\rightarrow$ SNT & 14.07 & SRC $\rightarrow$ NON & -2.59\\
-          7 & form=thomasoppermann  $\rightarrow$ TRG & 13.44 & SNT $\rightarrow$ SNT & 2.54\\
-          8 & form=bezeichnete $\rightarrow$ SNT & 13.25 & TRG $\rightarrow$ TRG & 2.31\\
-          9 & deprel[0]|deprel[1]=NK|AMS $\rightarrow$ NON & 12.92 & SRC $\rightarrow$ SRC & 2.19\\
-          10 & trailChar=te. $\rightarrow$ NON & 12.77 & SRC $\rightarrow$ TRG & -2.07\\\bottomrule
-    \end{tabular}
-    \egroup
-    \caption[Top-10 state and transition features learned by the CRF
-    model.]{Top-10 state and transition features learned by the CRF
-      model.\\{\small (sorted by the absolute values of their
-        weights)}}
-    \label{fgsa:tbl:ablation}
-  \end{center}
-\end{table}
-
-In order to get a better overview of the learned model's parameters,
-we also extracted top ten state and transition features ranked by the
-absolute values of their learned weights (see
-Table~\ref{fgsa:tbl:ablation}).  As can be seen from the statistics,
-three of the five highest ranked state attributes are complex features
-reflecting the lemma of the parent token: ``meiste'' (\emph{most}) and
-``rettungsschirme'' (\emph{bailout}), which typically indicate a
-target, and ``urlauberin'' (\emph{holiday}), which frequently
-correlates with sentiments.  Another common group of features are the
-lemma and form of the current token: here, we again encounter
-``meisten'' (\emph{most}), which, however, indicates the absence of
-any sentiment entities at the current position; two other
-attributes---``anfechten'' (\emph{doubt}) and ``bezeichnete''
-(\emph{called})---represent the so-called \emph{direct speech events}
-and expectedly correlate with the sentiment tags; the remaining
-feature---``thomasopperman''---is a person name, which frequently
-appeared as a target of an opinion in the corpus.
-
-An interesting pattern can be observed for the transition attributes:
-As we can see from the results, the top-three transition features
-indicate a strong belief that an objective token is highly unlikely to
-be followed by a sentiment entity (hence, the high negative weights of
-the transitions emanating from \textsc{NON}).  It is, however, quite
-common that a \textsc{NON} tag will precede another \textsc{NON}
-instance (cf. line 5 of the table).  Other transition attributes also
-mainly reflect plausible regularities: It is, for instance, uncommon
-that a target of an opinion will appear immediately before a source
-(\textsc{TRG}$\rightarrow$\textsc{SRC} $= -2.99$); in the same vein,
-it is rather uncommon that a source tag will precede a target
-(\textsc{SRC}$\rightarrow$\textsc{TRG} $= -2.07$); nonetheless, is is
-perfectly acceptable that the same tag will continue over multiple
-words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
-\textsc{TRG}$\rightarrow$\textsc{TRG} $= 2.31$).
-
-\subsection{Effect of Word Embeddings}
-
-Similarly to the CRF features, we also investigated the impact of the
-input embeddings on the final results of the RNN approaches.  For this
-purpose, instead of learning task-specific word representations as we
-did in the initial experiments, we re-ran the training using two other
-available options:
-\begin{itemize}
-\item\emph{least-squares word vectors}, in which we again learned
-  task-specific word representations, but additionally computed an
-  optimal transformation matrix $W$ using the method of the ordinary
-  least squares:
-  \begin{equation}\label{eq:fgsa:least-sq}
-    W = \argmin_{W}\lVert V_{TS} - W^T\cdot V_{W2V}\rVert_F,
-  \end{equation}
-  where $V_{TS}$ stands for the matrix of task-specific word
-  representations learned by the system, $V_{W2V}$ represents the
-  respective matrix of word2vec embeddings, and
-  $\left\lVert\cdot\right\rVert_F$ is the Frobenius norm of the
-  resulting difference.  We then used the learned task-specific
-  representations for all known words encountered during testing, and
-  obtained the best possible task-specific approximations for all
-  unknown words by taking a dot product of the matrix $W$ with their
-  word2vec vectors;
-\item another option was to use the normal \emph{word2vec
-    embeddings}~\cite{Mikolov:13}, which we previously trained on the
-  German Twitter snapshot~\cite{Scheffler:14} using the default
-  options of the original word2vec implementation.  These embeddings
-  were kept fixed during the RNN training and did not get updated by
-  the optimization procedure.
-\end{itemize}
-
-The results for these alternatives are given in
-Table~\ref{snt-fgsa:tbl:embeddings}.  As we can see from the scores,
-the least-squares method significantly boosts the recall, which, in
-turn, leads to much higher macro-averaged \F-measures, outperforming
-all other compared approaches. The task-specific variant shows
-second-best results, mainly due to a higher precision of the targets
-and sources.  Last but not least, the word2vec approach still improves
-the prediction of sentiment spans, but otherwise leads to a notable
-degradation at literally every other opinion-related aspect.
-
-\begin{table*}
-  \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.162\columnwidth} % first columm
-        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
-        *{1}{>{\centering\arraybackslash}p{0.136\columnwidth}}} % last two columns
-      \toprule
-      \multirow{2}*{\bfseries Data Set} & \multicolumn{3}{c}{\bfseries Sentiment} & %
-      \multicolumn{3}{c}{\bfseries Source} & %
-      \multicolumn{3}{c}{\bfseries Target} & %
-      \multirow{2}{0.136\columnwidth}{\bfseries\centering Macro\newline \F{}}\\\cline{2-10}
-      & Precision & Recall & \F{} & %
-      Precision & Recall & \F{} & %
-      Precision & Recall & \F{} &\\\midrule
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}Task-Specific Embeddings}\\
-
-      LSTM & 0.283 & 0.288 & 0.278 & %
-       \textbf{0.293} & 0.372 & 0.328 & %
-       \textbf{0.254} & 0.27 & \textbf{0.259} & 0.288\\
-
-      GRU & 0.287 & 0.246 & 0.263 & %
-       0.287 & 0.405 & \textbf{0.335} & %
-       0.252 & 0.205 & 0.216 & 0.271\\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}Least-Squares Embeddings}\\
-
-      LSTM & 0.268 & \textbf{0.37} & 0.307 & %
-      0.261 & \textbf{0.414} & 0.314 & %
-      0.223 & \textbf{0.275} & 0.245 & \textbf{0.289}\\
-
-      GRU & 0.256 & 0.341 & 0.291 & %
-       0.267 & 0.395 & 0.318 & %
-       0.229 & 0.262 & 0.245 & 0.285\\
-
-      \multicolumn{11}{c}{\cellcolor{cellcolor}word2vec Embeddings}\\
-
-      LSTM & \textbf{0.291} & 0.329 & \textbf{0.309} & %
-       0.2 & 0.311 & 0.244 & %
-       0.221 & 0.219 & 0.22 & 0.257\\
-
-      GRU & 0.273 & 0.355 & 0.301 & %
-       0.207 & 0.353 & 0.257 & %
-       0.213 & 0.26 & 0.233 & 0.264\\\bottomrule
-    \end{tabular}
-    \egroup
-    \caption{Results of fine-grained sentiment analysis with different
-      types of word embeddings.}
-    \label{snt-fgsa:tbl:embeddings}
-  \end{center}
-\end{table*}
-
 \subsection{Effect of Text Normalization}
 
 Another question which remained open in the foregoing experiments was
@@ -1826,87 +1826,6 @@ We can explain this degradation by the following possible reasons:
 We leave, however, a more detailed analysis of these reasons as one of
 the directions for future research.
 
-\section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
-
-Summarizing the above findings, we would like to recap that, in this
-chapter, we presented two most common approaches to the fine-grained
-sentiment analysis: conditional random fields and recurrent neural
-networks; applying these methods to the corpus of German tweets
-introduced earlier.  Our experiments showed that CRFs with manually
-defined features outperform both recurrent neural network
-architectures (LSTM and GRU), reaching a macro-averaged \F-score
-of~0.287 on three opinion-relevant entity classes (sentiments,
-sources, and targets).
-
-Furthermore, a closer look at each of the settings in our experiments
-revealed that:
-\begin{itemize}
-\item Higher sentiment scores can be achieved by narrowing down the
-  text spans of this class to the emotional expression only.  This,
-  however, might negatively affect the classification of other opinion
-  entities (sources and targets);
-\item Even though the context seems to play an important role for the
-  prediction, redefining the context flow in the models by changing
-  their graph topologies (such as increasing the order of the
-  dependencies or modifying the underlying graph structure from linear
-  chains to trees) does not bring much improvement.  We could,
-  however, still outperform the results of the traditional
-  linear-chain CRFs with their first- and second-order semi-Markov
-  variants;
-\item In order to understand why the effect of topology changes was so
-  little, we analyzed in more depth the features that were learned by
-  the CRF model, coming to the conclusion that the large number state
-  attributes massively predominated the final decisions, suppressing
-  the influence of the contextual flow;
-\item Nevertheless, a closer look at the top-scoring state and
-  transition features showed that the CRF system could learn
-  meaningful correlations.  However, an additional ablation test of
-  the state attributes revealed that different types of features had
-  varying effects on different opinion entities: while sentiment
-  classification benefited from all provided traits without exception,
-  the prediction of sources profited most from lexical and complex
-  attributes, whereas the analysis of targets was positively
-  influenced by morphological and syntactic features only;
-\item Similarly to the review of the CRF features, we also analyzed
-  the effect of the different embedding types on the net scores of the
-  RNN approaches, finding that task-specific word vectors with a
-  least-square fallback to word2vec embeddings yielded best overall
-  results;
-\item In the penultimate step, we revised the influence of the text
-  normalization on the classification scores by rerunning all
-  experiments on the original (unnormalized) messages.  This test
-  showed that preprocessing is an extremely helpful preparation step,
-  which might boost the FGSA results by up to 3\%;
-\item Finally, in the concluding part of the evaluation, we estimated
-  the utility of the Zurich Polarity List~\cite{Clematide:10}---one of
-  the best-performing German sentiment lexicons to date; finding that
-  the lexicon features only marginally improved the CRF scores, and
-  had an even negative effect on the results of the LSTM and GRU
-  approaches.
-\end{itemize}
-
-With these observations, we hope to have provided a better insight
-into the abilities of modern FGSA approaches, the importance of their
-hyper-parameter settings, and the general amenability of the German
-Twitter domain to an automatic extraction of fine-grained opinions.
-Even though we did our best to make this description and evaluation as
-comprehensive as possible, there still remain many potential avenues
-to explore and potential ways to improve the presented results: It
-would, for instance, be extremely helpful to evaluate other polarity
-lists (produced by different SLG methods) in combination with the
-described FGSA methods.\footnote{Unfortunately, we were not able to do
-  this analysis by ourselves due to prohibitively long training times:
-  a single run of an RNN classifier was taking more than 27 hours on a
-  very strong machine.}  Another interesting opportunity would be a
-modification of the CRF formalism in which the influence from the
-context would be automatically equalized with the sum of the state
-feature weights.  Finally, an ensemble of the CRF and RNN systems
-would be a viable possibility for improving the scores of each of
-these systems.  We encourage interested readers to explore these ways
-in their future research, whereas we should soon turn our attention to
-another big area of opinion mining in which the polarity lists might
-unleash their full power: the coarse-grained sentiment analysis.
-
 \section{Related Work}
 
 However, before we proceed to another topic, we first would like to
@@ -2055,3 +1974,84 @@ a memory-based multilevel network for classifying opinions about the
 given aspects; and, finally, \citet{Wang:16}, who used the output of a
 deep recursive network as input to a CRF system, updating the weights
 of the network along with the CRF parameters.
+
+\section{Summary and Conclusions}\label{fgsa:subsec:conclusions}
+
+Summarizing the above findings, we would like to recap that, in this
+chapter, we presented two most common approaches to the fine-grained
+sentiment analysis: conditional random fields and recurrent neural
+networks; applying these methods to the corpus of German tweets
+introduced earlier.  Our experiments showed that CRFs with manually
+defined features outperform both recurrent neural network
+architectures (LSTM and GRU), reaching a macro-averaged \F-score
+of~0.287 on three opinion-relevant entity classes (sentiments,
+sources, and targets).
+
+Furthermore, a closer look at each of the settings in our experiments
+revealed that:
+\begin{itemize}
+\item Higher sentiment scores can be achieved by narrowing down the
+  text spans of this class to the emotional expression only.  This,
+  however, might negatively affect the classification of other opinion
+  entities (sources and targets);
+\item Even though the context seems to play an important role for the
+  prediction, redefining the context flow in the models by changing
+  their graph topologies (such as increasing the order of the
+  dependencies or modifying the underlying graph structure from linear
+  chains to trees) does not bring much improvement.  We could,
+  however, still outperform the results of the traditional
+  linear-chain CRFs with their first- and second-order semi-Markov
+  variants;
+\item In order to understand why the effect of topology changes was so
+  little, we analyzed in more depth the features that were learned by
+  the CRF model, coming to the conclusion that the large number state
+  attributes massively predominated the final decisions, suppressing
+  the influence of the contextual flow;
+\item Nevertheless, a closer look at the top-scoring state and
+  transition features showed that the CRF system could learn
+  meaningful correlations.  However, an additional ablation test of
+  the state attributes revealed that different types of features had
+  varying effects on different opinion entities: while sentiment
+  classification benefited from all provided traits without exception,
+  the prediction of sources profited most from lexical and complex
+  attributes, whereas the analysis of targets was positively
+  influenced by morphological and syntactic features only;
+\item Similarly to the review of the CRF features, we also analyzed
+  the effect of the different embedding types on the net scores of the
+  RNN approaches, finding that task-specific word vectors with a
+  least-square fallback to word2vec embeddings yielded best overall
+  results;
+\item In the penultimate step, we revised the influence of the text
+  normalization on the classification scores by rerunning all
+  experiments on the original (unnormalized) messages.  This test
+  showed that preprocessing is an extremely helpful preparation step,
+  which might boost the FGSA results by up to 3\%;
+\item Finally, in the concluding part of the evaluation, we estimated
+  the utility of the Zurich Polarity List~\cite{Clematide:10}---one of
+  the best-performing German sentiment lexicons to date; finding that
+  the lexicon features only marginally improved the CRF scores, and
+  had an even negative effect on the results of the LSTM and GRU
+  approaches.
+\end{itemize}
+
+With these observations, we hope to have provided a better insight
+into the abilities of modern FGSA approaches, the importance of their
+hyper-parameter settings, and the general amenability of the German
+Twitter domain to an automatic extraction of fine-grained opinions.
+Even though we did our best to make this description and evaluation as
+comprehensive as possible, there still remain many potential avenues
+to explore and potential ways to improve the presented results: It
+would, for instance, be extremely helpful to evaluate other polarity
+lists (produced by different SLG methods) in combination with the
+described FGSA methods.\footnote{Unfortunately, we were not able to do
+  this analysis by ourselves due to prohibitively long training times:
+  a single run of an RNN classifier was taking more than 27 hours on a
+  very strong machine.}  Another interesting opportunity would be a
+modification of the CRF formalism in which the influence from the
+context would be automatically equalized with the sum of the state
+feature weights.  Finally, an ensemble of the CRF and RNN systems
+would be a viable possibility for improving the scores of each of
+these systems.  We encourage interested readers to explore these ways
+in their future research, whereas we should soon turn our attention to
+another big area of opinion mining in which the polarity lists might
+unleash their full power: the coarse-grained sentiment analysis.

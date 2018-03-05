@@ -1640,10 +1640,243 @@ and hardly outperform the scores of the initial seed list.
   \end{center}
 \end{table}
 
+\subsubsection{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
+
+Another important aspect which could notably influence the results of
+the NWE-algorithms was the type of the embeddings, which we provided
+to these systems as input.  As already noted in
+Section~\ref{subsec:snt:lex:nwe}, the two most common kinds of such
+representations are the standard word2vec and task-specific
+vectors~\cite{Mikolov:13,Collobert:11}.  The former type seeks to find
+word representations which maximizes the probability of other tokens
+appearing in the nearby context, whereas the latter type tries to
+obtain word vectors which best suit some custom-defined objective
+(e.g., predicting the semantic class of a whole sentence given its
+words).
+
+In order to see how these specifics could affect the net results of
+our NWE-based approaches, we additionally trained task-specific
+embeddings on the German Twitter snapshot~\cite{Scheffler:14},
+considering the occurrence of positive and negative emoticons as noisy
+polarity labels of the microblogs.  Furthermore, we also explored two
+in-between solutions:
+\begin{itemize}
+\item training \emph{hybrid embeddings}, with which we simultaneously
+  optimized both objectives: prediction of the surrounding context and
+  classification of noisy sentiment labels;
+\item and separately training both word2vec and task-specific vectors,
+  and then computing a transformation matrix~$W$ for mapping the
+  former type to the latter via the \emph{ordinary least squares}
+  method.  In the final step of this approach, we obtained an
+  approximated task-specific representation for terms missing in the
+  noisily labeled dataset by multiplying their word2vec vectors with
+  the matrix~$W$.
+\end{itemize}
+
+The macro-averaged \F-scores of our approaches with these alternative
+vector types are shown in Table~\ref{snt-lex:tbl:emb-eff}.  As we can
+see from the results, the $k$-NN and linear projection algorithms work
+best with the standard word2vec embeddings (with the overall best
+score (0.468) achieved by the $k$-NN method), but their performance
+degrades as the input vectors become more and more task-specific.  An
+opposite situation is observed for the nearest centroids and principal
+components systems, which show an improvement on purely task-specific
+and task-specific + least-squares vectors, but perform rather poorly
+on word2vec and hybrid embeddings.
+
+\begin{table}[thb!]
+  \begin{center}
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}%
+    \setlength{\belowrulesep}{0pt}\scriptsize
+    \begin{tabular}{p{0.15\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
+      \toprule
+      \multirow{2}*{\bfseries Lexicon} %
+      & \multicolumn{4}{c}{\bfseries Embedding Type}\\
+      & word2vec & task-specific + word2vec & task-specific + least squares %
+                                            & task-specific\\\midrule
+      NC & 0.398 & 0.398 & \textbf{0.401} & 0.399\\
+      $k$-NN & \textbf{0.468} & 0.43 & 0.398 & 0.392\\
+      PCA & 0.398 & 0.398 & 0.404 & \textbf{0.409}\\
+      LP & \textbf{0.462} & 0.441 & 0.398 & 0.399\\\bottomrule
+
+    \end{tabular}\egroup%
+    {
+      \captionsetup{justification=centering}
+      \caption[Macro-averaged \F-scores of NWE-based methods for
+      different embedding types.]{Macro-averaged \F-scores of
+        NWE-based methods for different embedding types.\\%
+        {\small\itshape%
+          NC~--~nearest centroids, %
+          $k$-NN~--~$k$-nearest neighbors, %
+          PCA~--~principal component analysis, %
+          LP~--~linear projection%
+        }%
+      }\label{snt-lex:tbl:emb-eff}
+    }
+  \end{center}
+\end{table}
+
+In order to better understand the reasons for these differences, we
+projected the embeddings of all tokens appearing in the PotTS
+corpus~\cite{Sidarenka:16} onto the two-dimensional vector space using
+the t-SNE method of~\citet{Maaten:08}, and visualized these vectors,
+specifically highlighting polar terms from the \citeauthor{Turney:03}
+seed set.  Following the recommended practices for analyzing t-SNE's
+output~\cite{Wattenberg:2016}, we generated these lower-dimensional
+projections for different perplexity values: $p\in\{5, 30, 50\}$; and
+present the results of this visualization in
+Figure~\ref{snt:fig:tsne-seeds}.
+
+As we can see from the right column of the figure, task-specific
+representations of polar terms tend to appear in the immediate
+vicinity of each other, but apart from the rest of the word vectors.
+Consequently, their centroids will most likely be far away from the
+center of neutral words, which partially explains better results of
+the NC algorithm on this embedding type.  However, at the same time,
+we also can notice that the prevailing majority of the objective
+expressions will have approximately the same number of subjective
+terms among their neighbors, being roughly equidistant away from them.
+Therefore, the $k$-NN approach is likely to assign high polarity
+values to many neutral entries, once the polar terms outweigh the
+known neutral seeds in their neighborhood.  Similarly, with the linear
+projection method, the optimal polarity line will be obviously equally
+parallel to both polar and neutral lexemes, assigning high scores to
+both of these classes.  Unfortunately, the subjectivity axis, which is
+supposed to help distinguish between subjective and objective
+instances, is apparently not strong enough to sort out this confusion.
+
+\begin{figure}[bht]
+  \centering
+  \includegraphics[height=30em,width=\linewidth]{img/potts_embeddings.png}
+  \caption[Visualization of \citeauthor{Turney:03}'s seed set]{t-SNE
+    visualization of PotTS' tokens and \citeauthor{Turney:03}'s seed
+    set with different embedding types.}\label{snt:fig:tsne-seeds}
+\end{figure}
+
+\subsubsection{Effect of Vector Normalization}\label{subsec:snt-lex:eowet}
+
+The final major factor which also could play a role in the quality of
+NWE-induced polarity lists was the length normalization and mean
+scaling, which we applied to word2vec vectors at the very beginning of
+the training.
+
+In the first stage of this preprocessing (during the length
+normalization), we divided all embeddings by their Euclidean norm,
+setting all of them to unit length:
+\begin{align}
+  E' &= \frac{E}{\norm{E}}.
+\end{align}
+Afterwards, we mean-normalized the resulting representations by
+subtracting their means and dividing by the standard deviation:
+\begin{align}
+  E'' &= \frac{E' -\mu_{E'}}{\sigma_{E'}},
+\end{align}
+ensuring this way that the final coordinates of all embeddings were
+centered around zero, and had a unit-variance in their distribution.
+
+To check the effect of these procedures, we reran our NWE-based
+algorithms without these normalization steps, and present the results
+of our evaluation in Table~\ref{snt-lex:tbl:emb-evn}.  As we can see
+from the scores, the method of the nearest centroids is almost
+indifferent to the preprocessing, showing the same performance for all
+settings.  However, the remaining three approaches ($k$-NN, PCA, and
+the linear projection system) achieve their best results when both
+normalization types are used.  Although we should admit that this
+success is mostly due to the length normalization rather than mean
+scaling.  We can recognize this by comparing the scores in the first
+and third columns of the table where the PCA algorithm shows identical
+results, and the scores of the $k$-NN and linear projection methods
+differ by only 0.1\%.  We also can observe that the mean-scaling alone
+has a strong negative effect on the linear projection system, pulling
+its scores down by 3\% in comparison with the unnormalized vectors;
+but at the same time it slightly improves the results of the $k$-NN
+system, increasing them by 0.1\% as compared to the original
+embeddings.
+
+\begin{table}[thb!]
+  \begin{center}
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}%
+    \setlength{\belowrulesep}{0pt}\scriptsize
+    \begin{tabular}{p{0.15\columnwidth} % first columm
+        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
+      \toprule
+      \multirow{2}*{\bfseries SLG Method} & \multicolumn{4}{c}{\bfseries Vector Normalization}\\
+                                          & mean normalization + length normalization %
+                                          & mean normalization %
+                                          & length normalization %
+                                          & no normalization\\\midrule
+      NC & \textbf{0.398} & \textbf{0.398} & \textbf{0.398} & \textbf{0.398}\\
+      $k$-NN & \textbf{0.468} & 0.418 & 0.467 & 0.417\\
+      PCA & \textbf{0.398} & 0.396 & \textbf{0.398} & 0.396\\
+      LP & \textbf{0.462} & 0.416 & 0.461 & 0.442\\\bottomrule
+
+    \end{tabular}\egroup%
+    {
+      \captionsetup{justification=centering}
+      \caption[Macro-averaged \F-scores of NWE-based methods depending
+      on the vector normalization.]{Macro-averaged \F-scores of
+        NWE-based methods depending on the vector normalization.\\%
+        {\small\itshape%
+          NC~--~nearest centroids, %
+          $k$-NN~--~$k$-nearest neighbors, %
+          PCA~--~principal component analysis, %
+          LP~--~linear projection%
+        }%
+      }\label{snt-lex:tbl:emb-evn}
+    }
+  \end{center}
+\end{table}
+
+To visually demonstrate the effect of this preprocessing, we applied
+these procedures to the two-dimensional sample vectors from
+Section~\ref{subsec:snt:lex:nwe}, and present these results in
+Figure~\ref{snt-lex:fig:nwe-norms}. As we can see from the picture,
+the length normalization casts all embeddings on an $n$-dimensional
+sphere, increasing the distance between the vectors with greater
+mutual angles, but shortening the differences between those embeddings
+whose in-between angles are small.  Vice versa, with the mean scaling,
+the internal structure of the whole vector space is largely preserved
+(up to a few outliers which become closer to the means), but their
+general distribution becomes more condensed (which we can recognize
+from the closer interval the embeddings appear in).  Finally, applying
+both normalizations (first normalizing the length, and then the mean)
+still makes the whole distribution spherical, but shifts the center of
+this sphere towards the location of the majority of the points.
+
+\begin{figure*}[hbt!]
+  {
+    \centering
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_not_normed.png}
+      \caption{Without normalization}\label{snt-lex:fig:nwe-no-norm}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_len_normed.png}
+      \caption{With length normalization}\label{snt-lex:fig:nwe-len-norm}
+    \end{subfigure}\\
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_mean_normed.png}
+      \caption{With mean normalization}\label{snt-lex:fig:nwe-mean-norm}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/sentilex_polarity_len_mean_normed.png}
+      \caption{With length and mean normalization}\label{snt-lex:fig:nwe-mean-len-mean-norm}
+    \end{subfigure}
+  }
+  \caption{Polarity lines determined by the linear projection method
+    with different vector
+    normalization steps.}\label{snt-lex:fig:nwe-norms}
+\end{figure*}
+
 \section{Effect of Seed Sets}\label{subsec:snt-lex:eoss}
 
 An important factor which could significantly affect the quality of
-the resulting sentiment lexicons was the set of the seed terms that we
+all resulting sentiment lexicons was the set of the seed terms that we
 used to initialize the polarity scores of the tested methods.  In
 order to estimate the impact of this setting on the final scores, we
 re-run our experiments using the seed lists proposed by \citet{Hu:04},
@@ -1804,239 +2037,6 @@ the much bigger size of this list.  Furthermore, the approaches of the
 nearest centroids, principal components, and the distantly supervised
 method of~\citet{Vo:16} show almost identical scores on all other seed
 collections.
-
-\section{Effect of Word Embeddings}\label{subsec:snt-lex:eowet}
-
-Another important aspect which could notably influence the results of
-the NWE-algorithms was the type of the embeddings, which we provided
-to these systems as input.  As already noted in
-Section~\ref{subsec:snt:lex:nwe}, the two most common kinds of such
-representations are the standard word2vec and task-specific
-vectors~\cite{Mikolov:13,Collobert:11}.  The former type seeks to find
-word representations which maximizes the probability of other tokens
-appearing in the nearby context, whereas the latter type tries to
-obtain word vectors which best suit some custom-defined objective
-(e.g., predicting the semantic class of a whole sentence given its
-words).
-
-In order to see how these specifics could affect the net results of
-our NWE-based approaches, we additionally trained task-specific
-embeddings on the German Twitter snapshot~\cite{Scheffler:14},
-considering the occurrence of positive and negative emoticons as noisy
-polarity labels of the microblogs.  Furthermore, we also explored two
-in-between solutions:
-\begin{itemize}
-\item training \emph{hybrid embeddings}, with which we simultaneously
-  optimized both objectives: prediction of the surrounding context and
-  classification of noisy sentiment labels;
-\item and separately training both word2vec and task-specific vectors,
-  and then computing a transformation matrix~$W$ for mapping the
-  former type to the latter via the \emph{ordinary least squares}
-  method.  In the final step of this approach, we obtained an
-  approximated task-specific representation for terms missing in the
-  noisily labeled dataset by multiplying their word2vec vectors with
-  the matrix~$W$.
-\end{itemize}
-
-The macro-averaged \F-scores of our approaches with these alternative
-vector types are shown in Table~\ref{snt-lex:tbl:emb-eff}.  As we can
-see from the results, the $k$-NN and linear projection algorithms work
-best with the standard word2vec embeddings (with the overall best
-score (0.468) achieved by the $k$-NN method), but their performance
-degrades as the input vectors become more and more task-specific.  An
-opposite situation is observed for the nearest centroids and principal
-components systems, which show an improvement on purely task-specific
-and task-specific + least-squares vectors, but perform rather poorly
-on word2vec and hybrid embeddings.
-
-\begin{table}[thb!]
-  \begin{center}
-    \bgroup\setlength\tabcolsep{0.1\tabcolsep}%
-    \setlength{\belowrulesep}{0pt}\scriptsize
-    \begin{tabular}{p{0.15\columnwidth} % first columm
-        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
-      \toprule
-      \multirow{2}*{\bfseries Lexicon} %
-      & \multicolumn{4}{c}{\bfseries Embedding Type}\\
-      & word2vec & task-specific + word2vec & task-specific + least squares %
-                                            & task-specific\\\midrule
-      NC & 0.398 & 0.398 & \textbf{0.401} & 0.399\\
-      $k$-NN & \textbf{0.468} & 0.43 & 0.398 & 0.392\\
-      PCA & 0.398 & 0.398 & 0.404 & \textbf{0.409}\\
-      LP & \textbf{0.462} & 0.441 & 0.398 & 0.399\\\bottomrule
-
-    \end{tabular}\egroup%
-    {
-      \captionsetup{justification=centering}
-      \caption[Macro-averaged \F-scores of NWE-based methods for
-      different embedding types.]{Macro-averaged \F-scores of
-        NWE-based methods for different embedding types.\\%
-        {\small\itshape%
-          NC~--~nearest centroids, %
-          $k$-NN~--~$k$-nearest neighbors, %
-          PCA~--~principal component analysis, %
-          LP~--~linear projection%
-        }%
-      }\label{snt-lex:tbl:emb-eff}
-    }
-  \end{center}
-\end{table}
-
-In order to better understand the reasons for these differences, we
-projected the embeddings of all tokens appearing in the PotTS
-corpus~\cite{Sidarenka:16} onto the two-dimensional vector space using
-the t-SNE method of~\citet{Maaten:08}, and visualized these vectors,
-specifically highlighting polar terms from the \citeauthor{Turney:03}
-seed set.  Following the recommended practices for analyzing t-SNE's
-output~\cite{Wattenberg:2016}, we generated these lower-dimensional
-projections for different perplexity values: $p\in\{5, 30, 50\}$; and
-present the results of this visualization in
-Figure~\ref{snt:fig:tsne-seeds}.
-
-As we can see from the right column of the figure, task-specific
-representations of polar terms tend to appear in the immediate
-vicinity of each other, but apart from the rest of the word vectors.
-Consequently, their centroids will most likely be far away from the
-center of neutral words, which partially explains better results of
-the NC algorithm on this embedding type.  However, at the same time,
-we also can notice that the prevailing majority of the objective
-expressions will have approximately the same number of subjective
-terms among their neighbors, being roughly equidistant away from them.
-Therefore, the $k$-NN approach is likely to assign high polarity
-values to many neutral entries, once the polar terms outweigh the
-known neutral seeds in their neighborhood.  Similarly, with the linear
-projection method, the optimal polarity line will be obviously equally
-parallel to both polar and neutral lexemes, assigning high scores to
-both of these classes.  Unfortunately, the subjectivity axis, which is
-supposed to help distinguish between subjective and objective
-instances, is apparently not strong enough to sort out this confusion.
-
-\begin{figure}[bht]
-  \centering
-  \includegraphics[height=30em,width=\linewidth]{img/potts_embeddings.png}
-  \caption[Visualization of \citeauthor{Turney:03}'s seed set]{t-SNE
-    visualization of PotTS' tokens and \citeauthor{Turney:03}'s seed
-    set with different embedding types.}\label{snt:fig:tsne-seeds}
-\end{figure}
-
-\section{Effect of Vector Normalization}\label{subsec:snt-lex:eowet}
-
-The final major factor which also could play a role in the quality of
-NWE-induced polarity lists was the length normalization and mean
-scaling, which we applied to word2vec vectors at the very beginning of
-the training.
-
-In the first stage of this preprocessing (during the length
-normalization), we divided all embeddings by their Euclidean norm,
-setting all of them to unit length:
-\begin{align}
-  E' &= \frac{E}{\norm{E}}.
-\end{align}
-Afterwards, we mean-normalized the resulting representations by
-subtracting their means and dividing by the standard deviation:
-\begin{align}
-  E'' &= \frac{E' -\mu_{E'}}{\sigma_{E'}},
-\end{align}
-ensuring this way that the final coordinates of all embeddings were
-centered around zero, and had a unit-variance in their distribution.
-
-To check the effect of these procedures, we reran our NWE-based
-algorithms without these normalization steps, and present the results
-of our evaluation in Table~\ref{snt-lex:tbl:emb-evn}.  As we can see
-from the scores, the method of the nearest centroids is almost
-indifferent to the preprocessing, showing the same performance for all
-settings.  However, the remaining three approaches ($k$-NN, PCA, and
-the linear projection system) achieve their best results when both
-normalization types are used.  Although we should admit that this
-success is mostly due to the length normalization rather than mean
-scaling.  We can recognize this by comparing the scores in the first
-and third columns of the table where the PCA algorithm shows identical
-results, and the scores of the $k$-NN and linear projection methods
-differ by only 0.1\%.  We also can observe that the mean-scaling alone
-has a strong negative effect on the linear projection system, pulling
-its scores down by 3\% in comparison with the unnormalized vectors;
-but at the same time it slightly improves the results of the $k$-NN
-system, increasing them by 0.1\% as compared to the original
-embeddings.
-
-\begin{table}[thb!]
-  \begin{center}
-    \bgroup\setlength\tabcolsep{0.1\tabcolsep}%
-    \setlength{\belowrulesep}{0pt}\scriptsize
-    \begin{tabular}{p{0.15\columnwidth} % first columm
-        *{4}{>{\centering\arraybackslash}p{0.2\columnwidth}}} % next four columns
-      \toprule
-      \multirow{2}*{\bfseries SLG Method} & \multicolumn{4}{c}{\bfseries Vector Normalization}\\
-                                          & mean normalization + length normalization %
-                                          & mean normalization %
-                                          & length normalization %
-                                          & no normalization\\\midrule
-      NC & \textbf{0.398} & \textbf{0.398} & \textbf{0.398} & \textbf{0.398}\\
-      $k$-NN & \textbf{0.468} & 0.418 & 0.467 & 0.417\\
-      PCA & \textbf{0.398} & 0.396 & \textbf{0.398} & 0.396\\
-      LP & \textbf{0.462} & 0.416 & 0.461 & 0.442\\\bottomrule
-
-    \end{tabular}\egroup%
-    {
-      \captionsetup{justification=centering}
-      \caption[Macro-averaged \F-scores of NWE-based methods depending
-      on the vector normalization.]{Macro-averaged \F-scores of
-        NWE-based methods depending on the vector normalization.\\%
-        {\small\itshape%
-          NC~--~nearest centroids, %
-          $k$-NN~--~$k$-nearest neighbors, %
-          PCA~--~principal component analysis, %
-          LP~--~linear projection%
-        }%
-      }\label{snt-lex:tbl:emb-evn}
-    }
-  \end{center}
-\end{table}
-
-To visually demonstrate the effect of this preprocessing, we applied
-these procedures to the two-dimensional sample vectors from
-Section~\ref{subsec:snt:lex:nwe}, and present these results in
-Figure~\ref{snt-lex:fig:nwe-norms}. As we can see from the picture,
-the length normalization casts all embeddings on an $n$-dimensional
-sphere, increasing the distance between the vectors with greater
-mutual angles, but shortening the differences between those embeddings
-whose in-between angles are small.  Vice versa, with the mean scaling,
-the internal structure of the whole vector space is largely preserved
-(up to a few outliers which become closer to the means), but their
-general distribution becomes more condensed (which we can recognize
-from the closer interval the embeddings appear in).  Finally, applying
-both normalizations (first normalizing the length, and then the mean)
-still makes the whole distribution spherical, but shifts the center of
-this sphere towards the location of the majority of the points.
-
-\begin{figure*}[hbt!]
-  {
-    \centering
-    \begin{subfigure}{.5\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/sentilex_polarity_not_normed.png}
-      \caption{Without normalization}\label{snt-lex:fig:nwe-no-norm}
-    \end{subfigure}%
-    \begin{subfigure}{.5\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/sentilex_polarity_len_normed.png}
-      \caption{With length normalization}\label{snt-lex:fig:nwe-len-norm}
-    \end{subfigure}\\
-    \begin{subfigure}{.5\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/sentilex_polarity_mean_normed.png}
-      \caption{With mean normalization}\label{snt-lex:fig:nwe-mean-norm}
-    \end{subfigure}%
-    \begin{subfigure}{.5\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/sentilex_polarity_len_mean_normed.png}
-      \caption{With length and mean normalization}\label{snt-lex:fig:nwe-mean-len-mean-norm}
-    \end{subfigure}
-  }
-  \caption{Polarity lines determined by the linear projection method
-    with different vector
-    normalization steps.}\label{snt-lex:fig:nwe-norms}
-\end{figure*}
 
 \section{Analysis of Entries}\label{subsec:snt-lex:aoe}
 
