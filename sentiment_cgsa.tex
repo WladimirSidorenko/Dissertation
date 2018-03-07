@@ -182,9 +182,9 @@ Table~\ref{snt-cgsa:tbl:corp-dist}.
 \end{tabular}
     \egroup
     \caption[Polarity class distribution in PotTS, SB10k, and the
-    German Twitter Snapshot.]{Polarity class distribution in PotTS,
+    German Twitter Snapshot]{Polarity class distribution in PotTS,
       SB10k, and the German
-      Twitter Snapshot (GTS).\\
+      Twitter Snapshot (GTS)\\
       \emph{(* -- the \emph{mixed} polarity was excluded from our
         experiments)}}
     \label{snt-cgsa:tbl:corp-dist}
@@ -756,8 +756,8 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
         0.235 & \textbf{0.606}\\\bottomrule
 \end{tabular}
     \egroup
-    \caption[Evaluation of lexicon-based CGSA methods.]{
-      Evaluation of lexicon-based CGSA methods.\\
+    \caption[Evaluation of lexicon-based CGSA methods]{
+      Evaluation of lexicon-based CGSA methods\\
       {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--~\citet{Musto:14},
         JRK~--~\citet{Jurek:15}, KLCH~--~\citet{Kolchyna:15}}}
     \label{snt-cgsa:tbl:lex-res}
@@ -1047,8 +1047,8 @@ changes.
 \end{tabular}
     \egroup
     \caption[Evaluation of polarity-changing factors in lexicon-based
-    CGSA methods.]{
-      Evaluation of polarity-changing factors in lexicon-based CGSA methods.\\
+    CGSA methods]{
+      Evaluation of polarity-changing factors in lexicon-based CGSA methods\\
       {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
         \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
         \citet{Kolchyna:15}}}
@@ -1868,8 +1868,8 @@ original descriptions.
        0.491 & 0.724\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of ML-based CGSA methods.]{
-      Evaluation of ML-based CGSA methods.\\
+    \caption[Evaluation of ML-based CGSA methods]{
+      Evaluation of ML-based CGSA methods\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~--~\citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res}
@@ -2005,8 +2005,8 @@ recomputing their scores.
       --Manual Lexicons & \NA{} & \NA{} & 0.553 & 0.751 & 0.51 & \textbf{0.739}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Feature-ablation test of ML-based CGSA methods.]{
-      Results of the feature-ablation test for ML-based CGSA methods.\\
+    \caption[Feature-ablation test of ML-based CGSA methods]{
+      Results of the feature-ablation test for ML-based CGSA methods\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~-- \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res-ablation}
@@ -2099,8 +2099,8 @@ featuring nine unigrams and one bigram among its top-ten entries.
           10 & DM-ITJ & POS & 0.157 & ? & NEUT & 0.061 & applause & POS & 1.5\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Top-10 features learned by CGSA classifiers.]{Top-10
-      features learned by ML-based CGSA methods.\\{\small (sorted by
+    \caption[Top-10 features learned by CGSA classifiers]{Top-10
+      features learned by ML-based CGSA methods\\{\small (sorted by
         the absolute values of their weights)}}
     \label{fgsa:tbl:ml:to10-features}
   \end{center}
@@ -2157,8 +2157,8 @@ analyzers.
       Logistic Regression & 0.309 & 0.693 & 0.553 & \textbf{0.772} & \textbf{0.512} & \textbf{0.75}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Feature-ablation test of ML-based CGSA methods.]{
-      Feature-ablation test of ML-based CGSA methods.\\
+    \caption[Feature-ablation test of ML-based CGSA methods]{
+      Feature-ablation test of ML-based CGSA methods\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~-- \citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res-classifiers}
@@ -2691,10 +2691,19 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         %
         % MVRNN Results:
         % ----------------
-      MVRNN &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+        % General Statistics:
+        % 'precision', 'predicted', average, warn_for)
+        % precision    recall  f1-score   support
+        % positive       0.45      1.00      0.62       680
+        % negative       0.00      0.00      0.00       287
+        % neutral       0.00      0.00      0.00       558
+        % avg / total       0.20      0.45      0.28      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
+        % Micro-Averaged F1-Score (All Classes): 44.5902%
+      MVRNN & 0.45 & 1.0 & 0.62 & %
+        0.0 & 0.0 & 0.0 & %
+        0.0 & 0.0 & 0.0 & %
+        0.308 & 0.446\\
 
         % RNTN Commands:
         % -----------------
@@ -2709,10 +2718,18 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         %
         % RNTN Results:
         % ----------------
-       RNTN &  &  &  & %
-         &  &  & %
-         &  &  & %
-         & \\
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.53      0.02      0.05       680
+        % negative       0.14      0.21      0.17       287
+        % neutral       0.36      0.70      0.47       558
+        % avg / total       0.40      0.30      0.22      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 10.69%
+        % Micro-Averaged F1-Score (All Classes): 30.3607%
+       RNTN & 0.53 & 0.02 & 0.05 & %
+         0.14 & 0.21 & 0.17 & %
+         0.36 & 0.7 & 0.47 & %
+         0.107 & 0.304\\
 
         % Severyn Commands:
         % -----------------
@@ -2727,11 +2744,19 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         %
         % Severyn Results:
         % ----------------
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.74      0.78      0.76       680
+        % negative       0.52      0.29      0.37       287
+        % neutral       0.65      0.77      0.70       558
+        % avg / total       0.67      0.68      0.66      1525
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 56.33%
+        % Micro-Averaged F1-Score (All Classes): 67.9344%
 
-      SEV &  &  &  & %
-         &  &  & %
-         &  &  & %
-         & \\
+      SEV & 0.74 & 0.78 & 0.76 & %
+         0.52 & 0.29 & 0.37 & %
+         0.65 & 0.77 & 0.7 & %
+         0.563 & 0.679\\
 
         % Baziotis Commands:
         % -----------------
@@ -2746,11 +2771,22 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         %
         % Baziotis Results:
         % ----------------
+        % General Statistics:
+        % /home/users/wsidorenko/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+        % 'precision', 'predicted', average, warn_for)
+        % precision    recall  f1-score   support
+        % positive       0.45      1.00      0.62       680
+        % negative       0.00      0.00      0.00       287
+        % neutral       0.00      0.00      0.00       558
+        % avg / total       0.20      0.45      0.28      1525
+        % 'precision', 'predicted', average, warn_for)
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
+        % Micro-Averaged F1-Score (All Classes): 44.5902%
 
-      BAZ &  &  &  & %
-         &   &  & %
-         &  &  & %
-         & \\
+      BAZ & 0.45 & 1.0 & 0.62 & %
+         0.0 & 0.0 & 0.0 & %
+         0.0 & 0.0 & 0.0 & %
+         0.308 & 0.446\\
 
         % lexicon-based attention (non-trainable) and standard attention
         % General Statistics:
@@ -2773,10 +2809,10 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         % avg / total       0.20      0.45      0.28      1525
         % Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
         % Micro-Averaged F1-Score (All Classes): 44.5902%
-      LBA &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+      LBA & 0.45 & 1.0 & 0.62 & %
+        0.0 & 0.0 & 0.0 & %
+        0.0 & 0.0 & 0.0 & %
+        0.308 & 0.446\\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
 
@@ -2830,14 +2866,33 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          0.64 & 0.73 & 0.68 & %
          0.146 & 0.509\\
 
-       MVRNN &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
-       RNTN &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+         % General Statistics:
+         % 'precision', 'predicted', average, warn_for)
+         % precision    recall  f1-score   support
+         % positive       0.00      0.00      0.00       354
+         % negative       0.00      0.00      0.00       212
+         % neutral       0.62      1.00      0.77       930
+         % avg / total       0.39      0.62      0.48      1496
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 0.00%
+         % Micro-Averaged F1-Score (All Classes): 62.1658%
+
+      MVRNN & 0.0 & 0.0 & 0.0 & %
+        0.0 & 0.0 & 0.0 & %
+        0.62 & 1.0 & 0.77 & %
+        0.0 & 0.622\\
+
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.07      0.01      0.02       354
+        % negative       0.24      0.06      0.10       212
+        % neutral       0.62      0.92      0.74       930
+        % avg / total       0.43      0.58      0.48      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 5.86%
+        % Micro-Averaged F1-Score (All Classes): 58.1551%
+      RNTN & 0.07 & 0.01 & 0.02 & %
+        0.24 & 0.06 & 0.1 & %
+        0.62 & 0.92 & 0.74 & %
+        0.059 & 0.582\\
 
         % Severyn Commands:
         % -----------------
@@ -2852,11 +2907,20 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         %
         % Severyn Results:
         % ----------------
+        % General Statistics:
+        % 'precision', 'predicted', average, warn_for)
+        % precision    recall  f1-score   support
+        % positive       0.23      0.91      0.37       354
+        % negative       0.00      0.00      0.00       212
+        % neutral       0.52      0.07      0.12       930
+        % avg / total       0.38      0.26      0.17      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 18.63%
+        % Micro-Averaged F1-Score (All Classes): 25.8690%
 
-       SEV &  &  &  & %
-          &  &  & %
-          &  &  & %
-          & \\
+       SEV & 0.23 & 0.91 & 0.37 & %
+          0.0 & 0.0 & 0.0 & %
+          0.52 & 0.07 & 0.12 & %
+          0.186 & 0.259\\
 
         % Baziotis Commands:
         % -----------------
@@ -2871,10 +2935,20 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         %
         % Baziotis Results:
         % ----------------
-       BAZ &  &  &  & %
-         &   &  & %
-         &  &  & %
-         & \\
+        % General Statistics:
+        % /home/users/wsidorenko/miniconda3/lib/python3.6/site-packages/sklearn/metrics/classification.py:1135: UndefinedMetricWarning: Precision and F-score are ill-defined and being set to 0.0 in labels with no predicted samples.
+        % 'precision', 'predicted', average, warn_for)
+        % precision    recall  f1-score   support
+        % positive       0.67      0.55      0.61       354
+        % negative       0.00      0.00      0.00       212
+        % neutral       0.74      0.96      0.83       930
+        % avg / total       0.62      0.73      0.66      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.29%
+        % Micro-Averaged F1-Score (All Classes): 72.5267%
+       BAZ & 0.67 & 0.55 & 0.61 & %
+         0.0 & 0.0 & 0.0 & %
+         0.74 & 0.96 & 0.83 & %
+         0.303 & 0.725\\
 
        LBA &  &  &  & %
         &  &  & %
@@ -2882,8 +2956,8 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         & \\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods.]{
-      Evaluation of DL-based CGSA methods.\\
+    \caption[Evaluation of DL-based CGSA methods]{
+      Evaluation of DL-based CGSA methods\\
       {\small Y\&C~--~\citet{Yessenalina:11}, RAE~--~Recursive
         Auto-Encoder \cite{Socher:11}, MVRNN~--~Matrix-Vector RNN
         \cite{Socher:12}, RNTN~--~Recursive Neural-Tensor Network
@@ -3169,8 +3243,8 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         & \\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods with pretrained word2vec vectors.]{
-      Evaluation of DL-based CGSA methods with pretrained word2vec vectors.\\
+    \caption[Evaluation of DL-based CGSA methods with pretrained word2vec vectors]{
+      Evaluation of DL-based CGSA methods with pretrained word2vec vectors\\
       {\small RAE~--~Recursive
         Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
         \cite{Socher:13}, SEV~--~\citet{Severyn:15},
@@ -3251,8 +3325,8 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         & \\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods with pretrained least-square embeddings.]{
-      Evaluation of DL-based CGSA methods with pretrained least-square embeddings.\\
+    \caption[Evaluation of DL-based CGSA methods with pretrained least-square embeddings]{
+      Evaluation of DL-based CGSA methods with pretrained least-square embeddings\\
       {\small RAE~--~Recursive
         Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
         \cite{Socher:13}, SEV~--~\citet{Severyn:15},
@@ -3560,8 +3634,8 @@ on the three-class prediction task.
        0.225 & 0.604\\\bottomrule
 \end{tabular}
     \egroup
-    \caption[Results of CGSA Methods without Text Normalization.]{
-      Results of CGSA methods without text normalization.\\
+    \caption[Results of CGSA Methods without Text Normalization]{
+      Results of CGSA methods without text normalization\\
       {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~-- \citet{Musto:14}, JRK
         -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
     \label{snt-cgsa:tbl:res-without-normalization}
