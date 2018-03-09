@@ -15,39 +15,27 @@
 
 \chapter{Discourse-Augmented Sentiment Analysis}
 
-%% \section{Introduction to Discourse Analysis}
-%% \subsection{Definitions and Related Work}
-%% \subsection{Peculiarities of Discourse Analysis on Twitter}
 
-%% \section{Corpus of Discourse Relations}
-%% \subsection{Annotation Scheme}
-%% \subsection{Statistics and Preliminary Results}
-%% \subsection{Inter-Annotator Agreement}
-%% \subsection{Related Work}
-%% \subsection{Conclusions}
+\section{Data Preparation}\label{sec:cgsa:data}
 
-\section{Discourse-Augmented Sentiment Analysis}
-\subsection{Discourse-Related Features}
-\subsection{Analysis of Results}
+\section{Discourse-Aware Sentiment Analysis Methods}
 
-\subsection{Related Work}
+% \done[inline]{\citet{Bickerstaffe:10}}
 
-\done[inline]{\citet{Bickerstaffe:10}}
-
-\citet{Bickerstaffe:10} also considered the rating prediction task,
-addressing this problem with the minimum-spanning-tree (MST) SVM
-approach.  In the initial step of this method, they constructed a
-strongly connected graph whose vertices were associated with the most
-representative example (determined via the average all-pairs Tanimoto
-coefficient) of each star rating and the edge weights represented the
-Tanimoto distances between those nodes.  Afterwards, they determined
-the MST of this graph using the Kruskal's
-algorithm~\cite[see][pp.~567--574]{Cormen:09} and, finally,
-constructed a decision tree from this MST, replacing the MST vertices
-with binary SVM classifiers, which had to discern the respective
-rating groups. An evaluation on the four-star review corpus
-of~\citet{Pang:05} showed an improvement by up to~7\% over the
-previous state of the art, boosting it to 59.37\% average accuracy.
+% \citet{Bickerstaffe:10} also considered the rating prediction task,
+% addressing this problem with the minimum-spanning-tree (MST) SVM
+% approach.  In the initial step of this method, they constructed a
+% strongly connected graph whose vertices were associated with the most
+% representative example (determined via the average all-pairs Tanimoto
+% coefficient) of each star rating and the edge weights represented the
+% Tanimoto distances between those nodes.  Afterwards, they determined
+% the MST of this graph using the Kruskal's
+% algorithm~\cite[see][pp.~567--574]{Cormen:09} and, finally,
+% constructed a decision tree from this MST, replacing the MST vertices
+% with binary SVM classifiers, which had to discern the respective
+% rating groups. An evaluation on the four-star review corpus
+% of~\citet{Pang:05} showed an improvement by up to~7\% over the
+% previous state of the art, boosting it to 59.37\% average accuracy.
 
 
 \todo[inline]{\citet{Pang:02}}
@@ -57,8 +45,16 @@ human-generated baseline, but the authors point out that discourse
 structure is necessary to detect and exploit the rhetorical devices
 used by the review authors
 
+\todo[inline]{\citet{Riloff:03}}
 
-\done[inline]{\citet{Pang:04}}
+\todo[inline]{\citet{Pang:04}}
+
+One of the first discourse-aware approaches to coarse-grained
+sentiment analysis was proposed by~\citet{Pang:04}.  In their work,
+the authors partitioned the text of a movie review into subjective and
+objective sentences using the min-cut method of~\citet{Blum:01}, and
+then analyzed the sentences from the former group in order to classify
+the overall polarity of the review.
 
 Another multi-stage Na{\"i}ve Bayes procedure was proposed by
 \citet{Pang:04}, who tried to classify the overall semantic
@@ -82,24 +78,33 @@ talking about the film itself. (Turney (2002) makes a similar point,
 noting that for reviews, ``the whole is not necessarily the sum of the
 parts''.)
 
-
 \todo[inline]{\citet{Hu:04}, Section 3.6}
 
-\todo[inline]{}
 
-One of the first discourse-aware approaches to coarse-grained
-sentiment analysis was proposed by~\citet{Pang:04}.  In their work,
-the authors partitioned the text of a movie review into subjective and
-objective sentences using the min-cut method of~\citet{Blum:01}, and
-then analyzed the sentences from the former group in order to classify
-the overall polarity of the review.
+\todo[inline]{\citet{Mao:06}}
+Other notable works on discourse-level sentiment analysis include
+those of~\citet{Mao:06}, who used isotonic CRFs to predict the
+polarity of single sentences and then used a nearest neighbors
+classifier to induce the polarity of the whole document from these
+predictions, observing an improvement over the traditional
+bag-of-words approach.
 
-\citet{Somasundaran:08,Somasundaran:08a} introduced the concept of
-\emph{opinion frames} which represented a pair of subjective
-statements (arguments or sentiments) that were related to each via the
-\emph{same} or \emph{alternative} link.  In the former case, both
-statements had to refer to the same target, while, in the latter case,
-these targets had to represent mutually exclusive alternatives.
+\todo[inline]{\citet{Thomas:06}}
+
+\todo[inline]{\citet{Polanyi:06}}
+
+\todo[inline]{\citet{Snyder:07}}
+Other notable works on discourse-augented sentiment analysis include
+those of~\citet{Snyder:07}, who proposed a joint Good Grief model to
+predict users' evaluations of different aspects of restaurants.  In
+the first phase of this approach, they applied a set of
+aspect-specific classifiers, each of which was supposed to predict
+user's polarity towards one particular criterion.  In the next step,
+the output of this ensemble was corrected by an additional linear
+classifier, which was supposed to account for the overall agreement on
+multiple aspects.
+
+\todo[inline]{\citet{Voll:07}}
 
 \citet{Voll:07} addressed the problem of classifying the polarity of
 Epinions reviews.\footnote{\url{www.epinions.com}} For this purpose,
@@ -127,63 +132,18 @@ of the sentences formed a linear chain and simultaneously were
 connected to the label node of the whole document which had to be
 predicted along with sentence orientations.
 
+\todo[inline]{\citet{Sadamitsu:08}}
+
+\todo[inline]{\citet{Somasundaran:08,Somasundaran:08a}}
+
+\citet{Somasundaran:08,Somasundaran:08a} introduced the concept of
+\emph{opinion frames} which represented a pair of subjective
+statements (arguments or sentiments) that were related to each via the
+\emph{same} or \emph{alternative} link.  In the former case, both
+statements had to refer to the same target, while, in the latter case,
+these targets had to represent mutually exclusive alternatives.
+
 \todo[inline]{\citet{Somasundaran:09a,Somasundaran:09b}}
-
-\citet{Yessenalina:10} proposed a latent-variable approach, in which
-they tried to predict the overall polarity of a document (movie review
-or congressional floor debate) by estimating the difference between
-the polarities of the most prominent subjective sentences.  Since the
-labels of the sentences were unknown at the training and testing time,
-the authors considered their polaity scores as latent variables whose
-most likely assignments were to be determined with a structural SVM
-algorithm~\cite{Yu:09}.  An enhancement of this algorithm was
-presented by~\citet{Trivedi:13}, who extended the original training
-objective with a set of discourse connectives attributes and polarity
-coherence features.
-
-Other ways of incorporating discourse structure into opinion mining
-applications were proposed by~\citet{Bhatia:15}.  In their work, the
-authors proposed two methods for augmenting a sentiment analysis
-system with discourse information:
-\begin{inparaenum}[(i)]
-\item discourse depth reweighting and
-\item rhetorical recursive neural network (R2N2).
-\end{inparaenum}
-In the former approach, they introduced a special parameter $\lambda_i$:
-\begin{equation*}
-  \lambda_i = \max\left(0.5, 1 - d_i/6\right),
-\end{equation*}
-where $d_i$ stands for the depth of an elementary discourse unit in
-the discourse tree of the whole document.  With this parameter, they
-estimated the overall polarity of a document~$\Psi$, by summing up the
-individual linaer predictions for each sentence scaled by~$\lambda_i$:
-\begin{equation*}
-  \Psi = \sum_i\lambda_i\mathbf{\theta}^T\cdot\mathbf{w}_i,
-\end{equation*}
-where $\mathbf{\theta}$ represents a vector of polarity scores ($-1$
-for negative terms and $+1$ for positive) obtained from the sentiment
-lexicon of~\citet{Wilson:05}, and $w_i$ stands for the bag-of-words
-representation of the $i$-th sentence.  In the R2N2 method, the
-authors adopted the RNN approach of~\citet{Socher:13} and recursively
-estimated the polarity of a document from the leaves of the RST tree
-up to its root.
-
-Other notable works on discourse-level sentiment analysis include
-those of~\citet{Mao:06}, who used isotonic CRFs to predict the
-polarity of single sentences and then used a nearest neighbors
-classifier to induce the polarity of the whole document from these
-predictions, observing an improvement over the traditional
-bag-of-words approach.
-
-Other notable works on discourse-augented sentiment analysis include
-those of~\citet{Snyder:07}, who proposed a joint Good Grief model to
-predict users' evaluations of different aspects of restaurants.  In
-the first phase of this approach, they applied a set of
-aspect-specific classifiers, each of which was supposed to predict
-user's polarity towards one particular criterion.  In the next step,
-the output of this ensemble was corrected by an additional linear
-classifier, which was supposed to account for the overall agreement on
-multiple aspects.
 
 Another work, which apparently comes closest to ours, is that
 of~\citet{Somasundaran:09a}, who tried to unite the notions of opinion
@@ -197,22 +157,90 @@ polarity of each dialogue leaf, and then used an integer linear
 programming module to correct the cases which violated the overall
 agreement of opinion frames.
 
+\todo[inline]{\citet{Yessenalina:10}}
 
-TODO: Somasundaran, 2007, 2009b
+\citet{Yessenalina:10} proposed a latent-variable approach, in which
+they tried to predict the overall polarity of a document (movie review
+or congressional floor debate) by estimating the difference between
+the polarities of the most prominent subjective sentences.  Since the
+labels of the sentences were unknown at the training and testing time,
+the authors considered their polaity scores as latent variables whose
+most likely assignments were to be determined with a structural SVM
+algorithm~\cite{Yu:09}.  An enhancement of this algorithm was
+presented by~\citet{Trivedi:13}, who extended the original training
+objective with a set of discourse connectives attributes and polarity
+coherence features.
 
-TODO:
-Riloff, 2003
+\todo[inline]{\citet{Heerschop:11}}
 
-Thomas, 2006
+\todo[inline]{\citet{Zhou:11}}
 
-Polanyi and Zaenen, 2006
+\todo[inline]{\citet{Zirn:11}}
 
-Sadamitsu, 2008
+Zirn et al. (2011) use an RST parser in a Markov Logic Network, with
+the goal of making polarity predictions at the sub-sentence level,
+rather than improving document-level pre- diction. None of the prior
+work considers the sort of recurrent compositional model presented
+here.
 
-Taboada and Grieve, 2009
+\todo[inline]{\citet{Mukherjee:12}}
 
-Mukherjee, 2012
+\todo[inline]{\citet{Wang:13}}
 
-Lazaridou, 2013
+Wang and Wu (2013) use manually-annotated discourse parses in
+combination with a sentiment lexicon, which is automatically updated
+based on the dis- course structure.
 
-\subsection{Conclusions}
+\todo[inline]{\citet{Chenlo:13}}
+
+\todo[inline]{\citet{Chenlo:14}}
+
+\done[inline]{\citet{Bhatia:15}}
+
+Other ways of incorporating discourse structure into an opinion mining
+application were proposed by~\citet{Bhatia:15} who presented two
+methods for augmenting a sentiment analysis system with discourse
+information:
+\begin{inparaenum}[(i)]
+\item discourse depth reweighting (DDR) and
+\item rhetorical recursive neural network (R2N2).
+\end{inparaenum}
+
+In the former approach, the authors first computed the sentiment score
+$\lambda_i$ of each elementary discourse unit $i$ as:
+\begin{equation*}
+  \lambda_i = \max\left(0.5, 1 - d_i/6\right),
+\end{equation*}
+where $d_i$ stands for the depth of the $i$-th EDU in the discourse
+tree of the whole document.  Afterwards, they estimated the overall
+polarity of the document~$\Psi$ by summing up the linear predictions
+for each discourse unit ($\theta^T\cdot\mathbf{w}_i$), scaling these
+prediction by the factor~$\lambda_i$:
+\begin{equation*}
+  \Psi = \sum_i\lambda_i\mathbf{\theta}^T\cdot\mathbf{w}_i = \mathbf{\theta}^T\cdot\sum_i\lambda_i\mathbf{w}_i,
+\end{equation*}
+In this equation, $\mathbf{\theta}$ represents a vector of polarity
+scores ($-1$ for negative terms and $+1.$ for positive entries) for
+all word in the vocabulary (as obtained from the sentiment lexicon
+of~\citet{Wilson:05}), and $w_i$ denotes the bag-of-words
+representation of the $i$-th EDU.
+
+In the R2N2 method, \citet{Bhatia:15} adopted the RNN approach
+of~\citet{Socher:13} and recursively computed polarity scoreb of each
+discourse $i$ unit as follows:
+\begin{equation*}
+  \psi_i = tanh\left(K_n^{(r_i)} \psi_{n(i)} + K_s^{(r_i)}\psi_{s(i)} \right),
+\end{equation*}
+where $K_n^{(r_i)}$ and $K_s^{(r_i)}$ denote the nucleus an satellite
+coefficients associated with the rhetorical relation $(r_i)$, and
+$\psi_{n(i)}$ and $\psi_{s(i)}$ represent the sentiment scores of the
+nucleus and satellite nodes of the $i$-th discourse unit.  With this
+method, the authors achieved 84.1\% two-class prediction accuracy on
+the moview review corpus of~\citet{Pang:04} and 85.6\% on the dataset
+of~\citet{Socher:13}.
+
+\todo[inline]{Lazaridou, 2013}
+
+\section{Evaluation}
+
+\section{Summary and Conclusions}
