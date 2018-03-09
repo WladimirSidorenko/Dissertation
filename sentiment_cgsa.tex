@@ -2543,27 +2543,32 @@ was newly proposed by~\citet{Baziotis:17}, who used two bidirectional
 LSTM layers, concatenating the hidden states of the left-to-right
 recurrence ($\vec{h}^{(i)}_{\rightarrow}\in\mathbb{R}^{150}$) with the
 respective hidden units of the right-to-left loop
-($\vec{h}^{(i)}_{\leftarrow}\in\mathbb{R}^{150}$):
+($\vec{h}^{(i)}_{\leftarrow}\in\mathbb{R}^{150}$) into joint hidden
+states
 $\vec{h}^{(i)} = [\vec{h}^{(i)}_{\rightarrow},
 \vec{h}^{(i)}_{\leftarrow}]\in\mathbb{R}^{300}$; and passing the
-result of this concatenation to the next RNN layer.  Before making the
-final prediction, the authors multiplied the outputs of the second
-BiLSTM with a special attention matrix $W_h$, adding to it an
-attention bias $\vec{b}_h$ in order to give more importance to
-specific tweet regions:
+result of this concatenation to the next RNN layer.  Afterwards, they
+multiplied the outputs of the second BiLSTM with a special attention
+vector $\vec{w}_h$ and computed the softmax of these products over all
+positions in the input sequence $\mathbf{x}$, estimating this way the
+relative importance of RNN results at different locations:
 \begin{align}
-  \vec{e}_i =& tanh\left(W_h\vec{h}_i+\vec{b}_h\right);\\
-  A =& \frac{\exp(\vec{e}_i)}{\sum_{t=1}^T\exp(\vec{e}_t)};\\
-  \vec{r} =& A\vec{h};
+  \vec{e}_i =& tanh\left(\vec{w}_h\vec{h}_i\right);\\
+  a_i =& \frac{\exp(\vec{e}_i)}{\sum_{t=1}^{|\mathbf{x}|}\exp(\vec{e}_t)}.
 \end{align}
-and then fed the resulting vector $\vec{r}\in\mathbb{R}^{300}$ into
-the final densely connected layer with softmax non-linearity.  With
-this approach, \citet{Baziotis:17} got first place
+Finally, the authors summed all outputs of the second recurrence,
+multiplying them with their respective attention scores, and passed
+the resulting value to another densely connected softmax layer:
+\begin{align}
+  r =& \sum_{i=1}^{|\mathbf{x}|}a_i\vec{h}_i;\\
+  o =& softmax\left(W r\right).
+\end{align}
+With this architecture, \citet{Baziotis:17} achieved the first place
 (0.675~\F{}$^{+/-}$) in SemEval-2017 Task~4 \cite{Rosenthal:17}, being
 on a par with the system of~\citet{Cliche:17} and even outperforming
 the method of~\citet{Rouvier:17}, which both relied on ensembles of
-LSTM and convolutional networks that had been previously trained with
-different parameters.
+LSTM and convolutional networks that had been trained with different
+parameters.
 
 % \done[inline]{\citet{Tang:14b}}
 
@@ -2598,10 +2603,9 @@ and simplicity, we used task-specific word embeddings of
 size~$\mathbb{R}^{100}$ in all systems, optimizing these vectors along
 with other parameters during training.  Moreover, we also unified the
 final activation part and cost function of all networks, using a
-densely connected softmax layer as the final module of their
-architectures and optimizing their weights w.r.t. the categorical
-hinge loss on the training set, but picking the setting which yielded
-the highest accuracy on the validation data.
+densely connected softmax layer and optimizing the weights w.r.t. the
+categorical hinge loss on the training set and picking the values that
+yielded the highest accuracy on the validation data.
 
 The results of this evaluation are shown in
 Table~\ref{snt-cgsa:tbl:dl-res}.
@@ -3086,16 +3090,17 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          % data/PotTS/preprocessed/predicted/rnn/rnn.word2vec.test
          % General Statistics:
          % precision    recall  f1-score   support
-         % positive       0.45      0.53      0.48       680
-         % negative       0.16      0.21      0.18       287
-         % neutral       0.35      0.23      0.28       558
-         % avg / total       0.36      0.36      0.35      1525
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 33.35%
-         % Micro-Averaged F1-Score (All Classes): 35.7377%
-      RAE & 0.45 & 0.53 & 0.48 & %
-         0.16 & 0.21 & 0.18 & %
-         0.35 & 0.23 & 0.28 & %
-         0.334 & 0.357\\
+         % positive       0.43      0.36      0.40       680
+         % negative       0.15      0.20      0.17       287
+         % neutral       0.37      0.38      0.37       558
+         % avg / total       0.36      0.34      0.34      1525
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 28.13%
+         % Micro-Averaged F1-Score (All Classes): 33.7049%
+
+      RAE & 0.43 & 0.36 & 0.4 & %
+         0.15 & 0.2 & 0.17 & %
+         0.37 & 0.38 & 0.37 & %
+         0.281 & 0.337\\
 
          % Commands:
          % cgsa_sentiment train -t rntn --w2v data/PotTS/preprocessed/train/*.tsv \
@@ -3104,19 +3109,18 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          % data/PotTS/preprocessed/predicted/rntn/rntn.word2vec.test
          % cgsa_evaluate data/PotTS/preprocessed/test/ \
          % data/PotTS/preprocessed/predicted/rntn/rntn.word2vec.test
-         % Results:
          % General Statistics:
          % precision    recall  f1-score   support
-         % positive       0.46      0.82      0.59       680
-         % negative       0.17      0.03      0.06       287
-         % neutral       0.40      0.18      0.25       558
-         % avg / total       0.38      0.44      0.36      1525
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 32.15%
-         % Micro-Averaged F1-Score (All Classes): 43.5410%
-      RNTN & 0.46 & 0.82 & 0.59 & %
-         0.17 & 0.03 & 0.06 & %
-         0.4 & 0.18 & 0.25 & %
-         0.322 & 0.435\\
+         % positive       0.44      0.91      0.60       680
+         % negative       1.00      0.00      0.01       287
+         % neutral       0.35      0.08      0.13       558
+         % avg / total       0.51      0.43      0.31      1525
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 30.10%
+         % Micro-Averaged F1-Score (All Classes): 43.4754%
+      RNTN & 0.44 & 0.91 & 0.6 & %
+          1. & 0.0 & 0.01 & %
+          0.35 & 0.08 & 0.13 & %
+          0.301 & 0.435\\
 
          % Commands:
          % cgsa_sentiment train -t severyn --w2v data/PotTS/preprocessed/train/*.tsv \
@@ -3124,18 +3128,18 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          % cgsa_sentiment -v test data/PotTS/preprocessed/test/*.tsv > \
          % data/PotTS/preprocessed/predicted/severyn/severyn.word2vec.test
          % cgsa_evaluate data/PotTS/preprocessed/test/ data/PotTS/preprocessed/predicted/severyn/severyn.word2vec.test
-         % Results:
+         % General Statistics:
          % precision    recall  f1-score   support
-         % positive       0.71      0.75      0.73       680
-         % negative       0.50      0.47      0.48       287
-         % neutral       0.68      0.65      0.66       558
-         % avg / total       0.66      0.66      0.66      1525
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 60.75%
-         % Micro-Averaged F1-Score (All Classes): 66.1639%
-      SEV & 0.71 & 0.75 & 0.73 & %
-         0.5 & 0.47 & 0.48 & %
-         0.68 & 0.65 & 0.66 & %
-         0.608 & 0.662\\
+         % positive       0.79      0.66      0.72       680
+         % negative       0.34      0.71      0.46       287
+         % neutral       0.75      0.49      0.59       558
+         % avg / total       0.69      0.61      0.62      1525
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 59.09%
+         % Micro-Averaged F1-Score (All Classes): 60.7213%
+      SEV & 0.79 & 0.66 & 0.72 & %
+          0.34 & 0.71 & 0.46 & %
+          0.75 & 0.49 & 0.59 & %
+          0.591 & 0.607\\
 
          % Commands:
          % cgsa_sentiment train -t baziotis --w2v data/SB10k/preprocessed/train/*.tsv \
@@ -3143,19 +3147,18 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          % cgsa_sentiment -v test data/SB10k/preprocessed/test/*.tsv > \
          % data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
          % cgsa_evaluate data/SB10k/preprocessed/test/ data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
-         % Results:
          % General Statistics:
          % precision    recall  f1-score   support
-         % positive       0.80      0.76      0.78       680
-         % negative       0.56      0.53      0.54       287
-         % neutral       0.70      0.77      0.73       558
+         % positive       0.80      0.77      0.79       680
+         % negative       0.59      0.48      0.53       287
+         % neutral       0.69      0.78      0.74       558
          % avg / total       0.72      0.72      0.72      1525
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 66.18%
-         % Micro-Averaged F1-Score (All Classes): 72.0000%
-      BAZ & 0.8 & 0.76 & 0.78 & %
-         0.56 & 0.53 & 0.54 & %
-         0.7 & 0.77 & 0.73 & %
-         0.662 & 0.72\\
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 65.90%
+         % Micro-Averaged F1-Score (All Classes): 72.2623%
+      BAZ & 0.8 & 0.77 & 0.79 & %
+          0.59 & 0.48 & 0.53 & %
+          0.69 & 0.78 & 0.74 & %
+          0.659 & 0.723\\
 
       LBA &  &  &  & %
         &  &  & %
@@ -3172,30 +3175,30 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          % data/SB10k/preprocessed/predicted/rnn/rnn.word2vec.test
          % General Statistics:
          % precision    recall  f1-score   support
-         % positive       0.55      0.10      0.17       354
-         % negative       0.17      0.01      0.02       212
-         % neutral       0.64      0.98      0.78       930
-         % avg / total       0.55      0.63      0.52      1496
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 9.46%
-         % Micro-Averaged F1-Score (All Classes): 63.3690%
-       RAE & 0.55 & 0.1 & 0.17 & %
-         0.17 & 0.01 & 0.02 & %
-         0.64 & 0.98 & 0.78 & %
-         0.095 & 0.634\\
-
-         % General Statistics:
-         % precision    recall  f1-score   support
-         % positive       0.00      0.00      0.00       354
+         % positive       0.37      0.03      0.06       354
          % negative       0.00      0.00      0.00       212
-         % neutral       0.62      1.00      0.77       930
-         % avg / total       0.39      0.62      0.48      1496
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 0.00%
-         % Micro-Averaged F1-Score (All Classes): 62.1658%
+         % neutral       0.62      0.98      0.76       930
+         % avg / total       0.48      0.62      0.49      1496
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 2.86%
+         % Micro-Averaged F1-Score (All Classes): 61.5642%
+       RAE & 0.37 & 0.03 & 0.06 & %
+          0.0 & 0.0 & 0.0 & %
+          0.62 & 0.98 & 0.76 & %
+          0.029 & 0.616\\
 
-      RNTN & 0.0 & 0.0 & 0.0 & %
-        0.0 & 0.0 & 0.0 & %
-        0.62 & 1.0 & 0.77 & %
-        0.0 & 0.622\\
+          % General Statistics:
+          % precision    recall  f1-score   support
+          % positive       0.26      0.02      0.03       354
+          % negative       0.12      0.00      0.01       212
+          % neutral       0.62      0.98      0.76       930
+          % avg / total       0.47      0.61      0.48      1496
+          % Macro-Averaged F1-Score (Positive and Negative Classes): 2.05%
+          % Micro-Averaged F1-Score (All Classes): 61.3636%
+
+      RNTN & 0.26 & 0.02 & 0.03 & %
+         0.12 & 0.0 & 0.01 & %
+         0.62 & 0.98 & 0.76 & %
+         0.021 & 0.614\\
 
          % Commands:
          % cgsa_sentiment train -t severyn --w2v data/SB10k/preprocessed/train/*.tsv \
@@ -3203,19 +3206,18 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          % cgsa_sentiment -v test data/SB10k/preprocessed/test/*.tsv > \
          % data/SB10k/preprocessed/predicted/severyn/severyn.word2vec.test
          % cgsa_evaluate data/SB10k/preprocessed/test/ data/SB10k/preprocessed/predicted/severyn/severyn.word2vec.test
-         % Results:
-        % General Statistics:
-        % precision    recall  f1-score   support
-        % positive       0.61      0.62      0.61       354
-        % negative       0.49      0.35      0.41       212
-        % neutral       0.80      0.84      0.82       930
-        % avg / total       0.71      0.72      0.71      1496
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 51.12%
-        % Micro-Averaged F1-Score (All Classes): 72.1257%
-      SEV & 0.61 & 0.62 & 0.61 & %
-          0.49 & 0.35 & 0.41 & %
-          0.8 & 0.84 & 0.82 & %
-          0.511 & 0.721\\
+         % General Statistics:
+         % precision    recall  f1-score   support
+         % positive       0.66      0.62      0.64       354
+         % negative       0.57      0.32      0.41       212
+         % neutral       0.80      0.89      0.84       930
+         % avg / total       0.73      0.75      0.73      1496
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 52.39%
+         % Micro-Averaged F1-Score (All Classes): 74.8663%
+      SEV & 0.66 & 0.62 & 0.64 & %
+          0.57 & 0.32 & 0.41 & %
+          0.8 & 0.89 & 0.84 & %
+          0.524 & 0.749\\
 
          % Commands:
          % cgsa_sentiment train -t baziotis --w2v data/SB10k/preprocessed/train/*.tsv \
@@ -3223,19 +3225,18 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          % cgsa_sentiment -v test data/SB10k/preprocessed/test/*.tsv > \
          % data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
          % cgsa_evaluate data/SB10k/preprocessed/test/ data/SB10k/preprocessed/predicted/baziotis/baziotis.word2vec.test
-         % Results:
          % General Statistics:
          % precision    recall  f1-score   support
-         % positive       0.63      0.68      0.65       354
-         % negative       0.52      0.40      0.45       212
-         % neutral       0.82      0.84      0.83       930
-         % avg / total       0.73      0.74      0.73      1496
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 55.12%
-         % Micro-Averaged F1-Score (All Classes): 73.7968%
-      BAZ & 0.63 & 0.68 & 0.65 & %
-         0.52 & 0.4  & 0.45 & %
-         0.82 & 0.84 & 0.83 & %
-         0.551 & 0.738\\
+         % positive       0.65      0.66      0.65       354
+         % negative       0.63      0.24      0.35       212
+         % neutral       0.79      0.90      0.84       930
+         % avg / total       0.73      0.75      0.73      1496
+         % Macro-Averaged F1-Score (Positive and Negative Classes): 50.08%
+         % Micro-Averaged F1-Score (All Classes): 74.7326%
+      BAZ & 0.65 & 0.66 & 0.65 & %
+          0.63 & 0.24 & 0.35 & %
+          0.79 & 0.9 & 0.84 & %
+          0.501 & 0.747\\
 
       LBA &  &  &  & %
         &  &  & %
@@ -3273,25 +3274,57 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
       Precision & Recall & \F{} & & \\\midrule
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
-      RAE &  &  &  & %
-         &  &  & %
-         &  &  & %
-         & \\
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.46      0.77      0.57       680
+      % negative       0.18      0.08      0.11       287
+      % neutral       0.35      0.15      0.21       558
+      % avg / total       0.37      0.42      0.36      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 34.39%
+      % Micro-Averaged F1-Score (All Classes): 41.5738%
+      RAE & 0.46 & 0.77 & 0.57 & %
+         0.18 & 0.08 & 0.11 & %
+         0.35 & 0.15 & 0.21 & %
+         0.344 & 0.416\\
 
-      RNTN &  &  &  & %
-         &  &  & %
-         &  &  & %
-         & \\
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.44      0.38      0.41       680
+      % negative       0.29      0.05      0.09       287
+      % neutral       0.36      0.58      0.44       558
+      % avg / total       0.38      0.39      0.36      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 24.74%
+      % Micro-Averaged F1-Score (All Classes): 38.8852%
+      RNTN & 0.44 & 0.38 & 0.41 & %
+         0.29 & 0.05 & 0.09 & %
+         0.36 & 0.58 & 0.44 & %
+         0.247 & 0.389\\
 
-      SEV &  &  &  & %
-         &  &  & %
-         &  &  & %
-         & \\
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.79      0.66      0.72       680
+      % negative       0.33      0.68      0.44       287
+      % neutral       0.74      0.48      0.58       558
+      % avg / total       0.69      0.60      0.62      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 58.20%
+      % Micro-Averaged F1-Score (All Classes): 59.8033%
+      SEV & 0.79 & 0.66 & 0.72 & %
+         0.33 & 0.68 & 0.44 & %
+         0.74 & 0.48 & 0.58 & %
+         0.582 & 0.598\\
 
-      BAZ &  &  &  & %
-         &  &  & %
-         &  &  & %
-         & \\
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.80      0.78      0.79       680
+      % negative       0.45      0.70      0.54       287
+      % neutral       0.79      0.59      0.68       558
+      % avg / total       0.73      0.70      0.70      1525
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 66.73%
+      % Micro-Averaged F1-Score (All Classes): 69.5082%
+      BAZ & 0.8 & 0.78 & 0.79 & %
+         0.45 & 0.7 & 0.54 & %
+         0.79 & 0.59 & 0.68 & %
+         0.667 & 0.695\\
 
       LBA &  &  &  & %
         &  &  & %
@@ -3299,25 +3332,58 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         & \\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
-       RAE &  &  &  & %
-         &  &  & %
-         &  &  & %
-         & \\
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.23      0.31      0.26       354
+      % negative       0.15      0.41      0.22       212
+      % neutral       0.66      0.31      0.43       930
+      % avg / total       0.49      0.33      0.36      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 24.23%
+      % Micro-Averaged F1-Score (All Classes): 32.6872%
+       RAE & 0.23 & 0.31 & 0.26 & %
+         0.15 & 0.41 & 0.22 & %
+         0.66 & 0.31 & 0.43 & %
+         0.242 & 0.327\\
 
-      RNTN &  &  &  & %
-        &  &  & %
-        &  &  & %
-        & \\
+      % General Statistics:
+      % precision    recall  f1-score   support
+      % positive       0.25      0.12      0.16       354
+      % negative       0.19      0.01      0.03       212
+      % neutral       0.63      0.89      0.74       930
+      % avg / total       0.48      0.58      0.50      1496
+      % Macro-Averaged F1-Score (Positive and Negative Classes): 9.52%
+      % Micro-Averaged F1-Score (All Classes): 58.2888%
 
-      SEV &  &  &  & %
-          &  &  & %
-          &  &  & %
-          & \\
+      RNTN & 0.25 & 0.12 & 0.16 & %
+        0.19 & 0.01 & 0.03 & %
+        0.63 & 0.89 & 0.74 & %
+        0.095 & 0.583\\
 
-      BAZ &  &  &  & %
-         &   &  & %
-         &  &  & %
-         & \\
+        % General Statistics:
+        % precision    recall  f1-score   support
+        % positive       0.56      0.68      0.61       354
+        % negative       0.49      0.33      0.39       212
+        % neutral       0.81      0.81      0.81       930
+        % avg / total       0.71      0.71      0.70      1496
+        % Macro-Averaged F1-Score (Positive and Negative Classes): 50.23%
+        % Micro-Averaged F1-Score (All Classes): 70.9225%
+      SEV & 0.56 & 0.68 & 0.61 & %
+          0.49 & 0.33 & 0.39 & %
+          0.81 & 0.81 & 0.81 & %
+          0.502 & 0.709\\
+
+          % General Statistics:
+          % precision    recall  f1-score   support
+          % positive       0.67      0.68      0.67       354
+          % negative       0.63      0.26      0.37       212
+          % neutral       0.80      0.90      0.85       930
+          % avg / total       0.74      0.76      0.74      1496
+          % Macro-Averaged F1-Score (Positive and Negative Classes): 52.12%
+          % Micro-Averaged F1-Score (All Classes): 75.8021%
+      BAZ & 0.67 & 0.68 & 0.67 & %
+         0.63 & 0.26 & 0.37 & %
+         0.8 & 0.9 & 0.85 & %
+         0.521 & 0.758\\
 
       LBA &  &  &  & %
         &  &  & %
@@ -3325,8 +3391,8 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         & \\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods with pretrained least-square embeddings]{
-      Evaluation of DL-based CGSA methods with pretrained least-square embeddings\\
+    \caption[Evaluation of DL-based CGSA methods with pretrained least-squares embeddings]{
+      Evaluation of DL-based CGSA methods with pretrained least-squares embeddings\\
       {\small RAE~--~Recursive
         Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
         \cite{Socher:13}, SEV~--~\citet{Severyn:15},
