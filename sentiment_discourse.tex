@@ -78,6 +78,19 @@ talking about the film itself. (Turney (2002) makes a similar point,
 noting that for reviews, ``the whole is not necessarily the sum of the
 parts''.)
 
+\todo[inline]{}
+
+Pang and Lee (2004) first showed that sentencelevel extraction can
+improve document-level performance. They used a cascaded approach by
+first filtering out objective sentences and performing subjectivity
+extractions using a global min-cut inference. Afterward, the
+subjective extracts were converted into inputs for the document-level
+sentiment classifier. One advantage of their approach is that it
+avoids the need for explicit subjectivity annotations. However, like
+other cascaded approaches (e.g., Thomas et al. (2006), Mao and Lebanon
+(2006)), it can be difficult to control how errors propagate from the
+sentence-level subtask to the main document classification task.
+
 \todo[inline]{\citet{Hu:04}, Section 3.6}
 
 
@@ -125,6 +138,8 @@ second-best scores with the system which considered all adjectives.
 The suboptimal results of the discourse-based approach were partially
 explained by the limited performance of the automatic RST system.
 
+\todo[inline]{\citet{McDonald:07}}
+
 Another joint framework for predicting the polarity of both sentences
 and documents was described by \cite{McDonald:07}.  In their work, the
 authors designed a unified CRF system, in which the predicted labels
@@ -157,19 +172,23 @@ polarity of each dialogue leaf, and then used an integer linear
 programming module to correct the cases which violated the overall
 agreement of opinion frames.
 
-\todo[inline]{\citet{Yessenalina:10}}
+\done[inline]{\citet{Yessenalina:10}}
 
-\citet{Yessenalina:10} proposed a latent-variable approach, in which
-they tried to predict the overall polarity of a document (movie review
-or congressional floor debate) by estimating the difference between
-the polarities of the most prominent subjective sentences.  Since the
-labels of the sentences were unknown at the training and testing time,
-the authors considered their polaity scores as latent variables whose
-most likely assignments were to be determined with a structural SVM
-algorithm~\cite{Yu:09}.  An enhancement of this algorithm was
-presented by~\citet{Trivedi:13}, who extended the original training
-objective with a set of discourse connectives attributes and polarity
-coherence features.
+Similarly, \citet{Yessenalina:10} proposed a latent-variable approach
+in which they tried to predict the overall polarity of a document by
+jointly selecting a subset of sentences which were most indicative of
+document's polarity and predicting the document's class (either
+positive or negative) based on this subset.  To achieve this goal, the
+authors adopted the latent-SVM method of \citet{Yu:09}, training a
+linear classifier on individual sentences with latent classes and
+making the final prediction using 30\% of the sentences which this
+classifier was most sure about.  To account for discourse phenomena,
+they also enhanced feature representations of the analyzed sentences
+with attributes extracted from their preceding clauses and added
+characteristics of the whole document to the model.  This way,
+\citet{Yessenalina:10} attained 93.22\% accuracy on the movie review
+corpus of \citet{Pang:04} and scored 77.09\% on a collection of
+congressional floor debates \cite{Thomas:06}.
 
 \todo[inline]{\citet{Heerschop:11}}
 
@@ -184,6 +203,9 @@ work considers the sort of recurrent compositional model presented
 here.
 
 \todo[inline]{\citet{Mukherjee:12}}
+
+\todo[inline]{\citet{Trivedi:13}}
+
 
 \todo[inline]{\citet{Wang:13}}
 
