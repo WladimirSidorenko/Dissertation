@@ -78,7 +78,7 @@ talking about the film itself. (Turney (2002) makes a similar point,
 noting that for reviews, ``the whole is not necessarily the sum of the
 parts''.)
 
-\todo[inline]{}
+\todo[inline]{Adjacent Sentence Pairs}
 
 Pang and Lee (2004) first showed that sentencelevel extraction can
 improve document-level performance. They used a cascaded approach by
@@ -91,6 +91,19 @@ other cascaded approaches (e.g., Thomas et al. (2006), Mao and Lebanon
 (2006)), it can be difficult to control how errors propagate from the
 sentence-level subtask to the main document classification task.
 
+\todo[inline]{\citet{Thomas:06}}
+
+\todo[inline]{\citet{McDonald:07}}
+
+Another joint framework for predicting the polarity of both sentences
+and documents was described by \cite{McDonald:07}.  In their work, the
+authors designed a unified CRF system, in which the predicted labels
+of the sentences formed a linear chain and simultaneously were
+connected to the label node of the whole document which had to be
+predicted along with sentence orientations.
+
+\todo[inline]{}
+
 \todo[inline]{\citet{Hu:04}, Section 3.6}
 
 
@@ -102,9 +115,17 @@ classifier to induce the polarity of the whole document from these
 predictions, observing an improvement over the traditional
 bag-of-words approach.
 
-\todo[inline]{\citet{Thomas:06}}
-
 \todo[inline]{\citet{Polanyi:06}}
+
+Polanyi and Zaenen (2006), in their discussion on contextual valence
+shifters, have also observed the phenomena described in this work -
+namely that a central topic may be divided into subtopics in order to
+perform evaluations, and that discourse structure can influence the
+overall interpretation of valence.
+
+Polanyi, L. and A. Zaenen, 2006. Contextual Valence Shifters, chapter
+1. Computing Attitude and Affect in Text: Theory and
+Applications. Springer.
 
 \todo[inline]{\citet{Snyder:07}}
 Other notable works on discourse-augented sentiment analysis include
@@ -116,6 +137,10 @@ user's polarity towards one particular criterion.  In the next step,
 the output of this ensemble was corrected by an additional linear
 classifier, which was supposed to account for the overall agreement on
 multiple aspects.
+
+Snyder and Barzilay (2007) combine an agreement model based on
+contrastive RST rela- tions with a local aspect model to make a more
+informed overall decision for sentiment classifi- cation.
 
 \todo[inline]{\citet{Voll:07}}
 
@@ -138,25 +163,26 @@ second-best scores with the system which considered all adjectives.
 The suboptimal results of the discourse-based approach were partially
 explained by the limited performance of the automatic RST system.
 
-\todo[inline]{\citet{McDonald:07}}
+\done[inline]{\citet{Sadamitsu:08}}
 
-Another joint framework for predicting the polarity of both sentences
-and documents was described by \cite{McDonald:07}.  In their work, the
-authors designed a unified CRF system, in which the predicted labels
-of the sentences formed a linear chain and simultaneously were
-connected to the label node of the whole document which had to be
-predicted along with sentence orientations.
-
-\todo[inline]{\citet{Sadamitsu:08}}
-
-\todo[inline]{\citet{Somasundaran:08,Somasundaran:08a}}
-
-\citet{Somasundaran:08,Somasundaran:08a} introduced the concept of
-\emph{opinion frames} which represented a pair of subjective
-statements (arguments or sentiments) that were related to each via the
-\emph{same} or \emph{alternative} link.  In the former case, both
-statements had to refer to the same target, while, in the latter case,
-these targets had to represent mutually exclusive alternatives.
+\citet{Somasundaran:08a,Somasundaran:08} introduced the concept of
+\emph{opinion frames} (OF)---special data structures for capturing the
+relations between opinions in the discourse.  Depending on the type of
+the opinions (either arguing~[\emph{A}] or sentiment~[\emph{S}]),
+their polarity towards the targets (either positive~[\emph{P}] or
+negative~[\emph{N}]), and semantic relationship between the two
+targets (either alternative~[\emph{Alt}] or same~[\emph{same}]), they
+distinguished 32 types of such frames: \emph{SPSPsame},
+\emph{SPSNsame}, \emph{APAPalt}, etc., dividing them into reinforcing
+and non-reinforcing ones; and also demonstrated the amenability of
+this concept to automatic classification and its utility to
+disambiguating the polarity of specific opinions.  Nevertheless, as
+noted by the authors, OF and common discourse analysis frameworks,
+although frequently going hand in hand, were not redundant to each
+other, so that reinforcing frames could be expressed by both
+contrastive and non-contrastive discourse relations, and vice-versa
+non-reinforcing frames were not necessarily bound to a contrast in the
+discourse.
 
 \todo[inline]{\citet{Somasundaran:09a,Somasundaran:09b}}
 
@@ -177,15 +203,15 @@ agreement of opinion frames.
 Similarly, \citet{Yessenalina:10} proposed a latent-variable approach
 in which they tried to predict the overall polarity of a document by
 jointly selecting a subset of sentences which were most indicative of
-document's polarity and predicting the document's class (either
-positive or negative) based on this subset.  To achieve this goal, the
-authors adopted the latent-SVM method of \citet{Yu:09}, training a
-linear classifier on individual sentences with latent classes and
-making the final prediction using 30\% of the sentences which this
-classifier was most sure about.  To account for discourse phenomena,
-they also enhanced feature representations of analyzed sentences with
-attributes extracted from their preceding clauses and added
-characteristics of the whole document to the model.  This way,
+document's semantic orientation and predicting the document's class
+(either positive or negative) based on this subset.  To achieve this
+goal, the authors adopted the latent-SVM method of \citet{Yu:09},
+training a linear classifier on individual sentences with latent
+classes and making the final prediction using 30\% of the sentences
+which this classifier was most sure about.  To account for discourse
+phenomena, they also enhanced feature representations of analyzed
+sentences with attributes extracted from their preceding clauses and
+added characteristics of the whole document to the model.  This way,
 \citet{Yessenalina:10} attained 93.22\% accuracy on the movie review
 corpus of \citet{Pang:04} and scored 77.09\% on the collection of
 congressional floor debates introduced by \citet{Thomas:06}.
