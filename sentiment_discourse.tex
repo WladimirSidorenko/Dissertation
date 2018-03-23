@@ -184,20 +184,23 @@ contrastive and non-contrastive discourse relations, and vice-versa
 non-reinforcing frames were not necessarily bound to a contrast in the
 discourse.
 
-\todo[inline]{\citet{Somasundaran:09a,Somasundaran:09b}}
+\done[inline]{\citet{Somasundaran:09a,Somasundaran:09b}}
 
-Another work, which apparently comes closest to ours, is that
-of~\citet{Somasundaran:09a}, who tried to unite the notions of opinion
-frames~\cite{Somasundaran:08} with the \emph{dialogue act
-  theory}~\cite{Bunt:12} within a single framework.  In particular,
-the authors projected the polarity annotation of the
-AMI~corpus~\cite{Carletta:05} onto the dialogue segments, and then
-used a two-stage approach similar to the one proposed
-by~\citet{Snyder:07}, in which they first separately classified
-polarity of each dialogue leaf, and then used an integer linear
-programming module to correct the cases which violated the overall
-agreement of opinion frames.
+In a later work, \citet{Somasundaran:09b,Somasundaran:09a} also
+introduced a joint inference framework based on the Iterative
+Classification Algorithm (ICA) and Integer Linear Programming (ILP)
+for joinly predicting the best configuration of single opinions and
+their frames.  In this approach, the authors first applied a local SVM
+classifier to compute the probabilities of polarity classes (positive,
+negative, or neutral) of individual dialog acts and then harnessed the
+ICA and ILP systems to determine which of the predicted opinions were
+connected via opinion frames and whether these frames were reinforcing
+or not.  Given a perfect information about the opinion links, this
+joint method outperformed the local classifier by more than 9
+percentage points, reaching 77.72\% accuracy on the AMI meeting
+corpus~\cite{Carletta:05}.
 
+\todo[inline]{Asher:08}
 \done[inline]{\citet{Yessenalina:10}}
 
 Similarly, \citet{Yessenalina:10} proposed a latent-variable approach
