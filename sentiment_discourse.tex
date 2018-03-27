@@ -107,13 +107,20 @@ predicted along with sentence orientations.
 \todo[inline]{\citet{Hu:04}, Section 3.6}
 
 
-\todo[inline]{\citet{Mao:06}}
-Other notable works on discourse-level sentiment analysis include
-those of~\citet{Mao:06}, who used isotonic CRFs to predict the
-polarity of single sentences and then used a nearest neighbors
-classifier to induce the polarity of the whole document from these
-predictions, observing an improvement over the traditional
-bag-of-words approach.
+\done[inline]{\citet{Mao:06}}
+
+\citet{Mao:06} proposed the idea of isotonic CRFs in which they
+explicitly modeled the constraint that features which were stronger
+associated with either polarity classes had to have higher
+coefficients than less predictive attributes.  After proving that this
+formalism also allowed to directly model the ordinal scale of
+sentiment scores (with lower CRF outputs indicating the negativity of
+a sentence, and higher scores showing its positive class), the authors
+used this approach to model the sentiment flow in a document.  For
+this purpose, they first predicted the polarity value for each
+sentence of a document in isolation and then convolved these outputs
+with a Gaussian kernel, getting a smoothed polarity curve for the
+whole analyzed text at the end.
 
 \todo[inline]{\citet{Polanyi:06}}
 
@@ -163,7 +170,9 @@ second-best scores with the system which considered all adjectives.
 The suboptimal results of the discourse-based approach were partially
 explained by the limited performance of the automatic RST system.
 
-\done[inline]{\citet{Sadamitsu:08}}
+\todo[inline]{\citet{Sadamitsu:08}}
+
+\done[inline]{\citet{Somasundaran:08a,Somasundaran:08}}
 
 \citet{Somasundaran:08a,Somasundaran:08} introduced the concept of
 \emph{opinion frames} (OF)---special data structures for capturing the
@@ -201,6 +210,7 @@ percentage points, reaching 77.72\% accuracy on the AMI meeting
 corpus~\cite{Carletta:05}.
 
 \todo[inline]{Asher:08}
+
 \done[inline]{\citet{Yessenalina:10}}
 
 Similarly, \citet{Yessenalina:10} proposed a latent-variable approach
