@@ -91,19 +91,6 @@ other cascaded approaches (e.g., Thomas et al. (2006), Mao and Lebanon
 (2006)), it can be difficult to control how errors propagate from the
 sentence-level subtask to the main document classification task.
 
-\todo[inline]{\citet{Thomas:06}}
-
-\todo[inline]{\citet{McDonald:07}}
-
-Another joint framework for predicting the polarity of both sentences
-and documents was described by \cite{McDonald:07}.  In their work, the
-authors designed a unified CRF system, in which the predicted labels
-of the sentences formed a linear chain and simultaneously were
-connected to the label node of the whole document which had to be
-predicted along with sentence orientations.
-
-\todo[inline]{}
-
 \todo[inline]{\citet{Hu:04}, Section 3.6}
 
 
@@ -131,6 +118,19 @@ between discourse segments might significantly weaken the strength of
 an opinion, and, vice versa, elaborations on sentiments might notably
 increase their persuasiveness.
 
+\todo[inline]{\citet{Thomas:06}}
+
+\todo[inline]{\citet{McDonald:07}}
+
+Another joint framework for predicting the polarity of both sentences
+and documents was described by \cite{McDonald:07}.  In their work, the
+authors designed a unified CRF system, in which the predicted labels
+of the sentences formed a linear chain and simultaneously were
+connected to the label node of the whole document which had to be
+predicted along with sentence orientations.
+
+\todo[inline]{}
+
 \todo[inline]{\citet{Snyder:07}}
 Other notable works on discourse-augented sentiment analysis include
 those of~\citet{Snyder:07}, who proposed a joint Good Grief model to
@@ -146,26 +146,32 @@ Snyder and Barzilay (2007) combine an agreement model based on
 contrastive RST rela- tions with a local aspect model to make a more
 informed overall decision for sentiment classifi- cation.
 
-\todo[inline]{\citet{Voll:07}}
+\done[inline]{\citet{Voll:07}}
 
-\citet{Voll:07} addressed the problem of classifying the polarity of
-Epinions reviews.\footnote{\url{www.epinions.com}} For this purpose,
-they applied the SO-CAL system (Semantic Orientation CALculator) to
-adjectives appearing in the user posts, considering three ways of
-pre-filtering this input: In the first (baseline) approach, they
-invariably passed all adjectives found in the review to SO-CAL.  In
-the second method, they only analyzed those words which appeared in
-the top-most nuclei of the sentences.  These nuclei were determined
-automatically by an RST parsing system \cite[SPADE; ][]{Soricut:03}.
-Finally, in the third experiment, the authors trained a decision-tree
-classifier, which predicted whether a particular sentence pertained to
-the general topic of its document or not, and applied the sentiment
-system only to those sentences which were classified as
-topic-relevant.  With this last approach, \citeauthor{Voll:07} were
-able to obtain their best results (69\% accuracy), getting their
-second-best scores with the system which considered all adjectives.
-The suboptimal results of the discourse-based approach were partially
-explained by the limited performance of the automatic RST system.
+The effect of discourse phenomena was also pointed out by
+\citet{Voll:07} who noted the fact that the mere occurrence of
+positive or negative terms in a text was not necessarily indicative of
+its main polarity if these terms appeared in off-topic sentences or
+subordinate clauses.  To check this hypothesis, the authors compared
+three different approaches to lexicon-based classification of customer
+reviews:
+\begin{inparaenum}[(i)]
+\item by simply applying the SO-CAL system to all adjectives appearing in
+the review,
+\item by only taking into account those ones which appeared in the
+  top-post nuclei of the sentences (as defined by the Rhetorical
+  Structure Theory), and
+\item by restricting the SO-CAL's input to clauses which had been
+  previously preclassified as belonging to the main topic of the text.
+\end{inparaenum}
+They found the last option working best, yielding 73\% accuracy for
+this two-class prediction task on the Epinion review corpus
+of~\citet{Taboada:06}.  Unfortunately, the RST-based method did not
+improve upon the baseline and resulted in only 69\% precision.  This,
+however, might be partially due to the fact that the authors
+completely ignored all nuclei and satellites within sentences except
+for the main ones, did not consider the discourse relations between
+the RST nodes, and also completely ignored all inter-sentential links.
 
 \todo[inline]{\citet{Sadamitsu:08}}
 
