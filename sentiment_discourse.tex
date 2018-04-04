@@ -78,6 +78,13 @@ talking about the film itself. (Turney (2002) makes a similar point,
 noting that for reviews, ``the whole is not necessarily the sum of the
 parts''.)
 
+Cascaded models for fine-to-coarse sentiment analysis were studied by
+Pang and Lee (2004). In that work an initial model classified each
+sentence as being subjective or objective using a global min- cut
+inference algorithm that considered local label- ing
+consistencies. The top subjective sentences are then input into a
+standard document level polarity classifier with improved results.
+
 \todo[inline]{Adjacent Sentence Pairs}
 
 Pang and Lee (2004) first showed that sentencelevel extraction can
@@ -120,16 +127,24 @@ increase their persuasiveness.
 
 \todo[inline]{\citet{Thomas:06}}
 
-\todo[inline]{\citet{McDonald:07}}
+\done[inline]{\citet{McDonald:07}}
 
-Another joint framework for predicting the polarity of both sentences
-and documents was described by \cite{McDonald:07}.  In their work, the
-authors designed a unified CRF system, in which the predicted labels
-of the sentences formed a linear chain and simultaneously were
-connected to the label node of the whole document which had to be
-predicted along with sentence orientations.
-
-\todo[inline]{}
+\citet{McDonald:07} proposed a joint framework for simultaneously
+predicting the polarity of a document and its constituent parts (which
+could be either paragraphs or sentences).  For this purpose, the
+authors considered the semantic orientation of the whole text and its
+single sentences as latent variables in a Markov random field,
+connecting each unobserved sentence polarity node to the nodes of the
+adjacent clauses as well as the overal polarity node of the complete
+document, and then figuring out the best configuration of all
+unobserved variables at the end.  With this approach, they could
+outperform both sentence- and document-level classifiers which
+predicted the polarity classes of their input in isolation
+(disregarding the context and hierarchical structure), and even
+surpassed a cascaded system where the output of a sentence classifier
+was fed into a document-level predictor, achieving 62.6\% sentence
+accuracy (for three classes) and 82.8\% document-level precision (for
+two classes) on a corpus of 600 reviews.
 
 \todo[inline]{\citet{Snyder:07}}
 Other notable works on discourse-augented sentiment analysis include
