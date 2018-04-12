@@ -38,66 +38,39 @@
 % previous state of the art, boosting it to 59.37\% average accuracy.
 
 
-\todo[inline]{\citet{Pang:02}}
-Pang et al. (2002) propose three different machine learning methods to
-extract the SO of adjectives. Their results are above a
-human-generated baseline, but the authors point out that discourse
-structure is necessary to detect and exploit the rhetorical devices
-used by the review authors
+\done[inline]{\citet{Pang:02}}
 
-\todo[inline]{\citet{Riloff:03}}
+\citet{Pang:02}, who experimented with three different approaches to
+document-level sentiment analysis---Na{\"i}ve Bayes, Maximum Entropy,
+and SVM with unigram and bigram features, pointed out that it was
+insufficient to rely on the mere presence or majority of certain
+polarity clues because these clues could any time be negated by a
+single antithesis relation (see Example~\ref{disc-snt:exmp-pang02}
+from \citet{Pang:02}).
 
-\todo[inline]{\citet{Pang:04}}
+\begin{example}[Polarity reversal via discourse antithesis]\label{disc-snt:exmp-pang02}
+  \noindent\upshape This film should be brilliant.  It sounds like a
+  great plot, the actors are first grade, and the supporting cast is
+  good as well, and Stallone is attempting to deliver a good
+  performance.  However, it can't hold up.
+\end{example}
 
-One of the first discourse-aware approaches to coarse-grained
-sentiment analysis was proposed by~\citet{Pang:04}.  In their work,
-the authors partitioned the text of a movie review into subjective and
-objective sentences using the min-cut method of~\citet{Blum:01}, and
-then analyzed the sentences from the former group in order to classify
-the overall polarity of the review.
+\done[inline]{\citet{Pang:04}}
 
-Another multi-stage Na{\"i}ve Bayes procedure was proposed by
-\citet{Pang:04}, who tried to classify the overall semantic
-orientation of movie reviews (positive vs. negative) by first dividing
-their sentences into subjective and objective ones (achieving 92\%
-accuracy on this subtask) and then predicting the overall polarity of
-a review using only subjective passages.  By pruning objective
-clauses, the authors achieved statistically significant improvements
-from~82.8 to~86.4\%.  The authors also experimented with the min-cut
-method to encode the idea that nearby sentence will likely share the
-same subjectivity class, but did not get any statistically significant
-improvement over the discourse-unaware baseline.
-
-Quote:
-
-Fundamentally, it seems that some form of discourse analysis is
-necessary (using more sophisticated techniques than our positional
-feature mentioned above), or at least some way of determining the
-focus of each sentence, so that one can decide when the author is
-talking about the film itself. (Turney (2002) makes a similar point,
-noting that for reviews, ``the whole is not necessarily the sum of the
-parts''.)
-
-Cascaded models for fine-to-coarse sentiment analysis were studied by
-Pang and Lee (2004). In that work an initial model classified each
-sentence as being subjective or objective using a global min- cut
-inference algorithm that considered local label- ing
-consistencies. The top subjective sentences are then input into a
-standard document level polarity classifier with improved results.
-
-\todo[inline]{Adjacent Sentence Pairs}
-
-Pang and Lee (2004) first showed that sentencelevel extraction can
-improve document-level performance. They used a cascaded approach by
-first filtering out objective sentences and performing subjectivity
-extractions using a global min-cut inference. Afterward, the
-subjective extracts were converted into inputs for the document-level
-sentiment classifier. One advantage of their approach is that it
-avoids the need for explicit subjectivity annotations. However, like
-other cascaded approaches (e.g., Thomas et al. (2006), Mao and Lebanon
-(2006)), it can be difficult to control how errors propagate from the
-sentence-level subtask to the main document classification task.
-
+One of the first approaches to coarse-grained sentiment analysis that
+explicitly addressed discourse phenomena was presented
+by~\citet{Pang:04}.  In their seminal work on predicting the semantic
+orientation of movie reviews, the authors emphasized the need for
+restricting the input to the polarity classifer to only subjective
+sentences, ignoring objective ones which could easily confuse the
+predictor.  To deal with this problem, they trained another
+classification system which first assigned an initial subjectivity
+value to every sentence in text; then constructed a graph, connecting
+each sentential node to the nodes of its its neighbors and two
+additional sink vertices representing the subjective and objective
+classes; and, finally, devided this graph into two parts, allocating
+all sentences to either of the two sinks and finding a minimum-cut
+partition.
 \todo[inline]{\citet{Hu:04}, Section 3.6}
 
 
@@ -334,7 +307,16 @@ method, the authors achieved 84.1\% two-class prediction accuracy on
 the moview review corpus of~\citet{Pang:04} and 85.6\% on the dataset
 of~\citet{Socher:13}.
 
-\todo[inline]{Lazaridou, 2013}
+\todo[inline]{Others}
+
+\done[inline]{\citet{Riloff:03}}
+
+\citet{Riloff:03} added a set of discourse-related features, such as
+relative sentence lengths, the average number of subjective clues in
+the preceding, current, and following clauses, and the relative number
+of these clues with respect to the corresponding sentence lengths,
+getting more than 2\% accuracy improvement over a baseline Na{\"i}ve
+Bayes classifier which did not utilize this information.
 
 \section{Evaluation}
 

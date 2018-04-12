@@ -2597,7 +2597,9 @@ parameters.
   \centering
   \includegraphics[width=\linewidth]{img/baziotis.png}
 }
-\caption[Neural network of \citet{Baziotis:17}]{Neural network proposed by~\citet{Baziotis:17}}\label{cgsa:fig:baziotis}
+\caption[Neural network of \citet{Baziotis:17}]{Architecture of the
+  neural network proposed
+  by~\citet{Baziotis:17}}\label{cgsa:fig:baziotis}
 \end{figure*}
 
 \todo[inline]{Devise own method}
@@ -2614,6 +2616,16 @@ final activation part and cost function of all networks, using a
 densely connected softmax layer and optimizing the weights w.r.t. the
 categorical hinge loss on the training set and picking the values that
 yielded the highest accuracy on the validation data.
+
+\begin{figure*}[htbp!]
+{
+  \centering
+  \includegraphics[width=\linewidth]{img/lba.png}
+}
+\caption[Neural network with lexicon-based attention]{Architecture of the
+  neural network with lexicon-based attention}\label{cgsa:fig:baziotis}
+\end{figure*}
+
 
 The results of this evaluation are shown in
 Table~\ref{snt-cgsa:tbl:dl-res}.
@@ -3290,6 +3302,21 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         0.55 & 0.21 & 0.31 & %
         0.74 & 0.96 & \textbf{0.84} & %
         0.446 & 0.736\\\bottomrule
+
+        %% General Statistics:
+        %% precision    recall  f1-score   support
+        %% positive       0.70      0.63      0.67       354
+        %% negative       0.58      0.37      0.45       212
+        %% neutral       0.80      0.90      0.85       930
+
+        %% avg / total       0.75      0.76      0.75      1496
+        %% Macro-Averaged F1-Score (Positive and Negative Classes): 55.83%
+        %% Micro-Averaged F1-Score (All Classes): 76.0695%
+      LBA$^{(2)}$ & 0.7 & 0.63 & 0.67 & %
+        0.58 & 0.37 & 0.45 & %
+        0.8 & 0.9 & \textbf{0.85} & %
+        0.558 & 0.761\\\bottomrule
+
     \end{tabular}
     \egroup
     \caption[Evaluation of DL-based CGSA methods with pretrained word2vec vectors]{
