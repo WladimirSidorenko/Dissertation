@@ -2537,38 +2537,39 @@ for each of these types.
 % \citet{Rouvier:17}}
 
 Even though convolutional approaches still yield competitive results,
-in recent time, they have gradually been superseded by recurrent
+in recent time, they have gradually given way to recurrent neural
 networks \cite{Xu:16,Wang:15}.  One of the most prominent such systems
-was newly proposed by~\citet{Baziotis:17}, who used two bidirectional
-LSTM layers, concatenating the hidden states of the left-to-right
-recurrence ($\vec{h}^{(i)}_{\rightarrow}\in\mathbb{R}^{150}$) with the
-respective hidden units of the right-to-left loop
-($\vec{h}^{(i)}_{\leftarrow}\in\mathbb{R}^{150}$) into joint hidden
-states
-$\vec{h}^{(i)} = [\vec{h}^{(i)}_{\rightarrow},
-\vec{h}^{(i)}_{\leftarrow}]\in\mathbb{R}^{300}$; and passing the
-result of this concatenation to the next RNN layer.  Afterwards, they
-multiplied the outputs of the second BiLSTM with a special attention
-vector $\vec{w}_h$ and computed the softmax of these products over all
-positions in the input sequence $\mathbf{x}$, estimating this way the
-relative importance of RNN results at different locations:
+has been recently proposed by~\citet{Baziotis:17}.  In their
+top-ranked submission to SemEval~2017 \cite{Rosenthal:17}, the authors
+used two successive bidirectional LSTM layers (BiLSTMs).  In each of
+these layers, they concatenated hidden states of the left-to-right
+recurrence ($\vec{h}^{(l)}_{i_{\rightarrow}}\in\mathbb{R}^{150}$) with
+the respective hidden units from the right-to-left loop
+($\vec{h}^{(l)}_{i_{\leftarrow}}\in\mathbb{R}^{150}$) into joint
+vectors $\vec{h}_i^{(l)} = [\vec{h}^{(l)}_{i_{\rightarrow}},
+  \vec{h}^{(l)}_{i_{\leftarrow}}]\in\mathbb{R}^{300}$ and passed the
+result of this concatenation to the next stage of the architecture.
+Afterwards, they fed the results of the second BiLSTM into a dedicated
+attention mechanism, which summed hidden states of this recurrence
+from each step $i$, weighting them with a globally normalized
+attention coefficient $a_i$:
 \begin{align}
-  \vec{e}_i =& tanh\left(\vec{w}_h\vec{h}_i\right);\\
-  a_i =& \frac{\exp(\vec{e}_i)}{\sum_{t=1}^{|\mathbf{x}|}\exp(\vec{e}_t)}.
+  a_i =& \frac{\exp(e_i)}{\sum_{t=1}^{|\mathbf{x}|}\exp(e_t)},\\
+  \textrm{where }e_i =& tanh\left(\vec{w}_h\vec{h}_i\right);
 \end{align}
-Finally, the authors summed all outputs of the second recurrence,
-multiplying them with their respective attention scores, and passed
-the resulting value to another densely connected softmax layer:
-\begin{align}
-  r =& \sum_{i=1}^{|\mathbf{x}|}a_i\vec{h}_i;\\
-  o =& softmax\left(W r\right).
-\end{align}
-With this architecture, \citet{Baziotis:17} achieved the first place
-(0.675~\F{}$^{+/-}$) in SemEval-2017 Task~4 \cite{Rosenthal:17}, being
-on a par with the system of~\citet{Cliche:17} and even outperforming
-the method of~\citet{Rouvier:17}, which both relied on ensembles of
-LSTM and convolutional networks that had been trained with different
-parameters.
+The vector parameter of the attention ($\vec{w}_h$) was optimized
+along with other weights of the network during the training stage.  To
+make the final prediction, \citeauthor{Baziotis:17} applied another
+densely connected layer with softmax non-linearity to the output of
+the attention, getting probability scores for each of the three
+polarity classes and choosing the one with the maximum value.  The
+architecture of this network is depicted in
+Figure~\ref{cgsa:fig:baziotis}.  With this approach, the authors
+attained the first first place at SemEval-2014 Task~4 (with
+0.675~\F{}$^{+/-}$), being on a par with the system
+of~\citet{Cliche:17} and even outperforming the method
+of~\citet{Rouvier:17}, even though both of these works relied on
+ensembles of LSTM and convolutional networks.
 
 % \done[inline]{\citet{Tang:14b}}
 
@@ -2622,10 +2623,10 @@ mechanism to the aforementioned corpora.  For the sake of uniformity
 and simplicity, we used task-specific word embeddings of
 size~$\mathbb{R}^{100}$ in all systems, optimizing these vectors along
 with other parameters during training.  Moreover, we also unified the
-final activation part and cost function of all networks, using a
+final activation part and cost function of these approaches, using a
 densely connected softmax layer and optimizing the weights w.r.t. the
-categorical hinge loss on the training set and picking the values that
-yielded the highest accuracy on the validation data.
+categorical hinge loss on the training data, picking the values that
+yielded the highest accuracy on the validation set.
 
 The results of this evaluation are shown in
 Table~\ref{snt-cgsa:tbl:dl-res}.
