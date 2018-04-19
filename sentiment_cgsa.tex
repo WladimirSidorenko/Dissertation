@@ -2555,7 +2555,7 @@ from each step $i$, weighting them with a globally normalized
 attention coefficient $a_i$:
 \begin{align}
   a_i =& \frac{\exp(e_i)}{\sum_{t=1}^{|\mathbf{x}|}\exp(e_t)},\\
-  \textrm{where }e_i =& tanh\left(\vec{w}_h\vec{h}_i\right);
+  \textrm{where }e_i =& tanh\left(\vec{w}_h\vec{h}_i + \beta_i\right);
 \end{align}
 The vector parameter of the attention ($\vec{w}_h$) was optimized
 along with other weights of the network during the training stage.  To
@@ -2568,8 +2568,11 @@ Figure~\ref{cgsa:fig:baziotis}.  With this approach, the authors
 attained the first first place at SemEval-2014 Task~4 (with
 0.675~\F{}$^{+/-}$), being on a par with the system
 of~\citet{Cliche:17} and even outperforming the method
-of~\citet{Rouvier:17}, even though both of these works relied on
-ensembles of LSTM and convolutional networks.
+of~\citet{Rouvier:17} despite the fact that both of these works relied
+on ensembles of LSTM and convolutional networks.
+
+Although the approach of~\citet{Baziotis:17} is currently, a crucial
+limitation of this method
 
 % \done[inline]{\citet{Tang:14b}}
 

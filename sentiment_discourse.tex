@@ -142,20 +142,20 @@ predicting the polarity class of customer reviews using hidden
 conditional random fields and also looking for the most probable joint
 configuration of sentence and document labels.
 
-\todo[inline]{\citet{Snyder:07}}
-Other notable works on discourse-augented sentiment analysis include
-those of~\citet{Snyder:07}, who proposed a joint Good Grief model to
-predict users' evaluations of different aspects of restaurants.  In
-the first phase of this approach, they applied a set of
-aspect-specific classifiers, each of which was supposed to predict
-user's polarity towards one particular criterion.  In the next step,
-the output of this ensemble was corrected by an additional linear
-classifier, which was supposed to account for the overall agreement on
-multiple aspects.
+\done[inline]{\citet{Snyder:07}}
 
-Snyder and Barzilay (2007) combine an agreement model based on
-contrastive RST rela- tions with a local aspect model to make a more
-informed overall decision for sentiment classifi- cation.
+\citet{Snyder:07} proposed a Good Grief algorithm for jointly
+predicting users' evaluations of different restaurant aspects.  For
+this purpose, they first classified the attitude of the user to each
+single predefined trait (food, ambience, service, etc.) and then
+applied another clasifier in order to predict whether these scores
+should rather agree or disagree with each other.  In the final step,
+the authors looked for the ranking which best satisfied both of the
+above predictions (i.e., ranks of individual aspects and their overall
+agreement), achieving this way 0.632 ranking loss on a corpus of
+$\approx$4,500 reviews and outperforming the renowned PRank algorithm
+\cite{Crammer:01} which determined the rank for each aspect in
+isolation.
 
 \done[inline]{\citet{Voll:07}}
 
