@@ -2272,23 +2272,23 @@ where even a human expert would doubt about the correct prediction.
 
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
-Even though traditional ML-based approaches still yield competitve
-results and play an important role in the sentiment analysis of
-newspaper texts and social media, they are gradually giving place to
-allegedly more powerful and in some sense more intuitive deep learning
-(DL) methods.  As we already mentioned in the previous chapter, in
-contrast to standard supervised techniques with human-engineered
-attributes, DL systems induce their optimal input representation along
-with feature weights completely automatically during training, and, in
-some cases, might produce even better features than those devised by a
-human person.  Another important advantage of this paradigm is a more
-straightforward way to implement the ``compositionality'' of language
-\cite{Frege:1892}: Whereas conventional classifiers usually consider
-each instance as a \emph{bag of features} and predict the label based
-on the sum of these features' values multiplied with their respective
-coefficients, DL approaches first try to combine the represenation of
-each part of this instance (typically sentence tokens) into a single
-whole and then deduce the final class from this joint embedding.
+Even though traditional ML-based approaches still yield competitive
+results and play an important role in the sentiment analysis of social
+media, they are gradually giving place to allegedly more powerful and
+in some sense more intuitive deep learning (DL) methods.  As we
+already mentioned in the previous chapter, in contrast to standard
+supervised techniques with human-engineered features, DL systems
+induce their optimal input attributes completely automatically, and,
+in some cases, might even produce better feature representation than
+the one devised by a human expert.  Another important advantage of
+this paradigm is a more straightforward way to implement the
+``compositionality'' of language \cite{Frege:1892}: Whereas
+conventional classifiers usually consider each instance as a \emph{bag
+  of features} and predict the label based on the sum of these
+features' values multiplied with their respective coefficients, DL
+approaches try to combine the represenation of each part of this
+instance (either tokens or sentences) into a single whole and then
+deduce the final class from this joint embedding.
 
 % \todo{Unite into a single ``compositionality'' paragraph.}
 
@@ -2334,50 +2334,56 @@ whole and then deduce the final class from this joint embedding.
 % corpus \cite{Wiebe:05}, outperforming plain rule-based and
 % bag-of-features approaches.
 
-Among the first who explicitly adopted this compositionality principle
-in a DL-based sentiment system were \citet{Yessenalina:11}.  In their
-proposed matrix-space approach, the authors represented each word $w$
-of a phrase $x^i = w^i_1, w^i_2, \ldots, w^i_{|x^i|}$ as a matrix
+Among the first who explicitly incorporated the compositionality
+principle into a DL-based sentiment application were
+\citet{Yessenalina:11}.  In their proposed matrix-space approach, the
+authors represented each word $w$ of an input phrase $\mathbf{x}^i =
+w^i_1, w^i_2, \ldots, w^i_{|\mathbf{x}^i|}$ as a matrix
 $W_{w}\in\mathbb{R}^{m\times m}$ and computed the sentiment score
 $\xi^i$ of this phrase as a product of its token matrices, multiplying
 the final result with two vectors ($\vec{u}$ and
-$\vec{v}\in\mathbb{R}^m$):
+$\vec{v}\in\mathbb{R}^m$) to get a single scalar:
 \begin{align*}
   \xi^i =& \vec{u}^\top\left(\prod_{j=1}^{|x^i|}W_{w^i_j}\right)\vec{v}.
 \end{align*}
-They subsequently compared the resulting value with automatically
-derived thresholds to jointly predict the intensity and polarity of
-the phrase on a five-level sentiment scale (ranging from very negative
-to very positive), attaining 0.6375 ranking loss on the MPQA
-corpus~\cite{Wiebe:05}. %  With this method, \citet{Yessenalina:11}
-% outperformed the PRank algorithm and bag-of-words ordered logistic
-% regression on the MPQA corpus~\cite{Wiebe:05}, attaining the lowest
-% ranking loss (0.6375) among these systems.
+Afterwards, they compared the resulting value $\xi^i$ with
+automatically derived thresholds in order to predict the intensity and
+polarity of the phrase on a five-level sentiment scale (ranging from
+very negative to very positive), attaining this way a ranking loss of
+0.6375 on the MPQA corpus~\cite{Wiebe:05} and outperforming both the
+PRank algorithm \cite{Crammer:01} and bag-of-words ordered logistic
+regression.
+% method, \citet{Yessenalina:11} outperformed the PRank algorithm and
+% bag-of-words ordered logistic regression on the MPQA
+% corpus~\cite{Wiebe:05}, attaining the lowest ranking loss (0.6375)
+% among these systems.
 
 Almost contemporarily with this work, \citet{Socher:11} introduced a
 deep recursive autoencoder (RAE) in which they obtained a fixed-width
 vector representation for complex phrases $\vec{w}_p$ by recursively
-merging the vectors of their tokens (e.g., $\vec{w}_l$ and
-$\vec{w}_r$) over a binarized dependency tree, first multiplying these
-vectors with a compositional matrix $W$ and then applying a non-linear
-function ($softmax$) to the resulting product:
+merging vectors of their tokens (e.g., $\vec{w}_l$ for left child and
+$\vec{w}_r$ for the right dependent) over a binarized dependency tree,
+first multiplying these vectors with a compositional matrix $W$ and
+then applying a non-linear function ($softmax$) to the resulting
+product:
 \begin{align}
   \vec{w}_p &= softmax\left(W\begin{bmatrix}
       \vec{w}_l\\
       \vec{w}_r
   \end{bmatrix}\right)\label{cgsa:eq:socher-11}
 \end{align}
-Using a max-margin classifier on top of the resulting representation,
+By applying a max-margin classifier to the resulting phrase vector,
 \citet{Socher:11} could improve the state-of-the-art results on
 predicting the sentence-level polarity of user's blog
 posts~\cite{Potts:10} and also outperformed the system
 of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}, achieving
-86.4\% accuracy on predicting contextual polarity of polar terms.
+86.4\% accuracy on predicting contextual polarity of opinionated
+terms.
 
-Later on, \citet{Socher:12} further improved this approach by
+Later on, \citet{Socher:12} further improved their approach by
 associating an additional matrix $W_w$ with each vocabulary word $w$
-and performing the inference over both vector and matrix
-representations:
+similarly to~\citet{Yessenalina:10} and performing the inference
+simultaneously over both vector and matrix representations:
 \begin{align*}
   \vec{w}_p = tanh\left(W_v \begin{bmatrix}W_r\vec{w}_l\\
       W_l \vec{w}_r\end{bmatrix} \right),\\
@@ -2386,16 +2392,16 @@ representations:
 \end{align*}
 where $\vec{w}_p\in\mathbb{R}^n$ stands for the vector embedding of
 the parent node, $\vec{w}_l$ and $\vec{w}_r$ represent the vectors of
-its left and right children, and
-$W_p, W_l, W_r \in \mathbb{R}^{n\times n}$ denote the respective
-matrices associated with these nodes.  The compositionality matrices
+its left and right children, and $W_p, W_l, W_r \in
+\mathbb{R}^{n\times n}$ denote the respective matrices associated with
+these vertices.  The compositionality matrices
 $W_v\in\mathbb{R}^{n\times 2n}$ and $W_m\in\mathbb{R}^{n\times 2n}$
 were shared across all instances and learned along with word-specific
 parameters during the training process.  This model, called
 Matrix-Vector Recursive Neural Network (MVRNN), surpassed the RAE
 system on the IMDB movie review dataset \cite{Pang:05}, attaining 0.91
-Kullback-Leibler divergence between the probabilities of correct and
-predicted assignments.
+Kullback-Leibler divergence between the assigned scores and correct
+labels.
 
 Yet another improvement---the Recursive Neural Tensor Network
 (RNTN)---was presented by~\citet{Socher:13}.  In this system, the
@@ -2417,7 +2423,7 @@ multiplication:
 \end{bmatrix}\right),\label{cgsa:eq:socher-11}
 \end{align*}
 where $\vec{w}_p, \vec{w}_l, \vec{w}_r\in\mathbb{R}^n$, and
-$W\in\mathbb{R}^{n\times 2n}$ are defined as previousl and denote the
+$W\in\mathbb{R}^{n\times 2n}$ are defined as previously and denote the
 word embeddings and compositionality matrix respectively; and $V$
 represents a $2n\times 2n\times n$-dimensional tensor.  By increasing
 this way the number of parameters in comparison with the RAE approach,
@@ -2426,7 +2432,7 @@ method, the authors gained a significant improvement of the results,
 boosting the classification accuracy on their own Stanford Sentiment
 Treebank from 82.9 to 85.4\%.
 
-However, a real breakthrough in the usage of deep learning methods for
+However, a real breakthrough in the use of deep learning methods for
 sentiment analysis of Twitter happened with the
 work~\citet{Severyn:15}, whose proposed feed-forward DL system ranked
 first in SemEval-2015 Subtask~10~A (phrase-level polarity prediction)
@@ -2434,30 +2440,30 @@ first in SemEval-2015 Subtask~10~A (phrase-level polarity prediction)
 (message-level classification) of this competition.  Mainly drawing on
 the ideas of~\citet{Kalchbrenner:14}, the authors devised a simple
 convolutional network in which they multiplied pretrained word
-embeddings with 300 distinct convolutional kernels each of width five,
-and then passed the results of this multiplication to a piecewise
-linear ReLU filter with a densely connected softmax layer.  An
+embeddings with 300 distinct convolutional kernels of width five,
+pooled the maximum value of this multiplication for each of the
+kernels, and then passed the results of this pooling to a piecewise
+linear ReLU filter with a densely connected softmax layer, attaining a
+superior result of 0.6459~\F$^{+/-}$ on the message-level subtask.  An
 important aspect of this approach which accounted for a huge part of
-its success was a special multi-stage initialization that was used to
-set the initial values of model's parameters: In the first step of
-this procedure, \citeauthor{Severyn:15} obtained Twitter-specific word
+its success was a special multi-stage training scheme that was used to
+optimize model's parameters: In the initial stage of this scheme,
+\citeauthor{Severyn:15} furst computed Twitter-specific word
 embeddings by applying the word2vec algorithm to a large corpus of
-downloaded tweets.  Afterwards, they preadjusted the complete system
-including the word vectors, convolutional filters, and inter-layer
-matrices by training their model on a big set of noisily labeled
-microblogs from this collection.  Finally, they fine-tuned the
-parameters of the network on the officially released SemEval data,
-attaining a superior result of 0.6459~two-class~\F{} on the
-message-level polarity subtask.
+tweets.  Afterwards, they pretrained the complete system including the
+word vectors, convolutional filters, and inter-layer matrices on a big
+set of noisily labeled microblogs from this collection; and, finally,
+fine-tuned the parameters of the models on the officially released
+SemEval dataset.
 
 Later on, this system was further improved by \citet{Deriu:16}, who
 increased the number of convolutional layers (applying two layers
 instead of one) and simultaneously trained two such models (using
 word2vec vectors as input for the first one and passing GloVe
-embeddings \cite{Pennington:14} to the second), joining their output
-at the end and achieving this way 0.671~\F$^{+/-}$ on the SemEval-2015
-data.  A similar enhancement was also proposed by~\citet{Rouvier:16},
-who likewise utilized three different types of embeddings (word2vec,
+embeddings to the second), joining their output at the end and
+achieving this way 0.671~\F$^{+/-}$ on the SemEval-2015 testset.  A
+similar enhancement was also proposed by~\citet{Rouvier:16}, who
+likewise utilized three different types of embeddings (word2vec,
 word2vec specific to particular parts of speech, and
 sentiment-tailored vectors), training separate sets of convolutions
 for each of these types.
@@ -2536,37 +2542,40 @@ for each of these types.
 % \done[inline]{\citet{Baziotis:17}, \citet{Cliche:17},
 % \citet{Rouvier:17}}
 
-Even though convolutional approaches still yield competitive results,
-in recent time, they have gradually given way to recurrent neural
-networks \cite{Xu:16,Wang:15}.  One of the most prominent such systems
-has been recently proposed by~\citet{Baziotis:17}.  In their
-top-ranked submission to SemEval~2017 \cite{Rosenthal:17}, the authors
-used two successive bidirectional LSTM layers (BiLSTMs).  In each of
-these layers, they concatenated hidden states of the left-to-right
-recurrence ($\vec{h}^{(l)}_{i_{\rightarrow}}\in\mathbb{R}^{150}$) with
-the respective hidden units from the right-to-left loop
+Even though convolutional approaches still yield competitive results
+and are hard to outperform in practice, in recent time, they are
+gradually being superseded by recurrent neural networks
+\cite{Xu:16,Wang:15}.  One of the most prominent such systems has been
+recently proposed by~\citet{Baziotis:17}.  In their submission to
+SemEval~2017 \cite{Rosenthal:17}, the authors used two successive
+bidirectional LSTM layers (BiLSTMs).  In each of these layers, they
+concatenated hidden states of the left-to-right recurrence
+($\vec{h}^{(l)}_{i_{\rightarrow}}\in\mathbb{R}^{150}$) with the
+respective hidden units from the right-to-left loop
 ($\vec{h}^{(l)}_{i_{\leftarrow}}\in\mathbb{R}^{150}$) into joint
 vectors $\vec{h}_i^{(l)} = [\vec{h}^{(l)}_{i_{\rightarrow}},
-  \vec{h}^{(l)}_{i_{\leftarrow}}]\in\mathbb{R}^{300}$ and passed the
-result of this concatenation to the next stage of the architecture.
-Afterwards, they fed the results of the second BiLSTM into a dedicated
-attention mechanism, which summed hidden states of this recurrence
-from each step $i$, weighting them with a globally normalized
-attention coefficient $a_i$:
+  \vec{h}^{(l)}_{i_{\leftarrow}}]\in\mathbb{R}^{300}$ and then passed
+the result of this concatenation to the next part of the architecture.
+After computing the output of the second BiLSTM, they fed this result
+into a dedicated attention mechanism, which summed hidden states of
+the recurrent cells for each time step $i$, weighting them with
+respective globally normalized attention coefficients $a_i$'s:
 \begin{align}
-  a_i =& \frac{\exp(e_i)}{\sum_{t=1}^{|\mathbf{x}|}\exp(e_t)},\\
-  \textrm{where }e_i =& tanh\left(\vec{w}_h\vec{h}_i + \beta_i\right);
+  a_i =&
+  \frac{\exp(e_i)}{\sum_{t=1}^{|\mathbf{x}|}\exp(e_t)},\\ \textrm{s.t. }e_i
+  =& tanh\left(\vec{w}_h\vec{h}^{(2)}_i + \beta_i\right);
 \end{align}
-The vector parameter of the attention ($\vec{w}_h$) was optimized
-along with other weights of the network during the training stage.  To
-make the final prediction, \citeauthor{Baziotis:17} applied another
-densely connected layer with softmax non-linearity to the output of
-the attention, getting probability scores for each of the three
-polarity classes and choosing the one with the maximum value.  The
-architecture of this network is depicted in
-Figure~\ref{cgsa:fig:baziotis}.  With this approach, the authors
-attained the first first place at SemEval-2014 Task~4 (with
-0.675~\F{}$^{+/-}$), being on a par with the system
+where $\vec{w}_h$ denotes the attention vector and $\beta_i$
+represents the bias term for the $i$-th position.  These parameters
+($\vec{w}_h$ and $\vec{\beta}$) were optimized along with other
+weights of the network during the training stage.  To make the final
+prediction, \citeauthor{Baziotis:17} applied another densely connected
+layer with softmax non-linearity to the output of the attention,
+getting probability scores for each of the three polarity classes and
+choosing the one with the maximum value.  The architecture of this
+network is depicted in Figure~\ref{cgsa:fig:baziotis}.  With this
+approach, the authors attained the first first place at SemEval-2014
+Task~4 (with 0.675~\F{}$^{+/-}$), being on a par with the system
 of~\citet{Cliche:17} and even outperforming the method
 of~\citet{Rouvier:17} despite the fact that both of these works relied
 on ensembles of LSTM and convolutional networks.
