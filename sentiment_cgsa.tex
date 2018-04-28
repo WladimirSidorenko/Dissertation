@@ -2596,43 +2596,96 @@ works used ensembles of LSTMs and convolutional networks.
 
 \todo[inline]{Describe LBA}
 
-Although the approach of~\citet{Baziotis:17} represents the current
-state of the art in sentiment analysis of Twitter, in our opinion,
-this method has still some potential for improvements.  This first of
-all concerns the way how attention coefficients are computed.  As we
-can see from Equation~\ref{eq:cgsa:baziotis-attention}, the magnitude
-of the attention score $a_i$ primarily depends on the absolute value
-of the LSTM output and the bias term for the $i$-th position.  Albeit
-this strategy makes a certain sense regarding the fact that polar
-terms appearing at the end of a message usually have a greater impact
-on the net polarity of the tweet than opinionated words appearing at
-its beginning, a crucial prerequisite for this strategy to work is
-that
+Although the approach of~\citet{Baziotis:17} still represents the
+current state of the art in sentiment analysis of Twitter and yields
+extraordinarily good results, in our opinion, this method has yet some
+potential for improvements.  This first of all concerns the way how
+attention coefficients are computed.  As we can see from
+Equation~\ref{eq:cgsa:baziotis-attention}, the magnitude of the
+attention score $a_i$ primarily depends on the absolute value of the
+LSTM outputs and the bias term at the $i$-th position.  Albeit this
+strategy is plausible regarding the fact that polar terms that appear
+at the end of a message usually have more impact on the net polarity
+of the tweet than opinionated words that occur at the beginning, a
+crucial prerequisite for this strategy to work is that
 \begin{inparaenum}[(i)]
-\item the LSTM layers already provide a sufficiently reliable result
+\item the LSTM layer already provides sufficiently reliable results
   and
-\item the bias scores does not overly boosts the importance of
-  irrelevant terms that accidentally appeared at favored positions.
+\item the bias terms do not overly boost the importance of irrelevant
+  tokens that just accidentally appeared at favored positions.
 \end{inparaenum}
-Unfortunately, both of these assumptions hardly hold in practice.
+Unfortunately, both of these assumptions are rarely true, especially
+when the training data are limited.
 
-In order to overcome thesw limitations, we decided to augment the
-original attention mechanism of~\citet{Baziotis:17} with two
-additional types of attention: lexicon- and context-based one.  In the
-former of these types, we estimated the boosting weight $b_i$ for
-position $i$ using the polarity score of the word $w_i$ from our
-linear projection lexicon $V$, normalizing these scores over all
-positions $j$ from the sequence:
+In order to overcome these drawbacks of position-based attention
+scores, we decided to augment the original architecture
+of~\citet{Baziotis:17} with two additional types of attention:
+\emph{lexicon-} and \emph{context-based} one.  In the former of these
+types, we estimated the importance weight $b_i$ for position $i$ using
+the polarity score of the word $w_i$ from our linear projection
+lexicon $V$, normalizing these scores over all positions $j$ from the
+sequence:
 \begin{align*}
-  \vec{b} =& \sum_{i=1}^{|\mathbf{x}|}b_i\vec{h}_i,\nonumber\\
-  b_i =& \frac{\exp(f_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(f_j)},\nonumber\\
-  \textrm{s.t. }f_i =& \left\{
+  \vec{b} =& \sum_{i=1}^{|\mathbf{x}|}b_i\vec{h}_i,\\
+  b_i =& \frac{\exp(f_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(f_j)},\textrm{ s.t.}\\
+  f_i =& \left\{
   \begin{array}{ll}
-    tanh(V_{w_i} + \epsilon) & \textrm{ if} w_i\in V\\
-    tanh(\epsilon) & \, \textrm{otherwise} \\
+    tanh(abs(V[{w_i}]) + \epsilon) & \textrm{ if } w_i\in V\\
+    tanh(\epsilon) & \, \textrm{otherwise.} \\
   \end{array}
   \right .;
 \end{align*}
+\noindent In so doing, we hoped to force this layer to weigh the LSTM
+outputs at subjective words more than its results at neutral tokens.
+
+Even though polar terms definitely are one of the most influential
+factors that affect message polarity, we should never forget that the
+semantic orientation of these terms can easily be changed (and even
+reversed) by various context factors \cite[see][]{Polanyi:06}.  To
+account for this fact, we have introduced another type of
+attention---the \emph{context-based} one, whose goal was to boost the
+importance of elements which could act as potential valence shifters.
+In order to identify such words, we applied another linear classifier
+which predicted the potential shifting power of a token by looking at
+the original embedding vector of this word and the LSTM output of its
+parent in the dependency tree multiplied with the lexicon-based
+attention score of the parent.  To keep the resulting values within an
+appropriate range, we also used the same $tanh$ transformation and
+global normalization over all positions as we did previously for the
+position- and lexicon-based attentions:
+\begin{align*}
+  \vec{c} =& \sum_{i=1}^{|\mathbf{x}|}c_i\vec{h}_i,\\ c_i =&
+  \frac{\exp(g_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(g_j)},\\ g_i =&
+  \tanh\left(C [\vec{w}_i, \vec{b}_p]^\top\right);
+\end{align*}
+where $C\in\mathbb{R}^{200 \times 100}$ represents a context-based
+attention matrix, $\vec{w}_i \in \mathbb{R}^{100}$ denotes the word
+embedding of the $i$-th token, and $\vec{b}_p$ stands for the LSTM
+output at the parent node of word $i$ times the lexicon-based
+attention score of this node.  This way, we hoped to amplify the
+importance of words like ``kaum'' (\textit{hardly}) or ``nicht''
+(\textit{not}) in cases when the immediate syntactic ancestors of
+these tokens were highly opinionated terms, e.g., ``Er hat die
+Pr\"ufung kaum bestanden'' (\textit{He hardly passed the exam}) or
+``Ich mag den neuen Bundesminister nicht'' (\textit{I do not like the
+  new federal minister}).
+
+Eventually, in order to make the final prediction, we concatenated the
+outputs of the three attention layers into a single matrix
+$A\in\mathbb{R}^{3 \times 100}$ and multiplied it with a vector
+$\vec{w}\in\mathbb{R}^{1\times 100}$, applying softmax normalization
+at the end:
+\begin{align*}
+  \vec{o} =& softmax\left(A^\top\vec{w}\right), \textrm{s.t.}\\
+  A =& [\vec{a}, \vec{b}, \vec{c}].
+\end{align*}
+
+Since introducing additional attention types increased the number of
+model parameters, we removed one of the Bi-LSTM layers to
+counterbalance this effect and report our results for both settings:
+with one and with two Bi-LSTM units (denoted as LBA$^{(1)}$ and
+LBA$^{(2)}$ respectively).  The final architecture of our approach is
+given in Figure~\ref{cgsa:fig:lba}.
 
 % \done[inline]{\citet{Tang:14b}}
 
@@ -2663,18 +2716,20 @@ positions $j$ from the sequence:
 \end{figure*}
 
 
-To evaluate the performance of these methods on the PotTS and SB10k
-data, we have reimplemented the approaches of~\citet{Yessenalina:11},
+To evaluate the performance of the presented competitor methods and
+also test our lexicon-based attention mechanism on the PotTS and SB10k
+data, we have reimplemented the systems of~\citet{Yessenalina:11},
 \citet{Socher:11,Socher:12,Socher:13}, \citet{Severyn:15},
-and~\citet{Baziotis:17}, and also applied our lexicon-based attention
-mechanism to the aforementioned corpora.  For the sake of uniformity
-and simplicity, we used task-specific word embeddings of
-size~$\mathbb{R}^{100}$ in all systems, optimizing these vectors along
-with other parameters during training.  Moreover, we also unified the
-final activation part and cost function of these approaches, using a
-densely connected softmax layer and optimizing the weights w.r.t. the
-categorical hinge loss on the training data, picking the values that
-yielded the highest accuracy on the validation set.
+and~\citet{Baziotis:17}, and applied them along with our own solution
+to the aforementioned corpora.  For the sake of uniformity and
+simplicity, we used task-specific word embeddings of
+size~$\mathbb{R}^{100}$ in all of the systems, optimizing these
+vectors with other network parameters during training.  Furthermore,
+we also unified the final activation part and cost function of all
+networks, using a densely connected softmax layer and optimizing the
+weights w.r.t. the categorical hinge loss on the training data,
+picking the values that yielded the highest accuracy on the validation
+set.
 
 The results of this evaluation are shown in
 Table~\ref{snt-cgsa:tbl:dl-res}.
@@ -2719,7 +2774,7 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
       %% avg / total       0.20      0.45      0.28      1525
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
       %% Micro-Averaged F1-Score (All Classes): 44.5902%
-      Y\&C & 0.45 & 1.0 & 0.62 & %
+      Y\&C & 0.45 & \textbf{1.0} & 0.62 & %
         0.0 & 0.0 & 0.0 & %
         0.0 & 0.0 & 0.0 & %
         0.308 & 0.446\\
@@ -2826,8 +2881,8 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          %% Macro-Averaged F1-Score (Positive and Negative Classes): 61.25%
          %% Micro-Averaged F1-Score (All Classes): 65.7705%
 
-      SEV & 0.71 & \textbf{0.78} & 0.74 & %
-         \textbf{0.46} & \textbf{0.51} & \textbf{0.48} & %
+      SEV & 0.71 & 0.78 & 0.74 & %
+         0.46 & \textbf{0.51} & \textbf{0.48} & %
          \textbf{0.71} & 0.59 & 0.64 & %
          \textbf{0.613} & 0.658\\
 
@@ -2853,58 +2908,39 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          %% Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
          %% Micro-Averaged F1-Score (All Classes): 44.5902%
 
-         BAZ & 0.45 & 1.0 & 0.62 & %
+         BAZ & 0.45 & \textbf{1.0} & 0.62 & %
          0.0 & 0.0 & 0.0 & %
          0.0 & 0.0 & 0.0 & %
          0.308 & 0.446\\
 
-        % lexicon-based attention (non-trainable) and standard attention
-        % General Statistics:
-        % 'precision', 'predicted', average, warn_for)
-        % precision    recall  f1-score   support
-        % positive       0.45      1.00      0.62       680
-        % negative       0.00      0.00      0.00       287
-        % neutral       0.00      0.00      0.00       558
-        % avg / total       0.20      0.45      0.28      1525
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
-        % Micro-Averaged F1-Score (All Classes): 44.5902%
+         % Lexicon-based Attention (1 BiLSTM) @b263b917dfe8755b10b9759f4ed0cecffa3534a1
+         %% General Statistics:
+         %% precision    recall  f1-score   support
+         %% positive       0.81      0.73      0.77       680
+         %% negative       0.60      0.15      0.24       287
+         %% neutral       0.59      0.89      0.71       558
+         %% avg / total       0.69      0.68      0.65      1525
+         %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.31%
+         %% Micro-Averaged F1-Score (All Classes): 67.8033%
+      LBA$^{(1)}$ & \textbf{0.81} & 0.73 & \textbf{0.77} & %
+         \textbf{0.6} & 0.15 & 0.24 & %
+         0.59 & \textbf{0.89} & \textbf{0.71} & %
+         0.503 & \textbf{0.678}\\
 
-        % lexicon-based attention (trainable)
-        % General Statistics:
-        % 'precision', 'predicted', average, warn_for)
-        % precision    recall  f1-score   support
-        % positive       0.45      1.00      0.62       680
-        % negative       0.00      0.00      0.00       287
-        % neutral       0.00      0.00      0.00       558
-        % avg / total       0.20      0.45      0.28      1525
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
-        % Micro-Averaged F1-Score (All Classes): 44.5902%
+         % Lexicon-based Attention (2 BiLSTM) @b263b917dfe8755b10b9759f4ed0cecffa3534a1
+         %% General Statistics:
+         %% precision    recall  f1-score   support
+         %% positive       0.45      1.00      0.62       680
+         %% negative       0.00      0.00      0.00       287
+         %% neutral       0.00      0.00      0.00       558
+         %% avg / total       0.20      0.45      0.28      1525
+         %% Macro-Averaged F1-Score (Positive and Negative Classes): 30.84%
+         %% Micro-Averaged F1-Score (All Classes): 44.5902%
 
-        % Results @d366c44dde629aa50e88fa58348e19c47e351801
-        % General Statistics:
-        % precision    recall  f1-score   support
-        % positive       0.67      0.75      0.71       680
-        % negative       0.00      0.00      0.00       287
-        % neutral       0.55      0.75      0.63       558
-        % avg / total       0.50      0.61      0.55      1525
-        % Macro-Averaged F1-Score (Positive and Negative Classes): 35.29%
-        % Micro-Averaged F1-Score (All Classes): 60.7869%
-
-         % Results @b6c7724
-         % General Statistics:
-         %              precision    recall  f1-score   support
-         %    positive       0.78      0.76      0.77       680
-         %    negative       0.00      0.00      0.00       287
-         %     neutral       0.58      0.89      0.70       558
-         % avg / total       0.56      0.67      0.60      1525
-         % Macro-Averaged F1-Score (Positive and Negative Classes): 38.59%
-         % Micro-Averaged F1-Score (All Classes): 66.7541%
-
-
-      LBA & \textbf{0.78} & 0.76 & \textbf{0.77} & %
-        0.0 & 0.0 & 0.0 & %
-        0.58 & \textbf{0.89} & \textbf{0.7} & %
-        0.386 & \textbf{0.668}\\
+         LBA$^{(2)}$ & 0.45 & \textbf{1.0} & 0.62 & %
+         0.0 & 0.0 & 0.0 & %
+         0.0 & 0.0 & 0.0 & %
+         0.308 & 0.446\\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
 
@@ -3013,7 +3049,7 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
 
        SEV & 0.0 & 0.0 & 0.0 & %
           0.0 & 0.0 & 0.0 & %
-          0.62 & 1.0 & 0.77 & %
+          0.62 & \textbf{1.0} & 0.77 & %
           0.0 & 0.622\\
 
           %% Baziotis Commands:
@@ -3037,32 +3073,50 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
           %% avg / total       0.62      0.73      0.67      1496
           %% Macro-Averaged F1-Score (Positive and Negative Classes): 31.03%
           %% Micro-Averaged F1-Score (All Classes): 72.8610%
-       BAZ & 0.66 & \textbf{0.6} & 0.62 & %
+       BAZ & 0.66 & 0.6 & 0.62 & %
          0.0 & 0.0 & 0.0 & %
-         \textbf{0.75} & 0.95 & \textbf{0.84} & %
+         0.75 & 0.95 & \textbf{0.84} & %
          0.31 & 0.729\\
 
+         % Lexicon-based Attention (1 BiLSTM) @b263b917dfe8755b10b9759f4ed0cecffa3534a1
          %% General Statistics:
-         %%              precision    recall  f1-score   support
-         %%    positive       0.72      0.57      0.63       354
-         %%    negative       0.00      0.00      0.00       212
-         %%     neutral       0.74      0.97      0.84       930
+         %% General Statistics:
+         %% precision    recall  f1-score   support
+         %% positive       0.70      0.57      0.63       354
+         %% negative       0.00      0.00      0.00       212
+         %% neutral       0.74      0.97      0.84       930
          %% avg / total       0.63      0.74      0.67      1496
-         %% Macro-Averaged F1-Score (Positive and Negative Classes): 31.65%
-         %% Micro-Averaged F1-Score (All Classes): 73.6631%
-       LBA & \textbf{0.72} & 0.57 & \textbf{0.63} & %
+         %% Macro-Averaged F1-Score (Positive and Negative Classes): 31.41%
+         %% Micro-Averaged F1-Score (All Classes): 73.5963%
+       LBA$^{(1)}$ & \textbf{0.7} & 0.57 & \textbf{0.63} & %
         0.0 & 0.0 & 0.0 & %
         0.74 & 0.97 & \textbf{0.84} & %
-        \textbf{0.317} & \textbf{0.737}\\\bottomrule
+        0.314 & \textbf{0.736}\\
+
+        %% General Statistics:
+        %% precision    recall  f1-score   support
+        %% positive       0.63      0.63      0.63       354
+        %% negative       0.00      0.00      0.00       212
+        %% neutral       0.76      0.94      0.84       930
+        %% avg / total       0.62      0.73      0.67      1496
+        %% Macro-Averaged F1-Score (Positive and Negative Classes): 31.50%
+        %% Micro-Averaged F1-Score (All Classes): 73.1283%
+
+        LBA$^{(2)}$ & 0.63 & \textbf{0.63} & \textbf{0.63} & %
+         0.0 & 0.0 & 0.0 & %
+         \textbf{0.76} & 0.94 & \textbf{0.84} & %
+         \textbf{0.315} & 0.731\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods]{
-      Evaluation of DL-based CGSA methods\\
-      {\small Y\&C~--~\citet{Yessenalina:11}, RAE~--~Recursive
-        Auto-Encoder \cite{Socher:11}, MVRNN~--~Matrix-Vector RNN
-        \cite{Socher:12}, RNTN~--~Recursive Neural-Tensor Network
-        \cite{Socher:13}, SEV~--~\citet{Severyn:15},
-        BAZ~--~\citet{Baziotis:17}, LBA~--~lexicon-based attention}}
+    \caption[Evaluation of DL-based CGSA methods]{ Evaluation of
+      DL-based CGSA methods\\ {\small Y\&C~--~\citet{Yessenalina:11},
+        RAE~--~Recursive Auto-Encoder \cite{Socher:11},
+        MVRNN~--~Matrix-Vector RNN \cite{Socher:12}, RNTN~--~Recursive
+        Neural-Tensor Network \cite{Socher:13},
+        SEV~--~\citet{Severyn:15}, BAZ~--~\citet{Baziotis:17},
+        LBA$^{(1)}$~--~lexicon-based attention with one Bi-LSTM
+        layer, LBA$^{(2)}$~--~lexicon-based attention with two Bi-LSTM
+        layers}}
     \label{snt-cgsa:tbl:dl-res}
   \end{center}
 \end{table}
@@ -3237,7 +3291,7 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
 
       SEV & 0.68 & 0.78 & 0.73 & %
           0.0 & 0.0 & 0.0 & %
-          0.61 & \textbf{0.82} & 0.7 & %
+          0.61 & 0.82 & 0.7 & %
           0.364 & 0.648\\
 
          % Commands:
@@ -3255,15 +3309,38 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
           %% Macro-Averaged F1-Score (Positive and Negative Classes): 65.09%
           %% Micro-Averaged F1-Score (All Classes): 70.5574%
 
-      BAZ & \textbf{0.83} & 0.69 & \textbf{0.76} & %
-          \textbf{0.54} & \textbf{0.55} & \textbf{0.55} & %
+      BAZ & 0.83 & 0.69 & \textbf{0.76} & %
+          0.54 & \textbf{0.55} & 0.55 & %
           \textbf{0.67} & 0.8 & \textbf{0.73} & %
           \textbf{0.651} & \textbf{0.706}\\
 
-      LBA & 0. & 0. & 0. & %
-          0. & 0. & 0. & %
-          0. & 0. & 0. & %
-          0. & 0.\\
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.85      0.64      0.73       680
+          %% negative       0.56      0.55      0.56       287
+          %% neutral       0.63      0.83      0.71       558
+          %% avg / total       0.72      0.69      0.69      1525
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 64.43%
+          %% Micro-Averaged F1-Score (All Classes): 69.1803%
+
+      LBA$^{(1)}$ & \textbf{0.85} & 0.64 & 0.73 & %
+          0.56 & \textbf{0.55} & \textbf{0.56} & %
+          0.63 & 0.83 & 0.71 & %
+          0.644 & 0.692\\
+
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.84      0.62      0.71       680
+          %% negative       0.65      0.26      0.37       287
+          %% neutral       0.56      0.91      0.69       558
+          %% avg / total       0.70      0.66      0.64      1525
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 54.20%
+          %% Micro-Averaged F1-Score (All Classes): 65.8361%
+
+      LBA$^{(2)}$ & 0.84 & 0.62 & 0.71 & %
+          \textbf{0.65} & 0.26 & 0.37 & %
+          0.56 & \textbf{0.91} & 0.69 & %
+          0.542 & 0.658\\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
          % Commands:
@@ -3315,7 +3392,7 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          %% avg / total       0.73      0.74      0.73      1496
          %% Macro-Averaged F1-Score (Positive and Negative Classes): 54.56%
          %% Micro-Averaged F1-Score (All Classes): 74.3984%
-      SEV & 0.7 & \textbf{0.61} & \textbf{0.65} & %
+      SEV & 0.7 & \textbf{0.61} & 0.65 & %
           0.51 & \textbf{0.39} & \textbf{0.44} & %
           \textbf{0.8} & 0.88 & 0.83 & %
           \textbf{0.546} & 0.744\\
@@ -3334,46 +3411,47 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
           %% avg / total       0.74      0.75      0.71      1496
           %% Macro-Averaged F1-Score (Positive and Negative Classes): 44.60%
           %% Micro-Averaged F1-Score (All Classes): 74.5321%
-      BAZ & 0.77 & 0.53 & 0.63 & %
+      BAZ & \textbf{0.77} & 0.53 & 0.63 & %
           \textbf{0.64} & 0.17 & 0.26 & %
-          0.74 & 0.96 & \textbf{0.84} & %
-          0.446 & \textbf{0.745}\\
+          0.74 & 0.96 & 0.84 & %
+          0.446 & 0.745\\
 
           %% General Statistics:
           %% precision    recall  f1-score   support
-          %% positive       0.79      0.47      0.59       354
-          %% negative       0.55      0.21      0.31       212
-          %% neutral       0.74      0.96      0.84       930
-          %% avg / total       0.72      0.74      0.70      1496
-          %% Macro-Averaged F1-Score (Positive and Negative Classes): 44.56%
-          %% Micro-Averaged F1-Score (All Classes): 73.5963%
-      LBA & \textbf{0.79} & 0.47 & 0.59 & %
-        0.55 & 0.21 & 0.31 & %
-        0.74 & 0.96 & \textbf{0.84} & %
-        0.446 & 0.736\\\bottomrule
+          %% positive       0.75      0.60      0.67       354
+          %% negative       0.59      0.22      0.32       212
+          %% neutral       0.77      0.94      0.85       930
+          %% avg / total       0.74      0.76      0.73      1496
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 49.38%
+          %% Micro-Averaged F1-Score (All Classes): 75.8690%
+      LBA$^{(1)}$ & 0.75 & 0.6 & \textbf{0.67} & %
+          0.59 & 0.22 & 0.32 & %
+          0.77 & 0.94 & \textbf{0.85} & %
+          0.494 & \textbf{0.759}\\
 
-        %% General Statistics:
-        %% precision    recall  f1-score   support
-        %% positive       0.70      0.63      0.67       354
-        %% negative       0.58      0.37      0.45       212
-        %% neutral       0.80      0.90      0.85       930
-
-        %% avg / total       0.75      0.76      0.75      1496
-        %% Macro-Averaged F1-Score (Positive and Negative Classes): 55.83%
-        %% Micro-Averaged F1-Score (All Classes): 76.0695%
-      LBA$^{(2)}$ & 0.7 & 0.63 & 0.67 & %
-        0.58 & 0.37 & 0.45 & %
-        0.8 & 0.9 & \textbf{0.85} & %
-        0.558 & 0.761\\\bottomrule
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.75      0.54      0.63       354
+          %% negative       0.54      0.28      0.37       212
+          %% neutral       0.76      0.93      0.84       930
+          %% avg / total       0.73      0.75      0.72      1496
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.04%
+          %% Micro-Averaged F1-Score (All Classes): 74.5989%
+      LBA$^{(2)}$ & 0.75 & 0.54 & 0.63 & %
+          0.54 & 0.28 & 0.37 & %
+          0.76 & 0.93 & 0.84 & %
+          0.5 & 0.746\\\bottomrule
 
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods with pretrained word2vec vectors]{
-      Evaluation of DL-based CGSA methods with pretrained word2vec vectors\\
-      {\small RAE~--~Recursive
-        Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
-        \cite{Socher:13}, SEV~--~\citet{Severyn:15},
-        BAZ~--~\citet{Baziotis:17}, LBA~--~lexicon-based attention}}
+    \caption[Evaluation of DL-based CGSA methods with pretrained
+      word2vec vectors]{ Evaluation of DL-based CGSA methods with
+      pretrained word2vec vectors\\ {\small RAE~--~Recursive
+        Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor
+        Network \cite{Socher:13}, SEV~--~\citet{Severyn:15},
+        BAZ~--~\citet{Baziotis:17}, LBA$^{(1)}$~--~lexicon-based
+        attention with one Bi-LSTM layer, LBA$^{(2)}$~--~lexicon-based
+        attention with two Bi-LSTM layers}}
     \label{snt-cgsa:tbl:dl-res-word2vec}
   \end{center}
 \end{table}
@@ -3437,7 +3515,7 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
 
       SEV & 0.71 & 0.78 & 0.74 & %
          0.0 & 0.0 & 0.0 & %
-         0.58 & \textbf{0.81} & 0.68 & %
+         0.58 & 0.81 & 0.68 & %
          0.37 & 0.643\\
 
          %% General Statistics:
@@ -3449,23 +3527,37 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
          %% Macro-Averaged F1-Score (Positive and Negative Classes): 64.28%
          %% Micro-Averaged F1-Score (All Classes): 71.8033%
 
-         BAZ & \textbf{0.79} & 0.79 & \textbf{0.79} & %
-         \textbf{0.6} & 0.43 & 0.5 & %
+         BAZ & 0.79 & 0.79 & \textbf{0.79} & %
+         0.6 & 0.43 & 0.5 & %
          0.68 & 0.79 & \textbf{0.73} & %
          0.643 & \textbf{0.718}\\
 
          %% General Statistics:
          %% precision    recall  f1-score   support
-         %% positive       0.73      0.84      0.78       680
-         %% negative       0.59      0.55      0.57       287
-         %% neutral       0.75      0.64      0.69       558
-         %% avg / total       0.71      0.71      0.71      1525
-         %% Macro-Averaged F1-Score (Positive and Negative Classes): 67.59%
-         %% Micro-Averaged F1-Score (All Classes): 71.2787%
-      LBA & 0.73 & \textbf{0.84} & 0.78 & %
-         0.59 & \textbf{0.55} & \textbf{0.57} & %
-         \textbf{0.75} & 0.64 & 0.69 & %
-         \textbf{0.676} & 0.713\\
+         %% positive       0.71      0.85      0.77       680
+         %% negative       0.64      0.48      0.55       287
+         %% neutral       0.75      0.66      0.70       558
+         %% avg / total       0.71      0.71      0.70      1525
+         %% Macro-Averaged F1-Score (Positive and Negative Classes): 65.88%
+         %% Micro-Averaged F1-Score (All Classes): 70.9508%
+      LBA$^{(1)}$ & 0.71 & \textbf{0.85} & 0.77 & %
+          \textbf{0.64} & \textbf{0.48} & \textbf{0.55} & %
+          \textbf{0.75} & 0.66 & 0.7 & %
+          \textbf{0.659} & 0.71\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.85      0.67      0.75       680
+      %% negative       0.60      0.43      0.50       287
+      %% neutral       0.62      0.86      0.72       558
+      %% avg / total       0.72      0.70      0.69      1525
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 62.58%
+      %% Micro-Averaged F1-Score (All Classes): 69.5738%
+
+      LBA$^{(2)}$ & \textbf{0.85} & 0.67 & 0.75 & %
+          0.6 & 0.43 & 0.5 & %
+          0.62 & \textbf{0.86} & 0.72 & %
+          0.626 & 0.696\\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
       %% General Statistics:
@@ -3504,7 +3596,7 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
         %% Macro-Averaged F1-Score (Positive and Negative Classes): 33.41%
         %% Micro-Averaged F1-Score (All Classes): 70.7888%
 
-      SEV & 0.55 & \textbf{0.68} & 0.61 & %
+      SEV & 0.55 & 0.68 & 0.61 & %
           0.44 & 0.03 & 0.06 & %
           0.78 & 0.87 & 0.82 & %
           0.334 & 0.708\\
@@ -3519,23 +3611,37 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
           %% Micro-Averaged F1-Score (All Classes): 75.7353%
 
       BAZ & 0.69 & 0.64 & 0.67 & %
-         \textbf{0.57} & 0.3 & 0.39 & %
-         0.8 & 0.91 & \textbf{0.85} & %
+         0.57 & \textbf{0.3} & \textbf{0.39} & %
+         \textbf{0.8} & 0.91 & \textbf{0.85} & %
          0.53 & 0.757\\
 
          %% General Statistics:
          %% precision    recall  f1-score   support
-         %% positive       0.75      0.64      0.69       354
-         %% negative       0.49      0.35      0.41       212
-         %% neutral       0.81      0.91      0.85       930
-         %% avg / total       0.75      0.76      0.75      1496
-         %% Macro-Averaged F1-Score (Positive and Negative Classes): 54.94%
-         %% Micro-Averaged F1-Score (All Classes): 76.4037%
+         %% positive       0.70      0.69      0.70       354
+         %% negative       0.62      0.27      0.38       212
+         %% neutral       0.80      0.91      0.85       930
+         %% avg / total       0.75      0.77      0.75      1496
+         %% Macro-Averaged F1-Score (Positive and Negative Classes): 53.90%
+         %% Micro-Averaged F1-Score (All Classes): 76.6043%
 
-      LBA & \textbf{0.75} & 0.64 & \textbf{0.69} & %
-         0.49 & \textbf{0.35} & \textbf{0.41} & %
-         \textbf{0.81} & 0.91 & \textbf{0.85} & %
-         \textbf{0.549} & \textbf{0.764}\\\bottomrule
+      LBA$^{(1)}$ & 0.7 & \textbf{0.69} & \textbf{0.7} & %
+          0.62 & 0.27 & 0.38 & %
+          \textbf{0.8} & 0.91 & \textbf{0.85} & %
+          \textbf{0.539} & \textbf{0.766}\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.79      0.50      0.61       354
+      %% negative       0.63      0.18      0.28       212
+      %% neutral       0.74      0.96      0.84       930
+      %% avg / total       0.74      0.74      0.71      1496
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 44.66%
+      %% Micro-Averaged F1-Score (All Classes): 74.3984%
+
+      LBA$^{(2)}$ & \textbf{0.79} & 0.5 & 0.61 & %
+          \textbf{0.63} & 0.18 & 0.28 & %
+          0.74 & 0.96 & 0.84 & %
+          0.447 & 0.744\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Evaluation of DL-based CGSA methods with pretrained least-squares embeddings]{
@@ -3543,7 +3649,9 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
       {\small RAE~--~Recursive
         Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
         \cite{Socher:13}, SEV~--~\citet{Severyn:15},
-        BAZ~--~\citet{Baziotis:17}, LBA~--~lexicon-based attention}}
+        BAZ~--~\citet{Baziotis:17}, , LBA$^{(1)}$~--~lexicon-based
+        attention with one Bi-LSTM layer, LBA$^{(2)}$~--~lexicon-based
+        attention with two Bi-LSTM layers}}
     \label{snt-cgsa:tbl:dl-res-lstsq}
   \end{center}
 \end{table}
