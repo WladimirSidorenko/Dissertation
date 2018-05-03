@@ -2594,8 +2594,6 @@ works used ensembles of LSTMs and convolutional networks.
   by~\citet{Baziotis:17}}\label{cgsa:fig:baziotis}
 \end{figure*}
 
-\todo[inline]{Describe LBA}
-
 Although the approach of~\citet{Baziotis:17} still represents the
 current state of the art in sentiment analysis of Twitter and yields
 extraordinarily good results, in our opinion, this method has yet some
@@ -2711,8 +2709,9 @@ given in Figure~\ref{cgsa:fig:lba}.
 
 \begin{figure*}[htbp!]
 { \centering \includegraphics[width=1.3\linewidth]{img/lba.png} }
-\caption[Neural network with lexicon-based attention]{Architecture of the
-  neural network with lexicon-based attention}\label{cgsa:fig:lba}
+\caption[Neural network with lexicon-based attention]{Architecture of
+  the neural network with lexicon- and context-based
+  attention}\label{cgsa:fig:lba}
 \end{figure*}
 
 
@@ -2730,9 +2729,6 @@ networks, using a densely connected softmax layer and optimizing the
 weights w.r.t. the categorical hinge loss on the training data,
 picking the values that yielded the highest accuracy on the validation
 set.
-
-The results of this evaluation are shown in
-Table~\ref{snt-cgsa:tbl:dl-res}.
 
 \begin{table}[h]
   \begin{center}
@@ -3120,6 +3116,46 @@ Table~\ref{snt-cgsa:tbl:dl-res}.
     \label{snt-cgsa:tbl:dl-res}
   \end{center}
 \end{table}
+
+The results of this evaluation are shown in
+Table~\ref{snt-cgsa:tbl:dl-res}.  As we can see from the figures, the
+LBA method performs fairly well, especially for the positive and
+neutral classes where it sets the best \F-benchmarks on both datasets
+and consequently achieves the highest overall micro-averaged \F-scores
+on all test samples (0.678 on PotTS and 0.736 on SB10k).  Even though
+our approach also yields the best macro-averaged result on the SB10k
+data~(0.315~\F), it seems to face a major difficulty with the extreme
+label skewness of this corpus, failing to predict any negative tweet
+on the provided test set.  This problem, in general, appears to be an
+insurmountable hurdle for almost all other compared systems as well
+and is especially aggravated for the matrix-space, RNTN, and
+convolutional systems, all of which eventually always predict only the
+most common neutral label and are unable to differentiate the other
+two classes.  A single notable exception in this regard is the
+recursive auto-encoder approach of~\citet{Socher:11}, which succeeds
+in classifying some of the negative instances and also predicts the
+positive and neutral labels, but whose precision and recall are still
+far below an acceptable level.
+
+A similar, though less severe situation is also observed with the
+PotTS corpus.  This time, the Y\&C, BAZ, and LBA$^{(2)}$ methods lapse
+into always predicting the most frequent polarity, which is positive
+this time.  Other systems, however, perform much better, especially
+the approach of~\citet{Severyn:15}, which does an extraordinarily good
+job at classifying negative messages, reaching remarkable 0.48~\F for
+this polarity and also attaining the best macro-average score (0.613)
+on all tweets due to its even performance on positive and neutral
+microblogs.  Nevertheless, even the best-performing DL systems (SEV
+and LBA) lag far behind the traditional supervised machine-learning
+method of~\citet{Mohammad:13}, and barely outperform the lexcon-based
+approach of~\citet{Hu:04} in terms of the micro-averaged \F{} on
+SB10k.  Two possible explanations for these rather mediocre results
+that we can think of might be a bad starting point of the parameters,
+which could prevent the optimizers from finding the optimal solution
+to the optimization objective, or an insufficient amount of training
+data, which would lead to overfitting the training set, but poor
+generalization to unseed examples.  We will investigate each of these
+factors in detail in the following sections.
 
 % \section{Coarse-Grained Sentiment Analysis Using Language and Domain
 %   Adaptation}\label{sec:cgsa:domain-adaptation}
