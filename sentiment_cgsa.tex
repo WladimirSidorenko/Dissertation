@@ -3153,9 +3153,9 @@ SB10k.  Two possible explanations for these rather mediocre results
 that we can think of might be a bad starting point of the parameters,
 which could prevent the optimizers from finding the optimal solution
 to the optimization objective, or an insufficient amount of training
-data, which would lead to overfitting the training set, but poor
-generalization to unseed examples.  We will investigate each of these
-factors in detail in the following sections.
+data, which would lead to an extreme overfitting of the training set,
+but poor generalization to unseed examples.  We will now investigate
+the former of these factors in detail.
 
 % \section{Coarse-Grained Sentiment Analysis Using Language and Domain
 %   Adaptation}\label{sec:cgsa:domain-adaptation}
@@ -3246,6 +3246,25 @@ factors in detail in the following sections.
 % each other;
 
 \subsection{Effect of Word Embeddings}
+
+Similarly to what we did in the previous chapters, we decided to
+replace the randomly initialized word vectors in the very first layer
+of the neural networks with pre-trained word2vec embeddings, keeping
+this parameter fixed during optimization.  As we can see from the
+results in Table~\ref{snt-cgsa:tbl:dl-res-word2vec}, this operation
+leads to a significant improvement of the results for all classifiers,
+boosting the best observed macro-averaged \F-score from 0.613 to 0.651
+on the PotTS corpus and increasing this value from 0.315 to 0.546 on
+the SB10k data.  In a similar way, the accuracy of the models also
+grows from 0.678 to 0.706 on the former dataset and from 0.736 to
+0.759 on the \citeauthor{Cieliebak}'s corpus.
+
+Another noteworthy tendency which we can observe after these changes
+is that these improvements mostly affect models with a greater number
+of intermediate paramaters, such as SEV, BAZ, LBA$^{(1)}$, and
+LBA$^{(2)}$, but are significantly smaller for the recursive systems
+(RAE and RNTN) which only have one compositional matrix or tensor to
+unite the embeddings.
 
 \begin{table}[h]
   \begin{center}
@@ -3492,6 +3511,20 @@ factors in detail in the following sections.
   \end{center}
 \end{table}
 
+In order to see whether this situation would be different if we
+optimized word representations as well, we reran our experiments once
+again, initializing word vectors with word2vec embeddings as
+previously, but allowing them to be updated during the training.
+Moreover, to account for words which were missing from the training
+set, we additionally computed an optimal least-square mapping for
+transforming original word2vec vectors to the best approximation of
+optimized word represenations.  As suggested by the results in
+Table~\ref{snt-cgsa:tbl:dl-res-lstsq}, these modifications iprove the
+results even further, setting a new record for the macro-averaged
+\F-value on the PotTS corpus (0.659~\F) and the micro-averaged
+\F-score on the SB10k data (0.766~\F), and pushing our LBA$^{(1)}$
+system even above its most challenging competitors.
+
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -3691,6 +3724,13 @@ factors in detail in the following sections.
     \label{snt-cgsa:tbl:dl-res-lstsq}
   \end{center}
 \end{table}
+
+A similar effect is also observed for other systems, first of all BAZ
+and LBA$^{(2)}$, which yield similarly good results for the positive
+and neutral classes.  The only system which seems to be uaffected by
+these improvements is the RNTN approach of~\citet{Socher:13}, which
+keeps to predict the neutral label for all instances on the SB10k
+corpus.
 
 \subsection{Error Analysis}
 
