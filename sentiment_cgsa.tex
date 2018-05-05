@@ -3257,7 +3257,7 @@ boosting the best observed macro-averaged \F-score from 0.613 to 0.651
 on the PotTS corpus and increasing this value from 0.315 to 0.546 on
 the SB10k data.  In a similar way, the accuracy of the models also
 grows from 0.678 to 0.706 on the former dataset and from 0.736 to
-0.759 on the \citeauthor{Cieliebak}'s corpus.
+0.759 on the \citeauthor{Cieliebak:17}'s corpus.
 
 Another noteworthy tendency which we can observe after these changes
 is that these improvements mostly affect models with a greater number
@@ -3734,7 +3734,130 @@ corpus.
 
 \subsection{Error Analysis}
 
-\begin{example}[Error Made by the System of~\citeauthor{Socher:11}]\label{snt:cgsa:exmp:socher11-error}
+Now, before we proceed with the evaluation of the other factor (a
+larger size of the training set), let us first analyze some errors
+that were specific to each classifier that was trained with
+task-specific embeddings using the least-square fallback.
+
+Since interpreting and understanding the results of deep learning
+systems is a fairly complex problem in general due to a big number of
+model parameters and unobvious correlations between them, we decided
+to use \textsc{Lime}~\cite{Ribeiro:16}---a recently proposed local
+interpretable model-agnostic explanation tool that can be used to
+analyze the results of any black-box classifier.  To achieve this,
+\textsc{Lime} randomly removes and perturbs parts of the input
+instance and measures which of these modifications leads to the
+biggest change of the output probabilities.
+
+The first incorrect prediction shown in
+Example~\ref{snt:cgsa:exmp:rae-error} was made by the recursive
+auto-encoder system of~\citet{Socher:11}.  For the sake of vividness,
+we highlighted all features that, according to \textsc{Lime}, are
+associated with the neutral class as white, negative attributes are
+marked with a \colorbox{blue!50}{blue} background, and positive
+attributes are highlighted in \colorbox{green!50}{green}.  The
+magnitude of color gradient shows the association strength of
+particular feature with the respective class.
+
+\begin{example}[Error Made by the RAE System]\label{snt:cgsa:exmp:rae-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape \colorbox{white!5}{Gr\"un}\colorbox{blue!11}{-}\colorbox{white!25.7}{Schwarz} \colorbox{white!5}{in} \colorbox{white!2.5!blue!1}{meinem} Bundesland. \colorbox{green!10}{Gef\"allt} \colorbox{white!5!blue!4.5}{mir} \colorbox{white!5!blue!5}{doch} \colorbox{white!4.6!blue!5}{sehr} \colorbox{white!5!blue!5}{\%PosSmiley}}\\
+  \noindent \colorbox{white!5}{Green}\colorbox{blue!11}{-}\colorbox{white!25.7}{Black} \colorbox{white!5}{in} \colorbox{white!2.5!blue!1}{my} state.  \colorbox{white!5!blue!5}{Yet}, \colorbox{white!5!blue!4.5}{I} \colorbox{green!10}{like} it \colorbox{white!4.6!blue!5}{so much} \colorbox{white!5!blue!5}{\%PosSmiley}\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 324606854040801280	Bundestagsdebatte : Von der Leyen schweigt beim Thema Frauenquote
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 347465873210085379	Die vier apokalyptischen Reiter des Euro sind wieder gefragt ...
+
+%% <<<	gold:	positive
+%% >>>	predicted:	neutral
+%% 370067678272430080	Wir lernen deutsch ! %PosSmiley
+
+%% <<<	gold:	positive
+%% >>>	predicted:	neutral
+%% 371300430250516480	Sehr Gut %PosSmiley Leverkusen gewinnt Derby gegen Gladbach. nrw
+
+%% <<<	gold:	positive
+%% >>>	predicted:	neutral
+%% 373555732970749953	Ach du scheisse ! %PosSmiley supercup BayernMunich
+
+%% <<<	gold:	positive
+%% >>>	predicted:	neutral
+%% 390206322832314370	tztztztz .. %PosSmiley Spass !
+
+%% <<<	gold:	positive
+%% >>>	predicted:	neutral
+%% 393338197133914112	Morgen lieve nichtje hier %PosSmiley
+
+%% <<<	gold:	positive
+%% >>>	predicted:	neutral
+%% 394535574235004928	tumblr people sind meine lieblings people %PosSmiley
+
+%% <<<	gold:	positive
+%% >>>	predicted:	neutral
+%% 395932235875905536	you ' re welcome %PosSmiley
+
+
+\begin{example}[Error Made by the RNTN System]\label{snt:cgsa:exmp:socher13-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet: }} {\upshape
+    tumblr people sind meine lieblings people \%PosSmiley}\\
+  \noindent tumblr people are my favorite people \%PosSmiley\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{green3}{positive}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
+\end{example}
+
+difficulties with possmiley
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 311916228971229184	Ich muss schon wieder aufs Klo , aber sobald ich drauf sitze , kommt der Papst raus . Bestimmt .
+
+%% <<<	gold:	negative
+%% >>>	predicted:	neutral
+%% 328110548975759360	Habe Hunger . Ihr seid mit Schuld . Als Deutsche sowieso .
+
+%% <<<	gold:	negative
+%% >>>	predicted:	neutral
+%% 332278087922368512	Syrien ist Freund von Iran , das ist das Problem ! annewill
+
+%% <<<	gold:	negative
+%% >>>	predicted:	neutral
+%% 362341966354198529	Otto Schily hat die SPD mit seinen Äusserungen zum Überwachungsskandal in Schwierigkeiten gebracht . Was die NSA ...
+
+%% <<<	gold:	negative
+%% >>>	predicted:	neutral
+%% 369706011709702144	Steuersenkungspläne : Trittin wirft der SPD Ängstlichkeit vor %Link Ängstlichkeit Steuersenkungspläne Trittin wirft
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	negative
+%% 368970863657246720	Achtung , Fanfare !
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 370519824461340674	Achtung , fertig , los !
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 391106605070422016	du fürchtest wohl richtig
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	negative
+%% 393133078983741440	Schlauste idee Nicht
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	negative
+%% 393977627050250240	dunkel draussen ...
+
+\begin{example}[Error Made by the SEV System]\label{snt:cgsa:exmp:severyn-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
   \noindent \\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
@@ -3743,7 +3866,24 @@ corpus.
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-\begin{example}[Error Made by the System of~\citeauthor{Severyn:15}]\label{snt:cgsa:exmp:severyn-error}
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 391697964189908992	Wollte meinen Kleiderschrank aufräumen ... sitze nun darin und singe Liebeslieder ...
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	negative
+%% 376747161884446720	Ich muss diese Arbeitswoche überleben ... für BTOB , BTS &amp; B. A. P
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 391671355307208704	Verstehe . Gepanzerte Boote essen die Viecher , Stiefel lassen sie übrig , die schmecken nicht . Natürlich ! schlefaz
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 373552746559188992	Die Bomben meiner Stadt machen BOOM , BOOM , BOOM !
+
+
+\begin{example}[Error Made by the BAZ System]\label{snt:cgsa:exmp:baziotis-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
   \noindent \\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
@@ -3752,14 +3892,50 @@ corpus.
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-\begin{example}[Error Made by the System of~\citeauthor{Baziotis:17}]\label{snt:cgsa:exmp:baziotis-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
-  \noindent \\[\exampleSep]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
-    \upshape\textcolor{green3}{positive}}\\
- \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{black}{neutral*}}
-\end{example}
+%% <<<	gold:	neutral
+%% >>>	predicted:	negative
+%% 322920577176334337	Zur Eröffnung in Hannover wurde so viel geschrieben in Sachen Putin und die Razzien bei den deutschen Stiftungen ,
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 367003093285601280	War das eine gute Idee ? - Amanda Bynes : Wiedersehen mit Hündchen Sherbert : Sie hat ihn wieder ! Nachdem Amanda ...
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	negative
+%% 367922644089589760	Diesen Eindruck bekommt man momentan leider wirklich . Bin sowieso dafür , dass Hübner die " 1 B " - Lösung forciert .
+
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 370535615928238081	Bekommen Sie den besten Preis f\"ur Reich Hochzeitskleid Nicht z\"ogern ! ( nicht versp\"aten ) %Link fb
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	negative
+%% 370854706064941056	Ominöse Festplatte bestellt . Ohne grosse Ahnung , da ich keine sichere Auskunft des Auftraggebers bekam . %NegSmiley Breaking Bad S2 &amp; 3 mal dazugelegt .
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 371687984086908928	Ach ja , damals %PosSmiley ( @ Mauerpark for Grüss August and Mutabor w / %User )
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 371687984086908928	Ach ja , damals %PosSmiley ( @ Mauerpark for Grüss August and Mutabor w / %User )
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 371910806411034624	Come on TeBe ! " 40. Minute : Hertha03 bisher ohne grosse Chancen . Die Abwehr steht gut . TeBeLive ...
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 375739199405981696	Fliegen macht nicht in jede Richtung Spass .
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 391701613066616832	bamba muss ein besseres stellungsspiel annehmen. klarer fehler beim 1-1 wenn zambrano rausrückt ...
+
+%% <<<	gold:	neutral
+%% >>>	predicted:	positive
+%% 394406565803216896	Gerade super Lust , mit Carls Haaren was zu machen aber ca 300 km Distanz halten mich davon ab .
 
 \begin{example}[Error Made by the LBA System]\label{snt:cgsa:exmp:lba-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape }\\
