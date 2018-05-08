@@ -3752,12 +3752,12 @@ biggest change of the output probabilities.
 The first incorrect prediction shown in
 Example~\ref{snt:cgsa:exmp:rae-error} was made by the recursive
 auto-encoder system of~\citet{Socher:11}.  For the sake of vividness,
-we highlighted all features that, according to \textsc{Lime}, are
-associated with the neutral class as white, negative attributes are
-marked with a \colorbox{blue!30}{blue} background, and positive
-attributes are highlighted in \colorbox{green!30}{green}.  The
-magnitude of color gradient shows the association strength of
-particular feature with the respective class.
+we have highlighted all features that, according to \textsc{Lime},
+were associated with the neutral class as white, marked negative
+attributes with the \colorbox{blue!30}{blue} background, and
+highlighted positive attributes in \colorbox{green!30}{green}, showing
+the strength of the association with the respectove polarity class via
+color brightness.
 
 \begin{example}[Error Made by the RAE System]\label{snt:cgsa:exmp:rae-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape \colorbox{white!5}{Gr\"un}\colorbox{blue!11}{-}\colorbox{white!25.7}{Schwarz} \colorbox{white!5}{in} \colorbox{white!2.5!blue!1}{meinem} Bundesland. \colorbox{green!10}{Gef\"allt} \colorbox{white!5!blue!4.5}{mir} \colorbox{white!5!blue!5}{doch} \colorbox{white!4.6!blue!5}{sehr} \colorbox{white!5!blue!5}{\%PosSmiley}}\\
@@ -3768,42 +3768,27 @@ particular feature with the respective class.
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 324606854040801280	Bundestagsdebatte : Von der Leyen schweigt beim Thema Frauenquote
+As we can see from the example, the model does correctly recognize the
+positive term ``gef\"allt'' (\emph{to like}), but, unfortunately, this
+word is the only one which contributes to the prediction of the
+correct class, and its learned weight is obviously insufficient to
+outdo the effect of multiple neutral and even some negatively connoted
+terms, such as ``Gr\"un'' (\emph{green}), ``Schwarz'' (\emph{black}),
+and most surprisingly ``PosSmiley\%'' (\emph{PosSmiley\%}), which is
+unexpectedly associated with the negative semantic orientation.
 
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 347465873210085379	Die vier apokalyptischen Reiter des Euro sind wieder gefragt ...
-
-%% <<<	gold:	positive
-%% >>>	predicted:	neutral
-%% 370067678272430080	Wir lernen deutsch ! %PosSmiley
-
-%% <<<	gold:	positive
-%% >>>	predicted:	neutral
-%% 371300430250516480	Sehr Gut %PosSmiley Leverkusen gewinnt Derby gegen Gladbach. nrw
-
-%% <<<	gold:	positive
-%% >>>	predicted:	neutral
-%% 373555732970749953	Ach du scheisse ! %PosSmiley supercup BayernMunich
-
-%% <<<	gold:	positive
-%% >>>	predicted:	neutral
-%% 390206322832314370	tztztztz .. %PosSmiley Spass !
-
-%% <<<	gold:	positive
-%% >>>	predicted:	neutral
-%% 393338197133914112	Morgen lieve nichtje hier %PosSmiley
-
-%% <<<	gold:	positive
-%% >>>	predicted:	neutral
-%% 394535574235004928	tumblr people sind meine lieblings people %PosSmiley
-
-%% <<<	gold:	positive
-%% >>>	predicted:	neutral
-%% 395932235875905536	you ' re welcome %PosSmiley
-
+A similar situation is also observed with the recurrent neural tensor,
+whose sample error is shown in
+Example~\ref{snt:cgsa:exmp:socher13-error}.  As we can see from the
+analysis, the bias towards the neutral class is even more pronounced
+this time, since virtually all of the terms present in tweet are
+highlighted in white.  The only word which shows a minimal negative
+connotation is ``tumblr'', which indeed appeared twice in a negative
+tweet, two times in neutral messages, and once in a positive microblog
+in the training set.  Nonetheless, even for this term the bias towards
+the negative polarity is much lower than its association with the
+neutral class (). whcih can be explained by the general neutral bias
+of the SB10k corpus.
 
 \begin{example}[Error Made by the RNTN System]\label{snt:cgsa:exmp:socher13-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet: }} {\upshape
@@ -3815,50 +3800,30 @@ particular feature with the respective class.
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-possmiley
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 311916228971229184	Ich muss schon wieder aufs Klo , aber sobald ich drauf sitze , kommt der Papst raus . Bestimmt .
-
-%% <<<	gold:	negative
-%% >>>	predicted:	neutral
-%% 328110548975759360	Habe Hunger . Ihr seid mit Schuld . Als Deutsche sowieso .
-
-%% <<<	gold:	negative
-%% >>>	predicted:	neutral
-%% 332278087922368512	Syrien ist Freund von Iran , das ist das Problem ! annewill
-
-%% <<<	gold:	negative
-%% >>>	predicted:	neutral
-%% 362341966354198529	Otto Schily hat die SPD mit seinen Äusserungen zum Überwachungsskandal in Schwierigkeiten gebracht . Was die NSA ...
-
-%% <<<	gold:	negative
-%% >>>	predicted:	neutral
-%% 369706011709702144	Steuersenkungspläne : Trittin wirft der SPD Ängstlichkeit vor %Link Ängstlichkeit Steuersenkungspläne Trittin wirft
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	negative
-%% 368970863657246720	Achtung , Fanfare !
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 370519824461340674	Achtung , fertig , los !
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 391106605070422016	du fürchtest wohl richtig
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	negative
-%% 393133078983741440	Schlauste idee Nicht
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	negative
-%% 393977627050250240	dunkel draussen ...
+A slightly different behavior is shown by the method
+of~\citet{Severyn:15} on the PotTS dataset.  This time, we can see two
+clearly positive words (``ist'' [\emph{is}] and ``Freund''
+[\emph{friend}]).  However, the former of these terms is an auxiliary
+copular verb, which can hardly be associated with any polarity as it
+rather plays a grammatical role and lacks any pronounced lexical
+meaning.  Nevertheless, the latter word (``Freund'' [\emph{friend}])
+indeed expresses a positive feeling of its prepositional argument
+(``Iran'') towards the subject of the sentence (``Syrien''
+[\emph{Syria}]).  Similarly to the previous cases, we again can
+observe an abundance of neutral terms, but unfortunately none of
+negative items, which is all the more surprising that the word
+``Problem'' (\emph{problem}) is an unequivocal negative marker which
+is usually featured among top negative entries in any sufficiently
+comprehensive sentiment lexicon.
 
 \begin{example}[Error Made by the SEV System]\label{snt:cgsa:exmp:severyn-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape \colorbox{white!7.4}{Syrien} \colorbox{green!8}{ist} \colorbox{green!11}{Freund} \colorbox{white!6.6}{von} \colorbox{white!40.5}{Iran}, das \colorbox{green!8}{ist} \colorbox{white!12.7}{das} \colorbox{green!1.5}{Problem}\colorbox{green!3}{!} \colorbox{blue!0.000005!white!8}{annewill}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    \colorbox{white!7.4}{Syrien} \colorbox{green!8}{ist}
+    \colorbox{green!11}{Freund} \colorbox{white!6.6}{von}
+    \colorbox{white!40.5}{Iran}, das \colorbox{green!8}{ist}
+    \colorbox{white!12.7}{das}
+    \colorbox{green!1.5}{Problem}\colorbox{green!3}{!}
+    \colorbox{blue!0.000005!white!8}{annewill}}\\
   \noindent \colorbox{white!7.4}{Syria} \colorbox{green!8}{is} a \colorbox{green!11}{friend} \colorbox{white!6.6}{of} \colorbox{white!40.5}{Iran}. That\colorbox{green!8}{'s} \colorbox{white!12.7}{the} \colorbox{green!1.5}{problem}\colorbox{green!3}{!} \colorbox{blue!0.000005!white!8}{annewill}\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
@@ -3866,93 +3831,30 @@ possmiley
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 391697964189908992	Wollte meinen Kleiderschrank aufräumen ... sitze nun darin und singe Liebeslieder ...
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	negative
-%% 376747161884446720	Ich muss diese Arbeitswoche überleben ... für BTOB , BTS &amp; B. A. P
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 391671355307208704	Verstehe . Gepanzerte Boote essen die Viecher , Stiefel lassen sie übrig , die schmecken nicht . Natürlich ! schlefaz
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 373552746559188992	Die Bomben meiner Stadt machen BOOM , BOOM , BOOM !
-
-
 \begin{example}[Error Made by the BAZ System]\label{snt:cgsa:exmp:baziotis-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Wollte meinen Kleiderschrank aufr\"aumen ... sitze nun darin und singe Liebeslieder...}\\
-  \noindent Wanted to clean up my wardrobe... Now sitting there and singing love songs...\\[\exampleSep]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
-    \upshape\textcolor{black}{neutral}}
- \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{green3}{positive*}}\\
-\end{example}
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	negative
-%% 322920577176334337	Zur Eröffnung in Hannover wurde so viel geschrieben in Sachen Putin und die Razzien bei den deutschen Stiftungen ,
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 367003093285601280	War das eine gute Idee ? - Amanda Bynes : Wiedersehen mit Hündchen Sherbert : Sie hat ihn wieder ! Nachdem Amanda ...
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	negative
-%% 367922644089589760	Diesen Eindruck bekommt man momentan leider wirklich . Bin sowieso dafür , dass Hübner die " 1 B " - Lösung forciert .
-
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 370535615928238081	Bekommen Sie den besten Preis f\"ur Reich Hochzeitskleid Nicht z\"ogern ! ( nicht versp\"aten ) %Link fb
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	negative
-%% 370854706064941056	Ominöse Festplatte bestellt . Ohne grosse Ahnung , da ich keine sichere Auskunft des Auftraggebers bekam . %NegSmiley Breaking Bad S2 &amp; 3 mal dazugelegt .
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 371687984086908928	Ach ja , damals %PosSmiley ( @ Mauerpark for Grüss August and Mutabor w / %User )
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 371687984086908928	Ach ja , damals %PosSmiley ( @ Mauerpark for Grüss August and Mutabor w / %User )
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 371910806411034624	Come on TeBe ! " 40. Minute : Hertha03 bisher ohne grosse Chancen . Die Abwehr steht gut . TeBeLive ...
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 375739199405981696	Fliegen macht nicht in jede Richtung Spass .
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 391701613066616832	bamba muss ein besseres stellungsspiel annehmen. klarer fehler beim 1-1 wenn zambrano rausrückt ...
-
-%% <<<	gold:	neutral
-%% >>>	predicted:	positive
-%% 394406565803216896	Gerade super Lust , mit Carls Haaren was zu machen aber ca 300 km Distanz halten mich davon ab .
-
-\begin{example}[Error Made by the LBA System]\label{snt:cgsa:exmp:lba-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    Gerade super Lust, mit Carls Haaren was zu machen aber ca 300 km
-    Distanz halten mich davon ab.}\\
-  \noindent super up to do something with Carl's hair, but 300 km
-  distance keep me off from this.\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape \colorbox{white!1.4}{Wollte} \colorbox{blue!7.7}{meinen} \colorbox{white!3.6}{Kleiderschrank} \colorbox{blue!1.7}{aufr\"aumen} ... \colorbox{white!1.2}{sitze} \colorbox{green!4.6}{nun} \colorbox{green!31.5}{darin} \colorbox{green!2.8}{und} \colorbox{green!29.7}{singe} \colorbox{green!15.2}{Liebeslieder}...}\\
+  \noindent \colorbox{white!1.4}{Wanted} to \colorbox{blue!1.7}{clean up} \colorbox{blue!7.7}{my} \colorbox{white!3.6}{wardrobe}... \colorbox{green!4.6}{Now} \colorbox{white!1.2}{sitting} \colorbox{green!31.5}{in it} \colorbox{green!2.8}{and} \colorbox{green!29.7}{singing} \colorbox{green!15.2}{love songs}...\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{black}{neutral}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{green3}{positive*}}
 \end{example}
 
-\section{Evaluation}
-\subsection{Effect of Lexicons}\label{cgsa:subsec:eval:lexicons}
 
-\todo[inline]{describe lexicon normalization steps}
+\begin{example}[Error Made by the LBA System]\label{snt:cgsa:exmp:lba-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    \colorbox{green!0.5!blue!0.4}{Gerade} \colorbox{green!89}{super} \colorbox{blue!0.3}{Lust}, mit \colorbox{white!2}{Carls} Haaren \colorbox{white!0.6}{was} zu \colorbox{green!1}{machen} \colorbox{green!0.3}{aber} \colorbox{white!2}{ca} 300 \colorbox{white!1}{km}
+    \colorbox{white!1}{Distanz} halten \colorbox{blue!0.3}{mich} davon \colorbox{white!1}{ab}.}\\
+  \noindent \colorbox{green!0.5!blue!0.4}{Right now} \colorbox{green!89}{super} \colorbox{blue!0.3}{up to} \colorbox{green!1}{do} \colorbox{white!0.6}{something} with \colorbox{white!2}{Carl}'s hair, \colorbox{green!0.3}{but} \colorbox{white!2}{ca.} 300 \colorbox{white!1}{km}
+  \colorbox{white!1}{distance} keep \colorbox{blue!0.3}{me} \colorbox{white!1}{off} from this.\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{black}{neutral}}\\
+ \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{green3}{positive*}}
+\end{example}
+
+
+\section{Evaluation}
 
 \subsection{Effect of Distant Supervision}
 \todo[inline]{}
