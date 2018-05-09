@@ -3781,14 +3781,15 @@ A similar situation is also observed with the recurrent neural tensor,
 whose sample error is shown in
 Example~\ref{snt:cgsa:exmp:socher13-error}.  As we can see from the
 analysis, the bias towards the neutral class is even more pronounced
-this time, since virtually all of the terms present in tweet are
+this time as virtually all of the terms present in tweet are
 highlighted in white.  The only word which shows a minimal negative
 connotation is ``tumblr'', which indeed appeared twice in a negative
 tweet, two times in neutral messages, and once in a positive microblog
-in the training set.  Nonetheless, even for this term the bias towards
-the negative polarity is much lower than its association with the
-neutral class (). whcih can be explained by the general neutral bias
-of the SB10k corpus.
+in the training set.  Nonetheless, even for this term the skewness
+towards the negative polarity is still ten times lower than its
+association with the neutral orientation ($\expnumber{1.5}{-5}$ versus
+$\expnumber{1.4}{-4}$). which can be explained by the general
+prevalence of neutral tweets in the SB10k corpus.
 
 \begin{example}[Error Made by the RNTN System]\label{snt:cgsa:exmp:socher13-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet: }} {\upshape
@@ -3804,17 +3805,15 @@ A slightly different behavior is shown by the method
 of~\citet{Severyn:15} on the PotTS dataset.  This time, we can see two
 clearly positive words (``ist'' [\emph{is}] and ``Freund''
 [\emph{friend}]).  However, the former of these terms is an auxiliary
-copular verb, which can hardly be associated with any polarity as it
-rather plays a grammatical role and lacks any pronounced lexical
-meaning.  Nevertheless, the latter word (``Freund'' [\emph{friend}])
-indeed expresses a positive feeling of its prepositional argument
-(``Iran'') towards the subject of the sentence (``Syrien''
-[\emph{Syria}]).  Similarly to the previous cases, we again can
-observe an abundance of neutral terms, but unfortunately none of
-negative items, which is all the more surprising that the word
-``Problem'' (\emph{problem}) is an unequivocal negative marker which
-is usually featured among top negative entries in any sufficiently
-comprehensive sentiment lexicon.
+copular verb, which can express any polarity, since it usually plays a
+purely grammatical role and lacks any distinct lexical meaning.
+Nevertheless, the latter word (``Freund'' [\emph{friend}]) indeed
+conveys a positive feeling of its prepositional argument (``Iran'')
+towards the subject of the sentence (``Syrien'' [\emph{Syria}]), but
+this positive effect is nullified by the author's statement that this
+friendship poses a problem. Unfortunately, the word ``Problem''
+(\emph{problem}) is recognized only as a neutral marker, just like
+many other terms present in this message.
 
 \begin{example}[Error Made by the SEV System]\label{snt:cgsa:exmp:severyn-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
@@ -3831,15 +3830,44 @@ comprehensive sentiment lexicon.
     \upshape\textcolor{black}{neutral*}}
 \end{example}
 
+In Example~\ref{snt:cgsa:exmp:baziotis-error}, we can see another
+error made by the system of~\citet{Baziotis:17}.  This time, again, we
+observe the prevalence of positive and neutral items, with the only
+exception being the term ``meinen'' (\emph{my}), which, according to
+the classifier, indicates the negative polarity even though it has a
+clear objective possessive meaning.  Apart from this term, we also can
+notice several inaccuracies at recognizing positive and neutral
+features: For example, the pronominal adverb ``darin'' (\emph{in it})
+is the strongest positive trait, whose predictiveness is even higher
+than the scores of the words ``singen'' (\emph{to sing}) and
+``Liebeslied'' (\emph{love song}).  This contradicts the fact that
+pronomial adverbs by themselves do not express any semantic
+orientation, all the more as in this case the antecedent of the
+adverb---the noun ``Kleiderschrank'' (\emph{wardrobe})---is already
+recognized as a neutral item.  On the other hand, the modal verb
+``wollte'' (\emph{wished}) is regarded as an objective term, but has a
+slight positive connotation as it expresses a wish of the author.
+
 \begin{example}[Error Made by the BAZ System]\label{snt:cgsa:exmp:baziotis-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape \colorbox{white!1.4}{Wollte} \colorbox{blue!7.7}{meinen} \colorbox{white!3.6}{Kleiderschrank} \colorbox{blue!1.7}{aufr\"aumen} ... \colorbox{white!1.2}{sitze} \colorbox{green!4.6}{nun} \colorbox{green!31.5}{darin} \colorbox{green!2.8}{und} \colorbox{green!29.7}{singe} \colorbox{green!15.2}{Liebeslieder}...}\\
-  \noindent \colorbox{white!1.4}{Wanted} to \colorbox{blue!1.7}{clean up} \colorbox{blue!7.7}{my} \colorbox{white!3.6}{wardrobe}... \colorbox{green!4.6}{Now} \colorbox{white!1.2}{sitting} \colorbox{green!31.5}{in it} \colorbox{green!2.8}{and} \colorbox{green!29.7}{singing} \colorbox{green!15.2}{love songs}...\\[\exampleSep]
+  \noindent \colorbox{white!1.4}{Wished} to \colorbox{blue!1.7}{clean up} \colorbox{blue!7.7}{my} \colorbox{white!3.6}{wardrobe}... \colorbox{green!4.6}{Now} \colorbox{white!1.2}{sitting} \colorbox{green!31.5}{in it} \colorbox{green!2.8}{and} \colorbox{green!29.7}{singing} \colorbox{green!15.2}{love songs}...\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{black}{neutral}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{green3}{positive*}}
 \end{example}
 
+Finally, Example~\ref{snt:cgsa:exmp:lba-error} shows an incorrect
+prediction of our lexicon-based attention method.  In contrast to the
+previous two approaches, the positive information is much more
+condensed in this case and represented by a single term ``super''.
+Surprisingly, this term outweighs a whole bunch of neutral features
+such as ``gerade'' (\emph{right now}), ``Lust haben'' (\emph{to be up
+  to}), ``was'' (\emph{something}) etc.  Admittedly, the first part of
+this message indeed expresses a positive attitude of the author who
+wants to do somethin with Carl's hair, but this effect is invalidated
+by the rhetorical \textsc{contrast}-relation, which shows the
+impossibility of this wish.
 
 \begin{example}[Error Made by the LBA System]\label{snt:cgsa:exmp:lba-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
