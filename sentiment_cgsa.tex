@@ -3884,6 +3884,16 @@ impossibility of this wish.
 
 \section{Evaluation}
 
+Now that we have familiarized ourselves with the peculiarities and
+results of the most common coarse-grained sentiment analysis
+approaches from all groups of methods (lexicon-, machine-learning--
+and deep-learning--based ones), let us have a closer look at how
+changing different common parameters of these methods might affect
+their performance.  In particular, we would like to see whether
+increasing the amount of the training data, switching to a different
+sentiment lexicon, or using unnormalized text as input can increase
+the scores of the analyzed classifiers.
+
 \subsection{Effect of Distant Supervision}
 \todo[inline]{}
 
@@ -3953,6 +3963,146 @@ Using $n$-gram (up to length two), lexicon, part-of-speech, and
 micro-blogging features (such as emoticons, abbreviations, and slang
 expressions), the authors achieved a macro-averaged \F-measure of~0.68
 on the three-class prediction task.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Method} & %
+      \multicolumn{3}{c}{\bfseries Positive} & %
+      \multicolumn{3}{c}{\bfseries Negative} & %
+      \multicolumn{3}{c}{\bfseries Neutral} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+      %% General Statistics:
+      %%   'precision', 'predicted', average, warn_for)
+      %%              precision    recall  f1-score   support
+      %%    positive       0.80      0.60      0.69       680
+      %%    negative       0.00      0.00      0.00       287
+      %%     neutral       0.52      0.95      0.67       558
+      %% avg / total       0.55      0.62      0.55      1525
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 34.31%
+      %% Micro-Averaged F1-Score (All Classes): 61.5082%
+
+       GMN & 0.8 & 0.6 & 0.69 & %
+        0.0 & 0.0 & 0.0 & %
+        0.52 & 0.95 & 0.67 & %
+        0.343 & 0.615\\
+
+       MHM &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+       GNT &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+       RAE &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+         RNTN &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+      SEV &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+         BAZ &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+         LBA$^{(1)}$ &  &  &  & %
+           &  &  & %
+           &  &  & %
+           & \\
+
+      LBA$^{(2)}$ &  &  &  & %
+           &  &  & %
+           &  &  & %
+           & \\
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+
+       GMN &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+       MHM &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+       GNT &  &  &  & %
+        &  &  & %
+        &  &  & %
+        & \\
+
+       RAE &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+         RNTN &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+      SEV &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+         BAZ &  &  &  & %
+          &  &  & %
+          &  &  & %
+          & \\
+
+         LBA$^{(1)}$ &  &  &  & %
+           &  &  & %
+           &  &  & %
+           & \\
+
+      LBA$^{(2)}$ &  &  &  & %
+           &  &  & %
+           &  &  & %
+           & \\\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Evaluation of DL-based CGSA methods with pretrained least-squares embeddings]{
+      Evaluation of DL-based CGSA methods with pretrained least-squares embeddings\\
+      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
+        GNT~--~\citet{Guenther:14}}, RAE~--~Recursive
+        Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
+        \cite{Socher:13}, SEV~--~\citet{Severyn:15},
+        BAZ~--~\citet{Baziotis:17}, , LBA$^{(1)}$~--~lexicon-based
+        attention with one Bi-LSTM layer, LBA$^{(2)}$~--~lexicon-based
+        attention with two Bi-LSTM layers}
+    \label{snt-cgsa:tbl:distant-supervision}
+  \end{center}
+\end{table}
+
+\subsection{Effect of Lexicons}\label{cgsa:subsec:eval:lexicons}
+
+\todo[inline]{describe lexicon normalization steps}
 
 \subsection{Effect of Text Normalization}
 \begin{table}[h]
