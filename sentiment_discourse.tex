@@ -266,9 +266,36 @@ useful, boosting the prediction accuracy on the movie review corpus
 of~\citet{Maas:11} from 88.21 to 91.36\% in comparison with the
 connector-unaware model.
 
-\todo[inline]{\citet{Heerschop:11}}
+\done[inline]{\citet{Heerschop:11}}
 
-\todo[inline]{\citet{Zhou:11}}
+\citet{Heerschop:11} compared three different ways of incorporating
+discourse information into a lexicon-based sentiment analysis system:
+by increasing polarity scores of words that appeared near the end of
+the document, by assigning higher weights to the tokens in the nuclei
+of RST trees than its satellites, and, finally, by training a genetic
+algorithm which learned separate coefficients for the nuclei and eight
+types of satellite relations (\textsc{Attribution},
+\textsc{Background}, \textsc{Cause}, etc.).  An evaluation of these
+approaches on the movie review corpus of~\citet{Pang:04} showed the
+superior performace of the first option (0.608 accuracy and 0,597
+macro\F).  However, after adding an offset to the decision boundary
+(accounting for the fact that negative reviews could contain multiple
+positive terms) significantly improved the results of the last
+classifier, which eventually outperformed all other competitors,
+yielding 0.72 accuracy and macro-averaged~\F.
+
+\done[inline]{\citet{Zhou:11}}
+
+\citet{Zhou:11} used automatically derived RST trees to disambiguate
+the polarity of complex sentences which contained both positive and
+negative terms.  To determine the semantic orientation of the whole
+sentence, the authors applied a set of heuristic rules that described
+possible polarity changes of elementary discourse units based on their
+nucleus/satellite-status and discourse relation connecting them to the
+parent.  With these rules, \citeauthor{Zhou:11} attained a
+statistically significant improvement in sentence-level polarity
+classification on the NTCIR MOAT corpus~\cite{Xu:10}, successfully
+resolving more than a half of ambiguities.
 
 \todo[inline]{\citet{Zirn:11}}
 
@@ -282,7 +309,7 @@ here.
 
 Wang and Wu (2013) use manually-annotated discourse parses in
 combination with a sentiment lexicon, which is automatically updated
-based on the dis- course structure.
+based on the discourse structure.
 
 \todo[inline]{\citet{Chenlo:13}}
 
