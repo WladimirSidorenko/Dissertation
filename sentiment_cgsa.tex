@@ -3264,7 +3264,7 @@ is that these improvements mostly affect models with a greater number
 of intermediate paramaters, such as SEV, BAZ, LBA$^{(1)}$, and
 LBA$^{(2)}$, but are significantly smaller for the recursive systems
 (RAE and RNTN) which only have one compositional matrix or tensor to
-unite the embeddings.
+unite embeddings.
 
 \begin{table}[h]
   \begin{center}
@@ -3891,7 +3891,8 @@ have a closer look at how changing different common parameters of
 these methods might affect their performance.  In particular, we would
 like to see whether increasing the amount of training data, switching
 to different sentiment lexicons, or using unnormalized text as input
-could increase their classification scores.
+might increase or, vice versa, deteriorate their classification
+scores.
 
 \subsection{Effect of Distant Supervision}
 \todo[inline]{}
@@ -3983,6 +3984,7 @@ on the three-class prediction task.
       Precision & Recall & \F{} & & \\\midrule
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+      %% (Without balancing)
       %% General Statistics:
       %%   'precision', 'predicted', average, warn_for)
       %%              precision    recall  f1-score   support
@@ -3993,27 +3995,42 @@ on the three-class prediction task.
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 34.31%
       %% Micro-Averaged F1-Score (All Classes): 61.5082%
 
-      GMN & 0.8 & 0.6 & 0.69 & %
-      0.0 & 0.0 & 0.0 & %
-      0.52 & 0.95 & 0.67 & %
-      0.343 & 0.615\\
+      %% (With balancing)
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.80      0.34      0.48       680
+      %% negative       0.20      0.29      0.24       287
+      %% neutral       0.53      0.79      0.63       558
+      %% avg / total       0.59      0.49      0.49      1525
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 35.67%
+      %% Micro-Averaged F1-Score (All Classes): 49.4426%
 
-      MHM &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      GMN &  &  &  & %
+       &  &  & %
+       &  &  & %
+       & \\
+
+      %% (With balancing)
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.86      0.60      0.71       680
+      %% negative       0.26      0.31      0.28       287
+      %% neutral       0.53      0.68      0.59       558
+      %% avg / total       0.63      0.57      0.59      1525
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 49.62%
+      %% Micro-Averaged F1-Score (All Classes): 57.3770%
 
       GNT &  &  &  & %
       &  &  & %
       &  &  & %
       & \\
 
-      RAE &  &  &  & %
+      MHM &  &  &  & %
       &  &  & %
       &  &  & %
       & \\
 
-      RNTN &  &  &  & %
+      RAE &  &  &  & %
       &  &  & %
       &  &  & %
       & \\
@@ -4045,22 +4062,17 @@ on the three-class prediction task.
       &  &  & %
       & \\
 
-      MHM &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
-
       GNT &  &  &  & %
       &  &  & %
       &  &  & %
       & \\
 
-      RAE &  &  &  & %
+      MHM &  &  &  & %
       &  &  & %
       &  &  & %
       & \\
 
-      RNTN &  &  &  & %
+      RAE &  &  &  & %
       &  &  & %
       &  &  & %
       & \\
@@ -4090,8 +4102,7 @@ on the three-class prediction task.
       Results of CGSA methods with distant supervision\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~--~\citet{Guenther:14}}, RAE~--~Recursive
-        Auto-Encoder \cite{Socher:11}, RNTN~--~Recursive Neural-Tensor Network
-        \cite{Socher:13}, SEV~--~\citet{Severyn:15},
+        Auto-Encoder \cite{Socher:11}, SEV~--~\citet{Severyn:15},
         BAZ~--~\citet{Baziotis:17}, , LBA$^{(1)}$~--~lexicon-based
         attention with one Bi-LSTM layer, LBA$^{(2)}$~--~lexicon-based
         attention with two Bi-LSTM layers}
