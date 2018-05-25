@@ -297,23 +297,39 @@ statistically significant improvement in sentence-level polarity
 classification on the NTCIR MOAT corpus~\cite{Xu:10}, successfully
 resolving more than a half of ambiguities.
 
-\todo[inline]{\citet{Zirn:11}}
+\done[inline]{\citet{Zirn:11}}
 
-Zirn et al. (2011) use an RST parser in a Markov Logic Network, with
-the goal of making polarity predictions at the sub-sentence level,
-rather than improving document-level pre- diction. None of the prior
-work considers the sort of recurrent compositional model presented
-here.
+An approach which probably comes closest to ours was proposed
+by~\citet{Zirn:11}, who used a lexicon-based sentiment system to
+compute polarity scores of elementary discourse units, and then
+applied a set of Markov logic rules to enforce consistency of these
+polarity assignments over an automatically derived RST tree.  Apart
+from experimenting with tree structures, the authors also checked
+whether simply preferring the same semantic orientation for linearly
+adjacent segements would improve the accuracy.  Surprisingly, this
+latter option worked the best, achieving 69.02\% accuracy on the
+Amazon review dataset of~\citet{Blitzer:07} and significantly
+outperforming both discourse-unaware and RST-tree--based baseline
+classifiers.
 
-\todo[inline]{\citet{Wang:13}}
+\done[inline]{\citet{Wang:13}}
+\done[inline]{\citet{Chenlo:13,Chenlo:14}}
 
-Wang and Wu (2013) use manually-annotated discourse parses in
-combination with a sentiment lexicon, which is automatically updated
-based on the discourse structure.
-
-\todo[inline]{\citet{Chenlo:13}}
-
-\todo[inline]{\citet{Chenlo:14}}
+Another RST-based framework was proposed by~\citet{Wang:13} who also
+computed polarity scores of elementary discourse segments, and
+determined the polarity of the whole document by computing a linear
+combination of these scores multiplied with their doscourse
+coefficients.  These coefficients were learned automatically during
+training and, similarly to the approach of~\citet{Zirn:11}, depended
+on the status of the segment in the RST tree (either nucleus or
+sattelite) and the relation connecting it to the ancestor node.  Using
+a restricted subset of such relations (\textsc{Contrast},
+\textsc{Cause}, \textsc{Generalization}, and \textsc{Condition}), the
+authors achived a considerable improvement over the baseline system in
+which all segments were weighted equally (0.8528 versus 0.8386\F).  A
+similar method was also used by \citet{Chenlo:13,Chenlo:14} for
+analyzing blog posts, where it also proved its efficiency, leading to
+much better results than discourse-unaware baselines.
 
 \done[inline]{\citet{Bhatia:15}}
 
