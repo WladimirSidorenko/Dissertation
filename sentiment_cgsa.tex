@@ -4005,10 +4005,24 @@ on the three-class prediction task.
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 35.67%
       %% Micro-Averaged F1-Score (All Classes): 49.4426%
 
-      GMN &  &  &  & %
-       &  &  & %
-       &  &  & %
-       & \\
+      GMN & 0.8\posdelta{0.13} & 0.34\negdelta{0.39} & 0.48\negdelta{0.22} & %
+       0.2\negdelta{0.15} & 0.29\posdelta{0.14} & 0.24\negdelta{0.03} & %
+       0.53\negdelta{0.07} & 0.79\posdelta{0.07} & 0.63\negdelta{0.03} & %
+       0.36\negdelta{0.01} & 0.49\negdelta{0.12}\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.86      0.59      0.70       680
+      %% negative       0.31      0.39      0.35       287
+      %% neutral       0.55      0.68      0.61       558
+      %% avg / total       0.64      0.59      0.60      1525
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 52.30%
+      %% Micro-Averaged F1-Score (All Classes): 58.6230%
+
+      MHM & 0.86\posdelta{0.07} & 0.59\negdelta{0.18} & 0.7\negdelta{0.08} & %
+      0.31\negdelta{0.27} & 0.39\negdelta{0.17} & 0.35\negdelta{0.22} & %
+      0.55\negdelta{0.18} & 0.68\negdelta{0.08} & 0.61\negdelta{0.13} & %
+      0.52\negdelta{0.15} & 0.59\negdelta{0.14}\\
 
       %% (With balancing)
       %% General Statistics:
@@ -4020,15 +4034,10 @@ on the three-class prediction task.
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 49.62%
       %% Micro-Averaged F1-Score (All Classes): 57.3770%
 
-      GNT &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
-
-      MHM &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      GNT & 0.86\posdelta{0.15} & 0.6\negdelta{0.2} & 0.71\negdelta{0.04} & %
+      0.26\negdelta{0.29} & 0.31\negdelta{0.14} & 0.28\negdelta{0.22} & %
+      0.53\negdelta{0.15} & 0.68\negdelta{0.05} & 0.59\negdelta{0.06} & %
+      0.5\negdelta{0.12} & 0.57\negdelta{0.1}\\
 
       RAE &  &  &  & %
       &  &  & %
@@ -4057,20 +4066,38 @@ on the three-class prediction task.
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
 
-      GMN &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      %% General Statistics: (with balancing)
+      %% precision    recall  f1-score   support
+      %% positive       0.71      0.27      0.40       354
+      %% negative       0.24      0.11      0.15       212
+      %% neutral       0.71      0.96      0.82       930
+      %% avg / total       0.64      0.68      0.62      1496
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 27.42%
+      %% Micro-Averaged F1-Score (All Classes): 67.9144%
 
-      GNT &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      GMN & 0.71\posdelta{0.06} & 0.27\negdelta{0.18} & 0.4\negdelta{0.13} & %
+      0.24\negdelta{0.14} & 0.11\posdelta{0.03} & 0.15\posdelta{0.02} & %
+      0.71\negdelta{0.01} & 0.96\posdelta{0.03} & 0.82\negdelta{0.01} & %
+      0.27\negdelta{0.06} & 0.68\negdelta{0.02}\\
 
       MHM &  &  &  & %
       &  &  & %
       &  &  & %
       & \\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.77      0.39      0.52       354
+      %% negative       0.25      0.13      0.17       212
+      %% neutral       0.71      0.92      0.80       930
+      %% avg / total       0.66      0.68      0.64      1496
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 34.42%
+      %% Micro-Averaged F1-Score (All Classes): 68.1150%
+
+      GNT & 0.77\posdelta{0.1} & 0.39\negdelta{0.23} & 0.52\negdelta{0.12} & %
+      0.25\negdelta{0.19} & 0.13\negdelta{0.15} & 0.17\negdelta{0.17} & %
+      0.71\negdelta{0.07} & 0.92\posdelta{0.05} & 0.8\negdelta{0.02} & %
+      0.34\negdelta{0.15} & 0.68\negdelta{0.04}\\
 
       RAE &  &  &  & %
       &  &  & %
@@ -4099,11 +4126,11 @@ on the three-class prediction task.
     \end{tabular}
     \egroup
     \caption[Results of CGSA methods with distant supervision]{
-      Results of CGSA methods with distant supervision\\
+      Results of CGSA methods with distantly supervised data\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~--~\citet{Guenther:14}}, RAE~--~Recursive
         Auto-Encoder \cite{Socher:11}, SEV~--~\citet{Severyn:15},
-        BAZ~--~\citet{Baziotis:17}, , LBA$^{(1)}$~--~lexicon-based
+        BAZ~--~\citet{Baziotis:17}, LBA$^{(1)}$~--~lexicon-based
         attention with one Bi-LSTM layer, LBA$^{(2)}$~--~lexicon-based
         attention with two Bi-LSTM layers}
     \label{snt-cgsa:tbl:distant-supervision}
