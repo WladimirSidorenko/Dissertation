@@ -2272,21 +2272,21 @@ where even a human expert would doubt about the correct prediction.
 
 \section{Deep-Learning Methods}\label{sec:cgsa:dl-based}
 
-Even though traditional ML-based approaches still yield competitive
+Even though traditional ML-based approaches still show competitive
 results and play an important role in the sentiment analysis of social
 media, they are gradually giving place to allegedly more powerful and
-in some sense more intuitive deep learning (DL) methods.  As we
+in a certain sense more intuitive deep learning (DL) methods.  As we
 already mentioned in the previous chapter, in contrast to standard
 supervised techniques with human-engineered features, DL systems
 induce their optimal input attributes completely automatically, and,
 in some cases, might even produce better feature representation than
 the one devised by a human expert.  Another important advantage of
-this paradigm is a more straightforward way to implement the
+this paradigm is their more straightforward way to implement the
 ``compositionality'' of language \cite{Frege:1892}: Whereas
 conventional classifiers usually consider each instance as a \emph{bag
   of features} and predict the label based on the sum of these
 features' values multiplied with their respective coefficients, DL
-approaches try to combine the represenation of each part of this
+approaches try to combine the represenation of each part of the
 instance (either tokens or sentences) into a single whole and then
 deduce the final class from this joint embedding.
 
@@ -2336,51 +2336,51 @@ deduce the final class from this joint embedding.
 
 Among the first who explicitly incorporated the compositionality
 principle into a DL-based sentiment application were
-\citet{Yessenalina:11}.  In their proposed matrix-space approach, the
-authors represented each word $w$ of an input phrase $\mathbf{x}^i =
-w^i_1, w^i_2, \ldots, w^i_{|\mathbf{x}^i|}$ as a matrix
+\citet{Yessenalina:11}.  In their proposed matrix-space approach, they
+represented each word $w$ of an input phrase $\mathbf{x}^i = w^i_1,
+w^i_2, \ldots, w^i_{|\mathbf{x}^i|}$ as a matrix
 $W_{w}\in\mathbb{R}^{m\times m}$ and computed the sentiment score
-$\xi^i$ of this phrase as a product of its token matrices, multiplying
-the final result with two vectors ($\vec{u}$ and
+$\xi^i$ of this phrase as the product of its token matrices,
+multiplying the final result with two vectors ($\vec{u}$ and
 $\vec{v}\in\mathbb{R}^m$) to get a single scalar:
 \begin{align*}
   \xi^i =& \vec{u}^\top\left(\prod_{j=1}^{|x^i|}W_{w^i_j}\right)\vec{v}.
 \end{align*}
-Afterwards, they compared the resulting value $\xi^i$ with
-automatically derived thresholds in order to predict the intensity and
+After computing this value, the authors predicted the intensity and
 polarity of the phrase on a five-level sentiment scale (ranging from
-very negative to very positive), attaining this way a ranking loss of
-0.6375 on the MPQA corpus~\cite{Wiebe:05} and outperforming both the
-PRank algorithm \cite{Crammer:01} and bag-of-words ordered logistic
-regression.
+very negative to very positive) by comparing $\xi^i$ with
+automatically derived thresholds.  With this system,
+\citeauthor{Yessenalina:11} attained a ranking loss of 0.6375 on the
+MPQA corpus~\cite{Wiebe:05} and outperformed the PRank algorithm
+\cite{Crammer:01} and bag-of-words ordered logistic regression.
 % method, \citet{Yessenalina:11} outperformed the PRank algorithm and
 % bag-of-words ordered logistic regression on the MPQA
 % corpus~\cite{Wiebe:05}, attaining the lowest ranking loss (0.6375)
 % among these systems.
 
-Almost contemporarily with this work, \citet{Socher:11} introduced a
-deep recursive autoencoder (RAE) in which they obtained a fixed-width
-vector representation for complex phrases $\vec{w}_p$ by recursively
-merging vectors of their tokens (e.g., $\vec{w}_l$ for left child and
-$\vec{w}_r$ for the right dependent) over a binarized dependency tree,
-first multiplying these vectors with a compositional matrix $W$ and
-then applying a non-linear function ($softmax$) to the resulting
-product:
+Almost contemporarily with the above work, \citet{Socher:11}
+introduced a deep recursive autoencoder (RAE), in which they obtained
+a fixed-width vector representation for a complex phrases $\vec{w}_p$
+by recursively merging vectors of its tokens over a binarized
+dependency tree, first multiplying these vectors with a compositional
+matrix $W$ and then applying a non-linear function ($softmax$) to the
+resulting product:
 \begin{align}
   \vec{w}_p &= softmax\left(W\begin{bmatrix}
       \vec{w}_l\\
       \vec{w}_r
-  \end{bmatrix}\right)\label{cgsa:eq:socher-11}
+  \end{bmatrix}\right),\label{cgsa:eq:socher-11}
 \end{align}
-By applying a max-margin classifier to the resulting phrase vector,
-\citet{Socher:11} could improve the state-of-the-art results on
-predicting the sentence-level polarity of user's blog
-posts~\cite{Potts:10} and also outperformed the system
-of~\citet{Nasukawa:03} on the MPQA data set~\cite{Wiebe:05}, achieving
-86.4\% accuracy on predicting contextual polarity of opinionated
-terms.
+where $\vec{w}_l$ represents the vector of the left child and
+$\vec{w}_r$ denotes the embedding of the right dependent.  By applying
+a max-margin classifier to the final vector, \citet{Socher:11} could
+improve the state-of-the-art results on predicting the sentence-level
+polarity of user's blog posts~\cite{Potts:10} and also outperformed
+the system of~\citet{Nasukawa:03} on the MPQA data
+set~\cite{Wiebe:05}, achieving 86.4\% accuracy on predicting
+contextual polarity of opinionated terms.
 
-Later on, \citet{Socher:12} further improved their approach by
+Later on, \citet{Socher:12} further improved this approach by
 associating an additional matrix $W_w$ with each vocabulary word $w$
 similarly to~\citet{Yessenalina:10} and performing the inference
 simultaneously over both vector and matrix representations:
@@ -2396,12 +2396,11 @@ its left and right children, and $W_p, W_l, W_r \in
 \mathbb{R}^{n\times n}$ denote the respective matrices associated with
 these vertices.  The compositionality matrices
 $W_v\in\mathbb{R}^{n\times 2n}$ and $W_m\in\mathbb{R}^{n\times 2n}$
-were shared across all instances and learned along with word-specific
-parameters during the training process.  This model, called
-Matrix-Vector Recursive Neural Network (MVRNN), surpassed the RAE
-system on the IMDB movie review dataset \cite{Pang:05}, attaining 0.91
-Kullback-Leibler divergence between the assigned scores and correct
-labels.
+were shared across all instances and learned along with vector
+embeddings.  This model, called Matrix-Vector Recursive Neural Network
+(MVRNN), surpassed the RAE system on the IMDB movie review dataset
+\cite{Pang:05}, attaining 0.91 Kullback-Leibler divergence between the
+assigned scores and probabilities of correct labels.
 
 Yet another improvement---the Recursive Neural Tensor Network
 (RNTN)---was presented by~\citet{Socher:13}.  In this system, the
@@ -2427,30 +2426,29 @@ $W\in\mathbb{R}^{n\times 2n}$ are defined as previously and denote the
 word embeddings and compositionality matrix respectively; and $V$
 represents a $2n\times 2n\times n$-dimensional tensor.  By increasing
 this way the number of parameters in comparison with the RAE approach,
-but significantly reducing their number with respect to the MVRNN
-method, the authors gained a significant improvement of the results,
-boosting the classification accuracy on their own Stanford Sentiment
-Treebank from 82.9 to 85.4\%.
+but significantly reducing it with respect to the MVRNN method, the
+authors gained a significant improvement of the results, boosting the
+classification accuracy on their own Stanford Sentiment Treebank from
+82.9 to 85.4\%.
 
-However, a real breakthrough in the use of deep learning methods for
-sentiment analysis of Twitter happened with the
-work~\citet{Severyn:15}, whose proposed feed-forward DL system ranked
-first in SemEval-2015 Subtask~10~A (phrase-level polarity prediction)
-\cite{Rosenthal:15} and achieved second place in Subtask~10~B
+A real breakthrough in the use of deep learning methods for sentiment
+analysis of Twitter happened with the work~\citet{Severyn:15}, whose
+proposed feed-forward DL system ranked first in SemEval-2015
+Subtask~10~A (phrase-level polarity prediction) \cite{Rosenthal:15}
+and achieved second place (0.6459~\F$^{+/-}$) in Subtask~10~B
 (message-level classification) of this competition.  Mainly drawing on
 the ideas of~\citet{Kalchbrenner:14}, the authors devised a simple
 convolutional network in which they multiplied pretrained word
-embeddings with 300 distinct convolutional kernels of width five,
+embeddings with 300 distinct convolutional kernels each of width 5,
 pooled the maximum value of this multiplication for each of the
 kernels, and then passed the results of this pooling to a piecewise
-linear ReLU filter with a densely connected softmax layer, attaining a
-superior result of 0.6459~\F$^{+/-}$ on the message-level subtask.  An
+linear ReLU filter with a densely connected softmax layer.  An
 important aspect of this approach which accounted for a huge part of
 its success was a special multi-stage training scheme that was used to
 optimize model's parameters: In the initial stage of this scheme,
 \citeauthor{Severyn:15} furst computed Twitter-specific word
-embeddings by applying the word2vec algorithm to a large corpus of
-tweets.  Afterwards, they pretrained the complete system including the
+embeddings by applying the word2vec algorithm to a large Twitter
+corpus.  Afterwards, they pretrained the complete system including the
 word vectors, convolutional filters, and inter-layer matrices on a big
 set of noisily labeled microblogs from this collection; and, finally,
 fine-tuned the parameters of the models on the officially released
@@ -2548,41 +2546,42 @@ gradually being superseded by recurrent neural networks
 \cite{Xu:16,Wang:15}.  One of the most prominent such systems has been
 recently proposed by~\citet{Baziotis:17}.  In their submission to
 SemEval~2017 \cite{Rosenthal:17}, the authors used two successive
-bidirectional LSTM layers (BiLSTMs).  In each of these layers, they
-concatenated hidden states of the left-to-right recurrence
+bidirectional LSTM units (BiLSTMs).  In each of these units, they
+concatenated the results of the left-to-right recurrence
 ($\vec{h}^{(l)}_{i_{\rightarrow}}\in\mathbb{R}^{150}$) with the
-respective hidden cells from the right-to-left loop
-($\vec{h}^{(l)}_{i_{\leftarrow}}\in\mathbb{R}^{150}$) into joint
-vectors $\vec{h}_i^{(l)} = [\vec{h}^{(l)}_{i_{\rightarrow}},
-  \vec{h}^{(l)}_{i_{\leftarrow}}]\in\mathbb{R}^{300}$ and then passed
-the result of this concatenation to the next part of the network.
-After computing the output of the second BiLSTM, they fed this result
-into a dedicated attention mechanism, which summed hidden states of
-the recurrent units for each time step $i$, weighting them with
-globally normalized attention coefficients $a_i$'s:
+respective outputs of the right-to-left loop
+($\vec{h}^{(l)}_{i_{\leftarrow}}\in\mathbb{R}^{150}$) and then passed
+the result of this concatenation ( $\vec{h}_i^{(l)} =
+[\vec{h}^{(l)}_{i_{\rightarrow}},
+  \vec{h}^{(l)}_{i_{\leftarrow}}]\in\mathbb{R}^{300}$) to the next
+layer of the network.  After getting the output of the second BiLSTM,
+they united the states of this unit from all time steps $i$ into a
+single vector $\vec{a}$ with the help of a special attention
+mechanism, in which they first multiplied each of the BiLSTM states
+$\vec{h}_i$ with the respective globally normalized attention score
+$a_i$ and then took the sum of these weighted vectors over all $i$'s:
 \begin{align}
-  \vec{a} =& \sum_{i=1}^{|\mathbf{x}|}a_i\vec{h}_i,\nonumber\\
-  a_i =& \frac{\exp(e_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(e_j)},\nonumber\\
-  \textrm{s.t. }e_i =& tanh\left(\vec{\alpha}\vec{h}^{(2)}_i + \beta_i\right);
-\end{align}\label{eq:cgsa:baziotis-attention}
-\noindent where $\vec{\alpha}$ denotes the attention vector, and
-$\beta_i$ represents the bias term for the $i$-th position.  These
-parameters ($\vec{\alpha}$ and $\vec{\beta}$) were optimized along
-with other weights of the network during the training stage.  To make
-the final prediction, \citeauthor{Baziotis:17} applied a densely
-connected softmax layer to the output of the attention, getting
-probability scores for each of the three polarity classes and choosing
-the one with the maximum value:
+  \vec{a} =&
+  \sum_{i=1}^{|\mathbf{x}|}a_i\vec{h}_i,\nonumber\\ \mbox{where }a_i
+  =&
+  \frac{\exp(e_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(e_j)},\nonumber\\ \textrm{s.t. }e_i
+  =& tanh\left(\vec{\alpha}\vec{h}^{(2)}_i + \beta_i\right).
+\end{align}\label{eq:cgsa:baziotis-attention}%
+The $\vec{\alpha}$ and $\beta$ terms in the above equations denote the
+attention parameters (score and bias) which are optimized along with
+other network weights during the training process.  To make the final
+prediction, \citeauthor{Baziotis:17} multiplied the attention vector
+$\vec{a}$ with a matrix $W$ and computed element-wise softmax of this
+product, getting probability scores for each of the three polarity
+classes and choosing the label with the highest such score:
 \begin{align}
   \hat{y} =& \argmax_y\left(softmax(W^\top\vec{a})_y\right).
 \end{align}
-\noindent The architecture of this network is depicted in
-Figure~\ref{cgsa:fig:baziotis}.  With this approach, the authors
-attained the first first place at SemEval-2014 Task~4 (with
-0.675~\F{}$^{+/-}$), being on a par with the system
-of~\citet{Cliche:17} and even outperforming the method
-of~\citet{Rouvier:17} despite the fact that both of these competing
-works used ensembles of LSTMs and convolutional networks.
+\noindent With this approach, the authors attained the first first
+place at SemEval-2014 Task~4 (with 0.675~\F{}$^{+/-}$), being on a par
+with the system of~\citet{Cliche:17} and even outperforming the method
+of~\citet{Rouvier:17} despite the fact that both of these submissions
+used ensembles of LSTMs and convolutional networks.
 
 \begin{figure*}[htbp!]
 {
@@ -2594,63 +2593,64 @@ works used ensembles of LSTMs and convolutional networks.
   by~\citet{Baziotis:17}}\label{cgsa:fig:baziotis}
 \end{figure*}
 
-Although the approach of~\citet{Baziotis:17} still represents the
-current state of the art in sentiment analysis of Twitter and yields
+Although the approach of~\citet{Baziotis:17} represents the current
+state of the art in sentiment analysis of Twitter and yields
 extraordinarily good results, in our opinion, this method has yet some
 potential for improvements.  This first of all concerns the way how
 attention coefficients are computed.  As we can see from
 Equation~\ref{eq:cgsa:baziotis-attention}, the magnitude of the
 attention score $a_i$ primarily depends on the absolute value of the
-LSTM outputs and the bias term at the $i$-th position.  Albeit this
-strategy is plausible regarding the fact that polar terms that appear
-at the end of a message usually have more impact on the net polarity
-of the tweet than opinionated words that occur at the beginning, a
-crucial prerequisite for this strategy to work is that
+BiLSTM outputs and the bias term at the $i$-th position.  Albeit this
+strategy is definitely plausible in light of the fact that polar terms
+that appear near the end of a message usually should have a greater
+influence on the net polarity of the tweet than opinionated words that
+occur at its beginning, a crucial prerequisite for this strategy to
+work is that
 \begin{inparaenum}[(i)]
 \item the LSTM layer already provides sufficiently reliable results
   and
 \item the bias terms do not overly boost the importance of irrelevant
   tokens that just accidentally appeared at favored positions.
 \end{inparaenum}
-Unfortunately, both of these assumptions are rarely true, especially
-when the training data are limited.
+Unfortunately, both of these assumptions rarely hold true.
 
-In order to overcome these drawbacks of position-based attention
-scores, we decided to augment the original architecture
-of~\citet{Baziotis:17} with two additional types of attention:
+In order to overcome these obstacles, we decided to augment the
+original architecture of~\citet{Baziotis:17} shown in
+Figure~\ref{cgsa:fig:baziotis} with two additional types of attention:
 \emph{lexicon-} and \emph{context-based} one.  In the former of these
 types, we estimated the importance weight $b_i$ for position $i$ using
-the polarity score of the word $w_i$ from our linear projection
-lexicon $V$, normalizing these scores over all positions $j$ from the
-sequence:
+the polarity score of the word $w_i$ from our sentiment lexicon,
+normalizing these scores over all positions of the input sequence:
 \begin{align*}
   \vec{b} =& \sum_{i=1}^{|\mathbf{x}|}b_i\vec{h}_i,\\
-  b_i =& \frac{\exp(f_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(f_j)},\textrm{ s.t.}\\
-  f_i =& \left\{
+  b_i =& \frac{\exp(f_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(f_j)},\\
+  \mbox{s.t. }f_i
+  =& \left\{
   \begin{array}{ll}
     tanh(abs(V[{w_i}]) + \epsilon) & \textrm{ if } w_i\in V\\
     tanh(\epsilon) & \, \textrm{otherwise.} \\
   \end{array}
-  \right .;
+  \right .
 \end{align*}
-\noindent In so doing, we hoped to force this layer to weigh the LSTM
-outputs at subjective words more than its results at neutral tokens.
+This way, we hoped to force the network to pay more attention to the
+BiLSTM outputs produced at highly subjective terms rather than
+favoring arbitrary words in the message.
 
-Even though polar terms definitely are one of the most influential
-factors that affect message polarity, we should never forget that the
-semantic orientation of these terms can easily be changed (and even
-reversed) by various context factors \cite[see][]{Polanyi:06}.  To
-account for this fact, we have introduced another type of
-attention---the \emph{context-based} one, whose goal was to boost the
-importance of elements which could act as potential valence shifters.
-In order to identify such words, we applied another linear classifier
-which predicted the potential shifting power of a token by looking at
-the original embedding vector of this word and the LSTM output of its
-parent in the dependency tree multiplied with the lexicon-based
-attention score of the parent.  To keep the resulting values within an
-appropriate range, we also used the same $tanh$ transformation and
-global normalization over all positions as we did previously for the
-position- and lexicon-based attentions:
+Another important factor which could significantly affect the polarity
+of a tweet apart from polar expressions were auxiliary words which
+could notably change (or even reverse) semantic orietation of these
+expressions---the so-called \emph{valence shifters}
+\cite[][]{Polanyi:06}.  To account for these phenomena, we introduced
+another type of attention---\emph{context-based} one, whose goal was
+to identify such elements in the message and give them bigger weights
+during the attention-based ranking.  For this purpose, we introduced
+another linear classifier, which had to predict the potential shifting
+power of a token given its original word embedding and the LSTM output
+of its parent in the dependency tree multiplied with the lexicon-based
+attention score of that parent.  To keep the resulting values of this
+attention type within an appropriate range, we again used the same
+$tanh$ transformation and global normalization over all positions as
+we did in the previous two types:
 \begin{align*}
   \vec{c} =& \sum_{i=1}^{|\mathbf{x}|}c_i\vec{h}_i,\\ c_i =&
   \frac{\exp(g_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(g_j)},\\ g_i =&
@@ -2660,17 +2660,18 @@ where $C\in\mathbb{R}^{200 \times 100}$ represents a context-based
 attention matrix, $\vec{w}_i \in \mathbb{R}^{100}$ denotes the word
 embedding of the $i$-th token, and $\vec{b}_p$ stands for the LSTM
 output at the parent node of word $i$ times the lexicon-based
-attention score of this node.  This way, we hoped to amplify the
-importance of words like ``kaum'' (\textit{hardly}) or ``nicht''
-(\textit{not}) in cases when the immediate syntactic ancestors of
-these tokens were highly opinionated terms, e.g., ``Er hat die
-Pr\"ufung kaum bestanden'' (\textit{He hardly passed the exam}) or
-``Ich mag den neuen Bundesminister nicht'' (\textit{I do not like the
-  new federal minister}).
+attention score of this parent.  With this classifier, we hoped to
+amplify the importance of words like ``kaum'' (\textit{hardly}) or
+``nicht'' (\textit{not}) in cases when the immediate syntactic
+ancestors of these tokens were highly opinionated expressions, e.g.,
+``Er hat die Pr\"ufung kaum bestanden'' (\textit{He hardly passed the
+  exam}) or ``Ich mag den neuen Bundesminister nicht'' (\textit{I do
+  not like the new federal minister}), but ignore them if the did not
+relate to any subjective term.
 
-Eventually, in order to make the final prediction, we concatenated the
-outputs of the three attention layers into a single matrix
-$A\in\mathbb{R}^{3 \times 100}$ and multiplied it with a vector
+At last, to make the final prediction, we concatenated the outputs of
+the three attention layers into a single matrix $A\in\mathbb{R}^{3
+  \times 100}$ and multiplied it with a vector
 $\vec{w}\in\mathbb{R}^{1\times 100}$, applying softmax normalization
 at the end:
 \begin{align*}
@@ -2681,9 +2682,9 @@ at the end:
 Since introducing additional attention types increased the number of
 model parameters, we removed one of the Bi-LSTM layers to
 counterbalance this effect and report our results for both settings:
-with one and with two Bi-LSTM units (denoted as LBA$^{(1)}$ and
-LBA$^{(2)}$ respectively).  The final architecture of our approach is
-given in Figure~\ref{cgsa:fig:lba}.
+using one and two Bi-LSTM units (respectively denoted as LBA$^{(1)}$
+and LBA$^{(2)}$).  The final architecture of our approach is given in
+Figure~\ref{cgsa:fig:lba}.
 
 % \done[inline]{\citet{Tang:14b}}
 
@@ -2715,20 +2716,20 @@ given in Figure~\ref{cgsa:fig:lba}.
 \end{figure*}
 
 
-To evaluate the performance of the presented competitor methods and
-also test our lexicon-based attention mechanism on the PotTS and SB10k
-data, we have reimplemented the systems of~\citet{Yessenalina:11},
+To evaluate the performance of the presented methods and also test our
+lexicon-based attention mechanism on the PotTS and SB10k data, we
+reimplemented the approaches of~\citet{Yessenalina:11},
 \citet{Socher:11,Socher:12,Socher:13}, \citet{Severyn:15},
 and~\citet{Baziotis:17}, and applied them along with our own solution
 to the aforementioned corpora.  For the sake of uniformity and
 simplicity, we used task-specific word embeddings of
 size~$\mathbb{R}^{100}$ in all of the systems, optimizing these
-vectors with other network parameters during training.  Furthermore,
-we also unified the final activation part and cost function of all
-networks, using a densely connected softmax layer and optimizing the
-weights w.r.t. the categorical hinge loss on the training data,
-picking the values that yielded the highest accuracy on the validation
-set.
+vectors with other network parameters during training.  Moreover, we
+also unified the final activation parts and cost functions of all
+networks, using a densely connected softmax layer as the last
+component of each network and optimizing their weights w.r.t. the
+categorical hinge loss on the training data, picking the values that
+yielded the highest accuracy on the validation set.
 
 \begin{table}[h]
   \begin{center}
