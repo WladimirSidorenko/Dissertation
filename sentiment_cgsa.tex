@@ -2540,7 +2540,7 @@ for each of these types.
 % \done[inline]{\citet{Baziotis:17}, \citet{Cliche:17},
 % \citet{Rouvier:17}}
 
-Even though convolutional approaches still yield competitive results
+Even though convolutional approaches still show competitive results
 and are hard to outperform in practice, in recent time, they are
 gradually being superseded by recurrent neural networks
 \cite{Xu:16,Wang:15}.  One of the most prominent such systems has been
@@ -2559,7 +2559,8 @@ they united the states of this unit from all time steps $i$ into a
 single vector $\vec{a}$ with the help of a special attention
 mechanism, in which they first multiplied each of the BiLSTM states
 $\vec{h}_i$ with the respective globally normalized attention score
-$a_i$ and then took the sum of these weighted vectors over all $i$'s:
+$a_i$ and then took the sum of these weighted vectors over all $i$
+positions:
 \begin{align}
   \vec{a} =&
   \sum_{i=1}^{|\mathbf{x}|}a_i\vec{h}_i,\nonumber\\ \mbox{where }a_i
@@ -2601,26 +2602,29 @@ attention coefficients are computed.  As we can see from
 Equation~\ref{eq:cgsa:baziotis-attention}, the magnitude of the
 attention score $a_i$ primarily depends on the absolute value of the
 BiLSTM outputs and the bias term at the $i$-th position.  Albeit this
-strategy is definitely plausible in light of the fact that polar terms
-that appear near the end of a message usually should have a greater
+strategy is definitely plausible, assuming the fact that LSTMs will
+produce higher scores for opinionated tokens and presupposing that
+polar terms near the end of the message will usually have a greater
 influence on the net polarity of the tweet than opinionated words that
 occur at its beginning, a crucial prerequisite for this strategy to
 work is that
 \begin{inparaenum}[(i)]
-\item the LSTM layer already provides sufficiently reliable results
+\item the LSTM layer can already provide sufficiently reliable results
   and
 \item the bias terms do not overly boost the importance of irrelevant
   tokens that just accidentally appeared at favored positions.
 \end{inparaenum}
-Unfortunately, both of these assumptions rarely hold true.
+Unfortunately, both of these prerequisites are rarely fulfilled in
+practice.
 
-In order to overcome these obstacles, we decided to augment the
+In order to overcome these difficulties, we decided to augment the
 original architecture of~\citet{Baziotis:17} shown in
 Figure~\ref{cgsa:fig:baziotis} with two additional types of attention:
-\emph{lexicon-} and \emph{context-based} one.  In the former of these
-types, we estimated the importance weight $b_i$ for position $i$ using
-the polarity score of the word $w_i$ from our sentiment lexicon,
-normalizing these scores over all positions of the input sequence:
+\emph{lexicon-} and \emph{context-based} one.  In the former type, we
+estimated the importance weight $b_i$ for position $i$ as the polarity
+score of the word $w_i$, obtaining this value from our NWE-based
+sentiment lexicon and dividing it by the sum of polarity scores for
+all tweet tokens:
 \begin{align*}
   \vec{b} =& \sum_{i=1}^{|\mathbf{x}|}b_i\vec{h}_i,\\
   b_i =& \frac{\exp(f_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(f_j)},\\
@@ -2631,43 +2635,45 @@ normalizing these scores over all positions of the input sequence:
     tanh(\epsilon) & \, \textrm{otherwise.} \\
   \end{array}
   \right .
-\end{align*}
+\end{align*}\label{cgsa:eq:lba}%
 This way, we hoped to force the network to pay more attention to the
 BiLSTM outputs produced at highly subjective terms rather than
 favoring arbitrary words in the message.
 
 Another important factor which could significantly affect the polarity
-of a tweet apart from polar expressions were auxiliary words which
-could notably change (or even reverse) semantic orietation of these
-expressions---the so-called \emph{valence shifters}
-\cite[][]{Polanyi:06}.  To account for these phenomena, we introduced
-another type of attention---\emph{context-based} one, whose goal was
+of a microblog apart from polar expressions were auxiliary words such
+as ``kaum'' (\emph{hardly}) or ``nicht'' (\emph{not}) which could
+notably change (or even reverse) the semantic orietation of these
+polar terms---the so-called \emph{valence shifters}
+\cite[][]{Polanyi:06}.  To account for these phenomena, we added
+another type of attention---a \emph{context-based} one, whose goal was
 to identify such elements in the message and give them bigger weights
-during the attention-based ranking.  For this purpose, we introduced
-another linear classifier, which had to predict the potential shifting
-power of a token given its original word embedding and the LSTM output
-of its parent in the dependency tree multiplied with the lexicon-based
-attention score of that parent.  To keep the resulting values of this
-attention type within an appropriate range, we again used the same
-$tanh$ transformation and global normalization over all positions as
-we did in the previous two types:
+during the attention-based ranking.  To achieve this goal, we
+introduced another linear classifier, which had to predict the
+potential shifting power of a token given its original word embedding
+and the LSTM output of its parent in the dependency tree multiplied
+with the lexicon-based attention score of that parent.  To keep the
+resulting values of these attention scores within an appropriate
+range, we again used the same $tanh$ transformation and global
+normalization over all positions as we did for the previous two types:
 \begin{align*}
   \vec{c} =& \sum_{i=1}^{|\mathbf{x}|}c_i\vec{h}_i,\\ c_i =&
   \frac{\exp(g_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(g_j)},\\ g_i =&
-  \tanh\left(C [\vec{w}_i, \vec{b}_p]^\top\right);
+  \tanh\left(C [\vec{w}_i, \vec{b}_p]^\top\right).
 \end{align*}
-where $C\in\mathbb{R}^{200 \times 100}$ represents a context-based
-attention matrix, $\vec{w}_i \in \mathbb{R}^{100}$ denotes the word
-embedding of the $i$-th token, and $\vec{b}_p$ stands for the LSTM
-output at the parent node of word $i$ times the lexicon-based
-attention score of this parent.  With this classifier, we hoped to
-amplify the importance of words like ``kaum'' (\textit{hardly}) or
-``nicht'' (\textit{not}) in cases when the immediate syntactic
-ancestors of these tokens were highly opinionated expressions, e.g.,
-``Er hat die Pr\"ufung kaum bestanden'' (\textit{He hardly passed the
-  exam}) or ``Ich mag den neuen Bundesminister nicht'' (\textit{I do
-  not like the new federal minister}), but ignore them if the did not
-relate to any subjective term.
+The $C$ term in the above equation represents a context-based
+attention matrix $\mathbb{R}^{200 \times 100}$, the $\vec{w}_i$
+variable denotes the word embedding of the $i$-th token, and the
+$\vec{b}_p$ term stands for the value of the vector $\vec{b}$ (the
+result of the lexicon-based attention from Equation~\ref{cgsa:eq:lba})
+at position $p$ (the index of the syntactic parent of $w_i$).  With
+this classifier, we hoped to amplify the importance of shifting words
+in cases when the immediate syntactic ancestors of these tokens were
+highly opinionated expressions, e.g., ``Er hat die Pr\"ufung kaum
+bestanden'' (\textit{He hardly passed the exam}) or ``Ich mag den
+neuen Bundesminister nicht'' (\textit{I do not like the new federal
+  minister}), but ignore them if they did not relate to any subjective
+term.
 
 At last, to make the final prediction, we concatenated the outputs of
 the three attention layers into a single matrix $A\in\mathbb{R}^{3
@@ -2675,8 +2681,8 @@ the three attention layers into a single matrix $A\in\mathbb{R}^{3
 $\vec{w}\in\mathbb{R}^{1\times 100}$, applying softmax normalization
 at the end:
 \begin{align*}
-  \vec{o} =& softmax\left(A^\top\vec{w}\right), \textrm{s.t.}\\
-  A =& [\vec{a}, \vec{b}, \vec{c}].
+  \vec{o} =& softmax\left(A^\top\vec{w}\right),\\ \textrm{where }A =&
+      [\vec{a}, \vec{b}, \vec{c}].
 \end{align*}
 
 Since introducing additional attention types increased the number of
@@ -2717,19 +2723,19 @@ Figure~\ref{cgsa:fig:lba}.
 
 
 To evaluate the performance of the presented methods and also test our
-lexicon-based attention mechanism on the PotTS and SB10k data, we
+lexicon-based attention mechanism on the PotTS and SB10k datasets, we
 reimplemented the approaches of~\citet{Yessenalina:11},
 \citet{Socher:11,Socher:12,Socher:13}, \citet{Severyn:15},
 and~\citet{Baziotis:17}, and applied them along with our own solution
 to the aforementioned corpora.  For the sake of uniformity and
 simplicity, we used task-specific word embeddings of
-size~$\mathbb{R}^{100}$ in all of the systems, optimizing these
-vectors with other network parameters during training.  Moreover, we
-also unified the final activation parts and cost functions of all
-networks, using a densely connected softmax layer as the last
-component of each network and optimizing their weights w.r.t. the
-categorical hinge loss on the training data, picking the values that
-yielded the highest accuracy on the validation set.
+size~$\mathbb{R}^{100}$ in all systems, optimizing these vectors with
+other network parameters during training.  Moreover, we also unified
+the final activation parts and cost functions of all networks, using a
+densely connected softmax layer as the last component of each
+classifier and optimizing their weights w.r.t. the categorical hinge
+loss on the training data, picking the values that yielded the highest
+accuracy on the validation set.
 
 \begin{table}[h]
   \begin{center}
