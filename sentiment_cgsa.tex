@@ -2278,16 +2278,16 @@ media, they are gradually giving place to allegedly more powerful and
 in a certain sense more intuitive deep learning (DL) methods.  As we
 already mentioned in the previous chapter, in contrast to standard
 supervised techniques with human-engineered features, DL systems
-induce their optimal input attributes completely automatically, and,
-in some cases, might even produce better feature representation than
-the one devised by a human expert.  Another important advantage of
-this paradigm is their more straightforward way to implement the
+induce their input attributes completely automatically, and, in some
+cases, might even produce a better feature representation than the one
+devised by a human expert.  Another important advantage of this
+paradigm is its more straightforward way to implement the
 ``compositionality'' of language \cite{Frege:1892}: Whereas
 conventional classifiers usually consider each instance as a \emph{bag
   of features} and predict the label based on the sum of these
-features' values multiplied with their respective coefficients, DL
-approaches try to combine the represenation of each part of the
-instance (either tokens or sentences) into a single whole and then
+features' values multiplied with their respective scores, DL
+approaches try to \emph{combine} the represenation of each part of the
+instance (be it tokens or sentences) into a single whole and then
 deduce the final class from this joint embedding.
 
 % \todo{Unite into a single ``compositionality'' paragraph.}
@@ -2351,8 +2351,9 @@ polarity of the phrase on a five-level sentiment scale (ranging from
 very negative to very positive) by comparing $\xi^i$ with
 automatically derived thresholds.  With this system,
 \citeauthor{Yessenalina:11} attained a ranking loss of 0.6375 on the
-MPQA corpus~\cite{Wiebe:05} and outperformed the PRank algorithm
-\cite{Crammer:01} and bag-of-words ordered logistic regression.
+MPQA corpus~\cite{Wiebe:05}, outperforming the traditional PRank
+algorithm \cite{Crammer:01} and bag-of-words ordered logistic
+regression.
 % method, \citet{Yessenalina:11} outperformed the PRank algorithm and
 % bag-of-words ordered logistic regression on the MPQA
 % corpus~\cite{Wiebe:05}, attaining the lowest ranking loss (0.6375)
@@ -2373,12 +2374,12 @@ resulting product:
 \end{align}
 where $\vec{w}_l$ represents the vector of the left child and
 $\vec{w}_r$ denotes the embedding of the right dependent.  By applying
-a max-margin classifier to the final vector, \citet{Socher:11} could
-improve the state-of-the-art results on predicting the sentence-level
-polarity of user's blog posts~\cite{Potts:10} and also outperformed
-the system of~\citet{Nasukawa:03} on the MPQA data
+a max-margin classifier to the final phrase vector, \citet{Socher:11}
+could improve the state-of-the-art results on predicting the
+sentence-level polarity of user's blog posts~\cite{Potts:10} and also
+outperformed the system of~\citet{Nasukawa:03} on the MPQA data
 set~\cite{Wiebe:05}, achieving 86.4\% accuracy on predicting
-contextual polarity of opinionated terms.
+contextual polarity of opinionated expressions.
 
 Later on, \citet{Socher:12} further improved this approach by
 associating an additional matrix $W_w$ with each vocabulary word $w$
@@ -2402,11 +2403,11 @@ embeddings.  This model, called Matrix-Vector Recursive Neural Network
 \cite{Pang:05}, attaining 0.91 Kullback-Leibler divergence between the
 assigned scores and probabilities of correct labels.
 
-Yet another improvement---the Recursive Neural Tensor Network
+Yet another improvement---a Recursive Neural Tensor Network
 (RNTN)---was presented by~\citet{Socher:13}.  In this system, the
 authors again opted for a vector representation of words, but enhanced
 the original matrix-vector product from
-Equation~\ref{cgsa:eq:socher-11} with an additional tensor
+Equation~\ref{cgsa:eq:socher-11} with additional tensor
 multiplication:
 \begin{align*}
   \vec{w}_p &= softmax\left(\begin{bmatrix}
@@ -2436,8 +2437,8 @@ analysis of Twitter happened with the work~\citet{Severyn:15}, whose
 proposed feed-forward DL system ranked first in SemEval-2015
 Subtask~10~A (phrase-level polarity prediction) \cite{Rosenthal:15}
 and achieved second place (0.6459~\F$^{+/-}$) in Subtask~10~B
-(message-level classification) of this competition.  Mainly drawing on
-the ideas of~\citet{Kalchbrenner:14}, the authors devised a simple
+(message-level classification) of this competition.  Drawing on the
+ideas of~\citet{Kalchbrenner:14}, the authors devised a simple
 convolutional network in which they multiplied pretrained word
 embeddings with 300 distinct convolutional kernels each of width 5,
 pooled the maximum value of this multiplication for each of the
@@ -2446,7 +2447,7 @@ linear ReLU filter with a densely connected softmax layer.  An
 important aspect of this approach which accounted for a huge part of
 its success was a special multi-stage training scheme that was used to
 optimize model's parameters: In the initial stage of this scheme,
-\citeauthor{Severyn:15} furst computed Twitter-specific word
+\citeauthor{Severyn:15} first computed Twitter-specific word
 embeddings by applying the word2vec algorithm to a large Twitter
 corpus.  Afterwards, they pretrained the complete system including the
 word vectors, convolutional filters, and inter-layer matrices on a big
@@ -2579,9 +2580,9 @@ classes and choosing the label with the highest such score:
   \hat{y} =& \argmax_y\left(softmax(W^\top\vec{a})_y\right).
 \end{align}
 \noindent With this approach, the authors attained the first first
-place at SemEval-2014 Task~4 (with 0.675~\F{}$^{+/-}$), being on a par
-with the system of~\citet{Cliche:17} and even outperforming the method
-of~\citet{Rouvier:17} despite the fact that both of these submissions
+place at SemEval-2014 Task~4 (0.675~\F{}$^{+/-}$), being on a par with
+the system of~\citet{Cliche:17} and even outperforming the method
+of~\citet{Rouvier:17} despite the fact that both of these competitors
 used ensembles of LSTMs and convolutional networks.
 
 \begin{figure*}[htbp!]
@@ -2602,7 +2603,7 @@ attention coefficients are computed.  As we can see from
 Equation~\ref{eq:cgsa:baziotis-attention}, the magnitude of the
 attention score $a_i$ primarily depends on the absolute value of the
 BiLSTM outputs and the bias term at the $i$-th position.  Albeit this
-strategy is definitely plausible, assuming the fact that LSTMs will
+strategy is definitely plausible, assuming the fact that LSTMs shall
 produce higher scores for opinionated tokens and presupposing that
 polar terms near the end of the message will usually have a greater
 influence on the net polarity of the tweet than opinionated words that
@@ -2614,8 +2615,7 @@ work is that
 \item the bias terms do not overly boost the importance of irrelevant
   tokens that just accidentally appeared at favored positions.
 \end{inparaenum}
-Unfortunately, both of these prerequisites are rarely fulfilled in
-practice.
+Unfortunately, both of these prerequisites are rarely met in practice.
 
 In order to overcome these difficulties, we decided to augment the
 original architecture of~\citet{Baziotis:17} shown in
@@ -2637,14 +2637,14 @@ all tweet tokens:
   \right .
 \end{align*}\label{cgsa:eq:lba}%
 This way, we hoped to force the network to pay more attention to the
-BiLSTM outputs produced at highly subjective terms rather than
-favoring arbitrary words in the message.
+BiLSTM outputs that were produced at highly subjective terms rather
+than favoring arbitrary words in the message.
 
-Another important factor which could significantly affect the polarity
-of a microblog apart from polar expressions were auxiliary words such
-as ``kaum'' (\emph{hardly}) or ``nicht'' (\emph{not}) which could
-notably change (or even reverse) the semantic orietation of these
-polar terms---the so-called \emph{valence shifters}
+Another important factor which could significantly affect microblog's
+polarity apart from polar expressions were auxiliary words such as
+``kaum'' (\emph{hardly}) or ``nicht'' (\emph{not}) which could notably
+change (or even reverse) the semantic orientation of these
+expressions---the so-called \emph{valence shifters}
 \cite[][]{Polanyi:06}.  To account for these phenomena, we added
 another type of attention---a \emph{context-based} one, whose goal was
 to identify such elements in the message and give them bigger weights
@@ -2653,9 +2653,9 @@ introduced another linear classifier, which had to predict the
 potential shifting power of a token given its original word embedding
 and the LSTM output of its parent in the dependency tree multiplied
 with the lexicon-based attention score of that parent.  To keep the
-resulting values of these attention scores within an appropriate
-range, we again used the same $tanh$ transformation and global
-normalization over all positions as we did for the previous two types:
+resulting values of this attention within an appropriate range, we
+again used the same $tanh$ transformation and global normalization
+over all positions as we did for the previous two types:
 \begin{align*}
   \vec{c} =& \sum_{i=1}^{|\mathbf{x}|}c_i\vec{h}_i,\\ c_i =&
   \frac{\exp(g_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(g_j)},\\ g_i =&
