@@ -208,9 +208,9 @@ towards this semantic orientation.
 
 The second most frequent group of the PotTS corpus is formed by
 neutral microblogs, which account for 32\% of the data.  Finally,
-negative messages represent the absolute minority of all tweets
-(merely 19\%), which, however, is less surprising as the same tendency
-can be observed for the SB10k and German Twitter Snapshot too.
+negative messages represent a clear minority of all tweets (merely
+19\%), which, however, is less surprising as the same tendency can be
+observed for the SB10k and German Twitter Snapshot too.
 
 Regarding the last two corpora, we can observe a more uniform (though
 not identical) behavior as both collections are dominated by neutral
@@ -3894,7 +3894,7 @@ switching to a different type of sentiment lexicon, or using
 unnormalized text as input could improve or, vice versa, lower the
 classification scores.
 
-\subsection{Effect of Distant Supervision}
+\subsection{Distant Supervision}
 
 The first avenue that we are going to explore in this evaluation is
 the effect of distantly supervised data---an additional collection of
@@ -3956,22 +3956,44 @@ hashtag corpus,\footnote{\url{http://demeter.inf.ed.ac.uk}} achieving
 a macro-averaged \F-score of~0.68 on the three-class prediction task.
 
 In order to check the effect of such noisily annotated data on our
-tested methods, we also distantly assigned sentiment labels to all
-messages of the German Twitter Snapshot \cite{Scheffler:14} using the
-occurrences of smileys as clues: In particular, we regarded a
-microblog as \textsc{Positive} if the normalized version of this tweet
-contained the token \texttt{\%PositiveSmiley} with no other emoticons.
-Similarly to this, we considered a message as \textsc{Negative} if it
-only had the token \texttt{\%NegativeSmiley} among its facial
-expressions.  Furthermore, we classified all tweets which contained
-both types of the emoticons as \textsc{Mixed}, excluding them from
-further processing, and assigned the rest of the microblogs to the
-\textsc{Neutral} class.  A detailed breakdown of the final
-distribution is given in Table~\ref{snt-cgsa:tbl:corp-dist} at the
-beginning of this chapter.
+tested methods, we also automatically labeled all messages from the
+German Twitter Snapshot~\cite{Scheffler:14} using the occurrences of
+smileys as clue factors: In particular, we considered a microblog as
+\textsc{Positive} if its normalized version contained the token
+\texttt{\%PositiveSmiley} with no other facial expressions.  Similarly
+to this, we considered a message as \textsc{Negative} if the only
+emoticon which appeared in this tweet was \texttt{\%NegativeSmiley}.
+Furthermore, we classified all posts which contained both of these
+types as \textsc{Mixed}, skipping them during further processing, and
+assigned the rest of the messages to the \textsc{Neutral} polarity.
 
+A detailed breakdown of the final distribution is given in
+Table~\ref{snt-cgsa:tbl:corp-dist} at the beginning of this
+chapter. As we could see from the table, objective messages clearly
+dominate the whole dataset, accounting for 84\% of the data; followed
+by the \textsc{Positive} class, which makes up 14\% of the tweets.
+Similarly to the manually annotated PotTS and SB10k corpora, the
+\textsc{Negative} semantic orientation represents the absolute
+minority in this collection, featuring only $\approx 350$K microblogs
+(0.76\%).
 
-\todo[inline]{PotTS/preprocessed/train/*.tsv PotTS/preprocessed/dev/*.tsv GTS/tweets-2013-04-1[01234]*}
+Since it was impossible to utilize the wole snapshot for training due
+to limited computational resources (just reading the dataset into
+memory would require 9.3Gb RAM, not to mention the space required for
+storing embeddings and features), we confined ourselves to one sixth
+of these data, which resulted in 4M messages.  Moreover, to mitigate
+the extreme skewness of this corpus, we downsampled positive and
+neutral tweets to get an equal number of instances for all classes
+(59K microblogs for each polarity) and used these examples in addition
+to the manually analyzed PotTS and SB10k training sets.
+
+Since lexicon-based approaches were mostly independent of the training
+set, we decided to rerun our experiments only with ML- and fastes
+DL--based methods (RNN, SEV, BAZ, and LBA), which still incurred
+running times up to several days per some system.  The results of this
+evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
+
+\todo[inline]{}
 
 \begin{table}[h]
   \begin{center}
@@ -4050,10 +4072,10 @@ beginning of this chapter.
       %% avg / total       0.64      0.53      0.56      1525
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 49.38%
       %% Micro-Averaged F1-Score (All Classes): 53.2459%
-      SEV &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      SEV & 0.87 & 0.51 & 0.64 & %
+      0.27 & 0.49 & 0.35 & %
+      0.55 & 0.58 & 0.56 & %
+      0.49 & 0.53\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4063,11 +4085,10 @@ beginning of this chapter.
       %% avg / total       0.04      0.19      0.06      1525
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 15.84%
       %% Micro-Averaged F1-Score (All Classes): 18.8197%
-
-     BAZ &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      BAZ & 0.0 & 0.0 & 0.0 & %
+      0.19 & 1.0 & 0.32 & %
+      0.0 & 0.0 & 0.0 & %
+      0.16 & 0.19\\
 
       LBA$^{(1)}$ &  &  &  & %
       &  &  & %
@@ -4160,7 +4181,7 @@ beginning of this chapter.
   \end{center}
 \end{table}
 
-\subsection{Effect of Lexicons}\label{cgsa:subsec:eval:lexicons}
+\subsection{Lexicons}\label{cgsa:subsec:eval:lexicons}
 
 \todo[inline]{describe lexicon normalization steps}
 
@@ -4203,7 +4224,7 @@ beginning of this chapter.
 \end{figure*}
 
 
-\subsection{Effect of Text Normalization}
+\subsection{Text Normalization}
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
