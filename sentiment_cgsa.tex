@@ -3890,52 +3890,46 @@ results of common sentiment analysis approaches from all method groups
 have a closer look at how changing different common parameters of
 these methods might affect their performance.  In particular, we would
 like to see whether increasing the amount of the training data,
-switching to a different sentiment lexicon, or using unnormalized text
-as input would improve or, vice versa, worsen the classification
-scores.
+switching to a different type of sentiment lexicon, or using
+unnormalized text as input could improve or, vice versa, lower the
+classification scores.
 
 \subsection{Effect of Distant Supervision}
-\todo[inline]{}
 
-To the best of our knowledge, the idea of utilizing web texts
-containing emoticons as noisily labeled training data was first
-proposed by~\citet{Read:05}, who collected a set of 26,000 Usenet
-posts featuring smileys or frownies and used these documents to train
-a Na{\"i}ve Bayes and SVM classifier.  The author demonstrated that,
-despite some encouraging results obtained on the instances from the
-same domain (up to 70\% accuracy), the trained systems did not
-generalize well to other text genres, barely outperforming the chance
-baseline and reaching a maximum accuracy of~54.4\% on news data and
-56.8\% on movie reviews.
+The first avenue that we are going to explore in this evaluation is
+the effect of distantly supervised data---an additional collection of
+training tweets that have been automatically labeled with sentiment
+tags based on the occurrence of some sufficiently reliable formal
+criterion, such as emoticon or polar hashtag.
 
-The presumably first known attempt to adopt distant supervision for
-the sentiment analysis of Twitter data was made by~\citet{Go:09} who
-collected a set of 800,000 positive and 800,000 negative microblogs
-relying on emoticons as their noisy labels.  After stripping off these
-smileys from text, the authors trained three independent
-ML-classifiers (Na{\"i}ve Bayes, Maximum Entropy, and Support Vector
-Machines) on this collection, achieving their best results (82.7\%
-accuracy) with the NB and MaxEnt systems thaat utilized unigrams and
-bigrams as features.
+Among the first who proposed the idea of training a sentiment
+classifier on a larger corpus of automatically annotated messages was
+\citet{Read:05}, who gathered a set of 766,000 Usenet posts containing
+frownies or smileys, assigned a polarity label to each of these posts,
+judging by the type of the emoticons, and subsequently used a subset
+of these documents (up to 22,000 posts) to optimize a Na{\"i}ve Bayes
+and SVM system.  Even though these classifiers could achieve a
+considerabl accuracy (up to 70\%) on predicting the noisy labels of
+the remaining posts, they could not generalize to texts from other
+genres (movie reviews and newswire articles), where they could hardly
+outperform the random-chance baseline.
 
-Another distantly supervised approach was presented
-by~\citet{Barbosa:10}, who gathered a collection of automatically
-labeled tweets from three popular sentiment web sites (Twendz, Twitter
-Sentiment, and TweetFeel), and trained two binary SVM systems on this
-corpus.  The first of these classifiers had to distinguish between
-subjective and objective microblogs, attaining an error rate of~18.1\%
-on a subset of 1,000 manually annotated messages.  In the next step,
-the second system had to determine the semantic orientation of
-opinionated posts (positive or negative), reaching an error rate
-of~18.7\% on this prediction.
+With the onset of the Twitter era in the sentiment analysis research,
+this idea experienced its renaissance, with one of the first revival
+attempts made by~\citet{Go:09}, who collected a corpus of 800,000
+positive and 800,000 negative microblogs, also considering emoticons
+as their noisy labels.  After stripping these smileys off from text,
+the authors trained three independent ML-classifiers (Na{\"i}ve Bayes,
+Maximum Entropy, and Support Vector Machines) on these data, achieving
+their best results (82.7\% accuracy) with the NB and MaxEnt systems
+which utilized unigrams and bigrams as features.
 
-In a similar way, \citet{Pak:10} gathered a collection of 300,000
+In a similar way, \citet{Pak:10} scraped a collection of 300,000
 noisily labeled tweets, ensuring an even distribution of positive,
-negative, and neutral messages.  After a brief exploration of PoS tag
-statistics in these different classes, they presented a Na{\"i}ve
-Bayes system which utilized highly relevant binary part-of-speech and
-$n$-gram features.\footnote{\citet{Pak:10} determined the relevance of
-  a feature $f$ using a special \emph{salience} metric, which was
+negative, and neutral messages, and trained a Na{\"i}ve Bayes
+classifier, using reliable part-of-speech and $n$-gram
+features.\footnote{\citet{Pak:10} determined the reliability of a
+  feature $f$ using a special \emph{salience} metric, which was
   defined as a negative ratio between the minimum and maximum
   conditional probabilities of this feature belonging to different
   target classes:
@@ -3944,25 +3938,40 @@ $n$-gram features.\footnote{\citet{Pak:10} determined the relevance of
   \end{equation*}
   where the $N$~term denotes the number of training examples, and
   $s_i$ means the sentiment class of the $i$-th training instance.}
-With this approach, the authors attained an accuracy slighlty above
-0.6 on the manually labeled test set of~\citet{Go:09}, also
-demonstrating a particular utility of bigrams, negation rules, and
-feature pruning heuristics.
+With this approach, the authors attained an accuracy of slighlty more
+than 60\% on the manually annotated test set of the
+\citeauthor{Go:09}'s corpus, but demonstrated a particular utility of
+bigrams, negation rules, and feature pruning heuristics.
 
-A slightly different task was addressed by~\citet{Davidov:10}, who
-sought to predict hashtags and emoticons occurring in tweets using a
-$k$-NN classifier trained on a large collection of messages.  The
-authors achieved an \F-measure of~0.31 on the former task, and reached
-an \F-score of~0.64 on predicting smileys.
+Other notable works on opinion mining with distant supervision were
+introduced by~\citet{Barbosa:10}, who harnessed three publicly
+available sentiment websites (Twendz, Twitter Sentiment, and
+TweetFeel) to bootstrap the labels for their downloaded messages;
+\citet{Davidov:10}, who tried to predict hashtags and emoticons
+occurring in tweets using a $k$-NN classifier; and
+\citet{Kouloumpis:11}, who optimized an AdaBoost
+system~\cite{Schapire:00} on two large collections of noisily labeled
+microblogs---the emoticon tweebank of~\citet{Go:09} and the Edinburgh
+hashtag corpus,\footnote{\url{http://demeter.inf.ed.ac.uk}} achieving
+a macro-averaged \F-score of~0.68 on the three-class prediction task.
 
-\citet{Kouloumpis:11} trained an AdaBoost
-classifier~\cite{Schapire:00} on two large collections of noisily
-labeled tweets---the emoticon tweebank of~\citet{Go:09} and the
-Edinburgh hashtag corpus.\footnote{\url{http://demeter.inf.ed.ac.uk}}
-Using $n$-gram (up to length two), lexicon, part-of-speech, and
-micro-blogging features (such as emoticons, abbreviations, and slang
-expressions), the authors achieved a macro-averaged \F-measure of~0.68
-on the three-class prediction task.
+In order to check the effect of such noisily annotated data on our
+tested methods, we also distantly assigned sentiment labels to all
+messages of the German Twitter Snapshot \cite{Scheffler:14} using the
+occurrences of smileys as clues: In particular, we regarded a
+microblog as \textsc{Positive} if the normalized version of this tweet
+contained the token \texttt{\%PositiveSmiley} with no other emoticons.
+Similarly to this, we considered a message as \textsc{Negative} if it
+only had the token \texttt{\%NegativeSmiley} among its facial
+expressions.  Furthermore, we classified all tweets which contained
+both types of the emoticons as \textsc{Mixed}, excluding them from
+further processing, and assigned the rest of the microblogs to the
+\textsc{Neutral} class.  A detailed breakdown of the final
+distribution is given in Table~\ref{snt-cgsa:tbl:corp-dist} at the
+beginning of this chapter.
+
+
+\todo[inline]{PotTS/preprocessed/train/*.tsv PotTS/preprocessed/dev/*.tsv GTS/tweets-2013-04-1[01234]*}
 
 \begin{table}[h]
   \begin{center}
