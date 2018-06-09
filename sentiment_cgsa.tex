@@ -3988,12 +3988,17 @@ neutral tweets to get an equal number of instances for all classes
 to the manually analyzed PotTS and SB10k training sets.
 
 Since lexicon-based approaches were mostly independent of the training
-set, we decided to rerun our experiments only with ML- and fastes
-DL--based methods (RNN, SEV, BAZ, and LBA), which still incurred
-running times up to several days per some system.  The results of this
-evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
+set, we decided to rerun our experiments only with ML- and fastest
+DL--based methods (RNN, SEV, BAZ, and LBA),\footnote{In all subsequent
+  evaluation experiments with DL-based systems, we will use
+  pre-trained word2vec vectors (if applicable) with the least-square
+  fallback, and compare the results of these approaches to the
+  respective scores in Table~\ref{snt-cgsa:tbl:dl-res-lstsq}.} which
+still incurred running times up to several days for some systems.  The
+results of this evaluation are shown in
+Table~\ref{snt-cgsa:tbl:distant-supervision}.
 
-\todo[inline]{}
+\todo[inline]{Describe results}
 
 \begin{table}[h]
   \begin{center}
@@ -4059,10 +4064,18 @@ evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
       0.53\negdelta{0.15} & 0.68\negdelta{0.05} & 0.59\negdelta{0.06} & %
       0.5\negdelta{0.12} & 0.57\negdelta{0.1}\\
 
-      RAE &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.68      0.31      0.43       680
+      %% negative       0.25      0.46      0.32       287
+      %% neutral       0.49      0.61      0.54       558
+      %% avg / total       0.53      0.45      0.45      1525
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 37.66%
+      %% Micro-Averaged F1-Score (All Classes): 44.8525
+      RAE & 0.68\posdelta{0.07} & 0.31\negdelta{0.3} & 0.43\negdelta{0.18} & %
+      0.25\posdelta{0.03} & 0.46\posdelta{0.45} & 0.32\posdelta{0.29} & %
+      0.49\posdelta{0.01} & 0.61\negdelta{0.11} & 0.54\negdelta{0.03} & %
+      0.38\posdelta{0.06} & 0.45\negdelta{0.09}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4072,10 +4085,10 @@ evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
       %% avg / total       0.64      0.53      0.56      1525
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 49.38%
       %% Micro-Averaged F1-Score (All Classes): 53.2459%
-      SEV & 0.87 & 0.51 & 0.64 & %
-      0.27 & 0.49 & 0.35 & %
-      0.55 & 0.58 & 0.56 & %
-      0.49 & 0.53\\
+      SEV & 0.87\posdelta{0.14} & 0.51\negdelta{0.23} & 0.64\negdelta{0.1} & %
+      0.27\posdelta{0.27} & 0.49\posdelta{0.49} & 0.35\posdelta{0.35} & %
+      0.55\negdelta{0.01} & 0.58\negdelta{0.26} & 0.56\negdelta{0.12} & %
+      0.49\posdelta{0.12} & 0.53\negdelta{0.11}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4085,15 +4098,23 @@ evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
       %% avg / total       0.04      0.19      0.06      1525
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 15.84%
       %% Micro-Averaged F1-Score (All Classes): 18.8197%
-      BAZ & 0.0 & 0.0 & 0.0 & %
-      0.19 & 1.0 & 0.32 & %
-      0.0 & 0.0 & 0.0 & %
-      0.16 & 0.19\\
+      BAZ & 0.0\negdelta{0.82} & 0.0\negdelta{0.72} & 0.0\negdelta{0.77} & %
+      0.19\negdelta{0.43} & 1.0\posdelta{0.51} & 0.32\negdelta{0.23} & %
+      0.0\negdelta{0.68} & 0.0\negdelta{0.85} & 0.0\negdelta{0.76} & %
+      0.16\negdelta{0.5} & 0.19\negdelta{0.43}\\
 
-      LBA$^{(1)}$ &  &  &  & %
-      &  &  & %
-      &  &  & %
-      & \\
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.48      0.88      0.62       680
+      %% negative       0.25      0.23      0.24       287
+      %% neutral       0.00      0.00      0.00       558
+      %% avg / total       0.26      0.44      0.32      1525
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 43.00%
+      %% Micro-Averaged F1-Score (All Classes): 43.6721%
+      LBA$^{(1)}$ & 0.48\negdelta{0.28} & 0.88\posdelta{0.04} & 0.62\negdelta{0.17} & %
+      0.25\negdelta{0.35} & 0.23\negdelta{0.33} & 0.24\negdelta{0.34} & %
+      0.0\negdelta{0.75} & 0.0\negdelta{0.68} & 0.0\negdelta{0.72} & %
+      0.43\negdelta{0.26} & 0.44\negdelta{0.29}\\
 
       LBA$^{(2)}$ &  &  &  & %
       &  &  & %
@@ -4183,8 +4204,44 @@ evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
 
 \subsection{Lexicons}\label{cgsa:subsec:eval:lexicons}
 
-\todo[inline]{describe lexicon normalization steps}
+Another factor which could significantly affect the results of the
+tested systems was the sentiment lexicon that they used either
+directly (to compute the polarity of the input message) or indirectly
+(to extract some features or draw the attention of the model).  To
+estimate the effect of this resource on the net scores of the
+evaluated approaches, we successively replaced the linear projection
+lexicon, which we utilized in our previous experiments, with other
+polarity lists presented in Chapter~\ref{chap:snt:lex} and recomputed
+the scores.
 
+As we can see in Figure~\ref{cgsa:fig:potts-lexicon-effect}, the
+system of~\citet{Mohammad:13} and our own lexicon-based attention
+method clearly dominate all other competitors on the PotTS corpus
+independently of the lexicon they use.  The only approach which comes
+at least close to their results---the ML-based classifier
+of~\citet{Guenther:14}---is still almost 5\% below the average
+macro-\F{} of these two methods .  The same also applies to the
+micro-\F-scores where the solution of~\citet{Guenther:14} loses
+$\approx$3\% on average to the top-performing systems.  Regarding the
+differences between the MHM and LBA themselves, we can observe a
+rather mixed situation: The approach of~\citet{Mohammad:13} yields
+better macro-averaged \F{}-results with the lexicons
+of~\citet{Esuli:05}, \citet{Vo:16}, and \citet{Clematide:10}, but
+falls against LBA when used with the polarity lists
+of~\citet{Blair-Goldensohn:08}, \citet{Waltinger:10}, \citet{Hu:04},
+\citet{Kiritchenko:14}, \citet{Rao:09}, \citet{Takamura:05},
+\citet{Tang:14}, and \citet{Velikovich:10} as well as the NWE-based
+\textsc{LinProj} and \textsc{PCA} resources.  Moreover, the LBA system
+also produces the best overall macro-\F{} on this corpus when trained
+with the \textsc{LinProj} and \citeauthor{Tang:14}'s lexicons.  These
+results, however, look a bit differently when we consider the
+micro-averaged scores, where \citeauthor{Mohammad:13}'s system
+outperforms our solution on 8 out of 20 lexicons, but performs worse
+than LBA on 4 polarity lists (GPC, KIR, RR$_{\textrm{mincut}}$, and
+VEL).  Neverthelless, our solution still achieves the best overall
+observed score (0.73) with at least three lexica (GPC, LP, and VEL).
+
+%% This figure was generated using the iPython notebook `notebooks/cgsa.ipynb`.
 \begin{figure*}
 {
 \centering
@@ -4204,6 +4261,7 @@ evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
   corpus}\label{cgsa:fig:potts-lexicon-effect}
 \end{figure*}
 
+%% This figure was generated using the iPython notebook `notebooks/cgsa.ipynb`.
 \begin{figure*}
 {
 \centering
@@ -4225,6 +4283,9 @@ evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
 
 
 \subsection{Text Normalization}
+
+\todo[inline]{describe effect of text normalization}
+
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -4713,3 +4774,5 @@ evaluation are shown in Table~\ref{snt-cgsa:tbl:distant-supervision}.
 \end{table}
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
+
+\todo[inline]{write summary and conclusions}
