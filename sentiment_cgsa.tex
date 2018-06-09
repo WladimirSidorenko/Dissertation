@@ -4216,30 +4216,41 @@ the scores.
 
 As we can see in Figure~\ref{cgsa:fig:potts-lexicon-effect}, the
 system of~\citet{Mohammad:13} and our own lexicon-based attention
-method clearly dominate all other competitors on the PotTS corpus
-independently of the lexicon they use.  The only approach which comes
-at least close to their results---the ML-based classifier
+approach clearly dominate all other competitors on the PotTS corpus
+independently of the lexicon they use.  The only method which comes at
+least close to their results---the ML-based classifier
 of~\citet{Guenther:14}---is still almost 5\% below the average
-macro-\F{} of these two methods .  The same also applies to the
+macro-\F{} of these two classifiers .  The same also applies to the
 micro-\F-scores where the solution of~\citet{Guenther:14} loses
 $\approx$3\% on average to the top-performing systems.  Regarding the
 differences between the MHM and LBA themselves, we can observe a
-rather mixed situation: The approach of~\citet{Mohammad:13} yields
+rather mixed relation: The approach of~\citet{Mohammad:13} yields
 better macro-averaged \F{}-results with the lexicons
 of~\citet{Esuli:05}, \citet{Vo:16}, and \citet{Clematide:10}, but
 falls against LBA when used with the polarity lists
 of~\citet{Blair-Goldensohn:08}, \citet{Waltinger:10}, \citet{Hu:04},
 \citet{Kiritchenko:14}, \citet{Rao:09}, \citet{Takamura:05},
 \citet{Tang:14}, and \citet{Velikovich:10} as well as the NWE-based
-\textsc{LinProj} and \textsc{PCA} resources.  Moreover, the LBA system
-also produces the best overall macro-\F{} on this corpus when trained
-with the \textsc{LinProj} and \citeauthor{Tang:14}'s lexicons.  These
-results, however, look a bit differently when we consider the
-micro-averaged scores, where \citeauthor{Mohammad:13}'s system
-outperforms our solution on 8 out of 20 lexicons, but performs worse
-than LBA on 4 polarity lists (GPC, KIR, RR$_{\textrm{mincut}}$, and
-VEL).  Neverthelless, our solution still achieves the best overall
-observed score (0.73) with at least three lexica (GPC, LP, and VEL).
+\textsc{LinProj} and \textsc{PCA} lexicons.  Moreover, when trained
+with \citeauthor{Tang:14}'s and \textsc{LinProj} lists, the LBA system
+also produces the best overall macro-\F{} on this corpus.
+
+These results, however, look slightly differently when we consider the
+micro-averaged scores. This time, the system
+of~\citeauthor{Mohammad:13} outperforms our solution on eight out of
+twenty lexicons, but performs worse than LBA on four other polarity
+lists (GPC, KIR, RR$_{\textrm{mincut}}$, and VEL).  Neverthelless, our
+approach still attaines the best overall observed score (0.73) with
+three tested lexicos (GPC, \textsc{LinProj}, and VEL).
+
+Regarding the performance of single lexicons, we can see that the best
+results are achieved with the manually curated \textsc{SentiWS} and
+Zurich lists \cite{Remus:10,Clematide:10} followed by the
+dictionary-based approaches of~\citet{Blair-Goldensohn:08} and
+\citet{Rao:09}.  The method of the nearest centroids vice versa
+appears to be of the lowest utility for almost all methods, even
+though it demonstrated quite acceptable scores in our intrinsic
+lexicon evaluation.
 
 %% This figure was generated using the iPython notebook `notebooks/cgsa.ipynb`.
 \begin{figure*}
