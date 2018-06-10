@@ -4237,20 +4237,20 @@ also produces the best overall macro-\F{} on this corpus.
 
 These results, however, look slightly differently when we consider the
 micro-averaged scores. This time, the system
-of~\citeauthor{Mohammad:13} outperforms our solution on eight out of
-twenty lexicons, but performs worse than LBA on four other polarity
-lists (GPC, KIR, RR$_{\textrm{mincut}}$, and VEL).  Neverthelless, our
-approach still attaines the best overall observed score (0.73) with
-three tested lexicos (GPC, \textsc{LinProj}, and VEL).
+of~\citeauthor{Mohammad:13} outperforms our solution on 8 out of 20
+lexicons, but performs worse than LBA on 4 other polarity lists (GPC,
+KIR, RR$_{\textrm{mincut}}$, and VEL).  Neverthelless, our approach
+still reaches the best overall observed score (0.73) with three tested
+resources (GPC, \textsc{LinProj}, and VEL).
 
 Regarding the performance of single lexicons, we can see that the best
 results are achieved with the manually curated \textsc{SentiWS} and
-Zurich lists \cite{Remus:10,Clematide:10} followed by the
+Zurich Polarity lists \cite{Remus:10,Clematide:10} followed by the
 dictionary-based approaches of~\citet{Blair-Goldensohn:08} and
 \citet{Rao:09}.  The method of the nearest centroids vice versa
-appears to be of the lowest utility for almost all methods, even
+appears to be of the lowest utility for almost all systems, even
 though it demonstrated quite acceptable scores in our intrinsic
-lexicon evaluation.
+evaluation.
 
 %% This figure was generated using the iPython notebook `notebooks/cgsa.ipynb`.
 \begin{figure*}
@@ -4271,6 +4271,26 @@ lexicon evaluation.
   methods with different lexicons on the PotTS
   corpus}\label{cgsa:fig:potts-lexicon-effect}
 \end{figure*}
+
+A similar situation also holds for the SB10k corpus where the ML-based
+approaches of~\citet{Mohammad:13} and \citet{Guenther:14} and our
+DL-based LBA system outperform all other methods in terms of both
+macro- and micro-averaged \F{}-scores.  This time, however, the
+average difference between the average macro-results of LBA and GNT is
+much smaller than in the previous case and amounts to only 0.02\% in
+favor of LBA, which again achieves the best overall macro-\F{} (0.58)
+in combination with the min-cut lexicon of~\citet{Rao:09}.  However,
+our system clearly falls against the latter classifier with respect to
+the micro-averaged results, performing worse than it in 16 out of 20
+experiments.
+
+The effect of single lexicons is also less pronounced than in the
+PotTS case as all of the tested polarity lists show a more or less
+similar behavior, especially regarding the macro-averaged \F{}-score.
+In terms of the micro-\F{}, however, we can observe that
+dictionary-based lists---especially those of~\citet{Awadallah:10},
+\citet{Blair-Goldensohn:08}, \citet{Hu:04}, and \citet{Kim:04}---lead
+to altogether better scores than corpus- and NWE-based resources.
 
 %% This figure was generated using the iPython notebook `notebooks/cgsa.ipynb`.
 \begin{figure*}
