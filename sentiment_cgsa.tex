@@ -4192,6 +4192,14 @@ Table~\ref{snt-cgsa:tbl:distant-supervision}.
       &  &  & %
       & \\
 
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.00      0.00      0.00       354
+      %% negative       0.14      1.00      0.25       212
+      %% neutral       0.00      0.00      0.00       930
+      %% avg / total       0.02      0.14      0.04      1496
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 12.41%
+      %% Micro-Averaged F1-Score (All Classes): 14.1711%
       LBA$^{(2)}$ &  &  &  & %
       &  &  & %
       &  &  & %
@@ -4323,7 +4331,49 @@ to altogether better scores than corpus- and NWE-based resources.
 
 \subsection{Text Normalization}
 
-\todo[inline]{describe effect of text normalization}
+Finally, the last aspect that we are going to analyze in this
+evaluation is the effect of the text normalization which we applied to
+the input messages before passing them to the classifiers.  To verify
+the utility of this step, we rerun all experiments from the initial
+sections, using the original Twitter messages instead of their
+preprocessed forms, and recalculated the results of the tested
+sentiment systems.
+
+As we can see from the figures in
+Table~\ref{snt-cgsa:tbl:res-no-normalization}, switching off the
+normalization has a strong negative effect on the scores of almost all
+approaches except for the methods of~\citet{Yessenalina:10} and
+\citet{Socher:12,Socher:13}, which notoriously keep predicting the
+majority class in most of the cases in the same way as they did it
+before.  Apart from this, we can notice that lexicon-based systems
+(HL, JRK, KLCH, MST, and TBD) suffer the greatest loss in terms of
+both macro- and micro-averaged \F{}-scores on the PotTS corpus (up to
+-0.25 macro- and and -0.22 micro-\F{}).  A closer look at their errors
+revealed that this deterioration is mostly due to the larger variety
+of different emoticons in the dataset (which were typically unified
+during the preprocessing) and the absence of these forms in the
+utilized lexicon.  The second biggest quality drop is demonstrated by
+the DL-based approaches BAZ, LBA$^{(1)}$, and LBA$^{(2)}$, which
+apparently also get confused by the increased lexical variety of the
+input and fail to optimize all their internal parameters to properly
+fit this diversity.  The remaining DL- and ML-based classifiers
+(especially those of MHM, GNT, and RNTN) seem to be more resistant to
+the introduced changes, but still show a descrease by up to 0.04
+macro- and 0.08 micro-\F{}.  Finally, the MVRNN system
+of~\citet{Socher:12} even slightly improves on the negative and
+neutral classes, leaving the majority class pitfall.  However, this
+increase appears to be too small to positively influence the overall
+micro-average of this method.
+
+Regarding the breakdown of single polarity classes, we can see that
+most of the rare improvements affect the recall of positive and
+neutral messages, with the biggest gains demonstrated by the RAE and
+RNTN approaches (+0.37 and +0.11 respectively).  Other positive
+changes are fairly sporadic and produced by only few classifiers
+(first of all MVRNN).  Nevertheless, even in these exceptional cases,
+the improvements are typically so small that they hardly outweigh the
+decreased scores on other aspects and have virtually no effect on the
+net results for all classes.
 
 \begin{table}[h]
   \begin{center}
@@ -4491,10 +4541,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.43      0.46      0.31      1529
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 31.18%
       %% Micro-Averaged F1-Score (All Classes): 46.1086%
-      RAE & 0.46 & 0.98 & 0.62 & %
-      0.0 & 0.0 & 0.0 & %
-      0.63 & 0.05 & 0.09 & %
-      0.31 & 0.46\\
+      RAE & 0.46\negdelta{0.15} & 0.98\posdelta{0.37} & 0.62\posdelta{0.01} & %
+      0.0\negdelta{0.22} & 0.0\negdelta{0.01} & 0.0\negdelta{0.03} & %
+      0.63\posdelta{0.15} & 0.05\negdelta{0.67} & 0.09\negdelta{0.48} & %
+      0.31\negdelta{0.01} & 0.46\negdelta{0.08}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4504,10 +4554,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.31      0.43      0.29      1529
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 30.66%
       %% Micro-Averaged F1-Score (All Classes): 43.0347%
-      MVRNN & 0.45 & 0.92 & 0.6 & %
-      0.08 & 0.01 & 0.01 & %
-      0.26 & 0.03 & 0.06 & %
-      0.31 & 0.43\\
+      MVRNN & 0.45 & 0.92\negdelta{0.08} & 0.6\negdelta{0.02} & %
+      0.08\posdelta{0.08} & 0.01\posdelta{0.01} & 0.01\posdelta{0.01} & %
+      0.26\posdelta{0.26} & 0.03\posdelta{0.03} & 0.06\posdelta{0.06} & %
+      0.31 & 0.43\negdelta{0.02}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4517,10 +4567,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.40      0.45      0.32      1529
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 31.17%
       %% Micro-Averaged F1-Score (All Classes): 44.9313%
-      RNTN & 0.45 & 0.93 & 0.61 & %
-      0.29 & 0.01 & 0.01 & %
-      0.4 & 0.07 & 0.12 & %
-      0.31 & 0.45\\
+      RNTN & 0.45 & 0.93\posdelta{0.11} & 0.61\posdelta{0.02} & %
+      0.29\posdelta{0.05} & 0.01\negdelta{0.05} & 0.01\negdelta{0.09} & %
+      0.4\negdelta{0.03} & 0.07\negdelta{0.1} & 0.12\negdelta{0.12} & %
+      0.31\negdelta{0.03} & 0.45\negdelta{0.01}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4530,10 +4580,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.45      0.56      0.50      1529
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 32.76%
       %% Micro-Averaged F1-Score (All Classes): 56.1805%
-      SEV & 0.56 & 0.79 & 0.66 & %
+      SEV & 0.56\negdelta{0.17} & 0.79\posdelta{0.05} & 0.66\negdelta{0.08} & %
       0.0 & 0.0 & 0.0 & %
-      0.57 & 0.57 & 0.57 & %
-      0.33 & 0.56\\
+      0.57\posdelta{0.01} & 0.57\negdelta{0.27} & 0.57\negdelta{0.11} & %
+      0.33\negdelta{0.04} & 0.56\negdelta{0.08}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4543,10 +4593,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.59      0.57      0.55      1529
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 46.83%
       %% Micro-Averaged F1-Score (All Classes): 56.8345%
-      BAZ & 0.65 & 0.59 & 0.62 & %
-      0.62 & 0.22 & 0.32 & %
-      0.5 & 0.74 & 0.6 & %
-      0.47 & 0.57\\
+      BAZ & 0.65\negdelta{0.17} & 0.59\negdelta{0.13} & 0.62\negdelta{0.15} & %
+      0.62 & 0.22\negdelta{0.27} & 0.32\negdelta{0.23} & %
+      0.5\negdelta{0.18} & 0.74\negdelta{0.11} & 0.6\negdelta{0.16} & %
+      0.47\negdelta{0.19} & 0.57\negdelta{0.16}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4556,10 +4606,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.59      0.58      0.56      1529
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 59.72%
       %% Micro-Averaged F1-Score (All Classes): 57.9464%
-      LBA$^{(1)}$ & 0.58 & 0.77 & 0.66 & %
-      0.54 & 0.53 & 0.54 & %
-      0.63 & 0.37 & 0.46 & %
-      0.6 & 0.58\\
+      LBA$^{(1)}$ & 0.58\negdelta{0.18} & 0.77\negdelta{0.07} & 0.66\negdelta{0.13} & %
+      0.54\negdelta{0.06} & 0.53\negdelta{0.03} & 0.54\negdelta{0.04} & %
+      0.63\negdelta{0.12} & 0.37\negdelta{0.31} & 0.46\negdelta{0.26} & %
+      0.6\negdelta{0.09} & 0.58\negdelta{0.15}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4569,10 +4619,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.58      0.57      0.57      1529
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 53.01%
       %% Micro-Averaged F1-Score (All Classes): 57.0307%
-      LBA$^{(2)}$ & 0.67 & 0.52 & 0.59 & %
-      0.51 & 0.44 & 0.47 & %
-      0.52 & 0.7 & 0.6 & %
-      0.53 & 0.57\\
+      LBA$^{(2)}$ & 0.67\negdelta{0.17} & 0.52\negdelta{0.21} & 0.59\negdelta{0.19} & %
+      0.51\negdelta{0.06} & 0.44\negdelta{0.04} & 0.47\negdelta{0.06} & %
+      0.52\negdelta{0.14} & 0.7\negdelta{0.12} & 0.6\negdelta{0.13} & %
+      0.53\negdelta{0.12} & 0.57\negdelta{0.15}\\
 
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
 
@@ -4719,10 +4769,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.61      0.66      0.62      1496
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 28.12%
       %% Micro-Averaged F1-Score (All Classes): 66.0428%
-      RAE & 0.46 & 0.62 & 0.53 & %
-      0.18 & 0.02 & 0.03 & %
-      0.77 & 0.82 & 0.79 & %
-      0.28 & 0.66\\
+      RAE & 0.46\negdelta{0.04} & 0.62\negdelta{0.11} & 0.53\negdelta{0.06} & %
+      0.18\negdelta{0.17} & 0.02\negdelta{0.04} & 0.03\negdelta{0.07} & %
+      0.77\negdelta{0.03} & 0.82\posdelta{0.02} & 0.79\negdelta{0.01} & %
+      0.28\negdelta{0.07} & 0.66\negdelta{0.02}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4759,10 +4809,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.61      0.67      0.62      1496
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 27.31%
       %% Micro-Averaged F1-Score (All Classes): 66.9786%
-      SEV & 0.58 & 0.39 & 0.47 & %
-      0.23 & 0.05 & 0.08 & %
-      0.7 & 0.92 & 0.8 & %
-      0.27 & 0.67\\
+      SEV & 0.58\negdelta{0.06} & 0.39\negdelta{0.19} & 0.47\negdelta{0.14} & %
+      0.23\negdelta{0.28} & 0.05\negdelta{0.16} & 0.08\negdelta{0.22} & %
+      0.7\negdelta{0.06} & 0.92\posdelta{0.03} & 0.8\negdelta{0.02} & %
+      0.27\negdelta{0.18} & 0.67\negdelta{0.05}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4772,10 +4822,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.71      0.69      0.69      1496
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.68%
       %% Micro-Averaged F1-Score (All Classes): 68.9840%
-      BAZ & 0.69 & 0.54 & 0.6 & %
-      0.36 & 0.49 & 0.41 & %
-      0.79 & 0.79 & 0.79 & %
-      0.51 & 0.69\\
+      BAZ & 0.69\negdelta{0.03} & 0.54\negdelta{0.16} & 0.6\negdelta{0.05} & %
+      0.36\negdelta{0.17} & 0.49\posdelta{0.16} & 0.41 & %
+      0.79 & 0.79\negdelta{0.12} & 0.79\negdelta{0.05} & %
+      0.51\negdelta{0.02} & 0.69\negdelta{0.06}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4785,10 +4835,10 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.55      0.27      0.16      1496
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 41.39%
       %% Micro-Averaged F1-Score (All Classes): 27.4733%
-      LBA$^{(1)}$ & 0.24 & 0.86 & 0.38 & %
-      0.45 & 0.45 & 0.45 & %
-      0.69 & 0.01 & 0.02 & %
-      0.41 & 0.27\\
+      LBA$^{(1)}$ & 0.24\negdelta{0.36} & 0.86\negdelta{0.14} & 0.38\negdelta{0.28} & %
+      0.45\negdelta{0.02} & 0.45\posdelta{0.03} & 0.45\posdelta{0.01} & %
+      0.69\negdelta{0.15} & 0.01\negdelta{0.79} & 0.02\negdelta{0.8} & %
+      0.41\negdelta{0.14} & 0.27\negdelta{0.46}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -4798,19 +4848,61 @@ to altogether better scores than corpus- and NWE-based resources.
       %% avg / total       0.72      0.72      0.69      1496
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 44.55%
       %% Micro-Averaged F1-Score (All Classes): 72.4599%
-      LBA$^{(2)}$ & 0.74 & 0.42 & 0.54 & %
-      0.62 & 0.25 & 0.35 & %
-      0.73 & 0.95 & 0.82 & %
-      0.45 & 0.72\\\bottomrule
+      LBA$^{(2)}$ & 0.74\negdelta{0.02} & 0.42\negdelta{0.15} & 0.54\negdelta{0.1} & %
+      0.62\posdelta{0.07} & 0.25\negdelta{0.14} & 0.35\negdelta{0.11} & %
+      0.73\negdelta{0.06} & 0.95\posdelta{0.05} & 0.82\negdelta{0.02} & %
+      0.45\negdelta{0.1} & 0.72\negdelta{0.03}\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Results of CGSA Methods without Text Normalization]{
-      Results of CGSA methods without text normalization\\
-      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~-- \citet{Musto:14}, JRK
-        -- \citet{Jurek:15}, KLCH -- \citet{Kolchyna:15}}}
-    \label{snt-cgsa:tbl:res-without-normalization}
+      Results of CGSA methods without text normalization\\ {\small
+        HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
+        \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
+        \citet{Kolchyna:15}, GMN~--~\citet{Gamon:04},
+        MHM~--~\citet{Mohammad:13}, GNT~--~\citet{Guenther:14},
+        Y\&C~--~\citet{Yessenalina:11}, RAE~--~Recursive Auto-Encoder
+        \cite{Socher:11}, MVRNN~--~Matrix-Vector RNN \cite{Socher:12},
+        RNTN~--~Recursive Neural-Tensor Network \cite{Socher:13},
+        SEV~--~\citet{Severyn:15}, BAZ~--~\citet{Baziotis:17},
+        LBA$^{(1)}$~--~lexicon-based attention with one Bi-LSTM layer,
+        LBA$^{(2)}$~--~lexicon-based attention with two Bi-LSTM
+        layers}}
+    \label{snt-cgsa:tbl:res-no-normalization}
   \end{center}
 \end{table}
+
+A similar situation is also observed on the SB10k corpus, where we can
+see even fewer improvements (in 10 out of 176 cases).  The biggest
+increase this time (+0.16 recall) is demonstrated by the approach
+of~\citet{Baziotis:17} on the negative class.  The remaining growths,
+however, are much smaller and typically range between one and seven
+percent.  On the other hand, three of the tested methods (Y\&C, MVRNN,
+and RNTN) have not changed their results at all and show exactly the
+same numbers as they did previously with normalized messages,
+although, most of the time, these classifiers only predict the
+majority label anyway.  As to the rest of the systems, we can see that
+their scores are notably lower than in our intial experiments, but the
+decrese is much smaller as compared to the PotTS corpus.  A sad
+exception in this case is a major drop of the recall of neutral
+messages (-0.79) demonstrated by our LBA$^{(1)}$ system, which, in
+turn, resulted in a significant decrease of its macro- and
+micro-averaged \F{}-scores (-0.14 and -0.46 respectively).  Other
+approaches (including the sibling method LBA$^{(2)}$) behave much more
+stable in this regard and their average decrease amounts to -0.06
+macro- and -0.03 micro-\F{}.
+
+Similarly to the results on the PotTS data, most of the gains are
+concentrated at the recall of the neutral class (4 out of 10
+improvements), with other positive changes being rather sporadic and
+affecting only a few classifiers.  Unlike in the previous case, this
+time, we can even observe a slight improvement of the macro-averaged
+\F-measure for one of the systems (the lexicon-based approach
+of~\citeauthor{Jurek:15}), but its micro-averaged metric remains
+mainly unaffected by this increase.  However, overall, the vast
+majority of macro- and micro-\F-scores show an obvious decline on both
+datasets, which once again proves the advantage of preprocessing
+colloquial text before applying to it a standard NLP pipeline.
+
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
 
