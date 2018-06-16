@@ -4909,9 +4909,68 @@ of~\citeauthor{Jurek:15}), but its micro-averaged metric remains
 mainly unaffected by this increase.  However, overall, the vast
 majority of macro- and micro-\F-scores show an obvious decline on both
 datasets, which once again proves the advantage of preprocessing
-colloquial text before applying to it a standard NLP pipeline.
+colloquial texts before applying a standard NLP pipeline.
 
 
 \section{Summary and Conclusions}\label{slsa:subsec:conclusions}
 
-\todo[inline]{write summary and conclusions}
+Now, concluding this chapter, we would like to remind the reader that
+in this part of the thesis we have made the following findings and
+contributions:
+\begin{itemize}
+  \item we have compared three major families of coarse-grained
+    sentiment analysis methods---lexicon-, machine-learning-- and
+    deep-learning--based ones, finding that the last two groups
+    significantly outperformed lexicon-driven systems;
+  \item somewhat surprisingly, among all compared lexicon methods, the
+    most simplistic one---the classifier of~\citet{Hu:04}---produced
+    the best macro- and micro-averaged \F{}-results on the PotTS
+    corpus (0.615 and 0.685 respectively) and also yielded the highest
+    macro \F{}-measure on the SB10k dataset (0.421).  Other systems,
+    however, could improve their scores if they better handled the
+    negation (after switching off the negation component in the method
+    of~\citeauthor{Musto:14}, its macro-\F{} on the PotTS corpus
+    increased to 0.641, surpassing the benchmark
+    of~\citeauthor{Hu:04});
+  \item as expected, the ML-based system of~\citet{Mohammad:13}---the
+    winner of the inaugural run of SemEval task in sentiment analysis
+    of Twitter~\cite{Nakov:13}---also outperformed all its competitors
+    from the ML group, achieving highly competitive results: 0.674
+    macro- and 0.727 micro-\F{} on the PotTS data and 0.564 macro- and
+    0.752 micro-averaged \F{}-measure on the SB10k test set;
+  \item however, as in the previous case, these results could further
+    be improved if the classifier did not utilize character-level and
+    part-of-speech features and used logistic regression instead of
+    SVM as its backend;
+  \item a much more varied situation was observed with
+    deep-learning--based systems, which frequently simply degraded to
+    always predicting the majority class for all inputs, but sometimes
+    yielded extraordinarily good results as, for example, in the case
+    of our lexicon-based attention system, which attained 0.69
+    macro-\F{} on the PotTS corpus and 0.55 macro \F{}-score on the
+    SB10k dataset (0.73 and 0.75 micro-\F{} respectively) when used
+    with pretrained word embeddings and the least-square fallback,
+    setting a new state-of-the-art for the former corpus;
+  \item speaking of word embeddings, we should note that almost all
+    DL-based approaches performed fairly weak when they used
+    task-specific embeddings initialized from scratch, their results,
+    however, improved after swicthing pre-trained word2vec vectors,
+    and became even better after we optimized these embeddings with
+    respect to the task at hand and applied the least-square fallback
+    to approximate the representations of unseen tokens;
+  \item contrary to our initial expectations, the majority class
+    pitfall of DL-based systems could not be solved by adding more
+    noisily supervised training data, which, in general, only lowered
+    the scores of both ML- and DL-based methods.  Since this result
+    contradicts the findings of other authors, we hypothesize that
+    this deterioration is primarily due to the differences in class
+    distributions between automatically and manually labeled datasets;
+  \item on the other hand, we could see that using more qualitative
+    sentiment lexicons (especially manually curated and
+    dictionary-based ones) resulted in further improvements for the
+    systems which utilized this lexical resource;
+  \item last but not least, we proved the utility of the text
+    normalization step, which brought about signifcant improvements
+    for all of the tested systems, as confirmed by our last ablation
+    test.
+\end{itemize}
