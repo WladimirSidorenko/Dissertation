@@ -15,10 +15,61 @@
 
 \chapter{Discourse-Aware Sentiment Analysis}
 
+Albeit coarse-grained seniment methods do a fairly good job at
+classifying the overall polarity of messages, and DL-based approaches
+also try their best to incorporate the compositional principle into
+that prediction, a crucial limitation of all these systems is that
+they overlook the structural nature of their input by either
+considering it as a single whole (for example, of-features
+classifiers) or analyzing it as a monotone sequence of equally
+important elements (for instance, recurrent neural networks).
+Unfortunately, both of these solutions completely ignore the
+hierarchical nature of language \cite{Saussure:13,Hjelmslev:70}, in
+which morphemes are put together to form words, words are united
+together into sentences, and multiple sentences constitute a
+discourse.  Moreover, even units of the same linguistic level might
+play different roles and be of different importance while joined
+syntagmatically: \eg{} in words, the root morpheme typically conveys
+more lexical meaning than the affixes; in sentences, the syntactic
+head grammatically dominates all its dependents.  The same kind of
+hierarchy can also be obsered in discourse, where one of the sentences
+might express the gist of the whole text, but its meaning can still be
+changed or reversed by other propositions.
 
-\section{Data Preparation}\label{sec:cgsa:data}
+Exactly the lack of the discourse information was the main reason for
+the misclassifications of the systems of \citet{Severyn:15},
+\citet{Baziotis:17}, and our own LBA method shown in Examples
+\ref{snt:cgsa:exmp:severyn-error}, \ref{snt:cgsa:exmp:baziotis-error},
+and \ref{snt:cgsa:exmp:lba-error} of the previous chapter.  Since none
+of these approaches explicitly took the discourse structure into
+account (in the best case, the inference simply proceeded from the
+level of words to the level of the whole message), we decided to check
+whether making the last of these solutions (our LBA method) aware of
+the discourse relations would improve its results.  However, before we
+proceed with our experiments, we will first give a short overview of
+the most popular approaches to discourse analysis in the literature
+and justify our choice of one of them.  Afterwards, in
+Section~\ref{sec:dasa:data}, we will describe the way of adding
+discourse information to the existing PotTS and SB10k data.  Then, in
+Section~\ref{sec:dasa:data}, we present a concise survey of the
+existing discourse-aware sentiment analysis methods and evaluate their
+results on the two aforementioned corpora.  After analyzing the
+effects of different common factors (such as various subsets of
+discourse relations that might be incorporated into a discourse-aware
+sentiment system), we summarize our findings in the last part of this
+chapter.
 
-\section{Discourse-Aware Sentiment Analysis Methods}
+\section{Discourse Analysis}\label{sec:dasa:theory}
+
+\todo[inline]{RST}
+
+\todo[inline]{PDTB}
+
+\todo[inline]{SDRT}
+
+\section{Data Preparation}\label{sec:dasa:data}
+
+\section{Discourse-Aware Sentiment Analysis}\label{sec:dasa:data}
 
 % \done[inline]{\citet{Bickerstaffe:10}}
 
