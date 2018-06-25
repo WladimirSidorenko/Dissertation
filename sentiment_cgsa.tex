@@ -96,7 +96,7 @@ opinions with different semantic orientations.  In cases when a
 sentiment was absent, we recoursed to a fallback strategy by
 considering all tweets with only positive (negative) polar terms as
 positive (negative), disregarding messages which featured expressions
-from both polarity classes, and assuming the rest of the corpus (i.e.,
+from both polarity classes, and assuming the rest of the corpus (\ie{}
 posts with neither sentiments nor polar terms) to be neutral.
 
 A few examples of such heuristically inferred labels are provided
@@ -238,7 +238,7 @@ the respective score of the SB10k set (0.66 versus 0.39).
 %%   However, Cohen's $\kappa$ of these data (0.4), which is only
 %% available for our corpus, is merely on the verge between fair and
 %% moderate agreement.  Nevertheless, since labels used in our
-%% experiments are ordinal rather than nominal in their nature (i.e.,
+%% experiments are ordinal rather than nominal in their nature (\ie{}
 %% we can compute the \emph{distance} between distinct labels, which,
 %% for example, would be greater for the pair \textsc{positive}
 %% vs. \textsc{negative} than for the pair \textsc{positive}
@@ -307,11 +307,11 @@ of the terms if they were negated.  %% Finally, \citet{Kim:04}
 In~\citeyear{Polanyi:06}, \citeauthor{Polanyi:06} presented an
 extensive overview and analysis of common lexicon-based sentiment
 methods that existed at that time, arguing that, besides considering
-the lexical valence (i.e., semantic orientation) of polar expressions,
+the lexical valence (\ie{} semantic orientation) of polar expressions,
 it was also important to incorporate syntactic, discourse-level, and
 extra-linguistic factors such as negations, intensifiers, modal
-operators (e.g., \emph{could} or \emph{might}), presuppositional items
-(e.g., \emph{barely} or \emph{failure}), irony, reported speech,
+operators (\eg{} \emph{could} or \emph{might}), presuppositional items
+(\eg{} \emph{barely} or \emph{failure}), irony, reported speech,
 discourse connectors, genre, attitude assessment, reported speech,
 multi-entity evaluation, etc.  This theoretical hypothesis was also
 proven empirically by \citet{Kennedy:06} who investigated two ways to
@@ -484,7 +484,7 @@ all of the tested approaches presupposed different signs for the terms
 with opposite semantic orientations.\footnote{We will investigate the
   impact of other lexicons with presumably better scoring later in
   Section~\ref{cgsa:subsec:eval:lexicons}.}  Moreover, because some
-analyzers (e.g., \citet{Taboada:11} and \citet{Musto:14}) relied on
+analyzers (\eg{} \citet{Taboada:11} and \citet{Musto:14}) relied on
 the part-of-speech tags of lexicon entries, we automatically tagged
 all terms in the polarity list with the help of the
 \texttt{TreeTagger} \cite{Schmid:95}, choosing the most probable
@@ -504,7 +504,7 @@ class on the training and development sets,\footnote{Since none of the
   hyper-parameters, we used both training and development data to
   optimize the threshold scores.} and then derived polarity labels for
 the test messages by comparing their predicted SO scores with these
-thresholds.  To achieve the former goal (i.e., find the optimal
+thresholds.  To achieve the former goal (\ie{} find the optimal
 thresholds), we exhaustively searched through all unique polarity
 values assigned to the training and development instances and checked
 whether using these values as a boundary between two adjacent polarity
@@ -1335,7 +1335,7 @@ incorporate additional, non-lexical attributes into their final
 decisions.  Moreover, as noted by~\citet{Pang:02} and also confirmed
 empirically by~\citet{Riloff:03} and \citet{Gamon:04}, many linguistic
 expressions which actually correlate with the subjectivity and
-polarity of a sentence (e.g., exclamation marks or spelling
+polarity of a sentence (\eg{} exclamation marks or spelling
 variations) are very unlikely to be included into a sentiment lexicon
 even by a human expert.  As a consequence of this, with the emergence
 of manually annotated corpora, lexicon-based systems have been
@@ -1438,7 +1438,7 @@ accuracy from~87.1 to~90.5\%.
 % linear support-vector classifiers, one of which had to distinguish
 % between polarity-shifted and polarity-preserving sentences, the other
 % two were to classify the semantic orientation of these two groups
-% (i.e., one system had to predict the polarity of shifted instances,
+% (\ie{} one system had to predict the polarity of shifted instances,
 % and the other one had to determine the semantic orientation of
 % polarity-preserving ones), and the last one was trained on the
 % complete original dataset---the product review corpus
@@ -1516,7 +1516,7 @@ accuracy from~87.1 to~90.5\%.
 % various datasets---the movie review corpus of~\citet{Pang:04}, the
 % product reviews gathered by~\citet{Jindal:07}, and the customer
 % feedback dataset of~\citet{Blitzer:06}, coming to the conclusion that,
-% in general, preserving the original form of tokens (i.e., keeping the
+% in general, preserving the original form of tokens (\ie{} keeping the
 % original token forms instead of lemmas) and using their frequency
 % scores instead of binary values was beneficial to the results on all
 % test sets.  The use of different $n$-gram lengths, however, had a
@@ -1552,19 +1552,19 @@ accuracy from~87.1 to~90.5\%.
 
 % A related problem, namely that of classifying the strength of
 % opinions, was addressed by~\citet{Wilson:04,Wilson:06}.  In
-% particular, the authors proposed a wide variety of linguistic features
-% (including automatically learned lexico-syntactic patterns similar to
-% the ones used by~\citet{Riloff:03}, bags of words, and syntactic
-% attributes such as lemma and PoS tag of the root of a dependency tree,
-% lemmas and tags of its intermediate nodes and leaves, lexicalized
-% relation tuples, i.e., tuples consisting of the lemma of a parent
-% node, its grammatical relation to the child, and the lemma of the
-% child itself, etc.), checking the utility of these attributes with
-% three different classifiers: BoosTexter~\cite{Schapire:00},
-% Ripper~\cite{Cohen:95}, and SVMLight~\cite{Joachims:99}.
-% \citet{Wilson:04} achieved their best results (55\%~accuracy and
-% 0.991~mean squared error) with the BoosTexter approach when using all
-% the introduced features.
+% particular, the authors proposed a wide variety of linguistic
+% features (including automatically learned lexico-syntactic patterns
+% similar to the ones used by~\citet{Riloff:03}, bags of words, and
+% syntactic attributes such as lemma and PoS tag of the root of a
+% dependency tree, lemmas and tags of its intermediate nodes and
+% leaves, lexicalized relation tuples, \ie{} tuples consisting of the
+% lemma of a parent node, its grammatical relation to the child, and
+% the lemma of the child itself, etc.), checking the utility of these
+% attributes with three different classifiers:
+% BoosTexter~\cite{Schapire:00}, Ripper~\cite{Cohen:95}, and
+% SVMLight~\cite{Joachims:99}.  \citet{Wilson:04} achieved their best
+% results (55\%~accuracy and 0.991~mean squared error) with the
+% BoosTexter approach when using all the introduced features.
 
 However, a real game change in the CGSA research field happened with
 the introduction of the SemEval shared task on sentiment analysis in
@@ -2250,7 +2250,7 @@ analyzed as positive by the method of~\citet{Guenther:14}, even though
 the polar term ``borniert'' (\emph{narrow-minded}) was present in both
 utilized sentiment lexicons (ZPL and linear Projection) as a negative
 item.  This again can be explained by the prevalence of general
-features (e.g., \texttt{8}, \texttt{nicht-nur\_NEG},
+features (\eg{} \texttt{8}, \texttt{nicht-nur\_NEG},
 \texttt{nur\_NEG}, etc.) and their strong bias towards the majority
 class in the PotTS dataset.
 
@@ -2669,7 +2669,7 @@ result of the lexicon-based attention from Equation~\ref{cgsa:eq:lba})
 at position $p$ (the index of the syntactic parent of $w_i$).  With
 this classifier, we hoped to amplify the importance of shifting words
 in cases when the immediate syntactic ancestors of these tokens were
-highly opinionated expressions, e.g., ``Er hat die Pr\"ufung kaum
+highly opinionated expressions, \eg{} ``Er hat die Pr\"ufung kaum
 bestanden'' (\textit{He hardly passed the exam}) or ``Ich mag den
 neuen Bundesminister nicht'' (\textit{I do not like the new federal
   minister}), but ignore them if they did not relate to any subjective
@@ -4282,9 +4282,9 @@ test sets, which overly bias the classifiers' predictions.
 
 Another factor which could significantly affect the results of some
 systems was the sentiment lexicon that these systems used either
-directly for computing the polarity of a message (e.g., lexicon-based
+directly for computing the polarity of a message (\eg{} lexicon-based
 approaches) or indirectly for extracting some features or assigning
-attention scores to some parts of the input (e.g., ML- and DL-based
+attention scores to some parts of the input (\eg{} ML- and DL-based
 techniques).  To estimate the effect of this resource, we successively
 replaced the lexicons which we utilized in our previous experiments
 with other polarity lists presented in Chapter~\ref{chap:snt:lex}, and

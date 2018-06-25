@@ -20,7 +20,7 @@ opinions (\emph{sentiments}), the holders of these opinions
 (\emph{sources}), and their respectively evaluated objects
 (\emph{targets}) in text.  Since an accurate automatic prediction of
 these elements would enable people to track public attitude to
-literally any object (e.g., a product, service, or political
+literally any object (\eg{} a product, service, or political
 decision), FGSA is commonly considered to be one of the most
 attractive, necessary, but, unfortunately, also challenging goals in
 computational linguistics.
@@ -491,9 +491,9 @@ As state attributes in our experiments, we used the following types of
 predicates (which, for simplicity, are listed here in groups):
 \begin{itemize}
 \item\emph{formal}, which included the initial three characters of
-  each token (e.g., $\phi_{abc}(\mathbf{x}_m) = 1\mbox{ if
+  each token (\eg{} $\phi_{abc}(\mathbf{x}_m) = 1\mbox{ if
   }\mathbf{x}_m\sim\mbox{ /\textasciicircum abc/ else } 0$), its last
-  three characters, and the general spelling class of the token (e.g.,
+  three characters, and the general spelling class of the token (\eg{}
   alphanumeric, digit, or punctuation);
 
 \item\emph{morphological}, which encompassed the part-of-speech tags
@@ -544,7 +544,7 @@ training data, achieving a macro-averaged \F-score of~0.904.  The
 learned parameters, however, only partially generalize to unseen
 tweets, leading to notably lower \F-results on the test corpus
 (0.287).  This disbalance indicates a strong ``overfitting'' of the
-model to the training data (i.e., the assignment of unreasonably high
+model to the training data (\ie{} the assignment of unreasonably high
 weights to rather sporadic, noisy features, which only accidentally
 co-occurred with the target classes in the corpus).
 
@@ -703,7 +703,7 @@ that a target of an opinion will appear immediately before a source
 it is rather uncommon that a source tag will precede a target
 (\textsc{SRC}$\rightarrow$\textsc{TRG} $= -2.07$); nonetheless, is is
 perfectly acceptable that the same tag will continue over multiple
-words (e.g., \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
+words (\eg{} \textsc{SNT}$\rightarrow$\textsc{SNT} $= 2.54$,
 \textsc{TRG}$\rightarrow$\textsc{TRG} $= 2.31$).
 
 \section{Recurrent Neural Networks}
@@ -829,7 +829,7 @@ the final equation, which is obtained after unrolling the loop, is
 differentiable with respect to all of its parameters, and can
 therefore be optimized using the standard gradient update techniques.
 Since most of these parameters, however, represent high-dimensional
-matrices or vectors, finding an optimal learning rate (i.e., the size
+matrices or vectors, finding an optimal learning rate (\ie{} the size
 of the update step taken in the direction of the gradient) might pose
 considerable difficulties, leading either to prohibitively large
 training times (if the steps are too small) or a complete divergence
@@ -855,7 +855,7 @@ initial values of the bias vectors.
 Finally, due to a high imbalance of the target classes in the training
 set (where most of the instances represented objective statements
 without any sentiment tags), we ``over-sampled'' opinionated tweets
-(i.e., we randomly repeated some of the training microblogs containing
+(\ie{} we randomly repeated some of the training microblogs containing
 sentiments until we reached an equal proportion of subjective and
 objective messages), and chose the \emph{hinge-loss} as the optimized
 objective function $L$:\footnote{Since most of the tokens in the
@@ -1432,7 +1432,7 @@ linear-chain CRFs, which are shown in Figure~\ref{fig:snt:ho-crf}:
 
 In the first (higher-order) variant, instead of estimating the
 likelihood of a single tag~$y$ at the given
-position~$i$~(e.g.,~$P(y_i)=$ SNT), we kept a separate track of the
+position~$i$~(\eg{}~$P(y_i)=$ SNT), we kept a separate track of the
 probability of each possible label
 sequence~$P(y_{i-n+1},\ldots,y_{i})$, where $n$ denotes the order of
 the model.  In compliance with this structure, we established
@@ -1444,7 +1444,7 @@ SRC|TRG, TRG|TRG, and NON|TRG via transition factors; since these were
 the only unobserved states whose last labels matched the first tag of
 the former node.)  Furthermore, instead of considering just one
 transition attribute between those states, as we did in the
-first-order case (e.g.,
+first-order case (\eg{}
 $f(\mathbf{x}_i, TRG, SNT) = 1.\text{ if }y_{i-1}=TRG\text{ and
 }y_i=SNT\text{ else }0.$), we took a sum of several transition
 features (one for each possible prefix length).  For instance, in the
@@ -1640,20 +1640,20 @@ approach, we
 \begin{itemize}
 \item replaced syntactically integrated Twitter phenomena (@-mentions,
   hyperlinks, e-mail addresses etc.) with special unified tokens
-  representing their semantic classes (e.g., ``\%Username'' for
+  representing their semantic classes (\eg{} ``\%Username'' for
   @-mentions, and ``\%URI'' for hyperlinks);
 \item removed these phenomena if they were syntactically independent
   and did not play a potential role for the expression of sentiments
-  (e.g., we stripped off all retweet mentions and hyperlinks appearing
+  (\eg{} we stripped off all retweet mentions and hyperlinks appearing
   at the very end of the tweets if they were not preceded by a
   preposition);
 \item substituted all emoticons with unified placeholders representing
-  their polarities (e.g., \smiley{} $\rightarrow$ ``\%PosSmiley'',
+  their polarities (\eg{} \smiley{} $\rightarrow$ ``\%PosSmiley'',
   \frownie{} $\rightarrow$ ``\%NegSmiley'', \texttt{:-O} $\rightarrow$
   ``\%Smiley'' etc.);
 \item stripped off the number sign (\#) from the beginning of hashtags
-  (e.g., ``\#gl\"ucklich'' $\rightarrow$ ``gl\"ucklich'');
-\item and, finally, restored some common forms of misspellings (e.g.,
+  (\eg{} ``\#gl\"ucklich'' $\rightarrow$ ``gl\"ucklich'');
+\item and, finally, restored some common forms of misspellings (\eg{}
   ``zuguckn'' $\rightarrow$ ``zugucken'' (\emph{to watch}), ``Tach''
   $\rightarrow$ ``Tag'' (\emph{day}) etc.) using a set of
   manually-defined heuristic rules.
@@ -1888,8 +1888,8 @@ of~\citet{Zhao:08}, letting their system differentiate between ten
 different sentiment classes (two classes for the presence or absence
 of an opinion times three polarity classes times three intensities),
 ensuring, however, that the parameters belonging to the same group
-(e.g., positive polarity) were shared among all of the respective
-subclasses (e.g., positive sentiments with high, low, and middle
+(\eg{} positive polarity) were shared among all of the respective
+subclasses (\eg{} positive sentiments with high, low, and middle
 intensities).
 
 Instead of relying on just one most likely label assignment when
@@ -1918,7 +1918,7 @@ was set by~\citet{Socher:13}, who first introduced a deep learning
 method for predicting the polarity of syntactic constituents.  In
 their work, the authors computed a vector representation of a given
 constituency node ($\vec{w}_c \in \mathbb{R}^n$) by recursively
-multiplying the embeddings of its descendants (e.g.,
+multiplying the embeddings of its descendants (\eg{}
 $\vec{w}_1 \in \mathbb{R}^n$ and $\vec{w}_2 \in \mathbb{R}^n$) with a
 compositional tensor $V \in \mathbb{R}^{2n\times2n\times2n}$ and
 applying the softmax non-linearity afterwards:
