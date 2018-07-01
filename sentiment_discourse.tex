@@ -16,25 +16,25 @@
 \chapter{Discourse-Aware Sentiment Analysis}
 
 Albeit coarse-grained seniment methods do a fairly good job at
-classifying the overall polarity of messages, and DL-based approaches
+classifying the overall polarity of a message, and DL-based approaches
 also try their best to incorporate the compositional principle into
 that prediction, a crucial limitation of all these systems is that
 they overlook the structural nature of their input by either
-considering it as a single whole (for example, of-features
-classifiers) or analyzing it as a monotone sequence of equally
-important elements (for instance, recurrent neural networks).
-Unfortunately, both of these solutions completely ignore the
-hierarchical nature of language \cite{Saussure:13,Hjelmslev:70}, in
-which morphemes are put together to form words, words are united
-together into sentences, and multiple sentences constitute a
-discourse.  Moreover, even units of the same linguistic level might
-play different roles and be of different importance while joined
-syntagmatically: \eg{} in words, the root morpheme typically conveys
-more lexical meaning than the affixes; in sentences, the syntactic
-head grammatically dominates all its dependents.  The same kind of
-hierarchy can also be obsered in discourse, where one of the sentences
+considering it as a single whole (for example, of-features approaches)
+or analyzing it as a monotone sequence of equally important elements
+(for instance, recurrent neural methods).  Unfortunately, both of
+these solutions completely ignore the hierarchical nature of language
+\cite{Saussure:90,Hjelmslev:70}, in which morphemes are put together
+to form words, words are united together into sentences, and multiple
+sentences constitute a discourse.  Moreover, apart from this inherent
+linguistic hierarchy, even units of the same language level might play
+different roles and be of different importance while joined
+syntagmatically: \eg{} in words, the root morpheme typically has more
+lexical meaning than the affixes; in sentences, the syntactic head
+grammatically dominates all its dependents.  The same kind of
+structure can also be obsered in discourse, where one of the sentences
 might express the gist of the whole text, but its meaning can still be
-changed or reversed by other propositions.
+changed or reversed by other clauses.
 
 Exactly the lack of the discourse information was the main reason for
 the misclassifications of the systems of \citet{Severyn:15},
@@ -43,15 +43,15 @@ the misclassifications of the systems of \citet{Severyn:15},
 and \ref{snt:cgsa:exmp:lba-error} of the previous chapter.  Since none
 of these approaches explicitly took the discourse structure into
 account (in the best case, the inference simply proceeded from the
-level of words to the level of the whole message), we decided to check
-whether making the last of these solutions (our LBA method) aware of
-the discourse relations would improve its results.  However, before we
-proceed with our experiments, we will first give a short overview of
-the most popular approaches to discourse analysis in the literature
+level of words directly to the level of message), we decided to check
+whether making the last of these solutions (the LBA classifier) aware
+of the discourse relations would improve its results.  But, before we
+begin with our experiments, we should first give a short introduction
+to the most popular approaches to discourse analysis in the literature
 and justify our choice of one of them.  Afterwards, in
 Section~\ref{sec:dasa:data}, we will describe the way of adding
 discourse information to the existing PotTS and SB10k data.  Then, in
-Section~\ref{sec:dasa:data}, we present a concise survey of the
+Section~\ref{sec:dasa:data}, we will present a concise survey of the
 existing discourse-aware sentiment analysis methods and evaluate their
 results on the two aforementioned corpora.  After analyzing the
 effects of different common factors (such as various subsets of
@@ -61,26 +61,107 @@ chapter.
 
 \section{Discourse Analysis}\label{sec:dasa:theory}
 
-\todo[inline]{General Discourse Theory}
+Since the main focus of our attention in this chapter will be on
+\emph{discourse analysis}, we should probably first clarify what
+discourse analysis actually means and which common ways there are to
+represent and analyze the discourse.
 
-\citet{Hobbs:79}
+In a nutshell, discourse analysis is an area of research in
+linguistics and natural language processing which explores language
+phenomena beyond the sentence boundaries and tries to find and process
+such phenomena automatically \cite{Stede:11}.  Although the scope of
+this research can be quite large (ranging from the logical composition
+of a document to the use of pronouns in a sentence), in our
+experiments we will primarily concentrate on the coherence structure
+of the text, \ie{} the division of the text into \emph{elementary
+  discourse units} (EDUs) and the induction of (hierarchical)
+coherence links between these EDUs.
 
-\todo[inline]{RST: \citet{Mann:88}}
+Admittedly, the idea of decomposing the text into smaller meaningful
+pieces and inferring semantic links between those parts dates back to
+the very origins of general linguistics \cite{Aristotle:10} and in
+particular its structuralism branch \cite{Saussure:90}.  However, a
+especially big surge of interest in this field happened in the 1970-s
+with the groundbreaking works of \citet{vanDijk:72} and
+\citet{vanDijk:83}, who introduced the notions of local and global
+coherence, defining the former as a set of ``rules and conditions for
+the well-formed concatenation of pairs of sentences in a linearly
+ordered sequence'' and specifying the latter as contraints on the
+macro-structure of the narrative \cite[see][]{Hoey:83}.  Similar ideas
+were also described by~\citet{Longacre:79,Longacre:96}, who considered
+the paragraph as the next level of the tagmemic grammar that was
+composed of multiple sentences according to some predefined
+compoisitonal principles.  Finally, \citet{Winter:77} conducted an
+extensive study of different lexical means via which one could connect
+two sentences and also proposed a taxonomy of semantic ties based on
+his observations.  All relations in this taxonomy were divided into
+two main groups: \textsc{Matching} and \textsc{Logical Sequence},
+depending on whether they elaborated on the preceding content or
+continued the natural course of narrative.
 
-\citet{Thompson:87}
+It is not surprising that the increased interest of traditional
+linguistics in text-level phenomena also spurred the attention of the
+broader NLP community.  Among the first who stressed the importance of
+discourse analysis for automatic generation and understanding of texts
+was \citet{Hobbs:79}, who argued that semantic links between sentences
+were one of the most important components for building a coherent
+discourse, and the lexical cohesion of this disocurse (\ie{} the use
+of coreferent and overlapping lexical items) was an immediate result
+of such relations.  Similarly to \citeauthor{Winter:77},
+\citeauthor{Hobbs:79} also proposed a classification of inter-sentence
+relations, which, however, comprised only three elements:
+\textsc{Elaboration}, \textsc{Parallel}, and \textsc{Contrast}.
+Although this taxonomy was definitely too small to cover the whole
+variety of different semantic links that could exist between any two
+sentences, it had laid the foundation of many successful approaches to
+automatic discourse analysis that appeared later.
 
-\citet{Mann:88}
+\done[inline]{RST}
 
-\textbf{RST} One of the first comprehensive theory of discourse that
-was directly amenable to automatic analysis was proposed
-by~\citet{Mann:88}.  In their approach, called \emph{Rhetorical
-  Structure Theory} or \emph{RST}, the authors suggested to divide the text into
+\textbf{RST} One of the presumably best-known such approaches, called
+\emph{Rhetorical Structure Theory} or \emph{RST}, was presented
+by~\citet{Mann:88}.  Besides revising the inventory of discourse
+relations and expanding it to a set of 23 items (by adding new types
+such as \textsc{Circumstance}, \textsc{Solutionhood},
+\textsc{Elaboration}, etc.), the authors also introduced the
+distinction between nucleus-satellite and multinuclear ties, depending
+on whether two clauses connected by such links were of different
+importance to the content of the whole text (nucleus-satellite) or
+represented equally significant, interchangeable elements
+(multinuclear relations).  According to this distinction, they also
+defined each relation as a set of constraints on their \emph{Nucleus}
+(N), \emph{Satellite} (S), \emph{the N+S combination}, and \emph{the
+  effect} of the whole combination on the reader (R).  An excerpt from
+the original description of the \textsc{Evidence} relation as defined
+by~\citet{Mann:88} is given in Example~\ref{dasa:exmp:rst-evidence}
 
-A relation definition consists of four fields:
-1. Constraint on the Nucleus;
-2. Constraint on the Satellite;
-3. Constraints on the combination of Nucleus and Satellite;
-4. The Effect.
+\begin{example}[Definition of the \textsc{Evidence} Relation]\label{dasa:exmp:rst-evidence}
+\textbf{Relation Name:} \textsc{Evidence}
+
+\textbf{Constraints on N:} R might not believe N to a degree satusfactory to W
+
+\textbf{Constraints on S:} The reader believes S or will find it credible
+
+\textbf{Constraints on the N+S Combination:} R's comprehending S increases R's belief of N
+
+\textbf{Effect:} R's belief of N is increased
+
+\textbf{Locus of the Effect:} N
+\end{example}
+
+The most important requirement imposed by the authors, however,
+related to the overall structure of the text, which had to be
+completely covered by such relations with their EDU arguments
+essentially forming a tree.  EDUs located near the top of this tree
+were supposed to play the central role to the main idea of the whole
+text, with their satellite dependents providing rather auxiliary
+additional information.  You can see a sample fragment of such tree
+from the RST Discourse Treebank \cite{Carlson:01a} in
+Figure~\ref{dasa:fig:rst-tree}.  The top-most node in this example
+(\texttt{profit \ldots is estimated to have climbed between 11\% and
+  14\%}) indeed expresses the main idea of the whole passage, while
+other EDUs either specify the authorship of this message or provide
+additional information on it such as commentary of another analyst.
 
 \begin{figure*}[htbp!]
   \input{rst.tex}
