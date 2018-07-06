@@ -45,42 +45,41 @@ of these approaches explicitly took the discourse structure into
 account (in the best case, the inference simply proceeded from the
 level of words directly to the level of message), we decided to check
 whether making the last of these solutions (the LBA classifier) aware
-of the discourse relations would improve its results.  But, before we
-begin with our experiments, we should first give a short introduction
-to the most popular approaches to discourse analysis in the literature
-and justify our choice of one of them.  Afterwards, in
+of the discourse phenomena would improve its results.  However, before
+we begin with our experiments, we should first give a short
+introduction to the most popular approaches to discourse analysis in
+the literature and justify our choice of one of them.  Afterwards, in
 Section~\ref{sec:dasa:data}, we will describe the way of adding
 discourse information to the existing PotTS and SB10k data.  Then, in
-Section~\ref{sec:dasa:data}, we will present a concise survey of the
+Section~\ref{sec:dasa:data}, we present a concise survey of the
 existing discourse-aware sentiment analysis methods and evaluate their
 results on the two aforementioned corpora.  After analyzing the
 effects of different common factors (such as various subsets of
-discourse relations that might be incorporated into a discourse-aware
-sentiment system), we summarize our findings in the last part of this
-chapter.
+discourse relations that might be used in a discourse-aware sentiment
+system), we summarize our findings in the last section of this part.
 
 \section{Discourse Analysis}\label{sec:dasa:theory}
 
 Since the main focus of our attention in this chapter will be on
-\emph{discourse analysis}, we should probably first clarify what
-discourse analysis actually means and which common ways there are to
-represent and analyze the discourse.
+\emph{discourse analysis}, we should first clarify what discourse
+analysis actually means and which common ways there are to represent
+and analyze the discourse automatically.
 
 In a nutshell, discourse analysis is an area of research in
-linguistics and natural language processing which explores language
-phenomena beyond the sentence boundaries and tries to find and process
-such phenomena automatically \cite{Stede:11}.  Although the scope of
-this research can be quite large (ranging from the logical composition
-of a document to the use of pronouns in a sentence), in our
-experiments we will primarily concentrate on the coherence structure
-of the text, \ie{} the division of the text into \emph{elementary
-  discourse units} (EDUs) and the induction of (hierarchical)
-coherence links between these EDUs.
+linguistics and natural language processing which explores and
+analyzes language phenomena beyond the sentence boundaries
+\cite{Stede:11}.  Although the scope of this research can be quite
+large (ranging from the use of pronouns in a sentence to the logical
+composition of the whole document), in our experiments we will
+primarily concentrate on the coherence structure of the text, \ie{}
+the division of the text into \emph{elementary discourse units} (EDUs)
+and the induction of (hierarchical) coherence relations between these
+EDUs.
 
 Admittedly, the idea of decomposing the text into smaller meaningful
 pieces and inferring semantic links between those parts dates back to
-the very origins of general linguistics \cite{Aristotle:10} and in
-particular its structuralism branch \cite{Saussure:90}.  However, a
+the very origins of general linguistics \cite{Aristotle:10} and, in
+particular, its structuralism branch \cite{Saussure:90}.  However, an
 especially big surge of interest in this field happened in the 1970-s
 with the groundbreaking works of \citet{vanDijk:72} and
 \citet{vanDijk:83}, who introduced the notions of local and global
@@ -89,90 +88,177 @@ the well-formed concatenation of pairs of sentences in a linearly
 ordered sequence'' and specifying the latter as contraints on the
 macro-structure of the narrative \cite[see][]{Hoey:83}.  Similar ideas
 were also described by~\citet{Longacre:79,Longacre:96}, who considered
-the paragraph as the next level of the tagmemic grammar that was
-composed of multiple sentences according to some predefined
-compoisitonal principles.  Finally, \citet{Winter:77} conducted an
-extensive study of different lexical means via which one could connect
-two sentences and also proposed a taxonomy of semantic ties based on
-his observations.  All relations in this taxonomy were divided into
-two main groups: \textsc{Matching} and \textsc{Logical Sequence},
-depending on whether they elaborated on the preceding content or
-continued the natural course of narrative.
+the paragraph as a level of tagmemic grammar that was composed of
+multiple sentences according to some predefined compositional
+principles.  Finally, \citet{Winter:77} conducted an extensive study
+of different lexical means for connecting two sentences and also
+proposed a taxonomy of semantic relattions based on his observations.
+All links in this taxonomy were divided into two main groups:
+\textsc{Matching} and \textsc{Logical Sequence}, depending on whether
+the next sentence of the text (which was connected via such link)
+elaborated on the preceding content or rather continued the flow of
+the narrative.
 
 It is not surprising that the increased interest of traditional
-linguistics in text-level phenomena also spurred the attention of the
-broader NLP community.  Among the first who stressed the importance of
-discourse analysis for automatic generation and understanding of texts
-was \citet{Hobbs:79}, who argued that semantic links between sentences
-were one of the most important components for building a coherent
-discourse, and the lexical cohesion of this disocurse (\ie{} the use
-of coreferent and overlapping lexical items) was an immediate result
-of such relations.  Similarly to \citeauthor{Winter:77},
-\citeauthor{Hobbs:79} also proposed a classification of inter-sentence
+linguistics in text-level phenomena has also spurred the attention of
+the broad NLP community.  Among the first who affirmed the importance
+of discourse analysis for automatic generation and understanding of
+texts was \citet{Hobbs:79}, who argued that the semantic ties between
+sentences were one of the most important components for building a
+coherent discourse, and the lexical cohesion of this disocurse (\ie{}
+the use of coreferent and overlapping lexical items) was an immediate
+result of such relations.  Similarly to \citeauthor{Winter:77},
+\citeauthor{Hobbs:79} also proposed a set of possible inter-sentence
 relations, which, however, comprised only three elements:
 \textsc{Elaboration}, \textsc{Parallel}, and \textsc{Contrast}.
-Although this taxonomy was definitely too small to cover the whole
+Although this taxonomy was obviously too small to cover the whole
 variety of different semantic links that could exist between any two
 sentences, it had laid the foundation of many successful approaches to
-automatic discourse analysis that appeared later.
+automatic discourse processing that appeared later on.
 
 \done[inline]{RST}
 
 \textbf{RST} One of the presumably best-known such approaches, called
 \emph{Rhetorical Structure Theory} or \emph{RST}, was presented
 by~\citet{Mann:88}.  Besides revising the inventory of discourse
-relations and expanding it to a set of 23 items (by adding new types
-such as \textsc{Circumstance}, \textsc{Solutionhood},
-\textsc{Elaboration}, etc.), the authors also introduced the
-distinction between nucleus-satellite and multinuclear ties, depending
-on whether two clauses connected by such links were of different
-importance to the content of the whole text (nucleus-satellite) or
-represented equally significant, interchangeable elements
-(multinuclear relations).  According to this distinction, they also
-defined each relation as a set of constraints on their \emph{Nucleus}
-(N), \emph{Satellite} (S), \emph{the N+S combination}, and \emph{the
-  effect} of the whole combination on the reader (R).  An excerpt from
-the original description of the \textsc{Evidence} relation as defined
-by~\citet{Mann:88} is given in Example~\ref{dasa:exmp:rst-evidence}
+relations and expanding it to a set of 23 elements (by including new
+items such as \textsc{Evidence}, \textsc{Elaboration},
+\textsc{Circumstance}, etc.), the authors also introduced the
+distinction between nucleus-satellite and multinuclear relations,
+depending on whether two clauses connected by a semantic link were of
+different importance to the content of the whole text
+(nucleus-satellite) or represented equally significant,
+interchangeable elements (multinuclear relations).  Following this
+distinction, they formally defined each relation using a set of
+constraints on the \emph{Nucleus} (N), \emph{Satellite} (S), \emph{the
+  N+S combination}, and \emph{the effect} of the whole combination on
+the reader (R).  An excerpt from the original description of the
+\textsc{Evidence} relation as defined by~\citet{Mann:88} is given in
+Example~\ref{dasa:exmp:rst-evidence}
 
 \begin{example}[Definition of the \textsc{Evidence} Relation]\label{dasa:exmp:rst-evidence}
 \textbf{Relation Name:} \textsc{Evidence}
 
-\textbf{Constraints on N:} R might not believe N to a degree satusfactory to W
+\textbf{Constraints on N:} R might not believe N to a degree
+satisfactory to W
 
-\textbf{Constraints on S:} The reader believes S or will find it credible
+\textbf{Constraints on S:} The reader believes S or will find it
+credible
 
-\textbf{Constraints on the N+S Combination:} R's comprehending S increases R's belief of N
+\textbf{Constraints on the N+S Combination:} R's comprehending S
+increases R's belief of N
 
 \textbf{Effect:} R's belief of N is increased
 
 \textbf{Locus of the Effect:} N
 \end{example}
 
-The most important requirement imposed by the authors, however,
-related to the overall structure of the text, which had to be
-completely covered by such relations with their EDU arguments
-essentially forming a tree.  EDUs located near the top of this tree
-were supposed to play the central role to the main idea of the whole
-text, with their satellite dependents providing rather auxiliary
-additional information.  You can see a sample fragment of such tree
-from the RST Discourse Treebank \cite{Carlson:01a} in
-Figure~\ref{dasa:fig:rst-tree}.  The top-most node in this example
+However, the most important aspect of RST concerned not the definition
+of the relations but the overall structure of the text, which,
+according to the authors, had to be a (projective) tree, whose nodes
+were either elementary discourse units or other subtrees, and edges
+were nothing else but the semantic links described previously.  A
+combination of a nucleus and satellite node (or multiple nuclei in the
+case of a multi-nuclear relation) in this tree formed an abstract
+node, which essentially comprised the content of all its descendents,
+and could in turn serve as a nucleus or satellite in further
+relations.  Thanks to this structure, the root EDU\footnote{By root we
+  mean the nucleus of the nucleus.} of the top-most nucleus node by
+definition represented the central claim of the whole text, and
+satellite units that were located closer to the top of the tree were
+assumed to have a larger modification scope than their dependents.
+
+You can see an example of an RST tree from the original rhetorical
+structure treebank \cite{Carlson:01a} in
+Figure~\ref{dasa:fig:rst-tree}.  The top-most nucleus in this example
 (\texttt{profit \ldots is estimated to have climbed between 11\% and
   14\%}) indeed expresses the main idea of the whole passage, while
 other EDUs either specify the authorship of this message or provide
-additional information on it such as commentary of another analyst.
+additional information on its claims, such as, for example, a
+commentary of another specialist.
 
 \begin{figure*}[htbp!]
   \input{rst.tex}
 \end{figure*}
 
+Despite its immense popularity and practical utility \cite[see
+][]{Marcu:98,Yoshida:14,Bhatia:15,Goyal:16}, RST has often been
+criticized for the rigidness of the imposed projective tree structure
+\cite{Wolf:05} and arbitrariness of the selected taxonomy relations
+\cite{Nicholas:94,Miltsakaki:04}.  As a consequence of this criticism,
+two alternative approaches to automated discourse analysis have
+entered the scene.
 
 \todo[inline]{PDTB \citet{Prasad:04}}
 
-\textbf{PDTB}
+\textbf{PDTB} The first of these approaches---PDTB (named so after the
+Penn Discourse Treebank \cite{Prasad:04})---was developed by the
+discourse research group of the University of Pennsylvania
+\cite{Miltsakaki:04,Miltsakaki:04a,Prasad:08}, and, at its core,
+represents an \emph{underspecification} of RST: Instead of fully
+specifying the hierarchical structure of the text and trying to come
+up with a comprehensive set of unambiguous discourse relations, the
+author proceeded bottom-up, and focused only on the elements which
+could connect two sentences.  These elements were typically either
+coordinating or subordinating conjuctions (\eg{} \emph{and},
+\emph{because}, \emph{since}, etc.) or discourse adverbials (\eg{}
+\emph{however}, \emph{otherwise}, \emph{as a result}, etc.).  Each
+connective was assumed to accept two sentence arguments: \textsc{Arg1}
+and \textsc{Arg2}; and have one of the predefined semantic
+\emph{senses}, whose choice was explicitly restricted for each
+connective (for example, the set of possible senses for
+\emph{nonetheless} included \textsc{Comparison}, \textsc{Conjunction},
+\textsc{Contra-Expectation}, and \textsc{Contrast}).
 
-\todo[inline]{SDRT}
+Apart from the explicit mentions of connectives, \cite{Prasad:04} also
+allowed for the situations where the connective was missing from the
+text but could be easily inferred by the reader.  The authors denoted
+these situations as \textsc{Implicit} discourse relations and asked
+the annotators of the treebank to still label the arguments anyway,
+but, in addition, also specify the phrase, which they supposed could
+serve as a connective in that case.
+
+Finally, if there was neither an explicit connective nor an implicit
+one, which could be deduced, \cite{Prasad:04} distinguished three
+different possibilities:
+\begin{inparaenum}
+  \item either the coherence was expressed by an alternative lexical
+    means which made the connective redundant (\textsc{AltLex}), or
+  \item it was achieved by referring to the same entities in both
+    sentences (\textsc{EntRel}), or
+  \item there was no coherence relation at all (\textsc{NoRel})
+\end{inparaenum};
+and asked the experts to annotate such situations respectively with
+different labels.  At last, in the case of a reported speech, PDTB
+also provided a special \textsc{Attribution} tag for text spans which
+specified the authors of the statements.
+
+Example~\ref{dasa:exmp:pdtb-analysis} shows the same fragment of the
+Wall Street Journal, using which we previously exemplified the RST
+tree, but now annotated with PDTB-style relations.  As we can see from
+this analysis, the PDTB approach is indeed more flexible in comparison
+with RST in the sense that it allows the discourse units (arguments)
+to be overlapping, disjoint, or even embedded into other ones.  At the
+same time, the assignment of sense relations is also more
+straightforward as it mainly goes by the connective that connects the
+arguments (\emph{in fact}, \emph{while}, or \emph{if}).  On the other
+hand, the structure of this annotation is completely flat so that we
+cannot infer from it which of the sentences is more important or plays
+a central role in the text.
+
+\begin{example}[Example of PDTB Analysis]\label{dasa:exmp:pdtb-analysis}
+\fbox{Analysts said,} \argone[1]{profit for the dozen or so big drug
+  makers, as a group, is estimated to have climbed between 11\% and
+  14\%.}  \connective[1]{\textsc{implicit}$:=$in fact}
+\argtwo[1]{\connective[2]{\textsc{explicit}$:=$While}
+  \argtwo[2]{that's not spectacular}}, \fbox{Neil Sweig, an analyst
+  with Prudential Bache, said} \argtwo[1]{\argone[2]{\argone[3]{that
+      the rate of growth will ``look especially good as compared to
+      other companies} \connective[3]{\textsc{explicit}:
+      if}\argtwo[3]{the economy turns downward}}}.''
+\end{example}
+
+\todo[inline]{SDRT: \citet{Lascarides:01}, \citet{Asher:05}}
 
 \textbf{SDRT}
 \section{Data Preparation}\label{sec:dasa:data}
@@ -548,5 +634,53 @@ Bayes classifier which did not utilize this information.
 \section{Evaluation}
 
 \subsection{Relation Scheme}
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.17\columnwidth} % first columm
+        *{1}{>{\centering\arraybackslash}p{0.4\columnwidth}}
+        *{1}{>{}p{0.4\columnwidth}}} % next two columns
+      \toprule
+      \textbf{Authors} & \textbf{Relation Set} & \textbf{Equivalence Classes}\\\midrule
+
+      \citet{Heerschop:11} & \{\textsc{Attribution},
+      \textsc{Background}, \textsc{Cause}, \textsc{Condition},
+      \textsc{Contrast}, \textsc{Elaboration}, \textsc{Enablement},
+      \textsc{Explanation}, \textsc{\bfseries Other}\} & \\
+
+      \citet{Zhou:11} & \{\textsc{Contrast}, \textsc{Condition},
+      \textsc{Continuation}, \textsc{Cause}, \textsc{Purpose},
+      \textsc{\bfseries Other}\} & \textsc{Contrast} $\defeq$
+      \{\textsc{Antithesis}, \textsc{Concession}, \textsc{Otherwise},
+      \textsc{Contrast}\};\newline \textsc{Continuation} $\defeq$
+      \{\textsc{Continuation}, \textsc{Parallel}\};\newline
+      \textsc{Cause} $\defeq$ \{\textsc{Evidence}, \textsc{Volitional
+        Cause}, \textsc{Nonvolitional-Cause},
+      \textsc{Volitional-Result}, \textsc{Nonvolitional-Result}\};\\
+
+      \citet{Chenlo:13} & \{\textsc{Attribution}, \textsc{Background},
+      \textsc{Cause}, \textsc{Comparison}, \textsc{Condition},
+      \textsc{Consequence}, \textsc{Contrast}, \textsc{Elaboration},
+      \textsc{Enablement}, \textsc{Evaluation}, "Explanation",
+      \textsc{Joint}, \textsc{Otherwise}, \textsc{Temporal},
+      \textsc{\bfseries Other}\} & \\
+
+      \citet{Bhatia:15} & \{\textsc{Contrastive},
+      \textsc{\bfseries Non-Contrastive}\} & \textsc{Contrastive} $\defeq$
+      \{\textsc{Antithesis}, \textsc{Antithesis-E},
+      \textsc{Comparison}, \textsc{Concession},
+      \textsc{Consequence-S}, \textsc{Contrast},
+      \textsc{Problem-Solution}\}.\\\bottomrule
+\end{tabular}
+    \egroup
+    \caption[RST relations used in different discourse-aware sentiment
+      methods]{RST relations used in different discourse-aware
+      sentiment methods\\ {\small (default relation [which subsumes
+          the rest of the links] is highlighted in
+        \textbf{boldface})}}
+    \label{dasa:tbl:rst-rels}
+  \end{center}
+\end{table}
 
 \section{Summary and Conclusions}
