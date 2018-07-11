@@ -116,8 +116,6 @@ variety of different semantic links that could exist between any two
 sentences, it had laid the foundation of many successful approaches to
 automatic discourse processing that appeared later on.
 
-\done[inline]{RST}
-
 \textbf{RST} One of the presumably best-known such approaches, called
 \emph{Rhetorical Structure Theory} or \emph{RST}, was presented
 by~\citet{Mann:88}.  Besides revising the inventory of discourse
@@ -189,62 +187,61 @@ criticized for the rigidness of the imposed projective tree structure
 two alternative approaches to automated discourse analysis have
 entered the scene.
 
-\todo[inline]{PDTB \citet{Prasad:04}}
-
 \textbf{PDTB} The first of these approaches---PDTB (named so after the
-Penn Discourse Treebank \cite{Prasad:04})---was developed by the
-discourse research group of the University of Pennsylvania
+Penn Discourse Treebank \cite{Prasad:04})---has been developed by the
+research group of the University of Pennsylvania
 \cite{Miltsakaki:04,Miltsakaki:04a,Prasad:08}, and, at its core,
-represents an \emph{underspecification} of RST: Instead of fully
-specifying the hierarchical structure of the text and trying to come
-up with a comprehensive set of unambiguous discourse relations, the
-author proceeded bottom-up, and focused only on the elements which
+represents an \emph{underspecification of RST}, where, instead of
+fully specifying the hierarchical structure of the text and trying to
+come up with a comprehensive set of unambiguous discourse relations,
+the author proceeded bottom-up, and focused only on the elements which
 could connect two sentences.  These elements were typically either
 coordinating or subordinating conjuctions (\eg{} \emph{and},
 \emph{because}, \emph{since}, etc.) or discourse adverbials (\eg{}
-\emph{however}, \emph{otherwise}, \emph{as a result}, etc.).  Each
-connective was assumed to accept two sentence arguments: \textsc{Arg1}
-and \textsc{Arg2}; and have one of the predefined semantic
-\emph{senses}, whose choice was explicitly restricted for each
-connective (for example, the set of possible senses for
+\emph{however}, \emph{otherwise}, \emph{as a result}, etc.).
+According to the definition, each connective could accept two sentence
+arguments: \textsc{Arg1} and \textsc{Arg2}; and expressed one of the
+predefined semantic \emph{senses}, whose choice was explicitly
+restricted for each word (for example, the set of possible senses for
 \emph{nonetheless} included \textsc{Comparison}, \textsc{Conjunction},
 \textsc{Contra-Expectation}, and \textsc{Contrast}).
 
-Apart from the explicit mentions of connectives, \cite{Prasad:04} also
-allowed for the situations where the connective was missing from the
-text but could be easily inferred by the reader.  The authors denoted
-these situations as \textsc{Implicit} discourse relations and asked
+Apart from the explicit mentions of the connectives, \citet{Prasad:04}
+also allowed for the situations where the connective was missing from
+the text but could be easily inferred by the reader.  The authors
+denoted these cases as \textsc{Implicit} discourse relations and asked
 the annotators of the treebank to still label the arguments anyway,
 but, in addition, also specify the phrase, which they supposed could
-serve as a connective in that case.
+serve as a connective.
 
-Finally, if there was neither an explicit connective nor an implicit
-one, which could be deduced, \cite{Prasad:04} distinguished three
-different possibilities:
-\begin{inparaenum}
-  \item either the coherence was expressed by an alternative lexical
-    means which made the connective redundant (\textsc{AltLex}), or
+Finally, if there was neither an explicit connective nor an implicitly
+assumed one, \citet{Prasad:04} distinguished three different
+possibilities:
+\begin{inparaenum}[(i)]
+  \item either the coherence relation was expressed by an alternative
+    lexical means which made the connective redundant
+    (\textsc{AltLex}), or
   \item it was achieved by referring to the same entities in both
     sentences (\textsc{EntRel}), or
-  \item there was no coherence relation at all (\textsc{NoRel})
-\end{inparaenum};
+  \item there was no coherence relation at all (\textsc{NoRel});
+\end{inparaenum}
 and asked the experts to annotate such situations respectively with
 different labels.  At last, in the case of a reported speech, PDTB
 also provided a special \textsc{Attribution} tag for text spans which
 specified the authors of the statements.
 
 Example~\ref{dasa:exmp:pdtb-analysis} shows the same fragment of the
-Wall Street Journal, using which we previously exemplified the RST
-tree, but now annotated with PDTB-style relations.  As we can see from
-this analysis, the PDTB approach is indeed more flexible in comparison
-with RST in the sense that it allows the discourse units (arguments)
-to be overlapping, disjoint, or even embedded into other ones.  At the
-same time, the assignment of sense relations is also more
-straightforward as it mainly goes by the connective that connects the
-arguments (\emph{in fact}, \emph{while}, or \emph{if}).  On the other
-hand, the structure of this annotation is completely flat so that we
-cannot infer from it which of the sentences is more important or plays
-a central role in the text.
+Wall Street Journal that we used previously to demonstrate an RST
+tree, but now annotated with PDTB relations.  As we can see from the
+analysis, the PDTB approach is indeed more flexible in comparison with
+RST as it allows the discourse units (arguments) to overlap, be
+disjoint or even embedded into other units.  The assignment of sense
+relations is also more straightforward and mainly determined by the
+connective that connects the arguments (\emph{in fact}, \emph{while},
+or \emph{if}).  At the same time, the structure of this annotation is
+completely flat so that we can neither infer which of the sentences
+plays the central role in the text nor see the modification scope of
+the secondary statements.
 
 \begin{example}[Example of PDTB Analysis]\label{dasa:exmp:pdtb-analysis}
 \fbox{Analysts said,} \argone[1]{profit for the dozen or so big drug
@@ -258,9 +255,82 @@ a central role in the text.
       if}\argtwo[3]{the economy turns downward}}}.''
 \end{example}
 
-\todo[inline]{SDRT: \citet{Lascarides:01}, \citet{Asher:05}}
+\textbf{SDRT} Another alternarive to RST---Segmented Discourse
+Representation Theory or SDRT---was proposed by \citet{Lascarides:01}.
+Although developed from a completely different angle of view (the
+authors of SDRT mainly drew their inspiration from predicate logics,
+dynamic semantics, and anaphora theory), SDRT shares many of its
+features with the standard rhetorical structure theory as it also
+assumes a graph-like structure of the text, whose nodes are either
+elementary or complex discourse units, and distinguishes between
+coordinating and subordinating relations.  However, unlike RST,
+segmented discourse representation explictly allows the text structure
+to be any graph, not only a tree (\ie{} a discourse node can have
+multiple parents and also be connected via multiple links to the same
+vertex), provided that it does not have crossing dependencies (the
+right-frontier constraint).  In this respect, SDRT can be viewed as a
+\emph{modification} or \emph{structural relaxation of RST}.
 
-\textbf{SDRT}
+We can also notice the relatedness of the two approaches by looking at
+the SDRT analysis of the previous WSJ fragment in
+Example~\ref{dasa:fig:sdrt-graph}.  Although the names of the
+relations in the presented graph are completely different from those
+used in the RST tree, many of these relations have the same (or at
+least similar) meaning as the respective links in the rhetorical
+structure theory: for example, the \textsc{Source} relation in SDRT
+almost directly corresponds to the \textsc{Attribution} edge in RST.
+On the other hand, SDRT's \textsc{Contrast} subsumes RST's
+\textsc{Contrast}, \textsc{Antithesis}, and \textsc{Comparison}, but,
+unlike the last two nucleus-satellite links, represents a paratactic
+relationship between its arguments.  These discrepancies between
+paratactic dependencies in SDRT and their hypotactic equivalents in
+RST account for the lion's share of the differences between the two
+discourse representations in Examples~\ref{dasa:fig:rst-tree} and
+\ref{dasa:fig:sdrt-graph} as they arise for at least three links in
+the given SDRT graph (\textsc{Narration}, \textsc{Precondition}, and
+\textsc{Contrast}).  Another difference stems from the different
+scopes of the commentary \texttt{While that's not spectacular} in the
+two representations: whereas the SDRT graph suggests that this opinion
+primarily relates to the content of Neil Sweig's statement, RST tree
+widens the scope of this opinion also to the fact of making this
+statement.
+
+\begin{figure}[htbp]
+  \begin{center}
+    \begin{tikzpicture}[>=triangle 45,semithick]
+      \tikzstyle{edu}=[];
+      \tikzstyle{cdu}=[draw,shape=rectangle];
+      \node[edu] (1a) at (1,0)  {$\pi_{1a}$};
+      \node[edu] (1b) at (1,-2)  {$\pi_{1b}$};
+
+      \node[edu] (p'') at (7,0)  {$\pi''$};
+      \node[edu] (p') at (5.5,-2)  {$\pi'$};
+      \node[edu] (1g) at (8.5,-2)  {$\pi_{1g}$};
+
+      \node[edu] (1e) at (4,-4)  {$\pi_{1e}$};
+      \node[edu] (1f) at (7,-4)  {$\pi_{1f}$};
+
+      \node[edu] (1c) at (2,-2)  {$\pi_{1c}$};
+      \node[edu] (1d) at (4,-2)  {$\pi_{1d}$};
+
+      \draw[->] (1a)  to node [auto] {Source} (1b);
+      \draw[->] (1a)  to node [auto] {Narration} (p'');
+      \draw[-]  (p'') to node [auto] {} (p');
+      \draw[-]  (p'') to node [auto] {} (1g);
+      \draw[->] (p')  to node [auto] {Precondition} (1g);
+      \draw[-]  (p')  to node [auto] {} (1e);
+      \draw[-]  (p')  to node [auto] {} (1f);
+      \draw[->] (1e)  to node [auto] {Contrast} (1f);
+      \draw[->] (p'') to node [xshift=-8mm,yshift=0mm] {Commentary} (1c);
+      \draw[->] (p'') to node [xshift=-0mm,yshift=0mm] {Source} (1d);
+    \end{tikzpicture}
+    \caption[SDRT graph example]{Example of an SDRT graph}
+    \label{dasa:fig:sdrt-graph}
+  \end{center}
+\end{figure}
+
+\textbf{Final choice}
+
 \section{Data Preparation}\label{sec:dasa:data}
 
 \section{Discourse-Aware Sentiment Analysis}\label{sec:dasa:data}
@@ -620,7 +690,7 @@ method, the authors achieved 84.1\% two-class prediction accuracy on
 the moview review corpus of~\citet{Pang:04} and 85.6\% on the dataset
 of~\citet{Socher:13}.
 
-\todo[inline]{Others}
+\done[inline]{Others}
 
 \done[inline]{\citet{Riloff:03}}
 
