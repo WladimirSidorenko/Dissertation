@@ -330,21 +330,101 @@ statement.
 \end{figure}
 
 \textbf{Final choice} Since it was unclear which of these approaches
-we should use for our further sentiment experiments, we motivated our
-choice by theoretical and practical considerations: From the
-theoretical perspective, we wanted to have a strictly hierarchical
-discourse structure for the analyzed tweets.  From the practical
-aspect, since there was no disourse parser readily available for
-German, we wanted to have a maximal assortment of such parsers for
-English so that we could pick one that would be easiest to retrain on
-native data.  Fortunately, both of these concerns lead us to the same
-solution---rhetorical structure theory, which, on the one hand, was
-the only formalism which explicitly imposed the tree constraint on the
-resulting discourse graph, and, on the other hand, offered a wide
-variety of open-source parsing systems \cite[i.a.,
-][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
+we should use for our further sentiment experiments, we made our
+choice by taking into account the following theoretical and practical
+considerations: From the theoretical perspective, we wanted to have a
+strictly hierarchical discourse structure for the analyzed tweets so
+that we could infer the polarity of the whole message from its
+top-most structure node.  From the practical aspect, since there was
+no disourse parser available for German, we wanted to have a maximal
+assortment of such parsers for English so that we could pick one that
+would be easiest to retrain on native data.  Fortunately, both of
+these concerns have lead us to the same solution---rhetorical
+structure theory, which, on the one hand, was the only formalism which
+explicitly guaranteed to yield a single root node for any analyzed
+text, and, on the other hand, offered a wide variety of open-source
+parsing systems
+\cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
 
 \section{Data Preparation}\label{sec:dasa:data}
+
+To prepare the data for the experiments, we split all microblogs from
+the PotTS and SB10k corpora, which we used in the previous chapter,
+into elementary discourse units using the ML-based discourse segmenter
+of~\citet{Sidarenka:15}.  After filtering out all tweets which had at
+most one segment,\footnote{Since the focus of this chapter is mainly
+  on discourse phenomena, we skip all messages which consist of a
+  single discourse segment as their overall polarity is unaffected by
+  intra-sentence discourse relations and can be normally determined
+  with the standard disource-unaware sentiment techniques described
+  previously.} we assigned polarity scores to the remaining EDUs
+(analyzing each of them in isolation) with the help of the
+lexicon-based attention classifier that was pretrained on the
+respective dataset.  This left us with a total of 4,771 microblogs
+(12,137 segments) for PotTS and 3,763 messages (9,625 segments) for
+the SB10k corpus.  We again used the same 70\%-10\%-20\% split into
+training, development, and test sets as we did in our previous work on
+coarse-grained sentiment analysis.
+
+%% This figure was generated using the iPython notebook `notebooks/dasa.ipynb`.
+\begin{figure*}
+  \centering
+  {
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/dasa_potts_edu_distribution.png}
+      \caption{PotTS}\label{dasa:fig:data-distribution-potts}
+    \end{subfigure}
+  }
+  \centering
+  {
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/dasa_sb10k_edu_distribution.png}
+      \caption{SB10k}\label{dasa:fig:data-distribution-sb10k}
+    \end{subfigure}
+  }
+  \caption[EDU distribution in PotTS and SB10k]{Distribution of
+    Elementary Discourse Units and Polarity Classes in the Training and
+    Development Sets of PotTS and
+    SB10k}\label{dasa:fig:data-distribution}
+\end{figure*}
+
+Figure~\ref{dasa:fig:data-distribution} shows the distribution of
+elementary discourse units and polarity classes in the training and
+development data of both dataset.  As we can see from these graphics,
+the absolute majority of all tweets consist of maximally three
+segments, whereas messages with more than five EDUs are extremely rare
+and rather represent exceptions, which is not surprising regarding
+that the maximum tweet length is constrained to at most 140
+characters.  Nevertheless, in each corpus, we also can notice a few
+microblogs with up to 12 or even 13 discourse units.  Since it was
+somewhat unusual to see that many segments in a single microblog, we
+decided to inspect these messages in more detail.  As it turned out,
+such high numbers of EDUs typically arose from spurious punctuation
+marks, which were apparently freely used in Twitter communication but
+confused our segmenter (see Example~\ref{dasa:exmp:many-segments}).
+
+\begin{example}[SB10k Tweet with 13 EDUs]\label{dasa:exmp:many-segments}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} { \upshape
+    [Guinness on Wheelchairs :]$_1$ [Das .]$_2$ [Ist .]$_3$ [Verdammt
+      .]$_4$ [Noch .]$_5$ [Mal .]$_6$ [Einer .]$_7$ [Der .]$_8$
+    [Besten .]$_9$ [Werbespots .]$_{10}$ [Des .]$_{11}$ [Jahrzehnts
+      .]$_{12}$ [( Auch ...]$_{13}$ }\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    [Guinness on Wheelchairs :]$_1$ [This .]$_2$ [Is .]$_3$ [Gosh
+      .]$_4$ [Darn .]$_5$ [It .]$_6$ [One .]$_7$ [Of .]$_8$ [The best
+      .]$_9$ [Commercials .]$_{10}$ [Of .]$_{11}$ [The Decade
+      .]$_{12}$ [( Also ...]$_{13}$}
+\end{example}
+
+\todo[inline]{Describe RST Parser}
+
+To obtain RST trees for the segemented messages, we \cite{Stede:14}
+
+\citet{Bhatia:15}
 
 \section{Discourse-Aware Sentiment Analysis}\label{sec:dasa:data}
 
