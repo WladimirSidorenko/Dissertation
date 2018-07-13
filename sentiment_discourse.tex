@@ -321,7 +321,7 @@ statement.
       \draw[-]  (p')  to node [auto] {} (1e);
       \draw[-]  (p')  to node [auto] {} (1f);
       \draw[->] (1e)  to node [auto] {Contrast} (1f);
-      \draw[->] (p'') to node [xshift=-8mm,yshift=0mm] {Commentary} (1c);
+      \draw[->] (p'') to node [xshift=-8mm,yshift=-0.35mm] {Commentary} (1c);
       \draw[->] (p'') to node [xshift=-0mm,yshift=0mm] {Source} (1d);
     \end{tikzpicture}
     \caption[SDRT graph example]{Example of an SDRT graph}
@@ -366,7 +366,8 @@ the SB10k corpus.  We again used the same 70\%-10\%-20\% split into
 training, development, and test sets as we did in our previous work on
 coarse-grained sentiment analysis.
 
-%% This figure was generated using the iPython notebook `notebooks/dasa.ipynb`.
+%% This figure was generated using the iPython notebook
+%% `notebooks/dasa.ipynb`.
 \begin{figure*}
   \centering
   {
@@ -405,7 +406,8 @@ somewhat unusual to see that many segments in a single microblog, we
 decided to inspect these messages in more detail.  As it turned out,
 such high numbers of EDUs typically arose from spurious punctuation
 marks, which were apparently freely used in Twitter communication but
-confused our segmenter (see Example~\ref{dasa:exmp:many-segments}).
+confused our segmenter.  You can see an example of such super-prolific
+message in~\ref{dasa:exmp:many-segments}).
 
 \begin{example}[SB10k Tweet with 13 EDUs]\label{dasa:exmp:many-segments}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} { \upshape
@@ -413,12 +415,24 @@ confused our segmenter (see Example~\ref{dasa:exmp:many-segments}).
       .]$_4$ [Noch .]$_5$ [Mal .]$_6$ [Einer .]$_7$ [Der .]$_8$
     [Besten .]$_9$ [Werbespots .]$_{10}$ [Des .]$_{11}$ [Jahrzehnts
       .]$_{12}$ [( Auch ...]$_{13}$ }\\
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    [Guinness on Wheelchairs :]$_1$ [This .]$_2$ [Is .]$_3$ [Gosh
-      .]$_4$ [Darn .]$_5$ [It .]$_6$ [One .]$_7$ [Of .]$_8$ [The best
-      .]$_9$ [Commercials .]$_{10}$ [Of .]$_{11}$ [The Decade
-      .]$_{12}$ [( Also ...]$_{13}$}
+    {\textup{[}Guinness on
+      Wheelchairs :\textup{]$_1$} \textup{[}This .\textup{]$_2$}
+    \textup{[}Is .\textup{]$_3$} \textup{[}Gosh .\textup{]$_4$}
+    \textup{[}Darn .\textup{]$_5$} \textup{[}It .\textup{]$_6$}
+    \textup{[}One .\textup{]$_7$} \textup{[}Of .\textup{]$_8$}
+    \textup{[}The best .\textup{]$_9$} \textup{[}Commercials
+      .\textup{]$_{10}$} \textup{[}Of .\textup{]$_{11}$} \textup{[}The
+      Decade .\textup{]$_{12}$} \textup{[}( Also ...\textup{]$_{13}$}}
 \end{example}
+
+Another trend which we can observe from the data is that the
+distribution of the polarity classes in the remained subset largely
+reflects the frequencies of these semantic orientations in the
+complete data: For example, the positive class still dominates the
+PotTS corpus, while the neutral polarity constitues the vast majority
+of the SB10k dataset.  Negative microblogs once again are the least
+represented group in both cases and account for 22\% of the former
+corpus and 16\% of the latter tweet set.
 
 \todo[inline]{Describe RST Parser}
 
