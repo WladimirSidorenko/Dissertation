@@ -348,19 +348,18 @@ parsing systems
 
 \section{Data Preparation}\label{sec:dasa:data}
 
-To prepare the data for the experiments, we split all microblogs from
-the PotTS and SB10k corpora, which we used in the previous chapter,
-into elementary discourse units using the ML-based discourse segmenter
-of~\citet{Sidarenka:15}.  After filtering out all tweets which had at
-most one segment,\footnote{Since the focus of this chapter is mainly
-  on discourse phenomena, we skip all messages which consist of a
-  single discourse segment as their overall polarity is unaffected by
-  intra-sentence discourse relations and can be normally determined
-  with the standard disource-unaware sentiment techniques described
-  previously.} we assigned polarity scores to the remaining EDUs
-(analyzing each of them in isolation) with the help of the
-lexicon-based attention classifier that was pretrained on the
-respective dataset.  This left us with a total of 4,771 microblogs
+To prepare the data for our experiments, we split all microblogs from
+the PotTS and SB10k corpora into elementary discourse units using the
+ML-based discourse segmenter of~\citet{Sidarenka:15}.  After filtering
+out all tweets which had at most one segment,\footnote{Since the focus
+  of this chapter is mainly on discourse phenomena, we skip all
+  messages which consist of a single discourse segment as their
+  overall polarity is unaffected by intra-sentence discourse relations
+  and can be normally determined with the standard disource-unaware
+  sentiment techniques described previously.} we assigned polarity
+scores to the remaining EDUs (analyzing each of them in isolation)
+with the help of the lexicon-based attention classifier introduced in
+the previous chapter.  This left us with a total of 4,771 microblogs
 (12,137 segments) for PotTS and 3,763 messages (9,625 segments) for
 the SB10k corpus.  We again used the same 70\%-10\%-20\% split into
 training, development, and test sets as we did in our previous work on
@@ -395,19 +394,20 @@ coarse-grained sentiment analysis.
 
 Figure~\ref{dasa:fig:data-distribution} shows the distribution of
 elementary discourse units and polarity classes in the training and
-development data of both dataset.  As we can see from these graphics,
-the absolute majority of all tweets consist of maximally three
-segments, whereas messages with more than five EDUs are extremely rare
-and rather represent exceptions, which is not surprising regarding
-that the maximum tweet length is constrained to at most 140
-characters.  Nevertheless, in each corpus, we also can notice a few
-microblogs with up to 12 or even 13 discourse units.  Since it was
-somewhat unusual to see that many segments in a single microblog, we
-decided to inspect these messages in more detail.  As it turned out,
-such high numbers of EDUs typically arose from spurious punctuation
-marks, which were apparently freely used in Twitter communication but
-confused our segmenter.  You can see an example of such super-prolific
-message in~\ref{dasa:exmp:many-segments}).
+development data of both datasets.  As we can see from the graphics,
+most of tweets in both corpora typically comprise two or three
+segments, while messages with more than five EDUs are extremely rare
+and rather represent exceptions, which is also not surprising
+regarding the maximum length restriction of 140 characters.
+Nonetheless, even with this limitation, there still are a few
+microblogs with 12 and 13 discourse units.  Since it was somewhat
+surprising to see that many discourse units in a single message, we
+decided to look at these tweets in more detail.  As it turned out,
+such high number of EDUs typically arises from spurious punctuation
+marks, which are carelessly used in texted messages but apparently
+confuse our segmenter, which has been trained on standard-language
+data.  You can see an example of such carelessly composed tweets with
+13 EDUs in~\ref{dasa:exmp:many-segments}.
 
 \begin{example}[SB10k Tweet with 13 EDUs]\label{dasa:exmp:many-segments}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} { \upshape
@@ -425,20 +425,85 @@ message in~\ref{dasa:exmp:many-segments}).
       Decade .\textup{]$_{12}$} \textup{[}( Also ...\textup{]$_{13}$}}
 \end{example}
 
-Another trend which we can observe from the data is that the
-distribution of the polarity classes in the remained subset largely
-reflects the frequencies of these semantic orientations in the
-complete data: For example, the positive class still dominates the
-PotTS corpus, while the neutral polarity constitues the vast majority
-of the SB10k dataset.  Negative microblogs once again are the least
-represented group in both cases and account for 22\% of the former
-corpus and 16\% of the latter tweet set.
+Another trend which we also can observe in the data is that the
+distribution of polarity classes in messages with multiple EDUs
+largely corresponds to the frequencies of these semantic orientations
+in the complete datasets: For example, the positive class still
+dominates the PotTS corpus, whereas the neutral polarity constitues
+the vast majority of the SB10k set.  Similarly, negative microblogs
+again are the least represented group in both cases and account for
+22\% of the former collection and 16\% of the latter tweebank.
 
-\todo[inline]{Describe RST Parser}
+To obtain RST trees for segmented messages, we retrained the DPLP
+discourse parser of~\citet{Ji:14} on the PCC~2.0 dataset
+\cite{Stede:14}, after mapping all discourse relations of this corpus
+to the binary set $\{$\textsc{Contrastive},
+\textsc{Non-Contrastive}$\}$, as suggested
+by~\citet{Bhatia:15}.\footnote{See Table~\ref{dasa:tbl:rst-rels} for
+  more details regarding this mapping.}  In contrast to the original
+DPLP implementation though, we did not use Brown cluster features
+\cite{Brown:92}, since this resource was not available for German, and
+we did not utilize a linear projection of the feature values, because
+the released parser code did not include this procedure either.  In
+part due to these modifications, but mostly because of the specifics
+of the German language, the results of our retrained model are
+considerably lower than the figures reported for the English RST
+Treebank~\cite{Carlson:01a}: 0.777, 0.512, and 0.396~\F{} for the
+span, nuclearity, and relation prediction on PCC~2.0 versus 82.08,
+71.13, and 61.63~\F{} on the English dataset.\footnote{Following
+  \citet{Ji:14}, we use the span-based evaluation metric introduced
+  by~\citet{Marcu:00}.}
 
-To obtain RST trees for the segemented messages, we \cite{Stede:14}
+Figure~\ref{dasa:fig:twitter-rst-tree} shows an example of an
+automatically induced RST tree for a Twitter message.  As we can see
+from the analysis, the adapted parser can correctly distinguish
+between contrastive and non-contrastive relations, but apparently
+struggles with the disambiguation of the nuclearity status of EDUs,
+assigning the highest significance to the initial discource segment
+(``Mooooiiinn.'' [\emph{Hellloooo!}]), which is merely a greeting, and
+weighing the third discourse unit (``Aber Kaffee!'' [\emph{But
+    coffee!}]) more than the second one (``Gegen solche N\"achte hilft
+die beste Kur nicht.'' [\emph{Even the best cure won't help against
+    such nights.}]), although traditional RST would consider both
+units as equally important and use the multi-nuclear \textsc{Contrast}
+relation for them.
 
-\citet{Bhatia:15}
+\begin{figure*}[htbp!]
+  \input{twitter-rst.tex}
+\end{figure*}
+
+Regarding the distribution of the two remained coarse-grained
+discourse relations, as we can see from
+Figure~\ref{dasa:fig:relation-distribution}, the
+\textsc{Non-Contrastive} ties clearly dominate both datasets,
+accounting for 98\% of all discourse links in PotTS and SB10k.  By
+comparison, the precentage of these relations in PCC~2.0 run up to
+90\% and also represented the prevailing majority of all semantic
+links in this corpus.
+
+\begin{figure*}
+  \centering
+  {
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/dasa_potts_rel_distribution.png}
+      \caption{PotTS}\label{dasa:fig:relation-distribution-potts}
+    \end{subfigure}
+  }
+  \centering
+  {
+    \centering
+    \begin{subfigure}{0.7\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{img/dasa_sb10k_rel_distribution.png}
+      \caption{SB10k}\label{dasa:fig:relation-distribution-sb10k}
+    \end{subfigure}
+  }
+  \caption[Relation distribution in PotTS and SB10k]{Distribution of
+    Discourse Relations in the Training and Development Sets of PotTS
+    and SB10k}\label{dasa:fig:relation-distribution}
+\end{figure*}
 
 \section{Discourse-Aware Sentiment Analysis}\label{sec:dasa:data}
 
@@ -880,18 +945,18 @@ Bayes classifier which did not utilize this information.
     \begin{tabular}{p{0.22\columnwidth} % first columm
         *{3}{>{\centering\arraybackslash}p{0.25\columnwidth}}} \toprule
 
-      \textbf{Relation Scheme} & \textbf{Nuclearity \F{}} &
-      \textbf{Span \F{}} & \textbf{Relation \F{}}\\\midrule
+      \textbf{Relation Scheme} & \textbf{Span \F{}} &
+       \textbf{Nuclearity \F{}} & \textbf{Relation \F{}}\\\midrule
 
-      \textsc{PCC} & 0.534 & 0.776 & 0.326\\
+      \textsc{PCC} & 0.776 & 0.534 & 0.326\\
 
-      \citet{Heerschop:11} & 0.51 & 0.774 & 0.361\\
+      \citet{Heerschop:11} & 0.774 & 0.51 & 0.361\\
 
-      \citet{Zhou:11} & 0.501 & 0.776 & 0.388\\
+      \citet{Zhou:11} & 0.776 & 0.501 & 0.388\\
 
-      \citet{Chenlo:13} & 0.505 & 0.769 & 0.362\\
+      \citet{Chenlo:13} & 0.769 & 0.505 & 0.362\\
 
-      \citet{Bhatia:15} & 0.512 & 0.777 & 0.396\\\bottomrule
+      \citet{Bhatia:15} & 0.777 & 0.512 & 0.396\\\bottomrule
 \end{tabular}
     \egroup
     \caption[Results of RST parser on PCC~2]{Results of automatic RST
