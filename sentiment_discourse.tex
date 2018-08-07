@@ -27,35 +27,36 @@ solutions completely ignore the hierarchical nature of language
 \cite{Saussure:90,Hjelmslev:70}, in which morphemes are put together
 to form words, words are united together into sentences, and multiple
 sentences constitute a discourse.  Moreover, apart from this inherent
-structural hierarchy, even units of the same language level might play
-a different role and be of varying importance while joined
+system hierarchy, even units of the same language level might play a
+different role and be of varying importance while joined
 syntagmatically: \eg{} in words, the root morpheme typically possesses
 more lexical information than the affixes; in sentences, the syntactic
 head usually dominates all its dependents.  The same kind of structure
 can also be obsered in discourse, where one of the sentences might
-comprise the gist of the complete text.
+express the core idea of the whole text.
 
 Exactly the lack of the discourse information was the main reason for
 the misclassifications of the systems of \citet{Severyn:15},
-\citet{Baziotis:17}, and our own LBA method shown in Examples
+\citet{Baziotis:17}, and our own LBA method in Examples
 \ref{snt:cgsa:exmp:severyn-error}, \ref{snt:cgsa:exmp:baziotis-error},
 and \ref{snt:cgsa:exmp:lba-error} of the previous chapter.  Since none
 of these approaches explicitly took the discourse structure into
 account (in the best case, the inference simply proceeded from the
-level of words directly to the level of message), we decided to check
-whether making the last of these solutions (the LBA classifier) aware
-of the discourse phenomena would improve its results.  However, before
-we begin with our experiments, we should first give a short
+level of words directly to the level of a message), we decided to
+check whether making the last of these solutions (the LBA classifier)
+aware of the discourse phenomena would improve its results.  But,
+before we begin with our experiments, we should first give a short
 introduction to the most popular approaches to discourse analysis in
 the literature and justify our choice of one of them.  Afterwards, in
-Section~\ref{sec:dasa:data}, we will describe the way of adding
-discourse information to the PotTS and SB10k data.  Then, in
+Section~\ref{sec:dasa:data}, we will describe the way of inferring and
+adding discourse information to the PotTS and SB10k data.  Then, in
 Section~\ref{sec:dasa:data}, we will present a concise survey of the
-existing discourse-aware sentiment analysis methods and evaluate their
-results on the two aforementioned corpora.  After analyzing the
-effects of different common factors (such as various subsets of
-discourse relations that might be used in a discourse-aware sentiment
-system), we summarize our findings in the last section of this part.
+existing discourse-aware sentiment analysis (DASA) methods and
+evaluate their results on the two aforementioned corpora.  After
+analyzing the effects of different common factors (such as various
+subsets of discourse relations that might be used in a discourse-aware
+sentiment system), we will summarize our findings in the last section
+of this part.
 
 \section{Discourse Analysis}\label{sec:dasa:theory}
 
@@ -72,7 +73,7 @@ the use of pronouns in a sentence to the logical composition of a
 document), in our experiments we will primarily concentrate on the
 coherence structure of the text, \ie{} its segmentation into
 \emph{elementary discourse units} (EDUs) and induction of
-(hierarchical) coherence relations between these EDUs.
+(hierarchical) \emph{coherence relations} between these EDUs.
 
 Admittedly, the idea of decomposing the discourse into smaller
 meaningful pieces and inferring semantic links between those parts
@@ -87,15 +88,15 @@ in a linearly ordered sequence'' and specifying the latter as
 contraints on the macro-structure of the narrative
 \cite[see][]{Hoey:83}.  Similar ideas were also proposed
 by~\citet{Longacre:79,Longacre:96}, who considered the paragraph as
-another level of tagmemic grammar which was composed of multiple
+another level of tagmemic grammar, which was composed of multiple
 sentences according to a predefined set of compositional principles.
-Finally, \citet{Winter:77} presented an extensive study of different
-lexical means, which could connect two sentences, and also devised a
-taxonomy of semantic relattions based on these observations.  All
-links in this taxonomy were divided into two main groups:
-\textsc{Matching} and \textsc{Logical Sequence}; depending on whether
-a sentence was elaborating on the preceding content of the text or
-rather adding new information to the narrative.
+\todo{Replace ``finally''}{Finally,} \citet{Winter:77} presented an
+extensive study of different lexical means, which could connect two
+sentences, and also devised a taxonomy of semantic relattions based on
+these observations.  All links in this taxonomy were divided into two
+main groups: \textsc{Matching} and \textsc{Logical Sequence};
+depending on whether a sentence was elaborating on the preceding
+content of the text or rather adding new information to the narrative.
 
 It is also not surprising that the increased interest of traditional
 linguistics in text-level phenomena has also rapidly spurred the
@@ -122,7 +123,7 @@ including new items such as \textsc{Evidence}, \textsc{Elaboration},
 \textsc{Circumstance}, etc.), the authors also introduced the
 distinction between nucleus-satellite and multinuclear relations,
 depending on whether two clauses connected by a semantic link were of
-different importance to the content of the whole text
+different importance to the content of the complete text
 (nucleus-satellite) or represented equally significant,
 interchangeable elements (multinuclear relations).  Following this
 distinction, they formally defined each relation as a set of
@@ -207,11 +208,11 @@ restricted for each word: for example, the set of possible senses for
 
 Apart from the explicitly mentioned connectives, \citet{Prasad:04}
 also allowed for the situations where the connective was missing but
-could be easily inferred from context.  The authors denoted these
+could be easily inferred from the context.  The authors denoted these
 cases as \textsc{Implicit} discourse relations and asked the
-annotators of the treebank to annotated the arguments of such
-relations as well, but, in addition, also specify the connective word
-or phrase, which, in their opinion, was omitted.
+annotators of the treebank to annotate the arguments of such relations
+as well, but, in addition, also specify the connective word or phrase,
+which, in their opinion, was omitted.
 
 Finally, if there was neither an explicit nor an implicit connective,
 \citet{Prasad:04} distinguished three different possibilities:
@@ -264,31 +265,31 @@ subordinating relations.  However, unlike RST, segmented discourse
 representation explictly allows the text structure to be any graph,
 not only tree (\ie{} a discourse node can have multiple parents and
 also be connected via multiple links to the same vertex), provided
-that it does not have crossing dependencies (the right-frontier
+that it does not have crossing dependencies (right-frontier
 constraint).  In this respect, SDRT can be viewed as a
 \emph{structural relaxation of RST}.
 
 We can also notice the relatedness of the two approaches by looking at
-the SDRT analysis of the same WSJ fragment in
+the SDRT analysis of the WSJ fragment in
 Example~\ref{dasa:fig:sdrt-graph}.  Although the names of the
 relations in the presented graph are completely different from those
 used in RST, many of these relations have the same (or at least
-similar) meaning as the respective links in the rhetorical structure
-theory: for example, the \textsc{Source} relation in SDRT almost
-completely corresponds to the \textsc{Attribution} edge in RST.  On
-the other hand, SDRT's \textsc{Contrast} subsumes RST's
-\textsc{Contrast}, \textsc{Antithesis}, and \textsc{Comparison}, but,
-unlike the last two nucleus-satellite links, represents a paratactic
-relationship between the arguments.  These discrepancies between
-paratactic dependencies in SDRT and their hypotactic equivalents in
-RST account for the lion's share of the differences between the two
-discourse representations in Examples~\ref{dasa:fig:rst-tree} and
-\ref{dasa:fig:sdrt-graph}.  Another dissimilarity stems from the
-different scopes of the commentary \texttt{While that's not
-  spectacular}: while the SDRT graph suggests that this opinion
-primarily relates to the actual statement of Neil Sweig, RST tree
-widens the modification scope of this opinion also to the fact of
-making this statement.
+similar) meaning as the respective links in the rhetorical structure:
+for example, the \textsc{Source} relation in SDRT almost completely
+corresponds to the \textsc{Attribution} edge in RST.  On the other
+hand, SDRT's \textsc{Contrast} subsumes RST's \textsc{Contrast},
+\textsc{Antithesis}, and \textsc{Comparison}, but, unlike the last two
+nucleus-satellite links, represents a paratactic relationship between
+the arguments.  These discrepancies between paratactic dependencies in
+SDRT and their hypotactic equivalents in RST account for the lion's
+share of the differences between the two discourse representations in
+Examples~\ref{dasa:fig:rst-tree} and \ref{dasa:fig:sdrt-graph}.
+Another dissimilarity stems from the different scopes of the
+commentary \texttt{While that's not spectacular} assigned by SDRT and
+RST: while the SDRT graph suggests that this opinion primarily relates
+to the actual statement of Neil Sweig, RST tree widens the
+modification scope of this opinion also to the fact of making this
+statement.
 
 \begin{figure}[htbp]
   \begin{center}
@@ -325,7 +326,7 @@ making this statement.
 \end{figure}
 
 \textbf{Final choice} Since it was unclear which of these approaches
-would be more amenable to our sentiment experiments, we made our
+would be more amenable to our sentiment experiments, we have made our
 choice by taking into account the following theoretical and practical
 considerations: From the theoretical perspective, we wanted to have a
 strictly hierarchical discourse structure for the analyzed tweets so
@@ -333,18 +334,18 @@ that we could infer the polarity of the whole message from its
 top-most discourse unit.  From the practical aspect, since there was
 no disourse parser readily available for German, we wanted to have a
 maximal assortment of such parsers for English so that we could pick
-one that would be easiest to retrain on German data.  Fortunately,
-both of these concerns have lead us to the same solution---Rhetorical
+one that would be easiest to retrain on German.  Fortunately, both of
+these concerns have lead us to the same solution---Rhetorical
 Structure Theory, which, on the one hand, was the only formalism that
 explicitly guaranteed a single root for the analyzed text, and, on the
 other hand, provided a wide variety of open-source parsing systems for
-English that we could choose from
+English at our disposal
 \cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
 
 \section{Data Preparation}\label{sec:dasa:data}
 
-To prepare data for our experiments, we split all microblogs from the
-PotTS and SB10k corpora into elementary discourse units using the
+To prepare the data for our experiments, we split all microblogs from
+the PotTS and SB10k corpora into elementary discourse units using the
 ML-based discourse segmenter of~\citet{Sidarenka:15}.  After filtering
 out all tweets which had less than two segments,\footnote{Since the
   focus of this chapter is mainly on discourse phenomena, we skip all
@@ -396,10 +397,10 @@ and rather represent exceptions, which is also not surprising
 regarding the maximum length restriction of 140 characters.
 Nonetheless, even with this limitation, there still are a few
 microblogs with 12 and 13 discourse units.  Since it was somewhat
-surprising to see that many segments in a single message, we decided
-to look at these tweets in detail.  As it turned out, such high number
-of EDUs typically arose from spurious punctuation marks, which were
-carelessly used in texted messages, but evidently confused our
+unusual to see that many segments in a single message, we decided to
+look at these tweets in more detail.  As it turned out, such high
+number of EDUs typically arose from spurious punctuation marks, which
+were carelessly used in texted messages but evidently confused our
 segmenter, which had been trained on standard-language data (see
 Example~\ref{dasa:exmp:many-segments}).
 
@@ -450,16 +451,16 @@ span, nuclearity, and relation prediction on PCC~2.0 versus 82.08,
 
 Figure~\ref{dasa:fig:twitter-rst-tree} shows an example of an
 automatically induced RST tree.  As we can see, the adapted parser can
-correctly distinguish between contrastive and non-contrastive
-relations, but apparently struggles with the disambiguation of the
-nuclearity status, assigning the highest significance to the initial
-discource segment (``Mooooiiinn.''  [\emph{Hellloooo!}]), which is
-merely a greeting, and weighing the second EDU (``Gegen solche
-N\"achte hilft die beste Kur nicht.''  [\emph{Even the best cure won't
-    help against such nights.}]) lower than the third one (``Aber
-Kaffee!''  [\emph{But coffee!}]), although traditional RST would
-consider both units as equally important and use the multi-nuclear
-\textsc{Contrast} relation for them.
+correctly distinguish between contrastive and non-contrastive links,
+but apparently struggles with the disambiguation of the nuclearity
+status, assigning the highest significance to the initial discource
+segment (``Mooooiiinn.''  [\emph{Hellloooo!}]), which is merely a
+greeting, and weighing the second EDU (``Gegen solche N\"achte hilft
+die beste Kur nicht.''  [\emph{Even the best cure won't help against
+    such nights.}]) less than the third one (``Aber Kaffee!''
+[\emph{But coffee!}]), although traditional RST would consider both
+units as equally important and use the multi-nuclear \textsc{Contrast}
+relation for them.
 
 \begin{figure*}[htbp!]
   \input{twitter-rst.tex}
@@ -471,7 +472,7 @@ Figure~\ref{dasa:fig:relation-distribution}, the
 \textsc{Non-Contrastive} ties clearly dominate both corpora,
 accounting for 98\% of all discourse links in PotTS and SB10k.  By
 comparison, the precentage of these relations in PCC~2.0 amounts to
-90\% and also represents the prevailing majority of all semantic links
+90\% and also represents the prevailing majority of all semantic ties
 in this dataset.
 
 \begin{figure*}
@@ -517,354 +518,426 @@ in this dataset.
 % of~\citet{Pang:05} showed an improvement by up to~7\% over the
 % previous state of the art, boosting it to 59.37\% average accuracy.
 
+Now, with these prepared data at hand, we are all set to check whether
+incorporating the additional discourse information into our
+lexicon-based attention system would improve the quality of its
+analysis.  However, before we proceed with this check, let us first
+make a short digression and revise the most prominent related
+approaches to discourse-aware sentiment classification that have been
+introduced in the literature so far.
 
-\done[inline]{\citet{Pang:02}}
-
-\citet{Pang:02}, who experimented with three different approaches to
-document-level sentiment analysis---Na{\"i}ve Bayes, Maximum Entropy,
-and SVM with unigram and bigram features, pointed out that it was
-insufficient to rely on the mere presence or majority of certain
-polarity clues because these clues could any time be negated by a
-single antithesis relation (see Example~\ref{disc-snt:exmp-pang02}
-from \citet{Pang:02}).
-
+As it turns out, even the very first works on opinion mining already
+pointed out the importance of discourse phenomena for determining the
+overall polarity of a text.  For example, in the seminal paper
+of~\citet{Pang:02}, where the authors tried to predict the semantic
+orientation of movie reviews (whether these reviews were thumbs down
+or thumbs up), they quickly noticed the fact that it was insufficient
+to rely on the mere presence or majority of polarity clues because
+these clues could any time be invalidated by a single counter-argument
+(see Example~\ref{disc-snt:exmp-pang02}).
 \begin{example}[Polarity reversal via discourse antithesis]\label{disc-snt:exmp-pang02}
   \noindent\upshape This film should be brilliant.  It sounds like a
   great plot, the actors are first grade, and the supporting cast is
   good as well, and Stallone is attempting to deliver a good
-  performance.  However, it can't hold up.
+  performance.  However, it can't hold up. \cite{Pang:02}
 \end{example}
+\noindent \citet{Polanyi:06} also confirmed the important role of the
+text structure, considering discourse connectors and relations as one
+of the most significant context factors, which could notably affect
+the intensity and polarity of opinionated words.  To prove this claim,
+they provided several convincing examples, where concessive discourse
+links considerably weakened the strength of an opinion, and, vice
+versa, elaborations on sentiments notably increased the persuasiveness
+of these judgements.
 
-\done[inline]{\citet{Pang:04}}
+These observations have rapidly motivated the NLP community to add a
+discourse-analysis component to document-level sentiment classifiers.
+One of the first such systems was presented by~\citet{Pang:04}, who
+tried to improve the classification accuracy on the IMDB corpus by
+explicitly pointing the sentiment predictor only to the sentences
+which another (discourse-aware) classifier has previously considered
+as subjective.  To achieve this goal (\ie{} to distinguish between
+subjective and objective statements), \citet{Pang:04} represented the
+text as a graph whose vertices corresponded to sentences with their
+automatically induced subjectivity scores (which were at first
+assigned independently of other clauses) and connected these vertices
+via affinity efges to their immediate neighbors.  After adding two
+additional abstract nodes representing the subjective and objective
+classes, the authors determined the minimum cut of that graph using
+the Blum algorithm \cite{Blum:01} and partitioned it into two clusters
+(subjective and objective) on that cut.
 
-One of the first approaches to coarse-grained sentiment analysis that
-explicitly addressed discourse phenomena was presented
-by~\citet{Pang:04}.  In their seminal work on predicting the semantic
-orientation of movie reviews, the authors emphasized the need for
-restricting the input to the polarity classifer to only subjective
-sentences, ignoring objective ones which could easily confuse the
-predictor.  To deal with this problem, they trained another
-classification system which first assigned an initial subjectivity
-value to every sentence in text; then constructed a graph, connecting
-each sentential node to the nodes of its its neighbors and two
-additional sink vertices representing the subjective and objective
-classes; and, finally, devided this graph into two parts, allocating
-all sentences to either of the two sinks and finding a minimum-cut
-partition.
+Although an obvious oversimplification, the core idea that locally
+adjacent sentences had to share the same subjective properties (local
+coherence) has been dominating the following discourse-aware sentiment
+research for almost a decade.  For example, \citet{Riloff:03} also
+improved the accuracy of their Na{\"i}ve Bayes predictor of subjective
+expressions by $\approx2\%$ after adding a set of discourse-related
+features indicating the relative length of the sentence w.r.t. its
+neighbors, the average number of subjective clues in the preceding,
+current, and following clauses, and the relative number of these clues
+with respect to the corresponding sentence lengths.  Similarly,
+\citet{Hu:04} achieved better scores on disambiguating users'
+polarities towards particular product features after taking the
+information about the semantic orientation of previous sentences into
+account.
 
-\done[inline]{\citet{Hu:04}, Section 3.6}
+Another important line of DASA research concentrated more on the joint
+analysis of opinions, where, in addition to classifying each sentiment
+in isolation, the authors also sought to maximize the ``total
+happiness'' (or global coherence) of these assignments by ensuring
+that similar or related judgements receieved the same or at least
+agreeing polarity scores (\citet{Pang:04} also tried to achieve this
+objective by constructing and partitioning the text graph).  One of
+the most notable works in this direction was done by
+\citet{Snyder:07}, who introduced the Good Grief algorithm for
+predicting users' satisfaction with different restaurant aspects.
+Another important contribution was made by
+\citet{Somasundaran:08a,Somasundaran:08}, who proposed the concept of
+\emph{opinion frames} (OF)---a special data structure for representing
+the relations between the opinions in discourse.  Depending on the
+type of these opinions (whether arguing~[\emph{A}] or
+sentiment~[\emph{S}]), their polarity towards the target (whether
+positive~[\emph{P}] or negative~[\emph{N}]), and semantic relationship
+between the two targets (whether alternative~[\emph{Alt}] or the
+same~[\emph{same}]), the authors distinguished 32 types of possible
+frames: \emph{SPSPsame}, \emph{SPSNsame}, \emph{APAPalt}, etc.,
+dividing them into reinforcing and non-reinforcing ones.  Later on,
+\citet{Somasundaran:09a,Somasundaran:09b} also presented two joint
+inference frameworks (one of which was based on the iterative
+classification algorithm and another one used the integer linear
+programming) for determining the best configuration of single opinions
+and their respective connecting frames, achieving 77.72\% accuracy of
+frame prediction on the AMI meeting corpus~\cite{Carletta:05}, when
+given oracle information about the opinions.
 
-Similarly, \citet{Hu:04} in their work on mining and summarizing
-customer reviews used discourse clues as a fallback strategy for
-determining user's opinion about particular product features: The
-authors first tried to determine the attitude toward a feature by
-simply counting the number of postive and negative terms appearing in
-the same sentence as the mentioned product aspect.  In case of a tie,
-they resorted to counting these clues in the immeadiate nearby context
-of the feature, and, if these also were equal, used the polarity of
-the previous opinionated sentence, reversing it to the opposite if the
-current sentence started with ``\emph{but}''.
+%% \done[inline]{\citet{Somasundaran:09a,Somasundaran:09b}}
 
-\done[inline]{\citet{Mao:06}}
+%% In a later work, \citet{Somasundaran:09b,Somasundaran:09a} also
+%% introduced a joint inference framework based on the Iterative
+%% Classification Algorithm (ICA) and Integer Linear Programming (ILP)
+%% for joinly predicting the best configuration of single opinions and
+%% their frames.  In this approach, the authors first applied a local SVM
+%% classifier to compute the probabilities of polarity classes (positive,
+%% negative, or neutral) of individual dialog acts and then harnessed the
+%% ICA and ILP systems to determine which of the predicted opinions were
+%% connected via opinion frames and whether these frames were reinforcing
+%% or not.  Given a perfect information about the opinion links, this
+%% joint method outperformed the local classifier by more than 9
+%% percentage points, reaching 77.72\% accuracy on the AMI meeting
+%% corpus~\cite{Carletta:05}.
 
-\citet{Mao:06} proposed the idea of isotonic CRFs in which they
-explicitly modeled the constraint that features which were stronger
-associated with either polarity classes had to have higher
-coefficients than less predictive attributes.  After proving that this
-formalism also allowed to directly model the ordinal scale of
-sentiment scores (with lower CRF outputs indicating the negativity of
-a sentence, and higher scores showing its positive class), the authors
-used this approach to model the sentiment flow in a document.  For
-this purpose, they first predicted the polarity value for each
-sentence of a document in isolation and then convolved these outputs
-with a Gaussian kernel, getting a smoothed polarity curve for the
-whole analyzed text at the end.
+%% \done[inline]{\citet{Mao:06}}
 
-\done[inline]{\citet{Polanyi:06}}
+%% \citet{Mao:06} proposed the idea of isotonic CRFs in which they
+%% explicitly modeled the constraint that features which were stronger
+%% associated with either polarity classes had to have higher
+%% coefficients than less predictive attributes.  After proving that this
+%% formalism also allowed to directly model the ordinal scale of
+%% sentiment scores (with lower CRF outputs indicating the negativity of
+%% a sentence, and higher scores showing its positive class), the authors
+%% used this approach to model the sentiment flow in a document.  For
+%% this purpose, they first predicted the polarity value for each
+%% sentence of a document in isolation and then convolved these outputs
+%% with a Gaussian kernel, getting a smoothed polarity curve for the
+%% whole analyzed text at the end.
+%% \done[inline]{\citet{Thomas:06}}
 
-\citet{Polanyi:06} listed connectors and discourse relations among the
-most important factors which could significantly change the intensity
-and polarity of opinionated words.  They claimed that concessive links
-between discourse segments might significantly weaken the strength of
-an opinion, and, vice versa, elaborations on sentiments might notably
-increase their persuasiveness.
+%% \citet{Thomas:06} enhanced an SVM-based sentiment classification
+%% system for predicting speaker's attitude in political speeches with
+%% information about the inter-speaker agreement, incorporating these
+%% links into the global cost function.  Thanks to this change, the
+%% authors achieved $\approx$4\% improvement in accuracy (from 66.05 to
+%% 70.81\%) over the baseline classifer which analyzed each utterance in
+%% isolation.
 
-\done[inline]{\citet{Thomas:06}}
+An attemt to reunite local and global coherence again was made by
+\citet{McDonald:07}, who proposed a joint framework based on
+\emph{latent variables} for simultaneously predicting the polarity of
+a document and its constituent parts (which could be either paragraphs
+or sentences).  For this purpose, the authors considered the semantic
+orientation of the whole text and its single sentences as unobserved
+variables in a Markov random field, connecting each such sentence node
+to the vertices of its adjacent clauses and the overal polarity node
+of the complete document, and then figuring out the best configuration
+of all variables at the end.  A similar approach was also suggested
+by~\citet{Sadamitsu:08}, who attained 82.74\% accuracy on predicting
+the polarity of customer reviews with the help of hidden conditional
+random fields.
 
-\citet{Thomas:06} enhanced an SVM-based sentiment classification
-system for predicting speaker's attitude in political speeches with
-information about the inter-speaker agreement, incorporating these
-links into the global cost function.  Thanks to this change, the
-authors achieved $\approx$4\% improvement in accuracy (from 66.05 to
-70.81\%) over the baseline classifer which analyzed each utterance in
-isolation.
+Another latent-variable approach was presented by
+\citet{Yessenalina:10}, who tried to predict the overall semantic
+orientation of a document by first selecting a subset of the most
+indicative sentences and then classifying the document (as either
+positive or negative) with the help of this selection.  To achieve
+this goal, the authors adopted the latent-SVM method of \citet{Yu:09}
+by first training a linear classifier on individual sentences with
+latent classes and then making the final prediction using 30\% of
+those clauses which the classifier was most sure about.  With this
+method, \citet{Yessenalina:10} could attain 93.22\% accuracy on the
+movie review corpus of \citet{Pang:04} and reach 77.09\% on a
+collection of congressional floor debates \cite{Thomas:06}.
 
-\done[inline]{\citet{McDonald:07,Sadamitsu:08}}
+A common drawback of all of the above approaches though is their
+complete ignoring of traditional discourse theories and, as a
+consequence of this, too coarse approximation of discourse structure
+(which essentially boils down to either connecting nearby sentences,
+or creating a densely connected graph).  Among the first who tried to
+overcome this omission were \citet{Voll:07}, who came up with two
+different ways of making their lexicon-based sentiment calculator
+\cite[SO-CAL; ][]{Taboada:11} aware of discourse information: In the
+first method, they let the classifier analyze only those discourse
+segments which appeared in the top-post nuclei of the sentences (using
+automatically derived RST trees for determining such EDUs).  In the
+second attempt, they restricted SO-CAL's input only to the clauses
+which had been previously classified as pertaining to the main topic
+of the text.  Unfortunately, the RST-based solution did not work out
+as well as expected and failed to outperform even the
+discourse-unaware baseline, yielding only 69\% precision on a corpus
+of Epinion reviews \cite{Taboada:06}.  This mishap, however, might be
+partially due to the fact that the authors completely ignored all
+nuclei and satellites apart from the roots and also disregarded all
+inter-sentential relations.  The second alternative, however, turned
+out to work fairly well, achieving 73\% accuracy on this two-class
+prediction task.
 
-\citet{McDonald:07} proposed a joint framework for simultaneously
-predicting the polarity of a document and its constituent parts (which
-could be either paragraphs or sentences).  For this purpose, the
-authors considered the semantic orientation of the whole text and its
-single sentences as latent variables in a Markov random field,
-connecting each unobserved sentence polarity node to the nodes of the
-adjacent clauses as well as the overal polarity node of the complete
-document, and then figuring out the best configuration of all
-unobserved variables at the end.  With this method, they could
-outperform both sentence- and document-level classifiers which
-predicted the polarity classes of their input in isolation
-(disregarding the context and hierarchical structure), and even
-surpassed a cascaded system where the output of a sentence classifier
-was fed into a document-level predictor, achieving 62.6\% sentence
-accuracy (for three classes) and 82.8\% document-level precision (for
-two classes) on a corpus of 600 reviews.  A similar approach was also
-suggested by~\citet{Sadamitsu:08} who attained 82.74\% accuracy at
-predicting the polarity class of customer reviews using hidden
-conditional random fields and also looking for the most probable joint
-configuration of sentence and document labels.
-
-\done[inline]{\citet{Snyder:07}}
-
-\citet{Snyder:07} proposed a Good Grief algorithm for jointly
-predicting users' evaluations of different restaurant aspects.  For
-this purpose, they first classified the attitude of the user to each
-single predefined trait (food, ambience, service, etc.) and then
-applied another clasifier in order to predict whether these scores
-should rather agree or disagree with each other.  In the final step,
-the authors looked for the ranking which best satisfied both of the
-above predictions (i.e., ranks of individual aspects and their overall
-agreement), achieving this way 0.632 ranking loss on a corpus of
-$\approx$4,500 reviews and outperforming the renowned PRank algorithm
-\cite{Crammer:01} which determined the rank for each aspect in
-isolation.
-
-\done[inline]{\citet{Voll:07}}
-
-The effect of discourse phenomena was also pointed out by
-\citet{Voll:07} who noted the fact that the mere occurrence of
-positive or negative terms in a text was not necessarily indicative of
-its main polarity if these terms appeared in off-topic sentences or
-subordinate clauses.  To check this hypothesis, the authors compared
-three different approaches to lexicon-based classification of customer
-reviews:
+Other ways of incorporating discourse information into a sentiment
+system were explored by \citet{Heerschop:11}, who experimented with
+three different approaches:
 \begin{inparaenum}[(i)]
-\item by simply applying the SO-CAL system to all adjectives appearing in
-the review,
-\item by only taking into account those ones which appeared in the
-  top-post nuclei of the sentences (as defined by the Rhetorical
-  Structure Theory), and
-\item by restricting the SO-CAL's input to clauses which had been
-  previously preclassified as belonging to the main topic of the text.
+\item increasing the polarity scores of words which appeared near
+  the end of the document,
+\item assigning higher weights to tokens in the nuclei of RST trees
+  rather than satellites, and, finally,
+\item training a genetic algorithm, which learned separate scores for
+  the nuclei and eight types of satellite nodes (\textsc{Attribution},
+  \textsc{Background}, \textsc{Cause}, etc.).
 \end{inparaenum}
-They found the last option working best, yielding 73\% accuracy for
-this two-class prediction task on the Epinion review corpus
-of~\citet{Taboada:06}.  Unfortunately, the RST-based method did not
-improve upon the baseline and resulted in only 69\% precision.  This,
-however, might be partially due to the fact that the authors
-completely ignored all nuclei and satellites within sentences except
-for the main ones, did not consider the discourse relations between
-the RST nodes, and also completely ignored all inter-sentential links.
+An evaluation of these methods on the movie review corpus
+of~\citet{Pang:04} showed superior performance of the first option
+(0.608 accuracy and 0,597 macro\F).  The authors, however, could
+significantly improve the results of the last classifier at the end,
+after adding an offset to the decision boundary, which increased both
+its accuracy and macro~\F-measure to 0.72.
 
-\done[inline]{\citet{Somasundaran:08a,Somasundaran:08}}
-
-\citet{Somasundaran:08a,Somasundaran:08} introduced the concept of
-\emph{opinion frames} (OF)---special data structures for capturing the
-relations between opinions in the discourse.  Depending on the type of
-the opinions (either arguing~[\emph{A}] or sentiment~[\emph{S}]),
-their polarity towards the targets (either positive~[\emph{P}] or
-negative~[\emph{N}]), and semantic relationship between the two
-targets (either alternative~[\emph{Alt}] or same~[\emph{same}]), they
-distinguished 32 types of such frames: \emph{SPSPsame},
-\emph{SPSNsame}, \emph{APAPalt}, etc., dividing them into reinforcing
-and non-reinforcing ones; and also demonstrated the amenability of
-this concept to automatic classification and its utility to
-disambiguating the polarity of specific opinions.  Nevertheless, as
-noted by the authors, OF and common discourse analysis frameworks,
-although frequently going hand in hand, were not redundant to each
-other, so that reinforcing frames could be expressed by both
-contrastive and non-contrastive discourse relations, and vice-versa
-non-reinforcing frames were not necessarily bound to a contrast in the
-discourse.
-
-\done[inline]{\citet{Somasundaran:09a,Somasundaran:09b}}
-
-In a later work, \citet{Somasundaran:09b,Somasundaran:09a} also
-introduced a joint inference framework based on the Iterative
-Classification Algorithm (ICA) and Integer Linear Programming (ILP)
-for joinly predicting the best configuration of single opinions and
-their frames.  In this approach, the authors first applied a local SVM
-classifier to compute the probabilities of polarity classes (positive,
-negative, or neutral) of individual dialog acts and then harnessed the
-ICA and ILP systems to determine which of the predicted opinions were
-connected via opinion frames and whether these frames were reinforcing
-or not.  Given a perfect information about the opinion links, this
-joint method outperformed the local classifier by more than 9
-percentage points, reaching 77.72\% accuracy on the AMI meeting
-corpus~\cite{Carletta:05}.
-
-\done[inline]{\citet{Asher:08}}
-
-\citet{Asher:08} presented an annotation scheme and pilot corpus of
-English and French texts labeled according to these guidelines, in
-which they tried to explicitly take the SDRT theory as a basis for
-sentiment representation.  For this purpose, the authors first asked
-their annotators to analyze the segmented discourse structure of the
-corpus texts and then ascribe one of the four major opinion categories
-(reporting, judgement, advice, or sentiment) along with their
-subcategories (e.g., inform, assert, blame, recommend) to each
-discourse unit which featured at least one opinionated word from a
-lexicon.  Afterwards, they showed that, with a simple set of rules,
-one could easily propagate these opinions through the discourse
-graphs, increasing the strengths or reversing the polarity of
-sentiments depending on the type of discourse relations that connected
-the segments.
-
-\done[inline]{\citet{Yessenalina:10}}
-
-Similarly, \citet{Yessenalina:10} proposed a latent-variable approach
-in which they tried to predict the overall polarity of a document by
-jointly selecting a subset of sentences which were most indicative of
-document's semantic orientation and predicting the document's class
-(either positive or negative) based on this subset.  To achieve this
-goal, the authors adopted the latent-SVM method of \citet{Yu:09},
-training a linear classifier on individual sentences with latent
-classes and making the final prediction using 30\% of the sentences
-which this classifier was most sure about.  To account for discourse
-phenomena, they also enhanced feature representations of analyzed
-sentences with attributes extracted from their preceding clauses and
-added characteristics of the whole document to the model.  This way,
-\citet{Yessenalina:10} attained 93.22\% accuracy on the movie review
-corpus of \citet{Pang:04} and scored 77.09\% on the collection of
-congressional floor debates introduced by \citet{Thomas:06}.
-
-\done[inline]{\citet{Trivedi:13}}
-
-Later on, \citet{Trivedi:13} refined this approach by introducing
-special \emph{connector-augmented} transition features, which
-reflected whether an explicit connector at the beginning of a sentence
-implied a \emph{continuation} or \emph{shift} of the polarity of the
-preceding discourse unit.  These attributes turned out to be extremely
-useful, boosting the prediction accuracy on the movie review corpus
-of~\citet{Maas:11} from 88.21 to 91.36\% in comparison with the
-connector-unaware model.
-
-\done[inline]{\citet{Heerschop:11}}
-
-\citet{Heerschop:11} compared three different ways of incorporating
-discourse information into a lexicon-based sentiment analysis system:
-by increasing polarity scores of words that appeared near the end of
-the document, by assigning higher weights to the tokens in the nuclei
-of RST trees than its satellites, and, finally, by training a genetic
-algorithm which learned separate coefficients for the nuclei and eight
-types of satellite relations (\textsc{Attribution},
-\textsc{Background}, \textsc{Cause}, etc.).  An evaluation of these
-approaches on the movie review corpus of~\citet{Pang:04} showed the
-superior performace of the first option (0.608 accuracy and 0,597
-macro\F).  However, after adding an offset to the decision boundary
-(accounting for the fact that negative reviews could contain multiple
-positive terms) significantly improved the results of the last
-classifier, which eventually outperformed all other competitors,
-yielding 0.72 accuracy and macro-averaged~\F.
-
-\done[inline]{\citet{Zhou:11}}
-
-\citet{Zhou:11} used automatically derived RST trees to disambiguate
-the polarity of complex sentences which contained both positive and
-negative terms.  To determine the semantic orientation of the whole
-sentence, the authors applied a set of heuristic rules that described
-possible polarity changes of elementary discourse units based on their
-nucleus/satellite-status and discourse relation connecting them to the
-parent.  With these rules, \citeauthor{Zhou:11} attained a
+Other notable works on RST-based sentiment prediction were done by
+\citet{Zhou:11}, who used a set of heuristic rules to infer possible
+polarity shifts of discourse units based on their nuclearity status
+and links to the parent units, which allowed them to attain a
 statistically significant improvement in sentence-level polarity
-classification on the NTCIR MOAT corpus~\cite{Xu:10}, successfully
-resolving more than a half of ambiguities.
+classification on the NTCIR MOAT corpus~\cite{Xu:10}; \citet{Zirn:11},
+who applied a lexicon-based sentiment system to compute the polarity
+scores of elementary discourse units, and then enforced the
+consistency of these assignments over an automatically derived RST
+tree with the help of of Markov logic contraints; and \citet{Wang:13},
+who also first computed polarity scores of isolated discourse units
+and then estimated the polarity of the whole document by taking a
+linear combination of these EDU scores, multiplying them with
+automatically learned coefficients.\footnote{Similarly to the approach
+  of~\citet{Zirn:11}, these coefficients depended on the status of the
+  segment in the RST tree (whether nucleus or sattelite) and relation,
+  which connected the respective discourse node to the ancestor.}  A
+similar system was also described by \citet{Chenlo:13,Chenlo:14}, who
+used their model to analyze user blog posts, achieving significantly
+better results on the TREC corpus \cite{Macdonald:09} than any
+discourse-unaware baselines.
 
-\done[inline]{\citet{Zirn:11}}
-
-An approach which probably comes closest to ours was proposed
-by~\citet{Zirn:11}, who used a lexicon-based sentiment system to
-compute polarity scores of elementary discourse units, and then
-applied a set of Markov logic rules to enforce consistency of these
-polarity assignments over an automatically derived RST tree.  Apart
-from experimenting with tree structures, the authors also checked
-whether simply preferring the same semantic orientation for linearly
-adjacent segements would improve the accuracy.  Surprisingly, this
-latter option worked the best, achieving 69.02\% accuracy on the
-Amazon review dataset of~\citet{Blitzer:07} and significantly
-outperforming both discourse-unaware and RST-tree--based baseline
-classifiers.
-
-\done[inline]{\citet{Wang:13},\citet{Chenlo:13,Chenlo:14}}
-
-Another RST-based framework was proposed by~\citet{Wang:13} who also
-computed polarity scores of elementary discourse segments, and
-determined the polarity of the whole document by computing a linear
-combination of these scores multiplied with their doscourse
-coefficients.  These coefficients were learned automatically during
-training and, similarly to the approach of~\citet{Zirn:11}, depended
-on the status of the segment in the RST tree (either nucleus or
-sattelite) and the relation connecting it to the ancestor node.  Using
-a restricted subset of such relations (\textsc{Contrast},
-\textsc{Cause}, \textsc{Generalization}, and \textsc{Condition}), the
-authors achived a considerable improvement over the baseline system in
-which all segments were weighted equally (0.8528 versus 0.8386\F).  A
-similar method was also used by \citet{Chenlo:13,Chenlo:14} for
-analyzing blog posts, where it also proved its efficiency, leading to
-much better results than discourse-unaware baselines.
-
-\done[inline]{\citet{Bhatia:15}}
-
-Other ways of incorporating discourse structure into an opinion mining
-application were proposed by~\citet{Bhatia:15} who presented two
-methods for augmenting a sentiment analysis system with discourse
-information:
-\begin{inparaenum}[(i)]
-\item discourse depth reweighting (DDR) and
-\item rhetorical recursive neural network (R2N2).
-\end{inparaenum}
-
-In the former approach, the authors first computed the sentiment score
-$\lambda_i$ of each elementary discourse unit $i$ as:
+Among the most recent advances in RST-based opinion mining, we should
+especially emphasize the work of \citet{Bhatia:15}, who proposed two
+different sentiment analysis systems:
+\begin{itemize}
+\item discourse depth reweighting (DDR)
+\item and rhetorical recursive neural network (R2N2).
+\end{itemize}
+In the former approach, they estimated the relevance $\lambda_i$ of
+each elementary discourse unit $i$ as:
 \begin{equation*}
   \lambda_i = \max\left(0.5, 1 - d_i/6\right),
 \end{equation*}
-where $d_i$ stands for the depth of the $i$-th EDU in the discourse
-tree of the whole document.  Afterwards, they estimated the overall
-polarity of the document~$\Psi$ by summing up the linear predictions
-for each discourse unit ($\theta^T\cdot\mathbf{w}_i$), scaling these
-prediction by the factor~$\lambda_i$:
+where $d_i$ stands for the depth of the $i$-th EDU in the document's
+discourse tree; and computed the sentiment score $\sigma_i$ of that
+unit as the dot product of its binary feature vector $\mathbf{w}_i$
+(token unigrams) with the coefficients of these features $\theta$
+(polarity scores of the respective unigrams):
+\begin{equation*}
+  \sigma_i = \theta^{\top}\cdot\mathbf{w}_i,
+\end{equation*}
+Afterwards, the authors calculated the overall polarity of the
+document~$\Psi$ as the sum of the predicted sentiment scores for all
+units, multiplying these weights by the importance factors~$\lambda$:
 \begin{equation*}
   \Psi = \sum_i\lambda_i\mathbf{\theta}^T\cdot\mathbf{w}_i = \mathbf{\theta}^T\cdot\sum_i\lambda_i\mathbf{w}_i,
 \end{equation*}
-In this equation, $\mathbf{\theta}$ represents a vector of polarity
-scores ($-1$ for negative terms and $+1.$ for positive entries) for
-all word in the vocabulary (as obtained from the sentiment lexicon
-of~\citet{Wilson:05}), and $w_i$ denotes the bag-of-words
-representation of the $i$-th EDU.
 
 In the R2N2 method, \citet{Bhatia:15} adopted the RNN approach
-of~\citet{Socher:13} and recursively computed polarity scoreb of each
-discourse $i$ unit as follows:
+of~\citet{Socher:13} by recursively computing the polarity score of
+each discourse unit $i$ as:
 \begin{equation*}
   \psi_i = tanh\left(K_n^{(r_i)} \psi_{n(i)} + K_s^{(r_i)}\psi_{s(i)} \right),
 \end{equation*}
-where $K_n^{(r_i)}$ and $K_s^{(r_i)}$ denote the nucleus an satellite
-coefficients associated with the rhetorical relation $(r_i)$, and
+where $K_n^{(r_i)}$ and $K_s^{(r_i)}$ denote the nucleus and satellite
+coefficients associated with the rhetorical relation $r_i$, whereas
 $\psi_{n(i)}$ and $\psi_{s(i)}$ represent the sentiment scores of the
-nucleus and satellite nodes of the $i$-th discourse unit.  With this
-method, the authors achieved 84.1\% two-class prediction accuracy on
-the moview review corpus of~\citet{Pang:04} and 85.6\% on the dataset
+nucleus and satellite nodes of the $i$-th discourse node.  This system
+achieved formidable 84.1\% prediction accuracy on the two-class moview
+review corpus of~\citet{Pang:04} and reached 85.6\% on the dataset
 of~\citet{Socher:13}.
 
-\done[inline]{Others}
+For the sake of completeness, we should note that there also exist
+discourse-aware sentiment approaches which build upon the PDTB and
+SDRT frameworks: For example, \citet{Trivedi:13} presented a method
+based on the latent structural SVM \cite{Yu:09}, in which they
+represented each sentence as a set of features associated with the
+potential polarity of that document $y\in\{-1, +1\}$ and subjectivity
+class of the sentence $h_i \in \{0, 1\}$ produced by the function
+$\mathbf{f}(y, \mathbf{x}_i, h_i)$, where $\mathbf{x}_i$ was the
+surface form of the $i$-th sentence from which the features were
+extracted.  One such attribute could, for example, be \texttt{<+1,
+  ``love'', 1>}, which would indicate the token ``love'' in a
+subjective sentence of a positive document. Since the true assignment
+of the variables $h_i$ was unknown though, the authors regarded this
+value as a latent variable and tried to predict the most likely
+semantic orientation of document $\hat{y}$ by inferring the most
+probable assignment of $h$:
+\begin{equation*}
+  \hat{y} = \argmax_y\left(\max_{\mathbf{h}}\mathbf{f}(y, \mathbf{x},
+  \mathbf{h})\mathbf{w}^{\top}\right).
+\end{equation*}
+To ensure that this assignment was coherent over the text, the authors
+enhanced their original feature function with an additional set of
+\emph{transitional} attributes, which indicated whether two adjacent
+sentences were likely to share the same subjectivity given the
+discourse connector of the second clause.  With the help of these
+features, were able to boost the prediction accuracy on the movie
+review corpus of~\citet{Maas:11} from 88.21 to 91.36\% in comparison
+with the connector-unaware model.
 
-\done[inline]{\citet{Riloff:03}}
+The first steps towards an SDRT-inspired approach were made by
+\citet{Asher:08}, who presented an annotation scheme and pilot corpus
+of English and French texts labeled with their discourse structure
+according to the SDRT theory and augmented with an additional
+sentiment layer.  To this end, the authors asked the annotators to
+ascribe one of the four opinion categories (reporting, judgement,
+advice, or sentiment) along with their subcategories (e.g., inform,
+assert, blame, recommend) to each discourse unit which featured at
+least one opinionated word from a sentiment lexicon.  Afterwards, they
+showed that with a simple set of rules, one could easily propagate
+opinions through the discourse graphs, increasing their strengths or
+reversing their polarity, depending on the type of discourse relations
+that connected the segments.
 
-\citet{Riloff:03} added a set of discourse-related features, such as
-relative sentence lengths, the average number of subjective clues in
-the preceding, current, and following clauses, and the relative number
-of these clues with respect to the corresponding sentence lengths,
-getting more than 2\% accuracy improvement over a baseline Na{\"i}ve
-Bayes classifier which did not utilize this information.
+Since the focus of our chapter is mainly on RST-based approaches, we
+decided to reimplement the most common of these methods and evaluate
+their performance on our data.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Method} & %
+      \multicolumn{3}{c}{\bfseries Positive} & %
+      \multicolumn{3}{c}{\bfseries Negative} & %
+      \multicolumn{3}{c}{\bfseries Neutral} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+
+      %% General Statistics:
+      ZRN &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      WNG &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      BHT &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      \textsc{Last} &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      \textsc{Root} &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      \textsc{No-Discourse} &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+
+      %% General Statistics:
+      ZRN &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      WNG &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      BHT &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      \textsc{Last} &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      \textsc{Root} &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\
+
+      %% General Statistics:
+      \textsc{No-Discourse} &  &  &  & %
+      &  &  & %
+      &  &  & %
+      & \\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Evaluation of DASA methods]{Evaluation of discourse-aware
+      sentiment analysis methods\\ {\small
+        ZRN~--~\citet{Zirn:11},
+        WNG~-~\citet{Wang:13},
+        BHT~--~\citet{Bhatia:15},
+        \textsc{Last}~--~polarity determined by the last EDU,
+        \textsc{Last}~--~polarity determined by the root nucleus,
+        \textsc{No-Discourse}~--~discourse-unaware lexicon-based
+        attention model with one Bi-LSTM layer}}
+    \label{dasa:tbl:res}
+  \end{center}
+\end{table}
 
 \section{Evaluation}
 
