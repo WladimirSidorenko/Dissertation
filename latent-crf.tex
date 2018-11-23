@@ -1,0 +1,112 @@
+{\scriptsize
+  \begin{tikzpicture}
+    \tikzstyle{xnode}=[rectangle,draw,fill=gray76,align=center,minimum size=2em,text width=2.2em] %
+    \tikzstyle{lnode}=[circle,draw,fill=white,inner sep=1pt,minimum size=2.5em] %
+    \tikzstyle{ynode}=[circle,draw,fill=gray76,inner sep=1pt,minimum size=2.5em] %
+    \tikzstyle{label}=[] %
+    \tikzstyle{extext}=[] %
+    \tikzstyle{factor}=[rectangle,fill=black,midway,inner sep=0pt,minimum size=0.4em] %
+
+    \node[ynode] (0Neg) at (5, 6) {Neg};
+    \node[ynode] (0Neut) at (6, 6) {Neut};
+    \node[ynode] (0Pos) at (7, 6) {Pos};
+    \hyperNode{0Neg}{0Neut}{0Pos}{Root};
+    \crfFeatures{0/4.5/0.541, 1/5.5/0.39, 2/6.5/0.07, 3/7.5/1.}{0}{4.7};
+
+    \node[lnode] (1Neg) at (5, 3.7) {Neg};
+    \node[lnode] (1Neut) at (6, 3.7) {Neut};
+    \node[lnode] (1Pos) at (7, 3.7) {Pos};
+    \hyperNode{1Neg}{1Neut}{1Pos}{EDU 2};
+    \crfEdges{0}{1};             % see definition in command.tex
+    \crfFeatures{0/4.5/0.538, 1/5.5/0.219, 2/6.5/0.243, 3/7.5/1.}{1}{2.4};
+
+    \node[lnode] (2Neg) at (1, 1.4) {Neg};
+    \node[lnode] (2Neut) at (2, 1.4) {Neut};
+    \node[lnode] (2Pos) at (3, 1.4) {Pos};
+    \hyperNode{2Neg}{2Neut}{2Pos}{EDU 0};
+    \crfEdges{1}{2};
+    \crfFeatures{0/0.5/0.149, 1/1.5/0.447, 2/2.5/0.403, 3/3.5/1.}{2}{0.1};
+
+    \node[lnode] (3Neg) at (5, 1.4) {Neg};
+    \node[lnode] (3Neut) at (6, 1.4) {Neut};
+    \node[lnode] (3Pos) at (7, 1.4) {Pos};
+    \hyperNode{3Neg}{3Neut}{3Pos}{EDU 1};
+    \crfEdges{1}{3};
+    \crfFeatures{0/4.5/0.142, 1/5.5/0.424, 2/6.5/0.433, 3/7.5/1.}{3}{0.1};
+
+    \node[lnode] (4Neg) at (9, 1.4) {Neg};
+    \node[lnode] (4Neut) at (10, 1.4) {Neut};
+    \node[lnode] (4Pos) at (11, 1.4) {Pos};
+    \hyperNode{4Neg}{4Neut}{4Pos}{EDU 3};
+    \crfEdges{1}{4};
+    \crfFeatures{0/8.5/0.182, 1/9.5/0.404, 2/10.5/0.413, 3/11.5/1.}{4}{0.1};
+
+    \node[extext] (GText) [below=4.5em of 3Neut] {\small $[$Gucke Lost$]_0$ $[$und esse Obst .$]_1$ $[$F\"uhlt sich fast an ,$]_2$ $[$als w\"are das mein Leben .$]_3$};
+    \node[extext] (EText) [below=0.3em of GText] {\small\itshape $[$Watching Lost$]_0$ $[$and eating fruits .$]_1$ $[$Almost feels$]_2$ $[$as if it were my life .$]_3$};
+\end{tikzpicture}
+}
+%% [Gucke Lost] [und esse Obst .] [F\"uhlt sich fast an ,] [als wäre das mein Leben .]
+%% [
+%%   {
+%%     "polarity_scores": [
+%%       0.14949016273021698,
+%%       0.44729670882225037,
+%%       0.40321311354637146
+%%     ],
+%%     "type": "HS",
+%%     "prnt_edu": null,
+%%     "toks": [
+%%       0,
+%%       1
+%%     ]
+%%   },
+%%   {
+%%     "polarity_scores": [
+%%       0.142274871468544,
+%%       0.42430344223976135,
+%%       0.43342170119285583
+%%     ],
+%%     "type": "HSF",
+%%     "prnt_edu": 0,
+%%     "toks": [
+%%       2,
+%%       3,
+%%       4,
+%%       5
+%%     ]
+%%   },
+%%   {
+%%     "polarity_scores": [
+%%       0.5375863909721375,
+%%       0.2193969190120697,
+%%       0.24301667511463165
+%%     ],
+%%     "type": "HS",
+%%     "prnt_edu": null,
+%%     "toks": [
+%%       6,
+%%       7,
+%%       8,
+%%       9,
+%%       10
+%%     ]
+%%   },
+%%   {
+%%     "polarity_scores": [
+%%       0.18236444890499115,
+%%       0.4047204554080963,
+%%       0.41291508078575134
+%%     ],
+%%     "type": "SUB",
+%%     "prnt_edu": 2,
+%%     "toks": [
+%%       11,
+%%       12,
+%%       13,
+%%       14,
+%%       15,
+%%       16
+%%     ]
+%%   }
+%% ]
+%% <DepDT id=-1 rel2par=None polarity_scores=[0.0, 0.0, 0.0] children=[<DepDT id=2 rel2par=None polarity_scores=array([0.53758639, 0.21939692, 0.24301668]) children=[<DepDT id=0 rel2par=non-contrastive polarity_scores=array([0.14949016, 0.44729671, 0.40321311]) children=[]>, <DepDT id=1 rel2par=non-contrastive polarity_scores=array([0.14227487, 0.42430344, 0.4334217 ]) children=[]>, <DepDT id=3 rel2par=non-contrastive polarity_scores=array([0.18236445, 0.40472046, 0.41291508]) children=[]>]>]>
