@@ -737,14 +737,14 @@ unit as the dot product of its binary feature vector $\mathbf{w}_i$
 (token unigrams) with the polarities of these features $\theta$ taken
 from a lexicon:
 \begin{equation*}
-  \sigma_i = \theta^{\top}\cdot\mathbf{w}_i,
+  \sigma_i = \theta^{\top}\mathbf{w}_i,
 \end{equation*}
 Afterwards, the authors calculated the overall semantic orientation of
 the document~$\Psi$ as the sum of the predicted sentiment scores for
 all units, multiplying these weights by the importance
 factors~$\lambda$:
 \begin{equation*}
-  \Psi = \sum_i\lambda_i\mathbf{\theta}^T\mathbf{w}_i = \mathbf{\theta}^T\cdot\sum_i\lambda_i\mathbf{w}_i,
+  \Psi = \sum_i\lambda_i\mathbf{\theta}^T\mathbf{w}_i = \mathbf{\theta}^T\sum_i\lambda_i\mathbf{w}_i,
 \end{equation*}
 
 In the R2N2 method, \citet{Bhatia:15} adopted the RNN approach
@@ -805,12 +805,82 @@ through the discourse graphs, increasing their strengths or reversing
 their polarity, depending on the type of discourse relations that
 connected the segments.
 
-In general, however, PDTB- and SDRT-based sentiment analysis methods
-are much less common than RST-inspired techniques, and since the focus
-of this chapter is mainly on RST, we will next present an evaluation
-of the most common approaches from this paradigm on the PotTS and
-SB10k data.  To this end, we have reimplemented the DDR and R2N2
-systems of~\citet{Bhatia:15}
+In general, however, PDTB- and SDRT-based sentiment systems are much
+less common than RST-inspired solutions.  Because of this fact and
+since RST formalism was our favorite framework for discourse-aware
+enhancement of the LBA system anyway , we decided to primarily
+concentrate on this group of methods.  In particular, for the sake of
+comparison, we have replicated the linear combination method of
+\citet{Wang:13} and also reimplemented the DDR and R2N2 approaches
+of~\citet{Bhatia:15} .  Furthermore, to see how these techniques would
+perform with respect to much easier baselines, we additionally created
+two simple systems which predicted the polarity of a message by only
+considering its last or topmost nucleus EDU (henceforth \textsc{Last}
+and \textsc{Root}, respectively), and also estimated the results of
+the original LBA approach by letting it analyze whole tweets at once
+without splitting these messages into elementary discourse units
+(henceforth \textsc{No-Discourse}).  Apart from these existing and
+baseline methods, we also propose several new DASA solutions which we
+briefly descibe below.
+
+In the first of these solutions, called \emph{Latent Conditional
+  Random Fields} or \emph{LCRF}, we consider the problem of
+message-level sentiment analysis as an inference task over an
+undirected graphical model, where the nodes of the model represent
+polarity probabilities of elementary discourse units, and the
+structure reflects the RST tree analysis of these EDUs.  In
+particular, we define CRF graph $\mathcal{G}\defeq(\mathcal{V},
+\mathcal{E})$ as a set of vertices $\mathcal{V}\defeq
+\mathcal{Y}\cup\mathcal{X}$, in which $\mathcal{Y}\defeq\{y_{(i,
+  j)}\mid i\in\{\text{\textsc{Root}}, 0, 1, \ldots, n-1\}, j
+\in\{\text{\textsc{Negative}, \textsc{Neutral},
+  \textsc{Positive}}\}\}$ represents (partially observed) random
+variables (with $n$ standing for the number of EDUs in the tweet) and
+$\mathcal{X}\defeq\{x_{(i, j)}\mid i\in\{\text{\textsc{Root}}, 0, 1,
+\ldots, n-1\}, j \in[0,\ldots, 3]\}$ denotes the respective features
+of these nodes (three polarity scores returned by the LBA classifier
+for the $i$-th EDU plus an additional \emph{offset} feature whose
+value is always one irrespectively of the input).  Since the
+\textsc{Root} vertix of this graph do not have a corresponding
+discourse segment in the RST tree, we use the polarity scores
+predicted by the LBA classifier for the whole message as features of
+this node.
+
+Factor edges $\mathcal{E}$ connect random variables to their
+corresponding feature attributes and also link every pair of vertices
+$(v_{(i,\cdot)},v_{(j,\cdot)})$ if node $i$ appears as the parent of
+node $j$ in the dependency representation of automatically constructed
+RST tree.  Following the work of~\citet{Bhatia:15}, we obtain this
+representation using the DEP-DT algorithm of~\citet{Hirao:13} with the
+only modification that we do not follow any satellite branches while
+computing the heads of abstract RST nodes in Step 1 of this procedure
+\cite[see][pp.~1516--1517]{Hirao:13}.
+
+\begin{figure*}[thb]
+  \centering \input{latent-crf}
+  \caption{Example of an RST-Based Latent-CRF Graph\\ {\small (random
+      variables are shown as circles, fixed input parameters appear as
+      boxes, and observed values are displayed in
+      gray)}}\label{dasa:fig:latent-crf}
+\end{figure*}
+
+Figure~\ref{dasa:fig:latent-crf} shows a real example of such
+automatically induced CRF tree.  At this point we can already notice
+some tendencies regarding the obtained discourse graph: First of all,
+our segmenter clearly tends to oversegment its input, also considering
+conjoined predicates and adverbial subordinate clauses as separate
+discourse units.  Even though this behavior violates the principles of
+standard RST, it actually comes advantageous to our particular
+sentiment application as it allows the base classifier to be more
+fine-grained (and consequently more precise) in its prediction.  At
+the same time, we again can see that the automatic parser struggles
+with determining the correct nuclearity of EDUs, putting the segment
+``f\"uhlt sich fast an'' (\textit{feels}) in the top-most position,
+which we can hardly call the right decision.  Finally, we also can
+notice that although the LBA classifier incorrectly predicts the
+polarity of the whole message (assigning the negative class instead of
+neutral), it might have better guesses for single discourse units,
+giving us at least a hypothetical possibility to overrule its error.
 
 \begin{table}[h]
   \begin{center}
@@ -834,7 +904,7 @@ systems of~\citet{Bhatia:15}
       \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
 
       %% General Statistics:
-      HCRF & \textbf{0.76} & 0.79 & \textbf{0.77} & %
+      LCRF & \textbf{0.76} & 0.79 & \textbf{0.77} & %
       0.61 & 0.53 & 0.57 & %
       0.7 & 0.71 & 0.7 & %
       0.67 & 0.708\\
@@ -890,7 +960,7 @@ systems of~\citet{Bhatia:15}
       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
 
       %% General Statistics:
-      HCRF & \textbf{0.64} & \textbf{0.69} & 0.66 & %
+      LCRF & \textbf{0.64} & \textbf{0.69} & 0.66 & %
       0.45 & \textbf{0.45} & 0.45 & %
       \textbf{0.82} & 0.79 & \textbf{0.8} & %
       0.557 & 0.713\\
@@ -944,8 +1014,8 @@ systems of~\citet{Bhatia:15}
     \end{tabular}
     \egroup
     \caption[Evaluation of DASA methods]{Evaluation of discourse-aware
-      sentiment analysis methods\\ {\small HCRF~--~hidden conditional random fields,
-        HMCRF~--~hidden marginalized conditional random fields,
+      sentiment analysis methods\\ {\small LCRF~--~latent conditional random fields,
+        LMCRF~--~latent marginalized conditional random fields,
         RDP~--~recursive Dirichlet process,
         WNG~--~\citet{Wang:13},
         DDR~--~discourse-depth reweighting~\cite{Bhatia:15},
