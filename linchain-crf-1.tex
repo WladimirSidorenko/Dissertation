@@ -1,34 +1,37 @@
 {\scriptsize
   \begin{tikzpicture}
-    \tikzstyle{xnode}=[circle,draw,fill=gray76,minimum size=2.3em] %
-    \tikzstyle{ynode}=[circle,draw,inner sep=1pt] %
+    \tikzstyle{xnode}=[rectangle,draw,fill=gray76,minimum size=2em] %
+    \tikzstyle{ynode}=[circle,draw,fill=gray76,inner sep=1pt,%
+    minimum width=width("MMM"),minimum height=height("MMM")] %
     \tikzstyle{factor}=[rectangle,fill=black,midway,inner sep=0pt,%
     minimum size=0.4em] %
-    \tikzstyle{ctxt}=[red] %
+    \tikzstyle{ctxt}=[] %
 
-    \node[ynode] (SNT1) at (2, 2) {SNT};
+    \node[ynode] (NON0) at (1, 4) {NON};
+    \node[ynode] (SRC0) at (1, 3) {SRC};
+    \node[ynode] (TRG0) at (1, 2) {TRG};
+    \node[ynode] (SNT0) at (1, 1) {SNT};
+    \hyperNodeX{NON0}{SRC0}{TRG0}{SNT0}{w$_1$};
 
-    \node[ynode] (TRG1) [above=0.4em of SNT1] {TRG};
-    \node[ynode] (SRC1) [above=0.4em of TRG1] {SRC};
-    \node[ynode] (NON1) [above=0.4em of SRC1] {NON};
+    \node[ynode] (NON1) at (3, 4) {NON};
+    \node[ynode] (SRC1) at (3, 3) {SRC};
+    \node[ynode] (TRG1) at (3, 2) {TRG};
+    \node[ynode] (SNT1) at (3, 1) {SNT};
+    \hyperNodeX{NON1}{SRC1}{TRG1}{SNT1}{w$_2$};
 
-    \node[ynode] (SNT0) [left=2.5em of SNT1] {SNT};
+    \crfFeaturesX{0/2, 1/3, 2/4}{1}{0};
+    %% \node[xnode] (FEAT1) at (2, 0) {};
+    %% \node[xnode] (FEAT2) at (3, 0) {};
+    %% \node[xnode] (FEAT3) at (4, 0) {};
 
-    \node[ynode] (TRG0) [above=0.4em of SNT0] {TRG};
-    \node[ynode] (SRC0) [above=0.4em of TRG0] {SRC};
-    \node[ynode] (NON0) [above=0.4em of SRC0] {NON};
+    %% \path [-] (FEAT1) edge node [factor] {} (SNT1);
+    %% \path [-] (FEAT2) edge node [factor] {} (SNT1);
+    %% \path [-] (FEAT3) edge node [factor] {} (SNT1);
 
-    \node[xnode] (FEAT1) [below left=2em and 1.7em of SNT1] {};
-    \node[xnode] (FEAT2) [below=1.2em of SNT1] {};
-    \node[xnode] (FEAT3) [below right=2em and 1.7em of SNT1] {};
-
-    \path [-] (FEAT1) edge node [factor] {} (SNT1);
-    \path [-] (FEAT2) edge node [factor] {} (SNT1);
-    \path [-] (FEAT3) edge node [factor] {} (SNT1);
-
-    \path [-] (SNT0) edge[ctxt] node [factor,ctxt] {} (SNT1);
-    \path [-] (TRG0) edge[ctxt] node [factor,ctxt] {} (SNT1);
-    \path [-] (SRC0) edge[ctxt] node [factor,ctxt] {} (SNT1);
-    \path [-] (NON0) edge[ctxt] node [factor,ctxt] {} (SNT1);
+    \crfEdgesX{1}{0};
+    %% \path [-] (SNT0) edge[ctxt] node [factor,ctxt] {} (SNT1);
+    %% \path [-] (TRG0) edge[ctxt] node [factor,ctxt] {} (SNT1);
+    %% \path [-] (SRC0) edge[ctxt] node [factor,ctxt] {} (SNT1);
+    %% \path [-] (NON0) edge[ctxt] node [factor,ctxt] {} (SNT1);
 \end{tikzpicture}
 }

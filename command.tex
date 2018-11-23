@@ -54,7 +54,7 @@
 \usepackage{xcolor}             % \colorlet
 
 \usetikzlibrary{arrows,backgrounds,calc,decorations.markings,%
-        positioning,shapes,snakes}
+        positioning,shapes,shapes.misc,snakes}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
@@ -141,12 +141,170 @@
 \newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
 \newcommand{\heart}{\ensuremath\heartsuit}
-\newcommand{\defeq}{\stackrel{\mathclap{\normalfont\mbox{def}}}{=}}
+\newcommand{\defeq}{\vcentcolon=}
+\newcommand{\eqdef}{=\vcentcolon}
 \newcommand{\eg}{\textit{e.g.},}
 \newcommand{\ie}{\textit{i.e.},}
 
 \newcommand{\specialcell}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\newcommand{\crfEdges}[2]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {Neg, Neut, Pos}
+        {
+           \foreach \chld in {Neg, Neut, Pos}
+             \path [-] (#1\prnt) edge node [factor] {} (#2\chld);
+        }
+    \end{scope}
+}
+
+\newcommand{\crfEdgesX}[2]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {SNT, TRG, SRC, NON}
+        {
+           \foreach \chld in {SNT, TRG, SRC, NON}
+             \path [-] (\prnt#1) edge node [factor] {} (\chld#2);
+        }
+    \end{scope}
+}
+
+%% 3 arguments:
+%% Arg1: list of (i, x, w) tuples, where i is the number of feature, x is its x position, and w stands for the feature weight
+%% Arg2: index of the parent node
+%% Arg3: y position of feature nodes
+\newcommand{\crfFeatures}[3]{
+    \foreach \i/\x/\w in {#1}
+    {
+        \node[xnode] (#2FEAT\i) at (\x, #3) {\w};
+        \foreach \prnt in {Neg, Neut, Pos}
+        {
+            \path [-] (#2FEAT\i) edge node [factor] {} (#2\prnt);
+        }
+    }
+}
+
+\newcommand{\crfFeaturesX}[3]{
+    \foreach \i/\x in {#1}
+    {
+        \node[xnode] (FEAT\i) at (\x, #3) {};
+        \begin{scope}[on background layer]
+          \foreach \prnt in {SNT, TRG, SRC, NON}
+          {
+            \path [-] (FEAT\i) edge node [factor] {} (\prnt#2);
+          }
+        \end{scope}
+    }
+}
+
+\newcommand{\crfFeaturesXX}[3]{
+    \foreach \i/\x in {#1}
+    {
+        \node[xnode] (FEAT\i) at (\x, #3) {};
+        \begin{scope}[on background layer]
+          \foreach \prnt in {SNT, TRG, SRC, DOTS, NON}
+          {
+            \path [-] (FEAT\i) edge node [factor] {} (\prnt#2);
+          }
+        \end{scope}
+    }
+}
+
+\newcommand{\crfFeaturesSemiMarkov}[3]{
+    \foreach \i/\x/\d in {#1}
+    {
+      \node[xnode] (FEAT\i) at (\x, #3) {};
+      \begin{scope}[on background layer]
+        \foreach \prnt in {SNT, TRG, SRC, NON}
+        {
+          \path [-] (FEAT\i) edge node [factor] {} (\prnt\d);
+        }
+      \end{scope}
+    }
+    \foreach \i/\x/\d in {#2}
+    {
+      \node[xnode] (FEAT\i) at (\x, #3) {};
+      \begin{scope}[on background layer]
+        \foreach \prnt in {SNT, TRG, SRC, NON}
+        {
+          \path [-] (FEAT\i) edge node [factor] {} (\prnt\d);
+        }
+      \end{scope}
+    }
+}
+
+%% 3 arguments:
+%% Arg1: left node
+%% Arg2: middle node
+%% Arg3: right node
+%% Arg4: hypernode label
+\newcommand{\hyperNode}[4]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(-0.49,0.)$)
+        to[out=90,in=180] ($(#2) + (0.,0.47)$)
+        to[out=0,in=90] ($(#3) + (0.49,0.)$)
+        to[out=270,in=0] ($(#2) + (0.,-0.47)$)
+        to[out=180,in=270] ($(#1) + (-0.49,0.)$);
+     \node[label] (Root) [above right=0em and 0.3em of #3] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #4}}};
+    \end{scope}
+}
+
+\newcommand{\hyperNodeX}[5]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(0.,0.49)$)
+        to[out=0,in=90] ($(#1) + (0.47,0.)$)
+        to[out=270,in=90] ($(#2) + (0.47,0.)$)
+        to[out=270,in=90] ($(#3) + (0.47,0.)$)
+        to[out=270,in=90] ($(#4) + (0.47,0.)$)
+        to[out=270,in=0] ($(#4) + (0.,-0.49)$)
+        to[out=180,in=270] ($(#4) + (-0.47,0.)$)
+        to[out=90,in=270] ($(#3) + (-0.47,0.)$)
+        to[out=90,in=270] ($(#2) + (-0.47,0.)$)
+        to[out=90,in=270] ($(#1) + (-0.47,0.)$)
+        to[out=90,in=180] ($(#1) + (0.,0.49)$);
+     \node[label] (Root) [above right=0em and 0.3em of #1] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #5}}};
+    \end{scope}
+}
+
+\newcommand{\hyperNodeXX}[6]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(0.,0.49)$)
+        to[out=0,in=90] ($(#1) + (0.87,0.)$)
+        to[out=270,in=90] ($(#2) + (0.87,0.)$)
+        to[out=270,in=90] ($(#3) + (0.87,0.)$)
+        to[out=270,in=90] ($(#4) + (0.87,0.)$)
+        to[out=270,in=90] ($(#5) + (0.87,0.)$)
+        to[out=270,in=0] ($(#5) + (0,-0.49)$)
+        to[out=180,in=270] ($(#5) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#4) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#3) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#2) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#1) + (-0.87,0.)$)
+        to[out=90,in=180] ($(#1) + (0.,0.49)$);
+     \node[label] (Root) [above right=0em and 0.3em of #1] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #6}}};
+    \end{scope}
+}
+
+\newcommand{\hyperNodeTreeCRF}[5]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(-0.49,0.)$)
+        to[out=90,in=180] ($(#2) + (0.,0.47)$)
+        to[out=0,in=180] ($(#3) + (0.,0.47)$)
+        to[out=0,in=90] ($(#4) + (0.49,0.)$)
+        to[out=270,in=0] ($(#3) + (0.,-0.47)$)
+        to[out=180,in=0] ($(#2) + (0.,-0.47)$)
+        to[out=180,in=270] ($(#1) + (-0.49,0.)$);
+     \node[label] (Root) [above right=0.3em and 0.em of #4] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #5}}};
+    \end{scope}
+}
 
 %% Header, Footer, and Page Layout
 \fancyhf{}
