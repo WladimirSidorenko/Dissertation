@@ -140,11 +140,13 @@
 \newcommand{\expnumber}[2]{{#1}\mathrm{e}^{#2}}
 \newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
 \newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand\given[1]{\:#1\vert\:}
 \newcommand{\heart}{\ensuremath\heartsuit}
 \newcommand{\defeq}{\vcentcolon=}
 \newcommand{\eqdef}{=\vcentcolon}
 \newcommand{\eg}{\textit{e.g.},}
-\newcommand{\ie}{\textit{i.e.},}
+\newcommand{\ienocomma}{\textit{i.e.}}
+\newcommand{\ie}{\ienocomma,}
 
 \newcommand{\specialcell}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
@@ -165,6 +167,19 @@
         {
            \foreach \chld in {SNT, TRG, SRC, NON}
              \path [-] (\prnt#1) edge node [factor] {} (\chld#2);
+        }
+    \end{scope}
+}
+
+\newcommand{\crfEdgesLatent}[2]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {Neg, Neut, Pos}
+        {
+           \foreach \chld in {Neg, Neut, Pos}
+           {
+             \path [-,transform canvas={xshift=-1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+             \path [-,transform canvas={xshift=1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+           }
         }
     \end{scope}
 }
