@@ -34,6 +34,7 @@
 \usepackage{graphicx}           % \scalebox
 \usepackage{hhline}             % \ifstrempty
 \usepackage{hyperref}           % clickable table of contents
+\usepackage{ifthen}             % \ifthenelse
 \usepackage{listings}           % for \lstlisting
 \usepackage{mathtools}          % \stackrel, \mathclap
 \usepackage{mdframed}           % gray background boxes
@@ -72,6 +73,11 @@
 %% \setlength{\compressionWidth}{100pt}
 %% \setlength{\terminalWidth}{0pt}
 \setlength{\rstmiddleskip}{1.5em}
+
+\newlength{\hcrfwidth}
+\setlength{\hcrfwidth}{0.45\textwidth}
+\newlength{\hcrfheight}
+\setlength{\hcrfheight}{9em}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Colors
@@ -184,6 +190,25 @@
     \end{scope}
 }
 
+\newcommand{\crfColoredEdgesLatent}[4]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {Neg, Neut, Pos}
+        {
+           \foreach \chld in {Neg, Neut, Pos}
+           {
+             \ifthenelse{\(\equal{#1\prnt}{#3} \OR \equal{ANY}{#3}\)  %
+                          \AND \(\equal{#2\chld}{#4} \OR \equal{ANY}{#4}\)}{
+               \path [-,transform canvas={xshift=-1pt},highlight] (#1\prnt) edge node [factor,highlight] {} (#2\chld);
+               \path [-,transform canvas={xshift=1pt},highlight] (#1\prnt) edge node [factor,highlight] {} (#2\chld);
+             }{
+               \path [-,transform canvas={xshift=-1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+               \path [-,transform canvas={xshift=1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+             }
+           }
+        }
+    \end{scope}
+}
+
 %% 3 arguments:
 %% Arg1: list of (i, x, w) tuples, where i is the number of feature, x is its x position, and w stands for the feature weight
 %% Arg2: index of the parent node
@@ -194,7 +219,22 @@
         \node[xnode] (#2FEAT\i) at (\x, #3) {\w};
         \foreach \prnt in {Neg, Neut, Pos}
         {
-            \path [-] (#2FEAT\i) edge node [factor] {} (#2\prnt);
+           \path [-] (#2FEAT\i) edge[] node [factor] {} (#2\prnt);
+        }
+    }
+}
+
+\newcommand{\crfColoredFeatures}[4]{
+    \foreach \i/\x/\w in {#1}
+    {
+        \node[xnode,highlight] (#2FEAT\i) at (\x, #3) {\w};
+        \foreach \prnt in {Neg, Neut, Pos}
+        {
+            \ifthenelse{\equal{\prnt}{#4} \OR \equal{ANY}{#4}}{
+              \path [-] (#2FEAT\i) edge[highlight] node [factor,highlight] {} (#2\prnt);
+            }{
+              \path [-] (#2FEAT\i) edge[] node [factor] {} (#2\prnt);
+            }
         }
     }
 }

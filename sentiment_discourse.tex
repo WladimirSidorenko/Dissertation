@@ -516,6 +516,13 @@ with this check, let us first revise the most prominent approaches to
 discourse-aware sentiment classification that have been proposed in
 the literature so far.
 
+\begin{example}[Polarity reversal via discourse antithesis]\label{disc-snt:exmp-pang02}
+  \noindent\upshape This film should be brilliant.  It sounds like a
+  great plot, the actors are first grade, and the supporting cast is
+  good as well, and Stallone is attempting to deliver a good
+  performance.  However, it can't hold up. \cite{Pang:02}
+\end{example}
+
 As it turns out, even the very first works on opinion mining already
 pointed out the importance of discourse phenomena for determining the
 overall polarity of a text.  For example, in the seminal paper
@@ -524,15 +531,9 @@ orientation of movie reviews, they quickly noticed the fact that it
 was insufficient to rely on the mere presence or even majority of
 polarity clues because these clues could any time be reversed by a
 single counter-argument (see Example~\ref{disc-snt:exmp-pang02}).
-\begin{example}[Polarity reversal via discourse antithesis]\label{disc-snt:exmp-pang02}
-  \noindent\upshape This film should be brilliant.  It sounds like a
-  great plot, the actors are first grade, and the supporting cast is
-  good as well, and Stallone is attempting to deliver a good
-  performance.  However, it can't hold up. \cite{Pang:02}
-\end{example}
-\noindent \citet{Polanyi:06} also affirmed the important role of the
-text structure, considering discourse connectors and relations as one
-of the most significant context factors which could notably affect the
+\citet{Polanyi:06} also affirmed the important role of the text
+structure, considering discourse connectors and relations as one of
+the most significant context factors which could notably affect the
 intensity and polarity of opinions.  To prove this claim, they
 provided several convincing examples in which discourse links
 considerably weakened the strength of a sentiment by introducing
@@ -896,7 +897,7 @@ log-likelihood of label sequences $\mathbf{y}^{(i)}$ on the training
 set $\mathcal{D}\defeq\left\{\left(\mathbf{x}^{(i)},
 \mathbf{y}^{(i)}\right)\right\}_{i=1}^{N}$, \ienocomma:
 \begin{equation*}
-  \theta^* = \argmax_{\theta}\ell(\theta) = \sum_{i=1}^{N}\log{}p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \theta\right),\label{dasa:eq:crf-objective}
+  \theta^* = \argmax_{\theta}\ell(\theta) = \sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \theta\right)\right),\label{dasa:eq:crf-objective}
 \end{equation*}
 where conditional likelihood is normally estimated as:
 \begin{equation*}
@@ -912,9 +913,8 @@ Adapting this equation to our RST-based structure, we obtain:
       ch(t)}\sum_e\mathbf{\theta}_ef_e\left(\mathbf{y}^{(i)}_{t},
     \mathbf{y}^{(i)}_{c}\right)\right]\right)}{Z},
 \end{equation*}
-where $ch(t)$ denotes the children of node $t$, $v$ stands for the
-indices of vertex features, and $e$ represents the indices of edge
-attributes.
+where $ch(t)$ denotes children of node $t$, $v$ stands for the indices
+of vertex features, and $e$ represents the indices of edge attributes.
 
 A crucial problem with this formulation though is that, in our task,
 only a small subset of labels from $\mathbf{y}^{(i)}$ (namely those
@@ -927,8 +927,8 @@ $\theta^*$ which maximize the log-likelihood of \emph{known} labels,
 \ienocomma:
 \begin{equation*}
 \mathbf{\theta}^* =
-\argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\log{}p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)};
-\theta\right).
+\argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\log\left(p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)};
+\theta\right)\right).
 \end{equation*}
 However, it is still unclear what we shall do about hidden tags
 $\mathbf{y}_h^{(i)}$, since the values of their features are yet
@@ -952,7 +952,7 @@ from Equation~\ref{dasa:eq:y_i} as the ground truth and penalize all
 labels which disagree with this sequence, we might overly commit
 ourselves to the model's guess of unknown tags and unduly discriminate
 against other possible assignments of hidden labels.  To mitigate this
-effect, we can instead penalize only one other sequence, namely, that
+effect, we can instead penalize only one other sequence, namely that
 which maximizes the probability of an incorrect label at the observed
 state:
 \begin{align*}
@@ -961,50 +961,25 @@ state:
     where}\\
   \mathbf{y}_h^{*(i)}&=\argmax_{\mathbf{y}_h^{(i)}}p\left(\mathbf{y}_o^{'(i)}\vert\mathbf{x}^{(i)}\right).
 \end{align*}
-Correspondingly, we reformulate our objective function and, instead of
-maximizing the conditional log likelihood of the training set, will
-now try to maximize the difference between the probabilities of
-correct and wrong observed labels:
-\begin{align*}
-  \mathbf{\theta}^* &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\left(p(\mathbf{y}^{(i)}) - p(\mathbf{y}^{'(i)})\right)\\
-  &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\exp{\mathbf{\theta}^{\top}\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})} - \exp{\mathbf{\theta}^{\top}\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})}\\
-  &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\mathbf{\theta}^{\top}\left(\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)}) - \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})\right),
-\end{align*}
+Correspondingly, we redefine our objective function and, instead of
+maximizing the log-likelihood of the training set, will now try to
+maximize the difference between the likelihoods of correct and wrong
+assignments:
+\begin{align}
+  \begin{split}
+  \mathbf{\theta}^* &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\right)\right) - \log\left(p\left(\mathbf{y}^{'(i)}\right)\right)\\
+  &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\log\left(\exp{\mathbf{\theta}^{\top}\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})}\right) - \log\left(\exp{\mathbf{\theta}^{\top}\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})}\right)\\
+  &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\mathbf{\theta}^{\top}\left(\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)}) - \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})\right),\label{dasa:eq:hcrf-objective}
+  \end{split}
+\end{align}
 where $\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})$ and
 $\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$ are all features
 associated with label sequences $\mathbf{y}^{(i)}$ and
-$\mathbf{y}^{'(i)}$ respectively, and the last line follows from the
-fact that both expressions (difference of the exponents and difference
-of raw terms) change monotonically w.r.t. $\theta_k$, having the same
-slope sign and a single critical point at
-$\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)}) =
-\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$.
+$\mathbf{y}^{'(i)}$ respectively.
 
-\begin{figure*}
-  \centering
-  {
-    \centering
-    \begin{subfigure}{0.45\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/delta-a.png}
-      \caption{$\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)}) > \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$}
-    \end{subfigure}
-  }
-  {
-    \centering
-    \begin{subfigure}{0.45\textwidth}
-      \centering
-      \includegraphics[width=\linewidth]{img/delta-b.png}
-      \caption{$\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)}) < \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$}
-    \end{subfigure}
-  }
-  \caption{Relationship between the difference of exponents and
-    difference of linear terms}\label{dasa:fig:delta-exp}
-\end{figure*}
-
-The only thing that we now need to do to the above objective is to
+The only thing that we still need to do to the above objective is to
 introduce a regularization term $\frac{1}{2}\norm{\theta}^2$ in order
-to prevent the divergence to infinity in cases when
+to prevent its divergence to infinity in cases when
 $\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})$ and
 $\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$ are perfectly
 separable.  This brings us to our final formulation:
@@ -1014,28 +989,157 @@ separable.  This brings us to our final formulation:
   \sum_{i=1}^{N}\mathbf{\theta}^{\top}\left(\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})
   - \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})\right)
 \end{align}
-At this point, we can notice that the resulting objective is similar
-to the unconstrained minimization problem of structural SVM
+At this point, we can notice that the resulting function is similar to
+the unconstrained minimization problem of structural SVM
 \cite{Taskar:03}, and we indeed can piggyback on one of the many
 efficient SVM-optimization methods to learn the parameters of our
 model.  In particular, we use the block-coordinate Frank-Wolfe
 algorithm~\cite{Lacoste-Julien:13}, running it for 1,000 epochs or
-until convergence is reached, whatever of these events occurs
+until convergence is reached, whichever of these events occurs
 first.\todo{Outline the difference from the approaches of
   \citet{McDonald:07} and \citet{Trivedi:13}.}
 
 \textbf{Latent Marginalized CRF} Another way to tackle unobserved
 labels in the input is to use the fact that we can estimate the
 probability of a subset of random variables from a joint distribution
-by marginalizing (summing) out the remaining random terms from this
-distribution, \ienocomma:
+over a larger set by marginalizing (summing) out the remaining terms
+of this distribution, \ienocomma:
 \begin{align*}
-  p\left(Y=y\right) &= \sum_h p\left(Y=y, H=h\right).
+  p\left(E=e\right) &= \sum_h p\left(E=e, H=h\right).
 \end{align*}
-Applying this formula to our objective, we obtain:
+Applying this formula to our objective, we get:
 \begin{align*}
-  p\left(\mathbf{y}_o^{(i)}\right) &= \sum_{\mathbf{y}_h^{(i)}} p\left(\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}\right).
+  \begin{split}
+  p\left(\mathbf{y}_o^{(i)}\right) &= \sum_{\mathbf{y}_h^{(i)}} p\left(\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}\right)\\
+  &= \frac{\sum_{\mathbf{y}_h^{(i)}}\exp\left(\sum_{t=0}^{T_i}\left[%
+    \sum_v\mathbf{\theta}_vf_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
+    + \sum_{c\in
+      ch(t)}\sum_e\mathbf{\theta}_ef_e\left(\mathbf{y}^{(i)}_{t},
+    \mathbf{y}^{(i)}_{c}\right)\right]\right)}{Z},
+  \end{split}
 \end{align*}
+where $\mathbf{y}^{(i)}$ in the exponent is defined as before:
+$\mathbf{y}^{(i)}\defeq[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}]$.
+
+This time again, we would like to maximize the probability of the
+correct assignment, setting it apart from its closest competitor by at
+least some margin.  Unfortunately, due to the summation over
+$\mathbf{y}_h^{(i)}$, we cannot avail ourselves of the log-exp
+cancellation trick that we used previously in
+Equation~\ref{dasa:eq:hcrf-objective}.  Instead of this, we will
+replace the difference of log-likelihoods by the raw ratio of marginal
+probabilities:
+\begin{align}
+  \begin{split}
+  \mathbf{\theta}^* &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}\frac{p(\mathbf{y}^{(i)})}{p(\mathbf{y}^{'(i)})}\\
+  &= \argmax_{\mathbf{\theta}}\sum_{i=1}^{N}
+  \frac{\sum_{\mathbf{y}_h^{(i)}}\exp\left(\sum_{t=0}^{T_i}\left[%
+    \sum_v\mathbf{\theta}_vf_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
+    + \sum_{c\in
+      ch(t)}\sum_e\mathbf{\theta}_ef_e\left(\mathbf{y}^{(i)}_{t},
+    \mathbf{y}^{(i)}_{c}\right)\right]\right)}{\sum_{\mathbf{y}_h^{(i)}}\exp\left(\sum_{t=0}^{T_i}\left[%
+    \sum_v\mathbf{\theta}_vf_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{'(i)}_{t}\right)
+    + \sum_{c\in
+      ch(t)}\sum_e\mathbf{\theta}_ef_e\left(\mathbf{y}^{'(i)}_{t},
+    \mathbf{y}^{'(i)}_{c}\right)\right]\right)}\label{dasa:eq:hmcrf-objective}
+  \end{split}
+\end{align}
+To simplify this expression, we introduce the following abbreviations:
+\begin{align*}
+  a &\defeq \exp\left(\sum_{t=0}^{T_i}\left[
+    \sum_v\mathbf{\theta}_vf_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
+    + \sum_{c\in
+      ch(t)}\sum_e\mathbf{\theta}_ef_e\left(\mathbf{y}^{(i)}_{t},
+    \mathbf{y}^{(i)}_{c}\right)\right]\right),\\
+  b &\defeq \exp\left(\sum_{t=0}^{T_i}\left[
+    \sum_v\mathbf{\theta}_vf_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{'(i)}_{t}\right)
+    + \sum_{c\in
+      ch(t)}\sum_e\mathbf{\theta}_ef_e\left(\mathbf{y}^{'(i)}_{t},
+    \mathbf{y}^{'(i)}_{c}\right)\right]\right).
+\end{align*}
+Now, we can estimate the derivatives of functions $a$ and $b$ w.r.t. a
+single parameter $\theta_v$ as:
+\begin{align*}
+  \frac{\partial{}a}{\partial\theta_v} &= a\sum_{t=0}^{T_i}f_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}f_v,\\
+  \frac{\partial{}b}{\partial\theta_v} &= b\sum_{t=0}^{T_i}f_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)\propto\mathbb{E}_{\mathbf{y}^{'(i)}}f_v;
+\end{align*}
+and analogously obtain:
+\begin{align*}
+  \frac{\partial{}a}{\partial\theta_e} &= a\sum_{t=0}^{T_i}\sum_{c\in ch(t)}f_e\left(\mathbf{y}^{(i)}_{t}, \mathbf{y}^{(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}f_e,\\
+  \frac{\partial{}b}{\partial\theta_e} &= b\sum_{t=0}^{T_i}\sum_{c\in ch(t)}f_e\left(\mathbf{y}^{'(i)}_{t}, \mathbf{y}^{'(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{'(i)}}f_e.
+\end{align*}
+With the help of these expressions, we can easily compute the gradient
+of the objective function w.r.t. $\mathbf{\theta}$ by observing that:
+\begin{align*}
+  \nabla_{\mathbf{\theta}} &=
+  \sum_{i=1}^{N}\frac{\sum_{\mathbf{y}_h^{(i)}}\nabla_{\mathbf{\theta}}a\sum_{\mathbf{y}_h^{(i)}}b
+    -
+    \sum_{\mathbf{y}_h^{(i)}}a\sum_{\mathbf{y}_h^{(i)}}\nabla_{\mathbf{\theta}}b}{\left(\sum_{\mathbf{y}_h^{(i)}}b\right)^2}.
+\end{align*}
+We again use the block-coordinate Frank-Wolfe method to optimize the
+parameters of our model, but instead of pushing these parameters in
+the direction
+$\boldsymbol{\psi}\defeq\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})-\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$
+(which is the derivative of latent CRF, see Algorithm~2 in
+[\citeauthor{Lacoste-Julien:13}, \citeyear{{Lacoste-Julien:13}}]), now
+force them in the direction of the above gradient.
+
+It is probably easier to realize the difference of the two methods
+(latent and latent marginalized CRFs) more vividly by looking at
+Figure~\ref{dasa:fig:lcrf-vs-lmcrf}, in which we have highlighted the
+paths that are used to compute the probabilities of correct and wrong
+labels in both systems.  As we can see from the figure, LCRF considers
+only a single label sequence that leads to the maximum probability the
+correct tag at the only observed \textsc{Root} state and then
+contrasts this sequence with the path that maximizes the probability
+of an incorrect tag (in this case \textsc{NEG}) at the same
+\textsc{Root} hypernode.  As opposed to this, LMCRF takes into account
+all possible label configurations of elementary discourse units and
+uses this total cumulative mass to estimate the probability of the
+observed tag.
+
+\begin{figure*}[thb]
+  \centering
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \resizebox{\hcrfwidth}{\hcrfheight}{
+      \input{latent-crf-a}
+      }
+    \caption{Computational path of the probability of the correct
+      label in latent CRF}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \resizebox{\hcrfwidth}{\hcrfheight}{
+      \input{latent-crf-b}
+      }
+    \caption{Computational path of the probability of a wrong label in
+      latent CRF}
+  \end{subfigure}\\[1em]
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \resizebox{\hcrfwidth}{\hcrfheight}{
+      \input{latent-mcrf-a}
+    }
+    \caption{Computational path of the probability of the correct
+      label in latent marginalized CRF}
+  \end{subfigure}
+  ~
+  \begin{subfigure}[t]{0.4\textwidth}
+    \centering
+    \resizebox{\hcrfwidth}{\hcrfheight}{
+      \input{latent-mcrf-b}
+    }
+    \caption{Computational path of the probability of a wrong label in
+      latent marginalized CRF}
+  \end{subfigure}
+  \caption[Confronted computational paths in LCRF and
+    LMCRF]{Confronted computational paths in latent and
+    latent-marginalized conditional random
+    fields}\label{dasa:fig:lcrf-vs-lmcrf}
+\end{figure*}
+
 
 \begin{table}[h]
   \begin{center}
