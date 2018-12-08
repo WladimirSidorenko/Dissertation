@@ -22,6 +22,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 % \usepackage{amsthm}
+\usepackage{bbm}                %\mathbbm (mathbb for digits)
 \usepackage{bm}
 \usepackage{booktabs}
 \usepackage[font={small,it},justification=centering]{caption}
@@ -392,6 +393,15 @@ insert path={
 
 %% Math
 \DeclareMathOperator{\E}{\mathop{\mathbb{E}}}
+
+% Line spacing in matrices
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+  \edef\arraystretch{#1}%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{*\c@MaxMatrixCols c}}
+\makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Environments
