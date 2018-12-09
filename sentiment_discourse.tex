@@ -1255,15 +1255,15 @@ this vector by a certain factor.\footnote{Since all elements of
   the polarity scores drawn from this distribution will be almost
   random.} We compute this factor using the following formula:
 \begin{align*}
-  scale&= \frac{\varsigma \times \left(0.1 + \cos\left(\mathbf{z}^*_j,
+  scale&= \frac{\xi \times \left(0.1 + \cos\left(\mathbf{z}^*_j,
     \mathbf{z}_{i_{j-1}}\right)\right)}{H\left(\boldsymbol{\alpha}_{i_j}\right)};
 \end{align*}
-where $\varsigma$ is a random model parameter drawn from a
-$\chi^2$-distribution: $\varsigma\sim\chi^2(34)$; 0.1 is a constant
-used to prevent zero scales in the cases when
-$\cos\left(\mathbf{z}^*_j, \mathbf{z}_{i_{j-1}}\right)$ is equal to
-zero; and $H\left(\boldsymbol{\alpha}_{i_j}\right)$ stands for the
-entropy of the $\boldsymbol{\alpha}_{i_j}$ vector.
+where $\xi$ is a random model parameter drawn from a
+$\chi^2$-distribution: $\xi\sim\chi^2(34)$; 0.1 is a constant used to
+prevent zero scales in the cases when $\cos\left(\mathbf{z}^*_j,
+\mathbf{z}_{i_{j-1}}\right)$ is equal to zero; and
+$H\left(\boldsymbol{\alpha}_{i_j}\right)$ stands for the entropy of
+the $\boldsymbol{\alpha}_{i_j}$ vector.
 
 Although looking somewhat complicated, the intuition behind this
 formula is very simple: the $\xi$ term encodes our belief in the
@@ -1287,16 +1287,6 @@ Once all children have been processed, we consider the final result
 $\mathbf{z}_{i_{J}}$ as the final probability of polarity classes for
 the $i$-th node and move on the next vertex in the BFS sorting.
 
-Finally, after arriving at the \textsc{Root} node and finishing
-processing all of its descendents, we use the resulting term
-$\mathbf{z}_{\text{\textsc{Root}}}$ as a parameter of a categorical
-distribution to predict the final label $y$:
-\begin{align*}
-  y \sim Cat(\mathbf{z}_{\text{\textsc{Root}}}).
-\end{align*}
-
-
-
 \begin{figure}[htbp!]
   {
     \centering
@@ -1306,6 +1296,35 @@ distribution to predict the final label $y$:
     Process}\label{dasa:fig:rdp-alplha}
 \end{figure}
 
+Finally, after arriving at the \textsc{Root} node and finishing
+processing all of its descendents, we use the resulting term
+$\mathbf{z}_{\text{\textsc{Root}}}$ as a parameter of a categorical
+distribution to predict the final label $y$:
+\begin{align*}
+  y \sim Cat(\mathbf{z}_{\text{\textsc{Root}}}).
+\end{align*}
+
+This model with manually defined parameters reflects our prior belief
+of what the joint probability of hidden and observed states $p(y,
+\mathbf{z})$ might look like.  As it turns out, knowing this belief is
+sufficient to derive another probability $q(\mathbf{z})$, which best
+approximates the probability of latent variables.  In particular, we
+define this distribution in the same way as above, but deprive it of
+the last step (drawing of the observed label), and optimize its
+parameters ($\boldsymbol{\theta}$) by maximizing the evidence lower
+bound \cite[see][]{Ranganath:14}:
+\begin{align*}
+  \mathcal{L}\left(\boldsymbol{\theta}\right)
+  &=\mathbb{E}_{q_{\boldsymbol{\theta}}(\mathbf{z})}%
+  \left[\log\left(p(y, \mathbf{z})\right) -
+    \log\left(q(\mathbf{z})\right)\right].
+\end{align*}
+We perform this optimization for 100 epochs, picking the parameter
+values which yield best results for $q(\mathbf{z})$ on the set-aside
+development data.
+
+The results of our proposed and baseline methods are shown in
+Table~\ref{dasa:tbl:res}.
 
 \begin{table}[h]
   \begin{center}
