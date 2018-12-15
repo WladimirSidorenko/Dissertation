@@ -1281,11 +1281,9 @@ Once all children have been processed, we consider the final result
 $\mathbf{z}_{i_{J}}$ as the final probability of polarity classes for
 the $i$-th node and move on the next vertex in the BFS sorting.
 
-\begin{figure}[htbp!]
-  {
-    \centering
-    \includegraphics[width=\linewidth]{img/dirichlet-process.png}
-  }
+\begin{figure}[htb]
+  { \centering
+    \includegraphics[width=\linewidth]{img/dirichlet-process.png} }
   \caption{Computed node probabilities in Recursive Dirichlet
     Process}\label{dasa:fig:rdp-alplha}
 \end{figure}
@@ -1485,8 +1483,8 @@ and WNG methods get sixth and seventh places respectively, followed by
 the most simplistic solutions---\textsc{Last} and \textsc{Root}.
 Interestingly enough, the \textsc{Last} approach beats the
 \textsc{Root} method on the SB10k dataset, but shows worse scores on
-the PotTS data, which is mostly due to a lower recall of the negative
-class.
+the PotTS data, which is mostly due to the lower recall of the
+negative class.
 
 \subsection{Error Analysis}
 
@@ -1500,20 +1498,100 @@ class.
 \end{example}
 
 \begin{example}[Error Made by the \textsc{Last} System]\label{snt:dasa:exmp:last-error}
+  %% <<<	gold:	negative
+  %% >>>	predicted:	neutral
+  %% ' ( :'( :'( Die letzte Aussprache war wohl das schwerste Telefonat
+  %% meines gesamten Lebens :'( :'( :'( Aber wir gehen friedlich und als
+  %% F ...
 \end{example}
 
 \begin{example}[Error Made by the \textsc{Root} System]\label{snt:dasa:exmp:root-error}
+  %% <<<	gold:	negative
+  %% >>>	predicted:	neutral
+  %% Die NSA weiss auch von dir ... Nützt uns auch nichts . \%NegSmiley
 \end{example}
 
 \section{Evaluation}
 
 \subsection{Base Classifier}
 
-%% \begin{figure*}
-%%   \centering
-%%   \includegraphics[width=\linewidth]{img/dasa_potts_edu_distribution.png}
-%%   \caption{PotTS}\label{dasa:fig:relation-scheme-effect}
-%% \end{figure*}
+The first important aspect, which forms the basis of every DASA method
+(but at the same time is also limiting its performance), is the
+quality of the base sentiment classifier which predicts the scores for
+single EDUs of an RST tree.  To see whether a lexion- or
+machine-learning--based CGSA system would be a better starting point
+for discourse-aware sentiment inference, we reran our experiments,
+replacing the probabiities returned by the LBA system with the scores
+returned by the lexicon-based metho of \citet{Hu:04} and the ML
+approach of~\citet{Mohammad:13}.  The results of this evaluation are
+presented in Figures~\ref{dasa:fig:potts-base-classifier} and
+\ref{dasa:fig:sb10k-base-classifier}.
+
+\begin{figure*}[htb]
+{ \centering
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-potts-bc-macro-F1.png}
+  \caption{\texttt{Macro-\F{}}}\label{dasa:fig:potts-base-classifier-macro-F1}
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-potts-bc-micro-F1.png}
+  \caption{\texttt{Micro-\F{}}}\label{dasa:fig:potts-base-classifier-micro-F1}
+\end{subfigure}
+}
+\caption[PotTS results of discourse-aware classifiers with different
+  base classifiers]{Results of discourse-aware sentiment analysis
+  methods with different base classifiers on the PotTS
+  corpus}\label{dasa:fig:potts-base-classifier}
+\end{figure*}
+
+From these figures we can see that the lexicon-based attention
+approach is in fact more effective than any alternative coarse-grained
+sentiment method for almost all discourse-aware approaches.  A few
+exceptions to this general tendency are the macro-\F{} of the
+\textsc{Last} system, which surprisingly improves in combination with
+the lexicon-based \citeauthor{Hu:04} system, and the micro-averaged
+\F{}-score of the \textsc{RDP} and \textsc{Last} solutions, which
+attain their best ranks together with the \citeauthor{Mohammad:13}'s
+classifier (0.713 and 0.582 respectively).
+
+\begin{figure*}[htb]
+{ \centering
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-sb10k-bc-macro-F1.png}
+  \caption{\texttt{Macro-\F{}}}\label{dasa:fig:sb10k-base-classifier-macro-F1}
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-sb10k-bc-micro-F1.png}
+  \caption{\texttt{Micro-\F{}}}\label{dasa:fig:sb10k-base-classifier-micro-F1}
+\end{subfigure}
+}
+\caption[SB10k results of discourse-aware classifiers with different
+  base classifiers]{Results of discourse-aware sentiment analysis
+  methods with different base classifiers on the SB10k
+  corpus}\label{dasa:fig:sb10k-base-classifier}
+\end{figure*}
+
+This situation, however, looks differently on the SB10k dataset, where
+LBA leads to higher macro-scores for the \textsc{DDR}, \textsc{R2N2},
+\textsc{WNG}, \textsc{Last}, and \textsc{Root} systems, but the
+ML-based approach of \citeauthor{Mohammad:13} improves the results of
+the \textsc{LCRF}, \textsc{LMCRF}, \textsc{RDP}, and
+\textsc{No-Discourse} methods.  The ML-classifier is also the
+unequivocal leader in terms of the micro-averaged \F, yielding the
+highest scores for all systems except for the approach of
+\citet{Wang:13}.  Unfortunately, the lexicon-based slution of
+\citet{Hu:04} performs much weaker in comparison with the other two
+systems, with the hgighest macro- and micro-averaged \F{}-scores
+running up to 0.422 (\textsc{RDP}) and 0.625 (\textsc{Last})
+respectively.  The most disappointing result for us, however, is that
+the LMCRF system fails to predict any polar class except for
+\textsc{Neutral} when trained on the scores produced by this
+classifier.  Likewise, the LCRF system can hardly beat any other
+approach, reaching only 0.239 macro\F{}.
 
 \subsection{Relation Scheme}
 
@@ -1647,11 +1725,11 @@ Table~\ref{dasa:tbl:dplp-results}.
 
 As is evident from the scores, a coarser relation scheme might indeed
 lead to better parsing quality, especially in terms of relation \F{}.
-In the most extreme cases (\citeauthor{Bhatia:15} versus PCC), these
-gains can even run up to seven percent. However, with respect to other
-metrics (first of all, span and nuclearity \F{}), these gaps are not
-that big and in some cases might even be in favor of the richer set
-(\eg{} nuclearity \F{} for PCC).
+In the most extreme cases (\eg{} \citeauthor{Bhatia:15} versus PCC),
+these gains can even run up to seven percent. However, with respect to
+other metrics (first of all, span and nuclearity \F{}), these gaps are
+not that big and in some cases might even be in favor of the richer
+set (\eg{} nuclearity \F{} for PCC).
 
 To see how this varying quality could affect the net results of
 discourse-aware sentiment methods, we re-evaluated all DASA approaches
@@ -1734,7 +1812,7 @@ benchmark.  On the other hand, discourse-depth reweighting and the
 approach by~\citet{Wang:13} benefit from the relations used
 by~\citet{Chenlo:13} so much that the former system even achieves the
 highest overall macro-score (0.572) on this dataset, being on a par
-with the R2N2 system, which reaches its best results with the set
-by~\citet{Zhou:11} (0.572 macro-\F{} and 0.719 micro=\F{}).
+with the R2N2 system, which reaches its best results with the
+\citeauthor{Zhou:11}'s set (0.572 macro-\F{} and 0.719 micro-\F{}).
 
 \section{Summary and Conclusions}
