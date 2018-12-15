@@ -424,21 +424,21 @@ discourse parser of~\citet{Ji:14} on the Potsdam Commentary Corpus
 \cite[PCC~2.0; ][]{Stede:14}, after converting all discourse relations
 of this dataset to the binary scheme $\{$\textsc{Contrastive},
 \textsc{Non-Contrastive}$\}$ as suggested
-by~\citet{Bhatia:15}.\footnote{See Table~\ref{dasa:tbl:rst-rels} for
-  more details regarding this mapping.}  In contrast to the original
-DPLP implementation though, we did not use Brown cluster features
-\cite{Brown:92}, since this resource was unavailable for German, nor
-did we utilize the linear projection of the features, because the
-released parser code was missing this component either.  In part due
-to these modifications, but mostly because of the specifics of the
-German language (richer morphology, higher lexical variety and
-syntactic ambiguity), the results of the retrained model were also
-considerably lower than the figures reported for the English RST
-Treebank~\cite{Carlson:01a}, amounting to 0.777, 0.512, and 0.396~\F{}
-for the span, nuclearity, and relation prediction on PCC~2.0 versus
-82.08, 71.13, and 61.63~\F{} on the English corpus.\footnote{Following
-  \citet{Ji:14}, we use the span-based evaluation metric
-  of~\citet{Marcu:00}.}
+by~\citet{Bhatia:15}.\footnote{See Table~\ref{dasa:tbl:rst-rel-sets}
+  for more details regarding this mapping.}  In contrast to the
+original DPLP implementation though, we did not use Brown cluster
+features \cite{Brown:92}, since this resource was unavailable for
+German, nor did we utilize the linear projection of the features,
+because the released parser code was missing this component either.
+In part due to these modifications, but mostly because of the
+specifics of the German language (richer morphology, higher lexical
+variety and syntactic ambiguity), the results of the retrained model
+were also considerably lower than the figures reported for the English
+RST Treebank~\cite{Carlson:01a}, amounting to 0.777, 0.512, and
+0.396~\F{} for the span, nuclearity, and relation prediction on
+PCC~2.0 versus 82.08, 71.13, and 61.63~\F{} on the English
+corpus.\footnote{Following \citet{Ji:14}, we use the span-based
+  evaluation metric of~\citet{Marcu:00}.}
 
 Figure~\ref{dasa:fig:twitter-rst-tree} shows an example of an
 automatically induced RST tree.  As we can see, the adapted parser can
@@ -1205,12 +1205,9 @@ setting the mean $\boldsymbol{\mu}_r$ to:
   1 & 0 & 0\\
   0 & 0.3 & 0\\
   0 & 0 & 1
-  \end{bmatrix}
+  \end{bmatrix}.
 \end{equation*}
-for all non-contrastive relations, and swapping the first and the last
-rows of this matrix for the contrastive ones.  The variance of this
-distribution is set to all-ones matrix, independently of the discourse
-relation.
+The variance of this distribution is set to the all-ones matrix.
 
 Prior to computing the polarity scores of a RST node $i$, we will
 multiply the probability vector of its child node $j$ with matrix
@@ -1222,14 +1219,12 @@ probability simplex using the sparsemax method of~\citet{Martins:16}:
 \end{align*}
 As is obvious from this equation, each row of matrix $M_r$ is
 responsible for propagating the respective polarity score of the child
-node.  Thus, setting the second row to $[0., 0.3, 0.]$ will dampen th
-neutral polarity of the child, which refelcts our wish that neutral
-segments should have less impact on the overall polarity of a tweet if
-other, strongly polar EDUs are present.  (At the same time, we still
-want to assign neutral semantic orientation to the message if all of
-its RST nodes are neutral.)  By swapping the rows, we wish to invert
-the polarities of contrastive nodes, turning the negative semantic
-orientation into a positive one and vice versa.
+node.  Thus, setting the second row to $[0., 0.3, 0.]$ will dampen the
+neutral polarity of the child, which reflects our wish to decrease the
+effect of neutral segments on the overall polarity of a tweet if other
+strongly polar EDUs are present.  (At the same time, we still want to
+assign the neutral semantic orientation to the message if all of its
+RST nodes are objective.)
 
 We sort all nodes of RST tree in reverse topological order and compute
 their polarities bottom-up.  When arriving at node $i$, we iterate
@@ -1245,32 +1240,31 @@ controls how much information from parent and child we want to see in
 the updated state $\mathbf{z}_{i_j}$; and $\odot$ means elementwise
 multiplication.
 
-The only thing that we now need to do to the
-$\boldsymbol{\alpha}_{i_j}$ vector before we draw the actual
-probability distribution $\boldsymbol{z}_{i_j}$ from the corresponding
-Dirichlet distribution $Dir(\boldsymbol{\alpha}_{i_j})$ is to scale
-this vector by a certain factor.\footnote{Since all elements of
-  $\boldsymbol{\alpha}_{i_j}$ will be in the range $[0,\ldots,1]$, the
-  variance of the resulting probability will be extremely high, and
-  the polarity scores drawn from this distribution will be almost
-  random.} We compute this factor using the following formula:
+The only thing that we now need to do to the above vector
+$\boldsymbol{\alpha}_{i_j}$ before we draw the actual probability
+$\boldsymbol{z}_{i_j}$ from the corresponding Dirichlet distribution
+$Dir(\boldsymbol{\alpha}_{i_j})$ is to scale it by a certain
+factor.\footnote{Since all elements of $\boldsymbol{\alpha}_{i_j}$
+  will be in the range $[0,\ldots,1]$, the variance of the resulting
+  probability will be extremely high, and the polarity scores drawn
+  from this distribution will be almost random.} We compute this
+factor using the following formula:
 \begin{align*}
   scale&= \frac{\xi \times \left(0.1 + \cos\left(\mathbf{z}^*_j,
     \mathbf{z}_{i_{j-1}}\right)\right)}{H\left(\boldsymbol{\alpha}_{i_j}\right)};
 \end{align*}
-where $\xi$ is a random model parameter drawn from a
-$\chi^2$-distribution: $\xi\sim\chi^2(34)$; 0.1 is a constant used to
-prevent zero scales in the cases when $\cos\left(\mathbf{z}^*_j,
-\mathbf{z}_{i_{j-1}}\right)$ is equal to zero; and
-$H\left(\boldsymbol{\alpha}_{i_j}\right)$ stands for the entropy of
-the $\boldsymbol{\alpha}_{i_j}$ vector.
+where $\xi$ is a model parameter drawn from the $\chi^2$-distribution:
+$\xi\sim\chi^2(34)$; 0.1 is a constant used to prevent zero scales in
+the cases when $\cos\left(\mathbf{z}^*_j, \mathbf{z}_{i_{j-1}}\right)$
+is zero; and $H\left(\boldsymbol{\alpha}_{i_j}\right)$ stands for the
+entropy of the $\boldsymbol{\alpha}_{i_j}$ vector.
 
-Although looking somewhat complicated, the intuition behind this
-formula is very simple: the $\xi$ term encodes our belief in the
-correctness of the model's prediction (the higher this value, the more
-trust we have in the model); the cosine term measures the similarity
-between the probabilities of parent and child (the more similar these
-probabilities, the higher will be the scale); and, finally, the
+Although this formula looks somewhat complicated, the intuition behind
+it is very simple: The $\xi$ term encodes our belief in the
+correctness of the model's prediction (the higher its value, the more
+we trust the model); the cosine term measures the similarity between
+the probabilities of parent and child (the more similar these
+probabilities are, the higher will be the scale); and, finally, the
 entropy in the denominator tells us how uniform the vector
 $\boldsymbol{\alpha}_{i_j}$ is (the more uniform the polarity scores
 are, the less confidence we will have in the final outcome).
@@ -1292,7 +1286,7 @@ the $i$-th node and move on the next vertex in the BFS sorting.
     \centering
     \includegraphics[width=\linewidth]{img/dirichlet-process.png}
   }
-  \caption{Updated probabilities of parent nodes in Recursive Dirichlet
+  \caption{Computed node probabilities in Recursive Dirichlet
     Process}\label{dasa:fig:rdp-alplha}
 \end{figure}
 
@@ -1320,11 +1314,8 @@ bound \cite[see][]{Ranganath:14}:
     \log\left(q(\mathbf{z})\right)\right].
 \end{align*}
 We perform this optimization for 100 epochs, picking the parameter
-values which yield best results for $q(\mathbf{z})$ on the set-aside
+values which yield the best prediction accuracy on the set-aside
 development data.
-
-The results of our proposed and baseline methods are shown in
-Table~\ref{dasa:tbl:res}.
 
 \begin{table}[h]
   \begin{center}
@@ -1366,12 +1357,6 @@ Table~\ref{dasa:tbl:res}.
       \textbf{0.678} & 0.706\\
 
       %% General Statistics:
-      WNG & 0.58 & 0.79 & 0.67 & %
-      \textbf{0.61} & 0.21 & 0.31 & %
-      0.61 & 0.57 & 0.59 & %
-      0.487 & 0.59\\
-
-      %% General Statistics:
       DDR & 0.73 & 0.77 & 0.75 & %
       0.54 & \textbf{0.59} & 0.56 & %
       0.69 & 0.61 & 0.65 & %
@@ -1382,6 +1367,12 @@ Table~\ref{dasa:tbl:res}.
       0.59 & 0.53 & 0.56 & %
       0.68 & 0.68 & 0.68 & %
       0.657 & 0.692\\
+
+      %% General Statistics:
+      WNG & 0.58 & 0.79 & 0.67 & %
+      \textbf{0.61} & 0.21 & 0.31 & %
+      0.61 & 0.57 & 0.59 & %
+      0.487 & 0.59\\
 
       %% General Statistics:
       \textsc{Last} & 0.52 & \textbf{0.83} & 0.64 & %
@@ -1421,11 +1412,6 @@ Table~\ref{dasa:tbl:res}.
       0.82 & 0.79 & \textbf{0.8} & %
       0.557 & 0.713\\
 
-      WNG & 0.61 & 0.63 & 0.62 & %
-      0.46 & 0.29 & 0.36 & %
-      0.76 & \textbf{0.82} & 0.79 & %
-      0.488 & 0.693\\
-
       %% General Statistics:
       DDR & 0.59 & 0.63 & 0.61 & %
       \textbf{0.48} & 0.44 & \textbf{0.46} & %
@@ -1437,6 +1423,11 @@ Table~\ref{dasa:tbl:res}.
       0.46 & \textbf{0.45} & 0.45 & %
       0.81 & 0.79 & \textbf{0.8} & %
       0.559 & 0.713\\
+
+      WNG & 0.61 & 0.63 & 0.62 & %
+      0.46 & 0.29 & 0.36 & %
+      0.76 & \textbf{0.82} & 0.79 & %
+      0.488 & 0.693\\
 
       %% General Statistics:
       \textsc{Last} & 0.56 & 0.55 & 0.56 & %
@@ -1461,9 +1452,9 @@ Table~\ref{dasa:tbl:res}.
       sentiment analysis methods\\ {\small LCRF~--~latent conditional random fields,
         LMCRF~--~latent marginalized conditional random fields,
         RDP~--~recursive Dirichlet process,
-        WNG~--~\citet{Wang:13},
         DDR~--~discourse-depth reweighting~\cite{Bhatia:15},
         R2N2~--~rhetorical recursive neural network~\cite{Bhatia:15},
+        WNG~--~\citet{Wang:13},
         \textsc{Last}~--~polarity determined by last EDU,
         \textsc{Root}~--~polarity determined by root EDU(s),
         \textsc{No-Discourse}~--~discourse-unaware classifier}}
@@ -1471,22 +1462,115 @@ Table~\ref{dasa:tbl:res}.
   \end{center}
 \end{table}
 
+The results of our proposed and baseline methods are shown in
+Table~\ref{dasa:tbl:res}.  As we can see from the table, our
+approaches perform fairly well in comparison with other systems,
+outperforming them in terms of both macro- and macro-averaged $F_1$ on
+either dataset.  In particular the latent marginalized CRF method
+shows very competitive numbers, yielding the best $F_1$-scores for the
+positive and neutral classes on PotTS and SB10k, which in turn leads
+to the highest overall micro-averaged $F_1$-measure on these corpora.
+This solution is closely followed by the Recursive Dirichlet Process,
+whose $F_1$ for the positive class on the PotTS data is identical to
+the one attained by LMCRF, and the $F$-score for the negative class is
+even one percent higher, which allows it to reach the best
+macro-averaged result on this test set.
+
+As it turns out, the strongest competitors of our systems are the
+\textsc{No-Discourse} approach and the R2N2 method by
+\citet{Bhatia:15}: The former solution outperforms the latter on the
+PotTS corpus on both metrics (macro- and micro-$F_1$), but falls
+against it with respect to the macro-\F{} on the SB10k set.  The DDR
+and WNG methods get sixth and seventh places respectively, followed by
+the most simplistic solutions---\textsc{Last} and \textsc{Root}.
+Interestingly enough, the \textsc{Last} approach beats the
+\textsc{Root} method on the SB10k dataset, but shows worse scores on
+the PotTS data, which is mostly due to a lower recall of the negative
+class.
+
+\subsection{Error Analysis}
+
+\begin{example}[LCRF Error]\label{snt:dasa:exmp:lcrf-error}
+\end{example}
+
+\begin{example}[LMCRF Error]\label{snt:dasa:exmp:lmcrf-error}
+\end{example}
+
+\begin{example}[RDP Error]\label{snt:dasa:exmp:rdp-error}
+\end{example}
+
+\begin{example}[Error Made by the \textsc{Last} System]\label{snt:dasa:exmp:last-error}
+\end{example}
+
+\begin{example}[Error Made by the \textsc{Root} System]\label{snt:dasa:exmp:root-error}
+\end{example}
+
 \section{Evaluation}
 
 \subsection{Base Classifier}
 
+%% \begin{figure*}
+%%   \centering
+%%   \includegraphics[width=\linewidth]{img/dasa_potts_edu_distribution.png}
+%%   \caption{PotTS}\label{dasa:fig:relation-scheme-effect}
+%% \end{figure*}
+
 \subsection{Relation Scheme}
+
+Two other factors which could significantly influence the results of
+discourse-aware sentiment systems were the quality of automatic
+discourse analysis and the set of RST relations distinguished by the
+parsing system. As you might remember from the beginning of this
+chapter, while preparing the data for our experiments, we decided to
+only differentiate between \textsc{Contrastive} and
+\textsc{Non-Contrastive} links, drawing on a similar idea by
+\citet{Bhatia:15}.  The main reason for this simplification was to
+ease the work of the RST parser and DASA methods by decreasing the
+number of their distinguished classes and consequently reducing the
+number of learned parameters.  Although similar approximations were
+made in almost all other works on discourse-aware opinion mining
+\cite[see ][]{Chenlo:13,Heerschop:11,Zhou:11}, it was unclear to us
+whether this subset of relations was indeed optimal and sufficient to
+reflect all possible varieties of discourse interactions that could
+exist in text and play a role in sentiment composition.
+
+To investigate this question in more detail, we decided to repeat our
+experiments, using the subsets of relations proposed by
+\citet{Chenlo:13}, \citet{Heerschop:11}, and \citet{Zhou:11}, and also
+try the original full set of all discourse links from the Potsdam
+Commentary Corpus.  A detailed overview of these relation schemes is
+shown in Table~\ref{dasa:tbl:rst-rel-sets}.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup
+    \setlength\tabcolsep{0.3\tabcolsep}\scriptsize
     \begin{tabular}{p{0.17\columnwidth} % first columm
         *{1}{>{\centering\arraybackslash}p{0.4\columnwidth}}
         *{1}{>{}p{0.4\columnwidth}}} % next two columns
       \toprule
-      \textbf{Scheme} & \textbf{Relation Set} & \textbf{Equivalence Classes}\\\midrule
+      \textbf{Scheme} & \textbf{Relation Set} & {\centering\textbf{Equivalence Classes}}\\\midrule
 
-      \textsc{PCC} & \{ \textsc{Antithesis}, \textsc{Background},
+      \citeauthor{Bhatia:15} & \{\textsc{Contrastive},
+      \textsc{\bfseries Non-Contrastive}\} & \textsc{Contrastive} $\defeq$
+      \{\textsc{Antithesis}, \textsc{Antithesis-E},
+      \textsc{Comparison}, \textsc{Concession},
+      \textsc{Consequence-S}, \textsc{Contrast},
+      \textsc{Problem-Solution}\}.\\
+
+      \citeauthor{Chenlo:13} & \{\textsc{Attribution},
+      \textsc{Background}, \textsc{Cause}, \textsc{Comparison},
+      \textsc{Condition}, \textsc{Consequence}, \textsc{Contrast},
+      \textsc{Elaboration}, \textsc{Enablement}, \textsc{Evaluation},
+      \textsc{Explanation}, \textsc{Joint}, \textsc{Otherwise},
+      \textsc{Temporal}, \textsc{\bfseries Other}\} & \\
+
+      \citeauthor{Heerschop:11} & \{\textsc{Attribution},
+      \textsc{Background}, \textsc{Cause}, \textsc{Condition},
+      \textsc{Contrast}, \textsc{Elaboration}, \textsc{Enablement},
+      \textsc{Explanation}, \textsc{\bfseries Other}\} & \\
+
+      \textsc{PCC} & \{\textsc{Antithesis}, \textsc{Background},
       \textsc{Cause}, \textsc{Circumstance}, \textsc{Concession},
       \textsc{Condition}, \textsc{Conjunction}, \textsc{Contrast},
       \textsc{Disjunction}, \textsc{E-Elaboration},
@@ -1500,34 +1584,16 @@ Table~\ref{dasa:tbl:res}.
       \textsc{Summary}, \textsc{Unconditional}, \textsc{Unless},
       \textsc{Unstated-Relation}\} & \\
 
-      \citet{Heerschop:11} & \{\textsc{Attribution},
-      \textsc{Background}, \textsc{Cause}, \textsc{Condition},
-      \textsc{Contrast}, \textsc{Elaboration}, \textsc{Enablement},
-      \textsc{Explanation}, \textsc{\bfseries Other}\} & \\
-
-      \citet{Zhou:11} & \{\textsc{Contrast}, \textsc{Condition},
+      \citeauthor{Zhou:11} & \{\textsc{Contrast}, \textsc{Condition},
       \textsc{Continuation}, \textsc{Cause}, \textsc{Purpose},
       \textsc{\bfseries Other}\} & \textsc{Contrast} $\defeq$
-      \{\textsc{Antithesis}, \textsc{Concession}, \textsc{Otherwise},
-      \textsc{Contrast}\};\newline \textsc{Continuation} $\defeq$
+      \{\textsc{Antithesis}, \textsc{Concession}, \textsc{Contrast},
+      \textsc{Otherwise}\};\newline \textsc{Continuation} $\defeq$
       \{\textsc{Continuation}, \textsc{Parallel}\};\newline
-      \textsc{Cause} $\defeq$ \{\textsc{Evidence}, \textsc{Volitional
-        Cause}, \textsc{Nonvolitional-Cause},
-      \textsc{Volitional-Result}, \textsc{Nonvolitional-Result}\};\\
+      \textsc{Cause} $\defeq$ \{\textsc{Evidence}, \textsc{Nonvolitional-Cause},
+      \textsc{Nonvolitional-Result}, \textsc{Volitional Cause},
+      \textsc{Volitional-Result}\};\\\bottomrule
 
-      \citet{Chenlo:13} & \{\textsc{Attribution}, \textsc{Background},
-      \textsc{Cause}, \textsc{Comparison}, \textsc{Condition},
-      \textsc{Consequence}, \textsc{Contrast}, \textsc{Elaboration},
-      \textsc{Enablement}, \textsc{Evaluation}, "Explanation",
-      \textsc{Joint}, \textsc{Otherwise}, \textsc{Temporal},
-      \textsc{\bfseries Other}\} & \\
-
-      \citet{Bhatia:15} & \{\textsc{Contrastive},
-      \textsc{\bfseries Non-Contrastive}\} & \textsc{Contrastive} $\defeq$
-      \{\textsc{Antithesis}, \textsc{Antithesis-E},
-      \textsc{Comparison}, \textsc{Concession},
-      \textsc{Consequence-S}, \textsc{Contrast},
-      \textsc{Problem-Solution}\}.\\\bottomrule
     \end{tabular}
     \egroup
     \caption[RST relations used in different discourse-aware sentiment
@@ -1535,9 +1601,23 @@ Table~\ref{dasa:tbl:res}.
       Corpus and different discourse-aware sentiment methods\\ {\small
         (default relation [which subsumes the rest of the links] is
         highlighted in \textbf{boldface})}}
-    \label{dasa:tbl:rst-rels}
+    \label{dasa:tbl:rst-rel-sets}
   \end{center}
 \end{table}
+
+As we can see from the table, our initially chosen scheme is by far
+the smallest one, comprising only two elements (\textsc{Contrastive}
+and \textsc{Non-Contrastive}), whereas PCC---the most comprehensive
+scheme in this study---features a total of 34 links.  In this respect,
+other approaches rather steer a middle course, swaying between 6 to 15
+relations.
+
+To estimate the utility of these sets, we retrained the DPLP parser
+using each of these relation sets. In order to estimate how much the
+number of distinguished discourse relations affected the quality of
+automatic parsing, we additionally evaluated every newly trained
+system on the held-out PCC test data and present their results in
+Table~\ref{dasa:tbl:dplp-results}.
 
 \begin{table}[h]
   \begin{center}
@@ -1548,21 +1628,113 @@ Table~\ref{dasa:tbl:res}.
       \textbf{Relation Scheme} & \textbf{Span \F{}} &
       \textbf{Nuclearity \F{}} & \textbf{Relation \F{}}\\\midrule
 
-      \textsc{PCC} & 0.776 & 0.534 & 0.326\\
-
-      \citet{Heerschop:11} & 0.774 & 0.51 & 0.361\\
-
-      \citet{Zhou:11} & 0.776 & 0.501 & 0.388\\
+      \citet{Bhatia:15} & \textbf{0.777} & 0.512 & \textbf{0.396}\\
 
       \citet{Chenlo:13} & 0.769 & 0.505 & 0.362\\
 
-      \citet{Bhatia:15} & 0.777 & 0.512 & 0.396\\\bottomrule
+      \citet{Heerschop:11} & 0.774 & 0.51 & 0.361\\
+
+      \textsc{PCC} & 0.776 & \textbf{0.534} & 0.326\\
+
+      \citet{Zhou:11} & 0.776 & 0.501 & 0.388\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Results of RST parser on PCC~2]{Results of automatic RST
       parser on PCC~2.0 with different relation schemes}
-    \label{dasa:tbl:rst-rels}
+    \label{dasa:tbl:dplp-results}
   \end{center}
 \end{table}
+
+As is evident from the scores, a coarser relation scheme might indeed
+lead to better parsing quality, especially in terms of relation \F{}.
+In the most extreme cases (\citeauthor{Bhatia:15} versus PCC), these
+gains can even run up to seven percent. However, with respect to other
+metrics (first of all, span and nuclearity \F{}), these gaps are not
+that big and in some cases might even be in favor of the richer set
+(\eg{} nuclearity \F{} for PCC).
+
+To see how this varying quality could affect the net results of
+discourse-aware sentiment methods, we re-evaluated all DASA approaches
+on the updated automatic RST trees and present the results of this
+evaluation in Figure~\ref{dasa:fig:potts-rel-schemes}.
+
+\begin{figure*}[htb]
+{
+\centering
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-potts-macro-F1.png}
+  \caption{\texttt{Macro-\F{}}}\label{dasa:fig:potts-rel-schemes-macro-F1}
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-potts-micro-F1.png}
+  \caption{\texttt{Micro-\F{}}}\label{dasa:fig:potts-rel-schemes-micro-F1}
+\end{subfigure}
+}
+\caption[PotTS results of discourse-aware classifiers with different
+  relation schemes]{Results of discourse-aware sentiment classifiers
+  for different relation schemes on the PotTS
+  corpus}\label{dasa:fig:potts-rel-schemes}
+\end{figure*}
+
+As it turns out, latent marginalized CRF can still hold the overall
+record in terms of both macro- and micro-averaged \F{} on the PotTS
+corpus, although its margin to the closest competitor (R2N2) is
+relatively small this time, reducing to only 0.1 percent.
+Interestingly enough, both top-performing methods (LMCRF and R2N2)
+achieve their best results with richer relation schemes than the one
+we used in our initial experiment: For example, LMCRF attains its
+highest macro-score when used with the relation set defined
+by~\citet{Heerschop:11} and yields the best micro-\F{} with the scheme
+by~\citet{Chenlo:14}.  The rhetorical recusrive neural network, vice
+versa, attains its highest macro-average with the latter relation set
+and reaches its best micro-score when used with the discourse links
+proposed by~\citeauthor{Heerschop:11}.
+
+A different situation is observed with other approaches though: For
+example, latent CRF and Recursive Dirichlet Process perform best when
+used with the initial smallest set by \citet{Bhatia:15}.  On the other
+hand, discourse-depth reweighting strongly benefits from the full
+unconstrained PCC set, which might be partially due to the better
+nuclearity prediction achieved with this scheme.  Finally, the
+\textsc{WNG} and \textsc{Root} methods get their best results with the
+subsets proposed by~\citet{Chenlo:14} and \citet{Heerschop:11}
+respectively.
+
+\begin{figure*}[htb]
+{ \centering
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-sb10k-macro-F1.png}
+  \caption{\texttt{Macro-\F{}}}\label{dasa:fig:sb10k-rel-schemes-macro-F1}
+\end{subfigure}\\
+\begin{subfigure}{\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/dasa-sb10k-micro-F1.png}
+  \caption{\texttt{Micro-\F{}}}\label{dasa:fig:sb10k-rel-schemes-micro-F1}
+\end{subfigure}
+}
+\caption[SB10k results of discourse-aware classifiers for different
+  relation schemes]{Results of discourse-aware sentiment classifiers
+  for different relation schemes on the SB10k
+  corpus}\label{dasa:fig:sb10k-rel-schemes}
+\end{figure*}
+
+As we can see from Figure~\ref{dasa:fig:sb10k-rel-schemes}, the
+performance of our methods is much more uniform on the SB10k corpus,
+where their \F-scores vary only slightly across the different relation
+schemes.  The only significant improvement that we can notice this
+time is higher macro- and micro-average achieved by the RDP approach
+in conjunction with the \citeauthor{Heerschop:11}'s relation set.
+Somewhat surprisingly, this set is also most amenable to the
+\textsc{Root} method, which reaches 0.488 macro-\F{} and 0.663
+micro-\F{} with this set, significantly improving on its initial
+benchmark.  On the other hand, discourse-depth reweighting and the
+approach by~\citet{Wang:13} benefit from the relations used
+by~\citet{Chenlo:13} so much that the former system even achieves the
+highest overall macro-score (0.572) on this dataset, being on a par
+with the R2N2 system, which reaches its best results with the set
+by~\citet{Zhou:11} (0.572 macro-\F{} and 0.719 micro=\F{}).
 
 \section{Summary and Conclusions}
