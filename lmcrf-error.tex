@@ -1,0 +1,261 @@
+{\scriptsize
+  \begin{tikzpicture}
+    \tikzstyle{xnode}=[rectangle,draw,fill=gray76,align=center,minimum size=2em,text width=2.2em] %
+    \tikzstyle{lnode}=[circle,draw,fill=white,inner sep=1pt,minimum size=2.5em] %
+    \tikzstyle{ynode}=[circle,draw,fill=gray76,inner sep=1pt,minimum size=2.5em] %
+    \tikzstyle{label}=[] %
+    \tikzstyle{extext}=[] %
+    \tikzstyle{factor}=[rectangle,fill=black,midway,inner sep=0pt,minimum size=0.4em] %
+
+    \node[ynode] (0Neg) at (5, 3.7) {Neg};
+    \node[ynode] (0Neut) at (6, 3.7) {Neut};
+    \node[ynode] (0Pos) at (7, 3.7) {Pos};
+    \hyperNode{0Neg}{0Neut}{0Pos}{Root};
+    \crfFeatures{0/4.5/0.001, 1/5.5/0.997, 2/6.5/0.001, 3/7.5/1.}{0}{2.4};
+
+    \node[lnode] (1Neg) at (2.5, 1.4) {Neg};
+    \node[lnode] (1Neut) at (3.5, 1.4) {Neut};
+    \node[lnode] (1Pos) at (4.5, 1.4) {Pos};
+    \hyperNode{1Neg}{1Neut}{1Pos}{EDU 1};
+    \crfEdgesLatent{0}{1};             % see definition in command.tex
+    \crfFeatures{0/2/0.001, 1/3/0.997, 2/4/0.001, 3/5/1.}{1}{0.1};
+
+    \node[lnode] (2Neg) at (7.5, 1.4) {Neg};
+    \node[lnode] (2Neut) at (8.5, 1.4) {Neut};
+    \node[lnode] (2Pos) at (9.5, 1.4) {Pos};
+    \hyperNode{2Neg}{2Neut}{2Pos}{EDU 2};
+    \crfEdgesLatent{0}{2};
+    \crfFeatures{0/7/0.999, 1/8/0.001, 2/9/0.0, 3/10/1.}{2}{0.1};
+\end{tikzpicture}
+}
+%% {
+%%   "toks": [
+%%     {
+%%       "form": "Wissen",
+%%       "prnt": -1,
+%%       "lemma": "wissen",
+%%       "tag": "NN",
+%%       "rel": "_",
+%%       "children": [
+%%         1
+%%       ],
+%%       "feats": {
+%%         "case": "nom",
+%%         "mmax": {},
+%%         "number": "sg",
+%%         "UNKFEAT": "neut"
+%%       }
+%%     },
+%%     {
+%%       "form": "?",
+%%       "prnt": 0,
+%%       "lemma": "?",
+%%       "tag": "$.",
+%%       "rel": "--",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "Igitt",
+%%       "prnt": -1,
+%%       "lemma": "igitt",
+%%       "tag": "NE",
+%%       "rel": "_",
+%%       "children": [
+%%         3
+%%       ],
+%%       "feats": {
+%%         "case": "nom",
+%%         "mmax": {},
+%%         "number": "sg",
+%%         "UNKFEAT": "masc"
+%%       }
+%%     },
+%%     {
+%%       "form": "geh",
+%%       "prnt": 2,
+%%       "lemma": "gehen",
+%%       "tag": "VVIMP",
+%%       "rel": "PAR",
+%%       "children": [
+%%         4,
+%%         5,
+%%         6
+%%       ],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "weg",
+%%       "prnt": 3,
+%%       "lemma": "weg",
+%%       "tag": "ADV",
+%%       "rel": "MO",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "damit",
+%%       "prnt": 3,
+%%       "lemma": "damit",
+%%       "tag": "PAV",
+%%       "rel": "NK",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "!",
+%%       "prnt": 3,
+%%       "lemma": "!",
+%%       "tag": "$.",
+%%       "rel": "--",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     }
+%%   ],
+%%   "msg_id": "389797109811015680",
+%%   "text": "Wissen ? Igitt geh weg damit !",
+%%   "edus": [
+%%     {
+%%       "polarity_scores": [
+%%         0.0012341559631749988,
+%%         0.997391939163208,
+%%         0.0013739187270402908
+%%       ],
+%%       "type": "HSF",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         0,
+%%         1
+%%       ]
+%%     },
+%%     {
+%%       "polarity_scores": [
+%%         0.9994296431541443,
+%%         0.000504668743815273,
+%%         6.569506513187662e-05
+%%       ],
+%%       "type": "HSF",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         2,
+%%         3,
+%%         4,
+%%         5,
+%%         6
+%%       ]
+%%     }
+%%   ],
+%%   "rst_trees": {
+%%     "chenlo": {
+%%       "rel2par": null,
+%%       "n/s": null,
+%%       "children": [
+%%         {
+%%           "rel2par": "joint",
+%%           "n/s": "Nucleus",
+%%           "children": [],
+%%           "id": 0
+%%         },
+%%         {
+%%           "rel2par": "joint",
+%%           "n/s": "Nucleus",
+%%           "children": [],
+%%           "id": 1
+%%         }
+%%       ],
+%%       "id": -1
+%%     },
+%%     "heerschop": {
+%%       "rel2par": null,
+%%       "n/s": null,
+%%       "id": -1,
+%%       "children": [
+%%         {
+%%           "rel2par": "other",
+%%           "n/s": "Nucleus",
+%%           "id": 0,
+%%           "children": []
+%%         },
+%%         {
+%%           "rel2par": "other",
+%%           "n/s": "Nucleus",
+%%           "id": 1,
+%%           "children": []
+%%         }
+%%       ]
+%%     },
+%%     "bhatia": {
+%%       "id": -1,
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "id": 0,
+%%           "rel2par": "non-contrastive",
+%%           "children": [],
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "id": 1,
+%%           "rel2par": "non-contrastive",
+%%           "children": [],
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "n/s": null
+%%     },
+%%     "zhou": {
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "rel2par": "other",
+%%           "children": [],
+%%           "id": 0,
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "rel2par": "other",
+%%           "children": [],
+%%           "id": 1,
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "id": -1,
+%%       "n/s": null
+%%     },
+%%     "pcc": {
+%%       "id": -1,
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "id": 0,
+%%           "rel2par": "joint",
+%%           "children": [],
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "id": 1,
+%%           "rel2par": "joint",
+%%           "children": [],
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "n/s": null
+%%     }
+%%   },
+%%   "label": "negative",
+%%   "polarity_scores": [
+%%     0.3135252892971039,
+%%     0.6631566286087036,
+%%     0.02331804856657982
+%%   ]
+%% }

@@ -1,0 +1,508 @@
+{\scriptsize
+  \begin{tikzpicture}
+    \tikzstyle{xnode}=[rectangle,draw,fill=gray76,align=center,minimum size=2em,text width=2.2em] %
+    \tikzstyle{lnode}=[circle,draw,fill=white,inner sep=1pt,minimum size=2.5em] %
+    \tikzstyle{ynode}=[circle,draw,fill=gray76,inner sep=1pt,minimum size=2.5em] %
+    \tikzstyle{label}=[] %
+    \tikzstyle{extext}=[] %
+    \tikzstyle{factor}=[rectangle,fill=black,midway,inner sep=0pt,minimum size=0.4em] %
+
+    \node[ynode] (0Neg) at (5, 6) {Neg};
+    \node[ynode] (0Neut) at (6, 6) {Neut};
+    \node[ynode] (0Pos) at (7, 6) {Pos};
+    \hyperNode{0Neg}{0Neut}{0Pos}{Root};
+    \crfFeatures{0/4.5/0.352, 1/5.5/0.474, 2/6.5/0.174, 3/7.5/1.}{0}{4.7};
+
+    \node[lnode] (3Neg) at (5, 3.7) {Neg};
+    \node[lnode] (3Neut) at (6, 3.7) {Neut};
+    \node[lnode] (3Pos) at (7, 3.7) {Pos};
+    \hyperNode{3Neg}{3Neut}{3Pos}{EDU 3};
+    \crfEdgesLatent{0}{3};
+    \crfFeatures{0/4.5/0.158, 1/5.5/0.39, 2/6.5/0.452, 3/7.5/1.}{3}{2.4};
+
+    \node[lnode] (1Neg) at (2.5, 1.4) {Neg};
+    \node[lnode] (1Neut) at (3.5, 1.4) {Neut};
+    \node[lnode] (1Pos) at (4.5, 1.4) {Pos};
+    \hyperNode{1Neg}{1Neut}{1Pos}{EDU 1};
+    \crfEdgesLatent{3}{1};             % see definition in command.tex
+    \crfFeatures{0/2/0.398, 1/3/0.421, 2/4/0.181, 3/5/1.}{1}{0.1};
+
+    \node[lnode] (2Neg) at (7.5, 1.4) {Neg};
+    \node[lnode] (2Neut) at (8.5, 1.4) {Neut};
+    \node[lnode] (2Pos) at (9.5, 1.4) {Pos};
+    \hyperNode{2Neg}{2Neut}{2Pos}{EDU 2};
+    \crfEdgesLatent{3}{2};
+    \crfFeatures{0/7/0.155, 1/8/0.338, 2/9/0.507, 3/10/1.}{2}{0.1};
+\end{tikzpicture}
+}
+%% Boah , also doch wieder ein Mann , oder ? ODER ??? papst
+%% {
+%%   "toks": [
+%%     {
+%%       "form": "Boah",
+%%       "prnt": -1,
+%%       "lemma": "boah",
+%%       "tag": "NE",
+%%       "rel": "_",
+%%       "children": [
+%%         1,
+%%         6
+%%       ],
+%%       "feats": {
+%%         "case": "nom",
+%%         "mmax": {
+%%           "EmoExpression": {
+%%             "markable_173": {
+%%               "Polarity": "negative",
+%%               "SubjectiveFact": true,
+%%               "Uncertain": true,
+%%               "Sarcasm": true,
+%%               "EmoExpression": true,
+%%               "Intensity": "strong"
+%%             }
+%%           },
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         },
+%%         "*": true,
+%%         "num": "sg"
+%%       }
+%%     },
+%%     {
+%%       "form": ",",
+%%       "prnt": 0,
+%%       "lemma": ",",
+%%       "tag": "$,",
+%%       "rel": "--",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "also",
+%%       "prnt": 6,
+%%       "lemma": "also",
+%%       "tag": "ADV",
+%%       "rel": "MO",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "doch",
+%%       "prnt": 6,
+%%       "lemma": "doch",
+%%       "tag": "ADV",
+%%       "rel": "MO",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "wieder",
+%%       "prnt": 6,
+%%       "lemma": "wieder",
+%%       "tag": "ADV",
+%%       "rel": "MO",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "ein",
+%%       "prnt": 6,
+%%       "lemma": "eine",
+%%       "tag": "ART",
+%%       "rel": "NK",
+%%       "children": [],
+%%       "feats": {
+%%         "case": "nom",
+%%         "gender": "masc",
+%%         "num": "sg",
+%%         "mmax": {
+%%           "Target": {
+%%             "markable_174": {
+%%               "Anaphref": "empty",
+%%               "Target": true,
+%%               "Preferred": true
+%%             }
+%%           },
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "Mann",
+%%       "prnt": 0,
+%%       "lemma": "mann",
+%%       "tag": "NN",
+%%       "rel": "CJ",
+%%       "children": [
+%%         2,
+%%         3,
+%%         4,
+%%         5,
+%%         7,
+%%         8
+%%       ],
+%%       "feats": {
+%%         "case": "nom",
+%%         "gender": "masc",
+%%         "num": "sg",
+%%         "mmax": {
+%%           "Target": {
+%%             "markable_174": {
+%%               "Target": true
+%%             }
+%%           },
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": ",",
+%%       "prnt": 6,
+%%       "lemma": ",",
+%%       "tag": "$,",
+%%       "rel": "--",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "oder",
+%%       "prnt": 6,
+%%       "lemma": "oder",
+%%       "tag": "KON",
+%%       "rel": "CD",
+%%       "children": [
+%%         9
+%%       ],
+%%       "feats": {
+%%         "mmax": {
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "?",
+%%       "prnt": 8,
+%%       "lemma": "?",
+%%       "tag": "$.",
+%%       "rel": "CJ",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {
+%%           "Sentiment": {
+%%             "markable_172": {
+%%               "Sentiment": true
+%%             }
+%%           }
+%%         }
+%%       }
+%%     },
+%%     {
+%%       "form": "ODER",
+%%       "prnt": 11,
+%%       "lemma": "oder",
+%%       "tag": "KON",
+%%       "rel": "JU",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "???",
+%%       "prnt": -1,
+%%       "lemma": "???",
+%%       "tag": "ADJA",
+%%       "rel": "_",
+%%       "children": [
+%%         10
+%%       ],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "papst",
+%%       "prnt": -1,
+%%       "lemma": "papst",
+%%       "tag": "ADJA",
+%%       "rel": "_",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     }
+%%   ],
+%%   "msg_id": "311918088230686720",
+%%   "text": "Boah , also doch wieder ein Mann , oder ? ODER ??? papst",
+%%   "edus": [
+%%     {
+%%       "polarity_scores": [
+%%         0.39818674325942993,
+%%         0.42101478576660156,
+%%         0.1807984709739685
+%%       ],
+%%       "type": "HSF",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         0,
+%%         1,
+%%         2,
+%%         3,
+%%         4,
+%%         5,
+%%         6,
+%%         7,
+%%         8,
+%%         9
+%%       ]
+%%     },
+%%     {
+%%       "polarity_scores": [
+%%         0.1545345038175583,
+%%         0.3381563127040863,
+%%         0.5073091983795166
+%%       ],
+%%       "type": "HS",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         10,
+%%         11
+%%       ]
+%%     },
+%%     {
+%%       "polarity_scores": [
+%%         0.15844668447971344,
+%%         0.38993096351623535,
+%%         0.4516223669052124
+%%       ],
+%%       "type": "UNK",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         12
+%%       ]
+%%     }
+%%   ],
+%%   "rst_trees": {
+%%     "chenlo": {
+%%       "rel2par": null,
+%%       "n/s": null,
+%%       "children": [
+%%         {
+%%           "rel2par": "other",
+%%           "n/s": "Nucleus",
+%%           "children": [
+%%             {
+%%               "rel2par": "joint",
+%%               "n/s": "Nucleus",
+%%               "children": [],
+%%               "id": 0
+%%             },
+%%             {
+%%               "rel2par": "joint",
+%%               "n/s": "Nucleus",
+%%               "children": [],
+%%               "id": 1
+%%             }
+%%           ],
+%%           "id": -2
+%%         },
+%%         {
+%%           "rel2par": "other",
+%%           "n/s": "Nucleus",
+%%           "children": [],
+%%           "id": 2
+%%         }
+%%       ],
+%%       "id": -1
+%%     },
+%%     "heerschop": {
+%%       "rel2par": null,
+%%       "n/s": null,
+%%       "id": -1,
+%%       "children": [
+%%         {
+%%           "rel2par": "other",
+%%           "n/s": "Nucleus",
+%%           "id": -2,
+%%           "children": [
+%%             {
+%%               "rel2par": "other",
+%%               "n/s": "Nucleus",
+%%               "id": 0,
+%%               "children": []
+%%             },
+%%             {
+%%               "rel2par": "other",
+%%               "n/s": "Nucleus",
+%%               "id": 1,
+%%               "children": []
+%%             }
+%%           ]
+%%         },
+%%         {
+%%           "rel2par": "other",
+%%           "n/s": "Nucleus",
+%%           "id": 2,
+%%           "children": []
+%%         }
+%%       ]
+%%     },
+%%     "bhatia": {
+%%       "id": -1,
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "id": -2,
+%%           "rel2par": "non-contrastive",
+%%           "children": [
+%%             {
+%%               "id": 0,
+%%               "rel2par": "non-contrastive",
+%%               "children": [],
+%%               "n/s": "Nucleus"
+%%             },
+%%             {
+%%               "id": 1,
+%%               "rel2par": "non-contrastive",
+%%               "children": [],
+%%               "n/s": "Nucleus"
+%%             }
+%%           ],
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "id": 2,
+%%           "rel2par": "non-contrastive",
+%%           "children": [],
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "n/s": null
+%%     },
+%%     "zhou": {
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "rel2par": "other",
+%%           "children": [
+%%             {
+%%               "rel2par": "other",
+%%               "children": [],
+%%               "id": 0,
+%%               "n/s": "Nucleus"
+%%             },
+%%             {
+%%               "rel2par": "other",
+%%               "children": [],
+%%               "id": 1,
+%%               "n/s": "Nucleus"
+%%             }
+%%           ],
+%%           "id": -2,
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "rel2par": "other",
+%%           "children": [],
+%%           "id": 2,
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "id": -1,
+%%       "n/s": null
+%%     },
+%%     "pcc": {
+%%       "id": -1,
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "id": 0,
+%%           "rel2par": "joint",
+%%           "children": [],
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "id": -2,
+%%           "rel2par": "joint",
+%%           "children": [
+%%             {
+%%               "id": 1,
+%%               "rel2par": "span",
+%%               "children": [],
+%%               "n/s": "Nucleus"
+%%             },
+%%             {
+%%               "id": 2,
+%%               "rel2par": "elaboration",
+%%               "children": [],
+%%               "n/s": "Satellite"
+%%             }
+%%           ],
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "n/s": null
+%%     }
+%%   },
+%%   "label": "negative",
+%%   "polarity_scores": [
+%%     0.35169991850852966,
+%%     0.47438257932662964,
+%%     0.1739174872636795
+%%   ]
+%% }

@@ -1,0 +1,430 @@
+{
+\scriptsize
+\begin{tikzpicture}
+\tikzstyle{xnode}=[rectangle,draw,fill=gray76,align=center,minimum size=2em,text width=2.2em] %
+\tikzstyle{lnode}=[circle,draw,fill=white,inner sep=1pt,minimum size=2.5em] %
+\tikzstyle{ynode}=[circle,draw,fill=gray76,inner sep=1pt,minimum size=2.5em] %
+\tikzstyle{label}=[] %
+\tikzstyle{extext}=[] %
+\tikzstyle{factor}=[rectangle,fill=black,midway,inner sep=0pt,minimum size=0.4em] %
+
+\node[lnode] (1Neg) at (5 , 3.7) {Neg};
+\node[lnode] (1Neut) at (6, 3.7) {Neut};
+\node[lnode] (1Pos) at (7, 3.7) {Pos};
+\hyperNode{1Neg}{1Neut}{1Pos}{EDU 1};
+\crfFeatures{0/5/0.007, 1/6/0.985, 2/7/0.007}{1}{2.4};
+
+\node[lnode] (2Neg) at (2.5, 1.4) {Neg};
+\node[lnode] (2Neut) at (3.5, 1.4) {Neut};
+\node[lnode] (2Pos) at (4.5, 1.4) {Pos};
+\hyperNode{2Neg}{2Neut}{2Pos}{EDU 2};
+\crfEdgesLatent{1}{2};
+\crfFeatures{0/2.5/0.001, 1/3.5/0.998, 2/4.5/0.001}{2}{0.1};
+
+\node[lnode] (3Neg) at (7.5, 1.4) {Neg};
+\node[lnode] (3Neut) at (8.5, 1.4) {Neut};
+\node[lnode] (3Pos) at (9.5, 1.4) {Pos};
+\hyperNode{3Neg}{3Neut}{3Pos}{EDU 3};
+\crfEdgesLatent{1}{3};
+\crfFeatures{0/7.5/1., 1/8.5/0., 2/9.5/0.}{3}{0.1};
+\end{tikzpicture}
+}
+%% {
+%%   "toks": [
+%%     {
+%%       "form": "Die",
+%%       "prnt": 1,
+%%       "lemma": "die",
+%%       "tag": "ART",
+%%       "rel": "NK",
+%%       "children": [],
+%%       "feats": {
+%%         "case": "nom",
+%%         "mmax": {},
+%%         "number": "pl",
+%%         "UNKFEAT": "*"
+%%       }
+%%     },
+%%     {
+%%       "form": "NSA",
+%%       "prnt": 2,
+%%       "lemma": "nsa",
+%%       "tag": "NE",
+%%       "rel": "SB",
+%%       "children": [
+%%         0
+%%       ],
+%%       "feats": {
+%%         "case": "nom",
+%%         "mmax": {},
+%%         "number": "pl",
+%%         "UNKFEAT": "*"
+%%       }
+%%     },
+%%     {
+%%       "form": "weiss",
+%%       "prnt": -1,
+%%       "lemma": "wissen",
+%%       "tag": "VVFIN",
+%%       "rel": "_",
+%%       "children": [
+%%         1,
+%%         4
+%%       ],
+%%       "feats": {
+%%         "person": "3",
+%%         "UNKFEAT": "ind",
+%%         "number": "sg",
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "auch",
+%%       "prnt": 4,
+%%       "lemma": "auch",
+%%       "tag": "ADV",
+%%       "rel": "MO",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "von",
+%%       "prnt": 2,
+%%       "lemma": "von",
+%%       "tag": "APPR",
+%%       "rel": "OP",
+%%       "children": [
+%%         3,
+%%         5
+%%       ],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "dir",
+%%       "prnt": 4,
+%%       "lemma": "du",
+%%       "tag": "PRF",
+%%       "rel": "NK",
+%%       "children": [
+%%         6
+%%       ],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "...",
+%%       "prnt": 5,
+%%       "lemma": "...",
+%%       "tag": "$.",
+%%       "rel": "--",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "Nützt",
+%%       "prnt": -1,
+%%       "lemma": "nützen",
+%%       "tag": "VVFIN",
+%%       "rel": "_",
+%%       "children": [
+%%         8,
+%%         9,
+%%         10
+%%       ],
+%%       "feats": {
+%%         "person": "3",
+%%         "UNKFEAT": "ind",
+%%         "tense": "pres",
+%%         "number": "sg",
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "uns",
+%%       "prnt": 7,
+%%       "lemma": "wir",
+%%       "tag": "PPER",
+%%       "rel": "OA",
+%%       "children": [],
+%%       "feats": {
+%%         "case": "acc",
+%%         "mmax": {},
+%%         "person": "1",
+%%         "number": "pl",
+%%         "UNKFEAT": "*"
+%%       }
+%%     },
+%%     {
+%%       "form": "auch",
+%%       "prnt": 7,
+%%       "lemma": "auch",
+%%       "tag": "ADV",
+%%       "rel": "MO",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "nichts",
+%%       "prnt": 7,
+%%       "lemma": "nichts",
+%%       "tag": "PIS",
+%%       "rel": "OA",
+%%       "children": [
+%%         11
+%%       ],
+%%       "feats": {
+%%         "mmax": {},
+%%         "UNKFEAT": "neut"
+%%       }
+%%     },
+%%     {
+%%       "form": ".",
+%%       "prnt": 10,
+%%       "lemma": ".",
+%%       "tag": "$.",
+%%       "rel": "--",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     },
+%%     {
+%%       "form": "%NegSmiley",
+%%       "prnt": -1,
+%%       "lemma": "%negsmiley",
+%%       "tag": "ITJ",
+%%       "rel": "_",
+%%       "children": [],
+%%       "feats": {
+%%         "mmax": {}
+%%       }
+%%     }
+%%   ],
+%%   "msg_id": "394835836069773312",
+%%   "text": "Die NSA weiss auch von dir ... Nützt uns auch nichts . %NegSmiley",
+%%   "edus": [
+%%     {
+%%       "polarity_scores": [
+%%         0.0066467877477407455,
+%%         0.9854232668876648,
+%%         0.007929954677820206
+%%       ],
+%%       "type": "HS",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         0,
+%%         1,
+%%         2,
+%%         3,
+%%         4,
+%%         5,
+%%         6
+%%       ]
+%%     },
+%%     {
+%%       "polarity_scores": [
+%%         0.0011337995529174805,
+%%         0.9977869391441345,
+%%         0.0010792326647788286
+%%       ],
+%%       "type": "HS",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         7,
+%%         8,
+%%         9,
+%%         10,
+%%         11
+%%       ]
+%%     },
+%%     {
+%%       "polarity_scores": [
+%%         0.9999760389328003,
+%%         1.820568650146015e-05,
+%%         5.775107183580985e-06
+%%       ],
+%%       "type": "FRE",
+%%       "prnt_edu": null,
+%%       "toks": [
+%%         12
+%%       ]
+%%     }
+%%   ],
+%%   "rst_trees": {
+%%     "chenlo": {
+%%       "rel2par": null,
+%%       "n/s": null,
+%%       "children": [
+%%         {
+%%           "rel2par": "background",
+%%           "n/s": "Satellite",
+%%           "children": [],
+%%           "id": 0
+%%         },
+%%         {
+%%           "rel2par": "span",
+%%           "n/s": "Nucleus",
+%%           "children": [
+%%             {
+%%               "rel2par": "background",
+%%               "n/s": "Satellite",
+%%               "children": [],
+%%               "id": 1
+%%             },
+%%             {
+%%               "rel2par": "span",
+%%               "n/s": "Nucleus",
+%%               "children": [],
+%%               "id": 2
+%%             }
+%%           ],
+%%           "id": -2
+%%         }
+%%       ],
+%%       "id": -1
+%%     },
+%%     "heerschop": {
+%%       "rel2par": null,
+%%       "n/s": null,
+%%       "id": -1,
+%%       "children": [
+%%         {
+%%           "rel2par": "background",
+%%           "n/s": "Satellite",
+%%           "id": 0,
+%%           "children": []
+%%         },
+%%         {
+%%           "rel2par": "span",
+%%           "n/s": "Nucleus",
+%%           "id": -2,
+%%           "children": [
+%%             {
+%%               "rel2par": "background",
+%%               "n/s": "Satellite",
+%%               "id": 1,
+%%               "children": []
+%%             },
+%%             {
+%%               "rel2par": "span",
+%%               "n/s": "Nucleus",
+%%               "id": 2,
+%%               "children": []
+%%             }
+%%           ]
+%%         }
+%%       ]
+%%     },
+%%     "bhatia": {
+%%       "id": -1,
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "id": 0,
+%%           "rel2par": "non-contrastive",
+%%           "children": [],
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "id": -2,
+%%           "rel2par": "non-contrastive",
+%%           "children": [
+%%             {
+%%               "id": 1,
+%%               "rel2par": "span",
+%%               "children": [],
+%%               "n/s": "Nucleus"
+%%             },
+%%             {
+%%               "id": 2,
+%%               "rel2par": "non-contrastive",
+%%               "children": [],
+%%               "n/s": "Satellite"
+%%             }
+%%           ],
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "n/s": null
+%%     },
+%%     "zhou": {
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "rel2par": "other",
+%%           "children": [],
+%%           "id": 0,
+%%           "n/s": "Nucleus"
+%%         },
+%%         {
+%%           "rel2par": "other",
+%%           "children": [
+%%             {
+%%               "rel2par": "span",
+%%               "children": [],
+%%               "id": 1,
+%%               "n/s": "Nucleus"
+%%             },
+%%             {
+%%               "rel2par": "other",
+%%               "children": [],
+%%               "id": 2,
+%%               "n/s": "Satellite"
+%%             }
+%%           ],
+%%           "id": -2,
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "id": -1,
+%%       "n/s": null
+%%     },
+%%     "pcc": {
+%%       "id": -1,
+%%       "rel2par": null,
+%%       "children": [
+%%         {
+%%           "id": 0,
+%%           "rel2par": "background",
+%%           "children": [],
+%%           "n/s": "Satellite"
+%%         },
+%%         {
+%%           "id": -2,
+%%           "rel2par": "span",
+%%           "children": [
+%%             {
+%%               "id": 1,
+%%               "rel2par": "background",
+%%               "children": [],
+%%               "n/s": "Satellite"
+%%             },
+%%             {
+%%               "id": 2,
+%%               "rel2par": "span",
+%%               "children": [],
+%%               "n/s": "Nucleus"
+%%             }
+%%           ],
+%%           "n/s": "Nucleus"
+%%         }
+%%       ],
+%%       "n/s": null
+%%     }
+%%   },
+%%   "label": "negative",
+%%   "polarity_scores": [
+%%     0.998874843120575,
+%%     0.0009919496951624751,
+%%     0.00013318551646079868
+%%   ]
+%% }

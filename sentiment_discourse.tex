@@ -827,7 +827,7 @@ without splitting these messages into elementary discourse units
 baseline methods, we also propose several new DASA solutions which we
 briefly descibe below.
 
-\textbf{Latent CRF} In the first of these solutions, called
+\textbf{Latent CRF.}\quad In the first of these solutions, called
 \emph{Latent Conditional Random Fields} or \emph{LCRF}, we consider
 the problem of message-level sentiment analysis as an inference task
 over an undirected graphical model, where the nodes of the model
@@ -999,11 +999,11 @@ until convergence is reached, whichever of these events occurs
 first.\todo{Outline the difference from the approaches of
   \citet{McDonald:07} and \citet{Trivedi:13}.}
 
-\textbf{Latent Marginalized CRF} Another way to tackle unobserved
-labels in the input is to use the fact that we can estimate the
-probability of a subset of random variables from a joint distribution
-over a larger set by marginalizing (summing) out the remaining terms
-of this distribution, \ienocomma:
+\textbf{Latent Marginalized CRF.}\quad Another way to tackle
+unobserved labels in the input is to use the fact that we can estimate
+the probability of a subset of random variables from a joint
+distribution over a larger set by marginalizing (summing) out the
+remaining terms of this distribution, \ienocomma:
 \begin{align*}
   p\left(E=e\right) &= \sum_h p\left(E=e, H=h\right).
 \end{align*}
@@ -1140,9 +1140,9 @@ observed tag.
     fields}\label{dasa:fig:lcrf-vs-lmcrf}
 \end{figure*}
 
-\textbf{Recursive Dirichlet Process} Finally, the last method that we
-present in this chapter---\emph{Recursive Dirichlet Process} or
-\emph{RDP}---goes a further step in the probabilistic direction by
+\textbf{Recursive Dirichlet Process.}\quad Finally, the last method
+that we present in this chapter---\emph{Recursive Dirichlet Process}
+or \emph{RDP}---goes a further step in the probabilistic direction by
 assuming that not only the probabilities of discourse units but also
 the parameters via which these probabilities are computed are random
 variables.
@@ -1197,7 +1197,7 @@ $\nu$ is the nuclearity status of the child (\textsc{Nucleus} or
 \textsc{Satellite}). We sample these matrices from a multivariate
 normal distribution:
 \begin{align*}
-  M_r \sim \mathcal{N}_{3\times3}(\boldsymbol{\mu}_r, \mathbbm{1}),
+  M_r \sim \mathcal{N}_{3\times3}(\boldsymbol{\mu}_r, \mathds{1}),
 \end{align*}
 setting the mean $\boldsymbol{\mu}_r$ to:
 \begin{equation*}
@@ -1446,16 +1446,16 @@ development data.
       0.557 & 0.713\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DASA methods]{Evaluation of discourse-aware
-      sentiment analysis methods\\ {\small LCRF~--~latent conditional random fields,
-        LMCRF~--~latent marginalized conditional random fields,
-        RDP~--~recursive Dirichlet process,
+    \caption[Evaluation of DASA methods]{Results of discourse-aware
+      sentiment analysis methods\\ {\small LCRF~--~latent conditional
+        random fields, LMCRF~--~latent marginalized conditional random
+        fields, RDP~--~recursive Dirichlet process,
         DDR~--~discourse-depth reweighting~\cite{Bhatia:15},
         R2N2~--~rhetorical recursive neural network~\cite{Bhatia:15},
-        WNG~--~\citet{Wang:13},
-        \textsc{Last}~--~polarity determined by last EDU,
-        \textsc{Root}~--~polarity determined by root EDU(s),
-        \textsc{No-Discourse}~--~discourse-unaware classifier}}
+        WNG~--~\citet{Wang:13}, \textsc{Last}~--~polarity determined
+        by last EDU, \textsc{Root}~--~polarity determined by root
+        EDU(s), \textsc{No-Discourse}~--~discourse-unaware
+        classifier}}
     \label{dasa:tbl:res}
   \end{center}
 \end{table}
@@ -1488,27 +1488,88 @@ negative class.
 
 \subsection{Error Analysis}
 
-\begin{example}[LCRF Error]\label{snt:dasa:exmp:lcrf-error}
+\begin{example}[Error Made by the \textsc{LCRF} System\newline]\label{snt:dasa:exmp:lcrf-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    $[$Boah , also doch wieder ein Mann , oder ?$]_1$ $[$ODER ?$]_2$ $[$papst$]_3$}\\
+  \noindent $[$Damn, a man again, isn't it ?$]_1$ $[$ISN'T ?$]_2$ $[$pope$]_3$\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}%
+    {
+      \begin{center}
+        \input{lcrf-error}
+      \end{center}
+    }
 \end{example}
 
-\begin{example}[LMCRF Error]\label{snt:dasa:exmp:lmcrf-error}
+\begin{example}[Error Made by the \textsc{LMCRF} System\newline]\label{snt:dasa:exmp:lmcrf-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape '
+    $[$Wissen ?$]_1$ $[$Igitt geh weg damit !$]_2$}\\
+  \noindent $[$Knowledge ?$]_1$ $[$Yuck , go away with it$]_2$\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}%
+    {
+      \begin{center}
+        \input{lmcrf-error}
+      \end{center}
+  }
 \end{example}
 
-\begin{example}[RDP Error]\label{snt:dasa:exmp:rdp-error}
+\begin{example}[Error Made by the \textsc{RDP} System\newline]\label{snt:dasa:exmp:rdp-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    $[$Prima , was sind das f\"ur Idioten im DFB ?$]_1$ $[$Das is eine
+    Muppetsshow auf LSD !$]_2$ $[$Das is noch lange nicht ausdiskutiert !$]_3$
+    $[$Kiessling ist ein Depp !$]_4$}\\
+  \noindent $[$Great, who are these idiots in the DFB ? $]_1$ $[$It is
+    a muppet show on LSD$]_2$ $[$It's no way been talked out !$]_3$
+  $[$Kiessling is a goof !$]_3$\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{green3}{positive*}}%
+    {
+      \begin{center}
+        \input{rdp-error}
+      \end{center}
+    }
+\end{example}
+
+\begin{example}[Error Made by the \textsc{Root} System\newline]\label{snt:dasa:exmp:root-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    $[$Die NSA weiss auch von dir ...$]_1$ $[$N\"utzt uns auch nichts .$]_2$ $[$ \%NegSmiley$]_3$}\\
+  \noindent $[$The NSA also knows about you$]_1$ $[$It doesn't help us
+    either$]_2$ $[$ \%NegSmiley$]_3$\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}%
+    {
+      \begin{center}
+        \input{root-error}
+      \end{center}
+    }
 \end{example}
 
 \begin{example}[Error Made by the \textsc{Last} System]\label{snt:dasa:exmp:last-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape ' (
+    :'( :'( Die letzte Aussprache war wohl das schwerste Telefonat
+    meines gesamten Lebens :'( :'( :'( Aber wir gehen friedlich und
+    als}\\
+  \noindent ' ( :'( :'( The last talk was probably the most difficult
+  call in my entire life :'( :'( :'( But we go apart peacefully and
+  as\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}
   %% <<<	gold:	negative
   %% >>>	predicted:	neutral
-  %% ' ( :'( :'( Die letzte Aussprache war wohl das schwerste Telefonat
+  %% 394487734192316416	' ( :'( :'( Die letzte Aussprache war wohl das schwerste Telefonat
   %% meines gesamten Lebens :'( :'( :'( Aber wir gehen friedlich und als
   %% F ...
-\end{example}
-
-\begin{example}[Error Made by the \textsc{Root} System]\label{snt:dasa:exmp:root-error}
-  %% <<<	gold:	negative
-  %% >>>	predicted:	neutral
-  %% Die NSA weiss auch von dir ... Nützt uns auch nichts . \%NegSmiley
 \end{example}
 
 \section{Evaluation}
@@ -1590,8 +1651,8 @@ running up to 0.422 (\textsc{RDP}) and 0.625 (\textsc{Last})
 respectively.  The most disappointing result for us, however, is that
 the LMCRF system fails to predict any polar class except for
 \textsc{Neutral} when trained on the scores produced by this
-classifier.  Likewise, the LCRF system can hardly beat any other
-approach, reaching only 0.239 macro\F{}.
+classifier.  Likewise, LCRF can hardly beat any other competitor,
+reaching merely 0.239 macro\F{}.
 
 \subsection{Relation Scheme}
 
@@ -1611,6 +1672,153 @@ made in almost all other works on discourse-aware opinion mining
 whether this subset of relations was indeed optimal and sufficient to
 reflect all possible varieties of discourse interactions that could
 exist in text and play a role in sentiment composition.
+
+\begin{table}[h]
+  \begin{center}
+    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \begin{tabular}{p{0.162\columnwidth} % first columm
+        *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+        *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
+      \toprule
+      \multirow{2}*{\bfseries Method} & %
+      \multicolumn{3}{c}{\bfseries Positive} & %
+      \multicolumn{3}{c}{\bfseries Negative} & %
+      \multicolumn{3}{c}{\bfseries Neutral} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+      \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+
+      & Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & %
+      Precision & Recall & \F{} & & \\\midrule
+
+      \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.83      0.77      0.80       541
+      %% negative       0.61      0.12      0.20       220
+      %% neutral       0.54      0.89      0.67       351
+      %% avg / total       0.70      0.68      0.64      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.15%
+      %% Micro-Averaged F1-Score (All Classes): 67.6259%
+      LCRF & 0.83 & 0.77 & 0.8 & %
+      0.61 & 0.12 & 0.2 & %
+      0.54 & 0.89 & 0.67 & %
+      0.502 & 0.676\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.85      0.76      0.80       541
+      %% negative       0.59      0.13      0.22       220
+      %% neutral       0.54      0.89      0.67       351
+      %% avg / total       0.70      0.68      0.64      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.72%
+      %% Micro-Averaged F1-Score (All Classes): 67.5360%
+      LMCRF & 0.85  & 0.76 & 0.8 & %
+      0.59 & 0.13 & 0.22 & %
+      0.54 & 0.89 & 0.67 & %
+      0.507 & 0.676\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.84      0.76      0.80       541
+      %% negative       0.60      0.17      0.26       220
+      %% neutral       0.55      0.88      0.68       351
+      %% avg / total       0.70      0.68      0.65      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 53.10%
+      %% Micro-Averaged F1-Score (All Classes): 68.1655%
+      RDP & 0.84 & 0.76 & 0.8 & %
+      0.6 & 0.17 & 0.26 & %
+      0.55 & 0.88 & 0.68 & %
+      0.531 & 0.682\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.90      0.07      0.12       541
+      %% neutral       0.33      0.99      0.49       351
+      %% negative       1.00      0.00      0.01       220
+      %% avg / total       0.74      0.35      0.22      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 6.65%
+      %% Micro-Averaged F1-Score (All Classes): 34.7122%
+      DDR & 0.9 & 0.07 & 0.12 & %
+      0.33 & 0.99 & 0.49 & %
+      1. & 0.0 & 0.01 & %
+      0.067 & 0.347\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.85      0.54      0.66       541
+      %% negative       0.44      0.04      0.07       220
+      %% neutral       0.44      0.93      0.60       351
+      %% avg / total       0.64      0.56      0.52      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 36.36%
+      %% Micro-Averaged F1-Score (All Classes): 56.4748%
+      R2N2 & 0.85 & 0.54 & 0.66 & %
+      0.44 & 0.04 & 0.07 & %
+      0.44 & 0.93 & 0.6 & %
+      0.364 & 0.565\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.81      0.12      0.21       541
+      %% negative       0.50      0.00      0.01       220
+      %% neutral       0.33      0.98      0.50       351
+      %% avg / total       0.60      0.37      0.26      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 10.92%
+      %% Micro-Averaged F1-Score (All Classes): 36.8705%
+      WNG & 0.81 & 0.12 & 0.21 & %
+      0.5 & 0.0 & 0.01 & %
+      0.33 & 0.98 & 0.5 & %
+      0.109 & 0.369\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.87      0.41      0.56       541
+      %% negative       0.00      0.00      0.00       220
+      %% neutral       0.40      0.97      0.56       351
+      %% avg / total       0.55      0.51      0.45      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 27.92%
+      %% Micro-Averaged F1-Score (All Classes): 50.5396%
+      \textsc{Last} & 0.87 & 0.41 & 0.56 & %
+      0.0 & 0.0  & 0.0 & %
+      0.4 & 0.97 & 0.56 & %
+      0.279 & 0.505\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.76      0.13      0.22       541
+      %% negative       0.00      0.00      0.00       220
+      %% neutral       0.33      0.97      0.50       351
+      %% avg / total       0.48      0.37      0.26      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 10.79%
+      %% Micro-Averaged F1-Score (All Classes): 36.8705%
+      \textsc{Root} & 0.76 & 0.13 & 0.22 & %
+      0.0 & 0.0 & 0.0 & %
+      0.33 & 0.97 & 0.5 & %
+      0.108 & 0.369\\
+
+      %% General Statistics:
+      %% precision    recall  f1-score   support
+      %% positive       0.84      0.77      0.80       541
+      %% negative       0.63      0.15      0.24       220
+      %% neutral       0.55      0.88      0.67       351
+      %% avg / total       0.70      0.68      0.65      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 52.11%
+      %% Micro-Averaged F1-Score (All Classes): 67.9856%
+
+      \textsc{No-Discourse} & 0.84 & 0.77 & 0.8 & %
+      0.63 & 0.15 & 0.24 & %
+      0.55 & 0.88 & 0.67 & %
+      0.521 & 0.68\\\bottomrule
+    \end{tabular}
+    \egroup
+    \caption[Results of DASA methods on manually annotated RST
+      trees]{Results of discourse-aware sentiment analysis methods on
+      the PotTS corpus with manually annotated RST trees}
+    \label{dasa:tbl:res}
+  \end{center}
+\end{table}
 
 To investigate this question in more detail, we decided to repeat our
 experiments, using the subsets of relations proposed by
