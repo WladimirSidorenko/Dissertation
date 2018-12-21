@@ -313,22 +313,22 @@ and the \textsc{Contrast} link is similar to the RST's
   \end{center}
 \end{figure}
 
-\textbf{Final choice} Because it was unclear which of these approaches
-(RST, PDTB, or SDRT) would be more amenable to our sentiment
-experiments, we made our decision by taking the following theoretical
-and practical considerations into account: From theoretical
-perspective, we wanted to have a strictly hierarchical discourse
-structure for analyzed tweets so that we could infer the polarity of
-the whole message by recursively accumulating the polarity scores from
-single discourse units.  From practical aspect, since there was no
-discourse parser readily available for German, we wanted to have a
-maximal assortment of such parsers for English so that we could pick
-one that would be easiest to retrain on German data.  Fortunately,
-both of these concerns have lead us to the same solution---Rhetorical
-Structure Theory, which, on the one hand, was the only formalism that
-explicitly guaranteed a single root for the analyzed text, and, on the
-other hand, also provided a wide variety of open-source parsing
-systems at our disposal
+\textbf{Final choice.}\quad{}Because it was unclear which of these
+approaches (RST, PDTB, or SDRT) would be more amenable to our
+sentiment experiments, we made our decision by taking the following
+theoretical and practical considerations into account: From
+theoretical perspective, we wanted to have a strictly hierarchical
+discourse structure for analyzed tweets so that we could infer the
+polarity of the whole message by recursively accumulating the polarity
+scores from single discourse units.  From practical aspect, since
+there was no discourse parser readily available for German, we wanted
+to have a maximal assortment of such parsers for English so that we
+could pick one that would be easiest to retrain on German data.
+Fortunately, both of these concerns have lead us to the same
+solution---Rhetorical Structure Theory, which, on the one hand, was
+the only formalism that explicitly guaranteed a single root for the
+analyzed text, and, on the other hand, also provided a wide variety of
+open-source parsing systems at our disposal
 \cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
 
 \section{Data Preparation}\label{sec:dasa:data}
@@ -352,7 +352,7 @@ analysis.
 
 %% This figure was generated using the iPython notebook
 %% `notebooks/dasa.ipynb`.
-\begin{figure*}
+\begin{figure*}[htb]
   \centering
       {
         \centering
@@ -371,9 +371,9 @@ analysis.
               \caption{SB10k}\label{dasa:fig:data-distribution-sb10k}
             \end{subfigure}
           }
-          \caption[EDU distribution in PotTS and SB10k]{Distribution of
-            Elementary Discourse Units and Polarity Classes in the Training and
-            Development Sets of PotTS and
+          \caption[EDU distribution in PotTS and SB10k]{Distribution
+            of elementary discourse units and polarity classes in the
+            training and development sets of PotTS and
             SB10k}\label{dasa:fig:data-distribution}
 \end{figure*}
 
@@ -1235,7 +1235,7 @@ estimating the probability of polar classes at each state as follows:
   (\mathbf{1} - \boldsymbol{\beta})\odot\mathbf{z}_{i_{j-1}},
 \end{align*}
 where $\boldsymbol{\beta}\in\mathbb{R}^3$ is another multivariate
-random variable drawn from a Beta distribution $B(5., 5.)$, which
+random variable drawn from the Beta distribution $B(5., 5.)$, which
 controls how much information from parent and child we want to see in
 the updated state $\mathbf{z}_{i_j}$; and $\odot$ means elementwise
 multiplication.
@@ -1279,32 +1279,78 @@ We subsequently use this result to estimate the polarity of the $i$-th
 node when analyzing its next child $j+1$ ($\mathbf{z}_{i_{j+1}}$).
 Once all children have been processed, we consider the final result
 $\mathbf{z}_{i_{J}}$ as the final probability of polarity classes for
-the $i$-th node and move on the next vertex in the BFS sorting.
+the $i$-th node and move on the next vertex in the reverse BFS order.
 
 \begin{figure}[htb]
-  { \centering
-    \includegraphics[width=\linewidth]{img/dirichlet-process.png} }
-  \caption{Computed node probabilities in Recursive Dirichlet
-    Process}\label{dasa:fig:rdp-alplha}
+  \begin{center}
+    \includegraphics[width=0.5\linewidth]{img/rdp.png}
+    \caption{Plate diagram of the Recursive Dirichlet
+      Process}\label{dasa:fig:rdp-plate}
+  \end{center}
 \end{figure}
 
-Finally, after arriving at the \textsc{Root} node and finishing
-processing all of its descendents, we use the resulting term
-$\mathbf{z}_{\text{\textsc{Root}}}$ as a parameter of a categorical
-distribution to predict the final label $y$:
+Finally, after we have processed all descendents of the \textsc{Root}
+node, we use the resulting term $\mathbf{z}_{\text{\textsc{Root}}}$ as
+a parameter of a categorical distribution from which we draw the final
+prediction label $y$:
 \begin{align*}
   y \sim Cat(\mathbf{z}_{\text{\textsc{Root}}}).
 \end{align*}
 
-This model with manually defined parameters reflects our prior belief
-of what the joint probability of hidden and observed states $p(y,
-\mathbf{z})$ might look like.  As it turns out, knowing this belief is
-sufficient to derive another probability $q(\mathbf{z})$, which best
-approximates the probability of latent variables.  In particular, we
-define this distribution in the same way as above, but deprive it of
-the last step (drawing of the observed label), and optimize its
-parameters ($\boldsymbol{\theta}$) by maximizing the evidence lower
-bound \cite[see][]{Ranganath:14}:
+To represent this process graphically, we visualized probability
+distributions $\mathbf{z}_{j_{k}}$ computed by the RDP for different
+probability values of parent and child nodes ($\mathbf{z}_j$ and
+$\mathbf{z}_k$) and present these results in
+Figure~\ref{dasa:fig:rdp-alpha} (higher probabilities are highlighted
+in red).
+
+As you can see from the top-left figure, when the parent has a strong
+probability of the negative class ($[1, 0, 0]$), but the probability
+of the child is uniform ($[0.33, 0.33, 0.33]$), the model keeps to the
+negative polarity, scooping up almost all probability mass into this
+corner.  At the same, to account for the uncertainty about the child,
+RDP slightly moves the summit of the probability hill (\ie{} its mean)
+towards the positive class and spreads the mass more evenly along all
+three axes. On the other hand, if parent and child have completely
+opposite polarities (say \textsc{Negative} and \textsc{Positive}),
+which the base classifier is absolutely sure of, RDP evenly
+distributes the probability along the
+\textsc{Positive}--\textsc{Negative} axis. (This sitation is depectied
+in Subfigure~b of the picture.)  The middle row shows two symmetric
+cases where parent and child again have opposite semantic
+orientations, but the base predictor is less sure about its decisions
+and also admits a small chance that either of these nodes is neutral.
+In this case, RDP still spreads the probability along the main polar
+axis, with the mean placed right in-between the two polar corners, but
+additionally stretches its mass towards the center of the simplex.  As
+we can see from the figure, our model does not make a distinction
+between parent and child, so that the resulting probabilities in both
+cases are almost identical, even though the polarities of the two
+joined nodes are swapped.  Finally, in the last row, we can see our
+intended discrimination of the neutral orientation: This time, the
+parent node is strictly polar (negative in Subfigure~e and positive in
+Subfigure~d), whereas the child is neutral.  In contrast to the
+previous two examples, the mean of the resulting distribution is now
+located closer to the polar corner and not in the middle of the two
+juxtapposed semantic orientations.
+
+\begin{figure}[htb]
+  { \centering
+    \includegraphics[width=\linewidth]{img/dirichlet-process.png} }
+  \caption{Node probabilities computed by the Recursive Dirichlet
+    Process}\label{dasa:fig:rdp-alpha}
+\end{figure}
+
+Our manually defined model with its fixed parameters reflects our
+prior beief in the way how the joint probability of hidden and
+observed states $p(y, \mathbf{z})$ might be computed.  As it turns
+out, knowing this belief is sufficient to derive another probability
+$q(\mathbf{z})$, which best approximates the probability of latent
+variables.  In particular, we define this distribution in the same way
+as above, but deprive it of the last step (drawing of the observed
+label), and optimize its parameters ($\boldsymbol{\theta}$) by
+maximizing the evidence lower bound, using stochastic gradient
+descent\cite[see][]{Ranganath:14}:
 \begin{align*}
   \mathcal{L}\left(\boldsymbol{\theta}\right)
   &=\mathbb{E}_{q_{\boldsymbol{\theta}}(\mathbf{z})}%
@@ -1702,7 +1748,7 @@ exist in text and play a role in sentiment composition.
       %% avg / total       0.70      0.68      0.64      1112
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.15%
       %% Micro-Averaged F1-Score (All Classes): 67.6259%
-      LCRF & 0.83 & 0.77 & 0.8 & %
+      LCRF & 0.83 & \textbf{0.77} & \textbf{0.8} & %
       0.61 & 0.12 & 0.2 & %
       0.54 & 0.89 & 0.67 & %
       0.502 & 0.676\\
@@ -1715,7 +1761,7 @@ exist in text and play a role in sentiment composition.
       %% avg / total       0.70      0.68      0.64      1112
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.72%
       %% Micro-Averaged F1-Score (All Classes): 67.5360%
-      LMCRF & 0.85  & 0.76 & 0.8 & %
+      LMCRF & 0.85  & 0.76 & \textbf{0.8} & %
       0.59 & 0.13 & 0.22 & %
       0.54 & 0.89 & 0.67 & %
       0.507 & 0.676\\
@@ -1728,10 +1774,10 @@ exist in text and play a role in sentiment composition.
       %% avg / total       0.70      0.68      0.65      1112
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 53.10%
       %% Micro-Averaged F1-Score (All Classes): 68.1655%
-      RDP & 0.84 & 0.76 & 0.8 & %
+      RDP & 0.84 & 0.76 & \textbf{0.8} & %
       0.6 & 0.17 & 0.26 & %
-      0.55 & 0.88 & 0.68 & %
-      0.531 & 0.682\\
+      0.55 & 0.88 & \textbf{0.68} & %
+      \textbf{0.531} & \textbf{0.682}\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
@@ -1741,9 +1787,9 @@ exist in text and play a role in sentiment composition.
       %% avg / total       0.74      0.35      0.22      1112
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 6.65%
       %% Micro-Averaged F1-Score (All Classes): 34.7122%
-      DDR & 0.9 & 0.07 & 0.12 & %
-      0.33 & 0.99 & 0.49 & %
-      1. & 0.0 & 0.01 & %
+      DDR & \textbf{0.9} & 0.07 & 0.12 & %
+      0.33 & \textbf{0.99} & \textbf{0.49} & %
+      \textbf{1.} & 0.0 & 0.01 & %
       0.067 & 0.347\\
 
       %% General Statistics:
@@ -1769,7 +1815,7 @@ exist in text and play a role in sentiment composition.
       %% Micro-Averaged F1-Score (All Classes): 36.8705%
       WNG & 0.81 & 0.12 & 0.21 & %
       0.5 & 0.0 & 0.01 & %
-      0.33 & 0.98 & 0.5 & %
+      0.33 & \textbf{0.98} & 0.5 & %
       0.109 & 0.369\\
 
       %% General Statistics:
@@ -1807,8 +1853,8 @@ exist in text and play a role in sentiment composition.
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 52.11%
       %% Micro-Averaged F1-Score (All Classes): 67.9856%
 
-      \textsc{No-Discourse} & 0.84 & 0.77 & 0.8 & %
-      0.63 & 0.15 & 0.24 & %
+      \textsc{No-Discourse} & 0.84 & \textbf{0.77} & \textbf{0.8} & %
+      \textbf{0.63} & 0.15 & 0.24 & %
       0.55 & 0.88 & 0.67 & %
       0.521 & 0.68\\\bottomrule
     \end{tabular}
