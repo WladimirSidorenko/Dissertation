@@ -4975,10 +4975,10 @@ following findings and contributions:
     sentiment analysis methods---lexicon-, machine-learning-- and
     deep-learning--based ones, finding that the last two groups
     significantly outperform lexicon-driven systems;
-  \item somewhat surprisingly, among all compared lexicon methods, the
-    most simple one---the classifier of~\citet{Hu:04}---produced the
-    best macro- and micro-averaged \F{}-results on the PotTS corpus
-    (0.615 and 0.685 respectively) and also yielded the highest macro
+  \item surprisingly, among all compared lexicon methods, the most
+    simple one---the classifier of~\citet{Hu:04}---produced the best
+    macro- and micro-averaged \F{}-results on the PotTS corpus (0.615
+    and 0.685 respectively) and also yielded the highest macro
     \F{}-measure on the SB10k dataset (0.421).  Other systems,
     however, could have improved their scores if they better handled
     the negation of polar terms (after switching off the negation
@@ -4987,36 +4987,35 @@ following findings and contributions:
     of~\citeauthor{Hu:04});
   \item as expected, the ML-based system of~\citet{Mohammad:13}---the
     winner of the inaugural run of SemEval task in sentiment analysis
-    of Twitter~\cite{Nakov:13}---also surpassed all its competitors
-    from the ML group, achieving highly competitive results: 0.674
-    macro- and 0.727 micro-\F{} on the PotTS data and 0.564 macro- and
-    0.752 micro-averaged \F{}-measure on the SB10k test set;
-  \item however, as in the previous case, these results could have
+    of Twitter~\cite{Nakov:13}---also surpassed other ML competitors,
+    achieving highly competitive results: 0.674 macro- and 0.727
+    micro-\F{} on the PotTS data and 0.564 macro- and 0.752
+    micro-averaged \F{}-measure on the SB10k test set;
+  \item as in the previous case, however, these results could have
     been improved if the classifier dispensed with character-level and
     part-of-speech features and used logistic regression instead of
     SVM;
   \item a much more varied situation was observed with
-    deep-learning--based systems, which frequently simply degraded to
-    always predicting the majority class for all input tweets, but
-    sometimes yielded extraordinarily good results as it was, for
-    example, the case with our proposed lexicon-based attention
-    system, which attained 0.69 macro-\F{} on the PotTS corpus and
-    0.55 macro \F{}-score on the SB10k dataset (0.73 and 0.75
-    micro-\F{} respectively), setting a new state of the art for the
-    former collection;
+    deep-learning--based systems, which frequently simply fell into
+    always predicting the majority class for all tweets, but sometimes
+    yielded extraordinarily good results as it was the case with our
+    proposed lexicon-based attention system, which attained 0.69
+    macro-\F{} on the PotTS corpus and 0.55 macro \F{}-score on the
+    SB10k dataset (0.73 and 0.75 micro-\F{} respectively), setting a
+    new state of the art for the former data;
   \item speaking of word embeddings, we should note that almost all
     DL-based approaches showed fairly low scores when they used
-    randomly initialized task-specific embeddings, but their results
-    notably improved after switching to pre-trained word2vec vectors,
-    and became even better when we optimized these embeddings with
-    respect to the task at hand and applied the least-squares fallback
-    to approximate the representations of unseen tokens;
-  \item contrary to our initial expectations, we could not overcome
-    the majority class pitfall of DL-based systems after adding more
-    noisily supervised training data, which, in general, only lowered
-    the scores of both ML- and DL-based methods.  Since this result
-    contradicts the findings of other authors, we hypothesize that
-    this deterioration is primarily due to the differences in the
+    randomly initialized task-specific embeddings, but notably
+    improved their results after switching to pre-trained word2vec
+    vectors, and became even better when we optimized these embeddings
+    with respect to the task at hand and applied the least-squares
+    fallback to approximate the representations of unseen tokens;
+  \item contrary to our expectations, we could not overcome the
+    majority class pitfall of DL-based systems after adding more
+    distatntly supervised training data, which, in general, only
+    lowered the scores of both ML- and DL-based methods.  Since this
+    result contradicts the findings of other authors, we hypothesize
+    that this degradation is primarily due to the differences in the
     class distributions between automatically and manually labeled
     tweets;
   \item on the other hand, we could see that using more qualitative

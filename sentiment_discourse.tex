@@ -47,8 +47,8 @@ explicitly took the discourse structure into account (in the best
 case, the inference simply proceeded from the level of words directly
 to the level of message), we decided to check whether making the last
 of these solutions (the LBA classifier) aware of discourse phenomena
-would improve its results.  However, before we present our findings,
-we first would like to take a short digression and give an overview of
+would improve its results.  But, before we present our findings, we
+first would like to take a short digression and give an overview of
 the most popular approaches to discourse analysis that exist in the
 literature nowadays.  Afterwards, in Section~\ref{sec:dasa:data}, we
 will describe the way how we inferred and added discourse information
@@ -465,7 +465,7 @@ comparison, the precentage of these relations in PCC~2.0 amounts to
 90\% and also represents the prevailing majority of all semantic links
 in this corpus.
 
-\begin{figure*}
+\begin{figure*}[htb]
   \centering
       {
         \centering
@@ -511,8 +511,8 @@ in this corpus.
 Now, with these prepared data at hand, we are all set to check whether
 incorporating the additional discourse information into our
 lexicon-based attention system would improve the quality of its
-analysis.\todo{Redefine this objective} However, before we proceed
-with this check, let us first revise the most prominent approaches to
+analysis.\todo{Redefine this objective} But, before we proceed with
+this check, let us first revise the most prominent approaches to
 discourse-aware sentiment classification that have been proposed in
 the literature so far.
 
@@ -1177,8 +1177,8 @@ elementary discourse segments, which we will henceforth denote as
 $\boldsymbol{\alpha}_{i_0}\in\mathbb{R}^3_+$. Since these scores,
 however, are only available for EDUs, we will initialize these priors
 to zero vectors $\mathbf{0}$ for all remaining abstract nodes except
-for the \textsc{Root}, for which we again will use the scores returned
-by the LBA classifier for the whole tweet.
+the \textsc{Root}, for which we again will use the scores returned by
+the LBA classifier for the whole tweet.
 
 Another important factor which might significantly affect the polarity
 of an RST node is the semantic orientation of its children and
@@ -1332,7 +1332,7 @@ parent node is strictly polar (negative in Subfigure~e and positive in
 Subfigure~d), whereas the child is neutral.  In contrast to the
 previous two examples, the mean of the resulting distribution is now
 located closer to the polar corner and not in the middle of the two
-juxtapposed semantic orientations.
+juxtaposed semantic orientations.
 
 \begin{figure}[htb]
   { \centering
@@ -1499,8 +1499,8 @@ development data.
         DDR~--~discourse-depth reweighting~\cite{Bhatia:15},
         R2N2~--~rhetorical recursive neural network~\cite{Bhatia:15},
         WNG~--~\citet{Wang:13}, \textsc{Last}~--~polarity determined
-        by last EDU, \textsc{Root}~--~polarity determined by root
-        EDU(s), \textsc{No-Discourse}~--~discourse-unaware
+        by the last EDU, \textsc{Root}~--~polarity determined by the
+        root EDU(s), \textsc{No-Discourse}~--~discourse-unaware
         classifier}}
     \label{dasa:tbl:res}
   \end{center}
@@ -1628,7 +1628,7 @@ quality of the base sentiment classifier which predicts the scores for
 single EDUs of an RST tree.  To see whether a lexion- or
 machine-learning--based CGSA system would be a better starting point
 for discourse-aware sentiment inference, we reran our experiments,
-replacing the probabiities returned by the LBA system with the scores
+replacing the probabilities returned by the LBA system with the scores
 returned by the lexicon-based metho of \citet{Hu:04} and the ML
 approach of~\citet{Mohammad:13}.  The results of this evaluation are
 presented in Figures~\ref{dasa:fig:potts-base-classifier} and
@@ -1700,26 +1700,21 @@ the LMCRF system fails to predict any polar class except for
 classifier.  Likewise, LCRF can hardly beat any other competitor,
 reaching merely 0.239 macro\F{}.
 
-\subsection{Relation Scheme}
+\subsection{Parsing Quality and Relation Scheme}
 
-Two other factors which could significantly influence the results of
-discourse-aware sentiment systems were the quality of automatic
-discourse analysis and the set of RST relations distinguished by the
-parsing system. As you might remember from the beginning of this
-chapter, while preparing the data for our experiments, we decided to
-only differentiate between \textsc{Contrastive} and
-\textsc{Non-Contrastive} links, drawing on a similar idea by
-\citet{Bhatia:15}.  The main reason for this simplification was to
-ease the work of the RST parser and DASA methods by decreasing the
-number of their distinguished classes and consequently reducing the
-number of learned parameters.  Although similar approximations were
-made in almost all other works on discourse-aware opinion mining
-\cite[see ][]{Chenlo:13,Heerschop:11,Zhou:11}, it was unclear to us
-whether this subset of relations was indeed optimal and sufficient to
-reflect all possible varieties of discourse interactions that could
-exist in text and play a role in sentiment composition.
-
-\begin{table}[h]
+Two other factors that could significantly influence the results of
+discourse-aware sentiment systems were the quality of automatic RST
+analysis and the set of discourse relations distinguished by the
+parsing system.  Although improving the results of the DPLP parser let
+alone manually annotating the complete PotTS and SB10k datasets was
+beyond the scope of this dissertation, we decided to check whether
+using hand-crafted RST trees in the test input could improve the
+scores of our tested DASA approaches.  For this purpose, we asked a
+student assistant to segment and annotate the discourse structure for
+88\% of the PotTS test data\footnote{Unfortunately, we could not
+  annotate the whole test set due to time limitations of the student.}
+and evaluated all trained systems on these trees.
+\begin{table}[htb]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
@@ -1742,129 +1737,163 @@ exist in text and play a role in sentiment composition.
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.83      0.77      0.80       541
-      %% negative       0.61      0.12      0.20       220
-      %% neutral       0.54      0.89      0.67       351
-      %% avg / total       0.70      0.68      0.64      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.15%
-      %% Micro-Averaged F1-Score (All Classes): 67.6259%
-      LCRF & 0.83 & \textbf{0.77} & \textbf{0.8} & %
-      0.61 & 0.12 & 0.2 & %
-      0.54 & 0.89 & 0.67 & %
-      0.502 & 0.676\\
+      %% positive       0.82      0.82      0.82       541
+      %% negative       0.66      0.55      0.60       220
+      %% neutral       0.69      0.75      0.72       351
+      %% avg / total       0.75      0.75      0.75      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 70.96%
+      %% Micro-Averaged F1-Score (All Classes): 74.7302%
+      LCRF & 0.82 & 0.82 & \textbf{0.82} & %
+       \textbf{0.66} & 0.55 & 0.6 & %
+       0.69 & 0.75 & 0.72 & %
+       0.71 & 0.747\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.85      0.76      0.80       541
-      %% negative       0.59      0.13      0.22       220
-      %% neutral       0.54      0.89      0.67       351
-      %% avg / total       0.70      0.68      0.64      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 50.72%
-      %% Micro-Averaged F1-Score (All Classes): 67.5360%
-      LMCRF & 0.85  & 0.76 & \textbf{0.8} & %
-      0.59 & 0.13 & 0.22 & %
-      0.54 & 0.89 & 0.67 & %
-      0.507 & 0.676\\
+      %% positive       0.83      0.81      0.82       541
+      %% negative       0.65      0.55      0.60       220
+      %% neutral       0.69      0.78      0.73       351
+      %% avg / total       0.75      0.75      0.75      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 70.86%
+      %% Micro-Averaged F1-Score (All Classes): 74.9101%
+     LMCRF & \textbf{0.83} & 0.81 & \textbf{0.82} & %
+       0.65 & 0.55 & 0.6 & %
+       0.69 & \textbf{0.78} & \textbf{0.73} & %
+       0.709 & 0.749\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.84      0.76      0.80       541
-      %% negative       0.60      0.17      0.26       220
-      %% neutral       0.55      0.88      0.68       351
-      %% avg / total       0.70      0.68      0.65      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 53.10%
-      %% Micro-Averaged F1-Score (All Classes): 68.1655%
-      RDP & 0.84 & 0.76 & \textbf{0.8} & %
-      0.6 & 0.17 & 0.26 & %
-      0.55 & 0.88 & \textbf{0.68} & %
-      \textbf{0.531} & \textbf{0.682}\\
+      %% positive       0.80      0.84      0.82       541
+      %% negative       0.64      0.58      0.61       220
+      %% neutral       0.72      0.71      0.72       351
+      %% avg / total       0.75      0.75      0.75      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 71.76%
+      %% Micro-Averaged F1-Score (All Classes): 75.0899%
+      RDP & 0.8 & 0.84 & \textbf{0.82} & %
+       0.64 & 0.58 & 0.61 & %
+       \textbf{0.72} & 0.71 & 0.72 & %
+       \textbf{0.718} & 0.751\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.90      0.07      0.12       541
-      %% neutral       0.33      0.99      0.49       351
-      %% negative       1.00      0.00      0.01       220
-      %% avg / total       0.74      0.35      0.22      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 6.65%
-      %% Micro-Averaged F1-Score (All Classes): 34.7122%
-      DDR & \textbf{0.9} & 0.07 & 0.12 & %
-      0.33 & \textbf{0.99} & \textbf{0.49} & %
-      \textbf{1.} & 0.0 & 0.01 & %
-      0.067 & 0.347\\
+      %% positive       0.78      0.75      0.77       541
+      %% negative       0.58      0.66      0.62       220
+      %% neutral       0.66      0.63      0.64       351
+      %% avg / total       0.70      0.70      0.70      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 69.31%
+      %% Micro-Averaged F1-Score (All Classes): 69.7842%
+      DDR & 0.78 & 0.75 & 0.77 & %
+       0.58 & \textbf{0.66} & \textbf{0.62} & %
+       0.66 & 0.63 & 0.64 & %
+       0.693 & 0.698\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.85      0.54      0.66       541
-      %% negative       0.44      0.04      0.07       220
-      %% neutral       0.44      0.93      0.60       351
-      %% avg / total       0.64      0.56      0.52      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 36.36%
-      %% Micro-Averaged F1-Score (All Classes): 56.4748%
-      R2N2 & 0.85 & 0.54 & 0.66 & %
-      0.44 & 0.04 & 0.07 & %
-      0.44 & 0.93 & 0.6 & %
-      0.364 & 0.565\\
+      %% positive       0.81      0.82      0.81       541
+      %% negative       0.64      0.53      0.58       220
+      %% neutral       0.68      0.74      0.71       351
+      %% avg / total       0.73      0.74      0.73      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 69.67%
+      %% Micro-Averaged F1-Score (All Classes): 73.6511%
+      R2N2 & 0.81 & 0.82 & 0.81 & %
+       0.64 & 0.53 & 0.58 & %
+       0.68 & 0.74 & 0.71 & %
+       0.697 & 0.737\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.81      0.12      0.21       541
-      %% negative       0.50      0.00      0.01       220
-      %% neutral       0.33      0.98      0.50       351
-      %% avg / total       0.60      0.37      0.26      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 10.92%
-      %% Micro-Averaged F1-Score (All Classes): 36.8705%
-      WNG & 0.81 & 0.12 & 0.21 & %
-      0.5 & 0.0 & 0.01 & %
-      0.33 & \textbf{0.98} & 0.5 & %
-      0.109 & 0.369\\
+      %% positive       0.58      0.74      0.65       541
+      %% negative       0.63      0.19      0.29       220
+      %% neutral       0.51      0.51      0.51       351
+      %% avg / total       0.56      0.56      0.53      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 46.97%
+      %% Micro-Averaged F1-Score (All Classes): 55.7554%
+      WNG & 0.58 & 0.74 & 0.65 & %
+       0.63 & 0.19 & 0.29 & %
+       0.51 & 0.51 & 0.51 & %
+       0.47 & 0.558\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.87      0.41      0.56       541
-      %% negative       0.00      0.00      0.00       220
-      %% neutral       0.40      0.97      0.56       351
-      %% avg / total       0.55      0.51      0.45      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 27.92%
-      %% Micro-Averaged F1-Score (All Classes): 50.5396%
-      \textsc{Last} & 0.87 & 0.41 & 0.56 & %
-      0.0 & 0.0  & 0.0 & %
-      0.4 & 0.97 & 0.56 & %
-      0.279 & 0.505\\
+      %% positive       0.55      0.86      0.67       541
+      %% negative       0.51      0.11      0.18       220
+      %% neutral       0.56      0.35      0.43       351
+      %% avg / total       0.54      0.55      0.50      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 42.59%
+      %% Micro-Averaged F1-Score (All Classes): 55.0360%
+      \textsc{Last} & 0.55 & \textbf{0.86} & 0.67 & %
+       0.51 & 0.11 & 0.18 & %
+       0.56 & 0.35 & 0.43 & %
+       0.426 & 0.55\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.76      0.13      0.22       541
-      %% negative       0.00      0.00      0.00       220
-      %% neutral       0.33      0.97      0.50       351
-      %% avg / total       0.48      0.37      0.26      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 10.79%
-      %% Micro-Averaged F1-Score (All Classes): 36.8705%
-      \textsc{Root} & 0.76 & 0.13 & 0.22 & %
-      0.0 & 0.0 & 0.0 & %
-      0.33 & 0.97 & 0.5 & %
-      0.108 & 0.369\\
+      %% positive       0.58      0.56      0.57       541
+      %% negative       0.58      0.25      0.35       220
+      %% neutral       0.43      0.60      0.50       351
+      %% avg / total       0.53      0.51      0.50      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 46.03%
+      %% Micro-Averaged F1-Score (All Classes): 51.2590%
+      \textsc{Root} & 0.58 & 0.56 & 0.57 & %
+       0.58 & 0.25 & 0.35 & %
+       0.43 & 0.6 & 0.5 & %
+       0.46 & 0.513\\
 
       %% General Statistics:
       %% precision    recall  f1-score   support
-      %% positive       0.84      0.77      0.80       541
-      %% negative       0.63      0.15      0.24       220
-      %% neutral       0.55      0.88      0.67       351
-      %% avg / total       0.70      0.68      0.65      1112
-      %% Macro-Averaged F1-Score (Positive and Negative Classes): 52.11%
-      %% Micro-Averaged F1-Score (All Classes): 67.9856%
-
-      \textsc{No-Discourse} & 0.84 & \textbf{0.77} & \textbf{0.8} & %
-      \textbf{0.63} & 0.15 & 0.24 & %
-      0.55 & 0.88 & 0.67 & %
-      0.521 & 0.68\\\bottomrule
+      %% positive       0.81      0.84      0.82       541
+      %% negative       0.65      0.57      0.61       220
+      %% neutral       0.72      0.73      0.73       351
+      %% avg / total       0.75      0.75      0.75      1112
+      %% Macro-Averaged F1-Score (Positive and Negative Classes): 71.63%
+      %% Micro-Averaged F1-Score (All Classes): 75.2698%
+      \textsc{No-Discourse} & 0.81 & 0.84 & \textbf{0.82} & %
+       0.65 & 0.57 & 0.61 & %
+       \textbf{0.72} & 0.73 & \textbf{0.73} & %
+       0.716 & \textbf{0.753}\\\bottomrule
     \end{tabular}
     \egroup
     \caption[Results of DASA methods on manually annotated RST
       trees]{Results of discourse-aware sentiment analysis methods on
       the PotTS corpus with manually annotated RST trees}
-    \label{dasa:tbl:res}
+    \label{dasa:tbl:res-gold}
   \end{center}
 \end{table}
+As we can see from the results in Table~\ref{dasa:tbl:res-gold}, the
+scores of all systems except \textsc{WNG}, \textsc{Last}, and
+\textsc{Root} increase by three to four percent.  Even the macro- and
+micro-averaged \F{}-measures of the discourse-unaware classifier raise
+from 0.677 and 0.706 to 0.716 and 0.753 respectively.  This latter
+change, however, is exclusively due to the reduced size of the test
+set and not the improved discourse structure of the input.  This time,
+the discourse-unware method also surpasses all other competitors in
+terms of the micro-averaged \F{}, achieving an accuracy of 75,3\%, but
+still fails to outperform the Recursive Dirichlet Process on the
+macro-averaged metric, getting a 0.2\% worse score than RDP (0.716
+versus 0.718 macro-\F{}).  Despite its signifcant improvements, the
+LMCRF method cannot surpass the plain LBA classifier, although it gets
+the same \F{}-scores for the positive and neutral classes as the
+discourse-unaware method.  The most unexpected finding for us though
+is that in gold discourse structures (as annotated by our student),
+EDUs which control the actual polarity of the message are unlikely to
+appear at the extreme ends of these structures either in horizontal
+(as the last segment of the message) or in vertical order (as the root
+of the discourse tree), which leads to a degradation of the scores for
+the \textsc{Last} and \textsc{Root} methods.
+
+As you might remember from the beginning of this chapter, while
+preparing the data for our experiments, we decided to only
+differentiate between \textsc{Contrastive} and
+\textsc{Non-Contrastive} links, drawing on a similar idea by
+\citet{Bhatia:15}.  The main reason for this simplification was to
+ease the work of the RST parser and DASA methods by decreasing the
+number of their distinguished classes and consequently reducing the
+number of learned parameters.  Although similar approximations were
+made in almost all other works on discourse-aware opinion mining
+\cite[see ][]{Chenlo:13,Heerschop:11,Zhou:11}, it was unclear to us
+whether this subset of relations was indeed optimal and sufficient to
+reflect all possible varieties of discourse interactions that could
+exist in text and play a role in sentiment composition.
 
 To investigate this question in more detail, we decided to repeat our
 experiments, using the subsets of relations proposed by
@@ -2070,3 +2099,61 @@ with the R2N2 system, which reaches its best results with the
 \citeauthor{Zhou:11}'s set (0.572 macro-\F{} and 0.719 micro-\F{}).
 
 \section{Summary and Conclusions}
+
+Summarizing our findings, we would like to recap that in this chapter
+we have made the following contributions and discovered the following
+facts:
+\begin{itemize}
+  \item first if all, we have presented a comprehensive overview of
+    the most popular approaches to automatic discourse analysis that
+    exist in the literature nowadays and explained why one of these
+    frameworks (Rhetorical Structure Theory) would be a more
+    appropriate basis for enhancing a sentiment analysis system with
+    discourse information than the others;
+  \item to check whether our lexicon-based attention system from the
+    previous chapter would indeed achieve better scores when working
+    on the RST tree of a tweet than when analyzing it as a whole at
+    once, disregarding of its discourse structure, we have segmented
+    all microblogs from the PotTS and SB10k corpora with an SVM-based
+    discourse segmenter~\cite{Sidarenka:15}, getting 4,771 and 3,763
+    multi-EDU microblogs respectively;
+  \item in order to obtain discourse trees for the above tweets, we
+    have retrained one of the recent state-of-the-art English RST
+    parsers \cite[DPLP; ][]{Ji:14} on the German Potsdam Commentary
+    Corpus~\cite{Stede:14} and applied it to the aforementioned PotTS
+    and SB10k messages;
+  \item to estimate the results of the existing discourse-aware
+    sentiment analysis systems, we have reimplemented the DASA
+    approaches of~\citet{Wang:15} and \citet{Bhatia:15} and also
+    established two simpler baselines, in which we predicted the
+    semantic orientation of a tweet based on the polarity of its root
+    and last EDUs, and evaluated these methods on the automatically
+    parsed data, getting the best results with the R2N2 solution
+    of~\citet{Bhatia:15} (0.657 and 0.559 macro-\F{} on PotTS and
+    SB10k respectively);
+  \item we could, however, further improve these results with our
+    three proposed novel solutions: latent and latent marginalized
+    conditional random fields and recursive Dirichlet process,
+    boosting the macro-averaged \F{}-scores to 0.678 on PotTS and
+    0.56\F{} on SB10k;
+  \item an evaluation of these methods with different settings showed
+    that these scores largely correlated with the results of the base
+    sentiment classifier (the one we used to predict the polarity of a
+    single EDU) and also revealed an important drawback of the latent
+    marginalized CRF system, which failed to predict any negative
+    instance on the test set of the PotTS corpus when used in
+    conjunction with the lexicon-based approach of~\citet{Hu:04};
+  \item nevertheless, almost all DASA approaches except for the most
+    simple ones could get better scores than in our initial
+    experiments when operating on manually annotated RST trees or
+    using a richer relation scheme than the one proposed
+    by~\citet{Bhatia:15};
+  \item finally, we could show that discourse-aware methods could
+    outperform the plain lexicon-based attention system in almost all
+    settings (the only exception was the micro-averaged \F{}-score on
+    the manually annotated PotTS trees), although the margin of these
+    improvements was moderate.  We can, however, imagine that ths
+    margin might further increase if we apply discourse-aware methods
+    to messages of greater text length or take the whole discussion
+    thread into account.
+\end{itemize}
