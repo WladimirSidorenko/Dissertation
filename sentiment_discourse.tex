@@ -1267,7 +1267,7 @@ the probabilities of parent and child (the more similar these
 probabilities are, the higher will be the scale); and, finally, the
 entropy in the denominator tells us how uniform the vector
 $\boldsymbol{\alpha}_{i_j}$ is (the more uniform the polarity scores
-are, the less confidence we will have in the final outcome).
+are, the less confident we will be in the final outcome).
 
 Now, with this term at hand, we are all set to draw the actual
 probability of polar classes for the $i$-th node when seeing its
@@ -1534,9 +1534,31 @@ negative class.
 
 \subsection{Error Analysis}
 
+Although our methods performed quite competitive on both datasets, we
+decided to have a closer at their errors in order to understand their
+remaining potential weaknesses.
+
+The first such error shown in Example~\ref{snt:dasa:exmp:lcrf-error}
+was made by the latent CRF system, which assigned the neutral label to
+an obviously negative tweet.  As is evident from the picture of the
+automatic RST tree in this example though, we can hardly expect the
+right decision in this case, because neither any of the EDUs nor the
+root node of this message have been considered as negative by the LBA
+classifier.  But, even in this apparently hopeless situation, the
+messages propagated from the leaves to the root still tell the latter
+node that the predicted class better be negative. (We have inspected
+the message scores passed in the forward direction and found that the
+total score for the negative class amounts to 0.597, whereas the
+belief in the positive class [the closest competitor] only runs up to
+0.462.)  Unfortunately, these scores cannot outweigh the state
+potentials of the root node, which assign the highest weight to the
+neutral polarity (0.524 for the neutral class versus -0.118 for the
+negative polarity).\footnote{All scores for this system are given in
+  the logarithm domain.}
 \begin{example}[Error Made by the \textsc{LCRF} System\newline]\label{snt:dasa:exmp:lcrf-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    $[$Boah , also doch wieder ein Mann , oder ?$]_1$ $[$ODER ?$]_2$ $[$papst$]_3$}\\
+    $[$Boah , also doch wieder ein Mann , oder ?$]_1$ $[$ODER ?$]_2$
+    $[$papst$]_3$}\\
   \noindent $[$Damn, a man again, isn't it ?$]_1$ $[$ISN'T ?$]_2$ $[$pope$]_3$\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
@@ -1548,7 +1570,13 @@ negative class.
       \end{center}
     }
 \end{example}
-
+As it turns out, high neutral potentials of the root node are also the
+main reason for the misclassification in
+Example~\ref{snt:dasa:exmp:lmcrf-error}, where the LMCRF system
+confuses the negative polarity with the neutral class.  This time,
+however, messages coming from the leaves suggest almost equal
+probabilities for the two semantic orientations, so that the features
+of the root node turn the scale in the final decision.
 \begin{example}[Error Made by the \textsc{LMCRF} System\newline]\label{snt:dasa:exmp:lmcrf-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape '
     $[$Wissen ?$]_1$ $[$Igitt geh weg damit !$]_2$}\\
@@ -1563,7 +1591,23 @@ negative class.
       \end{center}
   }
 \end{example}
-
+Unfortunately, the recursive Dirichlet process cannot overcome many
+erroneous predictions of the base classifier either.  For instance, in
+Example~\ref{snt:dasa:exmp:rdp-error}, LBA assigns the greatest scores
+to the positive class in three out of four EDUs, even though each of
+them by itself expresses a negative (sarcastic) attitude of the
+author.  Alas, the only case where the base classifier correctly the
+negative label (``Das is noch lange nicht ausdiskutiert !''
+[\emph{It's no way been talked out !}]) chokes off at the very
+beginning of the score propagation.  (As it turned out, the learned
+$\beta$ parameter, which controls the amount of information propagated
+from child to its parent, is extremely low for the negative class,
+amounting to only 0.097, whereas for the positive and negative
+polarities it runs up to 0.212 and 0.279 respectively.  Due to this
+low value, only one tenth of the negative score from EDU 3 is taken
+into account while computing the semantic orientation of the abstract
+span 1, which in the end runs up to 0.265, 0.176, and 0.559 for the
+negative, neutral, and positive classes respectively.)
 \begin{example}[Error Made by the \textsc{RDP} System\newline]\label{snt:dasa:exmp:rdp-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     $[$Prima , was sind das f\"ur Idioten im DFB ?$]_1$ $[$Das is eine
@@ -1582,7 +1626,17 @@ negative class.
       \end{center}
     }
 \end{example}
-
+Another iteresting error shown in
+Example~\ref{snt:dasa:exmp:root-error} was made by our baseline
+\textsc{Root} system system, which similarly to the CRF-based
+approaches confused the negative class with the neutral polarity.
+This time, however, the misclassification is due to the discourse
+structure itself rather than wrong predictions of the underlying
+sentiment classifier.  The LBA system correctly recognizes that the
+negative smiley at the end of tweet has a strictly negative semantic
+orientation, but the DASA baseline can only see the first EDU at the
+top of the RST tree, which merely expresses a hypothesis, free of any
+polar connotation.
 \begin{example}[Error Made by the \textsc{Root} System\newline]\label{snt:dasa:exmp:root-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     $[$Die NSA weiss auch von dir ...$]_1$ $[$N\"utzt uns auch nichts .$]_2$ $[$ \%NegSmiley$]_3$}\\
@@ -1598,24 +1652,28 @@ negative class.
       \end{center}
     }
 \end{example}
-
+Although our \textsc{Last} system can correctly handle cases like the
+previous example, this baseline is susceptible to other kinds of
+mistakes.  For instance, in Example~\ref{snt:dasa:exmp:last-error}, it
+assigns the neutral label to an obviously sad tweet based on the
+polarity of the right-most discourse segment, which indeed shows some
+positive attitude.  However, in contrast to the movie description from
+Example~\ref{disc-snt:exmp-pang02}, where the last sentence completely
+overturned the polarity of the whole preceding text, this time, the
+contrasting attitude does not alter the general negative mood of the
+tweet, but merely dampens its effect.
 \begin{example}[Error Made by the \textsc{Last} System]\label{snt:dasa:exmp:last-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape ' (
-    :'( :'( Die letzte Aussprache war wohl das schwerste Telefonat
-    meines gesamten Lebens :'( :'( :'( Aber wir gehen friedlich und
-    als}\\
-  \noindent ' ( :'( :'( The last talk was probably the most difficult
-  call in my entire life :'( :'( :'( But we go apart peacefully and
-  as\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    $[$' ( :'( :'( Die letzte Aussprache war wohl das schwerste
+      Telefonat meines gesamten Lebens :'( :'( :'($]_1$ $[$Aber wir gehen
+        friedlich und als F $\ldots]_2$}\\
+  \noindent $[$' ( :'( :'( The last talk was probably the most
+    difficult call in my entire life :'( :'( :'($]_1$ $[$But we go
+    apart peacefully and as f $\ldots]_1$\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
   \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{black}{neutral*}}
-  %% <<<	gold:	negative
-  %% >>>	predicted:	neutral
-  %% 394487734192316416	' ( :'( :'( Die letzte Aussprache war wohl das schwerste Telefonat
-  %% meines gesamten Lebens :'( :'( :'( Aber wir gehen friedlich und als
-  %% F ...
 \end{example}
 
 \section{Evaluation}
