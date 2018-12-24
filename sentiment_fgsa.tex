@@ -344,44 +344,44 @@ The main reasons for the huge success of this model are:
       P(KON, ADV, NN, VA) &= P(KON)\times P(ADV|KON)\\
       &\times P(NN|ADV)\times P(VA|NN)\\
       &=\frac{\exp(1)}{\exp(1)}\times\frac{\exp(0.5 + 0.5)}{\exp(0.5 + 0.5) + \exp(0.5 + 0.5)}\\%
-      &\times\frac{\exp(0.2 + 0.5)}{\exp(0.2 + 0.5) + \exp(0.8 + 0.5)}\times\frac{\exp(0.9 + 1.)}{\exp(0.9 + 1.)} \approx 0.177
+      &\times\frac{\exp(0.2 + 0.5)}{\exp(0.2 + 0.5) + \exp(0.8 + 0.5)}\\
+      &\times\frac{\exp(0.9 + 1.)}{\exp(0.9 + 1.)} \approx 0.177
     \end{align*}
-    At the same time, the probability of the incorrect variant
+    At the same time, the probability of the wrong variant
     ($KON-ADV-ADJA-VA$) amounts to $\approx$ 0.323 and will therefore
-    be preferred by an automatic tagger.
+    be preferred by the automatic tagger.
 
     A different situation is observed with the CRFs, where the
     normalizing factor in the denominator is computed over the whole
     input sequence without factorizing into individual terms for each
-    transition as it is done in the MEMM case.  This way, the
-    probability of the correct labels would run up to:
+    transition as it is done in MEMM.  This way, the probability of
+    the correct labels will run up to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
       P(ADV|KON)\times P(NN|ADV)\\
       &\times P(VA|NN)\\ =&\frac{\exp(1 + 0.5
         \times 3 + 0.2 + 0.9 + 1)}{Z} \approx 0.252,
     \end{align*}
-    where
-    $Z = \exp(1 + 0.5 \times 3 + 0.2 + 0.9 + 1) + \exp(1 + 0.5 \times
-    3 + 0.8 + 0.1 + 1) + \exp(1 + 0.5 \times 3 + 0.7 + 0.9 + 1) +
-    \exp(1 + 0.5 \times 3 + 0.3 + 0.1 + 1)$ is the total score of all
-    possible label assignments.  The incorrect alternative
-    ($KON-ADV-ADJA-VA$), however, would get a probability score of
-    $\approx$ 0.207, which is less than the likelihood of the correct
+    where $Z = \exp(1 + 0.5 \times 3 + 0.2 + 0.9 + 1) + \exp(1 + 0.5
+    \times 3 + 0.8 + 0.1 + 1) + \exp(1 + 0.5 \times 3 + 0.7 + 0.9 + 1)
+    + \exp(1 + 0.5 \times 3 + 0.3 + 0.1 + 1)$ is the total score of
+    all possible label assignments; the incorrect alternative
+    ($KON-ADV-ADJA-VA$), however, will get a probability score of
+    $\approx$ 0.207, which is less than the score of the correct
     labeling.
   \end{example}
 \end{enumerate}
-\textbf{Training} CRFs get these useful properties thanks to a neatly
-formulated objective function in which they seek to optimize the
-global log-likelihood of the gold labels $\mathbf{Y}$ conditioned on
-the training data $\mathbf{X}$.  In particular, given a set of
-training instances
-$\mathcal{D} = \{(\mathbf{x}^{(n)}, \mathbf{y}^{(n)})\}_{n=1}^N$,
-where $\mathbf{x}^{(n)}$ stands for the input variables of the $n$-th
-instance, and $\mathbf{y}^{(n)}$ denotes its respective gold labels,
-CRF's training adds up to finding feature coefficients $\mathbf{w}$
-which maximize the log-probabilities $\ell$ of $\mathbf{y}^{(i)}$
-given their covariates $\mathbf{x}^{(i)}$ over the whole corpus:
+\textbf{Training.}\quad{}CRFs get these useful properties thanks to a
+neatly formulated objective function in which they seek to optimize
+the global log-likelihood of the gold labels $\mathbf{Y}$ conditioned
+on the training data $\mathbf{X}$.  In particular, given a set of
+training instances $\mathcal{D} = \{(\mathbf{x}^{(n)},
+\mathbf{y}^{(n)})\}_{n=1}^N$, where $\mathbf{x}^{(n)}$ stands for the
+input variables of the $n$-th instance, and $\mathbf{y}^{(n)}$ denotes
+its respective gold labels, CRF's training adds up to finding feature
+coefficients $\mathbf{w}$ which maximize the log-probabilities $\ell$
+of $\mathbf{y}^{(i)}$ given their covariates $\mathbf{x}^{(i)}$ over
+the whole corpus:
 \begin{equation}\label{snt:fgsa:eq:crf-w}
   \mathbf{w} = \argmax_{\mathbf{w}}\sum_{n=1}^N\ell
   \left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right).
@@ -444,7 +444,7 @@ dynamically using the forward-backward (FB) algorithm
 \cite{Rabiner:90}, which is a particular case of the more general
 belief propagation method \cite[cf.][p.~81]{Barber:12}.
 
-\noindent\textbf{Inference} Once the optimal feature weights are
+\noindent\textbf{Inference.}\quad{}Once the optimal feature weights are
 learned, one can unproblematically compute the most likely label
 assignment for a new instance by using the Viterbi algorithm
 \cite{Viterbi:67}, which effectively corresponds to the forward pass
@@ -452,9 +452,9 @@ of the FB method with the summation over the alternative preceding
 states replaced by the maximum operator (hence the other name for this
 algorithm---``max-product'').
 
-\noindent\textbf{Features} A crucial component which accounts for a
-huge part of the success (or failure) of a CRF system are feature
-attributes which are defined by the developer.
+\noindent\textbf{Features.}\quad{}A crucial component which accounts
+for a huge part of the success (or failure) of a CRF system are
+feature attributes which are defined by the developer.
 
 Traditionally, feature functions in CRFs are divided into transition-
 and state-based ones.  The former attributes represent real- or
@@ -537,7 +537,7 @@ semantic and syntactic traits.  These included:
     scores.}
 \end{itemize}
 
-\textbf{Results} The results of our experiments are shown in
+\textbf{Results.}\quad{}The results of our experiments are shown in
 Table~\ref{snt-fgsa:tbl:crf-res}.  As we can see from the table, with
 the given set of features, the model can perfectly well fit the
 training data, achieving a macro-averaged \F-score of~0.904.  The
@@ -741,7 +741,7 @@ function, $\vec{h}^{(t-1)}$ denotes the state of the hidden vector at
 the previous time step, and $\mathbf{x}^{(t)}$ is the input vector at
 position $t$.
 
-\textbf{LSTM} A fundamental problem which arises from the above
+\textbf{LSTM.}\quad{}A fundamental problem which arises from the above
 definition is that the gradients of the trained parameters (the ones
 involved in computing the $\vec{h}$ vector), rapidly vanish to zero or
 explode to infinity (depending on whether the absolute values of
@@ -785,15 +785,16 @@ $\vec{o}^{(t)}$ and the new value of the hidden state $\vec{h}^{(t)}$:
   \vec{h}^{(t)} &= \vec{o}^{(t)} \odot tanh(\vec{c}^{(t)}).
 \end{align*}
 
-\textbf{GRU} Despite their enormous popularity and many successful
-practical applications~\cite[cf.][]{Filippova:15,Ghosh:16,Rao:16},
-LSTMs have often been criticized for the high complexity of the
-recurrent unit.  In order to overcome this problem while still keeping
-the gradients within an appropriate range, \citet{Cho:14a} introduced
-an alternative architecture called Gated Recurrent Units (GRU).  In
-this framework, the authors also used activation and forget
-gates---$\vec{i}^{(t)}$ and $\vec{f}^{(t)}$---similar to the ones
-defined by~\citet{Hochreiter:97}:
+\textbf{GRU.}\quad{}Despite their enormous popularity and many
+successful practical
+applications~\cite[cf.][]{Filippova:15,Ghosh:16,Rao:16}, LSTMs have
+often been criticized for the high complexity of the recurrent unit.
+In order to overcome this problem while still keeping the gradients
+within an appropriate range, \citet{Cho:14a} introduced an alternative
+architecture called Gated Recurrent Units (GRU).  In this framework,
+the authors also used activation and forget gates---$\vec{i}^{(t)}$
+and $\vec{f}^{(t)}$---similar to the ones defined
+by~\citet{Hochreiter:97}:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right),\\
   \vec{f}^{(t)} &= \sigma\left(W_f\cdot \mathbf{x}^{(t)} + U_f \cdot \vec{h}^{(t-1)} + \vec{b}_f\right).
@@ -824,9 +825,9 @@ product:
   \vec{p}^{(t)} &= softmax\left(O\cdot\vec{o}^{(t)}\right).
 \end{align*}
 
-\textbf{Training} A neat property of both of these approaches is that
-the final equation, which is obtained after unrolling the loop, is
-differentiable with respect to all of its parameters, and can
+\textbf{Training.}\quad{}A neat property of both of these approaches
+is that the final equation, which is obtained after unrolling the
+loop, is differentiable with respect to all of its parameters, and can
 therefore be optimized using the standard gradient update techniques.
 Since most of these parameters, however, represent high-dimensional
 matrices or vectors, finding an optimal learning rate (\ie{} the size
@@ -880,17 +881,17 @@ development set, and trained the final model for 256 epochs, choosing
 parameter values which maximized the macro-averaged \F-score on the
 development data.
 
-\textbf{Inference} Since each of the above approaches (LSTM and GRU)
-explicitly defines an output unit, the inference of the most likely
-label assignment for an input instance $\mathbf{x}$ is straightforward
-and amounts to finding the $\argmax$ value of the output vector at
-each time step of the recurrence:
+\textbf{Inference.}\quad{}Since each of the above approaches (LSTM and
+GRU) explicitly defines an output unit, the inference of the most
+likely label assignment for an input instance $\mathbf{x}$ is
+straightforward and amounts to finding the $\argmax$ value of the
+output vector at each time step of the recurrence:
 \begin{equation}
   \mathbf{\hat{y}} =
   \argmax{\vec{p}^{(1)}},\argmax{\vec{p}^{(2)}},\ldots,\argmax{\vec{p}^{(|\mathbf{x}|)}}.
 \end{equation}
 
-\textbf{Results} To account for the random factors in the
+\textbf{Results.}\quad{}To account for the random factors in the
 initialization, we repeated each training experiment three times, and
 show the mean and standard deviation of these results in
 Table~\ref{snt-fgsa:tbl:rnn-res}.
