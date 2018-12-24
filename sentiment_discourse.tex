@@ -15,56 +15,61 @@
 
 \chapter{Discourse-Aware Sentiment Analysis}
 
-Although coarse-grained sentiment analysis methods do a fairly good
-job at classifying the overall polarity of a message, putting their
-best leg forward to incorporate the compositional principle into that
-prediction, a crucial limitation of all these systems is that they
-absolutely overlook the structural nature of their input by either
-considering it as a single whole (\eg{} bag-of-features approaches) or
-analyzing it as a monotone sequence of equally important elements
-(\eg{} recurrent neural methods).  Unfortunately, both of these
-solutions completely ignore the hierarchical principle of language
-\cite{Saussure:90,Hjelmslev:70} which states that complex linguistic
-units emerge from the bottom up, by putting together successively
-bigger language elements: \eg{} morphemes are united together into
-words, several words are joined together into sentences, and multiple
-sentences eventually constitue a discourse.  Moreover, besides this
-inherent structural hierarchy, even units of the same linguistic level
-might play a different role and be of unequal importance to the
-meaning of the higher-level whole when joined syntagmatically: for
-example, in words, the root morpheme typically conveys more lexical
-information than affixes; in sentences, the syntactic head normally
-dominates its grammatic dependents; and a similar kind of imbalance
-can also be observed in discourse, where one of the sentences
-frequently expresses the gist of the whole text.
+Although coarse-grained sentiment analysis methods presented in the
+previous chapter do a fairly good job at classifying the overall
+polarity of a message,
+%% putting their best leg forward to incorporate the compositional
+%% principle into that prediction,
+a crucial limitation of all these systems is that they completely
+ignore the structural nature of their input by either considering it
+as a single whole (\eg{} bag-of-features approaches) or analyzing it
+as a monotone sequence of equally important elements (\eg{} recurrent
+neural methods).  Unfortunately, both of these solutions violate the
+hierarchical principle of language \cite{Saussure:90,Hjelmslev:70},
+which states that complex linguistic units are formed from smaller
+language elements in the bottom-up way: \eg{} words are created by
+putting together morphemes, sentences are made of several words, and
+the discourse is composed of multiple coherent sentences.  Moreover,
+apart from this inherent structural heterogeneity, even units of the
+same level might play a different role and be of unequal importance
+when joined syntagmatically into the higher-level whole: for example,
+in words, the root morpheme typically conveys more lexical information
+than the affixes; in sentences, the syntactic head usually dominates
+its grammatic dependents; and, in discourse, one of the sentences
+frequently expresses more prominent ideas than the rest of the text.
+%% At the same time, even auxiliary modifying elements might completely
+%% overturn the meaning of the central part to its opposite (cf. \emph{to
+%%   like} vs. \emph{to dislike}; \emph{She enjoyed this song}
+%% vs. \emph{She didn't enjoy this song}; \emph{Trump is a good
+%%   businessman} vs. \emph{Trump is a good businessman, but a terrible
+%%   employer}).
 
 Exactly the lack of discourse information was one of the main reasons
-for the misclassifications of the systems of \citet{Severyn:15},
-\citet{Baziotis:17}, and our own LBA method shown in Examples
+for the misclassifications made by the systems of \citet{Severyn:15},
+\citet{Baziotis:17}, and our own LBA method in Examples
 \ref{snt:cgsa:exmp:severyn-error}, \ref{snt:cgsa:exmp:baziotis-error},
 and \ref{snt:cgsa:exmp:lba-error}.  Since none of these approaches
-explicitly took the discourse structure into account (in the best
-case, the inference simply proceeded from the level of words directly
-to the level of message), we decided to check whether making the last
-of these solutions (the LBA classifier) aware of discourse phenomena
-would improve its results.  But, before we present our findings, we
-first would like to take a short digression and give an overview of
-the most popular approaches to discourse analysis that exist in the
-literature nowadays.  Afterwards, in Section~\ref{sec:dasa:data}, we
-will describe the way how we inferred and added discourse information
-to the PotTS and SB10k data.  Then, in Section~\ref{sec:dasa:methods},
-we will summarize the current state of the art in discourse-aware
-sentiment analysis (DASA) and also present several own methods,
-evaluating their results on the aforementioned corpora.  After
-analyzing the effects of different common factors (such as various
-subsets of discourse relations and the quality of the downstream
-sentiment classifier), we will recap our results and draw conclusions
-in the last section of this part.
+explicitly took the discourse structure into account, we decided to
+check whether making the last of these solutions (the LBA classifier)
+aware of discourse phenomena would improve the results of this method.
+But before we proceed to our experiments, we first would like to make
+a short digression and give an overview of the most popular approaches
+to discourse analysis that exist in the literature nowadays.
+Afterwards, in Section~\ref{sec:dasa:data}, we will describe the way
+how we inferred and added discourse information to the PotTS and SB10k
+data.  Then, in Section~\ref{sec:dasa:methods}, we will summarize the
+current state of the art in discourse-aware sentiment analysis (DASA)
+and also present our own methods, evaluating them on the
+aforementioned corpora.  After analyzing the effects of various common
+factors on discourse-aware sentiment analysis methods (such as the
+impact of the underlying sentiment classifier and the amenability of
+various discourse relation subsets), we will recap our results and
+summarize our findings in the last part of this chapter.
 
 \section{Discourse Analysis}\label{sec:dasa:theory}
 
-Since the main focus of this chapter will be on \emph{discourse
-  analysis}, we should first clarify what discourse analysis actually
+Since the main focus of our experiments will be on \emph{discourse
+  analysis}, we first need to clarify what discourse analysis actually
 means and which common ways there are to represent and analyze
 discourse automatically.
 
@@ -72,62 +77,61 @@ In a nutshell, discourse analysis is an area of research which
 explores and analyzes language phenomena beyond the sentence level
 \cite{Stede:11}.  Although the scope of this research can be quite
 large (ranging from the use of pronouns in a sentence to the logical
-composition of the whole document), in our experiments we will
-primarily concentrate on the coherence structure of the text, \ie{}
-its segmentation into \emph{elementary discourse units}\todo{give a
-  definition of EDUs as parenthesis} (EDUs) and induction of
-(hierarchical) \emph{coherence relations} between these EDUs\todo{give
-  a definition of coherence relations as parenthesis}.
+composition of the entire document), in our work we will primarily
+concentrate on the coherence structure of the text, \ie{} its
+segmentation into \emph{elementary discourse units} (typically single
+propositions) and induction of hierarchical \emph{coherence relations}
+(semantic or pragmatic links) between these EDUs.
 
 Although the idea of splitting the discourse into smaller meaningful
-pieces and inferring semantic links between these parts is anything
-but new, dating back to the very origins of general linguistics
-\cite{Aristotle:10} and in particular its structuralism branch
-\cite{Saussure:90}, an especially big surge of interest in this field
-happened in the 1970-s with the fundamental works of
-\citet{vanDijk:72} and \citet{vanDijk:83}.  In their study of
-different stategies of discourse comprehension, the authors introduced
-the notion of local and global coherence, defining the former as a set
-of ``rules and conditions for the well-formed concatenation of pairs
-of sentences in a linearly ordered sequence'' and specifying the
-latter as contraints on the macro-structure of the narrative
+pieces and inferring semantic relationships between these parts is
+anything but new, dating back to the very origins of general
+linguistics \cite{Aristotle:10} and in particular its structuralism
+branch \cite{Saussure:90}, an especially big surge of interest in this
+field happened in the 1970-s with the fundamental works of
+\citet{vanDijk:72} and \citet{vanDijk:83}, who introduced the notion
+of local and global coherence, defining the former as a set of ``rules
+and conditions for the well-formed concatenation of pairs of sentences
+in a linearly ordered sequence'' and specifying the latter as
+contraints on the macro-structure of the narrative
 \cite[see][]{Hoey:83}.  Similar ideas were also proposed
 by~\citet{Longacre:79,Longacre:96}, who considered the paragraph as a
-unit of tagmemic grammar which was composed of multiple sentences
+unit of tagmemic grammar that was composed of multiple sentences
 according to a predefined set of compositional principles.  Almost
 contemporarily with these works, \citet{Winter:77} presented an
 extensive study of various lexical means which could connect two
-sentences and divided these means into two major groups:
+sentences and grouped these means into two major categories:
 \textsc{Matching} and \textsc{Logical Sequence}; depending on whether
-they introduced sentences that were rather elaborating on the previous
-content or adding new information to the preceding context.
+they introduced sentences that were giving more details on the
+previous content or adding new information to the preceding narrative.
 
 The increased interest of traditional linguistics in text-level
 analysis has rapidly spurred the attention of the broader NLP
 community.  Among the first who stressed the importance of discourse
 structure for automatic generation and understanding of texts was
 \citet{Hobbs:79}, who argued that semantic links between sentences
-were one the most important component for building a coherent text.
-Similarly to \citeauthor{Winter:77}, \citeauthor{Hobbs:79} also
-proposed a set of possible inter-sentence relations which comprised
-\textsc{Elaboration}, \textsc{Parallel}, and \textsc{Contrast}.
-Although this taxonomy was obviously too small to accommodate all
-different semantic ties that could exist between two sentences, this
-division had laid the foundations for many successful approaches to
-automatic discourse processing that appeared later on.
+were one the most important component for building a coherent
+discourse.  Similarly to \citeauthor{Winter:77}, \citeauthor{Hobbs:79}
+also proposed a classification of inter-sentence relations, dividing
+them into \textsc{Elaboration}, \textsc{Parallel}, and
+\textsc{Contrast}.  Although this taxonomy was obviously too small to
+accommodate all possible semantic and pragmatic relationships that
+could exist between two clauses, this division had laid the
+foundations for many successful approaches to automatic discourse
+analysis that appeared in the following decades.
 
-\textbf{RST} One of the best-known such approaches---\emph{Rhetorical
-  Structure Theory} or \emph{RST}---was presented by~\citet{Mann:88}.
-Besides revising \citeauthor{Hobbs:79}' inventory of possible
-discourse relations and expanding it to a set of 23 elements
-(including new items such as \textsc{Evidence}, \textsc{Antithesis},
-\textsc{Elaboration}, \textsc{Circumstance}, etc.), the authors also
-introduced the distinction between nucleus-satellite (hypotactic) and
-multinuclear (paratactic) links, depending on whether the arguments of
-these relations were of different or equal importance to the content
-of the whole text.  Based on this distinction, they formally described
-each relation using a set of constraints on the \emph{Nucleus} (N),
-\emph{Satellite} (S), \emph{the N+S combination}, and \emph{the
+\textbf{RST.}\quad{}One of the best-known such
+approaches---\emph{Rhetorical Structure Theory} or \emph{RST}---was
+presented by~\citet{Mann:88}.  Besides revising \citeauthor{Hobbs:79}'
+inventory of discourse relations and expanding it to 23 elements
+(including new items such as \textsc{Antithesis},
+\textsc{Circumstance}, \textsc{Evidence}, and \textsc{Elaboration}),
+the authors also divided all coherence links into nucleus-satellite
+(hypotactic) and multinuclear (paratactic) ones, depending on whether
+the arguments of these edges were of different or equal importance to
+the content of the whole text.  Based on this division, they formally
+described each relation as a set of constraints on the \emph{Nucleus}
+(N), \emph{Satellite} (S), \emph{the N+S combination}, and \emph{the
   effect} of the whole combination on the reader (R).  An excerpt from
 the original description of the \textsc{Antithesis} link is shown in
 Example~\ref{dasa:exmp:rst-evidence}
@@ -157,80 +161,76 @@ Example~\ref{dasa:exmp:rst-evidence}
 
   \textbf{Locus of the Effect:} N
 \end{example}
-With the help of these relations, \citeauthor{Mann:88} then defined
-the general structure of a discourse as a projective (constituency)
-tree whose nodes were either elementary discourse units or subtrees,
-which were connected to each other via semantic edges (relations).
+The authors then defined the general structure of discourse as a
+projective (constituency) tree whose nodes were either elementary
+discourse units or subtrees that were connected to each other via
+these predefined coherence links.  You can see an example of such tree
+from the original Rhetorical Structure Treebank \cite{Carlson:01a} in
+Figure~\ref{dasa:fig:rst-tree}.
 
-You can see an example of such tree from the Rhetorical Structure
-Treebank \cite{Carlson:01a} in Figure~\ref{dasa:fig:rst-tree}.
-
-\begin{figure*}[htbp!]
+\begin{figure*}[htb!]\label{dasa:fig:rst-tree}
   \input{rst.tex}
 \end{figure*}
 
 Despite its immense popularity and practical utility \cite[see
-][]{Marcu:98,Yoshida:14,Bhatia:15,Goyal:16}, RST has been often
-criticized for the rigidness of the imposed tree constraint
-\cite{Wolf:05} and arbitrariness of distinguished relations
+][]{Marcu:98,Yoshida:14,Bhatia:15,Goyal:16}, RST has often been
+criticized for the rigidness of the imposed tree structure
+\cite{Wolf:05} and arbitrariness of its distinguished relations
 \cite{Nicholas:94,Miltsakaki:04}.  As a result of this criticism, two
-alternative approaches to automatic discourse analysis have entered
-the stage.
+alternative approaches to automatic discourse analysis have been
+proposed in the literature.
 
-\textbf{PDTB} One of these approaches---PDTB (named so after the Penn
-Discourse Treebank \cite{Prasad:04})---was developed by the research
-group of the University of Pennsylvania
-\cite{Miltsakaki:04,Miltsakaki:04a,Prasad:08} and in essence
-represents an \emph{underspecification of RST}, where, instead of
-fully specifying the hierarchical structure of the text and providing
-a comprehensive set of discourse relations, the authors mainly focused
-on the grammatical and lexical means (connectives) that could link two
-sentences.  Typical such means were coordinating or subordinating
-conjunctions (\eg{} \emph{and}, \emph{because}, \emph{since}, etc.)
-and discourse adverbials (\eg{} \emph{however}, \emph{otherwise},
-\emph{as a result}, etc.).  According to the authors' definition, each
-such connective had to accept two sentential arguments (\textsc{Arg1}
-and \textsc{Arg2}) and express a semantic relationship (\emph{sense})
-holding between these predicates.%% The choice
-%% of these senses was explicitly restricted for each word: for
-%% example, the set of possible senses for \emph{nonetheless} included
-%% \textsc{Comparison}, \textsc{Conjunction},
+\textbf{PDTB.}\quad{}One of these approaches---PDTB (named so after
+the Penn Discourse Treebank \cite{Prasad:04})---has been developed by
+the research group of the University of Pennsylvania
+\cite{Miltsakaki:04,Miltsakaki:04a,Prasad:08} and at its core
+represents an \emph{underspecification of RST}, where instead of fully
+specifying the hierarchical structure of the whole text and providing
+an all-embracing set of discourse relations, the authors have mainly
+focused on the grammatical and lexical means that can connect two
+sentences (\emph{connectives}) and express a semantic relationship
+(\emph{sense}) holding between these predicates.  Typical such means
+are coordinating or subordinating conjunctions (\eg{} \emph{and},
+\emph{because}, \emph{since}) and discourse adverbials (\eg{}
+\emph{however}, \emph{otherwise}, \emph{as a result}), which usually
+denote a \textsc{Conjunction}, a \textsc{Comparison}, a
+\textsc{Contrast}, or some other sense between their two sentential
+arguments (\textsc{Arg1} and \textsc{Arg2}).
+%% The choice of these senses was explicitly restricted for each word:
+%% for example, the set of possible senses for \emph{nonetheless}
+%% included \textsc{Comparison}, \textsc{Conjunction},
 %% \textsc{Contra-Expectation}, and \textsc{Contrast}.
 
 Apart from \emph{explicitly} mentioned connectives, \citet{Prasad:04}
-also allowed for situations where connective elements were missing
-from the text but could be easily inferred by the reader.  They
-denoted these cases as \emph{implicit} relations and asked the
-annotators to label the arguments of such structures as well,
-additionally, specifying the connective which, in their opinion, was
-omitted.
-
-Finally, if there was no connective at all, \citet{Prasad:04}
-distinguished three different possibilities:
-\begin{inparaenum}[(i)]
-\item the coherence relation was either expressed by an alternative
-  lexical means which made the connective redundant
-  (\textsc{AltLex}), or
-\item it was achieved by referring to the same entities in both
-  arguments (\textsc{EntRel}), or
-\item there was no coherence relation (\textsc{NoRel});
-\end{inparaenum}
-and asked the experts to annotate these situations respectively with
-different tags.  Furthermore, in case of reported speech, they also
-instructed the annotators to mark the authors of the statements as a
-special \textsc{Attribution} span.
+also allow for situations where the connectives are missing from the
+text but can be easily inferred by the reader.  They denote these
+cases as \emph{implicit} relations and demand the arguments of such
+structures be determined as well.  Furthermore, if there is no
+connective at all, the authors of PDTB distinguish three different
+possibilities:
+\begin{itemize}
+\item the coherence relation is either expressed by an alternative
+  lexical means which makes the connective redundant
+  (\textsc{AltLex}),
+\item or it is achieved by referring to the same entities in both
+  arguments (\textsc{EntRel}),
+\item or there is no coherence relation at all (\textsc{NoRel}).
+\end{itemize}
+Finally, they also provide a special \textsc{Attribution} label for
+marking the authors of reported speech.
 
 Example~\ref{dasa:exmp:pdtb-analysis} shows the previous fragment of
-the WSJ corpus now annotated according to the PDTB scheme.  As we can
-see from the analysis, the PDTB approach is indeed more flexible in
-comparison with RST as it allows the discourse units (arguments) to
-overlap, be disjoint or even embedded into other segments.  The
-assignment of sense relations is also more straightforward and mainly
-determined by the connective that links the arguments (\eg{} \emph{in
-  fact}, \emph{while}, or \emph{if}).  But, at the same time, the
-structure of this annotation is completely flat so that we can neither
-infer which of the sentences plays the central role in the text nor
-see the modification scope of supplementary statements.
+the RST corpus now annotated according to the PDTB scheme.  As we can
+see from the analysis, the PDTB approach is indeed more flexible than
+the rhetorical structure theory, as it allows the discourse units
+(arguments) to overlap, be disjoint or even embedded into other
+segments.  The assignment of sense relations is also more
+straightforward and mainly determined by the connectives that link the
+arguments (\eg{} \emph{in fact}, \emph{while}, or \emph{if}).  But, at
+the same time, the structure of this annotation is completely flat so
+that we can neither infer which of the sentences plays a more
+prominent role in the text nor see the modification scope of other
+supplementary statements.
 
 \begin{example}[Example of PDTB Analysis]\label{dasa:exmp:pdtb-analysis}
   \fbox{Analysts said,} \argone[1]{profit for the dozen or so big drug
@@ -244,31 +244,31 @@ see the modification scope of supplementary statements.
         if}\argtwo[3]{the economy turns downward}}}.''
 \end{example}
 
-\textbf{SDRT} Another alternarive to RST---Segmented Discourse
+\textbf{SDRT.}\quad{}Another alternarive to RST---Segmented Discourse
 Representation Theory or SDRT---was proposed by \citet{Lascarides:01}.
 Although developed from a completely different angle of view (the SDRT
 authors mainly drew their inspiration from predicate logics, dynamic
 semantics, and anaphora theory), this theory shares many of its
-features with the standard rhetorical structure as it also assumes a
+features with the standard rhetorical structure, as it also assumes a
 graph-like structure of the text, whose nodes are either elementary or
 complex discourse units, and distinguishes between coordinating and
 subordinating relations.  However, unlike RST, segmented discourse
-representation explictly allows the text structure to be any graph and
-not only a tree (\ie{} a discourse node can have multiple parents and
-also be connected via multiple links to the same vertex), provided
-that it does not have crossing dependencies (the right-frontier
-constraint).  In this respect, SDRT can be viewed as a
-\emph{structural relaxation of RST}.
+representation explictly allows this structure to be any graph and not
+only tree (\ie{} a discourse node can have multiple parents and also
+have multiple links to the same vertex), provided that it does not
+violate the right-frontier constraint (\ie{} has no crossing
+dependencies).  In this respect, SDRT can be viewed as a
+\emph{structural generalization of RST}.
 
 We can also notice the relatedness of the two approaches by looking at
-the SDRT analysis of the WSJ fragment in
-Example~\ref{dasa:fig:sdrt-graph}.  Although the names of relations in
-the presented graph differ from those used in RST, many of these links
-have the same (or at least similar) meaning as the respective edges in
-the first analysis: for example, the \textsc{Source} relation in SDRT
-almost completely corresponds to the \textsc{Attribution} edge in RST,
-and the \textsc{Contrast} link is similar to the RST's
-\textsc{Comparison}.
+the SDRT analysis of the previous RST fragment in
+Example~\ref{dasa:fig:sdrt-graph}.  Although the names of the
+relations in the presented graph differ from those used in RST, many
+of these links have the same (or at least similar) meaning as the
+respective edges in the first analysis: for example, the
+\textsc{Source} relation in SDRT almost completely corresponds to the
+\textsc{Attribution} edge in Example~\ref{dasa:fig:rst-tree}, and the
+\textsc{Contrast} link is similar to the RST \textsc{Comparison}.
 %% These discrepancies between paratactic dependencies in SDRT and
 %% their hypotactic equivalents in RST account for the lion's share of
 %% the differences between the two discourse representations in
@@ -315,47 +315,43 @@ and the \textsc{Contrast} link is similar to the RST's
 
 \textbf{Final choice.}\quad{}Because it was unclear which of these
 approaches (RST, PDTB, or SDRT) would be more amenable to our
-sentiment experiments, we made our decision by taking the following
-theoretical and practical considerations into account: From
-theoretical perspective, we wanted to have a strictly hierarchical
-discourse structure for analyzed tweets so that we could infer the
-polarity of the whole message by recursively accumulating the polarity
-scores from single discourse units.  From practical aspect, since
-there was no discourse parser readily available for German, we wanted
-to have a maximal assortment of such parsers for English so that we
-could pick one that would be easiest to retrain on German data.
-Fortunately, both of these concerns have lead us to the same
-solution---Rhetorical Structure Theory, which, on the one hand, was
-the only formalism that explicitly guaranteed a single root for the
-analyzed text, and, on the other hand, also provided a wide variety of
-open-source parsing systems at our disposal
+sentiment experiments, we made our decision by considering the
+following theoretical and practical concerns: From theoretical
+perspective, we wanted to have a strictly hierarchical discourse
+structure for each analyzed tweet so that we could infer the polarity
+of that message by recursively accumulating the polarity scores of its
+elementary discourse units in a bottom-up way.  From practical point
+of view, since there was no discourse parser readily available for
+German, we wanted to have a maximal assortment of such systems
+available for English so that we could pick one that would be easiest
+to retrain on German data.  Fortunately, both of these considerations
+have lead us to the same solution---Rhetorical Structure Theory, which
+was the only formalism that explicitly guaranteed a single root for
+the analyzed text, and also offered a wide variety of open-source
+parsing systems at our disposal
 \cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
 
 \section{Data Preparation}\label{sec:dasa:data}
 
 To prepare the data for our experiments, we split all microblogs from
-the PotTS and SB10k corpora into elementary discourse units using the
-ML-based discourse segmenter of~\citet{Sidarenka:15}.  After filtering
-out all tweets which had at most one segment,\footnote{Since the focus
+the PotTS and SB10k corpora into elementary discourse units with the
+ML-based discourse segmenter of \citet{Sidarenka:15}.  After filtering
+out all tweets that had at most one segment,\footnote{Since the focus
   of this chapter is mainly on discourse phenomena, we skip all
-  messages which consist of a single discourse segment as their
+  messages which consist of a single discourse segment, because their
   overall polarity is unaffected by the discourse structure and can be
   normally determined with the standard disource-unaware sentiment
-  techniques.} we assigned polarity scores to the EDUs of remaining
-tweets (analyzing each segment in isolation) with the help of the
-lexicon-based attention classifier introduced previously.  This left
-us with a total of 4,771 microblogs (12,137 segments) for PotTS and
-3,763 messages (9,625 segments) for the SB10k corpus.  We again used
-the same 70\%-10\%-20\% split into training, development, and test
-sets as we did in our earlier work on coarse-grained sentiment
-analysis.
+  techniques.}, we obtained 4,771 messages (12,137 segments) for PotTS
+and 3,763 posts (9,625 segments) for the SB10k corpus.  Afterwards, we
+assigned the polarity scores to thesw EDUs with the help of our
+lexicon-based attention classifier, analyzing each elementary unit
+separatey.  We again used the same 70-10-20 split into training,
+development, and test sets as we did in our previous experiments.
 
 %% This figure was generated using the iPython notebook
 %% `notebooks/dasa.ipynb`.
 \begin{figure*}[htb]
-  \centering
-      {
-        \centering
+  \centering { \centering
         \begin{subfigure}{0.7\textwidth}
           \centering
           \includegraphics[width=\linewidth]{img/dasa_potts_edu_distribution.png}
@@ -377,20 +373,18 @@ analysis.
             SB10k}\label{dasa:fig:data-distribution}
 \end{figure*}
 
-Figure~\ref{dasa:fig:data-distribution} shows the distribution of
-elementary discourse units and their polarity classes in the training
-and development data of both datasets.  As we can see from the
-graphics, most of the tweets in both corpora typically have two or
-three segments, while messages with more EDUs are extremely rare,
-which is also not surprising regarding that the maximum length of a
-tweet is limited to 140 characters.  Nonetheless, even with this
-restriction, there still are a few microblogs with 12 and 13 discourse
-units.  Since it was somewhat surprising for us to see that many
-segments in a single message, we decided to look at these messages in
-more detail.  As it turned out, such high number of EDUs typically
-arose from spurious punctuation marks, which were carelessly used in
-texted messages and evidently confused our segmenter, which had been
-trained on standard-language texts (see
+As we can see from the statistics in
+Figure~\ref{dasa:fig:data-distribution}, most multi-segment messages
+typically have two or three EDUs, whereas tweets with more than three
+disourse units are extremely rare, which is also not surprising
+regarding that the maximum length of a microblog is limited to 140
+characters.  Nonetheless, even with this severe restriction, there
+still are a few messages with up to 13 discourse units.  Since it was
+somewhat unexpected for us to see that many segments in a single
+tweet, we decided to look at these cases in more detail.  As it turned
+out, such high number of EDUs typically arose from spurious
+punctuation marks, which were carelessly used in texted tweets and
+evidently confused our segmenter (see
 Example~\ref{dasa:exmp:many-segments}).
 
 \begin{example}[SB10k Tweet with 13 EDUs]\label{dasa:exmp:many-segments}
@@ -409,30 +403,30 @@ Example~\ref{dasa:exmp:many-segments}).
                       Decade .\textup{]$_{12}$} \textup{[}( Also ...\textup{]$_{13}$}}
 \end{example}
 
-Another noticeable trend which we can also observe in the data is that
-the distribution of polarity classes in messages with multiple EDUs
-largely corresponds to the frequencies of these semantic orientations
-in the complete datasets: For example, the positive class still
+Another noticeable trend that we can see in the data is that the
+distribution of polar classes in messages with multiple EDUs largely
+corresponds to the frequencies of these polarities in the complete
+datasets: For example, the positive semantic orientation still
 dominates the PotTS corpus, whereas the neutral polarity constitues
 the vast majority of the SB10k set.  At the same time, negative
-microblogs again are the least represented group in both cases and
+microblogs again are the least represented class in both cases and
 account for only 22\% of the former dataset and 16\% of the latter
 tweebank.
 
-To obtain RST trees for segmented messages, we retrained the DPLP
-discourse parser of~\citet{Ji:14} on the Potsdam Commentary Corpus
-\cite[PCC~2.0; ][]{Stede:14}, after converting all discourse relations
-of this dataset to the binary scheme $\{$\textsc{Contrastive},
-\textsc{Non-Contrastive}$\}$ as suggested
+To obtain RST trees for these segmented messages, we retrained the
+DPLP discourse parser of~\citet{Ji:14} on the Potsdam Commentary
+Corpus \cite[PCC~2.0; ][]{Stede:14}, after converting all discourse
+relations of this dataset to the binary scheme
+$\{$\textsc{Contrastive}, \textsc{Non-Contrastive}$\}$ as suggested
 by~\citet{Bhatia:15}.\footnote{See Table~\ref{dasa:tbl:rst-rel-sets}
   for more details regarding this mapping.}  In contrast to the
 original DPLP implementation though, we did not use Brown cluster
-features \cite{Brown:92}, since this resource was unavailable for
+features \cite{Brown:92}, since this resource was not available for
 German, nor did we utilize the linear projection of the features,
-because the released parser code was missing this component either.
-In part due to these modifications, but mostly because of the
+because the released parser code did not include this component
+either.  In part due to these modifications, but mostly because of the
 specifics of the German language (richer morphology, higher lexical
-variety and syntactic ambiguity), the results of the retrained model
+variety, and syntactic ambiguity), the results of the retrained model
 were also considerably lower than the figures reported for the English
 RST Treebank~\cite{Carlson:01a}, amounting to 0.777, 0.512, and
 0.396~\F{} for the span, nuclearity, and relation prediction on
@@ -442,28 +436,28 @@ corpus.\footnote{Following \citet{Ji:14}, we use the span-based
 
 Figure~\ref{dasa:fig:twitter-rst-tree} shows an example of an
 automatically induced RST tree.  As we can see, the adapted parser can
-correctly distinguish between contrastive and non-contrastive links,
-but apparently struggles with the disambiguation of the nuclearity
-status, assigning the highest significance to the initial discource
-segment (``Mooooiiinn.''  [\emph{Hellloooo!}]), which is merely a
-greeting, and weighing the second EDU (``Gegen solche N\"achte hilft
-die beste Kur nicht.''  [\emph{Even the best cure won't help against
-    such nights.}]) less than the third one (``Aber Kaffee!''
-[\emph{But coffee!}]), although traditional RST would rather consider
-both units as equally important and use the multi-nuclear
-\textsc{Contrast} relation for them.
+correctly distinguish between contrastive and non-contrastive
+relations, but apparently struggles with the disambiguation of the
+nuclearity status, assigning the highest significance to the initial
+discource segment (``Mooooiiinn.''  [\emph{Hellloooo!}]), which is
+merely a greeting, and weighing the second EDU (``Gegen solche
+N\"achte hilft die beste Kur nicht.''  [\emph{Even the best cure won't
+    help against such nights.}]) less than the third one (``Aber
+Kaffee!''  [\emph{But coffee!}]), although traditional RST would
+consider both units as equally important and join them via the
+multi-nuclear \textsc{Contrast} link.
 
 \begin{figure*}[htbp!]
   \input{twitter-rst.tex}
 \end{figure*}
 
 As to the distribution of the two coarse-grained discourse relations,
-the \textsc{Non-\-Con\-tra\-sti\-ve} links clearly dominate both
-corpora, accounting for 98\% of all discourse relations in PotTS and
-SB10k (see Figure~\ref{dasa:fig:relation-distribution}).  By
-comparison, the precentage of these relations in PCC~2.0 amounts to
-90\% and also represents the prevailing majority of all semantic links
-in this corpus.
+the \textsc{Non-\-Con\-tra\-sti\-ve} coherence edges clearly dominate
+both corpora, accounting for 98\% of all discourse relations in PotTS
+and SB10k (see Figure~\ref{dasa:fig:relation-distribution}).  By
+comparison, the precentage of these links in PCC~2.0 amounts to 90\%
+and also represents the prevailing majority of all coherence ties in
+this corpus.
 
 \begin{figure*}[htb]
   \centering
