@@ -729,21 +729,21 @@ factors~$\lambda$:
   \Psi = \sum_i\lambda_i\boldsymbol{\theta}^T\mathbf{w}_i = \boldsymbol{\theta}^T\sum_i\lambda_i\mathbf{w}_i,
 \end{equation*}
 In the R2N2 system, \citeauthor{Bhatia:15} largely adopted the RNN
-method of~\citet{Socher:13}, recursively computing the polarity score
-$\psi$ of each discourse unit $i$ as:
+method of~\citet{Socher:13} by recursively computing the polarity
+scores of discourse units as:
 \begin{equation*}
   \psi_i = tanh\left(K_n^{(r_i)} \psi_{n(i)} + K_s^{(r_i)}\psi_{s(i)} \right),
 \end{equation*}
 where $K_n^{(r_i)}$ and $K_s^{(r_i)}$ stand for the nucleus and
 satellite coefficients associated with the rhetorical relation $r_i$,
-and $\psi_{n(i)}$ and $\psi_{s(i)}$ represent the sentiment scores of
-the nucleus and and satellite nodes of the $i$-th vertex.  This
-approach achieved formidable 84.1\% accuracy for the two-class
-prediction on the moview review corpus of~\citet{Pang:04} and reached
-85.6\% on the dataset of~\citet{Socher:13}.
+and $\psi_{n(i)}$ and $\psi_{s(i)}$ represent the previously computed
+sentiment scores of the nucleus and and satellite nodes of the $i$-th
+vertex.  This approach achieved 84.1\% two-class accuracy on the
+moview review corpus of~\citet{Pang:04} and reached 85.6\% on the
+dataset of~\citet{Socher:13}.
 
 For the sake of completeness, we should note that there also exist
-discourse-aware sentiment approaches which build upon PDTB and SDRT:
+discourse-aware sentiment approaches which build upon PDTB and SDRT.
 For example, \citet{Trivedi:13} presented a method based on the latent
 structural SVM~\cite{Yu:09}, in which they represented each sentence
 as a vector of features produced by function $\mathbf{f}(y,
@@ -773,58 +773,57 @@ they could improve the prediction accuracy on the movie review corpus
 of~\citet{Maas:11} from 88.21 to 91.36\% in comparison with the
 connector-unaware model.
 
-The first step towards an SDRT-inspired approach was made by
-\citet{Asher:08}, who presented an annotation scheme and pilot corpus
-of English and French texts labeled with their discourse structure
-according to the SDRT theory and augmented with an additional
-sentiment layer.  In particular, the authors asked the annotators to
+The first step towards an SDRT-based approach was made by
+\citet{Asher:08}, who presented an annotation scheme and a pilot
+corpus of English and French texts which were analyzed according to
+the SDRT theory and enriched with additional sentiment information.
+Specifically, the authors asked the annotators of their data to
 ascribe one of four opinion categories (reporting, judgement, advice,
-or sentiment) along with their subcategories (e.g., inform, assert,
+or sentiment) along with their subclasses (e.g., inform, assert,
 blame, recommend) to each discourse unit that had at least one
 opinionated word from a sentiment lexicon.  Afterwards, they showed
 that with a simple set of rules, one could easily propagate opinions
-through the discourse graphs, increasing their strengths or reversing
-their polarity, depending on the type of discourse relations that
-connected the segments.
+through these discourse graphs, increasing the strengths or reversing
+the polarity of the sentiments, depending on the type of the discourse
+relation that was linking two segments.
 
 In general, however, PDTB- and SDRT-based sentiment systems are much
-less common than RST-solutions.  Because of this fact and since the
-RST formalism was our favorite framework for discourse-aware
-enhancement of the LBA system anyway , we decided to primarily
-concentrate on this group of methods.  In particular, for the sake of
-comparison, we have replicated the linear combination method of
-\citet{Wang:13} and also reimplemented the DDR and R2N2 approaches
-of~\citet{Bhatia:15} .  Furthermore, to see how these techniques would
-perform with respect to much easier baselines, we additionally created
-two simple systems which predicted the polarity of a message by only
-considering its last or topmost nucleus EDU (henceforth \textsc{Last}
-and \textsc{Root} respectively), and also estimated the results of the
-original LBA approach by letting it analyze the whole tweets at once
-without splitting these messages into elementary discourse units
-(henceforth \textsc{No-Discourse}).  Apart from these existing and
-baseline methods, we also propose several new DASA solutions which we
-briefly descibe below.
+less common than RST-inspired solutions.  Because of this fact, but
+also due to the reasons set forth in Section~\ref{sec:dasa:theory}, we
+will primarily concentrate on this last group of methods.  In
+particular, for the sake of comparison, we replicated the linear
+combination approach of \citet{Wang:13} and also reimplemented the DDR
+and R2N2 systems of~\citet{Bhatia:15}.  Furthermore, to see how these
+techniques would perform in comparison with much simpler baselines, we
+additionally created two methods which predicted the polarity of a
+message by only considering its last or topmost nucleus EDU
+(henceforth \textsc{Last} and \textsc{Root}), and also estimated the
+results of the original LBA classifier without any discourse-related
+modifications (henceforth \textsc{No-Discourse}).  Apart from these
+baselines and existing methods, we also propose a few novel DASA
+solutions, which will be briefly descibed below.
 
 \textbf{Latent CRF.}\quad In the first of these solutions, called
 \emph{Latent Conditional Random Fields} or \emph{LCRF}, we consider
 the problem of message-level sentiment analysis as an inference task
 over an undirected graphical model, where the nodes of the model
-represent polarity probabilities of elementary discourse units, and
-the structure reflects the RST tree of these EDUs.  In particular, we
-define CRF graph $\mathcal{G}\defeq(\mathcal{V}, \mathcal{E})$ as a
-set of vertices $\mathcal{V}\defeq \mathcal{Y}\cup\mathcal{X}$, in
-which $\mathcal{Y}\defeq\{y_{(i, j)}\mid i\in\{\text{\textsc{Root}},
-1, 2, \ldots, T\}, j \in\{\text{\textsc{Negative}, \textsc{Neutral},
+represent polarity probabilities of elementary discourse units and the
+structure of the graph reflects the RST tree of these EDUs.  In
+particular, we define CRF graph $\mathcal{G}\defeq(\mathcal{V},
+\mathcal{E})$ as a set of vertices $\mathcal{V}\defeq
+\mathcal{Y}\cup\mathcal{X}$, in which $\mathcal{Y}\defeq\{y_{(i,
+  j)}\mid i\in\{\text{\textsc{Root}}, 1, 2, \ldots, T\}, j
+\in\{\text{\textsc{Negative}, \textsc{Neutral},
   \textsc{Positive}}\}\}$ represents (partially observed) random
-variables (with $T$ standing for the number of EDUs in the tweet), and
-$\mathcal{X}\defeq\{x_{(i, j)}\mid i\in\{\text{\textsc{Root}}, 0, 1,
-\ldots, n-1\}, j \in[0,\ldots, 3]\}$ denotes the respective features
-of these nodes (three polarity scores returned by the LBA classifier
-for the $i$-th EDU plus an additional \emph{offset} feature whose
-value is always \texttt{1} irrespectively of the input).  Since the
-\textsc{Root} vertix of this graph does not have a corresponding
-discourse segment, we use the polarity scores predicted by the LBA
-classifier for the whole message as features of this node.
+variables (with $T$ standing for the number of EDUs in tweet), and
+$\mathcal{X}\defeq\{x_{(i, j)}\mid i\in\{\text{\textsc{Root}}, 1, 2,
+\ldots, T\}, j \in[0,\ldots, 3]\}$ denotes the respective features of
+these nodes (three polarity scores returned by the LBA classifier for
+the $i$-th EDU plus an additional offset feature whose value is always
+\texttt{1} irrespectively of the input).  Since the \textsc{Root}
+vertix of this graph does not have a corresponding discourse segment,
+we use the polarity scores predicted by the LBA classifier for the
+whole message as features of this node.
 
 Factor edges $\mathcal{E}$ connect random variables to their
 corresponding feature attributes and also link every pair of vertices
