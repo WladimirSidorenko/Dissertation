@@ -744,34 +744,28 @@ dataset of~\citet{Socher:13}.
 
 For the sake of completeness, we should note that there also exist
 discourse-aware sentiment approaches which build upon PDTB and SDRT.
-For example, \citet{Trivedi:13} presented a method based on the latent
-structural SVM~\cite{Yu:09}, in which they represented each sentence
-as a vector of features produced by function $\mathbf{f}(y,
+For example, \citet{Trivedi:13} proposed a method based on the latent
+structural SVM~\cite{Yu:09}, where they represented each sentence as a
+vector of features produced by a feature function $\mathbf{f}(y,
 \mathbf{x}_i, h_i)$, where $y\in\{-1, +1\}$ denotes the potential
-polarity of the document, $h_i \in \{0, 1\}$ represents the assumed
-subjectivity class of sentence $i$, and $\mathbf{x}_i$ stands for the
-surface form of the $i$-th sentence.  One such feature, for example,
-could be \texttt{<+1, ``love'', 1>}, which would indicate that the
-token ``love'' appears in a supposedly subjective sentence of a
-positive document. However, because the true assignment of the
-variables $h_i$ was unknown, the authors regarded this value as a
-latent variable and tried to predict the most likely semantic
-orientation of the document $\hat{y}$ by finding the maximum product
-of weight and feature vectors over all possible assignments of
-$\mathbf{h}$, \ie{}:
+polarity of the whole document, $h_i \in \{0, 1\}$ stands for the
+assumed subjectivity class of sentence $i$, and $\mathbf{x}_i$
+represents the surface form of that sentence; and then tried to infer
+the most likely semantic orientation of the document $\hat{y}$ over
+all possible assignments $\mathbf{h}$, \ie{}:
 \begin{equation*}
   \hat{y} =
   \argmax_y\left(\max_{\mathbf{h}}\mathbf{w}^{\top}\mathbf{f}(y,
   \mathbf{x}, \mathbf{h})\right).
 \end{equation*}
 However, to ensure that these assignments were still coherent, the
-authors additionally extended their original feature set with special
-\emph{transitional} attributes, which indicated whether two adjacent
-sentences were likely to share the same subjectivity given the
-discourse connective between them.  With the help of these features,
-they could improve the prediction accuracy on the movie review corpus
-of~\citet{Maas:11} from 88.21 to 91.36\% in comparison with the
-connector-unaware model.
+authors additionally extended their original feature space with
+special \emph{transitional} attributes which indicated whether two
+adjacent sentences were likely to share the same subjectivity given
+the discourse connective between them.  With the help of these
+features, the authors could improve the prediction accuracy on the
+movie review corpus of~\citet{Maas:11} from 88.21 to 91.36\% in
+comparison to the connector-unaware model.
 
 The first step towards an SDRT-based approach was made by
 \citet{Asher:08}, who presented an annotation scheme and a pilot
