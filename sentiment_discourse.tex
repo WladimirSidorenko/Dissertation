@@ -800,142 +800,144 @@ solutions, which will be briefly descibed below.
 \textbf{Latent CRF.}\quad In the first of these solutions, called
 \emph{Latent Conditional Random Fields} or \emph{LCRF}, we consider
 the problem of message-level sentiment analysis as an inference task
-over an undirected graphical model, where the nodes of the model
+over undirected graphical model, where the nodes of the model
 represent polarity probabilities of elementary discourse units and the
-structure of the graph reflects the RST tree of these EDUs.  In
+structure of the graph reflects the RST dependency tree of that
+message.\footnote{Drawing on the work of~\citet{Bhatia:15}, we obtain
+  this representation using the DEP-DT algorithm of~\citet{Hirao:13}
+  with a minor modification that we do not follow any satellite
+  branches while computing the heads of abstract RST nodes in Step 1
+  of this procedure \cite[see][pp.~1516--1517]{Hirao:13}.}  In
 particular, we define CRF graph $\mathcal{G}\defeq(\mathcal{V},
 \mathcal{E})$ as a set of vertices $\mathcal{V}\defeq
 \mathcal{Y}\cup\mathcal{X}$, in which $\mathcal{Y}\defeq\{y_{(i,
   j)}\mid i\in\{\text{\textsc{Root}}, 1, 2, \ldots, T\}, j
 \in\{\text{\textsc{Negative}, \textsc{Neutral},
   \textsc{Positive}}\}\}$ represents (partially observed) random
-variables (with $T$ standing for the number of EDUs in tweet), and
+variables (with $T$ standing for the number of EDUs in the tweet), and
 $\mathcal{X}\defeq\{x_{(i, j)}\mid i\in\{\text{\textsc{Root}}, 1, 2,
 \ldots, T\}, j \in[0,\ldots, 3]\}$ denotes the respective features of
-these nodes (three polarity scores returned by the LBA classifier for
-the $i$-th EDU plus an additional offset feature whose value is always
-\texttt{1} irrespectively of the input).  Since the \textsc{Root}
-vertix of this graph does not have a corresponding discourse segment,
-we use the polarity scores predicted by the LBA classifier for the
-whole message as features of this node.
+these nodes (three polarity scores returned by the LBA classifier plus
+an additional offset feature whose value is always \texttt{1}
+irrespectively of the input).  Since the \textsc{Root} vertix,
+however, does not have a corresponding discourse segment in the RST
+analysis, we use the polarity scores predicted by the LBA classifier
+for the whole message as features of this node.
 
-Factor edges $\mathcal{E}$ connect random variables to their
+Graph edges $\mathcal{E}$ connect random variables to their
 corresponding feature attributes and also link every pair of vertices
-$(v_{(i,\cdot)},v_{(j,\cdot)})$ if node $i$ appears as the parent of
-node $j$ in the dependency representation of the automatically
-constructed RST tree.\footnote{In fact, we use two edges to connect
-  each child to its parent, setting one of these factors to one and
-  another to zero, depending on which discource relation links the two
-  nodes---\textsc{Contrastive} or \textsc{Non-Contrastive}.} Following
-the work of~\citet{Bhatia:15}, we obtain this representation using the
-DEP-DT algorithm of~\citet{Hirao:13} with a minor modification that we
-do not follow any satellite branches while computing the heads of
-abstract RST nodes in Step 1 of this procedure
-\cite[see][pp.~1516--1517]{Hirao:13}.
+$(v_{(k,\cdot)},v_{(i,\cdot)})$ if node $k$ appears as the parent of
+node $i$ in the RST dependency tree.\footnote{In fact, we use two
+  edges to connect each child to its parent: one for the
+  \textsc{Contrastive} relation and another one for the
+  \textsc{Non-Contrastive} link.}  You can see an actual example of
+such automatically induced CRF tree in
+Figure~\ref{dasa:fig:latent-crf}.
 
 \begin{figure*}[thb]
   \centering \input{latent-crf}
-  \caption{Example of an RST-Based Latent-CRF\\ {\small (random
-      variables are shown as circles, fixed input parameters appear as
-      rectangles, and observed values are displayed in
+  \caption[Example of an RST-based Latent-CRF]{Example of an
+    automatically constructed RST-based latent-CRF tree\\ {\small
+      (random variables are shown as circles, fixed input parameters
+      appear as rectangles, and observed values are displayed in
       gray)}}\label{dasa:fig:latent-crf}
 \end{figure*}
 
-Figure~\ref{dasa:fig:latent-crf} shows a real example of such
-automatically induced CRF tree where we can already notice a few
-tendencies regarding the obtained discourse graph: First of all, our
-segmenter clearly tends to oversegment its input, also considering
-conjoined predicates and adverbial subordinate clauses as separate
-discourse units.  Even though this behavior violates the principles of
-standard RST, it actually comes advantageous to our particular
-sentiment application as it allows the base classifier to be more
-fine-grained (and consequently more precise) in its predictions.  At
-the same time, we again can see that the automatic parser has
-difficulties with determining the correct nuclearity status of
-discourse segments, putting the segment ``f\"uhlt sich fast an''
-(\textit{almost feels}) in the top-most position, which we can hardly
-call the right decision.  Finally, we also can observe that despite an
-incorrect prediction of the polarity of the whole tweet (the LBA
-system considers it as a negative message, although human experts
-regarded it as neutral) our base classifier might still have better
-guesses for single EDUs, giving us at least a hypothetical possibility
-to overcome its general error.
+%% Figure~\ref{dasa:fig:latent-crf} shows a real example of such
+%% automatically induced CRF tree where we can already notice a few
+%% tendencies regarding the obtained discourse graph: First of all, our
+%% segmenter clearly tends to oversegment its input, also considering
+%% conjoined predicates and adverbial subordinate clauses as separate
+%% discourse units.  Even though this behavior violates the principles of
+%% standard RST, it actually comes advantageous to our particular
+%% sentiment application as it allows the base classifier to be more
+%% fine-grained (and consequently more precise) in its predictions.  At
+%% the same time, we again can see that the automatic parser has
+%% difficulties with determining the correct nuclearity status of
+%% discourse segments, putting the segment ``f\"uhlt sich fast an''
+%% (\textit{almost feels}) in the top-most position, which we can hardly
+%% call the right decision.  Finally, we also can observe that despite an
+%% incorrect prediction of the polarity of the whole tweet (the LBA
+%% system considers it as a negative message, although human experts
+%% regarded it as neutral) our base classifier might still have better
+%% guesses for single EDUs, giving us at least a hypothetical possibility
+%% to overcome its general error.
 
-Now, before we describe to the training of our model, let us briefly
-recall that in the standard CRF learning we typically try to find
-optimal model parameters $\boldsymbol{\theta}^*$ that maximize the
-log-likelihood of label sequences $\mathbf{y}^{(i)}$ on the training
-set $\mathcal{D}\defeq\left\{\left(\mathbf{x}^{(i)},
+Now, before we describe the training of our model, let us briefly
+recall that in the standard CRF optimization we typically try to find
+optimal parameters $\boldsymbol{\theta}^*$ which maximize the
+log-likelihood of all label sequences $\mathbf{y}^{(i)}$ on the
+training set $\mathcal{D}\defeq\left\{\left(\mathbf{x}^{(i)},
 \mathbf{y}^{(i)}\right)\right\}_{i=1}^{N}$, \ienocomma:
 \begin{equation*}
   \boldsymbol{\theta}^* = \argmax_{\boldsymbol{\theta}}\ell(\boldsymbol{\theta}) = \sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right)\right),\label{dasa:eq:crf-objective}
 \end{equation*}
-where conditional likelihood is normally estimated as:
+where the conditional likelihood is normally estimated as:
 \begin{equation*}
   p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right) =
   \frac{\exp\left(\sum_{t=1}^{T_i}\sum_k\boldsymbol{\theta}_k\mathbf{f}_k\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t-t},\mathbf{y}^{(i)}_{t}\right)\right)}{Z}.
 \end{equation*}
-Adapting this equation to our RST-based structure, we obtain:
-\begin{equation*}
+Adapting this equation to our RST-based CRF trees, we obtain:
+\begin{equation}
   p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right) =
   \frac{\exp\left(\sum_{t=0}^{T_i}\left[%
       \sum_v\boldsymbol{\theta}_v\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
       + \sum_{c\in
         ch(t)}\sum_e\boldsymbol{\theta}_e\mathbf{f}_e\left(\mathbf{y}^{(i)}_{t},
-      \mathbf{y}^{(i)}_{c}\right)\right]\right)}{Z},
-\end{equation*}
-where $ch(t)$ denotes children of node $t$, $v$ stands for the indices
-of vertex features, and $e$ represents the indices of edge attributes.
+      \mathbf{y}^{(i)}_{c}\right)\right]\right)}{Z},\label{dasa:eq:tree-crf}
+\end{equation}
+where $ch(t)$ denotes the children of node $t$, $v$ stands for the
+indices of node features, and $e$ represents the indices of edge
+attributes.
 
 A crucial problem with this formulation though is that, in our task,
-only a small subset of labels from $\mathbf{y}^{(i)}$ (namely those
-which pertain to the root node) are actually observed at the training
-time, whereas the rest of the tags (those which pertain to EDUs) are
-unknown.  We will denote these observed and hidden subsequences as
-$\mathbf{y}_o^{(i)}$ and $\mathbf{y}_h^{(i)}$ respectively.  Using
-this notation, we can specify our goal as finding model parameters
-$\boldsymbol{\theta}^*$ which maximize the log-likelihood of \emph{known} labels,
-\ienocomma:
+only a small subset of labels from $\mathbf{y}^{(i)}$ (namely those of
+the root node) are actually observed at the training time, whereas the
+rest of the tags (those which pertain to the EDUs) are unknown.  We
+will denote these observed and hidden subsets as $\mathbf{y}_o^{(i)}$
+and $\mathbf{y}_h^{(i)}$ respectively.  Using this notation, we can
+redefine the training objective for our model as finding such
+parameters $\boldsymbol{\theta}^*$ which maximize the log-likelihood
+of the \emph{observed} labels, \ienocomma:
 \begin{equation*}
   \boldsymbol{\theta}^* =
   \argmax_{\boldsymbol{\theta}}\sum_{i=1}^{N}\log\left(p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)};
   \boldsymbol{\theta}\right)\right).
 \end{equation*}
-However, it is still unclear what we shall do about hidden tags
-$\mathbf{y}_h^{(i)}$, since the values of their features are yet
-undefined.
+With this formulation though, it still remains unclear what we should
+do with hidden tags $\mathbf{y}_h^{(i)}$, because the values of their
+features are undefined.
 
 One possible way to approach the problem of unobserved states is to
 assume that any label sequence $\mathbf{y}_h^{(i)}$ might be true, and
-then try to maximize parameters along the path which leads to the
+then try to maximize the parameters along the path which leads to the
 maximum probability of the correct observed tag, \ienocomma:
 \begin{align}
   \begin{split}
     \mathbf{y}^{(i)}&\defeq[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{*(i)}]\text{, where}\\\label{dasa:eq:y_i}
-    \mathbf{y}_h^{*(i)}&=\argmax_{\mathbf{y}_h^{(i)}}p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)}\right).
+    \mathbf{y}_h^{*(i)}&=\argmax_{\mathbf{y}_h^{(i)}}p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)}\right),
   \end{split}
 \end{align}
-We can easily find this path with the max-product belief-propagation,
-which is also used in the standard CRF inference.
+and which we can easily using the standard Viterbi decoding.
 
-Unfortunately, if we simply consider label sequence $\mathbf{y}^{(i)}$
-from Equation~\ref{dasa:eq:y_i} as the ground truth and penalize all
-labels which disagree with this sequence, we might overly commit
-ourselves to the model's guess of unknown tags and unduly discriminate
-against other possible assignments of hidden labels.  To mitigate this
-effect, we can instead penalize only one other sequence, namely that
-which maximizes the probability of an incorrect label at the observed
-state:
+Unfortunately, if we simply consider the label sequence
+$\mathbf{y}^{(i)}$ from Equation~\ref{dasa:eq:y_i} as the ground truth
+and penalize all labels which disagree with this sequence, we might
+overly commit ourselves to the model's guess of unknown tags and
+unduly discriminate against other possible hidden label assignments.
+To mitigate this effect, we can instead penalize only one other
+sequence, namely the one which maximizes the probability of an
+incorrect label at the observed state:
 \begin{align*}
   \mathbf{y}^{'(i)}&\defeq\argmax_{\mathbf{y}_o^{'(i)}\neq\mathbf{y}_o^{(i)}}p\left([\mathbf{y}_o^{'(i)},
     \mathbf{y}_h^{*(i)}]\vert\mathbf{x}^{(i)}\right)\text{,
     where}\\
   \mathbf{y}_h^{*(i)}&=\argmax_{\mathbf{y}_h^{(i)}}p\left(\mathbf{y}_o^{'(i)}\vert\mathbf{x}^{(i)}\right).
 \end{align*}
-Correspondingly, we redefine our objective function and, instead of
-maximizing the log-likelihood of the training set, will now try to
+Correspondingly, we reformulate our objective function and instead of
+maximizing the log-likelihood of the training set will now try to
 maximize the difference between the likelihoods of correct and wrong
-assignments:
+labels:
 \begin{align}
   \begin{split}
     \boldsymbol{\theta}^* &= \argmax_{\boldsymbol{\theta}}\sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\right)\right) - \log\left(p\left(\mathbf{y}^{'(i)}\right)\right)\\
@@ -944,13 +946,14 @@ assignments:
   \end{split}
 \end{align}
 where $\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})$ and
-$\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$ are all features
+$\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$ mean all features
 associated with label sequences $\mathbf{y}^{(i)}$ and
 $\mathbf{y}^{'(i)}$ respectively.
 
 The only thing that we still need to do to the above objective is to
-introduce a regularization term $\frac{1}{2}\norm{\boldsymbol{\theta}}^2$ in order
-to prevent its divergence to infinity in cases when
+introduce a regularization term
+$\frac{1}{2}\norm{\boldsymbol{\theta}}^2$ in order to prevent its
+divergence to infinity in cases when
 $\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})$ and
 $\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$ are perfectly
 separable.  This brings us to our final formulation:
@@ -960,28 +963,28 @@ separable.  This brings us to our final formulation:
   \sum_{i=1}^{N}\boldsymbol{\theta}^{\top}\left(\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})
   - \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})\right)
 \end{align}
-At this point, we can notice that the resulting function is similar to
-the unconstrained minimization problem of structural SVM
+At this point, we can notice that the resulting function is identical
+to the unconstrained minimization problem of structural SVM
 \cite{Taskar:03}, and we indeed can piggyback on one of the many
-efficient SVM-optimization methods to learn the parameters of our
+efficient SVM-optimization techniques to learn the parameters of our
 model.  In particular, we use the block-coordinate Frank-Wolfe
 algorithm~\cite{Lacoste-Julien:13}, running it for 1,000 epochs or
-until convergence is reached, whichever of these events occurs
-first.\todo{Outline the difference from the approaches of
-  \citet{McDonald:07} and \citet{Trivedi:13}.}
+until convergence, whichever of these events occurs first.
 
 \textbf{Latent Marginalized CRF.}\quad Another way to tackle
-unobserved labels in the input is to use the fact that we can estimate
-the probability of a subset of random variables from a joint
-distribution over a larger set by marginalizing (summing) out the
-remaining terms of this distribution, \ienocomma:
+unobserved labels in the input is to estimate the probability of the
+observed tags by marginalizing (summing) out hidden variables from the
+joint distribution, \ienocomma:
 \begin{align*}
-  p\left(E=e\right) &= \sum_h p\left(E=e, H=h\right).
+  p\left(\mathbf{Y}_o{=}\mathbf{y}_o\right) &= \sum_{\mathbf{y}_h}
+  p\left(\mathbf{Y}_o{=}\mathbf{y}_o, \mathbf{Y}_h{=}\mathbf{y}_h\right).
 \end{align*}
-Applying this formula to our objective, we get:
+Applying this formula to Equation~\ref{dasa:eq:tree-crf}, we get:
 \begin{align*}
   \begin{split}
-    p\left(\mathbf{y}_o^{(i)}\right) &= \sum_{\mathbf{y}_h^{(i)}} p\left(\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}\right)\\
+    p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right) &=%
+    \sum_{\mathbf{y}_h^{(i)}} p\left([\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}]%
+    \vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right)\\
     &= \frac{\sum_{\mathbf{y}_h^{(i)}}\exp\left(\sum_{t=0}^{T_i}\left[%
         \sum_v\boldsymbol{\theta}_v\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
         + \sum_{c\in
@@ -989,16 +992,16 @@ Applying this formula to our objective, we get:
         \mathbf{y}^{(i)}_{c}\right)\right]\right)}{Z},
   \end{split}
 \end{align*}
-where $\mathbf{y}^{(i)}$ in the exponent is defined as before:
+where $\mathbf{y}^{(i)}$ in the numerator is defined as before:
 $\mathbf{y}^{(i)}\defeq[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}]$.
 
 This time again, we would like to maximize the probability of the
-correct assignment, setting it apart from its closest competitor by at
-least some margin.  Unfortunately, due to the summation over
+correct assignment, setting it apart from its closest competitor by
+some margin.  Unfortunately, due to the summation over
 $\mathbf{y}_h^{(i)}$, we cannot avail ourselves of the log-exp
 cancellation trick that we used previously in
 Equation~\ref{dasa:eq:hcrf-objective}.  Instead of this, we will
-replace the difference of log-likelihoods by the raw ratio of marginal
+replace the difference of log-likelihoods by the ratio of marginal
 probabilities:
 \begin{align}
   \begin{split}
@@ -1015,7 +1018,8 @@ probabilities:
         \mathbf{y}^{'(i)}_{c}\right)\right]\right)}\label{dasa:eq:hmcrf-objective}
   \end{split}
 \end{align}
-To simplify this expression, we introduce the following abbreviations:
+To simplify this expression, we will introduce the following
+abbreviations:
 \begin{align*}
   a &\defeq \exp\left(\sum_{t=0}^{T_i}\left[
     \sum_v\boldsymbol{\theta}_v\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
@@ -1039,35 +1043,36 @@ and analogously obtain:
   \frac{\partial{}a}{\partial\boldsymbol{\theta}_e} &= a\sum_{t=0}^{T_i}\sum_{c\in ch(t)}\mathbf{f}_e\left(\mathbf{y}^{(i)}_{t}, \mathbf{y}^{(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}\mathbf{f}_e,\\
   \frac{\partial{}b}{\partial\boldsymbol{\theta}_e} &= b\sum_{t=0}^{T_i}\sum_{c\in ch(t)}\mathbf{f}_e\left(\mathbf{y}^{'(i)}_{t}, \mathbf{y}^{'(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{'(i)}}\mathbf{f}_e.
 \end{align*}
-With the help of these expressions, we can easily compute the gradient
-of the objective function w.r.t. $\boldsymbol{\theta}$ by observing that:
-\begin{align*}
+With the help of these expressions, we easily compute the gradient of
+the objective function w.r.t. $\boldsymbol{\theta}$ by observing that:
+\begin{align}
   \nabla_{\boldsymbol{\theta}} &=
   \sum_{i=1}^{N}\frac{\sum_{\mathbf{y}_h^{(i)}}\nabla_{\boldsymbol{\theta}}a\sum_{\mathbf{y}_h^{(i)}}b
     -
-    \sum_{\mathbf{y}_h^{(i)}}a\sum_{\mathbf{y}_h^{(i)}}\nabla_{\boldsymbol{\theta}}b}{\left(\sum_{\mathbf{y}_h^{(i)}}b\right)^2}.
-\end{align*}
-We again use the block-coordinate Frank-Wolfe method to optimize the
-parameters of our model, but instead of pushing these parameters in
-the direction
+    \sum_{\mathbf{y}_h^{(i)}}a\sum_{\mathbf{y}_h^{(i)}}\nabla_{\boldsymbol{\theta}}b}{\left(\sum_{\mathbf{y}_h^{(i)}}b\right)^2}.\label{dasa:eq:lmcrf-gradient}
+\end{align}
+We again use the block-coordinate Frank-Wolfe algorithm to optimize
+the parameters of our model, but instead of pushing these parameters
+in the direction
 $\boldsymbol{\psi}\defeq\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})-\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$
 (which is the derivative of latent CRF, see Algorithm~2 in
-[\citeauthor{Lacoste-Julien:13}, \citeyear{{Lacoste-Julien:13}}]), now
-force them in the direction of the above gradient.
+[\citeauthor{Lacoste-Julien:13}, \citeyear{{Lacoste-Julien:13}}]), we
+now maximize them along the gradient from
+Equation~\ref{dasa:eq:lmcrf-gradient}.
 
-It is probably easier to realize the difference of the two methods
+It is probably easier to realize the difference of the two CRF methods
 (latent and latent marginalized CRFs) more vividly by looking at
 Figure~\ref{dasa:fig:lcrf-vs-lmcrf}, in which we have highlighted the
 paths that are used to compute the probabilities of correct and wrong
-labels in both systems.  As we can see from the figure, LCRF considers
-only a single label sequence that leads to the maximum probability the
-correct tag at the only observed \textsc{Root} state and then
-contrasts this sequence with the path that maximizes the probability
-of an incorrect tag (in this case \textsc{NEG}) at the same
-\textsc{Root} hypernode.  As opposed to this, LMCRF takes into account
-all possible label configurations of elementary discourse units and
-uses this total cumulative mass to estimate the probability of the
-observed tag.
+labels in both systems.  As we can see from this picture, LCRF only
+considers one label sequence that leads to the maximum probability of
+the correct tag (\textsc{Neut}) at the single observed \textsc{Root}
+node and then compares this sequence with the path that maximizes the
+probability of an incorrect tag (in this case \textsc{NEG}) at the
+same node.  In contrast to this, LMCRF takes all possible label
+configurations of elementary discourse units into account and uses
+this total cumulative mass to estimate the probability of both
+(correct and wring) observed tags.
 
 \begin{figure*}[thb]
   \centering
@@ -1115,8 +1120,8 @@ observed tag.
 that we present in this chapter---\emph{Recursive Dirichlet Process}
 or \emph{RDP}---goes a further step in the probabilistic direction by
 assuming that not only the probabilities of discourse units but also
-the parameters via which these probabilities are computed are random
-variables.
+the parameters via which these probabilities are computed represent
+random variables.
 
 In particular, we associate a variable
 $\mathbf{z}_i\in\mathbb{R}_+^3$, s.t. $\norm{\mathbf{z}}_1 = 1$, with
