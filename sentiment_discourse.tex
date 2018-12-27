@@ -1124,138 +1124,204 @@ the parameters via which these probabilities are computed represent
 random variables.
 
 In particular, we associate a variable
-$\mathbf{z}_i\in\mathbb{R}_+^3$, s.t. $\norm{\mathbf{z}}_1 = 1$, with
+$\mathbf{z}_j\in\mathbb{R}_+^3$, s.t. $\norm{\mathbf{z}}_1 = 1$, with
 every RST node $i$ (which in this case can be either an elementary
 discource segment or an abstract span).\footnote{In contrast to the
   previous CRF approaches, this time, we depart from the dependency
   tree representation and adopt the discourse tree structure proposed
-  by~\citet{Bhatia:15} for their R2N2 method instead.  In this
-  structure, we keep all abstract nodes from the original RST
-  constituency tree, but relink all satellites to the abstract parents
-  of their nuclei.}  The value of this variable reflects the
-multivariate probability of the three polarity classes
+  by~\citet{Bhatia:15} for their R2N2 method.  In this structure, we
+  keep all abstract nodes from the original RST tree, but relink all
+  satellites to the abstract parents of their nuclei.}  This variable
+specifies the multivariate probability of the three polarity classes
 (\textsc{Negative}, \textsc{Neutral}, and \textsc{Positive}) for the
-$i$-th node.  Since every element of $\mathbf{z}_i$ has to be
+$j$-th node.  Since every element of $\mathbf{z}_j$ has to be
 non-negative and their total sum must add up to one, it is natural to
-assume that this variable is drawn from the Dirichlet distribution:
+assume that its value is drawn from a Dirichlet distribution:
 \begin{align*}
-  \mathbf{z}_i \sim Dir(\boldsymbol{\alpha}).
+  \mathbf{z}_j \sim Dir(\boldsymbol{\alpha}).
 \end{align*}
 The only parameter accepted by this distribution, which simultaneously
-controls both the means and the variances of all polarities, is vector
-$\boldsymbol{\alpha}$.  Consequently, our primary goal now is to find a
-way how to compute this parameter automatically for every discourse
+controls both the mean and the variance of its outcomes, is vector
+$\boldsymbol{\alpha}$.  Consequently, our primary goal in this model
+is to find a way how to compute this parameter automatically for every
 node.
 
-One obvious source of information for this computation would certainly
-be the polarity scores predicted by the base classifiers for
-elementary discourse segments, which we will henceforth denote as
-$\boldsymbol{\alpha}_{i_0}\in\mathbb{R}^3_+$. Since these scores,
-however, are only available for EDUs, we will initialize these priors
-to zero vectors $\mathbf{0}$ for all remaining abstract nodes except
-the \textsc{Root}, for which we again will use the scores returned by
-the LBA classifier for the whole tweet.
+An obvious starting point for this computation is the polarity scores
+predicted by the base classifier for every elementary discourse unit,
+which we will henceforth denote as
+$\boldsymbol{z}_{j_0}\in\mathbb{R}^3_+$. Since these scores, however,
+are only available for elementary segments, we initialize the
+corresponding variables of the abstract spans to zeroes with the only
+exception being the root node, to which we again assign the scores
+returned by the LBA classifier for the whole message.
 
-Another important factor which might significantly affect the polarity
-of an RST node is the semantic orientation of its children and
-discourse relations via which these children are connected to their
-parent.  It is apparent that, in order to estimate the polarity
-probability of the parent, we need to join these two factors together.
-But how?
+To compute the posterior distribution of the root
+($\mathbf{z}_{\text{\textsc{Root}}}$), we sort all nodes of the RST
+tree in reverse topological order and estimate the polarities of the
+spans from the bottom up by joining the $\mathbf{z}$-scores of their
+children.  However, before we do this joining, we multiply the
+polarity vector of each child $k$ with a special matrix $M_r$, where
+$r \in \{\{\text{\textsc{Nucleus},
+  \textsc{Satellite}}\}\times\{\text{\textsc{Con\-tra\-sti\-ve},
+  \textsc{Non-\-Con\-tra\-sti\-ve}}\}\}$ is the discourse relation
+holding between that child and its parent, and project the result of
+this multiplication back to the probability simplex using the
+sparsemax operation~\cite{Martins:16}:
+\begin{align}
+  \mathbf{z}^*_k&=
+  sparsemax\left(M_r\mathbf{z}_k^{\top}\right).\label{dasa:eq:z-asterisk}
+\end{align}
 
-Let us first deal with the allegedly easier issue---namely, the
-discourse links between parent and child.  To encode the different
-nature of contrastive and non-contrastive connections, we will
-introduce a separate matrix $M_r$ for each relation discourse relation
-$r\defeq(\rho, \nu)$, where $\rho$ is the type of the relation
-(\textsc{Con\-tra\-sti\-ve} or \textsc{Non-\-Con\-tra\-sti\-ve}) and
-$\nu$ is the nuclearity status of the child (\textsc{Nucleus} or
-\textsc{Satellite}). We sample these matrices from a multivariate
-normal distribution:
+The main goal of this matrix is to express contextual changes that are
+introduced by disourse relations; for example, a contrastive link
+might stronger affect the polarity of the parent than the
+non-contrastive one (compare, for instance, the contrastive \emph{Many
+  people support Trump, but he behaves like an alpha male} with the
+non-contrastive \emph{Many people support Trump, because he behaves
+  like an alpha male}).  Because this parameter also represents a
+random variable, we sample it from a multivariate normal distribution:
 \begin{align*}
-  M_r \sim \mathcal{N}_{3\times3}(\boldsymbol{\mu}_r, \mathds{1}),
+  M_r \sim \mathcal{N}_{3\times3}(\boldsymbol{\mu}_r, \mathbf{\Sigma}_r),
 \end{align*}
-setting the mean $\boldsymbol{\mu}_r$ to:
+setting the mean of this distribution to:\footnote{Before we do the
+  actual sampling, we unroll this parameter to a vector and then
+  reshape the sampled value back to a $3\times3$ matrix.}
 \begin{equation*}
   \boldsymbol{\mu}_r\defeq\begin{bmatrix}
   1 & 0 & 0\\
   0 & 0.3 & 0\\
   0 & 0 & 1
+  \end{bmatrix},
+\end{equation*}
+and initializing its covariance matrix to all ones:
+\begin{equation*}
+  \boldsymbol{\Sigma}_r\defeq\begin{bmatrix}
+  1 & 1 & 1\\
+  1 & 1 & 1\\
+  1 & 1 & 1
   \end{bmatrix}.
 \end{equation*}
-The variance of this distribution is set to the all-ones matrix.
+With this choice of parameters, we hope to dampen the effect of
+neutral EDUs\footnote{As you can see from
+  Equation~\ref{dasa:eq:z-asterisk}, the middle row of the $M_r$
+  matrix is responsible for propagating the neutral score of the
+  $j$-the node, and by setting this row to $[0, 0.3, 0]$ we
+  effectively reduce the neutral polarity by two thirds.} in order to
+prevent situations when multiple objective segments vanquish the
+meaning of a single polar discourse unit.
 
-Prior to computing the polarity scores of a RST node $i$, we will
-multiply the probability vector of its child node $j$ with matrix
-$M_r$ (where $r$ is the discource relation holding between parent and
-child), projecting the result of this multiplication back to the
-probability simplex using the sparsemax method of~\citet{Martins:16}:
-\begin{align*}
-  \mathbf{z}^*_j&= sparsemax\left(M_r\mathbf{z}_j^{\top}\right).
-\end{align*}
-As is obvious from this equation, each row of matrix $M_r$ is
-responsible for propagating the respective polarity score of the child
-node.  Thus, setting the second row to $[0., 0.3, 0.]$ will dampen the
-neutral polarity of the child, which reflects our wish to decrease the
-effect of neutral segments on the overall polarity of a tweet if other
-strongly polar EDUs are present.  (At the same time, we still want to
-assign the neutral semantic orientation to the message if all of its
-RST nodes are objective.)
-
-We sort all nodes of RST tree in reverse topological order and compute
-their polarities bottom-up.  When arriving at node $i$, we iterate
-over all children $j \in ch(i)$ of that node from left to right,
-estimating the probability of polar classes at each state as follows:
-\begin{align*}
-  \boldsymbol{\alpha}_{i_j}&= \boldsymbol{\beta}\odot\mathbf{z}^*_j +
-  (\mathbf{1} - \boldsymbol{\beta})\odot\mathbf{z}_{i_{j-1}},
-\end{align*}
+Then, when seeing the $k$-th child of the $j$-th node in the RST tree,
+we compute the $\boldsymbol{\alpha}$ parameter of this node using the
+following formula:
+\begin{align}
+  \boldsymbol{\alpha}_{j_k}&= \boldsymbol{\beta}\odot\mathbf{z}^*_k +
+  (\mathbf{1} -
+  \boldsymbol{\beta})\odot\mathbf{z}_{j_{k-1}},\label{dasa:eq:alpha}
+\end{align}
 where $\boldsymbol{\beta}\in\mathbb{R}^3$ is another multivariate
-random variable drawn from the Beta distribution $B(5., 5.)$, which
-controls how much information from parent and child we want to see in
-the updated state $\mathbf{z}_{i_j}$; and $\odot$ means elementwise
-multiplication.
+random variable sampled from the Beta distribution $B(5., 5.)$, which
+controls the amount of information we want to pass from parent to
+child; $\mathbf{z}_{j_{k-1}}$ is the value of the $\mathbf{z}$-vector
+for the $j$-th node after seeing its previous child; and $\odot$ means
+elementwise multiplication.
 
-The only thing that we now need to do to the above vector
-$\boldsymbol{\alpha}_{i_j}$ before we draw the actual probability
-$\boldsymbol{z}_{i_j}$ from the corresponding Dirichlet distribution
-$Dir(\boldsymbol{\alpha}_{i_j})$ is to scale it by a certain
-factor.\footnote{Since all elements of $\boldsymbol{\alpha}_{i_j}$
-  will be in the range $[0,\ldots,1]$, the variance of the resulting
-  probability will be extremely high, and the polarity scores drawn
-  from this distribution will be almost random.} We compute this
-factor using the following formula:
+The only thing that we now need to do to the above
+$\boldsymbol{\alpha}_{j_k}$ term before we draw the actual probability
+$\boldsymbol{z}_{j_k}$ is to scale this vector by a certain amount in
+order to reduce the variance of the resulting
+Dirichlet.\footnote{Because if we keep the $\boldsymbol{\alpha}_{j_k}$
+  vector from Equation~\ref{dasa:eq:alpha} as is, most of its values
+  will be in the range $[0,\ldots,1]$ which will lead to an extremely
+  high variance of the Dirichlet distribution.} In particular, we
+compute this scaling factor as follows:
 \begin{align*}
-  scale&= \frac{\xi \times \left(0.1 + \cos\left(\mathbf{z}^*_j,
-    \mathbf{z}_{i_{j-1}}\right)\right)}{H\left(\boldsymbol{\alpha}_{i_j}\right)};
+  scale&= \frac{\xi \times \left(0.1 + \cos\left(\mathbf{z}^*_k,
+    \mathbf{z}_{j_{k-1}}\right)\right)}{H\left(\boldsymbol{\alpha}_{j_k}\right)};
 \end{align*}
-where $\xi$ is a model parameter drawn from the $\chi^2$-distribution:
+where $\xi$ is a model parameter sampled from a $\chi^2$-distribution:
 $\xi\sim\chi^2(34)$; 0.1 is a constant used to prevent zero scales in
-the cases when $\cos\left(\mathbf{z}^*_j, \mathbf{z}_{i_{j-1}}\right)$
-is zero; and $H\left(\boldsymbol{\alpha}_{i_j}\right)$ stands for the
-entropy of the $\boldsymbol{\alpha}_{i_j}$ vector.
+the cases when $\cos\left(\mathbf{z}^*_k, \mathbf{z}_{j_{k-1}}\right)$
+is zero; and $H\left(\boldsymbol{\alpha}_{j_k}\right)$ stands for the
+entropy of the $\boldsymbol{\alpha}_{j_k}$ vector.  Although this
+expression looks somewhat complicated, the intuition behind it very
+simple: The $\xi$ term encodes our prior belief in the correctness of
+the model's predictions (the higher its value, the more we trust the
+model); the cosine measures the similarity between the probabilities
+of parent and child (the more similar these probabilities, the greater
+will be the scale); and, finally, the entropy in the denominator tells
+us how uniform the vector $\boldsymbol{\alpha}_{j_k}$ is (the more
+equal its scores, the less confident we will be in the final outcome).
 
-Although this formula looks somewhat complicated, the intuition behind
-it is very simple: The $\xi$ term encodes our belief in the
-correctness of the model's prediction (the higher its value, the more
-we trust the model); the cosine term measures the similarity between
-the probabilities of parent and child (the more similar these
-probabilities are, the higher will be the scale); and, finally, the
-entropy in the denominator tells us how uniform the vector
-$\boldsymbol{\alpha}_{i_j}$ is (the more uniform the polarity scores
-are, the less confident we will be in the final outcome).
+\begin{figure}[htb!]
+  {\centering
+    \includegraphics[width=\linewidth]{img/dirichlet-process.png} }
+  \caption[Probability distributions computed by RDP]{Probability
+    distributions of polar classes computed by the Recursive Dirichlet
+    Process\\ {(higher probability regions are highlighted in red;
+      \small $\mathbf{p}_{prnt}$ means the probability of the parent
+      node [the values in the vector represent the scores for the
+        negative, neutral, and positive polarities respectively];
+      $\mathbf{p}_{chld}$ denotes the probability of the child; and
+      $\boldsymbol{\alpha}$, $\boldsymbol{\mu}$, and
+      $\boldsymbol{\sigma}$ represent the paremeters of the resulting
+      joint distribution shown in the
+      simplices)}}\label{dasa:fig:rdp-alpha}
+\end{figure}
 
-Now, with this term at hand, we are all set to draw the actual
-probability of polar classes for the $i$-th node when seeing its
-$j$-th child:
+With the $scale$ and $\boldsymbol{\alpha}_{j_k}$ terms at hand, we are
+all set to compute the updated probability of polar classes for the
+$j$-th node after considering its $k$-th child:
 \begin{align*}
-  \mathbf{z}_{i_{j}}\sim Dir(scale \times \boldsymbol{\alpha}_{i_j}).
+  \mathbf{z}_{j_{k}}\sim Dir(scale \times \boldsymbol{\alpha}_{j_k}).
 \end{align*}
-We subsequently use this result to estimate the polarity of the $i$-th
-node when analyzing its next child $j+1$ ($\mathbf{z}_{i_{j+1}}$).
-Once all children have been processed, we consider the final result
-$\mathbf{z}_{i_{J}}$ as the final probability of polarity classes for
-the $i$-th node and move on the next vertex in the reverse BFS order.
+
+You can see the examples of this computation in
+Figure~\ref{dasa:fig:rdp-alpha}, where we have plotted different
+configurations of parent and child probabilities
+($\mathbf{z}_{j_{k-1}}$ and $\mathbf{z}_{k}$, shown to the right of
+each picture) and the resulting Dirichlet distributions (represented
+as simplices).  For instance, in the top-left figure, we show a
+situation where the parent has a very strong probability of the
+negative class ($[1, 0, 0]$), but the probability of the child is
+absolutely uniform ($[0.33, 0.33, 0.33]$); in this case, the model
+keeps to the negative polarity, heaping almost all probability mass in
+this corner.  At the same, to account for the uncertainty of the
+child, RDP slightly moves the crest of the probability hill (\ie{} its
+mean) towards the positive class and makes the slopes of this hill
+lower along all three axes. On the other hand, if parent and child
+have completely opposite semantic orientations (say \textsc{Positive}
+and \textsc{Negative}), which the base classifier is perfectly sure
+about, as shown in Subfigure~b, RDP uniformly distributes the whole
+probability just along the narrow \textsc{Positive}--\textsc{Negative}
+edge.  A different situation is depicted in the middle row, where
+parent and child again have opposite polarities, but the base
+predictor is less sure about its decisions and also admits a small
+chance that either of these nodes is neutral.  In this case, RDP still
+spreads most probability along the main polar edge, but places the
+mean of this distribution right in-between the two polar corners and
+also screeds some part of that mass towards the center of the simplex.
+%% Another tendency that we can see in these figures is that our model
+%% does not make a distinction between parent and child, so that the
+%% resulting probabilities in both cases are almost identical, even when
+%% the polarities of these two nodes are swapped.
+Finally, in the last row, we can see our intended discrimination of
+the neutral orientation: This time, the parent node is strictly polar
+(negative on the left and positive on the right), whereas its child is
+neutral.  In contrast to the previous two examples, the mean of the
+resulting distribution is located closer to the polar corner and not
+in-between the two joined classes.
+
+Returning back to our model, after processing all $K$ children of the
+$j$-th node, we regard the last outcome $\mathbf{z}_{j_{K}}$ as the
+final polarity distribution of that node and use this value to
+estimate the probabilities of the remaining ancectors in the RST tree.
+Finally, after finishing processing all descendents of the root, we
+use the resulting $\mathbf{z}_{\text{\textsc{Root}}_K}$ vector as a
+parameter of a categorical distribution from which we draw the final
+prediction label $y$:
+\begin{align*}
+  y \sim Cat(\mathbf{z}_{\text{\textsc{Root}}}).
+\end{align*}
 
 \begin{figure}[htb]
   \begin{center}
@@ -1265,67 +1331,20 @@ the $i$-th node and move on the next vertex in the reverse BFS order.
   \end{center}
 \end{figure}
 
-Finally, after we have processed all descendents of the \textsc{Root}
-node, we use the resulting term $\mathbf{z}_{\text{\textsc{Root}}}$ as
-a parameter of a categorical distribution from which we draw the final
-prediction label $y$:
-\begin{align*}
-  y \sim Cat(\mathbf{z}_{\text{\textsc{Root}}}).
-\end{align*}
-
-To represent this process graphically, we visualized probability
-distributions $\mathbf{z}_{j_{k}}$ computed by the RDP for different
-probability values of parent and child nodes ($\mathbf{z}_j$ and
-$\mathbf{z}_k$) and present these results in
-Figure~\ref{dasa:fig:rdp-alpha} (higher probabilities are highlighted
-in red).
-
-As you can see from the top-left figure, when the parent has a strong
-probability of the negative class ($[1, 0, 0]$), but the probability
-of the child is uniform ($[0.33, 0.33, 0.33]$), the model keeps to the
-negative polarity, scooping up almost all probability mass into this
-corner.  At the same, to account for the uncertainty about the child,
-RDP slightly moves the summit of the probability hill (\ie{} its mean)
-towards the positive class and spreads the mass more evenly along all
-three axes. On the other hand, if parent and child have completely
-opposite polarities (say \textsc{Negative} and \textsc{Positive}),
-which the base classifier is absolutely sure of, RDP evenly
-distributes the probability along the
-\textsc{Positive}--\textsc{Negative} axis. (This sitation is depectied
-in Subfigure~b of the picture.)  The middle row shows two symmetric
-cases where parent and child again have opposite semantic
-orientations, but the base predictor is less sure about its decisions
-and also admits a small chance that either of these nodes is neutral.
-In this case, RDP still spreads the probability along the main polar
-axis, with the mean placed right in-between the two polar corners, but
-additionally stretches its mass towards the center of the simplex.  As
-we can see from the figure, our model does not make a distinction
-between parent and child, so that the resulting probabilities in both
-cases are almost identical, even though the polarities of the two
-joined nodes are swapped.  Finally, in the last row, we can see our
-intended discrimination of the neutral orientation: This time, the
-parent node is strictly polar (negative in Subfigure~e and positive in
-Subfigure~d), whereas the child is neutral.  In contrast to the
-previous two examples, the mean of the resulting distribution is now
-located closer to the polar corner and not in the middle of the two
-juxtaposed semantic orientations.
-
-\begin{figure}[htb]
-  { \centering
-    \includegraphics[width=\linewidth]{img/dirichlet-process.png} }
-  \caption{Node probabilities computed by the Recursive Dirichlet
-    Process}\label{dasa:fig:rdp-alpha}
-\end{figure}
-
-Our manually defined model with its fixed parameters reflects our
-prior beief in the way how the joint probability of hidden and
-observed states $p(y, \mathbf{z})$ might be computed.  As it turns
-out, knowing this belief is sufficient to derive another probability
-$q(\mathbf{z})$, which best approximates the probability of latent
-variables.  In particular, we define this distribution in the same way
-as above, but deprive it of the last step (drawing of the observed
-label), and optimize its parameters ($\boldsymbol{\theta}$) by
-maximizing the evidence lower bound, using stochastic gradient
+The plate diagram of our recursive Dirichlet process (without the
+final categorical draw) is shown in
+Figure~\ref{dasa:fig:rdp-plate}. With this manually defined model and
+its hand-tuned fixed parameters, we can estimate our prior belief in
+the joint probability of hidden and observed variables $p(y,
+\mathbf{z})$.  As it turns out, knowing this belief is sufficient to
+derive another probability $q(\mathbf{z})$, which best approximates
+the distribution of only the latent nodes.  In particular, we define
+the structure of $q(\mathbf{z})$ to be the same as in $p(y,
+\mathbf{z})$, but deprive it of the last step (drawing of the observed
+label) and optimize its parameters $\boldsymbol{\theta}$
+($\boldsymbol{\mu}_r$, $\boldsymbol{\Sigma}_r$, and the parameters of
+the Beta and $\chi^2$ distributions) by maximizing the evidence lower
+bound between $p$ and $q$, using stochastic gradient
 descent\cite[see][]{Ranganath:14}:
 \begin{align*}
   \mathcal{L}\left(\boldsymbol{\theta}\right)
@@ -1333,8 +1352,8 @@ descent\cite[see][]{Ranganath:14}:
   \left[\log\left(p(y, \mathbf{z})\right) -
     \log\left(q(\mathbf{z})\right)\right].
 \end{align*}
-We perform this optimization for 100 epochs, picking the parameter
-values which yield the best prediction accuracy on the set-aside
+We perform this optimization for 100 epochs, picking the $q$-model
+which yields the best macro-averaged \F{}-score on the set-aside
 development data.
 
 \begin{table}[h]
@@ -1481,28 +1500,27 @@ development data.
     \label{dasa:tbl:res}
   \end{center}
 \end{table}
-
 The results of our proposed and baseline methods are shown in
 Table~\ref{dasa:tbl:res}.  As we can see from the table, our
 approaches perform fairly well in comparison with other systems,
 outperforming them in terms of both macro- and macro-averaged $F_1$ on
 either dataset.  In particular the latent marginalized CRF method
-shows very competitive numbers, yielding the best $F_1$-scores for the
+shows very competitive scores, yielding the best $F_1$-results for the
 positive and neutral classes on PotTS and SB10k, which in turn leads
 to the highest overall micro-averaged $F_1$-measure on these corpora.
 This solution is closely followed by the Recursive Dirichlet Process,
 whose $F_1$ for the positive class on the PotTS data is identical to
-the one attained by LMCRF, and the $F$-score for the negative class is
+the one attained by LMCRF and the $F$-score for the negative class is
 even one percent higher, which allows it to reach the best
-macro-averaged result on this test set.
+macro-average on this test set.
 
-As it turns out, the strongest competitors of our systems are the
+As it turns out, the strongest competitors to our systems are the
 \textsc{No-Discourse} approach and the R2N2 method by
-\citet{Bhatia:15}: The former solution outperforms the latter on the
+\citet{Bhatia:15}. The former solution outperforms the latter on the
 PotTS corpus on both metrics (macro- and micro-$F_1$), but falls
 against it with respect to the macro-\F{} on the SB10k set.  The DDR
 and WNG methods get sixth and seventh places respectively, followed by
-the most simplistic solutions---\textsc{Last} and \textsc{Root}.
+the simplest solutions---\textsc{Last} and \textsc{Root}.
 Interestingly enough, the \textsc{Last} approach beats the
 \textsc{Root} method on the SB10k dataset, but shows worse scores on
 the PotTS data, which is mostly due to the lower recall of the
