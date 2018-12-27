@@ -1660,8 +1660,8 @@ moments with regard to the sad news expressed in the first segment;
 but in contrast to the movie description from
 Example~\ref{disc-snt:exmp-pang02}, where the last sentence completely
 overturned the polarity of the whole text, this time, the final
-opinion does not alter the general negative mood of the tweet, but
-merely dampens its effect.
+opinion does not alter the general negative mood of the message, but
+merely dampens its strength.
 \begin{example}[Error Made by the \textsc{Last} System]\label{snt:dasa:exmp:last-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     $[$' ( :'( :'( Die letzte Aussprache war wohl das schwerste
@@ -1678,17 +1678,27 @@ merely dampens its effect.
 
 \section{Evaluation}
 
+As we could see from the examples in Section~\ref{sec:dasa:methods},
+the results of our proposed methods are significanlty limited by two
+key factors:
+\begin{inparaenum}[(i)]
+\item by scores predicted by the base sentiment system for messages
+  and single EDUs and
+\item by the structure of RST trees constructed for these messages.
+\end{inparaenum}
+In order to estimate the effect of these factors in more detail, we
+decided to rerun our experiments from the previous section, trying
+alternative solutions for each of these aspects.
+
 \subsection{Base Classifier}
 
-The first important aspect, which forms the basis of every DASA method
-(but at the same time is also limiting its performance), is the
-quality of the base sentiment classifier which predicts the scores for
-single EDUs of an RST tree.  To see whether a lexion- or
-machine-learning--based CGSA system would be a better starting point
-for discourse-aware sentiment inference, we reran our experiments,
-replacing the probabilities returned by the LBA system with the scores
-returned by the lexicon-based metho of \citet{Hu:04} and the ML
-approach of~\citet{Mohammad:13}.  The results of this evaluation are
+To assess the impact of the former factor (base sentiment classifier),
+we replaced all polarity scores produced by the LBA system with
+respective values returned by the best lexicon- and ML-based CGSA
+methods (the systems of \citeauthor{Hu:04} [\citeyear{Hu:04}] and
+\citeauthor{Mohammad:13} [\citeyear{Mohammad:13}]) and retrained all
+DASA approaches on the updated data, subsequently evaluating them on
+the PotTS and SB10k test sets.  The results of this evaluation are
 presented in Figures~\ref{dasa:fig:potts-base-classifier} and
 \ref{dasa:fig:sb10k-base-classifier}.
 
@@ -1711,15 +1721,14 @@ presented in Figures~\ref{dasa:fig:potts-base-classifier} and
   corpus}\label{dasa:fig:potts-base-classifier}
 \end{figure*}
 
-From these figures we can see that the lexicon-based attention
-approach is in fact more effective than any alternative coarse-grained
-sentiment method for almost all discourse-aware approaches.  A few
-exceptions to this general tendency are the macro-\F{} of the
-\textsc{Last} system, which surprisingly improves in combination with
-the lexicon-based \citeauthor{Hu:04} system, and the micro-averaged
-\F{}-score of the \textsc{RDP} and \textsc{Last} solutions, which
-attain their best ranks together with the \citeauthor{Mohammad:13}'s
-classifier (0.713 and 0.582 respectively).
+As we can see from the first figure, our initially chosen LBA system
+is indeed a more reliable base predictor for almost all
+discourse-aware sentiment approaches on the PotTS corpus.  A few
+exceptions to this general rule are the macro-averaged \F{}-score of
+the \textsc{Last} baseline, which surprisingly improves in combination
+with the lexicon-based approach, and the micro-\F{} of \textsc{RDP}
+and \textsc{Last}, which attain their best results (0.713 and 0.582)
+in conjunction with the SVM classifier of \citet{Mohammad:13}.
 
 \begin{figure*}[htb]
 { \centering
@@ -1740,38 +1749,37 @@ classifier (0.713 and 0.582 respectively).
   corpus}\label{dasa:fig:sb10k-base-classifier}
 \end{figure*}
 
-This situation, however, looks differently on the SB10k dataset, where
-LBA leads to higher macro-scores for the \textsc{DDR}, \textsc{R2N2},
-\textsc{WNG}, \textsc{Last}, and \textsc{Root} systems, but the
-ML-based approach of \citeauthor{Mohammad:13} improves the results of
-the \textsc{LCRF}, \textsc{LMCRF}, \textsc{RDP}, and
-\textsc{No-Discourse} methods.  The ML-classifier is also the
-unequivocal leader in terms of the micro-averaged \F, yielding the
-highest scores for all systems except for the approach of
-\citet{Wang:13}.  Unfortunately, the lexicon-based slution of
-\citet{Hu:04} performs much weaker in comparison with the other two
-systems, with the hgighest macro- and micro-averaged \F{}-scores
-running up to 0.422 (\textsc{RDP}) and 0.625 (\textsc{Last})
-respectively.  The most disappointing result for us, however, is that
-the LMCRF system fails to predict any polar class except for
-\textsc{Neutral} when trained on the scores produced by this
-classifier.  Likewise, LCRF can hardly beat any other competitor,
-reaching merely 0.239 macro\F{}.
+A slightly different situation is observed on the SB10k corpus though.
+On this dataset, LBA still leads to higher macro-\F{}--scores for
+\textsc{DDR}, \textsc{R2N2}, \textsc{WNG}, \textsc{Last}, and
+\textsc{Root} systems; but approach of \citet{Mohammad:13} improves
+the results of \textsc{LCRF}, \textsc{LMCRF}, \textsc{RDP}, and
+\textsc{No-Discourse}.  The SVM classifier is also the unequivocal
+leader in terms of the micro-averaged \F, yielding the highest scores
+for all systems except for WNG.  Unfortunately, the lexicon-based
+solution performs much weaker than SVM and LBA: the highest macro- and
+micro-averaged \F{}-scores achieved with this system run up to 0.422
+(\textsc{RDP}) and 0.625 (\textsc{Last}) respectively.  The most
+disappointing result for us, however, is that the LMCRF system
+completely fails to predict any polar class except \textsc{Neutral} on
+the SB10k test set when trained with the scores produced by predictor.
+Likewise, LCRF can hardly outperform any other competitor, reaching
+only 0.239 macro-\F{}.
 
 \subsection{Parsing Quality and Relation Scheme}
 
-Two other factors that could significantly influence the results of
-discourse-aware sentiment systems were the quality of automatic RST
-analysis and the set of discourse relations distinguished by the
-parsing system.  Although improving the results of the DPLP parser let
-alone manually annotating the complete PotTS and SB10k datasets was
-beyond the scope of this dissertation, we decided to check whether
-using hand-crafted RST trees in the test input could improve the
-scores of our tested DASA approaches.  For this purpose, we asked a
-student assistant to segment and annotate the discourse structure for
-88\% of the PotTS test data\footnote{Unfortunately, we could not
-  annotate the whole test set due to time limitations of the student.}
-and evaluated all trained systems on these trees.
+Another factor which could significantly influence the results of
+discourse-aware sentiment systems was the quality of the automatic RST
+parsing and the set of discourse relations distinguished by the parser
+system.  Although improving the results of DPLP let alone manually
+annotating the complete PotTS and SB10k datasets was beyond the scope
+of this dissertation, we decided to check whether using hand-crafted
+RST trees in the test input could improve the scores of our tested
+DASA methods.  For this purpose, we asked a student assistant to
+segment messages and annotate discourse trees for 88\% of the PotTS
+test data\footnote{Unfortunately, we could not annotate the whole test
+  set due to time limitations of the student.}  and evaluated all
+trained systems on these trees.
 \begin{table}[htb]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -1917,6 +1925,7 @@ and evaluated all trained systems on these trees.
     \label{dasa:tbl:res-gold}
   \end{center}
 \end{table}
+
 As we can see from the results in Table~\ref{dasa:tbl:res-gold}, the
 scores of all systems except \textsc{WNG}, \textsc{Last}, and
 \textsc{Root} increase by three to four percent.  Even the macro- and
