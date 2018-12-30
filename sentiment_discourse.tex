@@ -122,21 +122,23 @@ two clauses, this division had laid the foundations for many
 successful approaches to automatic discourse analysis that appeared in
 the following decades.
 
-\textbf{RST.}\quad{}One of the best-known such
-approaches---\emph{Rhetorical Structure Theory} or \emph{RST}---was
-presented by~\citet{Mann:88}.  Besides revising \citeauthor{Hobbs:79}'
-inventory of discourse relations and expanding it to 23 elements
-(including new items such as \textsc{Antithesis},
-\textsc{Circumstance}, \textsc{Evidence}, and \textsc{Elaboration}),
-the authors also grouped all coherence links into nucleus-satellite
-(hypotactic) and multinuclear (paratactic) ones, depending on whether
-the arguments of these edges were of different or equal importance to
-the content of the whole text.  Based on this grouping, they formally
-described each relation as a set of constraints on the \emph{Nucleus}
-(N), \emph{Satellite} (S), \emph{the N+S combination}, and \emph{the
-  effect} of the whole combination on the reader (R).  An excerpt from
-the original description of the \textsc{Antithesis} relation is given
-in Example~\ref{dasa:exmp:rst-evidence}
+\paragraph{RST.}
+
+One of the best-known such approaches---\emph{Rhetorical Structure
+  Theory} or \emph{RST}---was presented by~\citet{Mann:88}.  Besides
+revising \citeauthor{Hobbs:79}' inventory of discourse relations and
+expanding it to 23 elements (including new items such as
+\textsc{Antithesis}, \textsc{Circumstance}, \textsc{Evidence}, and
+\textsc{Elaboration}), the authors also grouped all coherence links
+into nucleus-satellite (hypotactic) and multinuclear (paratactic)
+ones, depending on whether the arguments of these edges were of
+different or equal importance to the content of the whole text.  Based
+on this grouping, they formally described each relation as a set of
+constraints on the \emph{Nucleus} (N), \emph{Satellite} (S), \emph{the
+  N+S combination}, and \emph{the effect} of the whole combination on
+the reader (R).  An excerpt from the original description of the
+\textsc{Antithesis} relation is given in
+Example~\ref{dasa:exmp:rst-evidence}
 
 \begin{example}[Definition of the \textsc{Antithesis} Relation]\label{dasa:exmp:rst-evidence}
   \textbf{Relation Name:} \textsc{Antithesis}
@@ -184,10 +186,11 @@ criticized for the rigidness of the imposed tree structure
 alternative approaches to automatic discourse analysis were proposed
 in later works.
 
-\textbf{PDTB.}\quad{}One of these approaches---PDTB (named so after
-the Penn Discourse Treebank [\citeauthor{Prasad:04},
-  \citeyear{Prasad:04}])---was developed by the research group of the
-University of Pennsylvania
+\paragraph{PDTB.}
+
+One of these approaches---PDTB (named so after the Penn Discourse
+Treebank [\citeauthor{Prasad:04}, \citeyear{Prasad:04}])---was
+developed by the research group of the University of Pennsylvania
 \cite{Miltsakaki:04,Miltsakaki:04a,Prasad:08} and at its core
 represents an \emph{underspecification of RST}, where instead of fully
 specifying the hierarchical structure of the whole text and providing
@@ -246,14 +249,16 @@ modification scope of other supplementary statements.
         if}\argtwo[3]{the economy turns downward}}}.''
 \end{example}
 
-\textbf{SDRT.}\quad{}Another alternative to RST---Segmented Discourse
-Representation Theory or SDRT---was proposed by \citet{Lascarides:01}.
-Although developed from a completely different angle of view (the SDRT
-authors mainly drew their inspiration from predicate logic, dynamic
-semantics, and anaphora theory), this theory shares many of its
-features with the standard rhetorical structure, as it also assumes a
-graph-like structure of text and distinguishes between coordinating
-and subordinating relations.  However, unlike RST, segmented discourse
+\paragraph{SDRT.}
+
+Another alternative to RST---Segmented Discourse Representation Theory
+or SDRT---was proposed by \citet{Lascarides:01}.  Although developed
+from a completely different angle of view (the SDRT authors mainly
+drew their inspiration from predicate logic, dynamic semantics, and
+anaphora theory), this theory shares many of its features with the
+standard rhetorical structure, as it also assumes a graph-like
+structure of text and distinguishes between coordinating and
+subordinating relations.  However, unlike RST, segmented discourse
 representation explicitly allows the text structure to be any graph
 and not only tree (\ie{} a discourse node can have multiple parents
 and can also be connected via multiple links to the same vertex),
@@ -315,22 +320,24 @@ defined by \citet{Mann:88}.
   \end{center}
 \end{figure}
 
-\textbf{Final choice.}\quad{}Because it was unclear which of these
-approaches (RST, PDTB, or SDRT) would be more amenable to our
-sentiment experiments, we have made our decision by considering the
-following theoretical and practical aspects: From theoretical
-perspective, we wanted to have a strictly hierarchical discourse
-structure for each analyzed tweet so that we could infer the semantic
-orientation of that message by recursively accumulating polarity
-scores of its elementary discourse segments.  From practical point of
-view, since there was no discourse parser readily available for
-German, we wanted to have a maximal assortment of such systems
-available for English so that we could pick one that would be easiest
-to retrain on German data.  Fortunately, both of these concerns have
-lead us to the same solution---Rhetorical Structure Theory, which was
-the only formalism which explicitly guaranteed a single root for each
-analyzed text and also offered a wide variety of open-source parsing
-systems \cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
+\paragraph{Final choice.}
+
+Because it was unclear which of these approaches (RST, PDTB, or SDRT)
+would be more amenable to our sentiment experiments, we have made our
+decision by considering the following theoretical and practical
+aspects: From theoretical perspective, we wanted to have a strictly
+hierarchical discourse structure for each analyzed tweet so that we
+could infer the semantic orientation of that message by recursively
+accumulating polarity scores of its elementary discourse segments.
+From practical point of view, since there was no discourse parser
+readily available for German, we wanted to have a maximal assortment
+of such systems available for English so that we could pick one that
+would be easiest to retrain on German data.  Fortunately, both of
+these concerns have lead us to the same solution---Rhetorical
+Structure Theory, which was the only formalism which explicitly
+guaranteed a single root for each analyzed text and also offered a
+wide variety of open-source parsing systems
+\cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
 
 \section{Data Preparation}\label{sec:dasa:data}
 
@@ -791,12 +798,14 @@ modifications (henceforth \textsc{No-Discourse}).  Apart from these
 baselines and existing methods, we propose a few novel DASA solutions,
 which will be briefly described below.
 
-\textbf{Latent CRF.}\quad In the first of these solutions, called
-\emph{Latent Conditional Random Fields} or \emph{LCRF}, we consider
-the problem of message-level sentiment analysis as an inference task
-over undirected graphical model, where the nodes of the model
-represent polarity probabilities of elementary discourse units and the
-structure of the graph reflects the RST dependency tree of the
+\paragraph{Latent CRF.}
+
+In the first of these solutions, called \emph{Latent Conditional
+  Random Fields} or \emph{LCRF}, we consider the problem of
+message-level sentiment analysis as an inference task over undirected
+graphical model, where the nodes of the model represent polarity
+probabilities of elementary discourse units and the structure of the
+graph reflects the RST dependency tree of the
 message.\footnote{Drawing on the work of~\citet{Bhatia:15}, we obtain
   this representation using the DEP-DT algorithm of~\citet{Hirao:13}
   with a minor modification that we do not follow any satellite
@@ -966,10 +975,11 @@ model.  In particular, we use the block-coordinate Frank-Wolfe
 algorithm~\cite{Lacoste-Julien:13}, running it for 1,000 epochs or
 until convergence, whichever of these events occurs first.
 
-\textbf{Latent-Marginalized CRF.}\quad Another way to tackle
-unobserved labels is to estimate the probability of observed tags by
-marginalizing (summing) out hidden variables from the joint
-distribution, \ienocomma:
+\paragraph{Latent-Marginalized CRF.}
+
+Another way to tackle unobserved labels is to estimate the probability
+of observed tags by marginalizing (summing) out hidden variables from
+the joint distribution, \ienocomma:
 \begin{align*}
   p\left(\mathbf{Y}_o{=}\mathbf{y}_o\right) &= \sum_{\mathbf{y}_h}
   p\left(\mathbf{Y}_o{=}\mathbf{y}_o, \mathbf{Y}_h{=}\mathbf{y}_h\right).
@@ -1112,12 +1122,13 @@ uses this total cumulative mass to estimate the probability of both
     fields}\label{dasa:fig:lcrf-vs-lmcrf}
 \end{figure*}
 
-\textbf{Recursive Dirichlet Process.}\quad Finally, the last method
-that we present in this chapter---\emph{Recursive Dirichlet Process}
-or \emph{RDP}---goes a further step in the probabilistic direction by
-assuming that not only the probabilities of discourse units but also
-the parameters via which these probabilities are computed represent
-random variables.
+\paragraph{Recursive Dirichlet Process.}
+
+Finally, the last method that we present in this
+chapter---\emph{Recursive Dirichlet Process} or \emph{RDP}---goes a
+further step in the probabilistic direction by assuming that not only
+the probabilities of discourse units but also the parameters via which
+these probabilities are computed represent random variables.
 
 In particular, we associate a variable
 $\mathbf{z}_j\in\mathbb{R}_+^3$, s.t. $\norm{\mathbf{z}}_1 = 1$, with
