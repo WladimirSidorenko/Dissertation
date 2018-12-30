@@ -424,7 +424,7 @@ by~\citet{Bhatia:15}.\footnote{See Table~\ref{dasa:tbl:rst-rel-sets}
   for more details regarding this mapping.}  In contrast to the
 original DPLP implementation though, we did not use Brown clusters
 \cite{Brown:92}, because this resource was not available for German,
-and did not apply the linear projection of the features, because the
+nor did we apply the linear projection of the features, because the
 released parser code was missing this component either.  In part due
 to these modifications, but mostly because of the specifics of the
 German language (richer morphology, higher lexical variety, and
@@ -1950,12 +1950,15 @@ unlikely to appear either at the end of a message or at the top of its
 RST tree, which explains the degradation of the scores for the
 \textsc{Last} and \textsc{Root} baselines.
 
-A common way to improve the quality of automatic RST parsing and ease
-the task of discourse-aware sentiment methods is to reduce the number
-of discourse relations distinguished by the parser system.  Drawing on
-the work of \citet{Bhatia:15}, we also used this approach, projecting
-all coherence links from the Potsdam Commentary Corpus \cite{Stede:14}
-to the binary set of \textsc{Contrastive} and \textsc{Non-Contrastive}
+Although manually annotated RST trees do improve the results of most
+discourse-aware sentiment methods, this fact is of little help to us
+if we are bound to the output of an automatic parser. A common way to
+improve the quality of automatic RST analysis and ease the task of
+DASA methods is to reduce the number of discourse relations
+distinguished by the parsing system.  Drawing on the work of
+\citet{Bhatia:15}, we also used this approach, projecting all
+coherence links from the Potsdam Commentary Corpus \cite{Stede:14} to
+the binary set of \textsc{Contrastive} and \textsc{Non-Contrastive}
 ones.  Although similar approximations were made in almost all other
 discourse-aware solutions \cite[cf.
 ][]{Chenlo:13,Heerschop:11,Zhou:11}, we were not sure whether the
