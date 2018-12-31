@@ -169,8 +169,8 @@ Table~\ref{snt-cgsa:tbl:corp-dist}.
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.162\columnwidth} % first columm
-        *{6}{>{\centering\arraybackslash}p{0.13\columnwidth}}} % last two columns
+    \begin{tabular}{p{0.163\columnwidth} % first columm
+        *{6}{>{\centering\arraybackslash}p{0.135\columnwidth}}} % last two columns
       \toprule
       \textbf{Dataset} & \multicolumn{4}{c}{\bfseries Polarity Class}%
       & \multicolumn{2}{c}{\bfseries Agreement}\\\cmidrule(lr){2-5}\cmidrule(lr){6-7}
@@ -398,29 +398,28 @@ of all micro-phrase scores.
 % Jurek et al., 2015
 Another Twitter-aware system was presented by~\citet{Jurek:15}, who
 computed the negative and positive polarity of a message ($F_p$ and
-$F_n$ respectively) using the following formula: { \small%
-  \begin{align}
-    F_P &= \min\left(\frac{A_P}{2 - \log(3.5\times W_P + I_P)}, 100\right),\\
-    F_N &= \max\left(\frac{A_N}{2 - \log(3.5\times W_N + I_N)}, -100\right);\label{cgsa:eq:jurek}
-  \end{align}%
-  \normalsize%
-}%
+$F_n$ respectively) using the following formula:
+\begin{align}
+  \small
+  \begin{split}
+  F_P &= \min\left(\frac{A_P}{2 - \log(3.5\times W_P + I_P)}, 100\right),\\
+  F_N &= \max\left(\frac{A_N}{2 - \log(3.5\times W_N + I_N)}, -100\right);\label{cgsa:eq:jurek}
+  \end{split}
+\end{align}%
 where $A_P$ and $A_N$ represent the average scores of positive and
 negative lexicon terms found in the tweet; $W_P$ and $W_N$ stand for
 the raw counts of polar tokens; and $I_P$ and $I_N$ denote the number
 of intensifiers preceding these words.  In addition to that, before
 estimating the average values, the authors also modified the polarity
-scores $s_w$ every negated word $w$ using the following heuristics: {
+scores $s_w$ every negated word $w$ using the following heuristics:
+\begin{align*}
   \small%
-  \begin{align}
 neg(s_w) =
     \begin{cases}
         \min\left(\frac{s_w - 100}{2}, -10\right) & \text{if } s_w > 0,\\
         \max\left(\frac{s_w + 100}{2}, 10\right), & \text{if } s_w < 0.
     \end{cases}
-\end{align}%
-\normalsize%
-}%
+\end{align*}%
 Furthermore, besides computing the polarity scores $F_p$ and $F_n$,
 \citeauthor{Jurek:15} also determined the subjectivity degree of the
 message by replacing the $A_P$ and $A_N$ terms in
@@ -757,8 +756,8 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
         0.235 & \textbf{0.606}\\\bottomrule
 \end{tabular}
     \egroup
-    \caption[Evaluation of lexicon-based CGSA methods]{
-      Evaluation of lexicon-based CGSA methods\\
+    \caption[Results of lexicon-based CGSA methods]{
+      Results of lexicon-based CGSA methods\\
       {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--~\citet{Musto:14},
         JRK~--~\citet{Jurek:15}, KLCH~--~\citet{Kolchyna:15}}}
     \label{snt-cgsa:tbl:lex-res}
@@ -813,7 +812,7 @@ these changes.
 \begin{table}[h]
   \begin{center}
     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    \begin{tabular}{p{0.15\columnwidth} % first columm
+    \begin{tabular}{p{0.16\columnwidth} % first columm
         *{10}{>{\centering\arraybackslash}p{0.082\columnwidth}}}
       \toprule
       \multirow{2}{0.15\columnwidth}{%
@@ -1046,12 +1045,8 @@ these changes.
       \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\\bottomrule
 \end{tabular}
     \egroup
-    \caption[Evaluation of polarity-changing factors in lexicon-based
-    CGSA methods]{
-      Evaluation of polarity-changing factors in lexicon-based CGSA methods\\
-      {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--
-        \citet{Musto:14}, JRK -- \citet{Jurek:15}, KLCH --
-        \citet{Kolchyna:15}}}
+    \caption{Effect of polarity-changing factors on lexicon-based CGSA
+      methods}
     \label{snt-cgsa:tbl:lex-res-ablation}
   \end{center}
 \end{table}
@@ -1656,7 +1651,7 @@ of~\citet{Gamon:04}, we used the available dependency analyses from
 the \texttt{MateParser}~\cite{Bohnet:09} instead of constituency
 trees, considering each node of the dependency tree as a syntactic
 constituent and regarding the two-tuple
-(\texttt{dependency-link-to-the-parent}, \texttt{PoS-tag-of-the-node})
+(\texttt{dependency-link-to-the-parent}, \texttt{PoS-\-tag-\-of-\-the-\-node})
 as the name of that constituent (for example, a finite verb at the
 root node of the tree was mapped to the constituent (\texttt{--},
 \texttt{VVFIN}), where \texttt{--} was the name of the root relation).
@@ -1973,7 +1968,7 @@ recomputing their scores.
     \begin{tabular}{p{0.2\columnwidth} % first columm
         *{6}{>{\centering\arraybackslash}p{0.13097\columnwidth}}}
       \toprule
-      \multirow{2}{0.15\columnwidth}{%
+      \multirow{2}{0.145\columnwidth}{%
       \bfseries Features} & %
       \multicolumn{6}{c}{\bfseries System Scores}\\
       & \multicolumn{2}{c}{\bfseries GMN} & \multicolumn{2}{c}{\bfseries MHM} %
@@ -2004,9 +1999,7 @@ recomputing their scores.
     \end{tabular}
     \egroup
     \caption[Feature-ablation test of ML-based CGSA methods]{
-      Results of the feature-ablation test for ML-based CGSA methods\\
-      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
-        GNT~-- \citet{Guenther:14}}}
+      Results of the feature-ablation test for ML-based CGSA methods}
     \label{snt-cgsa:tbl:ml-res-ablation}
   \end{center}
 \end{table}
@@ -2135,7 +2128,7 @@ Mohammmad's and G\"unther's analyzers.
         *{6}{>{\centering\arraybackslash}p{0.13097\columnwidth}}}
       \toprule
       \multirow{2}{0.15\columnwidth}{%
-      \bfseries Features} & %
+      \bfseries Classifier} & %
       \multicolumn{6}{c}{\bfseries System Scores}\\
       & \multicolumn{2}{c}{\bfseries GMN} & \multicolumn{2}{c}{\bfseries MHM} %
       & \multicolumn{2}{c}{\bfseries GNT}\\%
@@ -2156,10 +2149,8 @@ Mohammmad's and G\"unther's analyzers.
       Logistic Regression & 0.309 & 0.693 & 0.553 & \textbf{0.772} & \textbf{0.512} & \textbf{0.75}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Feature-ablation test of ML-based CGSA methods]{
-      Feature-ablation test of ML-based CGSA methods\\
-      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
-        GNT~-- \citet{Guenther:14}}}
+    \caption{
+      Results of ML-based CGSA methods with different classifiers}
     \label{snt-cgsa:tbl:ml-res-classifiers}
   \end{center}
 \end{table}
@@ -3100,7 +3091,7 @@ accuracy on the validation set.
       0.298 & 0.723\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods]{Evaluation of
+    \caption[Results of DL-based CGSA methods]{Results of
       DL-based CGSA methods\\ {\small Y\&C~--~\citet{Yessenalina:11},
         RAE~--~Recursive Auto-Encoder \cite{Socher:11},
         MVRNN~--~Matrix-Vector RNN \cite{Socher:12}, RNTN~--~Recursive
