@@ -1041,13 +1041,13 @@ abbreviations:
 Now, we estimate the derivatives of functions $a$ and $b$ w.r.t. a
 single parameter $\boldsymbol{\theta}_v$ as:
 \begin{align*}
-  \frac{\partial{}a}{\partial\boldsymbol{\theta}_v} &= a\sum_{t=0}^{T_i}\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}\mathbf{f}_v,\\
-  \frac{\partial{}b}{\partial\boldsymbol{\theta}_v} &= b\sum_{t=0}^{T_i}\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)\propto\mathbb{E}_{\mathbf{y}^{'(i)}}\mathbf{f}_v;
+  \frac{\partial{}a}{\partial\boldsymbol{\theta}_v} &= a\sum_{t=0}^{T_i}\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}\left[\mathbf{f}_v\right],\\
+  \frac{\partial{}b}{\partial\boldsymbol{\theta}_v} &= b\sum_{t=0}^{T_i}\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)\propto\mathbb{E}_{\mathbf{y}^{'(i)}}\left[\mathbf{f}_v\right];
 \end{align*}
 and analogously obtain:
 \begin{align*}
-  \frac{\partial{}a}{\partial\boldsymbol{\theta}_e} &= a\sum_{t=0}^{T_i}\sum_{c\in ch(t)}\mathbf{f}_e\left(\mathbf{y}^{(i)}_{t}, \mathbf{y}^{(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}\mathbf{f}_e,\\
-  \frac{\partial{}b}{\partial\boldsymbol{\theta}_e} &= b\sum_{t=0}^{T_i}\sum_{c\in ch(t)}\mathbf{f}_e\left(\mathbf{y}^{'(i)}_{t}, \mathbf{y}^{'(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{'(i)}}\mathbf{f}_e.
+  \frac{\partial{}a}{\partial\boldsymbol{\theta}_e} &= a\sum_{t=0}^{T_i}\sum_{c\in ch(t)}\mathbf{f}_e\left(\mathbf{y}^{(i)}_{t}, \mathbf{y}^{(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}\left[\mathbf{f}_e\right],\\
+  \frac{\partial{}b}{\partial\boldsymbol{\theta}_e} &= b\sum_{t=0}^{T_i}\sum_{c\in ch(t)}\mathbf{f}_e\left(\mathbf{y}^{'(i)}_{t}, \mathbf{y}^{'(i)}_{c}\right)\propto\mathbb{E}_{\mathbf{y}^{'(i)}}\left[\mathbf{f}_e\right].
 \end{align*}
 With the help of these expressions, we can easily compute the gradient
 of the objective function w.r.t. $\boldsymbol{\theta}$ by observing
