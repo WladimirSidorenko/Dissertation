@@ -1,4 +1,4 @@
-\chapter{Coarse-Grained Sentiment Analysis}\label{sec:snt:cgsa}
+\chapter{Coarse-Grained Sentiment Analysis}\label{chap:cgsa}
 
 Having familiarized ourselves with the peculiarities of the creation
 of a sentiment corpus, the different ways to automatically induce new
@@ -1260,27 +1260,27 @@ this microblog were in fact neutral.  You can see the full list of the
 five nearest neighbors below:
 
 \begin{enumerate}
-\item \textcolor{darkred}{\bfseries Tweet:}: ``Not in my backyard'' -Mentalit\"at dt. Politik: ``N\"achster Castor geht wohl doch nach Gorleben... -\%Link antiatom''\\
+\item \textcolor{darkred}{\bfseries Tweet:} ``Not in my backyard'' -Mentalit\"at dt. Politik: ``N\"achster Castor geht wohl doch nach Gorleben... -\%Link antiatom''\\
   \textit{``Not in my backyard'' -Mentality of German politics: ``Next Castor will probably still got to Gorleben... -\%Link antiatom''}\\
   \textcolor{darkred}{\bfseries Label:}~\textcolor{black}{neutral}\\
   \textcolor{darkred}{\bfseries Distance:}~$\expnumber{6.83}{-03}$;
 
-\item \textcolor{darkred}{\bfseries Tweet:}: Kanzlerin im Google-Hangout: ``Die Technik soll sich mal bem\"uhen''\\
+\item \textcolor{darkred}{\bfseries Tweet:} Kanzlerin im Google-Hangout: ``Die Technik soll sich mal bem\"uhen''\\
   \textit{Chancellor in Google-Hangout: ``The technology should make an effort''}\\
   \textcolor{darkred}{\bfseries Label:}~\textcolor{black}{neutral}\\
   \textcolor{darkred}{\bfseries Distance:}~$\expnumber{1.6}{-02}$;\label{snt:cgsa:exmp:kolchyna-error-0.1}
 
-\item \textcolor{darkred}{\bfseries Tweet:}: Kanzlerin im Google-Hangout: ``Die Technik soll sich mal bem\"uhen''\\
+\item \textcolor{darkred}{\bfseries Tweet:} Kanzlerin im Google-Hangout: ``Die Technik soll sich mal bem\"uhen''\\
   \textit{Chancellor in Google-Hangout: ``The technology should make an effort''}\\
   \textcolor{darkred}{\bfseries Label:}~\textcolor{black}{neutral}\\
   \textcolor{darkred}{\bfseries Distance:}~$\expnumber{1.6}{-02}$;\label{snt:cgsa:exmp:kolchyna-error-0.2}
 
-\item \textcolor{darkred}{\bfseries Tweet:}: W\"unsche mir ein Format wie zdflogin auch f\"ur das \%User. Viele Themen, klare Aussagen. Sch\"ones Special \%User zur Landtagswahl! \%PosSmiley\\
+\item \textcolor{darkred}{\bfseries Tweet:} W\"unsche mir ein Format wie zdflogin auch f\"ur das \%User. Viele Themen, klare Aussagen. Sch\"ones Special \%User zur Landtagswahl! \%PosSmiley\\
   \textit{Wish \%User had a format like zdflogin. Many topics, clear statements. Nice Special \%User zur Landtagswahl! \%PosSmiley}\\
   \textcolor{darkred}{\bfseries Label:}~\textcolor{green3}{positive}\\
   \textcolor{darkred}{\bfseries Distance:}~$\expnumber{2.1}{-02}$;
 
-\item \textcolor{darkred}{\bfseries Tweet:}: Ich bin ja so gespannt ob
+\item \textcolor{darkred}{\bfseries Tweet:} Ich bin ja so gespannt ob
   die FDP im September erst den Zahn\"arzten und dann den Apothekern
   mit Geschenken dankt, oder anders rum...\\ \textit{I'm so curious
     whether FDP will first give gifts to dentists and then to
@@ -1863,8 +1863,8 @@ original descriptions.
        0.491 & 0.724\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of ML-based CGSA methods]{
-      Evaluation of ML-based CGSA methods\\
+    \caption[Results of ML-based CGSA methods]{
+      Results of machine-learning--based CGSA methods\\
       {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
         GNT~--~\citet{Guenther:14}}}
     \label{snt-cgsa:tbl:ml-res}
@@ -2098,7 +2098,7 @@ bigram among its top-ten entries.
   \end{center}
 \end{table}
 
-\subsection{Effect of the Classifiers}\label{subsec:cgsa:ml-methods:classifiers-analysis}
+\subsection{Classifiers}\label{subsec:cgsa:ml-methods:classifiers-analysis}
 
 Another important factor which could significantly affect the quality
 of ML-based approaches was the underlying classification method that
@@ -3092,7 +3092,7 @@ accuracy on the validation set.
     \end{tabular}
     \egroup
     \caption[Results of DL-based CGSA methods]{Results of
-      DL-based CGSA methods\\ {\small Y\&C~--~\citet{Yessenalina:11},
+      deep-learning--based CGSA methods\\ {\small Y\&C~--~\citet{Yessenalina:11},
         RAE~--~Recursive Auto-Encoder \cite{Socher:11},
         MVRNN~--~Matrix-Vector RNN \cite{Socher:12}, RNTN~--~Recursive
         Neural-Tensor Network \cite{Socher:13},
@@ -3231,7 +3231,7 @@ former of these factors in detail.
 % trying to predict which instance attributes frequently co-occured with
 % each other;
 
-\subsection{Effect of Word Embeddings}
+\subsection{Word Embeddings}
 
 Similarly to the previous chapters, we decided to replace randomly
 initialized word vectors in the very first layer of the vector-based
@@ -3478,8 +3478,8 @@ than the losses in these single aspects.
 
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods with pretrained
-      word2vec vectors]{ Evaluation of DL-based CGSA methods with
+    \caption[Results of DL-based CGSA methods with pretrained word2vec
+      vectors]{Results of deep-learning--based CGSA methods with
       pretrained word2vec vectors}
     \label{snt-cgsa:tbl:dl-res-word2vec}
   \end{center}
@@ -3696,9 +3696,9 @@ randomly initialized word vectors.
       0.55\posdelta{0.25} & 0.75\posdelta{0.03}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption[Evaluation of DL-based CGSA methods with least-squares
-      embeddings]{Evaluation of DL-based CGSA methods with least-squares
-      embeddings}
+    \caption[Results of DL-based CGSA methods with least-squares
+      embeddings]{Results of deep-learning--based CGSA methods with
+      least-squares embeddings}
     \label{snt-cgsa:tbl:dl-res-lstsq}
   \end{center}
 \end{table}
@@ -4869,7 +4869,7 @@ net results for all classes.
       %% avg / total       0.55      0.27      0.16      1496
       %% Macro-Averaged F1-Score (Positive and Negative Classes): 41.39%
       %% Micro-Averaged F1-Score (All Classes): 27.4733%
-      LBA$^{(1)}$ & 0.24\negdelta{0.36} & 0.86\negdelta{0.14} & 0.38\negdelta{0.28} & %
+      LBA$^{(1)}$ & 0.24\negdelta{0.36} & 0.86\posdelta{0.14} & 0.38\negdelta{0.28} & %
       0.45\negdelta{0.02} & 0.45\posdelta{0.03} & 0.45\posdelta{0.01} & %
       0.69\negdelta{0.15} & 0.01\negdelta{0.79} & 0.02\negdelta{0.8} & %
       0.41\negdelta{0.14} & 0.27\negdelta{0.46}\\
