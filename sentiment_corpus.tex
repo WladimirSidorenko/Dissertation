@@ -336,7 +336,7 @@ evaluations.  These elements included:
 
 \begin{itemize}
 \item
-  \textbf{emotional expressions}, which we defined as lexical items
+  \textbf{polar terms}, which we defined as lexical items
   (words or idioms) that had a clearly distinguishable polar
   subjective lexical meaning.  Typical examples of such expressions
   were lexemes and set phrases such as ``ekelhaft''
@@ -345,11 +345,11 @@ evaluations.  These elements included:
     pest}) etc.
 
   In contrast to the targets and sources, which only could occur in
-  the context of an annotated sentiment, emotional expressions were
+  the context of an annotated sentiment, polar terms were
   always to be marked in text regardless of whether a target-oriented
   opinion was present in their vicinity or not.
 
-  The main attributes of the emotional expressions (\emph{polarity},
+  The main attributes of the polar terms (\emph{polarity},
   \emph{intensity}, and \emph{sarcasm}) largely coincided with the
   attributes defined for the sentiments with the only difference that,
   in the case of the opinionated terms, the values of these features
@@ -359,7 +359,7 @@ evaluations.  These elements included:
   compositional meaning of the whole opinions (\ie{} contextual
   polarities and intensities of evaluations).
 
-  In addition to these common attributes, emotional expressions also
+  In addition to these common attributes, polar terms also
   had element-specific properties: the boolean features
   \emph{subjective-fact} and \emph{uncertain}, and the link attribute
   \emph{sentiment-ref}.  The first property showed whether a polar
@@ -381,7 +381,7 @@ evaluations.  These elements included:
 
 \item
   \textbf{diminishers}, on the contrary, were words or phrases which
-  decreased the polar lexical sense of emotional expressions.
+  decreased the polar lexical sense of polar terms.
   Similarly to intensifiers, these elements were usually expressed by
   adverbs, \eg{} ``weniger'' (\emph{less}), ``kaum'' (\emph{hardly}),
   ``fast'' (\emph{almost}).
@@ -394,7 +394,7 @@ evaluations.  These elements included:
 
 \item the final element---\textbf{negations}---was defined as
   grammatical or lexical means which turned the polarity of an
-  emotional expression to the complete opposite.  These were typically
+  polar term to the complete opposite.  These were typically
   represented by the negative particle ``nicht'' (\emph{not}) or the
   indefinite pronoun ``keine'' (\emph{no}).
 
@@ -405,7 +405,7 @@ evaluations.  These elements included:
 \end{itemize}
 
 In contrast to the opinion-level entities, which primarily encompassed
-syntactic or discourse-level units, emotional expressions and their
+syntactic or discourse-level units, polar terms and their
 modifiers were explicitly specified as lexical items in our
 instructions.  Consequently, their text spans only had to include
 single words or discernable idioms without their possible syntactic
@@ -449,13 +449,13 @@ sentiment and target elements are determined on the syntactic level,
 spanning the whole clause in the former case and encompassing the
 complete noun phrase in the latter.  The polarity of the complete
 opinion is set to \emph{negative}, and its intensity is specified as
-\emph{medium}.  The emotional expression ``r\"uhmlich''
+\emph{medium}.  The polar term ``r\"uhmlich''
 (\emph{laudable}), however, as well as its intensifier ``sehr''
 (\emph{very}) and the negation ``nicht'' (\emph{not}) only comprise
 single words without their grammatical attributes.  The polarity of
 the opinionated term is \emph{positive}, since this is the primarily
 expressed attitude of this term disregarding the context.  Both the
-intensity of the emotional expression and the degree of its
+intensity of the polar term and the degree of its
 intensifier are set to \emph{medium}, and the link attribute
 \emph{emo-expression-ref} unequivocally shows which opinionated term
 is being reversed by the negation and amplified by the intensifying
@@ -841,7 +841,7 @@ significantly below the $40\%$ threshold, which implies only a slight
 level of reliability according to the \citeauthor{Landis:77} scale
 \cite{Landis:77}.
 
-A different situation is observed for the emotional expressions and
+A different situation is observed for the polar terms and
 their intensifiers though.  The inter-annotator agreement on these
 elements is above 60 and 50 percent respectively, for both variants of
 the proposed $\kappa$-measure.  Obviously, defining these entities as
@@ -934,13 +934,13 @@ regard is achieved by sources, where the number of the labeled items
 in both annotations differs only by a factor of 1.2.
 
 As in the previous step, the highest agreement scores were attained by
-emotional expressions, whose reliability significantly surpassed the
+polar terms, whose reliability significantly surpassed the
 80\% benchmark, achieving an almost perfect level.  Interestingly
 enough, only 193 out of 3,290 opinionated terms annotated by the first
 expert did not match the labelings of the second coder, who again
 tended to mark generally more elements than the first assistant.
 Another notable observation is that the difference between the binary
-and proportional scores of the emotional expressions only ran up to
+and proportional scores of the polar terms only ran up to
 3.04\%, which suggests that the assistants could unproblematically
 determine the boundaries of these terms in most of the cases.
 
@@ -1020,7 +1020,7 @@ the average proportional agreement of all these elements is around 60
 percent, which is almost twice as high as the mean reliability
 achieved in the first step.
 
-As before, the scores of emotional expressions are in the ballpark of
+As before, the scores of polar terms are in the ballpark of
 almost perfect results \cite[cf.][]{Landis:77}.  Their modifying
 elements, however, show a decrease: the agreement on intensifiers
 deteriorates by 5.8\%, sinking down to 49.71\% proportional kappa.  A
@@ -1031,7 +1031,7 @@ $1.11\%$, which can be considered as a very good result, regarding the
 generally small number of these elements in our corpus.
 
 In general, we can see that the reliability of all elements in the
-final dataset is at least moderate, with emotional expressions being
+final dataset is at least moderate, with polar terms being
 the most dependably labeled items ($\kappa_{\textrm{p}}=80.29\%$) and
 intensifiers setting the lower boundary of the agreement scores
 ($\kappa_{\textrm{p}}=49.71\%$).
@@ -1107,7 +1107,7 @@ target ``Blockadehaltung'' (\emph{blocking politics}) and another one
 with the target ``die SPD'' (\emph{the SPD}).
 
 Even though our assistants were much more consistent when labeling
-emotional expressions than when analyzing opinion-level entities, we
+polar terms than when analyzing opinion-level entities, we
 decided to have a look at diverging annotations of these entities too
 in order to understand the difficulties in the remaining conflicts.  A
 sample case of diverging interpretations of polar terms is provided in
@@ -1204,7 +1204,7 @@ Interestingly enough, the ordinal inter-rater agreement on the
 intensities of sentiments ($\alpha = 73.54$) is notably higher than
 the corresponding figures for the binary reliability of their
 polarities ($\kappa = 58.8$).  The opposite situation is observed for
-the emotional expressions though: the $\alpha$-value for the
+the polar terms though: the $\alpha$-value for the
 intensities of these items ($78.79$) is almost ten percent lower than
 the corresponding $\kappa$-results for their binary polarities
 (87.12).
@@ -1215,7 +1215,7 @@ The average $\alpha$-agreement on the intensity of the direct
 subjective and objective speech events (a rough counterpart of our
 sentiments) on this dataset was around 79\%.  The corresponding
 results for the intensity of the expressive subjective elements
-(emotional expressions in our case) were much worse though, only
+(polar terms in our case) were much worse though, only
 amounting to 46\%, even though the respective $\kappa$-value of their
 polarity attained considerable 72\%.  It means that the reliability
 results of our corpus outperformed all but the sentiment intensity
@@ -1299,13 +1299,13 @@ messages containing emoticons) is the easiest one for annotating polar
 lexical items.  Somewhat surprisingly, the latter group is the one
 with the lowest IAA scores for the complete opinions, which means
 that, even though, our annotators could easily recognize smileys as
-emotional expressions, the question whether these expressions related
+polar terms, the question whether these expressions related
 to something particular in the microblog or rather reflected the
 general mood of the author was still difficult to answer.
 
 To confirm our observations (viz., the correlation between the topics
 and formal groups of the tweets on the one hand and the number and
-reliability of the labeled sentiments and emotional expressions on the
+reliability of the labeled sentiments and polar terms on the
 other), we have also computed the correlation coefficients ($\rho$) of
 these factors.  The results of these computations are shown in
 Table~\ref{sent:tbl:corr-coeff}.
@@ -1395,7 +1395,7 @@ pertaining opinionated terms.  Furthermore, the results shown in
 Table~\ref{tbl:attr-agrmnt} prove that the polarity and intensity
 attributes of these elements could be reliably analyzed either.
 Finally, the statistics plots on the distribution of subjective
-opinions and emotional expressions show precisely how different
+opinions and polar terms show precisely how different
 sampling criteria have affected the final composition and agreement
 scores of the final corpus.
 
@@ -1515,7 +1515,7 @@ showed that, initially, the experts had had major difficulties to
 agree on the mere notion of subjective evaluative judgements.
 Consequently, the $\kappa$-scores of the annotated sentiments, their
 sources, and targets had been relatively low either.  The agreement on
-the emotional expressions and their intensifiers had been rather high
+the polar terms and their intensifiers had been rather high
 though, amounting to notable 61.36\% proportional kappa.
 
 The initial disagreements of our experts could largely be resolved
@@ -1529,14 +1529,14 @@ whereas the second coder regarded them as valid intensifying terms.
 At the final stage, we observed a small decrease of the IAA scores as
 compared to the previous step.  This drop, however, was mainly
 insignificant, and the resulting $\kappa$-figures were still in the
-ballpark of at least moderate agreement with the emotional expressions
+ballpark of at least moderate agreement with the polar terms
 being the most dependably annotated items ($\kappa_\textrm{p}=80.29$)
 and intensifiers setting the lower boundary of the reliability results
 ($\kappa_{\textrm{p}}=49.71\%$).
 
 After computing these metrics, we showed that our experts could
 unproblematically agree on the values of the main attributes of
-sentiments and emotional expressions (polarity and intensity) once
+sentiments and polar terms (polarity and intensity) once
 they were at one about the presence and boundaries of these elements:
 The polarity kappa of sentiments achieved 58.8\%, whereas the
 corresponding scores for the polar terms reached remarkable 87.12\%.
