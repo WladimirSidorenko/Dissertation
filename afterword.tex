@@ -155,7 +155,7 @@ with all knowledge that we have acquired during our run.  Here we go:
     Due to the high diversity of methods, metrics, and tasks, it is
     difficult to provide a general recipe for transferring existing
     English sentiment systems to German Twitter, but we still would
-    like to formulate at least a few rules of thumb, which emerged
+    like to formulate at least a few rules of thumb, which came up
     during our experiments:
     \begin{itemize}
       \item\textbf{Prefer methods which are closest to your training
@@ -188,26 +188,42 @@ with all knowledge that we have acquired during our run.  Here we go:
       \item
     \end{itemize}
 
-  \item\textbf{Which groups of methods are best suited for which sentiment tasks?}
+  \item\textbf{Which groups of methods are best suited for which
+    sentiment tasks?}
 
-    The answer to this question is quite straightforward:
+    Based on our evaluation, we can answer to this question as
+    follows:
     \begin{itemize}
-      \item\emph{Generation of sentiment lexicons} is most amenable to
-        dictionary-based methods, provided that there is a
-        sufficiently big manually annotated lexical taxonomy for these
-        systems.  If there is no such resource, one should better
-        resort to word-embedding based methods;
-      \item With a limited size of the training set,
-        \emph{aspect-based sentiment analysis} should be better
-        addressed with probabilistic graphical models such as
-        conditional random fields with hand-crafted features;
-      \item Although \emph{message-level sentiment analysis}, vice
-        versa, is most amenable to
-      \item \emph{message-level sentiment analysis}, vice
-        versa, is most amenable to
+      \item\emph{Sentiment lexicon generation} is more amenable to
+        dictionary-based solutions, provided that there exists a
+        sufficiently big, reliably annotated lexical taxonomy for
+        these systems.  If there is no such resource, one should
+        better resort to word-embedding based algorithms;
+
+      \item With a limited amount of training data, \emph{aspect-based
+        sentiment analysis} can be better addressed with probabilistic
+        graphical models such as conditional random fields with
+        hand-crafted features;
+
+      \item On the other hand, plain \emph{message-level sentiment
+        analysis} can be efficiently tackled with machine- and
+        deep-learning algorithms (first of all SVM, logistic
+        regression, and RNN);
+
+      \item But probabilistic graphical models strike back at
+        \emph{discourse-aware sentiment methods}, yieding fairly good
+        scores with both directed and undirected models and even
+        outperforming pure neural-network solutions, although the
+        margin of these improvements is not always large.
     \end{itemize}
 
-  \item\textbf{Which level (subsentential or suprasentential)?}
+    As we can see, probabilistic model can still hold their ground
+    when it comes to structured prediction, but the difference of
+    these algorithms from and their improvements upon neural networks
+    is gradually vanishing.
+
+  \item\textbf{Which improvements can we expect for message-level
+    polarity classification of a tweet?}
 
   \item\textbf{Does text normalization help sentiment systems?}
 
@@ -303,6 +319,15 @@ with all knowledge that we have acquired during our run.  Here we go:
     %% \end{table}
 
   \item\textbf{Can we do better than these methods?}
+
+    Yes, we can: with our proposed linear projection algorithms we
+    improved the macro-averaged results of exisitng lexicon-generation
+    methods; be redefining the topology of CRF graphs we increased the
+    scores of aspect-based approaches; our lexicon-based attention
+    network outperformed many of its competitors on message-level
+    classification; and, finally, with latent-marginalized CRFs and
+    Recursive Dirichlet Process we could surpass the discourse-unware
+    baseline and other existing discourse-aware sentiment solutions.
 \end{itemize}
 
 \section*{Contributions}
