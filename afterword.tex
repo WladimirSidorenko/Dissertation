@@ -174,18 +174,17 @@ with all knowledge that we have acquired during our run.  Here we go:
       \item\textbf{Try using manually labeled resources for your
         target domain}, if they are available, but pay attention at
         the quality of their annotation---it often matters more than
-        the size of the corpus;
+        the corpus size;
       \item If you have manually annotated data, \textbf{prefer
         machine-learning methods to hard-coded rules}--- the former
         will penalize their bad components automatically by
         themselves;
-      \item\textbf{Do not use randomly initialized word embeddings}
-        for deep-learning systems---intialize them with language-model
+      \item\textbf{Do not use randomly initialized word embeddings for
+        deep-learning systems}---intialize them with language-model
         vectors (which are cheap to obtain) and approximate
         task-specific representations of unobserved tokens with the
         least-squares fallback.  Otherwise, your model might get stuck
         in a very bad local optimum.
-      \item
     \end{itemize}
 
   \item\textbf{Which groups of methods are best suited for which
@@ -217,13 +216,31 @@ with all knowledge that we have acquired during our run.  Here we go:
         margin of these improvements is not always large.
     \end{itemize}
 
-    As we can see, probabilistic model can still hold their ground
-    when it comes to structured prediction, but the difference of
-    these algorithms from and their improvements upon neural networks
-    is gradually vanishing.
+    Thus, probabilistic model can still hold their ground when it
+    comes to structured prediction, but the difference of these
+    algorithms from and their improvements upon neural networks are
+    gradually vanishing.
 
-  \item\textbf{Which improvements can we expect for message-level
-    polarity classification of a tweet?}
+  \item\textbf{How much do word- and discourse-level analyses affect
+    message-level sentiment classification?}
+
+    Our evaluation in Section~\ref{cgsa:subsec:eval:lexicons} showed
+    that the macro-averaged \F{}-scores of our proposed lexicon-based
+    attention method varied by up to 14\% (from 0.64 to 0.69
+    macro-\F{} on the PotTS corpus, and from 0.44 to 0.58 on SB10k)
+    depending on the lexicon used by this approach.  At the same,
+    discourse enhancements could only improve the results of LBA by at
+    most 1.5\% percent (from 0.677 to 0.678 on PotTS, and from 0.557
+    to 0.572 on SB10k).  Although it appears at first glance that the
+    lexicon component is more important to a sentiment system, such
+    conclusion would be generally incorrect, because
+    \begin{inparaenum}[(a)]
+      \item a full-fledged sentiment solution should take into account
+        both levels (words and discourse) and
+      \item these relative results might look different if we expand
+        the analyzed domain to longer documents or complete
+        discoussion threads.
+    \end{inparaenum}
 
   \item\textbf{Does text normalization help sentiment systems?}
 
@@ -231,7 +248,7 @@ with all knowledge that we have acquired during our run.  Here we go:
     Chapters~\ref{chap:fgsa} and \ref{chap:cgsa}, normalization
     significantly improves the quality of aspect-based and
     message-level sentiment analysis, boosting the results on the
-    former task by up to 4\% (see
+    former task by up to 4\% (cf.
     Table~\ref{snt-fgsa:tbl:normalization}) and improving the
     macro-averaged \F{}-measure of coarse-grained methods by up to
     25\% (cf. Table~\ref{snt-cgsa:tbl:res-no-normalization});
@@ -330,6 +347,13 @@ with all knowledge that we have acquired during our run.  Here we go:
     baseline and other existing discourse-aware sentiment solutions.
 \end{itemize}
 
+
+%% https://github.com/WladimirSidorenko/CRFSuite
+%% https://github.com/WladimirSidorenko/DiscourseSegmenter
+%% https://github.com/WladimirSidorenko/SentiLex
+%% https://github.com/WladimirSidorenko/CGSA
+%% https://github.com/WladimirSidorenko/PotTS
+%% https://github.com/WladimirSidorenko/TextNormalization
 \section*{Contributions}
 \addcontentsline{toc}{section}{Contributions}
 
