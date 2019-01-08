@@ -253,87 +253,162 @@ with all knowledge that we have acquired during our run.  Here we go:
     macro-averaged \F{}-measure of coarse-grained methods by up to
     25\% (cf. Table~\ref{snt-cgsa:tbl:res-no-normalization});
 
-    %% The only question that remained unanswered in this context is
-    %% which normalization steps exactly improve the scores of sentiment
-    %% systems.
-    %% \begin{table}[htb!]
-    %%   \begin{center}
-    %%     \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
-    %%     \begin{tabular}{p{0.162\columnwidth} % first columm
-    %%         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
-    %%         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
-    %%       \toprule
-    %%       \multirow{2}*{\bfseries Method} & %
-    %%       \multicolumn{3}{c}{\bfseries Positive} & %
-    %%       \multicolumn{3}{c}{\bfseries Negative} & %
-    %%       \multicolumn{3}{c}{\bfseries Neutral} & %
-    %%       \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
-    %%       \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
-    %%       \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
+    The only question that remained unanswered in this context is
+    which normalization steps exactly improve the scores of sentiment
+    systems.  To make up for this omission, we separately deactivated
+    each individual step of our text normalization pipeline
+    (unification of Twitter phenomena, spelling correction, and
+    normalization of slang terms) and rerun our message-level
+    classification experiments using the lexicon-based attention
+    system.  As we can see from the results in
+    Table~\ref{afterword:tbl:lba-normalization-steps}, the
+    micro-averaged \F{}-scores on both datasets benefit most from
+    unification of Twitter-specific phenomena, sinking by almost 19\%
+    when this component is switched off.  This step is also most
+    useful for the macro-\F{} on the SB10k data, whereas the
+    macro-average on the PotTS corpus mostly capitalizes on the
+    normalization of slang terms.
+    \begin{table}[htb!]
+      \begin{center}
+        \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+        \begin{tabular}{p{0.162\columnwidth} % first columm
+            *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
+            *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
+          \toprule
+          \multirow{2}*{\bfseries Method} & %
+          \multicolumn{3}{c}{\bfseries Positive} & %
+          \multicolumn{3}{c}{\bfseries Negative} & %
+          \multicolumn{3}{c}{\bfseries Neutral} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
+          \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
+          \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
-    %%       & Precision & Recall & \F{} & %
-    %%       Precision & Recall & \F{} & %
-    %%       Precision & Recall & \F{} & & \\\midrule
+          & Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & %
+          Precision & Recall & \F{} & & \\\midrule
 
-    %%       \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
-    %%       %% with normalization
-    %%       w/ normalization & 0.76 & 0.84 & 0.79 & %
-    %%       0.6 & 0.56 & 0.58 & %
-    %%       0.75 & 0.68 & 0.72 & %
-    %%       0.69 & 0.73\\
-    %%       %% without replacement of Twitter-specific phenomena
-    %%       w/o replacement of Twitter-specific phenomena & \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{}\\
-    %%       %% without spelling correction
-    %%       w/o spelling correction & \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{}\\
-    %%       %% without slang normalization
-    %%       w/o slang normalization & \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{}\\
-    %%       %% without normalization
-    %%       w/o normalization & 0.58\negdelta{0.18} & 0.77\negdelta{0.07} & 0.66\negdelta{0.13} & %
-    %%       0.54\negdelta{0.06} & 0.53\negdelta{0.03} & 0.54\negdelta{0.04} & %
-    %%       0.63\negdelta{0.12} & 0.37\negdelta{0.31} & 0.46\negdelta{0.26} & %
-    %%       0.6\negdelta{0.09} & 0.58\negdelta{0.15}\\
+          \multicolumn{12}{c}{\cellcolor{cellcolor}PotTS}\\
+          %% with normalization
+          with normalization & 0.76 & 0.84 & 0.79 & %
+          0.6 & 0.56 & 0.58 & %
+          0.75 & 0.68 & 0.72 & %
+          0.69 & 0.73\\
+          %% without replacement of Twitter-specific phenomena
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.51      0.87      0.64       679
+          %% negative       0.57      0.40      0.47       268
+          %% neutral       0.68      0.22      0.34       593
+          %% micro avg       0.54      0.54      0.54      1540
+          %% macro avg       0.59      0.50      0.48      1540
+          %% weighted avg       0.59      0.54      0.49      1540
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 55.53%
+          %% Micro-Averaged F1-Score (All Classes): 53.7662%
+          w/o unification of Twitter phenomena & 0.51\negdelta{0.25} & 0.87\posdelta{0.03} & 0.64\negdelta{0.05} & %
+          0.57\negdelta{0.03} & 0.4\negdelta{0.16} & 0.47\negdelta{0.11} & %
+          0.68\negdelta{0.07} & 0.22\negdelta{0.46} & 0.34\negdelta{0.38} & %
+          0.56\negdelta{0.13} & 0.54\negdelta{0.19}\\
+          %% without spelling correction
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.67      0.84      0.74       648
+          %% negative       0.61      0.34      0.44       268
+          %% neutral       0.74      0.68      0.71       626
+          %% micro avg       0.69      0.69      0.69      1542
+          %% macro avg       0.67      0.62      0.63      1542
+          %% weighted avg       0.69      0.69      0.68      1542
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 59.01%
+          %% Micro-Averaged F1-Score (All Classes): 68.9364%
+          w/o spelling correction & 0.67\negdelta{0.09} & 0.84 & 0.74\negdelta{0.05} & %
+          0.61\posdelta{0.01} & 0.34\negdelta{0.22} & 0.44\negdelta{0.14} & %
+          0.74\negdelta{0.01} & 0.68 & 0.71\negdelta{0.01} & %
+          0.59\negdelta{0.1} & 0.69\negdelta{0.04}\\
+          %% without slang normalization
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.59      0.87      0.70       650
+          %% negative       0.60      0.17      0.26       268
+          %% neutral       0.72      0.60      0.65       624
+          %% micro avg       0.64      0.64      0.64      1542
+          %% macro avg       0.64      0.54      0.54      1542
+          %% weighted avg       0.65      0.64      0.61      1542
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 48.26%
+          %% Micro-Averaged F1-Score (All Classes): 63.6187%
+          w/o slang normalization & 0.59\negdelta{0.17} & 0.87\posdelta{0.03} & 0.7\negdelta{0.09} & %
+          0.6 & 0.17\negdelta{0.39} & 0.26\negdelta{0.32} & %
+          0.72\negdelta{0.03} & 0.6\negdelta{0.08} & 0.65\negdelta{0.07} & %
+          0.48\negdelta{0.21} & 0.64\negdelta{0.09}\\
 
-    %%       \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
-    %%       %% with normalization
-    %%       w/ normalization & 0.6 & 0.72 & 0.66 & %
-    %%       0.47 & 0.42 & 0.44 & %
-    %%       0.84 & 0.8 & 0.82 & %
-    %%       0.55 & 0.73\\
-    %%       %% without replacement of Twitter-specific phenomena
-    %%       w/o replacement of Twitter-specific phenomena & \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{}\\
-    %%       %% without spelling correction
-    %%       w/o spelling correction & \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{}\\
-    %%       %% without slang normalization
-    %%       w/o slang normalization & \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{} & \negdelta{} & %
-    %%       \negdelta{} & \negdelta{}\\
-    %%       %% without normalization
-    %%       w/o normalization & 0.24\negdelta{0.36} & 0.86\posdelta{0.14} & 0.38\negdelta{0.28} & %
-    %%       0.45\negdelta{0.02} & 0.45\posdelta{0.03} & 0.45\posdelta{0.01} & %
-    %%       0.69\negdelta{0.15} & 0.01\negdelta{0.79} & 0.02\negdelta{0.8} & %
-    %%       0.41\negdelta{0.14} & 0.27\negdelta{0.46}\\\bottomrule
-    %%     \end{tabular}
-    %%     \egroup
-    %%     \caption{LBA$^{(1)}$ results with different text normalization steps}
-    %%     \label{afterword:tbl:lba-normalization-steps}
-    %%   \end{center}
-    %% \end{table}
+          \multicolumn{12}{c}{\cellcolor{cellcolor}SB10k}\\
+          %% with normalization
+          with normalization & 0.6 & 0.72 & 0.66 & %
+          0.47 & 0.42 & 0.44 & %
+          0.84 & 0.8 & 0.82 & %
+          0.55 & 0.73\\
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          %% without replacement of Twitter-specific phenomena
+          %% cgsa_sentiment train -t lba --lstsq -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt ~/data/CGSA/SB10k/preprocessed-no-noise-cleaner/train/train.tsv  ~/data/CGSA/SB10k/preprocessed-no-noise-cleaner/dev/dev.tsv
+          %% cgsa_sentiment test ~/data/CGSA/SB10k/preprocessed-no-noise-cleaner/test/test.tsv > ~/data/CGSA/SB10k/preprocessed-no-noise-cleaner/predicted/lba.test
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.36      0.85      0.50       354
+          %% negative       0.60      0.25      0.35       212
+          %% neutral       0.84      0.51      0.63       930
+          %% micro avg       0.55      0.55      0.55      1496
+          %% macro avg       0.60      0.53      0.49      1496
+          %% weighted avg       0.69      0.55      0.56      1496
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 42.52%
+          %% Micro-Averaged F1-Score (All Classes): 55.1471%
+          w/o unification of Twitter phenomena & 0.36\negdelta{0.24} & 0.85\posdelta{0.13} & 0.5\negdelta{0.16} &%
+          0.6\posdelta{0.13} & 0.25\negdelta{0.17} & 0.35\negdelta{0.09} & %
+          0.84 & 0.51\negdelta{0.29} & 0.63\negdelta{0.19} & %
+          0.43\negdelta{0.12} & 0.55\negdelta{0.18}\\
+
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          %% without spelling correction
+          %% Commands:
+          %% cgsa_sentiment train -t lba --lstsq -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt ~/data/CGSA/SB10k/preprocessed-no-misspelling-restorer/train/train.tsv  ~/data/CGSA/SB10k/preprocessed-no-misspelling-restorer/dev/dev.tsv
+          %% cgsa_sentiment test ~/data/CGSA/SB10k/preprocessed-no-misspelling-restorer/test/test.tsv > ~/data/CGSA/SB10k/preprocessed-no-misspelling-restorer/predicted/lba.test
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.54      0.71      0.61       354
+          %% negative       0.54      0.26      0.35       212
+          %% neutral       0.79      0.79      0.79       930
+          %% micro avg       0.70      0.70      0.70      1496
+          %% macro avg       0.62      0.59      0.58      1496
+          %% weighted avg       0.70      0.70      0.69      1496
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 48.12%
+          %% Micro-Averaged F1-Score (All Classes): 69.5856%
+          w/o spelling correction & 0.54\negdelta{0.06} & 0.71\negdelta{0.01} & 0.61\negdelta{0.05} & %
+          0.54\posdelta{0.07} & 0.26\negdelta{0.16} & 0.35\negdelta{0.09} & %
+          0.79\negdelta{0.05} & 0.79\negdelta{0.01} & 0.79\negdelta{0.03} & %
+          0.48\negdelta{0.07} & 0.7\negdelta{0.03}\\
+
+          %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+          %% without slang normalization
+          %% Commands:
+          %% cgsa_sentiment train -t lba --lstsq -l cgsa/data/lexicons/linproj.word2vec.kim_hovy_seedset.auto.txt ~/data/CGSA/SB10k/preprocessed-no-slang-normalization/train/train.tsv  ~/data/CGSA/SB10k/preprocessed-no-slang-normalization/dev/dev.tsv
+          %% cgsa_sentiment test ~/data/CGSA/SB10k/preprocessed-no-slang-normalization/test/test.tsv > ~/data/CGSA/SB10k/preprocessed-no-slang-normalization/predicted/lba.test
+          %% General Statistics:
+          %% precision    recall  f1-score   support
+          %% positive       0.55      0.71      0.62       354
+          %% negative       0.64      0.20      0.30       212
+          %% neutral       0.78      0.82      0.80       930
+          %% micro avg       0.70      0.70      0.70      1496
+          %% macro avg       0.66      0.57      0.57      1496
+          %% weighted avg       0.71      0.70      0.69      1496
+          %% Macro-Averaged F1-Score (Positive and Negative Classes): 45.97%
+          %% Micro-Averaged F1-Score (All Classes): 70.3877%
+          w/o slang normalization & 0.55\negdelta{0.05} & 0.71\negdelta{0.01} & 0.62\negdelta{0.04} & %
+          0.64\posdelta{0.17} & 0.2\negdelta{0.22} & 0.3\negdelta{0.14} & %
+          0.78\negdelta{0.06} & 0.82\posdelta{0.02} & 0.8\negdelta{0.02} & %
+          0.46\negdelta{0.09} & 0.7\negdelta{0.03}\\\bottomrule
+        \end{tabular}
+        \egroup
+        \caption{LBA$^{(1)}$ results without text normalization steps}
+        \label{afterword:tbl:lba-normalization-steps}
+      \end{center}
+    \end{table}
 
   \item\textbf{Can we do better than these methods?}
 
