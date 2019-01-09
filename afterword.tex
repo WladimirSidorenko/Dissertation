@@ -19,24 +19,24 @@ way:
   dataset, we grouped all microblogs into three formal categories
   (tweets with a polar term from the SentiWS lexicon, messages
   containing a smiley, and all remaining microblogs) and sampled an
-  equal number of tweets (666) from each of these three categories for
-  each of the four topics.  After annotating this corpus in three
+  equal number of tweets (666) for each of the four topics from each
+  of these three categories.  After annotating the corpus in three
   steps (initial, adjudication, and final), we attained a reliable
   level of inter-annotator agreement for all elements (sentiments,
-  sources, targets, polar terms, diminishers, negations, and
+  sources, targets, polar terms, downtoners, negations, and
   intensifiers), finding that both selection criteria (topics and
-  formal traits) had a significant impact on the distribution of
-  sentiments and polar terms and the reliability of their annotation;
+  formal traits) significantly affected the distribution of sentiments
+  and polar terms and the reliability of their annotation;
 
-\item Then, at the first checkpoint, we compared exisiting German
+\item Then, at the first checkpoint, we compared existing German
   sentiment lexicons, which were translated from English resources and
   revised by human experts, with lexicons that were generated
-  automatically from scratch with the help of existing
+  automatically from scratch with the help of state-of-the-art
   dictionary\mbox{-,} corpus\mbox{-,} and word-embedding--based
   methods.  An evaluation of these approaches on our corpus showed
   that semi-automatically translated polarity lists were generally
   better than the automatically induced ones, reaching 0.587
-  macro-\F{} and attaining 0.955 micro-\F{}--score for the prediction
+  macro-\F{} and attaining 0.955 micro-\F{}--score on the prediction
   of polar terms.  Furthermore, among fully automatic methods,
   dictionary-based systems showed stronger results than their corpus-
   and word-embedding--based competitors, yielding 0.479 macro-\F{} and
@@ -46,7 +46,7 @@ way:
   between the projections of seed vectors with opposite semantic
   orientations and then projected the embeddings of all remaining
   words on that line, considering the distance of these projections to
-  the median as the respective polarity scores;
+  the median as polarity scores of the respective terms;
 
 \item In Chapter \ref{chap:fgsa}, we turned our attention to the
   aspect-based sentiment analysis, in which we tried to predict the
@@ -57,12 +57,12 @@ way:
   however, increase these scores by using alternative topologies of
   CRFs (second-order linear-chain and semi-Markov CRFs) and also boost
   the macro-averaged \F{} to 0.38 by taking a narrower interpretation
-  of the sentiment spans (in which we only assigned the
-  \textsc{Sentiment} tag to polar terms).  Further evaluation of these
-  methods proved the utility of the text normalization step (which
-  raised the macro-\F{} of the CRF-method by almost 3\%) and
-  task-specific word embeddings with the least-squares fallback (which
-  improved the macro-\F{}--score of the GRU system by 1.4\%);
+  of sentiment spans (in which we only assigned the \textsc{Sentiment}
+  tag to polar terms).  Further evaluation of these methods proved the
+  utility of the text normalization step (which raised the macro-\F{}
+  of the CRF-method by almost 3\%) and task-specific word embeddings
+  with the least-squares fallback (which improved the
+  macro-\F{}--score of the GRU system by 1.4\%);
 
 \item Afterwards, in Chapter~\ref{chap:cgsa}, we addressed one of the
   most popular objective in contemporary sentiment
@@ -75,23 +75,23 @@ way:
   (the best macro-\F{}--scores of machine- and deep-learning methods
   run up to 0.677 and 0.69 respectively, whereas the best
   lexicon-based solution [\citeauthor{Hu:04}, \citeyear{Hu:04}] only
-  reached 0.641 macro-\F{}).  In addition to that, we improved the
-  results of many of these approaches by changing their default
+  reached 0.641 macro-\F{}).  Apart from this, we improved the results
+  of many reimplemented approaches by changing their default
   configuration (\eg{} abandoning polarity changing rules of
-  lexicon-based systems, using altenative classifiers for ML-based
+  lexicon-based systems, using alternative classifiers for ML-based
   classifiers, or taking the least-squares embeddings for DL-based
-  methods).  Apart from numerous reimplementations of popular existing
-  algorithms, we also proposed our own solution---lexicon-based
-  attention (LBA), in which we tried to unite the lexicon and
-  deep-learning paradigms by taking a bidirectional LSTM network and
-  explicitly pointing its attention to the polar terms that appeared
-  in the analyzed tweets.  With this solution, we not only
-  outperformed all allternative DL systems, but also improved on the
-  scores of ML-based classifiers, attaining 0.69 macro-\F{} and 0.73
-  micro-\F{} on the PotTS corpus.  Similarly to the findings of the
-  previous chapter, we observed a strong positive effect of text
-  normalization and task-specific embeddings with the least-squares
-  approximation;
+  methods).  In addition to the numerous reimplementations of popular
+  existing algorithms, we also proposed our own
+  solution---lexicon-based attention (LBA), in which we tried to unite
+  the lexicon and deep-learning paradigms by taking a bidirectional
+  LSTM network and explicitly pointing its attention to the polar
+  terms that appeared in the analyzed messages.  With this solution,
+  we not only outperformed all alternative DL systems, but also
+  improved on the scores of ML-based classifiers, attaining 0.69
+  macro-\F{} and 0.73 micro-\F{} on the PotTS corpus.  Similarly to
+  our findings of the previous chapter, we observed a strong positive
+  effect of text normalization and task-specific embeddings with the
+  least-squares approximation;
 
 \item Finally, in the last part, we tried to improve the results of
   the proposed LBA method by making it aware of the discourse
@@ -103,7 +103,7 @@ way:
   proposed three different ways of doing this joining (latent CRFs,
   latent-marginalized CRFs, and Recursive Dirichlet Process),
   obtaining better results than existing discourse-aware sentiment
-  methods and also outperfoming the original discourse-unaware
+  methods and also outperforming the original discourse-unaware
   baseline.  In the concluding experiments, we further improved these
   scores by using manually annotated RST trees and richer subsets of
   discourse relations.
@@ -114,9 +114,9 @@ way:
 \addcontentsline{toc}{section}{Conclusions}
 
 Now that we have gone past all these landmarks, it is time to unbag
-the list of the questions which we had asked ourselves at the
-beginning of this endeavor, and try to answer them again, equipped
-with all knowledge that we have acquired during our run.  Here we go:
+the questions which we had asked ourselves at the beginning of this
+endeavor, and try to answer them again, equipped with all knowledge
+that we have acquired during our run.  Here we go:
 
 \begin{itemize}
   \item\textbf{Can we apply NLP methods devised for standard English
@@ -130,10 +130,10 @@ with all knowledge that we have acquired during our run.  Here we go:
     was mostly due to the high quality of the \textsc{GermaNet}
     annotation.  On the other hand, our manually labeled PotTS corpus
     was evidently too small for aspect-based sentiment systems, which
-    failed to generalize to unseen tweets despite their high scores on
-    the training messages.  Message-level sentiment approaches, vice
-    versa, seemed to be quite happy with the size of the training set,
-    attaining good results on both datasets (PotTS and SB10k).
+    failed to generalize to unseen tweets despite their very high
+    scores on the training set.  Message-level sentiment approaches,
+    vice versa, seemed to be quite happy with the size of the training
+    dataset, attaining good results on both corpora (PotTS and SB10k).
     Nevertheless, we again experienced a lack of data while working on
     discourse-aware enhancements, many of which hit the same ceiling
     of the macro-averaged \F{}-scores.
@@ -146,12 +146,13 @@ with all knowledge that we have acquired during our run.  Here we go:
     to all \emph{synsets} found in the \textsc{WordNet} and not to
     produce a list of polar \emph{words}.  Similarly, the RNTN
     approach of \citet{Socher:13} was trained and evaluated on all
-    syntactic subtrees of a document and not only at the top document
+    syntactic subtrees of a document and not only at the top text
     level.  Likewise, the system of~\citet{Yessenalina:11} was devised
-    for ordinal logisitc regression and not multi-class prediction, as
-    in our case.  As a result, all these approaches showed lower
-    scores than their competitors in our evaluation, even though they
-    are undoubtedly well suited for their original data and tasks.
+    for doing ordinal logistic regression and not polarity
+    classification, as in our case.  As a result, all these approaches
+    showed lower scores than their competitors in our evaluation, even
+    though they are undoubtedly well suited for their original data
+    and tasks.
 
     Due to the high diversity of methods, metrics, and tasks, it is
     difficult to provide a general recipe for transferring existing
@@ -170,35 +171,31 @@ with all knowledge that we have acquired during our run.  Here we go:
           realize that every classification task is merely an attempt
           to solve a system of equations, so that methods which are
           good at solving one system might completely fail to solve
-          many other equations.}  The more options you try, the better
-        will be your results;
+          other equations.}  The more options you try, the better will
+        be your results;
       \item\textbf{Try using manually labeled resources for your
         target domain}, if they are available, but pay attention at
         the quality of their annotation---it often matters more than
         the corpus size;
-      \item If you have manually annotated data, \textbf{prefer
-        machine-learning methods to hard-coded rules}--- the former
-        will penalize their bad components automatically by
-        themselves;
+      \item If there are manually annotated data, \textbf{prefer
+        machine-learning methods to hard-coded rules}--- they will
+        penalize their bad components automatically by themselves;
       \item\textbf{Do not use randomly initialized word embeddings for
-        deep-learning systems}---intialize them with language-model
-        vectors (which are cheap to obtain) and approximate
-        task-specific representations of unobserved tokens with the
-        least-squares fallback.  Otherwise, your model might get stuck
-        in a very bad local optimum.
+        deep-learning systems}---initialize them with language-model
+        vectors (which are cheap to obtain).  Otherwise, your model
+        might get stuck in a very bad local optimum.
     \end{itemize}
 
   \item\textbf{Which groups of methods are best suited for which
     sentiment tasks?}
 
-    Based on our evaluation, we can answer to this question as
-    follows:
+    Based on our evaluation, we answer to this question as follows:
     \begin{itemize}
       \item\emph{Sentiment lexicon generation} is more amenable to
         dictionary-based solutions, provided that there exists a
         sufficiently big, reliably annotated lexical taxonomy for
         these systems.  If there is no such resource, one should
-        better resort to word-embedding based algorithms;
+        better resort to word-embedding--based algorithms;
 
       \item With a limited amount of training data, \emph{aspect-based
         sentiment analysis} can be better addressed with probabilistic
@@ -206,15 +203,14 @@ with all knowledge that we have acquired during our run.  Here we go:
         hand-crafted features;
 
       \item On the other hand, plain \emph{message-level sentiment
-        analysis} can be efficiently tackled with machine- and
-        deep-learning algorithms (first of all SVM, logistic
-        regression, and RNN);
+        analysis} can be efficiently tackled with both machine- and
+        deep-learning algorithms (such as SVM, logistic regression, or
+        RNN);
 
       \item But probabilistic graphical models strike back at
-        \emph{discourse-aware sentiment methods}, yieding fairly good
-        scores with both directed and undirected models and even
-        outperforming pure neural-network solutions, although the
-        margin of these improvements is not always large.
+        \emph{discourse-aware sentiment methods}, where they might
+        even outperform pure neural-network solutions, although the
+        margin of these improvements is not that large.
     \end{itemize}
 
     Thus, probabilistic model can still hold their ground when it
@@ -227,20 +223,20 @@ with all knowledge that we have acquired during our run.  Here we go:
 
     Our evaluation in Section~\ref{cgsa:subsec:eval:lexicons} showed
     that the macro-averaged \F{}-scores of our proposed lexicon-based
-    attention method varied by up to 14\% (from 0.64 to 0.69
+    attention system varied by up to 14\% (from 0.64 to 0.69
     macro-\F{} on the PotTS corpus, and from 0.44 to 0.58 on SB10k)
     depending on the lexicon used by this approach.  At the same,
     discourse enhancements could only improve the results of LBA by at
     most 1.5\% percent (from 0.677 to 0.678 on PotTS, and from 0.557
-    to 0.572 on SB10k).  Although it appears at first glance that the
-    lexicon component is more important to a sentiment system, such
-    conclusion would be generally incorrect, because
+    to 0.572 on SB10k).  Although it appears as if the lexicon
+    component were more important to a sentiment system, we would like
+    to preclude such incorrect conclusion, because
     \begin{inparaenum}[(a)]
       \item a full-fledged sentiment solution should take into account
-        both levels (words and discourse) and
+        both linguistic levels (words and discourse) and
       \item these relative results might look different if we expand
-        the analyzed domain to longer documents or complete
-        discoussion threads.
+        the analyzed domain to longer documents or apply
+        discourse-aware methods to complete discussion threads.
     \end{inparaenum}
 
   \item\textbf{Does text normalization help sentiment systems?}
@@ -248,11 +244,11 @@ with all knowledge that we have acquired during our run.  Here we go:
     Yes, it definitely does.  As we could see in
     Chapters~\ref{chap:fgsa} and \ref{chap:cgsa}, normalization
     significantly improves the quality of aspect-based and
-    message-level sentiment analysis, boosting the results on the
-    former task by up to 4\% (cf.
+    message-level sentiment analyses, boosting the results on the
+    former task by up to 4\% (see
     Table~\ref{snt-fgsa:tbl:normalization}) and improving the
     macro-averaged \F{}-measure of coarse-grained methods by up to
-    25\% (cf. Table~\ref{snt-cgsa:tbl:res-no-normalization});
+    25\% (see Table~\ref{snt-cgsa:tbl:res-no-normalization});
 
     The only question that remained unanswered in this context is
     which normalization steps exactly improve the scores of sentiment
@@ -263,12 +259,11 @@ with all knowledge that we have acquired during our run.  Here we go:
     classification experiments using the lexicon-based attention
     system.  As we can see from the results in
     Table~\ref{afterword:tbl:lba-normalization-steps}, the
-    micro-averaged \F{}-scores on both datasets benefit most from
+    micro-averaged \F{}-scores on both datasets benefit most from the
     unification of Twitter-specific phenomena, sinking by almost 19\%
-    when this component is switched off.  This step is also most
-    useful for the macro-\F{} on the SB10k data, whereas the
-    macro-average on the PotTS corpus mostly capitalizes on the
-    normalization of slang terms.
+    when this component is deactivated.  This step is also most useful
+    for the macro-\F{} on the SB10k corpus, whereas the macro-average
+    on PotTS mostly capitalizes on the normalization of slang terms.
     \begin{table}[htb!]
       \begin{center}
         \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
@@ -414,14 +409,20 @@ with all knowledge that we have acquired during our run.  Here we go:
 
   \item\textbf{Can we do better than these methods?}
 
-    Yes, we can: with our proposed linear projection algorithms we
-    improved the macro-averaged results of exisitng lexicon-generation
-    methods; be redefining the topology of CRF graphs we increased the
-    scores of aspect-based approaches; our lexicon-based attention
-    network outperformed many of its competitors on message-level
-    classification; and, finally, with latent-marginalized CRFs and
-    Recursive Dirichlet Process we could surpass the discourse-unware
-    baseline and other existing discourse-aware sentiment solutions.
+    Yes, we can:
+    \begin{itemize}
+    \item we improved the macro-averaged results of exisitng
+      lexicon-generation methods with our proposed linear projection
+      algorithms;
+    \item we increased the scores of aspect-based approaches by
+      redefining the topologies of CRFs;
+    \item our lexicon-based attention network outperformed many of
+      its competitors on message-level classification;
+    \item and, finally,we surpassed the discourse-unware baseline and
+      other existing discourse-aware sentiment solutions with the
+      proposed latent-marginalized CRFs and Recursive Dirichlet
+      Process.
+    \end{itemize}
 \end{itemize}
 
 
@@ -431,8 +432,8 @@ with all knowledge that we have acquired during our run.  Here we go:
 Apart from answering the above questions and pushing the state of the
 art for several major sentiment tasks on the PotTS and SB10k corpora,
 we have also paved the way for other researchers who want to work on
-the same topics by releasing the data and the code that were used in
-our experiments:
+the same topics by releasing the data and the code that we used in our
+experiments:
 \begin{itemize}
 \item the Potsdam Twitter Sentiment (PotTS) corpus is available at:\\
   \url{https://github.com/WladimirSidorenko/PotTS};
@@ -446,10 +447,10 @@ our experiments:
   approaches at:\\ \url{https://github.com/WladimirSidorenko/CGSA};
 \item and get all discourse-aware solutions
   from:\\ \url{https://github.com/WladimirSidorenko/DASA};
-\item finally, we have released the discourse segmenter, the adapted
-  DPLP parser, and our modified version of the \textsc{RST-Tool},which
-  was adjusted to the annotation of multilogues,
-  at:
+\item last but not least, we have released the discourse segmenter,
+  the adapted DPLP parser, and our modified version of
+  \textsc{RST-Tool}, which was adjusted to the annotation of
+  multilogues, at:
   \begin{itemize}
   \item\url{https://github.com/WladimirSidorenko/DiscourseSegmenter},
   \item\url{https://github.com/WladimirSidorenko/RSTParser}, and
@@ -457,14 +458,14 @@ our experiments:
   \end{itemize}
 \end{itemize}
 
-In addition to open-sourcing our projects, we have also made a few
+In addition to open-sourcing all projects, we have also made a few
 attempts to increase the visibility of our research with the following
 publications:
 \begin{itemize}
   \item the rule-based text normalization was described in
     \cite{Sidarenka:13};
   \item the PotTS corpus was presented in \cite{Sidarenka:16};
-  \item in \cite{Sidarenka:16b}, we have summarized the evaluation of
+  \item in \cite{Sidarenka:16b}, we summarized the evaluation of
     existing sentiment lexicons (a separate paper on the linear
     projection algorithm was withdrawn by us due to a mistake in the
     initial implementation);
@@ -476,12 +477,12 @@ publications:
     Twitter in \cite{Sidarenka:15a}.
 \end{itemize}
 Unfortunately, due to the lack of experience at the initial stage of
-working on this dissertation and because of time shortage at the
-concluding stage I\footnote{Throughout this work we have been using
+working on this dissertation and because of the time shortage at the
+concluding stage, I\footnote{Throughout this work we have been using
   the scientific ``we,'' considering the reader as a companion in our
-  experiments.  But because at this point I start describing the
+  marathon.  But because at this point I start describing the
   limitations of this work, which are solely my fault, I would like to
-  free the reader from this criticism by switching to the conceitful
+  exclude the reader from this criticism by switching to the solitary
   ``I''.} was not able to publish more or at higher-level venues.  I
 apologize for that.
 
@@ -494,32 +495,32 @@ prevented me from running this scientific marathon faster, better,
 and, most sadly, along more exciting places.  Alas, in the ``Sentiment
 Analysis of German Twitter'', I have concentrated more on the
 ``sentiment'' part, much at the cost of ``German Twitter''.  I wish I
-had paid more attention to the cross-lingual techniques of
-transferring English methods; elaborated on the linguistic aspects of
-microblogs; addressed the social component of the Twitter network.
-The main reason why I have not done all these things is that six years
-ago, whe I started working on this dissertation completely from
-scratch, with neither data, nor code, nor any plan in my head, I was
-so overwhelmed by the abundance of works on opinion mining and text
-normalization that I decided to first answer the questions whether
+had tried out more sophisticated cross-lingual approaches to
+transferring English methods to German, elaborated more on linguistic
+features of microblogs, and addressed the social aspect of the Twitter
+network.  The main reason why I have not done all these things is that
+six years ago, whe I started working on this dissertation completely
+from scratch, with neither data, nor code, nor any proper plan in my
+head, I was so overwhelmed by the abundance of works on opinion mining
+and text normalization that I decided to answer the questions whether
 existing sentiment methods work, whether text normalization helps, and
-whether I could improve on these methods; and these questions have
-preoccupied me since then.  Another reason why I refrained from
-addressing certain topics (why, for example, I did not extend the
-Rhetorical Structure Theory to multilogues) is because properly
-handling these problems would require another dissertation and would
-certainly first need to be done for English in order to get any
-international attention.
+whether I could improve on these methods, first; and these questions
+have pretty much preoccupied me ever since.  Another reason why I
+refrained from addressing certain topics (why, for example, I did not
+extend the Rhetorical Structure Theory to multilogues) is because
+properly handling these problems would require another dissertation
+and would certainly first need to be done for English in order to get
+any international attention.
 
 
 \section*{Final Remarks}
 \addcontentsline{toc}{section}{Final Remarks}
 
 Nevertheless, with this thesis I have basically built a theme park on
-the moon.  Although this park is still missing a slot machine and some
-carousels, it does have a blackjack table and other kinds of funny
-amusements.  And the good thing is that the new carousels are now
-easier to build, the existing amusement rides properly work for free,
+the moon.  Although this park is still missing a slot machine and a
+few carousels, it does have a nice card table and many other kinds of
+funny amusements.  And another good thing is that the new carousels
+are now easier to build, the existing amusement rides work for free,
 and the park itself might still entertain its occasional guests.  You
 might have enjoyed this theme park as well, or you might have not---we
 appreciate either of your choices and would like to thank you in any
