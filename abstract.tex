@@ -1,17 +1,10 @@
-% FILE: abstract.tex  Version 2.1
-% AUTHOR:
-% Universität Duisburg-Essen, Standort Duisburg
-% AG Prof. Dr. Günter Törner
-% Verena Gondek, Andy Braune, Henning Kerstan
-% Fachbereich Mathematik
-% Lotharstr. 65., 47057 Duisburg
-% entstanden im Rahmen des DFG-Projektes DissOnlineTutor
-% in Zusammenarbeit mit der
-% Humboldt-Universitaet zu Berlin
-% AG Elektronisches Publizieren
-% Joanna Rycko
-% und der
-% DNB - Deutsche Nationalbibliothek
+% FILE: abstract.tex Version 2.1 AUTHOR: Universität Duisburg-Essen,
+% Standort Duisburg AG Prof. Dr. Günter Törner Verena Gondek, Andy
+% Braune, Henning Kerstan Fachbereich Mathematik Lotharstr. 65., 47057
+% Duisburg entstanden im Rahmen des DFG-Projektes DissOnlineTutor in
+% Zusammenarbeit mit der Humboldt-Universitaet zu Berlin AG
+% Elektronisches Publizieren Joanna Rycko und der DNB - Deutsche
+% Nationalbibliothek
 %% \begin{abstract}
 %% Here is the english abstract.
 %% \end{abstract}
@@ -20,102 +13,68 @@
 \section*{Abstract}
 \addcontentsline{toc}{section}{Abstract}
 
-The growing popularity of online conversation platforms over the last
-few years has lead to a dramatic increase in the amount of textual
-data that are communicated via these platforms.  As a consequence,
-dealing with this abundance of texts in manual way becomes fairly
-impossible nowadays.  Unfortunately, existing automatic natural
-language processing (NLP) tools---most of which were created for
-standard language texts---cannot handle the relatively peculiar genre
-of casual online conversations sufficiently good either.  Therefore,
-we urgently need other, more robust and more high-quality NLP
-applications which are able to process even such ``unconventional''
-linguistic variants as the Web language.  However, in order to build
-them, we first need to understand the nature of these variants better.
+%% \hspace*{\fill}\epigraph{\itshape Das Internet ist f\"ur uns alle Neuland.}{---Angela Merkel}
 
-%% But in order to build a high-quality NLP application for a particular language
-%% form, one should first understand the nature of this
+The immense popularity of online communication services in the last
+decade has not only massively changed our life (with news spreading
+like wildfire on the Web, presidents announcing their decisions on
+Twitter, and the outcome of political elections being determined on
+Facebook) but also dramatically increased the amount of data exchanged
+on these platforms.  Therefore, if we wish to understand the needs of
+modern society better and if we want to protect it from new threats,
+we urgently need more robust, higher-quality natural language
+processing (NLP) applications that can recognize such necessities and
+menaces automatically, by analyzing uncensored speech.  Unfortunately,
+most NLP programs that exist today have been either created for
+standard language, as we know it from newspapers, or, in the best
+case, adapted to English social media texts.
 
-%% This thesis presents a linguistic and computational study of one of the most
-%% proliferating variants of the German online language -- namely, users'
-%% microblogs (tweets) posted on Twitter.\footnote{\url{https://twitter.com/}}
-%% From the linguistic perspective, we investigate in our work what language
-%% phenomena actually account for the notorious language style of tweets making
-%% it different from the standard German variant, how frequent those phenomena
-%% are,
-
-In this thesis, we present a study of one of the most proliferating
-forms of the German online language---namely, users' conversations on
-the Twitter platform.\footnote{\url{https://twitter.com/}} We
-investigate language specifics of Twitter messages (tweets) from both
-linguistic and computational sides.  From the linguistic perspective,
-we analyze which language phenomena actually account for the
-notoriously peculiar style of tweets, how frequent those phenomena
-are, and what role they play in the online communication.  From the
-computational point of view, we evaluate to what extent differences in
-the language style can affect the performance of the existing NLP
-approaches and what techniques can help improve this performance in
-future.
-
-We conduct our study on three different levels of linguistic granularity:
-\begin{inparaenum}[\itshape a\upshape)]
-    \item the \emph{subsentential},
-    \item the \emph{sentential}, and
-    \item the \emph{suprasentential} one.
+This thesis reduces the existing arrears by entering the Neuland of
+German online communication and addressing one of its most prolific
+forms---users' conversations on Twitter.  In particular, it explores
+ways and means how people express their evaluations on this service,
+examines current approaches to automatic mining of such opinions, and
+proposes novel methods that outperform state-of-the-art techniques.
+For this purpose, I introduce a new corpus of German tweets that have
+been manually annotated with evaluative opinions, their targets and
+holders, as well as lexical polarity items and contextual modifiers of
+these terms.
+%% A detailed inter-annotator agreement study of our dataset shows that
+%% not only are sentiments difficult to analyze for people, but this task
+%% becomes even more challenging in the presence of emoticons or when
+%% dealing with political topics.
+Using these data, I explore four major areas of sentiment research:
+\begin{inparaenum}[(i)]
+\item generation of sentiment lexicons,
+\item aspect-based opinion mining,
+\item message-level polarity classification, and
+\item discourse-aware sentiment analysis.
 \end{inparaenum}
+In the first task, I compare three popular groups of lexicon
+generation methods: dictionary-, corpus-, and word-embedding--based
+ones, finding that dictionary-based systems generally yield better
+polarity lists than the last two method groups.  In addition to this,
+I propose a novel linear projection algorithm, whose results surpass
+many existing automatically generated lexicons.  Afterwords, in the
+second task, I examine two common approaches to automatic prediction
+of sentiment, source, and target spans: conditional random fields and
+recurrent neural networks, obtaining higher scores with the former
+model and improving these results even further by redefining the
+structure of CRF graphs.  When dealing with message-level polarity
+classification, I juxtapose three major sentiment paradigms: lexicon-,
+machine-learning--, and deep-learning--based systems, and also try to
+unite the first and the last of these groups by introducing a
+bidirectional neural network with lexicon-based attention. Finally, in
+order to make the new classifier aware of microblogs' discourse
+structure, I let it separately analyze elementary discourse units of
+each tweet and infer the overall polarity of a message from the scores
+of its EDUs with the help of two novel approaches: latent-marginalized
+CRFs and Recursive Dirichlet Process.
 
-In the first (\emph{subsentential}) stage of our research, we
-investigate how difficult the task of automatic low-level segmentation
-(i.e. automatic detection of word and sentence boundaries) is for
-tweets.  After that, we turn to the analysis of spelling deviations
-which are knowingly ubiquituous in Twitter messages.  In order to
-estimate how aggravated this problem really is, we collect statistics
-on the most frequent out-of-vocabulary words found in sample users'
-messages, classify these words into three major classes (regular
-German words omitted from dictionaries, stylistic specifics of text
-genre, and true spelling deviations), and calculate how frequent each
-of these classes are.  We then present possible strategies for
-handling the latter two groups (rule-based normalization of stylistic
-specifics and hybrid correction of spelling mistakes).  %% In the
-description of the related work, we also juxtapose
-%% two general approaches to handling noisy texts -- text normalization and domain
-%% adaptation -- and analyze the pros and cons of these approaches.
-
-On the \emph{sentential} level, we concentrate on the task of
-automatic sentiment analysis of sentences.  Here, we first present a
-comprehensive corpus of German microblogs which were manually
-annotated with fine-grained sentiment relations.  We then conduct an
-agreement study of this corpus in order to evaluate how difficult the
-sentiment analysis task is for humans and which sentiment elements,
-text topics, and tweet types are most difficult to annotate.  After
-that, we demonstrate how well the sentiment classification task can be
-done automatically using wide-spread machine learning techniques.  In
-our experiments, we consider three related subtasks:
-\begin{inparaenum}[\itshape a\upshape)]
- \item automatic classification of polar words,
- \item automatic detection of sentiment constituents (i.e. opinion holders,
- targets, and evaluation spans), and, finally,
- \item automatic prediction of the intensity and polarity of sentiments.
-\end{inparaenum}
-
-On the \emph{suprasentential} or \emph{discourse} level of the
-analysis, we focus our attention on the task of automatic discourse
-segmentation and relation extraction.  We first try to apply the ideas
-of the classical Rhetorical Structure Theory \citep{Mann:88} to
-Twitter conversations.  Since this theory, however, was primarily
-developed for official monologue texts rather than casual multilogues,
-several refinements and extensions to this framework turned out to be
-necessary for analyzing Twitter discourses.  These refinements
-primarily concern the definition of elementary discourse units (EDUs)
-for such Twitter-specific elements as @-mentions, hyperlinks, hashtags
-etc.  Furthermore, as we show, several additions to the discourse
-relations set are needed in order to cover the interplay between
-discourse segments both within and across the tweets.  After defining
-these extensions, we evaluate different methods and strategies for
-automatically detecting EDU boundaries and discourse structures in
-users' messages.
-
-In a concluding step, we investigate how using text normalization, on
-the one hand, and incorporating discourse information, on the other
-hand, can help us improve the results of sentence-level sentiment
-analysis.
+%% \footnote{Throughout this
+%% dissertation, I will use the pronoun ``we'' in recognition of the
+%% efforts made by all people mentioned in the acknowledgments, and in
+%% recognition of your efforts as a reader who will struggle with me
+%% through the pages of this work.  This usage, however, does not imply
+%% that either you or any of my supporters share the same opinions or are
+%% responsible for any of the claims.}
