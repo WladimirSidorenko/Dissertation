@@ -31,6 +31,7 @@
 \usepackage{dirtree}            % \dirtree (draw directory structure)
 \usepackage{dsfont}
 \usepackage{etoolbox}           % \ifstrempty
+\usepackage{epigraph}           % \epigraph
 \usepackage{fancyhdr}
 \usepackage{footnote}
 \usepackage{graphicx}           % \scalebox
@@ -81,32 +82,36 @@
 \newlength{\hcrfheight}
 \setlength{\hcrfheight}{9em}
 
+%% Epigraph
+\setlength\epigraphwidth{.4\textwidth}
+\setlength\epigraphrule{0pt}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Colors
+\definecolor{chartreuse}{RGB}{127,255,0}
 \definecolor{cyan}{rgb}{0.0,0.6,0.6}
 \definecolor{darkblue}{rgb}{0.0,0.0,0.6}
 \definecolor{darkgoldenrod4}{RGB}{139,101,8}
 \definecolor{darkred}{RGB}{139,0,0}
 \definecolor{darkslateblue}{RGB}{72,61,139}
 \definecolor{deeppink4}{RGB}{139,10,80}
+\definecolor{dodgerblue4}{RGB}{16,78,139}
 \definecolor{firebrick}{RGB}{178,34,34}
 \definecolor{gray69}{RGB}{176,176,176}
 \definecolor{gray76}{RGB}{194,194,194}
+\definecolor{gray80}{RGB}{204,204,204}
 \definecolor{gray84}{RGB}{214,214,214}
 \definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{green2}{RGB}{0,238,0}
+\definecolor{green3}{RGB}{0,205,0}
+\definecolor{green}{RGB}{0,255,0}
 \definecolor{highlighter green}{RGB}{27,252,6}
 \definecolor{lightcyan4}{RGB}{122,139,139}
 \definecolor{midnightblue}{RGB}{25,25,112}
+\definecolor{orange3}{RGB}{205,133,0}
 \definecolor{red3}{RGB}{205,0,0}
 \definecolor{seagreen}{RGB}{46,139,87}
 \definecolor{violetred4}{RGB}{139,34,82}
-\definecolor{chartreuse}{RGB}{127,255,0}
-\definecolor{green}{RGB}{0,255,0}
-\definecolor{green2}{RGB}{0,238,0}
-\definecolor{green3}{RGB}{0,205,0}
-
-
-\definecolor{green3}{RGB}{0,205,0}
 
 \colorlet{cellcolor}{gray84}
 
@@ -155,6 +160,18 @@
 \newcommand{\eg}{\textit{e.g.},}
 \newcommand{\ienocomma}{\textit{i.e.}}
 \newcommand{\ie}{\ienocomma,}
+\newcommand{\corpusDir}{\texttt{PotTS/}}
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+
+%% Code Environment
+\NewDocumentCommand{\Colorbox}{O{\dimexpr\linewidth-2\fboxsep} m m}{%
+  \colorbox{#2}{\makebox[#1][l]{#3}}}
+\newcommand{\code}[1]{
+
+\smallskip\noindent\Colorbox{gray80}{\parbox{\textwidth}{\texttt{#1}}}\smallskip
+
+\noindent}
 
 \newcommand{\specialcell}[2][c]{%
   \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
@@ -425,6 +442,7 @@ rightmargin=35,%
 backgroundcolor=gray!20,%
 innertopmargin=5pt]{example}{Example}[section]
 
+\newtheorem*{Example*}{Example}
 % allow fotnotes in tables
 \makesavenoteenv{tabular}
 
