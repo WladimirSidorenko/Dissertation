@@ -13,7 +13,7 @@
 
 A crucial prerequisite for proving or disproving any hypotheses in
 computational linguistics is the existence of sufficiently big
-manually labeled data, on which these conjectures can be tested.
+manually labeled data, on which these conjectures could be tested.
 Since there was no corresponding manually annotated sentiment corpus
 for German Twitter that we were aware of at the time of writing this
 chapter, we had to create our own dataset, which we will introduce in
@@ -26,7 +26,7 @@ utilized annotation tool, we turn to an extensive analysis of the
 inter-annotator agreement, which will serve as an upper bound in our
 later experiments.  In Section~\ref{sec:snt:iaa}, we propose two new
 versions of the popular $\kappa$ metric \cite{Cohen:60}---binary and
-proportional kappa---which were specifically adjusted to the
+proportional kappa---that were specifically adjusted to the
 peculiarities of our annotation task.  With these two measures, we
 estimate the inter-coder reliability of the annotated spans of
 subjective opinions, their targets, and sources, also checking whether
@@ -34,32 +34,32 @@ the annotators agreed on the polarity and intensity of sentiments and
 polar terms, once they agreed on their boundaries.  Finally, with
 statistical means, we investigate the correlations between the
 selection criteria we applied initially and the number of annotated
-elements and disagreements of our experts in the corpus.
+elements and disagreements of our experts.
 
 \section{Data Collection}
 
-A common question, which typically arises when one starts creating a
-new dataset, is that of the selection criteria to use in order to
-collect the initial corpus data.  While, for low-level NLP tasks, such
-as part-of-speech tagging or syntactic parsing, it typically suffices
-to define the language domain to sample from (since the phenomena of
+A common question that typically arises when one starts creating a new
+dataset is that of the selection criteria to use in order to collect
+the initial corpus data.  While for low-level NLP tasks, such as
+part-of-speech tagging or syntactic parsing, it typically suffices to
+define the language domain to sample from (since the phenomena of
 interest are usually frequent and uniformly spread), for semantically
-demanding tasks with many diverse ways of expressions, one also has to
-pay attention to various in-domain factors as they might considerably
-affect the final distribution, making the resulting corpus either
-utterly sparse or excessively biased.
+demanding tasks, with many diverse ways of expression, one also has to
+pay attention to various in-domain factors, since they might
+considerably affect the final distribution, making the resulting
+corpus either utterly sparse or excessively biased.
 
-To minimize both of these risks---scarceness and bias---when preparing
+To minimize both of these risks (scarceness and bias) when preparing
 our data, we decided to use a compromise approach by gathering one
-part of the new corpus from tweets which were a priori more likely to
-contain sentiments, and sampling the rest of the microblogs from a big
-collection of messages uniformly at random.  By doing so, we hoped to
-increase the recall with the former strategy while mitigating the
-introduced bias with the latter method.
+part of the new corpus from tweets that were a priori more likely to
+contain sentiments, and sampling the rest of the microblogs uniformly
+at random.  By doing so, we hoped to increase the recall with the
+former strategy while mitigating the introduced bias with the latter
+method.
 
-As criteria which could help us find more opinionated microblogs, we
-considered the topic and form of tweets.  Our motivation was that some
-subjects, such as political or social issues, by themselves could
+As criteria that could help us find more opinionated microblogs, we
+considered the topic and form of the tweets.  Our motivation was that
+some subjects, such as political or social issues, by themselves could
 incite people to be more subjective in their judgements.  Therefore,
 including such topics in our corpus would automatically increase the
 coverage of sentiments.  On the other hand, opinions also need to be
@@ -70,10 +70,10 @@ not.
 Since we started creating the corpus in the spring of 2013, obvious
 choices of subjectively rich topics to us were the \emph{papal
   conclave}, which took place in March of that year, and the
-\emph{German federal elections}, which were to be held in autumn.
-Because both of these events implied some sort of voting, we decided
-to include \emph{general discussions of political issues} as another
-topic in our dataset in order to counterbalance the election
+\emph{German federal elections}, which were held in autumn of that
+year.  Because both of these events implied some sort of voting, we
+decided to include \emph{general discussions of political issues} as
+another topic in our dataset in order to counterbalance the election
 specifics.  Finally, to obey the second objective, \ie{} to keep the
 corpus bias low, we considered \emph{casual everyday conversations}
 without any pre-defined subjects as the last source of the new data.
@@ -90,11 +90,9 @@ problems within the joint FMER\footnote{Federal Ministry of Education
   and Research (BMBF).} project ``Discourse Analysis of Social
 Media''.  For sampling the fourth topic, we used the German Twitter
 snapshot of \citet{Scheffler:14}, which comprised $\approx97\%$ of
-German microblogs posted in April 2013.
-
-This tracking procedure gave us a total of 27.4 M messages with the
-M\"unster corpus and Scheffler's collection being by far the most
-prolific sources of the data.
+German microblogs posted in April 2013.  This tracking procedure gave
+us a total of 27.4 M messages with the M\"unster corpus and Tatjana
+Scheffler's collection being by far the most prolific sources.
 
 %% For our work, the in-domain factors to consider were the topics and
 %% the form of tweets.  Since we wanted our corpus to be as
@@ -123,11 +121,10 @@ groups based on the following formal criteria:
 \begin{itemize}
 \item We put messages that contained at least one polar term from the
   sentiment lexicon SentiWS \cite{Remus:10} into the first group;
-\item Microblogs which did not satisfy the first condition but
-  featured at least one emoticon or exclamation mark were put into the
-  second set;
-\item Finally, all remaining tweets were allocated to the third formal
-  category of their respective topic.
+\item Microblogs that did not satisfy the first condition but had at
+  least one emoticon or exclamation mark were put into the second set;
+\item Finally, all remaining tweets were allocated to the third
+  category.
 \end{itemize}
 With this split, we, again, hoped to increase the recall of the
 sentiments by separately analyzing messages with already known polar
@@ -142,7 +139,7 @@ inflection forms of its entries.
 Since no polar lexicon, however, was guaranteed to provide for the
 full coverage of opinionated expressions and, moreover, because
 Twitter users were renowned for their creativity in instantly
-inventing new language forms \cite[cf.][]{Eisenstein:13}, we also
+inventing new language forms \cite[see][]{Eisenstein:13}, we also
 applied a bail-out approach by separately collecting messages which
 did not have any lexicon terms but did contain a smiley or exclamation
 point.  Our assumption was that either these elements alone would
@@ -186,7 +183,6 @@ Table~\ref{snt:tbl:corp:topic-bins}:
       topic)\label{snt:tbl:corp:topic-bins}}
   \end{center}
 \end{table}
-
 As can be seen from the table, the vast majority of the tweets in each
 topic fall into the third category, \ie{} the one where neither polar
 terms no common emoticons are present.  The average expected
@@ -276,7 +272,7 @@ that had to be annotated by our experts.  This list included:
     \item
       the link attribute \emph{anaphref}, which was used for
       pronominal targets and had to point to the respective
-      antecedents of these proforms (cf. \citet{Stoyanov:06} and
+      antecedents of these proforms (see \citet{Stoyanov:06} and
       \citet{Ding:10} on the importance of coreference resolution in
       opinion mining);
     \item and, finally, another edge
@@ -317,7 +313,7 @@ In this sentence, our annotators labeled the complete clause as a
 sentiment, since this unit was the minimal syntactic constituent which
 simultaneously comprised both the target of the evaluation
 (``Milliardeneinnahmen,'' \emph{billions of revenue}) and its
-respective evaluative expression (``peinlich,'' \emph{embarrassing}).
+respective polar term (``peinlich,'' \emph{embarrassing}).
 Following our guidelines, the experts also included the complete noun
 phrase ``diese Milliardeneinnahmen'' (\emph{these billions of
   revenue}) along with the indefinite pronoun ``diese'' (\emph{these})
@@ -355,8 +351,8 @@ evaluations.  These elements included:
   compositional meaning of the whole opinions (\ie{} contextual
   polarities and intensities of evaluations).
 
-  In addition to these common attributes, polar terms also
-  had element-specific properties: the boolean features
+  In addition to these common attributes, polar terms also had
+  element-specific properties: the boolean features
   \emph{subjective-fact} and \emph{uncertain}, and the link attribute
   \emph{sentiment-ref}.  The first property showed whether a polar
   term denoted an objective event with a clear emotional association,
@@ -364,9 +360,9 @@ evaluations.  These elements included:
   (\emph{conservation}).  The second feature was used in the cases
   when the annotators were unsure about their decisions.  Finally, the
   last attribute was defined in the same way as it was specified for
-  the targets and sources and had to point from the emotional
-  expression in question to its respective sentiment when an
-  unambiguous assignment of the former item was impossible;
+  the targets and sources and had to point from the polar term in
+  question to its respective sentiment when an unambiguous assignment
+  of the former item was impossible;
 
 \item
   elements which increased the expressivity and polar sense of
@@ -388,11 +384,11 @@ evaluations.  These elements included:
   attribute \emph{polar-term-ref}, which had to point from the
   modifying element to its pertaining opinionated term;
 
-\item the final element---\textbf{negations}---was defined as
-  grammatical or lexical means which turned the polarity of an
-  polar term to the complete opposite.  These were typically
-  represented by the negative particle ``nicht'' (\emph{not}) or the
-  indefinite pronoun ``keine'' (\emph{no}).
+\item the final element, \textbf{negations}, was defined as
+  grammatical or lexical means which turned the polarity of an polar
+  term to the complete opposite.  These were typically represented by
+  the negative particle ``nicht'' (\emph{not}) or the indefinite
+  pronoun ``keine'' (\emph{no}).
 
   The only attribute associated with this element was the mandatory
   link \emph{polar-term-ref}, which had to point from the negation
@@ -793,7 +789,7 @@ Table~\ref{tbl:snt:agrmnt-init}.
           898 & 1,905 & 898 & 4,148 & \textbf{26.85}\\
           Source & 159 & 445 & 156 & 456 & \textbf{34.53} &
           153 & 439 & 153 & 456 & \textbf{33.75}\\
-          EExpression & 1,951 & 2,854 & 2,029 & 3,188 & \textbf{64.29} &
+          Polar Term & 1,951 & 2,854 & 2,029 & 3,188 & \textbf{64.29} &
           1,902 & 2,851 & 1,902 & 3,180 & \textbf{61.36}\\
           Intensifier & 57 & 101 & 59 & 123 & \textbf{51.71} &
           57 & 101 & 57 & 123 & \textbf{50.81}\\
@@ -886,7 +882,7 @@ Table~\ref{tbl:snt:agrmnt-adjud}.
           Source & 573 & 690 & 545 & 837 & \textbf{72.91} &
           539 & 676 & 539 & 833 & \textbf{71.12}\\
 
-          EExpression & 3,164 & 3,298 & 3,261 & 4,134 & \textbf{85.68} &
+          Polar Term & 3,164 & 3,298 & 3,261 & 4,134 & \textbf{85.68} &
           3,097 & 3,290 & 3,097 & 4,121 & \textbf{82.64}\\
 
           Intensifier & 111 & 219 & 113 & 180 & \textbf{56.01} &
@@ -982,7 +978,7 @@ both experts are given in Table~\ref{tbl:snt:agrmnt-final}.
           Source & 966 & 1,207 & 910 & 1,619 & \textbf{65.99} &
           898 & 1,180 & 898 & 1,604 & \textbf{64.1}\\
 
-          EExpression & 5,574 & 5,989 & 5,659 & 7,419 & \textbf{82.83} &
+          Polar Term & 5,574 & 5,989 & 5,659 & 7,419 & \textbf{82.83} &
           5,441 & 5,977 & 5,441 & 7,395 & \textbf{80.29}\\
 
           Intensifier & 192 & 432 & 194 & 338 & \textbf{49.97} & 192 &
@@ -1017,7 +1013,7 @@ percent, which is almost twice as high as the mean reliability
 achieved in the first step.
 
 As before, the scores of polar terms are in the ballpark of
-almost perfect results \cite[cf.][]{Landis:77}.  Their modifying
+almost perfect results \cite[see][]{Landis:77}.  Their modifying
 elements, however, show a decrease: the agreement on intensifiers
 deteriorates by 5.8\%, sinking down to 49.71\% proportional kappa.  A
 similar situation is observed for the diminishers, whose $\kappa$-rank
@@ -1135,7 +1131,7 @@ the words ``Angriff'' (\emph{attack}), ``Bombe'' (\emph{bomb}), and
 these tokens as valid opinionated items.  Even though our original
 guidelines were underspecified in this case (we only imposed the
 subjectivity constraint on the sentiments), in our later experiments
-(cf.~Section~\ref{sec:snt:lex}), labeling these terms turned out to be
+(see~Section~\ref{sec:snt:lex}), labeling these terms turned out to be
 a better solution when comparing the corpus annotation with the
 existing sentiment lexica.
 
@@ -1177,7 +1173,7 @@ these computations are shown in Table~\ref{tbl:attr-agrmnt}.
           {\bfseries Element} & {\bfseries Polarity $\kappa$} & %
           {\bfseries Intensity $\alpha$}\\\midrule
           Sentiment & 58.8 & 73.54\\
-          EExpression & 87.12 & 78.79\\
+          Polar Term & 87.12 & 78.79\\
           \bottomrule
     \end{tabular}
     \egroup
@@ -1191,10 +1187,10 @@ As can be seen from the scores, reaching a consensus about the
 polarities of the emotional terms was a much easier task than agreeing
 on the value of this attribute for complete opinions.  Similar to
 Example~\ref{snt:exmp:sent-disagr}, one of the main reasons for these
-disagreements were sentiments containing smileys, especially in cases
-when the polarity of the emoticon contradicted the polarity of its
-preceding sentence, \eg{} ``Ich hasse die Piratenpartei \smiley{}''
-(\emph{I hate the Pirate Party {\upshape \smiley{}}}).
+disagreements were sentiments containing smileys, especially in the
+cases when the polarity of the emoticon contradicted the polarity of
+its preceding sentence, \eg{} ``Ich hasse die Piratenpartei
+\smiley{}'' (\emph{I hate the Pirate Party {\upshape \smiley{}}}).
 
 Interestingly enough, the ordinal inter-rater agreement on the
 intensities of sentiments ($\alpha = 73.54$) is notably higher than
@@ -1206,7 +1202,7 @@ the corresponding $\kappa$-results for their binary polarities
 (87.12).
 
 For the sake of completeness, we also compared these figures with the
-scores obtained on the MPQA corpus \cite[cf.][pp. 38, 80]{Wilson:07}.
+scores obtained on the MPQA corpus \cite[see][pp. 38, 80]{Wilson:07}.
 The average $\alpha$-agreement on the intensity of the direct
 subjective and objective speech events (a rough counterpart of our
 sentiments) on this dataset was around 79\%.  The corresponding
@@ -1227,7 +1223,7 @@ initially for sampling our corpus affected the resulting distribution
 of the sentiments and polar expressions in the resulting dataset, we
 generated statistics plots on the frequencies and agreement level of
 these elements in our data
-(cf. Figures~\ref{snt:fig:crp-sent-emo-distr}
+(see Figures~\ref{snt:fig:crp-sent-emo-distr}
 and~\ref{snt:fig:crp-sent-emo-agr}).
 
 \begin{figure*}[htbp!]
