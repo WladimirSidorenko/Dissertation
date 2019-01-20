@@ -13,228 +13,229 @@
 \markboth{\textsc{FOREWORD}}{}
 \addcontentsline{toc}{chapter}{Foreword}
 
-As social media become more and more ubiquitous, the need for an
-automatic analysis of their data rises.  This analysis, however, is
-greatly aggravated by the fact that the language style used on the Web
-is fundamentally different from the style that is typical for
-newspapers or scientific articles.  Indeed, sentences like the ones
-shown in Example \ref{exmp:intro:tweets:en} (taken from
-\citet{HanBaldwin:11}) are highly unlikely to appear in editorials or
-government documents even though their wording is commonplace on the
-U.S. English Twitter.
-\begin{example}\label{exmp:intro:tweets:en}
-u must be talkin bout the paper but I was thinkin movies
+\hspace*{\fill}\epigraph{\itshape Das Internet ist f\"ur uns alle
+  Neuland.}{---Angela Merkel, 2013}
 
+As social media become more and more popular, the need for automatic
+analysis of their data rises.  This analysis, however, is greatly
+complicated by the fact that the language style used on the Web is
+fundamentally different from the style of official documents and
+newspaper articles.  Indeed, sentences like the ones shown in
+Example~\ref{exmp:intro:tweets:en} \cite[provided by][]{HanBaldwin:11}
+are very unlikely to appear in the transcript of an Oval Office
+address or in an editorial of The New York Times, even though such
+wording is commonplace on English Twitter.
+\begin{example}\label{exmp:intro:tweets:en}
+u must be talkin bout the paper but I was thinkin movies\\
 \dots so hw many time remaining so I can calculate it?
 \end{example}
-Similar discrepancies between the formalism of the official style and the
-casual nature of spontaneous Web conversations can be observed in other
-languages too, and German is not an exception.
 
-It is, however, unclear whether the idiosyncracies of the online style
-should be considered as a drawback or an advantage for the automated
-language analysis.  While most of the NLP-researchers tend to consider
-these peculiarities as a hindrance and suggest converting online texts
-to a more standard language-like form before doing any processing
-(cf. relevant works in Section \ref{sec:normalization:relwork}), other
-scientists at least object that a straightforward conversion would
-loose many significant details and therefore lead to a decrease in the
-performance.  \citet{Brody:11}, for instance, claim that the
-intentional prosodic lengthenings of words (such as \texample{sooooooo
-  strong} or \texample{coooolllllll}) often serve as vivid indicators
-of opinionated sentences and keeping these elongations in text would
-result in a better sentiment analysis.  \citet{Eisenstein:13}
-partially supports this idea by noting that also in cases of lexical
-normalization, when we are replacing a colloquial variant of some
-expression with its standard language equivalent, we can also observe
-a considerable shift in the original meaning.  %% Even such non-verbal
-%% elements as the online discourse deictics (e.g. \texample{\upshape
-%%   <--} (the arrow sign), \texample{\upshape\^{}} (the carat), and
-%% \texample{\upshape *} (the asterisk)) might play an important
-%% pragmatic role in discourse which should also be taken into account
-%% when doing text analysis (cf. \citet{Collister:11,Collister:12}).
+These differences become even more marked when it comes to emotional
+speech, when people express their excitement, sadness, happiness,
+approval or disapproval.  Compare, for instance, the following
+passages from Example~\ref{exmp:intro:telegraph-twitter}, where a
+Telegraph reporter and a Twitter user describe their feelings about
+the resignation of Boris Johnson, UK Foreign Secretary, who gave up
+his office in criticism of the government's Brexit plan.
+\begin{example}\label{exmp:intro:telegraph-twitter}
+Je regrette. I cannot express how horrified I am that Boris Johnson
+stepped down. He was the standard-bearer of those who wanted not to
+get out of the single market, but to curtail the move to political
+union in a federal state run by the likes of Juncker. \emph{(Ayesha
+  Vardag, The Telegraph)}
 
-\paragraph{Goals.}
+\noindent{}That muffled sound is Boris Johnson kicking himself that he
+didn't resign before David Davis. Two down and he's the second
+\emph{(@Kevin\_Maguire, Twitter)}
+\end{example}
+As you can see, not only the ways of expression are different, but the
+attitudes of the authors are contradictory as well. And nowadays it is
+the domain of social media that is steadily gaining popularity and
+that wields more and more influence on the opinions of common people,
+predetermining their preferences, choices, and political views.  This
+trend is inexorable; this trend is global; and, unfortunately, this
+trend opens up new possibilities for misuse of online services as an
+instrument of political deception.
 
-Providing an answer to the question whether the stylistic
-peculiarities of the online language can do more harm or good to the
-automated analysis is precisely one of the major goals of this
-dissertation.  We cannot, however, achieve this goal without realizing
-first what these stylistic peculiarities in fact are.  That means, our
-first and primary objective is \emph{to find out linguistic phenomena
-  that actually account for the idiosyncracies of the Web genre}.
+One way to avert the looming danger of deliberate manipulation of
+public opinion is to monitor social networks in real time in order to
+discover suspicious activities or unexplainable fluctuations of
+people's attitudes.  A crucial prerequisite for such monitoring though
+is reliable, high-quality NLP tools that can analyze users'
+dispositions automatically, in a split of second.
 
-After determining the online language-specific elements, the next
-naturally arising question is what to do about these elements---should
-we leave them unchanged or should we process them in some special way
-and, if so, what this special way might look like?  Thus, the second
-preliminary objective is \emph{to find effective methods for handling
-  the specifics of the Web language}.  In scope of this goal, we
-should juxtapose two approaches: the one of doing nothing and the one
-of normalizing that specifics.
+\section*{Motivation}
+\addcontentsline{toc}{section}{Motivation}
 
-For the normalization method, we should also \emph{provide an
-  appropriate metric for an intrinsic evaluation of this technique}.
-However, evaluating an approach intrinsically can tell us much about
-the quality of its work, but a crucial fact about the text
-preprocessing is that people are usually not interested in the
-preprocessing by itself but much more in its effect on the downstream
-modules, i.e., its extrinsic impact.  Therefore, after intrinsically
-evaluating our preprocessing strategy, we should \emph{extrinsically
-  asses its effect on the downstream NLP applications.}  We do so on
-the example of two main NLP objectives: sentiment and discourse
-analysis.
-
-\paragraph{Research objects.}
-
-However, before we start addressing our goals, we first would like to
-clarify some methodological aspects of our work.
-
-First of all, we should note that in order to assess the impact of
-stylistic peculiarities on the performance of automatic text
-applications, we need to answer the question of what these
-peculiarities actually are, i.e., which linguistic phenomena in fact
-contribute to the idiosyncracy of the online genre.  In order to
-answer this question, we should conduct an extensive study of
-out-of-vocabulary (OOV) words found in Twitter microblogs and divide
-found OOVs into separate classes depending on their word formation
-type.  Then, we shall investigate which of the suggested classes are
-typical only for the online language and which are common for all text
-genres.
-
-Secondly, after determining the Web-specific elements, we should
-\begin{inparaenum}[\itshape a)\upshape]
-\item investigate the effect of those elements on the automatic analysis and
-\item find an efficient strategy for mitigating the negative consequences of
-  that effect.
-\end{inparaenum}
-For solving the former task, we will compare the performance of the existing
-NLP methods obtained on standard language texts with their respective results
-achieved on microblog messages.  For solving the latter task, we will first
-introduce two general techniques that are commonly used in computational
-linguistics for adjusting existing NLP tools to new domains.  These techniques
-are called \emph{domain adaptation} and \emph{text normalization}.  We will
-briefly describe each of them and shortly point out their strengths and
-weaknesses.  After that, we will mainly concentrate on the latter method --
-the \emph{text normalization}.
-
-In this task, our goal will be to provide a formal definition of the text
-normalization task with regard to Twitter specifics.  As we should see later
-and as is also confirmed by \citet{Eisenstein:13}, it will turn out to be
-surprisingly difficult to find a precise definition of the normalization.  The
-reason for it lies in the fact that the notion of the language ``norm'' by
-itself appears to be lax and slippery.
-
-After providing a working definition of normalization, our next goal will be
-to investigate different normalization strategies and to find out which of
-these strategies are most suitable for treating Twitter-specific phenomena.
-This, of course, would not be possible without an appropriate evaluation
-metric.  % for measuring how good the performed normalization is.
-We will first rely on purely intrisic (\emph{in vitro}) metrics which measure
-the normalization quality on its own.
-
-For sure, an in vitro evaluation measure can tell much about the
-quality of the performed preprocessing.  But like for many other
-NLP-related tasks, a good performance of a standalone module does not
-necessarily lead to an equal quality improvement in further downstream
-processing.  This is especially true for the text normalization task
-whose mere positive effect on the subsequent analysis is often called
-into question.  \citet{DuBois:07}, for example, claims that language
-variation serves a pragmatic and/or stancetaking function and,
-consequently, eliminating variation would strip those additional
-layers of meaning.  \citet{Brody:11} provide a concrete example
-showing that intentional prosidic lengthenings of words are often a
-vivid indicator of opinionated sentences and keeping these elongations
-in text would result in better sentiment analysis.
-
-At this point, we arrive at the third methodological aspect that we need to
-address.  Deciding whether Twitter-genre is more or less amenable to automatic
-processing and evaluating the effects of text normalization should be done by
-inspecting different levels of automatic linguistic analysis.  Because
-language is not a uniform object but much more a complex hierarchical
-structure, we cannot draw an overall conclusion about its difficulty in
-general, if we only inspect one of its multiple levels.  In this work, we
-decided to concentrate on three levels:
-\begin{inparaenum}[\itshape i)\upshape]
-  \item subsentenial (on the example of sentence splitting and tokenization),
-  \item sentential (on the example of fine-grained sentiment analysis), and
-  \item the suprasentential or discourse level (on the example of discourse
-    segmentation and parsing).
-\end{inparaenum}
-
-For each of these levels, we will perform automatic analyses of standard
-language texts and compare their results with figures obtained on Twitter
-corpora.  Since annotated Twitter data are still scarce, we had to develop our
-own corpus for each of the above tasks.  In this work, we will briefly discuss
-the annotation scheme, the format, the selection criteria and several other
-issues involved in the creation of each of these corpora.
-
-Finally, we should note that all evaluations of automatic results should be
-done only with respect to the difficulty of that particular tasks for humans.
-For this purpose, we will conduct and present extensive inter-annotator
-agreement studies for each of our presented corpora and also discuss which
-elements, topics, and other linguistic criteria caused most difficulties
-during the annotation procedure.  We will then compare the results of the
-automatic systems with the results obtained of the inter-annotator agreement
-in order to compare how better or worse an automatic system works if compared
-to humans.
-
-In the concluding part of our dissertation, we will summarize our results
-obtained in each chapter and also investigate how different levels of
-automatic analysis might benefit form each other, and how text normalization
-procedure affects the final results.
-
-\section*{Motivation and Goals}
-\addcontentsline{toc}{section}{Motivation and Goals}
-
-In this work, we should only concentrate on German Twitter.  Though
-comparative studies of social media texts in other languages and from other
-platforms would certainly be of outermost interest, we only confine ourselves
-to this data source, since, in our opinion, any solid comparative research
-should first be preceded by thorough studies of the particular domains taken
-in isolation and again, in our opinion, little work has been done so far on
-German online genre in general and German microblogs in particular.
-
-The motivation for choosing especially Twitter platform is based on the
-following factors:
+Automatic mining of people's opinions from text is exactly what the
+field of knowledge called sentiment analysis or opinion
+mining\footnote{Following \citet{Liu:12}, I consider the terms
+  \emph{sentiment analysis} and \emph{opinion mining} as synonyms.} is
+concerned with and what we\footnote{Throughout this dissertation, I
+  will use the pronoun ``we'' in recognition of the efforts made by
+  all people mentioned in the acknowledgments, and in recognition of
+  your efforts as a reader who will struggle with me through the pages
+  of this work.  This usage, however, does not imply that either you
+  or any of my supporters share the same opinions or are responsible
+  for any of the claims.} will work on in this dissertation.  In
+particular, we are going to analyze users' attitudes on German
+Twitter---a linguistic register whose natural language processing is
+aggravated not only by specifics of the social media genre but also by
+the scarceness of resources, systems, and established baselines.
+Nevertheless, we decided address precisely this domain because:
 \begin{itemize}
-  \item First of all, Twitter data are easy to obtain via public APIs, even
-    though they, unfortunately, cannot be distributed in the same
-    unproblematic way;
-  \item Secondly, the amount of data communicated through this platform is
-    growing so rapidly, that the need for the automatic processing of them is
-    as urgent as it has never been before for any other kind of social media;
-  \item Thirdly, the language of tweets is always at the cutting edge of the
-    modern language development.  The free, uncensored way in which people can
-    post their information allows for quick responses to any changes in modern
-    technology and society.  These changes certainly get reflected in the
-    language that people use, and one, of course, could expect that some of
-    the changes introduced into the language of the Web might sooner or later
-    find their way into the norm of the standard language.  Therefore,
-    studying peculiarities of tweets might help us better predict the
-    evolution of other linguistic norms;
-  \item Fourthly, microblogs renownedly proliferate with various kinds of
-    social media-specific phenomena.  Some of these phenomena like, for
-    example, @-mentions or \#hashtags are so predominant that they even have
-    started penetrating other online platforms like
-    Facebook\footnote{\url{https://www.facebook.com/}},
-    Instagram\footnote{\url{instagram.com/}},
-    Myspace\footnote{\url{https://myspace.com/}} etc.  Therefore, studying
-    Twitter might help us better understand peculiarities of other online text
-    genres;
-  \item Finally, due to a programmatic restriction of the maximal tweet length
-    to 140 characters, the concentration of the above mentioned phenomena is
-    allegedly one of the highest among all social media types.  Therefore,
-    techniques that turn out to bring good results for Twitter might be even
-    more efficient for treating data coming from other platforms.
+  \item German is the most spoken first language in the European
+    Union, being the mother-tongue for 18\% of EU
+    citizens;\footnote{\url{https://en.wikipedia.org/wiki/Languages_of_the_European_Union}}
+  \item Germany has traditionally played a major role in the European
+    Government, and, as such, it also was one of the main driving
+    forces in the solution to several European crises, including the
+    Ukrainian conflict, the prevention of Greek sovereign default, and
+    Brexit;
+  \item Numerous internal problems (refugee crisis, rise of right-wing
+    populism, and unstable ratings of political parties) make German
+    politics susceptible to external influence.
 \end{itemize}
 
-%% The justification for choosing precisely this genre as typical
-%% representative of the ensemble of online languages is given in Section
-%% \ref{sct:intro:twitter}.
-The object of our research will be lingustic differences of Twitter
-data from the standard language texts and the impact of these
-differences on the performace of NLP applications.
+Our choice of the Twitter platform was motivated by the following
+factors:
+\begin{itemize}
+  \item First of all, Twitter is the second most popular social
+    network in
+    Germany,\footnote{\url{https://digiday.com/marketing/state-social-platform-use-germany-5-charts/}}
+    with 4.9 million monthly active users (as of
+    2017);\footnote{\url{https://luckyshareman.com/blog/die-twitter-nutzung-in-deutschland/}}
+  \item Second, Twitter's sociolect is at the cutting edge of modern
+    language development, and new linguistic phenomena introduced on
+    this service are likely to percolate into other social media and
+    even find their way into the standard language as well;
+  \item Finally, the abundance and accessibility of data on this
+    platform allows the researchers to analyze virtually any topic,
+    from North Korean nuclear weapons to Lady Gaga's dress, getting
+    messages (and opinions) from users of different income, gender,
+    and age groups.
+\end{itemize}
+
+\section*{Research Questions}
+\addcontentsline{toc}{section}{Research Questions}
+
+Unfortunately, despite its popularity and social importance, German
+Twitter has largely been ignored by computational linguistics in
+general, and in particular by its opinion mining branch.  With this
+dissertation, we hope to make up this leeway by presenting a new
+sentiment corpus of German microblogs and conducting an extensive
+study of existing and novel opinion mining methods on these data.  By
+doing so, we want to find answers to the following questions:
+
+\begin{itemize}
+\item\textbf{Can we apply opinion mining methods devised for
+  standard English to German Twitter?}
+
+  Since there had been literally no attempts to analyze sentiments in
+  German social media before we started our work, as a first step, we
+  decided to check whether we could reuse existing English systems
+  without further ado.
+
+\item\textbf{Which groups of approaches are best suited for which
+  sentiment tasks?}
+
+  Because sentiment analysis is a wide research field, which operates
+  on various linguistic levels and addresses many different problems
+  with their own methods and evaluation metrics, we want to know which
+  approaches (rule-based or machine-learning ones, systems that
+  operate on lexical taxonomies or solutions that utilize corpus data)
+  work best for specific sentiment tasks;
+
+\item\textbf{How much do word- and discourse-level analyses affect
+  message-level sentiment classification?}
+
+  Despite the wide variety of problems addressed by opinion mining,
+  one of them---message-level polarity classification---is commonly
+  considered as the central task in sentiment analysis of social
+  media.  Due to its importance and its central role, we would like to
+  see which linguistic level (subsentential [\ie{} the level of word]
+  or suprasentential [\ie{} the level of discourse]) contributes more
+  to determining the overall polarity of a tweet.
+
+\item\textbf{Does text normalization help analyze sentiments?}
+
+  Although many NLP-researchers consider social media specifics as a
+  hindrance and suggest converting them to the standard-language form,
+  other scientists object that a straightforward conversion might
+  loose many important details and consequently worsen the
+  classification.  \citet{Brody:11}, for instance, claim that
+  intentional prosodic lengthening of words (such as
+  \texample{sooooooo strong} or \texample{coooolllllll}) serves as a
+  vivid indicator of opinionated sentences, so that keeping these
+  elongations in text would result in better prediction.
+  \citet{Eisenstein:13}, in part, agrees with these claims by noting
+  that a straightforward replacement of colloquial variants with their
+  standard-language equivalents can considerably shift the original
+  meaning.  We admit that the arguments of the authors are right, but
+  it apparently depends on the magnitude by which non-standard
+  language helps or hampers NLP tasks.  So, in this work, we would
+  like to test whether text normalization does more harm than good to
+  the analysis of opinions.
+
+\item\textbf{Can we do better than existing approaches?}
+
+  Of course, simply evaluating existing methods on a new dataset would
+  not be of much novelty and would not accelerate the progress of the
+  research field, therefore, we will also try to improve on existing
+  results by suggesting our own solutions to various sentiment tasks.
+\end{itemize}
+
 
 \section*{Outline of this Work}
 \addcontentsline{toc}{section}{Outline of this Work}
+
+To answer these questions, we will proceed in the following way:
+
+\begin{itemize}
+\item In Chapter~\ref{chap:introduction}, we will give a short
+  introduction to sentiment analysis and make a digression into the
+  history of this field;
+
+\item In Chapter~\ref{chap:corpus}, we will present the Potsdam
+  Twitter Sentiment Corpus (PotTS), define the selection criteria that
+  we used to collect its data, describe its annotation scheme and
+  annotation procedure, and also conduct an extensive inter-annotator
+  agreement study, looking for tweets that were most difficult to
+  analyze for human experts;
+
+\item Afterwards, in Chapter~\ref{chap:snt:lex}, we will turn our
+  attention to the first subsentential sentiment task---sentiment
+  lexicon generation, in which we will compare three major paradigms:
+  dictionary-, corpus-, and word-embedding--based methods; and also
+  propose a novel linear-projection solution;
+
+\item Chapter~\ref{chap:fgsa} will address the problem of aspect-based
+  opinion mining, whose goal is to predict text spans of sentiments,
+  sources, and targets.  In particular, we will compare three popular
+  approaches to this challenging task: conditional random fields
+  (CRFs), long-short term memory (LSTM), and gated recurrent unit
+  (GRU), evaluating the effect of various features on the first
+  classifier and estimating the results for different word-embedding
+  types with the last two systems;
+
+\item In Chapter~\ref{chap:cgsa}, we will deal with one of the most
+  prominent sentiment analysis tasks---message-level polarity
+  classification.  This time again we will juxtapose three main
+  classes of methods: lexicon-based, machine-learning--based, and
+  deep-learning ones, and will try to unite the first and the last of
+  these groups by devising a recurrent neural network with
+  lexicon-based attention;
+
+\item Finally, in Chapter~\ref{chap:discourse}, we will enhance our
+  proposed algorithm by making it aware of microblogs' discourse
+  structure.  For this purpose, we will let the classifier predict the
+  polarity scores of elementary discourse units of the tweets and will
+  then unite these scores using three novel techniques: latent
+  conditional and conditional-marginalized random fields and Recursive
+  Dirichlet Process.
+\end{itemize}
+\vfill
+\begin{figure*}[htb!]
+  \centering \includegraphics[width=20em,height=10em]{img/putin-trump.jpg}
+  \caption*{\textcopyright Sergey Elkin, Deutsche Welle}
+\end{figure*}
