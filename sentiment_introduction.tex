@@ -11,17 +11,17 @@
 
 % \part{Sentiment Analysis}
 
-\chapter{Introduction to Sentiment Analysis}
+\chapter{Introduction to Sentiment Analysis}\label{chap:introduction}
 
 Interpersonal communication is not only a way to share objective
 information with other people but also a vibrant channel to convey
-one's subjective thoughts, attitudes, and feelings.  It is, in fact,
-this latter use which provides a personal touch to our discourses,
-making them more grasping, more entertaining, and more living.  And it
-is often this use which significantly influences our decisions,
-preferences, and choices in everyday life.  Therefore, a high-quality
-automatic analysis of the subjective part of information is typically
-as important as the extraction and analysis of objective facts.
+one's subjective feelings, impressions, and attitudes.  It is, in
+fact, this latter use that provides a personal touch to our
+conversations, making them more grasping, more entertaining, and more
+living.  And it is often this use that significantly influences our
+decisions, preferences, and choices in everyday life.  Therefore, a
+high-quality automatic analysis of people's emotions is usually as
+important as mining and analysis of objective facts.
 
 The field of knowledge which deals with the analysis of people's
 opinions, sentiments, evaluations, appraisals, attitudes, and emotions
@@ -30,7 +30,7 @@ towards particular entities mentioned in discourse is called
 discipline, however, much like the definition of the term
 \emph{sentiment} itself, is neither complete nor universally accepted.
 The main reasons for this are
-\begin{inparaenum}[\itshape a\upshape)]
+\begin{inparaenum}[(i)]
   \item a frequently unclear delimitation of the subjective and
     objective components of information and
   \item the heterogeneity of the language system to which SA methods
@@ -62,50 +62,14 @@ typically distinguish three different subtypes of sentiment analysis:
 \end{itemize}
 
 Each of these subtypes has its own characteristic strengths and
-weaknesses.  The fine-grained SA, for example, is typically considered
-to be the ultimate goal of any opinion mining\footnote{Following
-  \citet{Liu:12}, we do not make a distinction between the terms
-  \emph{opinion mining} and \emph{sentiment analysis} and use both
-  expressions interchangeably in this thesis.}  system as it aims at
-the highest possible recall of all subjective expressions occurring in
-a text.  At the same time, this task is unfortunately very challenging
-even for human beings, as we will show in Chapter~\ref{chap:corpus},
-let alone computer programs.  The consequently low results often
-intimidate researchers and prevent subsentential SA systems from being
-used in industrial applications.
-
-The last two disciplines (sentential and document-level analyses) can
-be considered as approximations of the fine-grained SA.  They coarsen
-the targeted recall down to the level of sentences or texts
-respectively, trying to determine only one (the most prominent)
-expression of subjectivity per analyzed unit.  In contrast to the
-subsentential SA, these approaches typically yield better results at
-the cost of sacrificing important details.
-
-Due to these crucial disparities between different variants of
-sentiment analysis, speaking of the difficulty or easiness of this
-task for a specific domain in general is in the same way wrong as
-making overall judgments about the amenability of this domain to the
-whole natural language processing field: one always has to specify the
-precise level of sentiment analysis whose difficulty is being analyzed
-just as she has to set apart a particular NLP task in order to assess
-its complicatedness.
-
-In this chapter, we will primarily concentrate on the most challenging
-SA objective -- that of the fine-grained SA.  After a brief summary of
-related work done on the opinion mining in general and sentiment
-analysis of social media in particular, we will introduce a
-comprehensive corpus of German tweets that has been created for the
-purpose of this work.  A detailed inter-annotator agreement study of
-this dataset will reveal which linguistic and extra-linguistic factors
-significantly influence the distribution of sentiments in Twitter, and
-which of them cause utter confusion among human experts.  After
-obtaining an upper bound on human performance, we will subsequently
-compare with it the results attained by automatic sentiment systems,
-starting with the most fundamental task of recognizing subjective
-expressions and concluding with the ultimate goal of recognizing
-textual spans of sentiments, their objects of evaluation
-(\emph{targets}), and authors (\emph{sources}).
+weaknesses.  Due to these crucial disparities between different
+variants of sentiment analysis, speaking of the difficulty or easiness
+of this task for a specific domain in general is in the same way wrong
+as making overall judgments about the amenability of this domain to
+the whole natural language processing field: one always has to specify
+the precise level of sentiment analysis whose difficulty is being
+analyzed just as she has to set apart a particular NLP task in order
+to assess its complicatedness.
 
 \section{Prehistory of the Field}
 
@@ -118,22 +82,22 @@ other areas of research, including philosophy, psychology, cognitive
 sciences, and last but least narratology and linguistics.
 
 In \emph{philosophy}, the questions about the nature of emotions,
-their interaction with the human consciousness, and their influence on
+their interaction with human consciousness, and their influence on
 people's deeds have occupied the minds of many great scholars,
 starting from Plato and Aristotle.  Plato, for instance, argued in his
 treatise ``The Republic'' \citep[Book~IV]{Plato:91} that the human
 soul presumably consists of three fundamental parts: the rational, the
-appetitive, and the passionate.  The last part -- the one by which we
-become angry or get into a temper -- determines our notion of justice
+appetitive, and the passionate.  The last part---the one by which we
+become angry or fly into a temper---determines our notion of justice
 by favoring either the rational or the appetitive aspect.
 
 These ideas were further particularized and partly revised by Plato's
-most prominent student -- Aristotle.  In Book~II of ``The Rhetoric''
+most prominent student, Aristotle.  In Book~II of ``The Rhetoric''
 \citep{Aristotle:54}, Aristotle not only provides a precise taxonomy
 and definitions of possible emotions that might constitute the
 passionate part of the mind, but also contends that these are both the
 reasons for the change of human judgements and the consequences of
-those changes \cite[cf.][p. 157]{Leighton:82}.
+those changes \cite[see][p. 157]{Leighton:82}.
 
 As noted by \citet{Sousa:14}, the sheer variety of phenomena covered
 by the term ``emotion'' and its closest neighbors tended to discourage
@@ -145,19 +109,10 @@ work, \citeauthor{James:1884} proclaimed the naturalistic idea that
 bodily changes followed directly the perception of the exciting facts,
 and that our feelings of the same changes were, in fact, the emotions.
 In other words, our biological processes were the primary and the only
-reason for us to perceive sentiments:
-\begin{quote}
-``If we fancy some strong emotion, and then try to abstract from our
-  consciousness of it all the feelings of its characteristic bodily
-  symptoms, we find we have nothing left behind, no `mind-stuff' out
-  of which the emotion can be constituted, and that a cold and neutral
-  state of intellectual perception is all that
-  remains.''\citep[p. 193]{James:1884}
-\end{quote}
-Independently of James' work, similar views were proposed by the
-Danish physician Carl~Lange \citep{Lange:1885}, who hypothesized that
-emotional phenomena were the consequences of cardiovascular events
-\citep[cf.][]{Lang:94}.
+reason for us to perceive sentiments.  Independently of James' work,
+similar views were proposed by the Danish physician Carl~Lange
+\citep{Lange:1885}, who hypothesized that emotional phenomena were the
+consequences of cardiovascular events \citep[cf.][]{Lang:94}.
 
 In the 1920s, this theory was severely criticized by Philip~Bard and
 Walter~B.~Cannon \citep{Bard:28,Cannon:31}, who proposed an
@@ -224,7 +179,7 @@ difficulties.
 One of the main problems that people working on opinion mining are
 typically confronted with in the first place is that of the discourse
 domain to be analyzed.  Since sentiment analysis is a highly
-domain-dependent task \citep[cf.][]{Aue:05,Blitzer:07,Li:08} -- i.e.,
+domain-dependent task \citep[cf.][]{Aue:05,Blitzer:07,Li:08} -- \ie{}
 systems trained for specific topics and on specific text genres do not
 neatly generalize to other subjects and other linguistic styles -- a
 natural question that arises in this context is which of the domains
@@ -476,7 +431,7 @@ on the polarity classes that were over-represented in the corpus.
 
 In \citeyear{Rosenthal:15}, three more subtasks were included in the
 competition:
-\begin{inparaenum}[\itshape a\upshape)]
+\begin{inparaenum}[(i)]
   \item polarity classification of messages pertaining to specific
     topics,
   \item topic-based trend prediction, and
