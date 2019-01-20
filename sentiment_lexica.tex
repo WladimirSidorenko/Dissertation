@@ -60,8 +60,8 @@ Another important question which needs to be addressed before we
 proceed with our experiments are the evaluation metrics that we should
 use to measure the quality of \mbox{(semi-)auto}\-ma\-tic sentiment
 lexicons.  Usually, this quality is estimated either
-\textit{intrinsically} (i.e., taking a lexicon in isolation and
-immediately assessing its accuracy) or \textit{extrinsically} (i.e.,
+\textit{intrinsically} (\ie{} taking a lexicon in isolation and
+immediately assessing its accuracy) or \textit{extrinsically} (\ie{}
 considering the lexicon within the scope of a bigger application such
 as a supervised classifier which utilizes lexicon's entries as
 features).
@@ -87,7 +87,7 @@ ranked the same as a purely polar expression.
 
 Unfortunately, an extrinsic evaluation does not always provide a
 complete solution in this case either, since, depending on the type of
-the extrinsic system (e.g., a document classifier), it might still
+the extrinsic system (\eg{} a document classifier), it might still
 presuppose a large data set for training the system and, moreover,
 might yield overly high scores, which, however, might be mainly due to
 the testbed system rather than the quality of the tested lexicon
@@ -155,9 +155,9 @@ German sentiment lexicons:
 \end{itemize}
 % Since all of these lexicons were created semi-automatically by either
 % automatically translating English polarity lists and then manually
-% revising these translations (e.g., GPC and SWS) or by manually
+% revising these translations (\eg{} GPC and SWS) or by manually
 % labeling an existing lexical resource and then automatically expanding
-% this set (e.g., ZPL), their results should give us an upper bound on
+% this set (\eg{} ZPL), their results should give us an upper bound on
 % the fully automated approaches which we are going to test in the
 % remaining parts of this section.
 
@@ -442,7 +442,7 @@ to synsets:
 
 Further notable works on dictionary-based lexicon generation include
 those of~\citet{Mohammad:09}, who generated their seed set using
-antonymous morphological patterns (e.g.,
+antonymous morphological patterns (\eg{}
 \emph{logical}---\emph{illogical}, \emph{honest}---\emph{dishonest},
 \emph{happy}---\emph{unhappy}) and subsequently expanded these seed
 sets with the help of the Macquarie Thesaurus \cite{Bernard:86};
@@ -486,7 +486,7 @@ translations of the same words.\footnote{All reimplemented methods and
   translated seed sets used in these experiments are available online
   at \url{https://github.com/WladimirSidorenko/SentiLex}.}
 Furthermore, to settle the differences between the binary and ternary
-approaches (i.e., those methods that only differentiated between the
+approaches (\ie{} those methods that only differentiated between the
 positive and negative classes, and those ones which also distinguished
 neutral terms as a separate category), we additionally enriched the
 translated seed set with 10 purely objective
@@ -496,7 +496,7 @@ adjectives---\emph{neutral}$^0$, \emph{objective}$^0$,
 \emph{theoretical}$^0$, and \emph{practical}$^0$---letting all
 evaluated classifiers work in the ternary mode.  Finally, since
 different methods relied on various notions of synonymous relations
-(e.g., \citet{Hu:04} only considered two words as synonyms if they
+(\eg{} \citet{Hu:04} only considered two words as synonyms if they
 appeared together in the same synset, whereas \citet{Esuli:06c},
 \citet{Rao:09}, and \citet{Awadallah:10} also considered
 hyper-hyponymous connections as valid edges for propagating polarities
@@ -512,12 +512,12 @@ connected via the inter-synset relations \texttt{has\_participle},
   utilized in the original work.} We intentionally skipped the
 relations \texttt{has\_hypernym} and \texttt{is\_related\_to} while
 constructing the graph, since hypernyms were not guaranteed to
-preserve the polarity of their children---e.g.,
+preserve the polarity of their children---\eg{}
 ``bewertungsspezifisch'' (\emph{appraisal-specific}) is a neutral term
 in contrast to its immediate hyponyms ``gut'' (\emph{good}) and
 ``schlecht'' (\emph{bad})---and the relatedness links
 (\texttt{is\_related\_to}) could connect both synonyms and antonyms of
-the same term---e.g., this relation holds between the words ``Form''
+the same term---\eg{} this relation holds between the words ``Form''
 (\emph{shape}) and ``unf\"ormig'' (\emph{misshapen}), but, at the same
 time, also connects the noun ``Dame'' (\emph{lady}) to its derived
 adjective ``damenhaft'' (\emph{ladylike}).
@@ -529,7 +529,7 @@ convergence of the eigenvector in the approach of
 \citet{Blair-Goldensohn:08}, we set the maximum number of times the
 polarity vector was multiplied with the adjacency matrix to five.  Our
 experiments showed that this limitation had a crucial impact on the
-quality of the resulting polarity list (e.g., after five
+quality of the resulting polarity list (\eg{} after five
 multiplications, the average precision of the recognized positive
 terms amounted to 0.499, reaching an average \F{}-score of 0.26 for
 this class; after ten more iterations though this precision decreased
@@ -757,7 +757,7 @@ evaluation:
 
 % Esuli/Sebastiani: Lp and Ln are two small sets, which we have
 % defined by manually selecting the intended synsets4 for 14
-% "paradigmatic" Positive and Negative terms (e.g., the Positive term
+% "paradigmatic" Positive and Negative terms (\eg{} the Positive term
 % nice, the Negative term nasty) which were used as seed terms in
 % (Turney and Littman, 2003).  The Lo set is treated differently from
 % Lp and Ln, because of the inherently "complementary" nature of the
@@ -1038,7 +1038,7 @@ word ``correct'' as ``richtig''.  This German word, however, also has
 another reading, viz., \emph{real} (as in ``ein richtiges Spiel''
 \emph{a real game} or ``ein richtiger Rennwagen'' \emph{a real sports
   car}), which was much more frequent in the analyzed snapshot, often
-appearing in a negative context, e.g., ``ein richtiger
+appearing in a negative context, \eg{} ``ein richtiger
 Bombenanschlag'' (\emph{a real bomb attack}) or ``ein richtiger
 Terrorist'' (\emph{a real terrorist}).  As a consequence, methods
 relying on distant supervision had to deal with an extremely
@@ -1229,7 +1229,7 @@ positive and negative terms on this line would be furthest away from
 each other.  Considering the distances to the origins of these axes as
 subjectivity and polarity scores of the projected words respectively,
 we estimated the final lexicon score of the newly added terms as the
-inverse sum of these values (i.e., one over the sum of both
+inverse sum of these values (\ie{} one over the sum of both
 distances), and sorted the resulting list in the ascending order.  The
 pseudo-code of this approach is shown in
 Algorithm~\ref{snt:lex:alg:pca}.
@@ -1651,7 +1651,7 @@ vectors~\cite{Mikolov:13,Collobert:11}.  The former type seeks to find
 word representations which maximizes the probability of other tokens
 appearing in the nearby context, whereas the latter type tries to
 obtain word vectors which best suit some custom-defined objective
-(e.g., predicting the semantic class of a whole sentence given its
+(\eg{} predicting the semantic class of a whole sentence given its
 words).
 
 In order to see how these specifics could affect the net results of
@@ -2131,7 +2131,7 @@ As can be seen from the table, the approaches of \citet{Hu:04},
 label-propagation algorithm of \citet{Rao:09} produce almost perfect
 polarity lists.  The \textsc{SentiWordNet} approach of
 \citet{Esuli:06c}, however, already features some spurious terms among
-its top-scored entries (e.g., ``absichtslos'' \emph{unintentional}).
+its top-scored entries (\eg{} ``absichtslos'' \emph{unintentional}).
 Finally, the min-cut approach of \citet{Rao:09} returns a set of
 mainly objective terms, which, however, is rather due to the fact that
 this method performs a cluster-like partitioning of the lexical graph
@@ -2142,7 +2142,7 @@ shown in Table~\ref{tbl:snt-lex:crp:top-10}: The top-scoring polarity
 lists returned by all of these approaches not only include many
 apparently objective terms, but are also difficult to interpret in
 general, as they contain a substantial number of slang and advertising
-expressions (e.g., ``BMKS65,'' ``\#gameinsight,'' ``\#androidgames'').
+expressions (\eg{} ``BMKS65,'' ``\#gameinsight,'' ``\#androidgames'').
 
 \begin{table}[hbt!]
   \begin{center}
@@ -2214,9 +2214,9 @@ expressions (e.g., ``BMKS65,'' ``\#gameinsight,'' ``\#androidgames'').
 We can also observe a similar trend for the most NWE-based methods,
 whose results are presented in Table~\ref{tbl:snt-lex:NWE:top-10}.  As
 we can see from the examples, many of these systems obviously overrate
-Internet-specific terms (e.g., ``\%user-playlist'', ``\%user-video'',
-``www.op''), and assign higher weights to foreign words (e.g.,
-``nerelere'', ``good'', ``nativepride'') and interjections (e.g.,
+Internet-specific terms (\eg{} ``\%user-playlist'', ``\%user-video'',
+``www.op''), and assign higher weights to foreign words (\eg{}
+``nerelere'', ``good'', ``nativepride'') and interjections (\eg{}
 ``niedlichg\"ahn'' \emph{cuteyawn}, ``vrrrum'').  Two notable
 exceptions from this trend are the {$k$-NN} and linear projection
 systems, whose top-scoring entries contain exclusively polar terms,
@@ -2505,7 +2505,7 @@ conclusions and contributions of this part of the thesis as follows:
 \item furthermore, an extensive evaluation of various sets of seed
   terms revealed that the results of almost all tested SLG algorithms
   crucially depended on the quality of their initial seeds, with
-  larger balanced seed sets, e.g, like the one proposed
+  larger balanced seed sets, \eg{} like the one proposed
   by~\citet{Kim:04}, typically leading to much higher scores;
 \item we also checked how different types of embeddings were affecting
   the performance of NWE-based SLG systems, noticing that the $k$-NN
