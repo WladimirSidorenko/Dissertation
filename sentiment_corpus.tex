@@ -14,27 +14,25 @@
 A crucial prerequisite for proving or disproving any hypotheses in
 computational linguistics is the existence of sufficiently big
 manually labeled data, on which these conjectures could be tested.
-Since there was no corresponding manually annotated sentiment corpus
-for German Twitter that we were aware of at the time of writing this
-chapter, we had to create our own dataset, which we will introduce in
-this section.
+Since there was no manually annotated sentiment corpus for German
+Twitter that we were aware of at the time of writing this chapter, we
+decided to create our own dataset, which we will introduce in this
+part of the thesis.
 
 We begin our introduction by describing the selection criteria and
-tracking procedure that we used to collect the initial data for our
-tweebank.  After detailing the annotation scheme and presenting the
-utilized annotation tool, we turn to an extensive analysis of the
-inter-annotator agreement, which will serve as an upper bound in our
-later experiments.  In Section~\ref{sec:snt:iaa}, we propose two new
+tracking procedure that we used to collect the initial data.  After
+detailing the annotation scheme and presenting the utilized annotation
+tool, we turn to an extensive analysis of the inter-annotator
+agreement, which will serve as an upper bound in our later
+experiments.  In Section~\ref{sec:snt:iaa}, we propose two new
 versions of the popular $\kappa$ metric \cite{Cohen:60}---binary and
 proportional kappa---that were specifically adjusted to the
 peculiarities of our annotation task.  With these two measures, we
 estimate the inter-coder reliability of the annotated spans of
-subjective opinions, their targets, and sources, also checking whether
-the annotators agreed on the polarity and intensity of sentiments and
-polar terms, once they agreed on their boundaries.  Finally, with
-statistical means, we investigate the correlations between the
-selection criteria we applied initially and the number of annotated
-elements and disagreements of our experts.
+subjective opinions, their targets, and sources.  Finally, with
+statistical means, we estimate the correlation between our initial
+selection criteria and the number of annotated elements and
+disagreements of our experts.
 
 \section{Data Collection}
 
@@ -49,49 +47,48 @@ pay attention to various in-domain factors, since they might
 considerably affect the final distribution, making the resulting
 corpus either utterly sparse or excessively biased.
 
-To minimize both of these risks (scarceness and bias) when preparing
-our data, we decided to use a compromise approach by gathering one
-part of the new corpus from tweets that were a priori more likely to
-contain sentiments, and sampling the rest of the microblogs uniformly
-at random.  By doing so, we hoped to increase the recall with the
-former strategy while mitigating the introduced bias with the latter
-method.
+To minimize both of these risks (scarceness and bias), we decided to
+use a compromise approach by gathering one part of the new corpus from
+the tweets that were a priori more likely to contain sentiments, and
+sampling the rest of the microblogs uniformly at random.  By doing so,
+we hoped to increase the recall with the former strategy while
+mitigating the introduced bias with the latter method.
 
 As criteria that could help us find more opinionated microblogs, we
 considered the topic and form of the tweets.  Our motivation was that
-some subjects, such as political or social issues, by themselves could
-incite people to be more subjective in their judgements.  Therefore,
-including such topics in our corpus would automatically increase the
-coverage of sentiments.  On the other hand, opinions also need to be
-expressed by some linguistic means, consequently, the mere form of a
-message could also suggest whether it was likely to be emotional or
-not.
+some subjects, such as political or social issues, in and of
+themselves could incite people to be more subjective in their
+statements.  Therefore, including such topics in our corpus would
+automatically increase the coverage of sentiments.  On the other hand,
+opinions also had to be expressed by some linguistic means,
+consequently, the mere form of a message could suggest whether it was
+likely to be emotional.
 
 Since we started creating the corpus in the spring of 2013, obvious
 choices of subjectively rich topics to us were the \emph{papal
   conclave}, which took place in March of that year, and the
-\emph{German federal elections}, which were held in autumn of that
-year.  Because both of these events implied some sort of voting, we
-decided to include \emph{general discussions of political issues} as
-another topic in our dataset in order to counterbalance the election
-specifics.  Finally, to obey the second objective, \ie{} to keep the
-corpus bias low, we considered \emph{casual everyday conversations}
-without any pre-defined subjects as the last source of the new data.
+\emph{German federal elections}, which were held in autumn.  Because
+both of these events implied some sort of voting, we decided to
+include \emph{general political discussions} as another topic in our
+dataset in order to counterbalance the election specifics.  Finally,
+to obey the second objective, \ie{} to keep the corpus bias low, we
+considered \emph{casual everyday conversations} without any
+pre-defined subjects as the last source of new data.
 
 In order to collect tweets for the first three topics, we created
 extensive keyword lists (with several dozens entries each) for each of
-these subjects.  Based on these lists, we subsequently were tracking
-microblogs between March and September 2013 using the public Twitter
+these subjects.  Based on these lists, we were tracking microblogs
+between March and September 2013 using the public Twitter
 API.\footnote{\url{https://pypi.python.org/pypi/tweetstream}}
-Afterwards, the set of tweets pertaining to the federal elections was
-enriched with additional messages, which we obtained from the
-University of M\"unster, who were concurrently working on related
-problems within the joint FMER\footnote{Federal Ministry of Education
-  and Research (BMBF).} project ``Discourse Analysis of Social
-Media.''  For sampling the fourth topic, we used the German Twitter
-snapshot of \citet{Scheffler:14}, which comprised $\approx97\%$ of
-German microblogs posted in April 2013.  This tracking procedure gave
-us a total of 27.4 M messages with the M\"unster corpus and Tatjana
+Afterwards, we enriched the set of tweets pertaining to the federal
+elections with additional messages, which we obtained from the
+University of M\"unster in the scope of the joint
+FMER\footnote{Federal Ministry of Education and Research (BMBF).}
+project ``Discourse Analysis of Social Media.''  For sampling the
+fourth topic, we used the German Twitter snapshot of
+\citet{Scheffler:14}, which comprised $\approx97\%$ of German
+microblogs posted in April 2013.  This tracking procedure gave us a
+total of 27.4 M messages with the M\"unster corpus and Tatjana
 Scheffler's collection being by far the most prolific sources.
 
 %% For our work, the in-domain factors to consider were the topics and
