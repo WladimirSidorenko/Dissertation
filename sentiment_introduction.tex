@@ -81,22 +81,22 @@ cognitive sciences, narratology, and linguistics.  In
 interaction with human consciousness, and the influence on people's
 deeds have occupied the minds of many great scholars, starting from
 Plato and Aristotle.  Plato, for instance, argued that the human soul
-consisted of three fundamental parts: the rational, the appetitive,
-and the passionate \citep[see][Book~IV]{Plato:91}.  The last part (the
-one by which we became angry or flew into a temper) determined our
-notion of justice by favoring either the rational or the appetitive
-aspect.  \citet{Aristotle:54}, the most prominent student of Plato,
-extended this idea by providing a precise taxonomy of feelings that,
-in his opinion, constituted the passionate part of the mind.
+consists of three fundamental parts: the rational, the appetitive, and
+the passionate \citep[see][Book~IV]{Plato:91}.  The last part (the one
+by which we become angry or fly into a temper) determines our notion
+of justice by favoring either the rational or the appetitive aspect.
+\citet{Aristotle:54}, the most prominent student of Plato, extended
+this idea by providing a precise taxonomy of feelings that, in his
+opinion, constitute the passionate part of the mind.
 
 As noted by \citet{Sousa:14}, the variety and complexity of phenomena
-covered by the term ``emotion'' was discouraging tidy theories and
-daunting the researchers for many hundred years since antiquity.  A
-real renaissance of emotional studies happened in the late 19-th
-century in \emph{psychology} with the introduction of James-Lange
-theory \cite{James:1884,Lange:1885}, which claimed that biological
-processes were the main and only reason for people's subjective
-opinions.  This theory, however, was severely criticized by
+covered by the term ``emotion'' was discouraging tidy philosophical
+views and was daunting the researchers for many hundred years since
+antiquity.  A real renaissance of emotional studies happened in the
+late 19-th century in \emph{psychology} with the introduction of
+James-Lange theory \cite{James:1884,Lange:1885}, which claimed that
+biological processes were the main and only reason for people's
+subjective opinions.  This theory, however, was severely criticized by
 \citet{Schachter:62}, who objected that bodily means alone were
 insufficient to express the full range of possible feelings and that
 cognitive factors were a key determinant of emotional states.
@@ -155,139 +155,129 @@ difficulties.
 
 \section{Sentiment Analysis of Social Media}
 
-One of the main problems that people working on opinion mining are
-typically confronted with at the very beginning is that of the
-discourse domain to deal with.  Since sentiment analysis is a highly
+One of the main problem that people working on opinion mining are
+usually confronted with in the first place is that of choosing the
+domain to deal with. Since sentiment analysis is a highly
 domain-dependent task \citep[see][]{Aue:05,Blitzer:07,Li:08}---\ie{}
-systems trained on specific topics and genres do not neatly generalize
-to other subjects and linguistic variations---a natural question that
-arises in this context is which of the domains should be addressed
-first in this case.
+systems trained on one text genre can rarely generalize to other
+linguistic variations---a natural question that arises in this context
+is which of the domains should be addressed first in this case.
 
 While earlier sentiment works were primarily concerned with narratives
-\citep{Wiebe:90a,Wiebe:94} or newspaper articles
+\citep{Wiebe:90a,Wiebe:94} or newspaper texts
 \citep{Wiebe:03,Wiebe:05,Bautin:08}, it soon became clear that social
-media provide a much more fertile ground for mining people's opinions.
-The reason for this is the virtual absence of any moderation on many
-modern CMC services.  This lack of censorship allows users to be
-upfront about their feelings.  Combined with the great popularity of
-social networks, such freedom of expressing one's thoughts makes
-social media the arguably most prolific channel for sharing (and
-mining) personal emotions.
-
-It is therefore not surprising that the rapid emergence of numerous SM
-websites was accompanied by an increasing interest in their content
-from many NLP practitioners.  One of the first who attempted to
-extract users' evaluations automatically from CMC services were
-\citet{Das:01}.  The authors investigated the correlation between
-users' attitudes on economic chat boards and stock prices for about
-eight stocks.  For this purpose, they trained a collection of five
-classifiers on a training set of 500 messages that were manually
-labeled with three classes: \emph{buy} (positive evaluations),
-\emph{sell} (negative evaluations), and \emph{null} (neutral
-statements).  With these classifiers, they subsequently annotated the
-rest of the downloaded 25,000 posts, taking the majority votes of the
-five systems as the final labels, and then scrutinized the
-interrelationship between these predictions and the observed stock
-indices.
+media provided a much more fertile ground for mining people's
+opinions.  Among the first who attempted to extract users' attitudes
+from online forums were \citet{Das:01}. For this purpose, they
+manually annotated a collection of 500 user messages from an economic
+chat board with three polarity classes (\emph{buy}, \emph{sell}, and
+\emph{null}) and then trained a collection of five classifiers on
+these data.  Using these trained systems, they classified the semantic
+orientation of 25,000 forum posts, trying to predict stock prices
+based on the polarities of these snippets.
 %% This study revealed that user chats strongly correlated with stock
 %% developments in a reactive way: changes in stock prices had
 %% typically lead to fluctuations of public opinions but not vica
 %% versa.
 
-\citet{Glance:05} also used sentiment analysis for business
-intelligence purposes by mining users' opinions on Usenet newsgroups
-with a set of hand-crafted rules.  Further notable works in this
-direction include those of \citet{Antweiler:04}, who investigated how
-postings on stock message boards correlated with stock volatility;
-\citet{Gruhl:05}, who studied the cross-correlation between online
-mentions of products and sales spikes for that commodities, also
-proposing an algorithm for tracking such correlations and making
-predictions about products' future sales automatically; finally,
-\citet{Ghose:07} examined the effect of opinions on the pricing power
-of merchants in online marketplaces, claiming that more positive
-opinions on the Web entitled traders to increase their selling prices.
+Automatic business intelligence has rapidly won the ground, with
+further notable works introduced by \citet{Glance:05}, who analyzed
+users' opinions on Usenet with hand-crafted rules;
+\citet{Antweiler:04}, who investigated how postings on message boards
+correlated with stock volatility; \citet{Ghose:07}, who examined the
+effect of opinions on the pricing power of merchants in online
+marketplaces; and, finally, \citet{Turney:02}, who classified Epinions
+comments into \emph{recommended} (thumbs up) and \emph{not
+  recommended} (thumbs down) ones based on the pointwise mutual
+information of the adjectives that appeared in these reviews.
 
-A separate line of research that is closely related to both commercial
-intelligence and sentiment analysis of social media involves opinion
-mining of product reviews.  A pioneering work in this direction was
-done by \citet{Turney:02}, who performed a two-class classification of
-410 Epinions comments, dividing customers' reviews of automobiles,
-banks, movies, and travel destinations into \emph{recommended} (thumbs
-up) and \emph{not recommended} (thumbs down) ones.  In order to make
-these decisions, the proposed system first computed the sum of the
-pointwise mutual information (PMI) scores between the adjectival and
-adverbial phrases occurring in a review text and the word
-``excellent,'' and then subtracted from this the PMIs of the found
-phrases in conjunction with the word ``poor.''  Reviews with negative
-results were subsequently considered as \emph{thumbs down}, and
-comments with non-negative total scores were correspondingly
-classified as \emph{thumbs up}.
+%% \citet{Glance:05} also used sentiment analysis for business
+%% intelligence purposes by mining users' opinions on Usenet newsgroups
+%% with a set of hand-crafted rules.  Further notable works in this
+%% direction include those of \citet{Antweiler:04}, who investigated how
+%% postings on stock message boards correlated with stock volatility;
+%% \citet{Gruhl:05}, who studied the cross-correlation between online
+%% mentions of products and sales spikes for that commodities, also
+%% proposing an algorithm for tracking such correlations and making
+%% predictions about products' future sales automatically; finally,
+%% \citet{Ghose:07} examined the effect of opinions on the pricing power
+%% of merchants in online marketplaces, claiming that more positive
+%% opinions on the Web entitled traders to increase their selling prices.
 
-According to \citet{Turney:02}, the most challenging type of reviews
-to analyze in these experiments were the movie critiques (the accuracy
-on this subset only reached 66\%, whereas, for banks and automobiles,
-it attained 80 and 84\% respectively).  This finding was also
-confirmed by \citet{Pang:02} who tried out several machine learning
-classifiers on a manually annotated corpus of $\approx2,000$ write-ups
-from the Internet Movie Database (IMDb).  The best results (82.9\%
-accuracy) for the two-class classification task (\emph{positive}
-versus \emph{negative}) were attained by an SVM system which used the
-presence of unigrams as classification features.
+%% A separate line of research that is closely related to both commercial
+%% intelligence and sentiment analysis of social media involves opinion
+%% mining of product reviews.  A pioneering work in this direction was
+%% done by \citet{Turney:02}, who performed a two-class classification of
+%% 410 Epinions comments, dividing customers' reviews of automobiles,
+%% banks, movies, and travel destinations into \emph{recommended} (thumbs
+%% up) and \emph{not recommended} (thumbs down) ones.  In order to make
+%% these decisions, the proposed system first computed the sum of the
+%% pointwise mutual information (PMI) scores between the adjectival and
+%% adverbial phrases occurring in a review text and the word
+%% ``excellent,'' and then subtracted from this the PMIs of the found
+%% phrases in conjunction with the word ``poor.''  Reviews with negative
+%% results were subsequently considered as \emph{thumbs down}, and
+%% comments with non-negative total scores were correspondingly
+%% classified as \emph{thumbs up}.
 
-Due to its high commercial impact, opinion mining of customer reviews
-soon became one of the most popular topics in sentiment analysis
-research.  \citet{Dave:03}, for example, attempted to classify C|Net
-and Amazon reviews of movies and electrical appliances as positive or
-negative using the Na\"{\i}ve Bayes and SVM approaches.  \citet{Hu:04}
-developed a three-stage application which first identified products'
-features in reviews, then looked for opinionated words associated with
-those features, and, finally, produced concise summaries of positive
+%% According to \citet{Turney:02}, the most challenging type of reviews
+%% to analyze in these experiments were the movie critiques (the accuracy
+%% on this subset only reached 66\%, whereas, for banks and automobiles,
+%% it attained 80 and 84\% respectively).  This finding was also
+%% confirmed by \citet{Pang:02} who tried out several machine learning
+%% classifiers on a manually annotated corpus of $\approx2,000$ write-ups
+%% from the Internet Movie Database (IMDb).  The best results (82.9\%
+%% accuracy) for the two-class classification task (\emph{positive}
+%% versus \emph{negative}) were attained by an SVM system which used the
+%% presence of unigrams as classification features.
+
+Due to its high commercial impact, sentiment analysis of customer
+feedback has soon become one of the most popular topics in opinion
+mining.  \citet{Dave:03}, for example, attempted to classify users'
+comments on C|Net and Amazon as positive or negative with the help of
+SVM and Na\"{\i}ve Bayes classifiers.  \citet{Hu:04} developed a
+three-stage application that produced concise summaries of positive
 and negative opinions about each particular product aspect.
-\citet{Funk:08} proposed a supervised SVM-system to perform two- and
-five-way polarity classification of product reviews, also using these
-predictions in a business intelligence system.  Other important
-milestones in this research direction were set by the works of
-\citet{Popescu:05}, \citet{Ding:09}, \citet{Wei:10},
-\citet{Mukherjee:12}, and many others.
+\citet{Funk:08} proposed a supervised SVM-system that classified the
+polarity of product reviews and then used these results in a business
+intelligence application.  Other important contributions to this
+research direction were made \citet{Popescu:05}, \citet{Ding:09},
+\citet{Wei:10}, \citet{Mukherjee:12}, etc.
 
 %% The authors found that replacing certain entities, such as product
 %% names, abbreviations, or numerals, with special meta-tokens and
 %% using token n-grams of different lengths had a significant positive
 %% effect on the accuracy of both classifiers.
 
-Notwithstanding that product reviews continued playing a crucial role
-for the success of the e-commerce, with the increasing spread of
-blogging services and social networks, sentiment researchers have
-gradually shifted the focus of their work from product feedbacks to
-these upcoming text genres.  \citet{Mishne:05} and \citet{Mishne:07},
-for instance, tried to classify Livejournal blogs according to the
-moods of their authors (e.g.  \emph{amused}, \emph{tired},
-\emph{happy} etc.).  The gold labels for their $\approx$~815,000 blog
-corpus were obtained automatically from blog labels on the Livejournal
-website.  On this corpus, the authors trained a supervised SVM
-classifier, reaching an average of 8\% improvement over the 50\%
-baseline.
+Although opinion analysis of product reviews continues playing an
+important role in e-commerce, the increased popularity of the
+blogosphere and social networks has motivated many sentiment
+researchers to shift the focus of their work to these new Web genres.
+Among the first who followed the new trend were \citet{Mishne:05} and
+\citet{Mishne:07}, who tried to predict the mood of Livejournal blogs
+(\eg{} \emph{amused}, \emph{tired}, \emph{happy}), achieving 58\%
+accuracy with an SVM classifier.
+%% The gold labels for their $\approx$~815,000 blog corpus were obtained
+%% automatically from blog labels on the Livejournal website.  On this
+%% corpus, the authors trained a supervised SVM classifier, reaching an
+%% average of 8\% improvement over the 50\% baseline.
+Another SVM system was proposed by \citet{Chesley:06}, who classified
+users' blogs into positive, negative, and objective and outperformed
+the majority class baseline by 15\% with this method.  Drawing on
+these works, \citet{Gill:08} analyzed the inter-rater agreement on
+mood labels for blogs, finding that raters' consensus on the expressed
+feelings was significantly higher for longer texts.
 
-\citet{Chesley:06} also applied an SVM system in order to classify
-user blogs into objective, positive and negative subjective ones.  The
-authors derived their features from the Wiktionary and the InfoXtract
-lexicon \citep{Srihari:03} and attained an accuracy increase of up to
-15~\% over the majority class baseline.  This research direction was
-further continued by \citet{Godbole:07}, who applied a lexicon-based
-method to detect users' opinions in newspapers and blogs; and
-\citet{Gill:08}, who conducted an inter-annotator agreement study of
-mood detection in blogs, finding that raters' consensus on the
-expressed emotions strongly increased with the length of blog entries.
+%% This research direction was further continued by \citet{Godbole:07},
+%% who applied a lexicon-based method to detect users' opinions in blogs;
 
-Speaking of blog length, it should certainly be said that the
-inception of the micro-blogging service Twitter in 2006 was a real
-game changer to the opinion mining field: the sudden availability of
-huge amounts of data; the presence of all possible social, national,
-and age groups combined with a high idiosyncrasy and diversity of the
-language used on this service gave rise to numerous scientific
-projects, studies, and publications, which we will briefly summarize
-in the next subsection.
+Speaking of blog length, we should certainly say that the inception of
+the micro-blogging service Twitter in 2006 was a real game changer to
+the whole opinion mining field.  The sudden availability of huge
+amounts of data; the presence of all possible social and national
+groups, combined with a high idiosyncrasy of the language on this
+service, has given rise to numerous scientific projects, studies, and
+publications, which we will briefly summarize in the next section.
 
 \section{Sentiment Analysis of Twitter}\label{snt:subsec:intro:saot}
 
