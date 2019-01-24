@@ -36,20 +36,20 @@ this are
     SA methods are applied.
 \end{inparaenum}
 
-The first factor, for instance, makes it difficult to delimitate which
-statements actually belong to the domain of sentiment analysis and
+The first factor, for instance, makes it difficult to delimit which
+statements actually belong to the jurisdiction of opinion mining and
 which ones should be ignored by its systems.  A prominent example of
 such borderline cases are the so-called subjective facts, such as
 ``terrorist attacks'' or ``anti-cancer drugs,'' which some people
 consider as polar terms, while others regard them as objective
 expressions.
 
-The second factor complicates a precise definition of SA because
-different language levels have their own notions of subjectivity
-(\eg{} a positive word is not the same as a positive text), which in
-turn necessitate different approaches.  Depending on the analyzed
-linguistic level, researchers typically distinguish three main types
-of sentiment analysis:
+The second factor complicates a precise definition of sentiment
+analysis because different language levels have their own notions of
+subjectivity (\eg{} a positive word is not the same as a positive
+text), which in turn necessitate different approaches.  Depending on
+the analyzed linguistic level, researchers typically distinguish three
+main types of SA:
 \begin{itemize}
   \item\emph{subsentential}, whose task is to determine the polarities
     of single words and find opinions within a sentence,
@@ -64,7 +64,7 @@ general difficulty of opinion mining for a specific domain is in the
 same way wrong as judging about the amenability of this domain to the
 whole natural language processing: one needs to specify a particular
 task and evaluate it with its own metrics.  Thus, to estimate the
-complexity of sentiment analysis for German Twitter, we will address
+complexity of sentiment analysis on German Twitter, we will address
 all three levels of SA: subsentential, sentential, and
 suprasentential.
 
@@ -90,15 +90,15 @@ this idea by providing a precise taxonomy of feelings that, in his
 opinion, constitute the passionate part of the mind.
 
 As noted by \citet{Sousa:14}, the variety and complexity of phenomena
-covered by the term ``emotion'' was discouraging tidy philosophical
-views and was daunting the researchers for many hundred years since
+covered by the term ``emotion'' discouraged tidy philosophical ideas
+and was daunting the researchers for many hundred years since
 antiquity.  A real renaissance of emotional studies happened in the
-late 19-th century in \emph{psychology} with the introduction of
-James-Lange theory \cite{James:1884,Lange:1885}, which claimed that
+late 19-th century in \emph{psychology} with the introduction of the
+James-Lange theory \cite{James:1884,Lange:1885}, which argued that
 biological processes were the main and only reason for people's
-subjective opinions.  This theory, however, was severely criticized by
+subjective opinions.  This theory, however, was later criticized by
 \citet{Schachter:62}, who objected that bodily means alone were
-insufficient to express the full range of possible feelings and that
+insufficient to express the full range of possible feelings, and that
 cognitive factors were a key determinant of emotional states.
 
 %% In the 1920s, this theory was severely criticized by Philip~Bard
@@ -122,74 +122,74 @@ These advances in psychology, reinforced by the nascent appraisal
 theory \citep{Arnold:60}, have significantly influenced many other
 scientific fields including \emph{literary studies} and
 \emph{linguistics}.  Among the most prominent representatives of this
-research direction in the former discipline were \citet{Rorty:80} and
-\citet{Banfield:82}, who analyzed how the attitudes of characters and
-authors were expressed by means of direct and indirect speech in
-literature.  Later on, \citet{Wiebe:90a,Wiebe:94} adapted
-\citeauthor{Banfield:82}'s theory to the needs of \emph{computational
-  linguistics} by proposing an algorithm that identified subjective
-sentences in text and inferred the main characters of a narrative from
-these sentences.  This work was presumably the first attempt to
-predict sentiments on the sentential level.
+direction in the former discipline were \citet{Rorty:80} and
+\citet{Banfield:82}, who analyzed how the opinions of characters and
+authors were expressed by direct and indirect speech.
+\citet{Wiebe:90a,Wiebe:94} adapted \citeauthor{Banfield:82}'s theory
+to the needs of \emph{computational linguistics} by proposing an
+algorithm that identified subjective sentences in text and inferred
+the main characters of a narrative from such sentences.  This work was
+presumably the first attempt to automatically detect sentiments on the
+sentential level.
 
 A real breakthrough in the opinion mining field, however, happened
-with the introduction of the first sufficiently big corpora.  Notable
-contributions in this regard were made by \citet{Pang:04,Pang:05}, who
-offered a dataset of $\approx2,000$ movie reviews with automatically
-derived polarity classes; \citet{Hu:04}, who presented a manually
-labeled set of Amazon and C|Net product feedbacks; \citet{Thomas:06},
-who created an automatically labeled corpus of congressional debates;
-and, finally, \citet{Wiebe:05}, who developed a manually annotated
-sentiment corpus of 535 news articles.
+with the introduction of the first sufficiently big corpora.
+Important contributions in this regard were made by
+\citet{Pang:04,Pang:05}, who released a dataset of $\approx2,000$
+movie reviews with their star ratings; \citet{Hu:04}, who presented a
+manually labeled set of Amazon and C|Net product comments;
+\citet{Thomas:06}, who automatically labeled a collection of
+congressional debates; and, finally, \citet{Wiebe:05}, who developed a
+manually annotated sentiment corpus of 535 news articles.
 
-The availability of these resources has lead to a plethora of new
-methods for both subsentential and sentential SA, making opinion
+The availability of these resources has given rise to a plethora of
+new methods for both subsentential and sentential SA, making opinion
 mining one of the most challenging and competitive branches of
-computational linguistics.  Important cornerstones in this field have
-already been set by the works of \citet{Pang:02}, \citet{Wiebe:05},
-\citet{Wilson:05}, \citet{Breck:07}, \citet{Choi:09,Choi:10},
-\citet{Yessenalina:11}, \citet{Socher:11, Socher:12}, etc.
-Nevertheless, many challenges of this research field, such as domain
+computational linguistics.  Fundamental cornerstones in this field
+have already been set by the works of \citet{Pang:02},
+\citet{Wiebe:05}, \citet{Wilson:05}, \citet{Breck:07},
+\citet{Choi:09,Choi:10}, and \citet{Socher:11, Socher:12}.
+Nevertheless, many challenges of sentiment research, such as domain
 adaptation or analysis of non-English texts, still pose considerable
 difficulties.
 
 \section{Sentiment Analysis of Social Media}
 
-One of the main problem that people working on opinion mining are
-usually confronted with in the first place is that of choosing the
-domain to deal with. Since sentiment analysis is a highly
-domain-dependent task \citep[see][]{Aue:05,Blitzer:07,Li:08}---\ie{}
-systems trained on one text genre can rarely generalize to other
-linguistic variations---a natural question that arises in this context
-is which of the domains should be addressed first in this case.
+One of the main problems that people working on opinion mining are
+usually confronted with in the first place is the choice of the domain
+to deal with. Since sentiment analysis is a highly domain-dependent
+task \citep[see][]{Aue:05,Blitzer:07,Li:08}---\ie{} systems trained on
+one text genre can rarely generalize to other linguistic
+variations---a natural question that arises in this context is which
+of the domains should be addressed first in this case.
 
 While earlier sentiment works were primarily concerned with narratives
 \citep{Wiebe:90a,Wiebe:94} or newspaper texts
 \citep{Wiebe:03,Wiebe:05,Bautin:08}, it soon became clear that social
-media provided a much more fertile ground for mining people's
-opinions.  Among the first who attempted to extract users' attitudes
-from online forums were \citet{Das:01}. For this purpose, they
-manually annotated a collection of 500 user messages from an economic
-chat board with three polarity classes (\emph{buy}, \emph{sell}, and
-\emph{null}) and then trained a collection of five classifiers on
-these data.  Using these trained systems, they classified the semantic
-orientation of 25,000 forum posts, trying to predict stock prices
-based on the polarities of these snippets.
+media provide a much more fertile ground for mining people's opinions.
+Among the first who tried to extract users' attitudes from online
+forums were \citet{Das:01}. For this purpose, the authors manually
+annotated a collection of 500 messages from an economic chat board
+with three polarity classes (\emph{buy}, \emph{sell}, and \emph{null})
+and then trained five different classifiers on these data.  Using the
+trained systems, they classified the semantic orientation of the
+remaining 25,000 forum posts, trying to predict the stock prices based
+on the polarities of these snippets.
 %% This study revealed that user chats strongly correlated with stock
 %% developments in a reactive way: changes in stock prices had
 %% typically lead to fluctuations of public opinions but not vica
 %% versa.
 
-Automatic business intelligence has rapidly won the ground, with
-further notable works introduced by \citet{Glance:05}, who analyzed
-users' opinions on Usenet with hand-crafted rules;
-\citet{Antweiler:04}, who investigated how postings on message boards
-correlated with stock volatility; \citet{Ghose:07}, who examined the
-effect of opinions on the pricing power of merchants in online
-marketplaces; and, finally, \citet{Turney:02}, who classified Epinions
-comments into \emph{recommended} (thumbs up) and \emph{not
-  recommended} (thumbs down) ones based on the pointwise mutual
-information of the adjectives that appeared in these reviews.
+Automatic business intelligence has rapidly won the ground in the
+opinion mining field, with further notable works introduced by
+\citet{Glance:05}, who analyzed users' opinions on Usenet with
+hand-crafted rules; \citet{Antweiler:04}, who investigated how
+postings on message boards correlated with stock volatility;
+\citet{Ghose:07}, who examined the effect of opinions on the pricing
+power in online marketplaces; and, finally, \citet{Turney:02}, who
+classified Epinions reviews into \emph{recommended} (thumbs up) and
+\emph{not recommended} (thumbs down) ones, based on the pointwise
+mutual information of the adjectives in these comments.
 
 %% \citet{Glance:05} also used sentiment analysis for business
 %% intelligence purposes by mining users' opinions on Usenet newsgroups
@@ -232,219 +232,162 @@ information of the adjectives that appeared in these reviews.
 %% presence of unigrams as classification features.
 
 Due to its high commercial impact, sentiment analysis of customer
-feedback has soon become one of the most popular topics in opinion
-mining.  \citet{Dave:03}, for example, attempted to classify users'
-comments on C|Net and Amazon as positive or negative with the help of
-SVM and Na\"{\i}ve Bayes classifiers.  \citet{Hu:04} developed a
-three-stage application that produced concise summaries of positive
-and negative opinions about each particular product aspect.
-\citet{Funk:08} proposed a supervised SVM-system that classified the
-polarity of product reviews and then used these results in a business
-intelligence application.  Other important contributions to this
-research direction were made \citet{Popescu:05}, \citet{Ding:09},
-\citet{Wei:10}, \citet{Mukherjee:12}, etc.
+feedback soon became one of the most popular topics in natural
+language processing.  \citet{Dave:03}, for example, classified users'
+comments on Amazon as positive or negative with the help of SVM and
+Na\"{\i}ve Bayes systems.  \citet{Hu:04} developed a three-stage
+application that produced concise summaries of positive and negative
+opinions about each particular product feature.  \citet{Funk:08}
+proposed a supervised SVM classifier that predicted the polarity of
+product reviews and then used these results in a business intelligence
+application.  Other important contributions were made
+\citet{Popescu:05}, \citet{Ding:09}, \citet{Wei:10},
+\citet{Mukherjee:12}, etc.
 
 %% The authors found that replacing certain entities, such as product
 %% names, abbreviations, or numerals, with special meta-tokens and
 %% using token n-grams of different lengths had a significant positive
 %% effect on the accuracy of both classifiers.
 
-Although opinion analysis of product reviews continues playing an
-important role in e-commerce, the increased popularity of the
-blogosphere and social networks has motivated many sentiment
-researchers to shift the focus of their work to these new Web genres.
-Among the first who followed the new trend were \citet{Mishne:05} and
-\citet{Mishne:07}, who tried to predict the mood of Livejournal blogs
-(\eg{} \emph{amused}, \emph{tired}, \emph{happy}), achieving 58\%
-accuracy with an SVM classifier.
+Although opinion analysis of product reviews still plays an important
+role in e-commerce, the increased popularity of the blogosphere and
+social networks has motivated many sentiment researchers to shift the
+focus of their work to these new Web genres.  Among the first who
+followed the new trend were \citet{Mishne:05} and \citet{Mishne:07},
+who tried to predict the moods of LiveJournal blogs (\eg{}
+\emph{amused}, \emph{tired}, \emph{happy}), achieving 58\% accuracy
+with an SVM classifier.
 %% The gold labels for their $\approx$~815,000 blog corpus were obtained
 %% automatically from blog labels on the Livejournal website.  On this
 %% corpus, the authors trained a supervised SVM classifier, reaching an
 %% average of 8\% improvement over the 50\% baseline.
-Another SVM system was proposed by \citet{Chesley:06}, who classified
-users' blogs into positive, negative, and objective and outperformed
-the majority class baseline by 15\% with this method.  Drawing on
-these works, \citet{Gill:08} analyzed the inter-rater agreement on
-mood labels for blogs, finding that raters' consensus on the expressed
-feelings was significantly higher for longer texts.
+Another SVM system was used by \citet{Chesley:06}, who classified
+users' blogs into positive, negative, and objective ones,
+outperforming the majority class baseline by 15\% with this method.
+Drawing on these works, \citet{Gill:08} analyzed the agreement of
+human experts on blogs' moods, finding that the annotators had a much
+better consensus about the feelings described in longer blog entries.
 
 %% This research direction was further continued by \citet{Godbole:07},
 %% who applied a lexicon-based method to detect users' opinions in blogs;
 
-Speaking of blog length, we should certainly say that the inception of
+Speaking of text length, we should certainly say that the inception of
 the micro-blogging service Twitter in 2006 was a real game changer to
 the whole opinion mining field.  The sudden availability of huge
-amounts of data; the presence of all possible social and national
-groups, combined with a high idiosyncrasy of the language on this
-service, has given rise to numerous scientific projects, studies, and
-publications, which we will briefly summarize in the next section.
+amounts of data, the presence of all possible social and national
+groups, combined with the uniqueness of language on this service, has
+given rise to numerous scientific projects, studies, and publications,
+which we will briefly summarize in the next section.
 
 \section{Sentiment Analysis of Twitter}\label{snt:subsec:intro:saot}
 
-Among the first attempts at an automatic sentiment analysis of Twitter
-was the study conducted by \citet{Go:09}.  In their experiments, the
-authors collected a set of 1,600,000 microblogs containing smileys.
-Based on these emoticons, they automatically derived polarity classes
-of these tweets (positive or negative) and then used these
-bootstrapped labels to train the Na\"{\i}ve Bayes, MaxEnt, and SVM
-classifiers.  The last system produced the best results, reaching an
-$F$-score of 82.2\%.
+One of the first attempts to automatically classify users' opinions on
+Twitter was made by \citet{Go:09}, who collected a set of 1,6~bn
+microblogs containing emoticons.  Considering these smileys as noisy
+labels (positive or negative), the authors trained three different
+classifiers (Na\"{\i}ve Bayes, Maximum Entropy, and SVM), obtaining
+the best results (0.82~\F{}) with the SVM system.  Similar approaches
+were taken by \citet{Pak:10}, who performed a three-class prediction
+with a Na\"{\i}ve Bayes system, and \citet{Davidov:10}, who trained a
+$k$-NN--like classifier on distantly supervised data. Another way to
+create a sentiment corpus was proposed by \citet{Barbosa:10}, who
+analyzed a set of 200,000 microblogs with three publicly available
+opinion mining services and used the majority votes of these systems
+as silver labels for their dataset.
 
-A similar approach was also used by \citet{Pak:10}, who applied the
-Na\"{\i}ve Bayes method to differentiate between neutral, positive,
-and negative messages.  Likewise, \citet{Davidov:10} obtained the gold
-labels for their corpus using distant supervision and then trained a
-kNN-like classifier on this dataset.
+Some time later, \citet{Kouloumpis:11} experimented with the AdaBoost
+classifier on the noisy collection of \citet{Go:09} and the Edinburgh
+Twitter corpus of \citet{Petrovic:10}, coming to the conclusion that
+microblog-specific features (such as presence of intensifiers,
+abbreviations, or emoticons) were the most reliable attributes for
+this classification.  \citet{Agarwal:11}, however, questioned this
+finding, arguing that POS-specific polarity features were a better
+alternative.
 
-A different way of collecting the data was proposed by
-\citet{Barbosa:10}.  The authors gathered a collection of 200,000
-microblogs from three publicly available sentiment web-services.
-Using the majority votes of these websites as the gold categories for
-their tweets, they trained a supervised SVM system on this corpus and
-then let this system predict the subjectivity and polarity classes of
-new unseen messages.
+Like opinion mining of product reviews, sentiment analysis of Twitter
+could not go unnoticed by the economic and sociological communities.
+An attempt to address political issues using this platform was made
+by~\citet{Tumasjan:10}, who analyzed users' opinions about German
+federal elections in 2009 by automatically translating 100,000 tweets
+into English and subsequently classifying these messages with the
+proprietary LIWC software \cite{Pannebaker:07}.  This study showed
+that not only sentiments but even the mere numbers of microblogs
+mentioning political parties strongly correlated with the results of
+election polls.
 
-The emoticon
-dataset\footnote{\url{http://twittersentiment.appspot.com}} of
-\citet{Go:09} along with a subset of the Edinburgh Twitter corpus
-\cite{Petrovic:10} was later used by \citet{Kouloumpis:11}, who
-trained an AdaBoost classifier on these data.  Reaching an average
-$F1$-measure of 68\% on a held-out manually labeled dataset, the
-authors came to the conclusion that microblog-specific features (such
-as the presence or absence of intensifiers or the occurrence of
-abbreviations and emoticons) were the most reliable traits for this
-classification.  This finding, however, was doubted by
-\citet{Agarwal:11}, who contended that POS-specific polarity features
-and tree-kernel methods were a better alternative.
+%% One of the first attempts to analyze tweets from these perspectives
+%% was made by \citet{Jansen:09}, who studied microblogs' power as
+%% online word of mouth, finding that 20\% of the tweets mentioning
+%% renowned companies expressed some polar opinions about the products
+%% of these brands.  A manual inspection of messages mentioning
+%% renowned company brands revealed that almost 20\% of these tweets
+%% expressed some polar opinions about their products.  More than a
+%% half of these opinionated microblogs were positive judgements,
+%% whereas 35\% of the posts represented negative sentiments.  These
+%% findings strongly correlated with the results of an automatic
+%% analysis, suggesting that social media in general and microblogging
+%% in particular could be a valuable source of economic evidence.
 
-Similarly to the opinion mining of customer reviews, sentiment
-analysis of Twitter could not go unnoticed by the economic and
-sociological communities.  One of the first attempts to analyze tweets
-from these perspectives was made by \citet{Jansen:09}, who studied
-microblogs' power as online word of mouth.  A manual inspection of
-messages mentioning renowned company brands revealed that almost 20\%
-of these tweets expressed some polar opinions about their products.
-More than a half of these opinionated microblogs were positive
-judgements, whereas 35\% of the posts represented negative sentiments.
-These findings strongly correlated with the results of an automatic
-analysis, suggesting that social media in general and microblogging in
-particular could be a valuable source of economic evidence.
+Nevertheless, the real rise of interest in this domain happened with
+the release of the Sem\-Eval corpus \cite{Nakov:13}---a collection of
+15,000 tweets that have been manually annotated by Amazon mechanical
+turkers with their message-level polarities and contextual semantic
+orientations of their polar terms. The best performing system in the
+first run of the SemEval competition was a supervised SVM classifier
+of \citet{Mohammad:13}, which won three out of four subtasks
+(message-level classification of SMSs and tweets and contextual
+polarity prediction of polar terms on Twitter).  This solution relied
+on an extensive set of hand-crafted features, powered by multiple
+manually- and automatically-generated sentiment lexicons.  The authors
+emphasized the crucial importance of the lexical resources, which
+increased the classification scores by almost $8.5\%$.  Other
+competing submissions \cite{Becker:13,Guenther:13,Kokciyan:13} used a
+similar approach, but had considerably fewer feature attributes.
 
-An attempt to address sociological problems with SA methods was made
-by \citet{Tumasjan:10}, who analyzed public opinions about federal
-elections in Germany by automatically extracting sentiments from
-users' microblogs.\footnote{We will make a similar analysis in Section
-  \ref{chap:fgsa} but will primarily concentrate on the NLP aspect of
-  this problem.}  For this purpose, the authors had gathered a
-collection of nearly 100,000 messages mentioning major political
-parties or prominent German politicians and subsequently translated
-these tweets into English.  The resulting translations were analyzed
-with the proprietary LIWC software \cite{Pannebaker:07}, which used
-relative word counts to compute associations between the given topics
-and a pre-defined emotions set.  This study also proved that Twitter
-could serve as a platform for political deliberation and that the mere
-number of tweets referencing some party strongly corresponded to the
-results of political election polls.
+The success of this shared task, which had more than 40 participants,
+motivated the organizers to continue the competition.  With slight
+modifications (addition of new tweets, inclusion of sarcastic
+microblogs and LiveJournal sentences), they rerun both subtasks in the
+following four years
+\cite{Rosenthal:14,Rosenthal:15,Nakov:16,Rosenthal:17}, attracting
+more and more competitors every time.\footnote{You can find a detailed
+  overview of these iterations in Chapter~\ref{chap:cgsa}.}
 
-As in the previous cases, a key factor for the success and popularity
-of this subfield among NLP researchers was the creation and
-dissemination of high-quality big annotated corpora.  An important
-role in this respect was played by the organizers of the SemEval
-competition on sentiment analysis in Twitter
-\cite{Nakov:13,Rosenthal:14,Rosenthal:15}.
+%% In \citeyear{Rosenthal:15}, three more subtasks were included in the
+%% competition:
+%% \begin{inparaenum}[(i)]
+%%   \item polarity classification of messages pertaining to specific
+%%     topics,
+%%   \item topic-based trend prediction, and
+%%   \item determining prior polarity of lexical terms found in tweets.
+%% \end{inparaenum}
 
-For the first run of the shared task in \citeyear{Nakov:13},
-\citet{Nakov:13} prepared a substantially-sized dataset with more than
-15,000 messages (the SemEval Tweet corpus), which were manually
-labeled on the crowdsourcing platform Amazon Mechanical Turk.  To that
-end, five Turkers were asked to determine the overall polarity of each
-collected microblog and to annotate all occurrences of subjective
-expressions in those messages with their contextual polarity.
+%% A much harder subtask in this run, on which only three of seven
+%% participants could outperform the majority class baseline, turned out
+%% to be the classification of message polarities towards specific topics
+%% (track C).  The winner of this subtask -- a system proposed by
+%% \citet{Boag:15} -- attained a macro-averaged \F{}-score of 50.51\%.
+%% This approach again relied on a supervised SVM classifier and used an
+%% extensive set of hand-crafted features, including raw and normalized
+%% bag-of-words (BOW), the number of positive and negative emoticons, the
+%% number of question and exclamation marks, average and maximum
+%% sentiment scores of single words occurring in a tweet, and many
+%% others.  The BOW features along with the lexicon-derived information
+%% were found to be the most useful classification attributes in these
+%% experiments.  A dedicated preprocessing pipeline with spelling
+%% correction and Twitter-specific tokenization also proved to have a
+%% positive effect on the final results.
 
-The best performing system in the first iteration -- a supervised SVM
-classifier of \citet{Mohammad:13} -- won three out of four subtasks.
-This solution relied on an extensive set of hand-crafted surface-form,
-semantic, and syntactic features and also actively used multiple
-manually and automatically generated sentiment lexica, including the
-NRC emotion lexicon of \citeauthor{Mohammad:13a}
-(\citeyear{Mohammad:13a}), the MPQA lexicon of \citeauthor{Wilson:05}
-(\citeyear{Wilson:05}), and the sentiment list of \citeauthor{Hu:04}
-(\citeyear{Hu:04}).  The authors noticed a crucial impact of the
-lexicon features on the quality of final predictions (an ablation test
-showed that the results of the system worsened by $\approx8.5\%$ when
-the lexicon information was removed).
-
-Other competing submissions \cite{Becker:13,Guenther:13,Kokciyan:13}
-basically utilized the same approach but used considerably less
-information from lexicons.  Nevertheless, all 10 top-scoring systems
-in this run could correctly predict the phrase-level polarity of
-subjective expressions in more than 80\% of the cases and also
-outperformed the 60\% benchmark when classifying the overall polarity
-of the tweets.
-
-The success of this shared task, which attracted more than 40
-participants, incited the organizers to continue this competition in
-the following years.  With slight modifications (addition of new
-tweets, inclusion of sarcastic microblogs and LiveJournal sentences),
-both subtasks were re-offered in \citeyear{Rosenthal:14}
-\cite[see][]{Rosenthal:14}.
-
-Here again, the system proposed by \citet{Mohammad:13} with some minor
-adjustments \cite{Zhu:14} ranked first in the phrase-polarity task and
-got fourth place in predicting the overall polarity of the messages.
-The top-scoring solution for the latter track was proposed by
-\citet{Miura:14}.  It also relied on a supervised SVM classifier
-operating on a set of hand-crafted features but additionally utilized
-a dedicated pre-processing pipeline and also imposed special penalties
-on the polarity classes that were over-represented in the corpus.
-
-In \citeyear{Rosenthal:15}, three more subtasks were included in the
-competition:
-\begin{inparaenum}[(i)]
-  \item polarity classification of messages pertaining to specific
-    topics,
-  \item topic-based trend prediction, and
-  \item determining prior polarity of lexical terms found in tweets.
-\end{inparaenum}
-
-This time, the best system for the phrase polarity subtask, which also
-ranked second in predicting polarities of complete messages, was
-proposed by \citet{Severyn:15}.  In their approach, the authors first
-unsupervisedly learned neural word embeddings from a big unannotated
-Twitter corpus.  These vector representations were then fine-tuned to
-the sentiment analysis task on the dataset of \citet{Go:09}.  Finally,
-the resulting embeddings were passed as input to a two-layer
-convolutional deep neural network and jointly trained on the official
-SemEval training set.
-
-A much harder subtask in this run, on which only three of seven
-participants could outperform the majority class baseline, turned out
-to be the classification of message polarities towards specific topics
-(track C).  The winner of this subtask -- a system proposed by
-\citet{Boag:15} -- attained a macro-averaged $F1$-score of 50.51\%.
-This approach again relied on a supervised SVM classifier and used an
-extensive set of hand-crafted features, including raw and normalized
-bag-of-words (BOW), the number of positive and negative emoticons, the
-number of question and exclamation marks, average and maximum
-sentiment scores of single words occurring in a tweet, and many
-others.  The BOW features along with the lexicon-derived information
-were found to be the most useful classification attributes in these
-experiments.  A dedicated preprocessing pipeline with spelling
-correction and Twitter-specific tokenization also proved to have a
-positive effect on the final results.
-
-As can be seen from the above, even despite its relatively short
-history, sentiment analysis of Twitter has already received much of
-attention in the NLP community.  A notable fact, however, is that,
-with a few exceptions \cite{Basile:13,Araque:15,Cesteros:15}, most of
-the works on opinion mining in microblogs were primarily dealing with
-either English data only or with English translations of foreign
-language tweets.  In the subsequent sections of this chapter, we are
-going to investigate whether preliminary findings that have already
-been obtained for English (the inherent difficulty of the Twitter
-domain for automatic SA methods, the crucial utility of lexicon
-features, the necessity of preprocessing the input text before passing
-it to a classifier) are equally applicable to German messages too.
+As you can see, despite its relatively short history, sentiment
+analysis of Twitter has already received much attention from the NLP
+community.  But, with a few exceptions
+\cite[\eg{}][]{Basile:13,Araque:15,Cesteros:15}, most of the existing
+works were primarily concerned with English messages or automatically
+translated microblogs.  In the following chapters, we will explore
+whether conclusions that have been drawn from English data (the
+difficulty of the Twitter domain for automatic SA, the utility of
+sentiment lexicons, and the need to normalize the input text) apply to
+German tweets as well.
 
 %% However, in order to prove or disprove these hypotheses, a vital
 %% prerequisite that we need is the existence of a substantial labeled
@@ -471,8 +414,6 @@ it to a classifier) are equally applicable to German messages too.
 %% preprocessing on this task. Finally, we summarize our findings and
 %% draw further conclusions in Section \ref{sec:snt:concl} of this
 %% chapter.
-
-\newpage
 
 %% \citet{Sarker:15}, \citet{Dalmia:15}, \citet{Han:15},
 %% \citet{Chikersal:15}, \citet{Hagen:15}, \citet{Fernandez:15}
