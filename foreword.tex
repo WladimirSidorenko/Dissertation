@@ -57,12 +57,12 @@ trend is inexorable; this trend is global; and, unfortunately, this
 trend opens up new possibilities for misuse of online services as an
 instrument of political deception.
 
-One way to avert the looming danger of deliberate manipulation of
-public opinion is to monitor social networks in real time in order to
-discover suspicious activities or unexplainable fluctuations of
-people's attitudes.  A crucial prerequisite for such monitoring though
-is reliable, high-quality NLP tools that can analyze users'
-dispositions automatically, in a split of second.
+One way to avert deliberate manipulation of public opinion is to
+monitor social networks in real time in order to discover suspicious
+activities or unexplainable fluctuations of people's attitudes.  A
+crucial prerequisite for such monitoring though is reliable,
+high-quality NLP tools that can analyze users' dispositions
+automatically, in a split of second.
 
 \section*{Motivation}
 \addcontentsline{toc}{section}{Motivation}
@@ -71,7 +71,7 @@ Automatic mining of people's opinions from text is exactly what the
 field of knowledge called sentiment analysis or opinion
 mining\footnote{Following \citet{Liu:12}, I consider the terms
   \emph{sentiment analysis} and \emph{opinion mining} as synonyms.} is
-concerned with and what we\footnote{Throughout this dissertation, I
+concerned with, and what we\footnote{Throughout this dissertation, I
   will use the pronoun ``we'' in recognition of the efforts made by
   all people mentioned in the acknowledgments, and in recognition of
   your efforts as a reader who will struggle with me through the pages
@@ -107,8 +107,8 @@ factors:
     2017);\footnote{\url{https://luckyshareman.com/blog/die-twitter-nutzung-in-deutschland/}}
   \item Second, Twitter's sociolect is at the cutting edge of modern
     language development, and new linguistic phenomena introduced on
-    this service are likely to percolate into other social media and
-    even find their way into the standard language as well;
+    this service are likely to percolate into other social media as
+    well and might even find their way into the standard language;
   \item Finally, the abundance and accessibility of data on this
     platform allows the researchers to analyze virtually any topic,
     from North Korean nuclear weapons to Lady Gaga's dress, getting
@@ -133,7 +133,7 @@ doing so, we want to find answers to the following questions:
 
   Since there had been literally no attempts to analyze sentiments in
   German social media before we started our work, as a first step, we
-  decided to check whether we could reuse existing English systems
+  decided to check whether we could reuse existing English solutions
   without further ado.
 
 \item\textbf{Which groups of approaches are best suited for which
@@ -141,9 +141,9 @@ doing so, we want to find answers to the following questions:
 
   Because sentiment analysis is a wide research field, which operates
   on various linguistic levels and addresses many different problems
-  with their own methods and evaluation metrics, we want to know which
-  approaches (rule-based or machine-learning ones, systems that
-  operate on lexical taxonomies or solutions that utilize corpus data)
+  with their own approaches and evaluation metrics, we want to know
+  which approaches (rule-based or machine-learning ones, systems that
+  operate on lexical taxonomies or those that utilize corpus data)
   work best for specific sentiment tasks;
 
 \item\textbf{How much do word- and discourse-level analyses affect
@@ -152,10 +152,10 @@ doing so, we want to find answers to the following questions:
   Despite the wide variety of problems addressed by opinion mining,
   one of them---message-level polarity classification---is commonly
   considered as the central task in sentiment analysis of social
-  media.  Due to its importance and its central role, we would like to
-  see which linguistic level (subsentential [\ie{} the level of word]
-  or suprasentential [\ie{} the level of discourse]) contributes more
-  to determining the overall polarity of a tweet.
+  media.  Due to its importance and central role, we would like to see
+  which linguistic level (subsentential [\ie{} the level of word] or
+  suprasentential [\ie{} the level of discourse]) contributes more to
+  determining the overall polarity of a microblog.
 
 \item\textbf{Does text normalization help analyze sentiments?}
 
@@ -164,32 +164,33 @@ doing so, we want to find answers to the following questions:
   other scientists object that a straightforward conversion might
   loose many important details and consequently worsen the
   classification.  \citet{Brody:11}, for instance, claim that
-  intentional prosodic lengthening of words (such as
-  \texample{sooooooo strong} or \texample{coooolllllll}) serves as a
+  intentional prosodic lengthening of words, such as
+  \texample{sooooooo strong} or \texample{coooolllllll}, serves as a
   vivid indicator of opinionated sentences, so that keeping these
-  elongations in text would result in better prediction.
+  elongations in text would result in better predictions.
   \citet{Eisenstein:13}, in part, agrees with these claims by noting
   that a straightforward replacement of colloquial variants with their
   standard-language equivalents can considerably shift the original
-  meaning.  We admit that the arguments of the authors are right, but
-  it apparently depends on the magnitude by which non-standard
-  language helps or hampers NLP tasks.  So, in this work, we would
-  like to test whether text normalization does more harm than good to
-  the analysis of opinions.
+  meaning.  We admit that the arguments of the authors are correct,
+  but it apparently depends on the magnitude by which non-standard
+  language helps or hampers NLP applications.  So, in this work, we
+  would like to test whether text normalization does more harm than
+  good to the analysis of opinions.
 
 \item\textbf{Can we do better than existing approaches?}
 
   Of course, simply evaluating existing methods on a new dataset would
   not be of much novelty and would not accelerate the progress of the
-  research field, therefore, we will also try to improve on existing
-  results by suggesting our own solutions to various sentiment tasks.
+  research field, therefore, we are going to improve on existing
+  results by suggesting our own solutions to various sentiment
+  objectives.
 \end{itemize}
 
 
 \section*{Outline of this Work}
 \addcontentsline{toc}{section}{Outline of this Work}
 
-To answer these questions, we will proceed in the following way:
+We will answer these questions by proceeding in the following way:
 
 \begin{itemize}
 \item In Chapter~\ref{chap:introduction}, we will give a short
@@ -199,15 +200,15 @@ To answer these questions, we will proceed in the following way:
 \item In Chapter~\ref{chap:corpus}, we will present the Potsdam
   Twitter Sentiment Corpus (PotTS), define the selection criteria that
   we used to collect its data, describe its annotation scheme and
-  annotation procedure, and also conduct an extensive inter-annotator
+  labeling procedure, and also conduct an extensive inter-annotator
   agreement study, looking for tweets that were most difficult to
   analyze for human experts;
 
 \item Afterwards, in Chapter~\ref{chap:snt:lex}, we will turn our
   attention to the first subsentential sentiment task---sentiment
   lexicon generation, in which we will compare three major paradigms:
-  dictionary-, corpus-, and word-embedding--based methods; and also
-  propose a novel linear-projection solution;
+  dictionary-, corpus-, and word-embedding--based methods; and propose
+  our own linear-projection solution;
 
 \item Chapter~\ref{chap:fgsa} will address the problem of aspect-based
   opinion mining, whose goal is to predict text spans of sentiments,
@@ -226,16 +227,16 @@ To answer these questions, we will proceed in the following way:
   these groups by devising a recurrent neural network with
   lexicon-based attention;
 
-\item Finally, in Chapter~\ref{chap:discourse}, we will enhance our
-  proposed algorithm by making it aware of microblogs' discourse
+\item Finally, in Chapter~\ref{chap:discourse}, we will enhance the
+  proposed system by making it aware of the microblogs' discourse
   structure.  For this purpose, we will let the classifier predict the
-  polarity scores of elementary discourse units of the tweets and will
-  then unite these scores using three novel techniques: latent
+  polarity scores of the elementary discourse units of each tweet and
+  will then unite these scores using three novel techniques: latent
   conditional and conditional-marginalized random fields and Recursive
   Dirichlet Process.
 \end{itemize}
 \vfill
 \begin{figure*}[htb!]
   \centering \includegraphics[width=20em,height=10em]{img/putin-trump.jpg}
-  \caption*{\textcopyright Sergey Elkin, Deutsche Welle}
+  \caption*{\small\textcopyright Sergey Elkin, Deutsche Welle}
 \end{figure*}
