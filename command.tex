@@ -48,6 +48,7 @@
 \usepackage{paralist}
 \usepackage{relsize}
 \usepackage{rst}
+\usepackage[detect-all]{siunitx}
 \usepackage{subcaption}
 \usepackage{tabularx}
 \usepackage{thmtools}
@@ -117,6 +118,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Commands
+\sisetup{range-phrase = \text{--}}
 \newcommand{\vars}{\texttt}
 \newcommand{\func}{\textrm}
 \newcommand{\ttranslate}[2]{#1
@@ -163,6 +165,9 @@
 \newcommand{\corpusDir}{\texttt{PotTS/}}
 \newcommand{\nocontentsline}[3]{}
 \newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+
+\newcommand{\markable}[1]{\texttt{#1}}
+\newcommand{\attribute}[1]{\emph{\texttt{#1}}}
 
 %% Code Environment
 \NewDocumentCommand{\Colorbox}{O{\dimexpr\linewidth-2\fboxsep} m m}{%
