@@ -31,9 +31,9 @@ u must be talkin bout the paper but I was thinkin movies\\
 \end{example}
 
 These differences become even more marked when it comes to emotional
-speech, when people express their excitement, sadness, happiness,
+speech, where people express their excitement, sadness, happiness,
 approval or disapproval.  Compare, for instance, the following
-passages from Example~\ref{exmp:intro:telegraph-twitter}, where a
+passages from Example~\ref{exmp:intro:telegraph-twitter}, in which a
 Telegraph reporter and a Twitter user describe their feelings about
 the resignation of Boris Johnson, UK Foreign Secretary, who gave up
 his office in criticism of the government's Brexit plan.
@@ -50,22 +50,22 @@ didn't resign before David Davis. Two down and he's the second
 \end{example}
 As you can see, not only the ways of expression are different, but the
 attitudes of the authors are contradictory as well. And nowadays it is
-the domain of social media that is steadily gaining popularity and
+the domain of social media that is steadily gaining popularity, and
 that wields more and more influence on the opinions of common people,
 predetermining their preferences, choices, and political views.  This
 trend is inexorable; this trend is global; and, unfortunately, this
 trend opens up new possibilities for misuse of online services as an
 instrument of political deception.
 
-One way to avert deliberate manipulation of public opinion is to
-monitor social networks in real time in order to discover suspicious
-activities or unexplainable fluctuations of people's attitudes.  A
-crucial prerequisite for such monitoring though is reliable,
-high-quality NLP tools that can analyze users' dispositions
-automatically, in a split of second.
+One way to avert the looming danger of deliberate manipulation of
+public opinion is to monitor social networks in real time in order to
+discover suspicious activities or unexplainable fluctuations of
+people's attitudes.  A crucial prerequisite for such monitoring though
+is reliable, high-quality NLP tools that can analyze users'
+dispositions automatically, in a split second.
 
 \section*{Motivation}
-\addcontentsline{toc}{section}{Motivation}
+%% \addcontentsline{toc}{section}{Motivation}
 
 Automatic mining of people's opinions from text is exactly what the
 field of knowledge called sentiment analysis or opinion
@@ -80,9 +80,9 @@ concerned with, and what we\footnote{Throughout this dissertation, I
   for any of the claims.} will work on in this dissertation.  In
 particular, we are going to analyze users' attitudes on German
 Twitter---a linguistic register whose natural language processing is
-aggravated not only by specifics of the social media genre but also by
-the scarceness of resources, systems, and established baselines.
-Nevertheless, we decided address precisely this domain because:
+aggravated not only by specifics of social media but also by the
+scarceness of resources, systems, and established baselines.
+Nevertheless, we decided to address precisely this domain because:
 \begin{itemize}
   \item German is the most spoken first language in the European
     Union, being the mother-tongue for 18\% of EU
@@ -117,7 +117,7 @@ factors:
 \end{itemize}
 
 \section*{Research Questions}
-\addcontentsline{toc}{section}{Research Questions}
+%% \addcontentsline{toc}{section}{Research Questions}
 
 Unfortunately, despite its popularity and social importance, German
 Twitter has largely been ignored by computational linguistics in
@@ -125,16 +125,16 @@ general, and in particular by its opinion mining branch.  With this
 dissertation, we hope to make up this leeway by presenting a new
 sentiment corpus of German microblogs and conducting an extensive
 study of existing and novel opinion mining methods on these data.  By
-doing so, we want to find answers to the following questions:
+doing so, we want to answer the following questions:
 
 \begin{itemize}
 \item\textbf{Can we apply opinion mining methods devised for
   standard English to German Twitter?}
 
   Since there had been literally no attempts to analyze sentiments in
-  German social media before we started our work, as a first step, we
-  decided to check whether we could reuse existing English solutions
-  without further ado.
+  German social media when we started working on this thesis, as a
+  first step, we decided to check whether we could reuse existing
+  English solutions without further ado.
 
 \item\textbf{Which groups of approaches are best suited for which
   sentiment tasks?}
@@ -171,7 +171,7 @@ doing so, we want to find answers to the following questions:
   \citet{Eisenstein:13}, in part, agrees with these claims by noting
   that a straightforward replacement of colloquial variants with their
   standard-language equivalents can considerably shift the original
-  meaning.  We admit that the arguments of the authors are correct,
+  meaning.  We admit that the arguments of these authors are correct,
   but it apparently depends on the magnitude by which non-standard
   language helps or hampers NLP applications.  So, in this work, we
   would like to test whether text normalization does more harm than
@@ -188,7 +188,7 @@ doing so, we want to find answers to the following questions:
 
 
 \section*{Outline of this Work}
-\addcontentsline{toc}{section}{Outline of this Work}
+%% \addcontentsline{toc}{section}{Outline of this Work}
 
 We will answer these questions by proceeding in the following way:
 
@@ -199,7 +199,7 @@ We will answer these questions by proceeding in the following way:
 
 \item In Chapter~\ref{chap:corpus}, we will present the Potsdam
   Twitter Sentiment Corpus (PotTS), define the selection criteria that
-  we used to collect its data, describe its annotation scheme and
+  we used to collect the data, describe its annotation scheme and
   labeling procedure, and also conduct an extensive inter-annotator
   agreement study, looking for tweets that were most difficult to
   analyze for human experts;
@@ -211,13 +211,13 @@ We will answer these questions by proceeding in the following way:
   our own linear-projection solution;
 
 \item Chapter~\ref{chap:fgsa} will address the problem of aspect-based
-  opinion mining, whose goal is to predict text spans of sentiments,
-  sources, and targets.  In particular, we will compare three popular
-  approaches to this challenging task: conditional random fields
-  (CRFs), long-short term memory (LSTM), and gated recurrent unit
-  (GRU), evaluating the effect of various features on the first
-  classifier and estimating the results for different word-embedding
-  types with the last two systems;
+  opinion mining, whose goal is to predict the text spans of
+  sentiments, sources, and targets.  In particular, we will compare
+  three popular approaches to this challenging task: conditional
+  random fields (CRFs), long-short term memory (LSTM), and gated
+  recurrent unit (GRU), evaluating the effect of various features on
+  the first classifier and estimating the results for different
+  word-embedding types with the last two systems;
 
 \item In Chapter~\ref{chap:cgsa}, we will deal with one of the most
   prominent sentiment analysis tasks---message-level polarity
@@ -231,12 +231,12 @@ We will answer these questions by proceeding in the following way:
   proposed system by making it aware of the microblogs' discourse
   structure.  For this purpose, we will let the classifier predict the
   polarity scores of the elementary discourse units of each tweet and
-  will then unite these scores using three novel techniques: latent
+  will then unite these scores using novel techniques: latent
   conditional and conditional-marginalized random fields and Recursive
   Dirichlet Process.
 \end{itemize}
-\vfill
-\begin{figure*}[htb!]
-  \centering \includegraphics[width=20em,height=10em]{img/putin-trump.jpg}
-  \caption*{\small\textcopyright Sergey Elkin, Deutsche Welle}
-\end{figure*}
+%% \vfill
+%% \begin{figure*}[htb!]
+%%   \centering \includegraphics[width=20em,height=10em]{img/putin-trump.jpg}
+%%   \caption*{\small\textcopyright Sergey Elkin, Deutsche Welle}
+%% \end{figure*}
