@@ -21,8 +21,8 @@ own corpus, which we will introduce in this part of the thesis.
 We begin our introduction by describing the selection criteria and
 tracking procedure that we used to collect the initial corpus data.
 After presenting the annotation scheme, we perform an extensive
-analysis of inter-annotator agreement.  For this purpose, we introduce
-two new versions of the popular $\kappa$ metric
+analysis of the inter-annotator agreement.  For this purpose, we
+introduce two new versions of the popular $\kappa$ metric
 \cite{Cohen:60}---binary and proportional kappa---which have been
 specifically adjusted to the peculiarities of our annotation task.
 Using these measures, we check the inter-coder reliability of
@@ -166,7 +166,7 @@ This list included:
   target; and the annotators had to label both the target and its
   respective evaluative expression with this tag. Apart from tagging
   the text span, they also had to specify the following attributes of
-  an opinion:
+  opinions:
   \begin{itemize}
   \item\attribute{polarity}, which reflected the attitude of opinion's
     holder to the evaluated entity.  Following
@@ -365,12 +365,13 @@ Appendix~\ref{chap:apdx:corp-guidelines} of this thesis.
 \section{Annotation Tool and Format}\label{subsec:snt:tformat}
 
 For annotating the collected data, we used \texttt{MMAX2}, a freely
-available markup tool.\footnote{\url{http://mmax2.sourceforge.net/}}
-Because this program uses a token-oriented stand-off format, where all
-annotated spans are stored in a separate file and only refer to the
-ids of words in the original text, we first had to split all corpus
-messages into tokens.  To this end, we applied a minimally modified
-version of Christopher Potts' social media
+available text-markup
+tool.\footnote{\url{http://mmax2.sourceforge.net/}} Because this
+program uses a token-oriented stand-off format, where all annotated
+spans are stored in a separate file and only refer to the ids of words
+in the original text, we first had to split all corpus messages into
+tokens.  To this end, we applied a minimally modified version of
+Christopher Potts' social media
 tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
 which had been slightly adjusted to the peculiarities of the German
 spelling (we allowed for the capitalized form of common nouns, \eg{}
@@ -728,7 +729,7 @@ detection of their boundaries.  This effect becomes even more evident
 when we look at \markable{diminisher}s and \markable{negation}s, where
 the $A$ and $M$ scores are absolutely identical for both metrics.  It
 means that both annotators always agreed on the boundaries of these
-elements when they agreed on their presence.  Unfortunately, due to a
+elements if they agreed on their presence.  Unfortunately, due to a
 rather small number of these tags in the corpus (with only 3 cases of
 \markable{diminisher}s and 21 cases of \markable{negation}s), the
 overall agreement of these labels is relatively small too, amounting
@@ -795,7 +796,7 @@ all annotated elements: the binary scores of \markable{sentiment}s and
 \markable{target}s increased by $29.87\%$ and $30.18\%$ respectively.
 An even greater improvement is observed for \markable{source}s, whose
 binary kappa improved by remarkable $38.38\%$.  A similar tendency
-applies to the proportional metric, where the agreement on
+applies to the proportional metric, where the agreement of
 \markable{sentiment}s gained $30.73\%$, reaching $61.94\%$.  Likewise,
 the reliability of opinion targets and holders improved by $30.42\%$
 and $37.37\%$, running up to $57.27\%$ and $71.12\%$.
@@ -911,9 +912,9 @@ and \markable{intensifier}s setting a lower bound on the agreement
 
 \subsection{Qualitative Analysis}\label{subsec:eval-qualitative-analysis}
 
-In order to understand the reasons for the remaining conflicts, we
-decided to have a closer look at diverging cases.  A sample sentence
-with different analyses of \markable{sentiment}s is shown in
+In order to understand the reasons for remaining conflicts, we decided
+to have a closer look at the diverging cases.  A sample sentence with
+different analyses of \markable{sentiment}s is shown in
 Example~\ref{snt:exmp:sent-disagr}:
 \begin{example}\label{snt:exmp:sent-disagr}
   \textcolor{red3}{\textbf{Annotation 1:}}\\ \upshape{}@TinaPannes
@@ -930,7 +931,8 @@ In this tweet, the first annotator obviously overlooked the emoticon
 \smiley{} at the end of the message, whereas the second expert
 correctly recognized it as an evaluation of the previous sentence.
 Because the first assistant did not label any \markable{sentiment} at
-all, she also automatically disagreed on the \markable{target} tag.
+all, she also automatically disagreed on the assignment of the
+\markable{target} tag.
 
 %% At this point, we should note that it also was legitimate to consider
 %% the noun phrase ``die \#afd'' (\emph{the \#afd}) as the object of the
@@ -971,10 +973,9 @@ In this sentence, the first expert considered \emph{blocking politics}
 as the main object of criticism, whereas the second annotator regarded
 the political party accused of such behavior as sentiment's target.
 In our opinion, both of these interpretations are correct and,
-ideally, two \markable{sentiment} elements had to be labeled in this
-message: one with the target ``Blockadehaltung'' (\emph{blocking
-  politics}) and another one with the target ``die SPD'' (\emph{the
-  SPD}).
+ideally, two \markable{sentiment}s had to be labeled in this message:
+one with the target ``Blockadehaltung'' (\emph{blocking politics}) and
+another one with the target ``die SPD'' (\emph{the SPD}).
 
 Although our annotators were much more consistent about the analysis
 of \markable{polar term}s, we still decided to have a look at
@@ -1003,7 +1004,7 @@ The obvious reason for the misclassifications in this message is the
 notorious subjective facts: As you can see, the first assistant
 ignored the words ``Angriff'' (\emph{attack}), ``Bombe''
 (\emph{bomb}), and ``Frieden'' (\emph{peace}), while the second
-annotator considered them as polar terms.
+annotator considered them as polar items.
 %% Even though our original guidelines were underspecified in this
 %% case (we only imposed the subjectivity constraint on the
 %% sentiments), in our later experiments
@@ -1014,10 +1015,11 @@ We should, however, admit that this difference is partially due to the
 adjudication procedure that we used in step two, because at the
 initial stage, our experts had had opposite preferences regarding
 these entities (the first annotator had labeled these terms, whereas
-the second assistant had skipped them).  During the revision, however,
-both assistants changed their minds after looking at the decisions of
-the other linguist.  Therefore, one needs to keep in mind the risk of
-mutual concession when applying the adjudication method in future.
+the second assistant had usually skipped them).  During the revision,
+however, both assistants changed their minds after looking at the
+decisions of the other linguist.  Therefore, one needs to keep in mind
+the risk of mutual concession when applying the adjudication method in
+future.
 
 %% Although the adjudication step significantly improved the reliability
 %% of other \markable{polar term}s and tags, the risk of mutual
@@ -1037,7 +1039,7 @@ one of the predefined classes (\emph{positive}, \emph{negative}, or
 attribute, whose value can range on a scale from zero (\emph{weak}) to
 two (\emph{strong}).  Since disagreements that are further apart on
 the scale need to be penalized more strongly than small divergences,
-we decided to use the $\alpha$-measure for this attribute, which
+we decided to use the $\alpha$-measure for this attribute, as it
 explicitly addresses this problem.
 \begin{table}[thb!]
   \begin{center}
@@ -1088,9 +1090,10 @@ and objective speech events (a rough counterpart of our
 corresponding results for the intensity of expressive subjective
 elements (\markable{polar term}s in our case), however, were much
 worse, amounting to only 46\%, even though the $\kappa$-value for
-their polarity run up to 72\%.  Hence, the reliability of annotated
-attributes in our corpus still outperforms the respective agreement in
-MPQA on almost all aspects except for sentiment intensity.
+their polarity run up to 72\%.  Hence, the reliability of the
+annotated attributes in our corpus still outperforms the respective
+agreement in MPQA on almost all aspects except for sentiment
+intensity.
 
 %% We should, however, note that the annotation scheme used for the
 %% latter dataset did not provide a specific attribute for the
@@ -1148,11 +1151,11 @@ and~\ref{snt:fig:crp-sent-emo-agr}.
 As we can see from the plots, topics and form clearly affect both the
 number of opinions and the difficulty of their interpretation.
 According to Figure~\ref{snt:fig:crp-sent-emo-distr}, the greatest
-number of \markable{sentiment}s occur in tweets pertaining to federal
-elections and in messages representing casual everyday conversations.
-A similar tendency is observed for \markable{polar term}s, but in this
-case, the form of the microblogs seems to have more impact on the
-elements' distribution than their topics.
+number of \markable{sentiment}s occur in tweets pertaining to the
+federal elections and in messages representing casual everyday
+conversations.  A similar tendency is observed for \markable{polar
+  term}s, but in this case, the form of the microblogs seems to have
+more impact on the elements' distribution than their topics.
 
 %% Moreover, a higher number of opinionated terms might not necessarily
 %% lead to a higher number of targeted sentiments.  We can recognize that
@@ -1165,10 +1168,10 @@ elements' distribution than their topics.
 
 Regarding the inter-annotator agreement, we can see that
 \markable{sentiment}s and \markable{polar term}s are most reliably
-annotated in the messages from the German Twitter Snapshot.  Moreover,
-the former elements are apparently easiest to annotate in tweets that
-were preselected using the sentiment lexicon, whereas \markable{polar
-  term}s are easiest to analyze in microblogs that contain emoticons.
+annotated in messages from the German Twitter Snapshot.  Moreover, the
+former elements are apparently easiest to annotate in tweets that were
+preselected using a sentiment lexicon, whereas \markable{polar term}s
+are easiest to analyze in microblogs that contain emoticons.
 %% Somewhat surprisingly, the emoticon group has the lowest IAA scores
 %% for \markable{sentiment}s, which means that although our annotators
 %% could easily recognize facial expressions as polar items, they had
@@ -1355,13 +1358,13 @@ The annotation process was performed in three steps: first, the
 annotators labeled one half of the data after minimal training; then,
 we automatically highlighted their divergent analyses and asked them
 to resolve these differences; finally, our assistants continued with
-the analysis of the remaining files.
+the analysis of remaining files.
 
 To estimate the inter-rater reliability, we introduced two modified
 versions of the established $\kappa$-metric---binary and proportional
 kappa---which differ in the way how they treat overlapping annotations
 and partial matches.  Using these measures, we estimated the
-inter-annotator agreement of the experts at different stages of their
+inter-annotator agreement of our experts at different stages of their
 work.  This study showed that, initially, our assistants could hardly
 agree on the mere notion of targeted opinions, but their disagreements
 could be resolved with the help of the adjudication procedure that we
@@ -1371,18 +1374,17 @@ least moderate reliability.
 
 Finally, we demonstrated that our initial selection criteria had a
 strong impact on the number and agreement of annotated sentiments and
-polar terms, with tweets about the federal elections and messages
-without prefiltered topics being the most prolific sources of these
-elements.
+polar terms, with tweets about federal elections and messages without
+prefiltered topics being the most prolific sources of these elements.
 
 That way, we not only contributed to the inventory of available
 sentiment and social-media resources for German but also provided new
-insights into different sampling methods that one could use to create
+insights into different sampling methods that could be used to create
 an opinion dataset and described the consequences of applying these
 methods in practice.  A detailed inter-annotator agreement study
 showed precisely which topics yield most subjective opinions
 (elections and casual conversations) and which groups of messages are
 especially difficult to annotate (tweets containing emoticons and
-microblogs without polar terms or smileys).  In the next step, we are
-going to check whether these data can also serve as a basis for
-building and evaluating automatic opinion mining systems.
+microblogs without polar terms or emoticons).  In the next step, we
+are going to check whether our dataset can also serve as a basis for
+building and evaluating automatic opinion mining applications.
