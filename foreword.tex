@@ -62,7 +62,7 @@ public opinion is to monitor social networks in real time in order to
 discover suspicious activities or unexplainable fluctuations of
 people's attitudes.  A crucial prerequisite for such monitoring though
 is reliable, high-quality NLP tools that can analyze users'
-dispositions automatically, in a split second.
+dispositions automatically in a split second.
 
 \section*{Motivation}
 %% \addcontentsline{toc}{section}{Motivation}
@@ -80,7 +80,7 @@ concerned with, and what we\footnote{Throughout this dissertation, I
   for any of the claims.} will work on in this dissertation.  In
 particular, we are going to analyze users' attitudes on German
 Twitter---a linguistic register whose natural language processing is
-aggravated not only by specifics of social media but also by the
+aggravated not only by the specifics of social media but also by the
 scarceness of resources, systems, and established baselines.
 Nevertheless, we decided to address precisely this domain because:
 \begin{itemize}
@@ -88,10 +88,9 @@ Nevertheless, we decided to address precisely this domain because:
     Union, being the mother-tongue for 18\% of EU
     citizens;\footnote{\url{https://en.wikipedia.org/wiki/Languages_of_the_European_Union}}
   \item Germany has traditionally played a major role in the European
-    Government, and, as such, it also was one of the main driving
-    forces in the solution to several European crises, including the
-    Ukrainian conflict, the prevention of Greek sovereign default, and
-    Brexit;
+    Government, and, as such, it was one of the main driving forces in
+    the solution to several European crises, including the Ukrainian
+    conflict, the prevention of Greek sovereign default, and Brexit;
   \item Numerous internal problems (refugee crisis, rise of right-wing
     populism, and unstable ratings of political parties) make German
     politics susceptible to external influence.
@@ -107,8 +106,8 @@ factors:
     2017);\footnote{\url{https://luckyshareman.com/blog/die-twitter-nutzung-in-deutschland/}}
   \item Second, Twitter's sociolect is at the cutting edge of modern
     language development, and new linguistic phenomena introduced on
-    this service are likely to percolate into other social media as
-    well and might even find their way into the standard language;
+    this service are likely to percolate into other social media and
+    might even find their way into the standard language as well;
   \item Finally, the abundance and accessibility of data on this
     platform allows the researchers to analyze virtually any topic,
     from North Korean nuclear weapons to Lady Gaga's dress, getting
@@ -159,23 +158,22 @@ doing so, we want to answer the following questions:
 
 \item\textbf{Does text normalization help analyze sentiments?}
 
-  Although many NLP-researchers consider social media specifics as a
+  Although many NLP researchers consider social media specifics as a
   hindrance and suggest converting them to the standard-language form,
   other scientists object that a straightforward conversion might
-  loose many important details and consequently worsen the
-  classification.  \citet{Brody:11}, for instance, claim that
-  intentional prosodic lengthening of words, such as
-  \texample{sooooooo strong} or \texample{coooolllllll}, serves as a
-  vivid indicator of opinionated sentences, so that keeping these
-  elongations in text would result in better predictions.
-  \citet{Eisenstein:13}, in part, agrees with these claims by noting
-  that a straightforward replacement of colloquial variants with their
-  standard-language equivalents can considerably shift the original
-  meaning.  We admit that the arguments of these authors are correct,
-  but it apparently depends on the magnitude by which non-standard
-  language helps or hampers NLP applications.  So, in this work, we
-  would like to test whether text normalization does more harm than
-  good to the analysis of opinions.
+  loose many important details and consequently worsen classification.
+  \citet{Brody:11}, for instance, claim that intentional prosodic
+  lengthening of words, such as \texample{sooooooo strong} or
+  \texample{coooolllllll}, serves as a vivid indicator of opinionated
+  sentences, so that keeping these elongations in text would result in
+  better predictions.  \citet{Eisenstein:13}, in part, agrees with
+  these claims by noting that a straightforward replacement of
+  colloquial variants with their standard-language equivalents can
+  considerably shift the original meaning.  We admit that the
+  arguments of these authors are correct, but it apparently depends on
+  the magnitude by which non-standard language helps or hampers NLP
+  applications.  So, in this work, we would like to test whether text
+  normalization does more harm than good to analysis of opinions.
 
 \item\textbf{Can we do better than existing approaches?}
 
@@ -199,24 +197,24 @@ We will answer these questions by proceeding in the following way:
 
 \item In Chapter~\ref{chap:corpus}, we will present the Potsdam
   Twitter Sentiment Corpus (PotTS), define the selection criteria that
-  we used to collect the data, describe its annotation scheme and
-  labeling procedure, and also conduct an extensive inter-annotator
-  agreement study, looking for tweets that were most difficult to
-  analyze for human experts;
+  we used in order to collect the tweets for this dataset, describe
+  its annotation scheme and labeling procedure, and also conduct an
+  extensive inter-annotator agreement study, looking for messages that
+  were most difficult to analyze for human experts;
 
 \item Afterwards, in Chapter~\ref{chap:snt:lex}, we will turn our
   attention to the first subsentential sentiment task---sentiment
-  lexicon generation, in which we will compare three major paradigms:
-  dictionary-, corpus-, and word-embedding--based methods; and propose
-  our own linear-projection solution;
+  lexicon generation---in which we will compare three major paradigms:
+  dictionary-, corpus-, and word-embedding--based methods; and also
+  propose our own linear-projection solution;
 
 \item Chapter~\ref{chap:fgsa} will address the problem of aspect-based
   opinion mining, whose goal is to predict the text spans of
-  sentiments, sources, and targets.  In particular, we will compare
+  sentiments, sources, and targets.  In particular, we will evaluate
   three popular approaches to this challenging task: conditional
   random fields (CRFs), long-short term memory (LSTM), and gated
-  recurrent unit (GRU), evaluating the effect of various features on
-  the first classifier and estimating the results for different
+  recurrent unit (GRU), checking the effect of various features on the
+  first classifier and estimating the results for different
   word-embedding types with the last two systems;
 
 \item In Chapter~\ref{chap:cgsa}, we will deal with one of the most
