@@ -22,11 +22,11 @@
 In this assignment, your task is to annotate sentiments in a corpus of
 Twitter messages.  We define \emph{sentiments} as polar (either
 positive or negative) evaluative opinions about some persons,
-entities, or events.  Your goal is to annotate both---text spans
-denoting the opinions (\emph{sentiments}) and text spans signifying
-the evaluated entities and events (\emph{sentiment targets}).  In
-addition to that, you also have to label opinions' holders
-(\emph{sentiment sources}) and lexical elements that might
+entities, or events.  Your goal is to annotate both the text spans
+denoting the opinions (\emph{sentiments}) and the text spans
+signifying the evaluated entities and events (\emph{sentiment
+  targets}).  In addition to that, you also have to label opinions'
+holders (\emph{sentiment sources}) and lexical elements that might
 significantly affect the polarity or the intensity of a sentiment.
 These elements are:
 \begin{itemize}
@@ -52,9 +52,8 @@ These elements are:
 
 \tocless\section{Annotation Tool}
 
-For annotating this corpus, you need to install \texttt{MMAX2}---a
-freely available annotation tool, which you can download
-at:
+For annotating this corpus, you need to install \texttt{MMAX2}, a
+freely available annotation tool, which you can download at:
 
 \small\url{http://sourceforge.net/projects/mmax2/files/mmax2/mmax2_1.13.003/MMAX2_1.13.003b.zip/download}
 
@@ -142,11 +141,11 @@ evaluative opinions about people, entities, or events.
 According to this definition, a sentiment must always fulfill the
 following three conditions:
 \begin{itemize}
-\item it has to be \textbf{polar}, \ie{} it shall always reflect
-  either positive or negative attitude to its respective target.
-  Neutral, non-evaluative statements such as \textit{Ich glaube, er
-    wird heute fr\"uher kommen} (\textit{I think he will be earlier
-    today}) do not represent \texttt{sentiment}s;
+\item it has to be \textbf{polar}, \ie{} it must always reflect either
+  positive or negative attitude to its respective target.  Neutral,
+  non-evaluative statements such as \textit{Ich glaube, er wird heute
+    fr\"uher kommen} (\textit{I think he will be earlier today}) do
+  not represent \texttt{sentiment}s;
 
 \item it has to be \textbf{subjective}, \ie{} you must not assign this
   tag to statements of objective facts, such as \textit{Beim Angriff
@@ -171,15 +170,15 @@ sentences similar to the one shown below.
   (\sentiment{I don't like the new James Bond movie.})\label{ex:sentiment}
 \end{example}
 This example expresses a personal subjective evaluation; the opinion
-is strictly negative, and it also has an explicit evaluation
+is strictly negative; and it also has an explicit evaluation
 target---the \textit{movie}.  Therefore, we enclose this sentence in
 the \texttt{sentiment} tags.
 
 We also consider contrastive comparisons as a special type of
 evaluations.  But unlike other sentiments, comparisons typically
-express a relative subjective judgment, \ie{} an object is regarded
-to be either better or worse than another one, but we usually do not
-know whether the author actually likes or dislikes any of them.  To
+express a relative subjective judgment, \ie{} an object is regarded to
+be better or worse than another one, but we usually do not know
+whether the author actually likes or dislikes any of them.  To
 distinguish such cases, we have introduced a special
 \texttt{comparison} value for the \texttt{polarity} attribute of this
 element, which you should use to distinguish such cases.
@@ -200,7 +199,7 @@ version\footnote{\url{https://github.com/WladimirSidorenko/PotTS/blob/master/doc
 of these guidelines).
 
 \paragraph{Boundaries.} \texttt{sentiment} tags should
-enclose both---the evaluated object (target) and the evaluative
+enclose both the evaluated object (target) and the evaluative
 expression (typically a polar-term).  After determining these two
 elements, you shall put the \texttt{sentiment} tags around the
 \emph{minimal complete syntactic or discourse-level unit in which both
@@ -545,7 +544,7 @@ If a \texttt{polar-term} represents an idiomatic phrase, you shall
 always annotate the complete idiom.  If a verb has an evaluative sense
 only in conjunction with certain prepositions (\eg{} \textit{to go for
   sth.} in the sense of \textit{to like}), you shall annotate
-both---the verb and the preposition with a single pair of tags (check
+both the verb and the preposition with a single pair of tags (check
 the \texttt{MMAX} manual to see how to annotate discontinuous spans).
 
 \paragraph{Attributes.}
