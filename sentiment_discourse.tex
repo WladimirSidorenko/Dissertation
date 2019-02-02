@@ -819,14 +819,14 @@ message.\footnote{Drawing on the work of~\citet{Bhatia:15}, we obtain
   with a minor modification that we do not follow any satellite
   branches while computing the heads of abstract RST nodes in Step 1
   of this procedure \cite[see][pp.~1516--1517]{Hirao:13}.}  In
-particular, we define CRF graph $\mathcal{G}\defeq(\mathcal{V},
-\mathcal{E})$ as a set of vertices $\mathcal{V}\defeq
-\mathcal{Y}\cup\mathcal{X}$, in which $\mathcal{Y}\defeq\{y_{(i,
+particular, we define CRF graph $\mathcal{G}=(\mathcal{V},
+\mathcal{E})$ as a set of vertices $\mathcal{V}=
+\mathcal{Y}\cup\mathcal{X}$, in which $\mathcal{Y}=\{y_{(i,
   j)}\mid i\in\{\text{\textsc{Root}}, 1, 2, \ldots, T\}, j
 \in\{\text{\textsc{Negative}, \textsc{Neutral},
   \textsc{Positive}}\}\}$ represents (partially observed) random
 variables (with $T$ standing for the number of EDUs in the tweet), and
-$\mathcal{X}\defeq\{x_{(i, j)}\mid i\in\{\text{\textsc{Root}}, 1, 2,
+$\mathcal{X}=\{x_{(i, j)}\mid i\in\{\text{\textsc{Root}}, 1, 2,
 \ldots, T\}, j \in[0,\ldots, 3]\}$ denotes the respective features of
 these nodes (three polarity scores returned by the LBA classifier plus
 an additional offset feature whose value is always \texttt{1}
@@ -877,7 +877,7 @@ Now, before we describe the training of our model, let us briefly
 recall that in the standard CRF optimization we typically try to find
 optimal parameters $\boldsymbol{\theta}^*$ that maximize the
 log-likelihood of all label sequences $\mathbf{y}^{(i)}$ on the
-training set $\mathcal{D}\defeq\left\{\left(\mathbf{x}^{(i)},
+training set $\mathcal{D}=\left\{\left(\mathbf{x}^{(i)},
 \mathbf{y}^{(i)}\right)\right\}_{i=1}^{N}$, \ienocomma:
 \begin{equation*}
   \boldsymbol{\theta}^* = \argmax_{\boldsymbol{\theta}}\ell(\boldsymbol{\theta}) = \sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right)\right),\label{dasa:eq:crf-objective}
@@ -925,7 +925,7 @@ leads to the maximum probability of the correct observed tag,
 \ienocomma:
 \begin{align}
   \begin{split}
-    \mathbf{y}^{(i)}&\defeq[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{*(i)}]\text{, where}\\\label{dasa:eq:y_i}
+    \mathbf{y}^{(i)}&=[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{*(i)}]\text{, where}\\\label{dasa:eq:y_i}
     \mathbf{y}_h^{*(i)}&=\argmax_{\mathbf{y}_h^{(i)}}p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)}\right),
   \end{split}
 \end{align}
@@ -940,7 +940,7 @@ effect, we can instead penalize only one other sequence, namely, that
 which maximizes the probability of an incorrect label at the observed
 state:
 \begin{align*}
-  \mathbf{y}^{'(i)}&\defeq\argmax_{\mathbf{y}_o^{'(i)}\neq\mathbf{y}_o^{(i)}}p\left([\mathbf{y}_o^{'(i)},
+  \mathbf{y}^{'(i)}&=\argmax_{\mathbf{y}_o^{'(i)}\neq\mathbf{y}_o^{(i)}}p\left([\mathbf{y}_o^{'(i)},
     \mathbf{y}_h^{*(i)}]\vert\mathbf{x}^{(i)}\right)\text{,
     where}\\
   \mathbf{y}_h^{*(i)}&=\argmax_{\mathbf{y}_h^{(i)}}p\left(\mathbf{y}_o^{'(i)}\vert\mathbf{x}^{(i)}\right).
@@ -988,7 +988,7 @@ Another way to tackle unobserved labels is to estimate the probability
 of observed tags by marginalizing (summing) out hidden variables from
 the joint distribution, \ienocomma:
 \begin{align*}
-  p\left(\mathbf{Y}_o{=}\mathbf{y}_o\right) &\defeq
+  p\left(\mathbf{Y}_o{=}\mathbf{y}_o\right) &=
   \sum_{\mathbf{y}_h} p\left(\mathbf{Y}_o{=}\mathbf{y}_o,
   \mathbf{Y}_h{=}\mathbf{y}_h\right).
 \end{align*}
@@ -1006,7 +1006,7 @@ Applying this formula to Equation~\ref{dasa:eq:tree-crf}, we get:
   \end{split}
 \end{align*}
 where $\mathbf{y}^{(i)}$ in the numerator is defined as before:
-$\mathbf{y}^{(i)}\defeq[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}]$.
+$\mathbf{y}^{(i)}=[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{(i)}]$.
 
 This time again, we would like to maximize the probability of the
 correct assignment, setting it apart from its closest competitor by
@@ -1034,12 +1034,12 @@ probabilities:
 To simplify this expression, we can introduce the following
 abbreviations:
 \begin{align*}
-  a &\defeq \exp\left(\sum_{t=0}^{T_i}\left[
+  a &= \exp\left(\sum_{t=0}^{T_i}\left[
     \sum_v\boldsymbol{\theta}_v\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
     + \sum_{c\in
       ch(t)}\sum_e\boldsymbol{\theta}_e\mathbf{f}_e\left(\mathbf{y}^{(i)}_{t},
     \mathbf{y}^{(i)}_{c}\right)\right]\right),\\
-  b &\defeq \exp\left(\sum_{t=0}^{T_i}\left[
+  b &= \exp\left(\sum_{t=0}^{T_i}\left[
     \sum_v\boldsymbol{\theta}_v\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{'(i)}_{t}\right)
     + \sum_{c\in
       ch(t)}\sum_e\boldsymbol{\theta}_e\mathbf{f}_e\left(\mathbf{y}^{'(i)}_{t},
@@ -1068,7 +1068,7 @@ that:
 We again use the block-coordinate Frank-Wolfe algorithm to optimize
 the parameters of our model, but instead of pushing these parameters
 in the direction
-$\boldsymbol{\psi}\defeq\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})-\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$
+$\boldsymbol{\psi}=\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})-\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})$
 (which is the derivative of latent CRFs, see Algorithm~2 in
 [\citeauthor{Lacoste-Julien:13}, \citeyear{{Lacoste-Julien:13}}]), we
 now maximize them along the gradient from
@@ -1204,7 +1204,7 @@ setting the mean of this distribution to:\footnote{Before we do the
   actual sampling, we unroll this parameter to a vector and then
   reshape the sampled value back to a $3\times3$ matrix.}
 \begin{equation*}
-  \boldsymbol{\mu}_r\defeq\begin{bmatrix}
+  \boldsymbol{\mu}_r=\begin{bmatrix}
   1 & 0 & 0\\
   0 & 0.3 & 0\\
   0 & 0 & 1
@@ -1212,7 +1212,7 @@ setting the mean of this distribution to:\footnote{Before we do the
 \end{equation*}
 and initializing its covariance matrix to all ones:
 \begin{equation*}
-  \boldsymbol{\Sigma}_r\defeq\begin{bmatrix}
+  \boldsymbol{\Sigma}_r=\begin{bmatrix}
   1 & 1 & 1\\
   1 & 1 & 1\\
   1 & 1 & 1
@@ -2001,7 +2001,7 @@ overview of these sets is given in Table~\ref{dasa:tbl:rst-rel-sets}.
       \textbf{Scheme} & \textbf{Relation Set} & {\centering\textbf{Equivalence Classes}}\\\midrule
 
       \citeauthor{Bhatia:15} & \{\textsc{Contrastive},
-      \textsc{\bfseries Non-Contrastive}\} & \textsc{Contrastive} $\defeq$
+      \textsc{\bfseries Non-Contrastive}\} & \textsc{Contrastive} $=$
       \{\textsc{Antithesis}, \textsc{Antithesis-E},
       \textsc{Comparison}, \textsc{Concession},
       \textsc{Consequence-S}, \textsc{Contrast},
@@ -2035,11 +2035,11 @@ overview of these sets is given in Table~\ref{dasa:tbl:rst-rel-sets}.
 
       \citeauthor{Zhou:11} & \{\textsc{Contrast}, \textsc{Condition},
       \textsc{Continuation}, \textsc{Cause}, \textsc{Purpose},
-      \textsc{\bfseries Other}\} & \textsc{Contrast} $\defeq$
+      \textsc{\bfseries Other}\} & \textsc{Contrast} $=$
       \{\textsc{Antithesis}, \textsc{Concession}, \textsc{Contrast},
-      \textsc{Otherwise}\};\newline \textsc{Continuation} $\defeq$
+      \textsc{Otherwise}\};\newline \textsc{Continuation} $=$
       \{\textsc{Continuation}, \textsc{Parallel}\};\newline
-      \textsc{Cause} $\defeq$ \{\textsc{Evidence}, \textsc{Nonvolitional-Cause},
+      \textsc{Cause} $=$ \{\textsc{Evidence}, \textsc{Nonvolitional-Cause},
       \textsc{Nonvolitional-Result}, \textsc{Volitional Cause},
       \textsc{Volitional-Result}\};\\\bottomrule
 
