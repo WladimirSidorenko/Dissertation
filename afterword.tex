@@ -67,10 +67,9 @@ way:
 
 \item Afterwards, in Chapter~\ref{chap:cgsa}, we addressed one of the
   most popular objective in contemporary sentiment
-  analysis---message-level polarity prediction (which we called
-  coarse-grained sentiment analysis [CGSA]).  To get a better overview
-  of the numerous existing systems, we compared three larger families
-  of CGSA methods---dictionary-, machine-learning--, and
+  analysis---message-level sentiment analysis (MLSA).  To get a better
+  overview of the numerous existing systems, we compared three larger
+  families of MLSA methods---dictionary-, machine-learning--, and
   deep-learning--based ones, finding that the last two groups
   performed significantly better than the lexicon-based approaches
   (the best macro-\F{}--scores of machine- and deep-learning methods
@@ -98,7 +97,7 @@ way:
   the proposed LBA method by making it aware of the discourse
   structure.  For this purpose, we segmented all microblogs from the
   PotTS and SB10k corpora into elementary discourse units,
-  individually analyzing each of these segments with our CGSA
+  individually analyzing each of these segments with our MLSA
   classifier, and then estimated the overall polarity of a tweet by
   joining the polarity scores of its EDUs over the RST tree.  We
   proposed three different ways of doing this joining (latent CRFs,
@@ -248,8 +247,8 @@ that we have acquired during our run.  Here we go:
     message-level sentiment analyses, boosting the results on the
     former task by up to 4\% (see
     Table~\ref{snt-fgsa:tbl:normalization}) and improving the
-    macro-averaged \F{}-measure of coarse-grained methods by up to
-    25\% (see Table~\ref{snt-cgsa:tbl:res-no-normalization});
+    macro-averaged \F{}-measure of message-level sentiment methods by
+    up to 25\% (see Table~\ref{snt-cgsa:tbl:res-no-normalization});
 
     The only question that remained unanswered in this context is
     which normalization steps exactly improve the scores of sentiment
@@ -444,8 +443,8 @@ experiments:
 \item for our text normalization pipeline and aspect-based sentiment
   methods, please refer to:\\
   \url{https://github.com/WladimirSidorenko/TextNormalization};
-\item furthermore, you can find our coarse-grained sentiment
-  approaches at:\\ \url{https://github.com/WladimirSidorenko/CGSA};
+\item furthermore, you can find our MLSA approaches
+  at:\\ \url{https://github.com/WladimirSidorenko/CGSA};
 \item and get all discourse-aware solutions
   from:\\ \url{https://github.com/WladimirSidorenko/DASA};
 \item last but not least, we have released the discourse segmenter,
