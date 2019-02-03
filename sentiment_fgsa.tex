@@ -188,24 +188,30 @@ and preprocessed them using the rule-based normalization technique of
 %% converted to in-vocabulary terms with a pre-defined set of
 %% transformations were also normalized.
 Afterwards, we labeled the normalized data with their part-of-speech
-tags using \texttt{TreeTagger}\footnote{We used \texttt{TreeTagger}
-  Version 3.2 with the German parameter file UTF-8.} \cite{Schmid:95},
-and parsed the resulting sentences with the \texttt{Mate} dependency
-parser\footnote{We used \texttt{Mate} Version \texttt{3.61} with the
-  German parameter model 3.6.}  \cite{Bohnet:13}.  Finally, since
-\texttt{MMAX2} did not provide a straightforward support for the
-character offsets of the annotated tokens, and the automatically
-tokenized data could disagree with the original corpus tokenization,
-we aligned manual annotation with the automatically split words using
-the Needleman-Wunsch alignment algorithm~\cite{Needleman:70}.
+tags using \textsc{TreeTagger}\footnote{In particular, we used
+  \textsc{TreeTagger} Version~3.2 with the German parameter file
+  UTF-8.}~\cite{Schmid:95}, and parsed the resulting sentences with
+the \textsc{Mate} dependency parser\footnote{We used \textsc{Mate}
+  Version \texttt{3.61} with the German parameter model 3.6.}
+\cite{Bohnet:13}.  The choice of these tools was motivated by their
+superior results in our evaluation study, which we conducted while
+working on the normalization pipeline \cite{Sidarenka:13}, and by the
+dependency of the \textsc{Mate} parser on the STTS tagset, which
+precluded the usage of other taggers \cite[\eg{}][]{Rehbein:13}.
+Finally, since \texttt{MMAX2} did not provide a straightforward
+support for the character offsets of the annotated tokens, and the
+automatically tokenized data could disagree with the original corpus
+tokenization, we aligned manual annotation with the automatically
+split words using the Needleman-Wunsch alignment
+algorithm~\cite{Needleman:70}.
 
 \section{Conditional Random Fields}
 
-The first method which we evaluated on the obtained data was that of
-the conditional random fields.  First introduced by
-\citet{Lafferty:01}, CRFs had rapidly grown in popularity, turning
-into one of the most commonly used probabilistic frameworks, which had
-been dominating the NLP field for more than a decade.
+The first method that we evaluated on the obtained data was
+conditional random fields.  First introduced by \citet{Lafferty:01},
+CRFs had rapidly grown in popularity, turning into one of the most
+widely used probabilistic frameworks, which was dominating the NLP
+field for more than a decade.
 
 The main reasons for the huge success of this model are:
 \begin{enumerate}[1)]
