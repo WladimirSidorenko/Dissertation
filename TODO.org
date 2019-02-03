@@ -5,14 +5,14 @@
    DEADLINE: <2016-05-06 Fr>
 ** DONE Write Summary and Conclusion
    DEADLINE: <2016-05-09 Mo>
-** DONE Revise the Section
+** DONE Revise the Chapter
    DEADLINE: <2016-05-09 Mo>
-** DONE Sent the Section to the Supervisor
+** DONE Sent the Chapter to the Supervisor
    DEADLINE: <2016-05-10 Tue>
 ** DONE Incorporate Supervisor's Feedback
 
 
-* DONE Write Sentiment Lexicon Section
+* DONE Write Sentiment Lexicon Chapter
 ** DONE Make Scaffold
    DEADLINE: <2016-05-18 Mi>
 
@@ -62,7 +62,7 @@
 *** TODO Finish the section
 ** DONE Write Summary and Conclusions
    DEADLINE: <2017-05-14 Sun>
-** DONE Revise the Section
+** DONE Revise the Chapter
 ** DONE Incorporate Supervisor's Feedback
 *** DONE S 44: Ich weiß nicht ob wir darüber schon gesprochen hatten, aber die Gleichsetzung von "polar words" und "emotional expressions" scheint mir nicht ganz die Standardterminologie zu sein. Emotions-Analysen kennen auch Dimensionen wie agitated/subdued und anderes, die interessant sind, aber definitiv orthogonal zu Polarität/Valenz. M.a.W., ich würde "Polariät" als eine der Dimensionen von "Emotion" sehen, aber nicht als dasselbe.
 *** DONE S. 44 und folgende: "updated version of dataset" klingt potenziell verwirrend ;-)  Die Dissertation soll nicht den mehrschrittigen Prozess der Genese des Dataset nacherzählen, sondern idealerweise nur das Endresultat beschreiben. Alles andere verwirrt (und ohnehin wissen wir schon, dass wir eher auf Kürze achten müssen). Vor allem ist es auch nicht gut, wenn Erweiterungen des Dataset in späteren Kapiteln eingeführt werden, und nicht im Dataset-Kapitel.
@@ -80,7 +80,7 @@
 *** DONE S. 54: schwierig, dass hier nochmal wieder related work kommt - wir hatten ja in dem Kapitel schon reichlich davon. Hab ich jetzt mal nicht weitergelesen.
 
 
-* TODO Write Fine-Grained Sentiment Analysis Section
+* TODO Write Fine-Grained Sentiment Analysis Chapter
 ** DONE Write Introduction
 ** DONE Describe Rules for Determining Text Spans
    DEADLINE: <2016-11-03 Do>
@@ -104,15 +104,15 @@
 ** DONE Revise Related Work
 ** DONE Write Summary and Conclusions
    DEADLINE: <2016-11-25 Fr>
-** DONE Revise Section
+** DONE Revise Chapter
    DEADLINE: <2016-11-30 Mi>
-** DONE Send Section to the Supervisor
+** DONE Send Chapter to the Supervisor
    DEADLINE: <2016-11-30 Mi>
 
 ** TODO Incorporate Supervisor's Feedback
 
 
-* IN-PROGRESS Write Coarse-Grained Sentiment Analysis Section
+* IN-PROGRESS Write Coarse-Grained Sentiment Analysis Chapter
 ** DONE Implement Evaluation Script
 ** DONE Describe Evaluation Metrics
 ** DONE Describe Data Preparation
@@ -251,10 +251,47 @@
 ** DONE Write Summary and Conclusions
    DEADLINE: <2018-02-28 Wed>
 
-** TODO Incorporate Supervisor's Feedback
+** DONE Incorporate Supervisor's Feedback
+**** DONE 102: Ich würde hier noch ein klein wenig ausführlicher ankündigen, dass Du ausgewählte (weil erfolgreiche) Ansätze re-implementieren wirst, und im DL Kapitel dann auch einen eigenen Ansatz (bzw Modifikation von Baziotis) vorschlägst.
+*** DONE Sct 6.1
+**** DONE S 103 warum ist macro F1 über pos und neg eine Alternative zu micro-avg über pos/neg/neut? Sollte man nicht immer dieselbe Zahl von Klassen haben?
+*** DONE Sct 6.2
+**** DONE S 103 Statt TreeTagger besser den Tweet-Tagger von Ines Rehbein nutzen?
+     # (Oder jedenfalls sagen, dass es ihn auch gibt.)
+**** DONE S 103 Ref PotTS Korpus sollte nicht ein paper, sondern das Kapitel dieser Diss sein
+**** DONE S 103 Was ist der Zweck der sehr einfachen Pol.-Bestimmung?
+     # Direkt sagen, dass das die Eval-Daten werden sollen und wir
+     # dafür eine einfache Methode benötigen. (Hm, wie zuverlässig
+     # wird das werden?)  Wieviele tweets werden getilgt, weil
+     # uneindeutig? Woher kommen die lexikalischen Informationen?
+     # Stecken wir Info in die "Gold" Daten, die wir später bei der
+     # Eval von Lex-Methoden dann wieder evaluieren wollen?
 
+**** DONE S 104 Erklärg warum Bsp 6.2.2 positiv annotiert wird?
+**** DONE S 105 Warum hat PotTS ein IAA - davon war im Text bisher nicht die Rede.
+**** DONE S 105 "As you might remember" unüblich, den Leser direkt anzusrpechen (kommt auch später vor.)
+*** DONE Sct 6.3
+**** DONE S 109 Test the earlier work on PotTS and SB10k, but why not on the 3rd corpus? (Or in other words, why was the 3rd corpus introduced?)
+**** DONE S 109 "drawback of this resource, which unfortunately slipped through our previous intrinsic evaluation" - was heißt das?
+*** DONE Sct 6.3.1, 6.3.2: interessant!
+**** DONE S 112 Ex 6.3.1 might point to a problem of re-implementing rules of an English system for German, where word order is much less restricted
+**** DONE S 112 Ex 6.3.2 Isn't the question the reason for nullifying the score? (And rightly so, I believe.)
+**** DONE S 113 what is an "informative part of speech"?
+**** DONE S 114 Ex 6.3.5 Is "Ok" a good translation of "Normal" ?
+**** DONE S 115 Warum tritt derselbe tweet zweimal im cluster auf?
+*** DONE Sct 6.4
+**** DONE S 118ff: If (many of) these approaches use sentiment lexicons in their feature space, is the dividing line between lexicon methods and ML methods really so clear?
+**** DONE S 120 First mention of "the Linear Projection lexicon" in this chapter. Please remind the reader what it is. (section reference)
+**** DONE S 121 As indicated earlier. at least one German Twitter PoS taggers does exist now. A comparison to TreeTagger would be really interesting here.
+**** DONE S 126 some equations have a number, some do not
+**** DONE S 126 in teh Ye./Cardie 11 approach, what are the vectors u and v ?
+**** DONE S 127 line 1: ist "child" = "dependent" und "vector" = "embedding"? Dann besser identische Bezeichner benutzen
+**** DONE S 130 der Übergang vom Referieren früherer Arbeiten zum Vorschlag eines eigenen klarer markiert sein - vielleicht durch separate subsubsections. 
+**** DONE S 138 6.5.5 ist natürlich ein schöner Hinweis auf einen möglichen Mehrwert von lokalen Kohärenzrelationen ;-)
 
-* DONE Write Discourse-Level Sentiment Analysis Section
+** IN-PROGRESS Revise the Chapter
+
+* DONE Write Discourse-Level Sentiment Analysis Chapter
 ** DONE Write Introduction
 ** DONE Write Related Work
 *** DONE Add summary of Riloff et al. (2003)
