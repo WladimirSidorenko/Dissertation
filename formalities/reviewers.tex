@@ -1,0 +1,64 @@
+\documentclass[12pt]{article}
+
+%% Package
+\usepackage[ngerman]{babel}     % German Date
+\usepackage{color}              % \definecolor
+\usepackage{enumitem}
+\usepackage[a4paper]{geometry}
+\usepackage{hyperref}
+\usepackage{marvosym}
+
+%% Colors
+\definecolor{midnightblue}{RGB}{25,25,112}
+
+%% Command
+\newcommand{\titledate}[2][2.15in]{{%
+  \vskip 1em\noindent\itshape%
+  \begin{tabular}{@{}p{#1}@{}}
+    \today\\ \hline \\[-.75\normalbaselineskip]
+    Datum
+  \end{tabular} \hspace{1in}
+  \begin{tabular}{@{}p{#1}@{}}
+    \\ \hline \\[-.75\normalbaselineskip]
+    Unterschrift
+  \end{tabular}
+}}
+
+%% Length and Setup
+\setenumerate[1]{itemsep=30pt,topsep=5em}
+\setlength{\parindent}{0pt}
+\hypersetup{
+    colorlinks=true,
+    linktoc=all,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=midnightblue,
+    urlcolor=midnightblue
+}
+
+%% Document
+\begin{document}
+
+\vskip 10em \textbf{Vorschlag f\"ur Gutachter im Promotionsverfahren}
+\vskip 1em
+\textbf{von Herrn: Uladzimir Sidarenka}
+
+\begin{enumerate}[label=\textbf{\arabic*.}]
+\item\textbf{Extern:}\\[1em]
+  Herr Prof. Dr. \textbf{Jacob Eisenstein}\\[0.5em]
+  School of Interactive Computing\\
+  Georgia Institute of Technology\\
+  801 Atlantic Drive NW, Atlanta, GA 30308\\
+  \Letter{} \href{mailto:jacobe@gmail.com}{jacobe@gmail.com}
+\item\textbf{Intern:}\\[1em]
+  Herr Prof. Dr. \textbf{Manfred Stede}\\[0.5em]
+  EB Kognitionswissenschaften\\
+  Universit\"at Potsdam\\
+  Karl-Liebknecht-Str. 24-25\\
+  D-14476 Golm\\
+  \Letter{} \href{mailto:stede@uni-potsdam.de}{stede@uni-potsdam.de}
+\end{enumerate}
+\vskip 3em
+\titledate{}
+\thispagestyle{empty}
+\end{document}
