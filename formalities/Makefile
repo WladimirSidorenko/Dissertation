@@ -1,8 +1,9 @@
 ##################################################################
 # Variables
 APPLICATION_FILE := application.pdf
-DECLARATION_FILE := declaration.pdf
 COMMITTEE_FILE := committee.pdf
+CV_FILE := cv.pdf
+DECLARATION_FILE := declaration.pdf
 PUBLICATIONS_FILE := publications.pdf
 REVIEWERS_FILE := reviewers.pdf
 
@@ -10,15 +11,15 @@ REVIEWERS_FILE := reviewers.pdf
 # Special Targets
 .DELETE_ON_ERROR:
 
-.PHONY: all application declaration committee publications reviewers \
-	clean clean_application clean_declaration clean_committee \
-	clean_publications clean_reviewers
+.PHONY: all application committee cv declaration publications reviewers \
+	clean clean_application clean_committee clean_cv \
+	clean_declaration clean_publications clean_reviewers
 
 ##################################################################
 # Main Target
-all: application committee declaration publications reviewers
+all: application committee cv declaration publications reviewers
 
-clean: clean_application clean_committee clean_declaration \
+clean: clean_application clean_committee clean_cv clean_declaration \
 	clean_publications clean_reviewers
 	-rm -f *.lot *.log *.aux *.out *.bbl *.lof *.blg
 
@@ -35,6 +36,13 @@ committee: ${COMMITTEE_FILE}
 
 clean_committee:
 	-rm -f ${COMMITTEE_FILE}
+
+##################################################################
+# CV
+cv: ${CV_FILE}
+
+clean_cv:
+	-rm -f ${CV_FILE}
 
 ##################################################################
 # Declaration
