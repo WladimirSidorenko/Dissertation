@@ -16,10 +16,10 @@ REVIEWERS_FILE := reviewers.pdf
 
 ##################################################################
 # Main Target
-all: application committee declaration reviewers
+all: application committee declaration publications reviewers
 
 clean: clean_application clean_committee clean_declaration \
-	clean_reviewers
+	clean_publications clean_reviewers
 	-rm -f *.lot *.log *.aux *.out *.bbl *.lof *.blg
 
 ##################################################################
@@ -46,6 +46,13 @@ clean_declaration:
 ##################################################################
 # Publications
 publications: ${PUBLICATIONS_FILE}
+
+${PUBLICATIONS_FILE}: %.pdf: %.tex ../bibliography.bib
+	set -e; \
+	pdflatex -halt-on-error -output-directory ${@D} $< && \
+	bibtex $(basename $<) && \
+	pdflatex -halt-on-error -output-directory ${@D} $< && \
+	pdflatex -halt-on-error -output-directory ${@D} $<
 
 clean_publications:
 	-rm -f ${PUBLICATIONS_FILE}
