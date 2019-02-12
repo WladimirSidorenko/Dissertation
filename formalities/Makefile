@@ -1,24 +1,21 @@
 ##################################################################
 # Variables
 APPLICATION_FILE := application.pdf
-AUTHORSHIP_STATEMENT_FILE := authorship_statement.pdf
-EXCLUSIVITY_DECLARATION_FILE := exclusivity_declaration.pdf
-SUBJECT_DECLARATION_FILE := subject_declaration.pdf
+DECLARATION_FILE := declaration.pdf
+COMMITTEE_LIST_FILE := committee_list.pdf
 
 ##################################################################
 # Special Targets
 .DELETE_ON_ERROR:
 
-.PHONY: all application authorship_statement exclusivity_declaration subject_declaration \
-	clean clean_application clean_authorship_statement clean_exclusivity_declaration \
-	clean_subject_declaration
+.PHONY: all application declaration \
+	clean clean_application clean_declaration
 
 ##################################################################
 # Main Target
-all: application authorship_statement exclusivity_declaration subject_declaration
+all: application declaration committee_list
 
-clean: clean_application clean_authorship_statement clean_exclusivity_declaration \
-	clean_subject_declaration
+clean: clean_application clean_declaration
 	-rm -f *.lot *.log *.aux *.out *.bbl *.lof *.blg
 
 ##################################################################
@@ -29,25 +26,18 @@ clean_application:
 	-rm -f ${APPLICATION_FILE}
 
 ##################################################################
-# Authorship Statement
-authorship_statement: ${AUTHORSHIP_STATEMENT_FILE}
+# Declaration
+declaration: ${DECLARATION_FILE}
 
-clean_authorship_statement:
-	-rm -f ${AUTHORSHIP_STATEMENT_FILE}
-
-##################################################################
-# Exclusivity Declaration
-exclusivity_declaration: ${EXCLUSIVITY_DECLARATION_FILE}
-
-clean_exclusivity_declaration:
-	-rm -f ${EXCLUSIVITY_DECLARATION_FILE}
+clean_declaration:
+	-rm -f ${DECLARATION_FILE}
 
 ##################################################################
-# Subject Declaration
-subject_declaration: ${SUBJECT_DECLARATION_FILE}
+# Committee
+committee_list: ${COMMITTEE_LIST_FILE}
 
-clean_subject_declaration:
-	-rm -f ${SUBJECT_DECLARATION_FILE}
+clean_committee_list:
+	-rm -f ${COMMITTEE_LIST_FILE}
 
 ##################################################################
 # PDF Files
