@@ -6,21 +6,24 @@ CV_FILE := cv.pdf
 DECLARATION_FILE := declaration.pdf
 PUBLICATIONS_FILE := publications.pdf
 REVIEWERS_FILE := reviewers.pdf
+SUMMARY_FILE := summary.pdf
 
 ##################################################################
 # Special Targets
 .DELETE_ON_ERROR:
 
 .PHONY: all application committee cv declaration publications reviewers \
+	summary \
 	clean clean_application clean_committee clean_cv \
-	clean_declaration clean_publications clean_reviewers
+	clean_declaration clean_publications clean_reviewers \
+	clean_summary
 
 ##################################################################
 # Main Target
-all: application committee cv declaration publications reviewers
+all: application committee cv declaration publications reviewers summary
 
 clean: clean_application clean_committee clean_cv clean_declaration \
-	clean_publications clean_reviewers
+	clean_publications clean_reviewers clean_summary
 	-rm -f *.lot *.log *.aux *.out *.bbl *.lof *.blg
 
 ##################################################################
@@ -55,22 +58,31 @@ clean_declaration:
 # Publications
 publications: ${PUBLICATIONS_FILE}
 
-${PUBLICATIONS_FILE}: %.pdf: %.tex ../bibliography.bib
+clean_publications:
+	-rm -f ${PUBLICATIONS_FILE}
+
+##################################################################
+# Reviewers
+reviewers: ${REVIEWERS_FILE}
+
+clean_reviewers:
+	-rm -f ${REVIEWERS_FILE}
+
+##################################################################
+# Summary
+summary: ${SUMMARY_FILE}
+
+clean_summary:
+	-rm -f ${SUMMARY_FILE}
+
+##################################################################
+# PDF + BibTeX Files
+${PUBLICATIONS_FILE} ${SUMMARY_FILE}: %.pdf: %.tex ../bibliography.bib
 	set -e; \
 	pdflatex -halt-on-error -output-directory ${@D} $< && \
 	bibtex $(basename $<) && \
 	pdflatex -halt-on-error -output-directory ${@D} $< && \
 	pdflatex -halt-on-error -output-directory ${@D} $<
-
-clean_publications:
-	-rm -f ${PUBLICATIONS_FILE}
-
-##################################################################
-# Publications
-reviewers: ${REVIEWERS_FILE}
-
-clean_reviewers:
-	-rm -f ${REVIEWERS_FILE}
 
 ##################################################################
 # PDF Files
