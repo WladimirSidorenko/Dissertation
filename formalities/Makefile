@@ -1,5 +1,6 @@
 ##################################################################
 # Variables
+ABSTRACT_FILE := abstract.pdf
 APPLICATION_FILE := application.pdf
 COMMITTEE_FILE := committee.pdf
 CV_FILE := cv.pdf
@@ -20,11 +21,18 @@ SUMMARY_FILE := summary.pdf
 
 ##################################################################
 # Main Target
-all: application committee cv declaration publications reviewers summary
+all: abstract application committee cv declaration publications reviewers summary
 
-clean: clean_application clean_committee clean_cv clean_declaration \
+clean: clean_abstract clean_application clean_committee clean_cv clean_declaration \
 	clean_publications clean_reviewers clean_summary
 	-rm -f *.lot *.log *.aux *.out *.bbl *.lof *.blg
+
+##################################################################
+# Application
+abstract: ${ABSTRACT_FILE}
+
+clean_application:
+	-rm -f ${ABSTRACT_FILE}
 
 ##################################################################
 # Application
