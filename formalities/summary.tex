@@ -4,13 +4,20 @@
 %% Packages
 \usepackage[authoryear]{natbib}
 \usepackage{paralist}
+\usepackage{titling}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Commands
+\newcommand{\ienocomma}{\textit{i.e.}}
+\newcommand{\ie}{\ienocomma,}
 \newcommand{\eg}{\textit{e.g.},}
 \newcommand{\F}[0]{$F_1$}
 \newcommand{\markable}[1]{\texttt{#1}}
 \newcommand{\attribute}[1]{\emph{\texttt{#1}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Lengths
+\setlength{\droptitle}{-10em}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Variables
@@ -24,31 +31,52 @@
 \begin{document}
 \maketitle
 
-The immense popularity of social media in the last decade has not only
-revolutionized our everyday life (with news spreading like wildfire on
-the Web, presidents announcing their decisions on Twitter, and the
-outcome of political elections being determined on Facebook) but also
-dramatically increased the amount of data exchanged on these services.
-Therefore, if we wish to understand the needs of modern society better
-and want to protect it from new threats, we urgently need more robust,
-higher-quality natural language processing (NLP) applications that can
-recognize such necessities and menaces automatically, by analyzing
-uncensored texts.  Unfortunately, most NLP programs today have been
-created for standard language, as we know it from newspapers, or, in
-the best case, adapted to the specifics of English online messages.
+Online communication services have not only revolutionized our
+everyday life, allowing us to stay in touch with friends, exchange
+ideas with colleagues, and get latest news from celebrities and
+politicians without leaving our desktops, but also opened the doors to
+numerous new dangers, such as cyber-attacks, online bullying, and
+deliberate manipulation of public opinion---dangers, which can hardly
+be averted manually due to the immense amount of data exchanged on
+online platforms.  Therefore, if we want to protect our society from
+these looming threats, we urgently need more robust, higher-quality
+natural language processing (NLP) applications that can recognize such
+menaces automatically, by analyzing uncensored texts.  Unfortunately,
+most NLP programs today have been created for standard language, as we
+know it from newspapers, or, in the best case, adapted to the
+specifics of English social media.
 
 This thesis reduces the existing deficit by entering the new frontier
-of German Internet communication and addressing one of its most
-prolific forms---users' conversations on Twitter.  In particular, it
-explores the ways and means by how people express their opinions on
-this service, examines current approaches to automatic mining of these
-sentiments, and proposes novel methods that outperform
-state-of-the-art techniques.
+of German online communication and addressing one of its most prolific
+forms---users' conversations on Twitter.  In particular, it explores
+the ways and means by how people express their opinions, evaluations,
+and appraisals on this service, examines current approaches to
+automatic mining of these feelings (that is what the field of
+sentiment analysis is actually concerned with), and proposes novel
+analysis methods that outperform state-of-the-art techniques.
+
+I perform these tasks on three different linguistic levels:
+\begin{itemize}
+  \item\emph{subsentential}, in which I try to predict the polarity of
+    single words and find the most important components of an opinion
+    (its target, holder, and the actual evaluative statement) within a
+    sentence;
+
+  \item\emph{sentential}, where I consider the whole microblog as a
+    single sentence and try to classify its overall semantic
+    orientation,
+
+  \item and, finally,\emph{suprasentential}, in which I try to improve
+    on message-level sentiment classification by computing the overall
+    polarity of a tweet from semantic orientations of it single
+    sentences, taking into account their discourse relations (\ie{}
+    semantic and pragmatic links).
+\end{itemize}
 
 \section{Research Questions}
 
-While pursuing these goals, I am trying to find answer to the
-following questions:
+By pursuing these goals, I am trying to find answers to the following
+questions:
 
 \begin{itemize}
 \item Can we apply opinion mining methods devised for standard English
@@ -61,6 +89,7 @@ following questions:
 \end{itemize}
 
 \section{Outline of this Work}
+
 
 \subsection{Chapter 1: Introduction to Sentiment Analysis}
 As you might remember, we started off by summarizing the history of
