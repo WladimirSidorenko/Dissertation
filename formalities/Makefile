@@ -31,7 +31,7 @@ clean: clean_abstract clean_application clean_committee clean_cv clean_declarati
 # Application
 abstract: ${ABSTRACT_FILE}
 
-clean_application:
+clean_abstract:
 	-rm -f ${ABSTRACT_FILE}
 
 ##################################################################
