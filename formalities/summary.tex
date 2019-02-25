@@ -17,7 +17,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
-\setlength{\droptitle}{-10em}
+\setlength{\droptitle}{-7em}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Variables
@@ -32,9 +32,9 @@
 \maketitle
 
 Online communication services have not only revolutionized our
-everyday life, allowing us to stay in touch with friends, exchange
+everyday life (allowing us to stay in touch with friends, exchange
 ideas with colleagues, and get latest news from celebrities and
-politicians without leaving our desktops, but also opened the doors to
+politicians without leaving our desktops) but also opened the doors to
 numerous new dangers, such as cyber-attacks, online bullying, and
 deliberate manipulation of public opinion---dangers, which can hardly
 be averted manually due to the immense amount of data exchanged on
@@ -49,69 +49,83 @@ specifics of English social media.
 This thesis reduces the existing deficit by entering the new frontier
 of German online communication and addressing one of its most prolific
 forms---users' conversations on Twitter.  In particular, it explores
-the ways and means by how people express their opinions, evaluations,
-and appraisals on this service, examines current approaches to
-automatic mining of these feelings (that is what the field of
-sentiment analysis is actually concerned with), and proposes novel
-analysis methods that outperform state-of-the-art techniques.
+the ways and means by how people express their opinions on this
+service, examines current approaches to automatic mining of these
+feelings, and proposes novel sentiment analysis methods, which
+outperform state-of-the-art techniques.
 
 I perform these tasks on three different linguistic levels:
 \begin{itemize}
-  \item\emph{subsentential}, in which I try to predict the polarity of
-    single words and find the most important components of an opinion
-    (its target, holder, and the actual evaluative statement) within a
+  \item\emph{subsentential}, in which I try to infer the polarity of
+    single words, and predict the main components of an opinion (its
+    target, holder, and the actual evaluative expression) within a
     sentence;
 
   \item\emph{sentential}, where I consider the whole microblog as a
-    single sentence and try to classify its overall semantic
-    orientation,
+    single statement and classify its overall semantic orientation,
 
-  \item and, finally,\emph{suprasentential}, in which I try to improve
-    on message-level sentiment classification by computing the overall
-    polarity of a tweet from semantic orientations of it single
-    sentences, taking into account their discourse relations (\ie{}
-    semantic and pragmatic links).
+  \item and, finally, \emph{suprasentential}, in which I try to
+    improve on message-level sentiment classification by deriving the
+    overall polarity of a tweet from the semantic orientation of its
+    single sentences, taking into account their semantic and pragmatic
+    links (discourse relations).
 \end{itemize}
+At each of these levels, I evaluate the most prominent classes of
+existing systems, seek to outperform their results with my own
+solutions, and estimate the effect of different hyper-paramaters and
+input properties (such as word embeddings, features, and text
+normalization) on all these methods.
 
 \section{Research Questions}
 
-By pursuing these goals, I am trying to find answers to the following
-questions:
-
+By doing so, I hope to find answers to the following questions:
 \begin{itemize}
-\item Can we apply opinion mining methods devised for standard English
-  to German Twitter?
-\item Which groups of approaches are best suited for which sentiment
+\item Can we apply opinion mining methods approaches devised for
+  standard English to German Twitter?
+\item Which groups of methods are best suited for which sentiment
   analysis tasks?
 \item How much do word- and discourse-level analyses affect
   message-level sentiment classification?
 \item Does text normalization help analyze sentiments?
+\item Can we do better than existing systems?
 \end{itemize}
 
 \section{Outline of this Work}
 
+To get these answers, I proceed in the following way:
 
-\subsection{Chapter 1: Introduction to Sentiment Analysis}
-As you might remember, we started off by summarizing the history of
-sentiment analysis, going back to its very origins in the ancient
-Greek philosophy and tracing its development to the present day;
+\subsection{Chapter~1: Introduction to Sentiment Analysis}
 
+In Chapter~1, I give a brief introduction to the main goals and
+definitions of the sentiment analysis field, and make a digression
+into the history of this discipline, tracing its roots back to the
+ancient philosophy, and following the course if its development
+through the main milestones in psychology, narratology, and
+linguistics in the 20th century.  I pay
 
-\subsection{Chapter 2: Sentiment Corpus}
+, paying special attention to the recent
+developments in opinion mining of social media, and especially
+Twitter.
 
-Afterwards, to see what the current state of the art in opinion mining
-would yield on German Twitter, we created a corpus of $\approx8,000$
-German tweets, collecting these messages for four different topics
-(federal elections, papal conclave, general political discussions, and
-casual everyday conversations).  To ensure a good recall of
-opinionated statements in the resulting dataset, we grouped all
-microblogs into three formal categories (tweets with a polar term from
-the SentiWS lexicon, messages containing a smiley, and all remaining
-microblogs) and sampled an equal number of tweets (666) for each of
-the four topics from each of these three categories.  After annotating
-the corpus in three steps (initial, adjudication, and final), we
-attained a reliable level of inter-annotator agreement for all
-elements (sentiments, sources, targets, polar terms, downtoners,
+\subsection{Chapter~2: Sentiment Corpus}
+
+Afterwards, in Chapter~2, I introduce the Potsdam Twitter Sentiment
+(PotTS) corpus---a collection of $7,992$ German microblogs pertaining
+to German federal elections, papal conclave, general political
+discussions, and casual everyday conversations.  To obtain messages
+for the first three groups, I was tracking the public Twitter API
+between March and September 2013, using extensive lists of hand-picked
+keywords that, in my opinion, described these topics.
+
+To ensure a representative number of subjective opinions in the
+resulting dataset, I grouped all microblogs into three formal classes:
+tweets that contained a polar term from the SentiWS
+lexicon~\cite{Remus:10}, messages containing a smiley, and all
+remaining microblogs) and sampled an equal number of tweets (666) for
+each of the four topics from each of these three categories.  After
+annotating the corpus in three steps (initial, adjudication, and
+final), we attained a reliable level of inter-annotator agreement for
+all elements (sentiments, sources, targets, polar terms, downtoners,
 negations, and intensifiers), finding that both selection criteria
 (topics and formal traits) significantly affected the distribution of
 sentiments and polar terms and the reliability of their annotation;
@@ -174,7 +188,7 @@ microblogs without polar terms or emoticons).  In the next step, we
 are going to check whether our dataset can also serve as a basis for
 building and evaluating automatic opinion mining applications.
 
-\subsection{Chapter 3: Sentiment Lexicons}
+\subsection{Chapter~3: Sentiment Lexicons}
 
 Then, at the first checkpoint, we compared existing German sentiment
 lexicons, which were translated from English resources and revised by
@@ -263,7 +277,7 @@ further opinion-mining fields, aspect-based and message-level
 sentiment analysis, in which sentiment lexicons are traditionally
 considered as one of the most valuable building blocks.
 
-\subsection{Chapter 4: Aspect-Based Sentiment Analysis}
+\subsection{Chapter~4: Aspect-Based Sentiment Analysis}
 
 In Chapter \ref{chap:fgsa}, we turned our attention to the
 aspect-based sentiment analysis, in which we tried to predict the
@@ -320,7 +334,7 @@ Furthermore, a closer look at these systems revealed that:
   3\%.
 \end{itemize}
 
-\subsection{Chapter 5: Message-Level Sentiment Analysis}
+\subsection{Chapter~5: Message-Level Sentiment Analysis}
 
 Afterwards, in Chapter~\ref{chap:cgsa}, we addressed one of the most
 popular objective in contemporary sentiment analysis---message-level
@@ -407,7 +421,7 @@ following findings and contributions:
     for all tested methods, as confirmed by our last ablation test.
 \end{itemize}
 
-\subsection{Chapter 6: Discourse-Aware Sentiment Analysis}
+\subsection{Chapter~6: Discourse-Aware Sentiment Analysis}
 
 Finally, in the last part, we tried to improve the results of the
 proposed LBA method by making it aware of the discourse structure.
