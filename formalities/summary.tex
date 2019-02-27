@@ -14,6 +14,7 @@
 \newcommand{\F}[0]{$F_1$}
 \newcommand{\markable}[1]{\texttt{#1}}
 \newcommand{\attribute}[1]{\emph{\texttt{#1}}}
+\renewcommand{\cite}{\citep}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Lengths
@@ -62,19 +63,19 @@ I perform these tasks on three different linguistic levels:
     expression) within a sentence;
 
   \item\emph{sentential}, where I consider the whole microblog as a
-    single statement and classify its overall semantic orientation,
+    single statement and classify its overall semantic orientation;
 
   \item and, finally, \emph{suprasentential}, in which I try to
-    improve on message-level sentiment classification by deriving the
+    improve on message-level sentiment classification by inferring the
     overall polarity of a tweet from the semantic orientation of its
     single sentences, taking into account their semantic and pragmatic
     links (discourse relations).
 \end{itemize}
 At each of these levels, I evaluate the most prominent classes of
-existing systems, seek to outperform their results with my own
+existing systems, seek to outperform their scores with my own
 solutions, and estimate the effect of different hyper-paramaters and
 input properties (such as word embedding types, feature groups, and
-text normalization) on these approaches.
+text normalization) on the net classification results.
 
 \section{Research Questions}
 
@@ -109,84 +110,82 @@ the current state of the art in sentiment analysis of Twitter.
 
 Afterwards, in Chapter~2, I introduce the Potsdam Twitter Sentiment
 (PotTS) corpus---a collection of $7,992$ German microblogs pertaining
-to the German federal elections~2013, the papal conclave, general
-political discussions, and casual everyday conversations.
+to the German federal elections~2013; papal conclave, which happened
+in the same year; general political discussions; and casual everyday
+conversations.
 
-To obtain an initial set of messages for the first three topics, I was
-tracking the public Twitter API between March and September 2013,
-using extensive lists of hand-picked keywords, which, in my opinion,
-best described these topics.
+I obtained messages for the first three groups by tracking the public
+Twitter API between March and September 2013, using extensive lists of
+hand-picked keywords that, in my opinion, best described these topics.
+As casual everyday posts, I considered microblogs from the German
+Twitter Snapshot~\cite{Scheffler:14}, which includes $\approx97\%$ all
+German tweets (17M messages) posted in April 2013.
 
 To ensure a representative number of subjective opinions in the
-resulting dataset, I grouped all microblogs into three formal classes:
-tweets that contained a polar term from the SentiWS
-lexicon~\cite{Remus:10}, messages containing a smiley, and all
-remaining microblogs) and sampled an equal number of tweets (666) for
-each of the four topics from each of these three categories.  After
-annotating the corpus in three steps (initial, adjudication, and
-final), we attained a reliable level of inter-annotator agreement for
-all elements (sentiments, sources, targets, polar terms, downtoners,
-negations, and intensifiers), finding that both selection criteria
-(topics and formal traits) significantly affected the distribution of
-sentiments and polar terms and the reliability of their annotation;
+resulting corpus, I grouped all downloaded microblogs pertaining to
+the same topic into three formal classes:
+\begin{inparaenum}[(i)]
+  \item tweets that contained a polar term from the sentiment lexicon
+    SentiWS~\cite{Remus:10},
+  \item messages that had an emoticon, and, finally,
+  \item all remaining microblogs.
+\end{inparaenum}
+Afterwards, I sampled an equal number of tweets (666) for each of the
+four topics from each of these three formal categories.
 
-Now that we have reached the end of the second chapter, we would like
-to remind the reader that in this part of the thesis we have presented
-the Potsdam Twitter Sentiment Corpus (PotTS), a collection of 7,992
-German microblogs that had been manually annotated by two human
-experts with sentiments, targets, sources, polar terms, and their
-modifying elements.
+In the next step, I defined an annotation scheme---a list of elements
+that had to be annotated by human experts.  These were:
+\begin{itemize}
+  \item\emph{sentiment}s, which were specified as polar subjective
+    evaluative opinions about people, entities, or events;
 
-We obtained the initial data for this corpus by tracking tweets about
-German federal elections, papal conclave, discussions of general
-political topics, and casual everyday conversations between spring and
-autumn 2013.  Afterwards, we grouped these messages into three classes
-(tweets containing polar terms, microblogs containing exclamation
-marks or emoticons, and the rest of the messages) and randomly sampled
-666 posts from each of these classes for each topic.
+  \item\emph{target}s, which were entities or events being evaluated;
 
-%% A rich annotation scheme, which we devised for our dataset, included
-%% \markable{sentiment}s, \markable{target}s, \markable{opinion}s,
-%% \markable{polar term}s, their \markable{intensifier}s,
-%% \markable{diminisher}s, and \markable{negation}s.  With all these
-%% elements, we associated extensive sets of attributes, such as
-%% \attribute{polarity}, \attribute{intensity}, \attribute{sarcasm},
-%% which also had to be specified by the experts during the annotation.
+  \item\emph{source}s, which were defined as the immediate author(s)
+    or holder(s) of an opinion;
 
-The annotation process was performed in three steps: first, the
-annotators labeled one half of the data after minimal training; then,
-we automatically highlighted their divergent analyses and asked them
-to resolve these differences; finally, our assistants continued with
-the analysis of the remaining files.
+  \item\emph{polar term}s, which represented words or idioms that had
+    a distinguishable evaluative lexical meaning;
 
-To estimate the inter-rater reliability, we introduced two modified
-versions of the established $\kappa$-metric---binary and proportional
-kappa---which differ in the way how they treat overlapping annotations
-and partial matches.  Using these measures, we estimated the
-inter-annotator agreement of our experts at different stages of their
-work.  This study showed that, initially, our assistants could hardly
-agree on the mere notion of targeted opinions, but their disagreements
-could be resolved with the help of the adjudication procedure that we
-applied in step two.  Despite a small drop of the IAA scores in the
-final stage, all $\kappa$-values still remained at the level of at
-least moderate reliability.
+  \item\emph{intensifier}s, which were elements that increased the
+    expressivity and subjective sense of polar terms;
 
-Finally, we demonstrated that our initial selection criteria had a
-strong impact on the number and agreement of annotated sentiments and
-polar terms, with tweets about federal elections and messages without
-prefiltered topics being the most prolific sources of these elements.
+  \item\emph{diminishers}s, which vice versa reduced the strength of a
+    polar term;
 
-That way, we not only contributed to the inventory of available
-sentiment and social-media resources for German but also provided new
-insights into different sampling methods that could be used to create
-an opinion dataset and described the consequences of applying these
-methods in practice.  A detailed inter-annotator agreement study
-showed precisely which topics yield most subjective opinions
-(elections and casual conversations) and which groups of messages are
-especially difficult to annotate (tweets containing emoticons and
-microblogs without polar terms or emoticons).  In the next step, we
-are going to check whether our dataset can also serve as a basis for
-building and evaluating automatic opinion mining applications.
+  \item and, finally, \emph{negation}s, which completely reversed the
+    semantic orientation of a polar item (\eg{} ``\emph{nicht} gut''
+    [\emph{not} good] or ``\emph{kein} schlechtes Beispiel''
+    [\emph{not} bad advice]).
+\end{itemize}
+
+The annotation process was performed in three steps: first, two human
+experts labeled one half of the data after only minimal training;
+then, I automatically highlighted their divergent analyses and asked
+them to resolve these differences; finally, the annotators continued
+with the analysis of the remaining files.
+
+To estimate the inter-rater reliability, I introduce two modified
+versions of the popular $\kappa$-metric~\cite{Cohen:60}---binary and
+proportional kappa---which differ in the way how they treat multiple
+annotations of the same tokens with the same tag (\eg{} if one phrase
+was labeled as \emph{sentiment} several times by one expert) and
+partial matches (\eg{} if two phrases labeled as \emph{sentiment} by
+different experts agree on some, but not all of their tokens).  Using
+these measures, I estimate the inter-annotator agreement (IAA) of the
+experts at different stages of their work.  This study shows that,
+initially, both assistants could hardly agree on the mere notion of
+targeted opinions, but their disagreements could be resolved with the
+help of the adjudication procedure, which was applied in step two.
+Despite a small drop of the IAA scores in the final stage, all
+$\kappa$-values still remained at the level of at least moderate
+reliability.
+
+Finally, I demonstrate that the initial selection criteria (formal
+classes and topics) had a strong impact on the number and agreement of
+annotated sentiments and polar terms, with tweets about federal
+elections and messages without prefiltered topics being the most
+prolific sources of these elements.
 
 \subsection{Chapter~3: Sentiment Lexicons}
 
