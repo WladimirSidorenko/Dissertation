@@ -27,11 +27,12 @@ also look whether methods that were used to produce the original
 English lexicons would yield comparable results when applied to German
 data directly.  Finally, we will analyze whether one of the most
 popular areas of research in contemporary computational
-linguistics---distributed vector representations of words
-\cite{Mikolov:13}---can produce better polarity lists than previous
-approaches.  In the concluding step, we will investigate the effect of
-different hyper-parameters and seed sets on these systems, summarizing
-and concluding our findings in the last part of this chapter.
+linguistics---distributed vector representations of
+words~\cite{Mikolov:13}---can produce better polarity lists than
+previous approaches.  In the concluding step, we will investigate the
+effect of different hyper-parameters and seed sets on these systems,
+summarizing and concluding our findings in the last part of this
+chapter.
 
 \section{Data}\label{sec:snt-lex:data}
 
@@ -41,14 +42,14 @@ evaluating the lexicons, we will utilize the complete corpus labeled
 by the second linguist.  These test data comprise a total of 6,040
 positive and 3,055 negative terms.  But because many of these
 expressions represent emoticons, which, on the one hand, are a priori
-absent in common lexical taxonomies such as \textsc{WordNet}
-\cite{Miller:95,Miller:07} or \textsc{GermaNet} \cite{Hamp:97} and
-therefore not amenable to methods that rely on these resources, but on
-the other hand, can be easily captured by regular expressions, we
-decided to exclude non-alphabetic smileys altogether from our study.
-This left us with a set of 3,459 positive and 2,755 negative labeled
-terms (1,738 and 1,943 unique expressions respectively), whose
-$\kappa$-agreement run up to 59\%.
+absent in common lexical taxonomies such as
+\textsc{WordNet}~\cite{Miller:95,Miller:07} or
+\textsc{GermaNet}~\cite{Hamp:97} and therefore not amenable to methods
+that rely on these resources, but on the other hand, can be easily
+captured by regular expressions, we decided to exclude non-alphabetic
+smileys altogether from our study.  This left us with a set of 3,459
+positive and 2,755 negative labeled terms (1,738 and 1,943 unique
+expressions respectively), whose $\kappa$-agreement run up to 59\%.
 
 \section{Evaluation Metrics}\label{sec:snt-lex:eval-metrics}
 
@@ -62,9 +63,9 @@ a bigger application, \eg{} a supervised classifier that uses
 lexicon's entries as features).
 
 Traditionally, intrinsic evaluation of English polarity lists amounts
-to comparing these resources with the General Inquirer lexicon
-\cite[GI; ][]{Stone:66}, a manually compiled list of 11,895 words
-annotated with their semantic categories.  For this purpose,
+to comparing these resources with the General Inquirer
+lexicon~\cite[GI; ][]{Stone:66}, a manually compiled list of 11,895
+words annotated with their semantic categories.  For this purpose,
 researchers usually take the intersection of the two sets and estimate
 the percentage of matches in which automatically induced polar terms
 have the same polarity as corresponding GI entries.  This evaluation,
@@ -100,10 +101,10 @@ least three of the aforementioned problems, namely,
 \end{inparaenum}
 
 In particular, in order to evaluate a lexicon on our dataset, we
-represent this polarity list as a case-insensitive trie
-\cite[pp. 492--512]{Knuth:98} and compare this trie with the original
-and lemmatized\footnote{All lemmatizations in our experiments were
-  performed using the \textsc{TreeTagger} of \citet{Schmid:95}.}
+represent this polarity list as a case-insensitive
+trie~\cite[pp. 492--512]{Knuth:98} and compare this trie with the
+original and lemmatized\footnote{All lemmatizations in our experiments
+  were performed using the \textsc{TreeTagger} of \citet{Schmid:95}.}
 corpus tokens, successively matching them from left to right.  We
 consider a match as correct if a lexicon term completely agrees with
 the (original or lemmatized) tokens of an annotated \markable{polar
@@ -118,9 +119,9 @@ predicted neutral polarity.
 Using this metric, we first estimated the quality of existing German
 polarity lists:
 \begin{itemize}
-\item\textbf{German Polarity Clues} \cite[GPC;][]{Waltinger:10}, which
+\item\textbf{German Polarity Clues}~\cite[GPC;][]{Waltinger:10}, which
   contains 10,141 polar terms from the English sentiment lexicons
-  Subjectivity Clues \cite{Wilson:05} and SentiSpin \cite{Takamura:05}
+  Subjectivity Clues \cite{Wilson:05} and SentiSpin~\cite{Takamura:05}
   that were automatically translated into German and then manually
   revised by the author.  Apart from that, \citeauthor{Waltinger:10}
   also manually enriched these translations with their frequent
@@ -1558,7 +1559,7 @@ word2vec and task-specific vectors~\cite{Mikolov:13,Collobert:11}.
 The former type seeks to find a word representation that maximizes the
 probability of other tokens appearing in the nearby context, whereas
 the latter type optimizes these representations with respect to a
-specific custom task, such polarity prediction for a whole text.
+specific custom task, such as polarity prediction of the whole text.
 
 In order to see how these differences could affect the results of our
 approaches, we have trained task-specific embeddings on snapshot
@@ -2358,8 +2359,8 @@ conclusions of this chapter as follows:
   present for every language;
 \item in this regard, a viable alternative to dictionary-based methods
   are SLG systems that induce polar lexicons from neural word
-  embeddings, which not only are independent avoid the above limitations, but
-  also yield competitive (or even better) results;
+  embeddings, which not only avoid the above limitations, but also
+  yield competitive (or even better) results;
 \item with at least two of such methods ($k$-NN and linear
   projection), we were able to establish a new state of the art for
   the macro- and micro-averaged \F-scores of automatically induced
