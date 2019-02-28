@@ -2,6 +2,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Packages
+\usepackage{breakcites}
 \usepackage[authoryear]{natbib}
 \usepackage{paralist}
 \usepackage{titling}
@@ -33,19 +34,20 @@
 \maketitle
 
 Online communication services have not only revolutionized our
-everyday life (allowing us to stay in touch with friends, exchange
-ideas with colleagues, and get latest news from celebrities and
-politicians without leaving the desktop) but also opened the doors to
-numerous new dangers, such as cyber-attacks, online bullying, and
-deliberate manipulation of public opinion---dangers, which can hardly
-be averted manually due to the immense amount of data exchanged on
-online platforms.  Therefore, if we want to protect our society from
-these looming threats, we urgently need more robust, higher-quality
-natural language processing (NLP) applications that can recognize such
-menaces automatically, by analyzing uncensored texts.  Unfortunately,
-most NLP programs today have been created for standard language, as we
-know it from newspapers, or, in the best case, adapted to the
-specifics of English social media.
+interaction with other people (allowing us to stay in touch with
+friends, exchange ideas with colleagues, and get latest news from
+celebrities and politicians without leaving the desktop) but also
+opened the doors to numerous new dangers, such as cyber-attacks,
+online bullying, and deliberate manipulation of public
+opinion---dangers, which can hardly be averted manually due to the
+immense amount of data exchanged on online platforms.  Therefore, if
+we want to protect our society from these looming threats, we urgently
+need more robust, higher-quality natural language processing (NLP)
+applications that can recognize such menaces automatically, by
+analyzing uncensored texts.  Unfortunately, most NLP programs today
+have been created for standard language, as we know it from
+newspapers, or, in the best case, adapted to the specifics of English
+social media.
 
 This thesis reduces the existing deficit by entering the new frontier
 of German online communication and addressing one of its most prolific
@@ -75,7 +77,7 @@ At each of these levels, I evaluate the most prominent classes of
 existing systems, seek to outperform their scores with my own
 solutions, and estimate the effect of different hyper-paramaters and
 input properties (such as word embedding types, feature groups, and
-text normalization) on the net classification results.
+text normalization) on the classification results.
 
 \section{Research Questions}
 
@@ -103,8 +105,9 @@ history of this field, tracing its roots back to the ancient
 philosophy, and following the course if its development through the
 main milestones in psychology, narratology, and linguistics of the
 20th century.  In the final sections, I elaborate on the recent
-advances in automatic opinion mining of social media, and summarize
-the current state of the art in sentiment analysis of Twitter.
+advances in automatic opinion mining of social media, and pay special
+attention to the current state of the art in sentiment analysis of
+Twitter.
 
 \subsection{Chapter~2: Sentiment Corpus}
 
@@ -114,12 +117,12 @@ to the German federal elections~2013; papal conclave, which happened
 in the same year; general political discussions; and casual everyday
 conversations.
 
-I obtained messages for the first three groups by tracking the public
-Twitter API between March and September 2013, using extensive lists of
-hand-picked keywords that, in my opinion, best described these topics.
-As casual everyday posts, I considered microblogs from the German
-Twitter Snapshot~\cite{Scheffler:14}, which comprises $\approx97\%$
-all German tweets (17M messages) posted in April 2013.
+To obtain messages for the first three groups, I was tracking the
+public Twitter API between March and September 2013, using extensive
+lists of hand-picked keywords, which, in my opinion, best described
+these topics.  As casual everyday posts, I considered microblogs from
+the German Twitter Snapshot~\cite{Scheffler:14}, which comprises
+$\approx97\%$ all German tweets (17M messages) posted in April 2013.
 
 To ensure a representative number of subjective opinions in the
 resulting corpus, I grouped all downloaded microblogs pertaining to
@@ -160,8 +163,8 @@ that had to be annotated by human experts.  These were:
     [\emph{not} bad advice]).
 \end{itemize}
 
-The annotation process was performed in three steps: first, two human
-experts labeled one half of the data after only minimal training;
+The annotation process was performed in three steps: first, two
+linguists labeled one half of the data after only minimal training;
 then, I automatically highlighted their divergent analyses and asked
 them to resolve these differences; finally, the annotators continued
 with the analysis of the remaining files.
@@ -171,111 +174,73 @@ versions of the popular $\kappa$-metric~\cite{Cohen:60}---binary and
 proportional kappa---which differ in the way how they treat multiple
 annotations of the same tokens (\eg{} if one phrase was labeled as
 \emph{sentiment} several times by one expert) and how they deal with
-partial matches (\eg{} if two phrases that were labeled as
-\emph{sentiment}s by different experts agree on some, but not all of
-their tokens).  Using these measures, I estimate the inter-annotator
-agreement (IAA) of the experts at different stages of their work.
-This study shows that, initially, both assistants could hardly agree
-on the mere notion of targeted opinions, but their disagreements could
-be resolved with the help of the adjudication procedure, which was
-applied in step two.  Despite a small drop of the IAA scores in the
-final stage, all $\kappa$-values still remained at the level of at
-least moderate reliability.
+partial matches (\eg{} if two \emph{sentiment}s labeled by different
+experts agree on some, but not all of their tokens).  Using these
+measures, I estimate the inter-rater reliability (IRR) of the
+annotators at different stages of their work.  This study shows that,
+initially, both assistants could hardly agree on the mere notion of
+targeted opinions, but their disagreements could be resolved with the
+help of the adjudication procedure, which was applied in step two.
+Despite a small drop of the IRR scores in the final stage, all
+$\kappa$-values still remained at the level of at least moderate
+reliability.
 
-Finally, I demonstrate that the initial selection criteria (formal
-classes and topics) had a strong impact on the number and agreement of
+Finally, I demonstrate that the initial selection criteria (topics and
+formal classes) had a strong impact on the number and agreement of
 annotated sentiments and polar terms, with tweets about federal
 elections and messages without prefiltered topics being the most
 prolific sources of these elements.
 
 \subsection{Chapter~3: Sentiment Lexicons}
 
-Then, at the first checkpoint, we compared existing German sentiment
-lexicons, which were translated from English resources and revised by
-human experts, with lexicons that were generated automatically from
-scratch with the help of state-of-the-art dictionary\mbox{-,}
-corpus\mbox{-,} and word-embedding--based methods.  An evaluation of
-these approaches on our corpus showed that semi-automatically
-translated polarity lists were generally better than the automatically
-induced ones, reaching 0.587 macro-\F{} and attaining 0.955
-micro-\F{}--score on the prediction of polar terms.  Furthermore,
-among fully automatic methods, dictionary-based systems showed
-stronger results than their corpus- and word-embedding--based
-competitors, yielding 0.479 macro-\F{} and 0.962 micro-\F{}.  We
-could, however, improve on the latter metric (pushing it to 0.963)
-with our proposed linear projection solution, in which we first found
-a line that maximized the mutual distance between the projections of
-seed vectors with opposite semantic orientations and then projected
-the embeddings of all remaining words on that line, considering the
-distance of these projections to the median as polarity scores of the
-respective terms;
+In Chapter~3, I turn to the first subsentential sentiment analysis
+task, in which I try to predict the polarity (positive, negative, or
+neutral) of single words in the text.
 
-Concluding this chapter, we would like to recapitulate that, in this
-part, we have presented a thorough review of the most popular
-sentiment lexicon generation methods.  For this purpose, we first
-revised existing lexicon evaluation techniques and suggested our own
-(stricter) metric, in which we explicitly counted all false positive,
-false negative, and true positive occurrences of positive, negative,
-and neutral terms on a real-life sentiment corpus, and also computed
-the macro- and micro-averaged \F-results of these polarity classes.
-Using our procedure, we first evaluated the most popular
-semi-automatic German lexicons: German Polarity Clues
-\cite{Waltinger:10}, SentiWS \cite{Remus:10}, and the Zurich Polarity
-List \cite{Clematide:10}, finding the last resource working best in
-terms of the macro-\F--score.  Afterwards, we estimated the quality of
-automatic polarity lists that were created with dictionary- and
-corpus-based methods, coming to the conclusion that the former group
-generally produced better lexicons and was less susceptible to noisy
-Twitter domain.  In the next step, we introduced several novel SLG
-approaches that operate on neural embeddings of words, showing that at
-least two of them ($k$-nearest neighbors and linear projection)
-outperformed all other compared automatic SLG algorithms.  Last but
-not least, we explored the effect of different hyper-parameters and
-settings on the net results of these methods, rerunning them with
-alternative sets of initial seed terms, checking their performance on
-different kinds of embeddings, and estimating the impact of various
-vector normalization techniques.
+For this purpose, I first evaluate the quality of existing German
+sentiment lexicons---SentiWS~\cite{Remus:10}, German Polarity
+Clues~\cite{Waltinger:10}, and the Zurich Polarity
+List~\cite{Clematide:10}---by directly comparing their entries with
+the annotated polar terms in the PotTS corpus.  This evaluation shows
+that the last resource (Zurich Polarity List) outperforms the other
+two competitors in terms of both macro- and micro-averaged
+\F{}-scores, reaching 0.589 and 0.955 \F{} respectively.
 
-Based on these observations and experiments, we can formulate the main
-conclusions of this chapter as follows:
-\begin{itemize}
-\item semi-automatic translations of common English polarity lists
-  notably outperform purely automatic SLG methods, which are applied
-  to German data directly;
-\item despite their allegedly worse ability to accommodate new
-  domains, dictionary-based approaches are still better than
-  corpus-based systems (at least in terms of our intrinsic metric);
-\item a potential weakness of these algorithms though is their
-  dependence on various types of hyper-parameters and manually
-  annotated linguistic resources, which might not necessarily be
-  present for every language;
-\item in this regard, a viable alternative to dictionary-based methods
-  are SLG systems that induce polar lexicons from neural word
-  embeddings, which not only are independent avoid the above limitations, but
-  also yield competitive (or even better) results;
-\item with at least two of such methods ($k$-NN and linear
-  projection), we were able to establish a new state of the art for
-  the macro- and micro-averaged \F-scores of automatically induced
-  sentiment lexicons;
-\item we also checked how different types of embeddings were affecting
-  the performance of NWE-based SLG systems, noticing that the $k$-NN
-  and linear projection methods worked best with the standard word2vec
-  vectors, while nearest centroids and PCA yielded better results when
-  using task-specific representations;
-\item furthermore, we saw that all NWE-based approaches benefited from
-  mean-scaling and length normalization of input vectors, getting an
-  improvement by up to~5\% in their macro-averaged \F-scores;
-\item finally, an extensive evaluation of various sets of seed terms
-  revealed that the results of almost all tested SLG algorithms
-  crucially depended on the quality of their initial seeds, with
-  larger balanced seed sets, \eg{} like the one proposed
-  by~\citet{Kim:04}, typically leading to much higher scores.
-\end{itemize}
+Afterwards, I compare three major groups of autmatic
+lexicon-generation methods: dictionary-, corpus-, and
+word-embedding--based ones.  The first of these groups induces
+polarity lists from a manually annotated lexical taxonomy
+\cite[\textsc{GermaNet}; ][]{Hamp:97}---a graph whose nodes represent
+sets of synonyms (synsets), which are connected to each other by
+semantic links (\eg{} meronymy-holonymy, hypernymy-hyponymy, or
+antonymy relations).  Corpus-based algorithms, on the contrary, infer
+sentiment lexicons from the collocation statistics computed on raw
+unlabaled datasets, by taking a set of terms with known semantic
+orientation (seed terms) as input and looking for other words that
+frequently co-occur with these seeds in raw texts.  In the same vein,
+word-embedding--based methods generate lists of polar terms by looking
+for words whose vector representations (which are automatically
+learned by a classifier, which predicts the occurrence of other words
+in the nearby context) are most similar to the embeddings of seed
+terms.
 
-Bearing this knowledge in mind, we will now move on to exploring
-further opinion-mining fields, aspect-based and message-level
-sentiment analysis, in which sentiment lexicons are traditionally
-considered as one of the most valuable building blocks.
+For the last group, I also propose four new algrorithms, which induce
+polarity lists by clustering words vectors using the methods of
+$k$-nearest neighbors, nearest centroids, principal component
+analysis, and my own linear projection algorithm, in which I look for
+a line that maximizes the distance between the projections of seed
+terms with opposite semantic orientations.  This algorithm surpasses
+all existing alternatives in terms of micro-averaged \F{}-score,
+reaching 0.963 micro-\F{}, and yields a very competitive macro-\F{}
+(0.462).
+
+In general, however, dictionary-based approaches typically produce
+better sentiment lexicons than corpus-based methods; and the only
+viable alternatives to these algorithms, which are independent of any
+manually annotated linguistic resources, are our linear projection and
+$k$-NN systems.  Further evaluation of different input parameters also
+shows that the results of almost all lexicon-generation methods can be
+improved by using larger sets of initial seed terms.
 
 \subsection{Chapter~4: Aspect-Based Sentiment Analysis}
 
