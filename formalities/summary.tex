@@ -15,6 +15,7 @@
 \newcommand{\F}[0]{$F_1$}
 \newcommand{\markable}[1]{\texttt{#1}}
 \newcommand{\attribute}[1]{\emph{\texttt{#1}}}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
 \renewcommand{\cite}{\citep}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,11 +40,11 @@ friends, exchange ideas with colleagues, and get latest news from
 celebrities and politicians without leaving the desktop) but also
 opened the doors to numerous new dangers, such as cyber-attacks,
 online bullying, and deliberate manipulation of public
-opinion---dangers, which can hardly be averted manually due to the
+opinion---dangers that can hardly be averted manually due to the
 immense amount of data exchanged on online platforms.  Therefore, if
 we want to protect our society from these looming threats, we urgently
 need more robust, higher-quality natural language processing (NLP)
-applications that can recognize such menaces automatically, by
+applications, which can recognize such menaces automatically, by
 analyzing uncensored texts.  Unfortunately, most NLP programs today
 have been created for standard language, as we know it from
 newspapers, or, in the best case, adapted to the specifics of English
@@ -113,15 +114,14 @@ Twitter.
 
 Afterwards, in Chapter~2, I introduce the Potsdam Twitter Sentiment
 (PotTS) corpus---a collection of $7,992$ German microblogs pertaining
-to the German federal elections~2013; papal conclave, which happened
-in the same year; general political discussions; and casual everyday
-conversations.
+to the German federal elections, papal conclave, general political
+discussions, and casual everyday conversations.
 
-To obtain messages for the first three groups, I was tracking the
-public Twitter API between March and September 2013, using extensive
-lists of hand-picked keywords, which, in my opinion, best described
-these topics.  As casual everyday posts, I considered microblogs from
-the German Twitter Snapshot~\cite{Scheffler:14}, which comprises
+I obtained messages for the first three groups by tracking the public
+Twitter API between March and September 2013, using extensive lists of
+hand-picked keywords, which, in my opinion, best described these
+topics.  As casual everyday posts, I considered microblogs from the
+German Twitter Snapshot~\cite{Scheffler:14}, which comprises
 $\approx97\%$ all German tweets (17M messages) posted in April 2013.
 
 To ensure a representative number of subjective opinions in the
@@ -134,7 +134,7 @@ the same topic into three formal classes:
   \item all remaining microblogs.
 \end{inparaenum}
 Afterwards, I sampled an equal number of tweets (666) from each of the
-four topics from each of these three formal categories.
+four topics, from each of these three formal categories.
 
 In the next step, I defined an annotation scheme---a list of elements
 that had to be annotated by human experts.  These were:
@@ -145,8 +145,8 @@ that had to be annotated by human experts.  These were:
   \item\emph{target}s, which represented entities or events being
     evaluated;
 
-  \item\emph{source}s, which were defined as the immediate author(s)
-    or holder(s) of an opinion;
+  \item\emph{source}s, which denoted the immediate author(s) or
+    holder(s) of an opinion;
 
   \item\emph{polar term}s, which were words or idioms that had a
     distinguishable evaluative lexical meaning;
@@ -173,17 +173,17 @@ To estimate the inter-rater reliability, I introduce two modified
 versions of the popular $\kappa$-metric~\cite{Cohen:60}---binary and
 proportional kappa---which differ in the way how they treat multiple
 annotations of the same tokens (\eg{} if one phrase was labeled as
-\emph{sentiment} several times by one expert) and how they deal with
-partial matches (\eg{} if two \emph{sentiment}s labeled by different
-experts agree on some, but not all of their tokens).  Using these
-measures, I estimate the inter-rater reliability (IRR) of the
-annotators at different stages of their work.  This study shows that,
-initially, both assistants could hardly agree on the mere notion of
-targeted opinions, but their disagreements could be resolved with the
-help of the adjudication procedure, which was applied in step two.
-Despite a small drop of the IRR scores in the final stage, all
-$\kappa$-values still remained at the level of at least moderate
-reliability.
+\emph{sentiment} several times by one annotator) and how they deal
+with partial matches of different annotations (\eg{} if two
+\emph{sentiment}s labeled by different experts agree on some, but not
+all of their tokens).  Using these measures, I estimate the
+inter-annotator agreement (IAA) of the experts at different stages of
+their work.  This study shows that, initially, both assistants could
+hardly agree on the mere notion of targeted opinions, but their
+disagreements could be resolved with the help of the adjudication
+procedure, which was applied in step two.  Despite a small drop of the
+IAA scores in the final stage, all $\kappa$-values still remained at
+the level of at least moderate reliability.
 
 Finally, I demonstrate that the initial selection criteria (topics and
 formal classes) had a strong impact on the number and agreement of
@@ -197,107 +197,109 @@ In Chapter~3, I turn to the first subsentential sentiment analysis
 task, in which I try to predict the polarity (positive, negative, or
 neutral) of single words in the text.
 
-For this purpose, I first evaluate the quality of existing German
-sentiment lexicons---SentiWS~\cite{Remus:10}, German Polarity
+For this purpose, I first evaluate the existing manually-curated
+German sentiment lexicons---SentiWS~\cite{Remus:10}, German Polarity
 Clues~\cite{Waltinger:10}, and the Zurich Polarity
 List~\cite{Clematide:10}---by directly comparing their entries with
-the annotated polar terms in the PotTS corpus.  This evaluation shows
-that the last resource (Zurich Polarity List) outperforms the other
-two competitors in terms of both macro- and micro-averaged
-\F{}-scores, reaching 0.589 and 0.955 \F{} respectively.
+annotated polar terms in the PotTS corpus.  This evaluation shows that
+the last resource (Zurich Polarity List) outperforms the other two
+competitors in terms of both macro- and micro-averaged \F{}-scores,
+reaching 0.589 and 0.955 \F{} respectively.
 
-Afterwards, I compare three major groups of autmatic
+Afterwards, I compare three major groups of automatic
 lexicon-generation methods: dictionary-, corpus-, and
 word-embedding--based ones.  The first of these groups induces
 polarity lists from a manually annotated lexical taxonomy
 \cite[\textsc{GermaNet}; ][]{Hamp:97}---a graph whose nodes represent
-sets of synonyms (synsets), which are connected to each other by
-semantic links (\eg{} meronymy-holonymy, hypernymy-hyponymy, or
-antonymy relations).  Corpus-based algorithms, on the contrary, infer
-sentiment lexicons from the collocation statistics computed on raw
-unlabaled datasets, by taking a set of terms with known semantic
-orientation (seed terms) as input and looking for other words that
-frequently co-occur with these seeds in raw texts.  In the same vein,
-word-embedding--based methods generate lists of polar terms by looking
-for words whose vector representations (which are automatically
-learned by a classifier, which predicts the occurrence of other words
-in the nearby context) are most similar to the embeddings of seed
-terms.
+sets of synonyms (synsets), which are connected to each other by their
+semantic relations (\eg{} meronymy-holonymy, hypernymy-hyponymy, or
+antonymy).  Corpus-based algorithms, on the contrary, infer sentiment
+lexicons from collocation statistics computed on raw, unlabeled data,
+by taking a set of terms with known semantic orientation (seed terms)
+and looking for other words that frequently co-occur with these seeds
+in text.  In the same vein, word-embedding--based methods generate
+lists of polar terms by looking for words whose vector representations
+(which are automatically learned by a classifier that predicts the
+occurrence of other words in the nearby context) are most similar to
+the embeddings of seed terms.
 
-For the last group, I also propose four new algrorithms, which induce
-polarity lists by clustering words vectors using the methods of
+For the last group, I propose four new algrorithms, which induce
+sentiment lexicons by clustering words vectors with the methods of
 $k$-nearest neighbors, nearest centroids, principal component
-analysis, and my own linear projection algorithm, in which I look for
-a line that maximizes the distance between the projections of seed
-terms with opposite semantic orientations.  This algorithm surpasses
-all existing alternatives in terms of micro-averaged \F{}-score,
-reaching 0.963 micro-\F{}, and yields a very competitive macro-\F{}
-(0.462).
+analysis, and my own linear projection algorithm.  In the last of
+these solutions, I first determine a line that maximizes the distance
+between the projections of seed terms with opposite semantic
+orientations, and then project the vectors of all remaining terms on
+this line, considering the distance of these projections to the origin
+as the respective polarity score.  My algorithm surpasses all existing
+alternatives in terms of micro-averaged \F{}-score, reaching 0.963
+micro-\F{}, and yields a very competitive macro-\F{} (0.462),
+outperforming all corpus- and word-embedding--based alternatives
+except for the method of $k$-nearest neighbors.
 
-In general, however, dictionary-based approaches typically produce
-better sentiment lexicons than corpus-based methods; and the only
-viable alternatives to these algorithms, which are independent of any
-manually annotated linguistic resources, are our linear projection and
-$k$-NN systems.  Further evaluation of different input parameters also
-shows that the results of almost all lexicon-generation methods can be
-improved by using larger sets of initial seed terms.
+In general, as shown by evaluation, the linear projection and $k$-NN
+algorithms are the only viable lexicon-generation solutions that
+dispense with any manually annotated linguistic resources and whose
+results are at least close to the scores of dictionary-based and
+manually-curated sentiment lexicons.  Additional experiments with
+different input settings also show that the quality of almost all
+automatically generated polarity lists can be further improved by
+using larger and less ambiguous sets of initial seed terms.
 
 \subsection{Chapter~4: Aspect-Based Sentiment Analysis}
 
-In Chapter \ref{chap:fgsa}, we turned our attention to the
-aspect-based sentiment analysis, in which we tried to predict the
-spans of sentiments, targets, and holders of opinions using two most
-popular approaches to this task---conditional random fields and
-recurrent neural networks.  We obtained our best results (0.287
-macro-\F{}) with the first-order linear-chain CRFs.  We could,
-however, increase these scores by using alternative topologies of CRFs
-(second-order linear-chain and semi-Markov CRFs) and also boost the
-macro-averaged \F{} to 0.38 by taking a narrower interpretation of
-sentiment spans (in which we only assigned the \textsc{Sentiment} tag
-to polar terms).  Further evaluation of these methods proved the
-utility of the text normalization step (which raised the macro-\F{} of
-the CRF-method by almost 3\%) and task-specific word embeddings with
-the least-squares fallback (which improved the macro-\F{}--score of
-the GRU system by 1.4\%);
+Another subsentential sentiment analysis task---that of automatic
+prediction of targets, holders, and evaluative text spans---is
+addressed in Chapter~4.  Following the current state of the art, I
+consider this objective as a sequence-labeling (SL) problem and
+approach it with two most popular SL techniques: conditional random
+fields~\cite[CRFs; ][]{Lafferty:01} and recurrent neural networks
+\cite[RNNs; ][]{Hochreiter:97,Cho:14a}.  For the former method, I
+devise an extensive set of feature attributes, which reflect different
+lexical, mophologic, and syntactic traits of the input; using these
+attributes, CRFs achieve 0.287 macro-\F{} for the three classes
+(sentiments, sources, and targets) on the PotTS test set.  An
+additional feature ablation of test demonstrates that complex
+features, which simutaneously reflect lexical and syntactic
+properties, are most useful for predicting sentiment spans; pure
+lexical attributes are most helpful when classifying opinion sources;
+and, finally, syntactic features work best when predicting targets of
+sentiments.
 
-Summarizing the above findings, we would like to remind the reader
-that in this chapter we have evaluated two most common approaches to
-aspect-based sentiment analysis: conditional random fields and
-recurrent neural networks.  Our experiments showed that CRFs with
-manually defined features outperform both recurrent neural networks
-(LSTM and GRU), reaching a macro-averaged \F-score of~0.287 on
-predicting \markable{sentiment}s, \markable{source}s, and
-\markable{target}s.
+Unfortunately, recurrent neural networks yield lower results than
+CRFs, with the best scores (0.27 macro-\F{}) achieved by the
+long-short term memory network~\cite{Hochreiter:97}.  Their prediction
+quality, however, can be improved by initializing the word embedding
+matrix with word2vec vectors~\cite{Mikolov:13} and optimizing these
+values along with other parameters during the training.  Besides this,
+I propose to use a special fallback strategy for approximating
+task-specific vector representations of words ($V$) that have word2vec
+embeddings ($W$), but are absent in the training set.  In particular,
+I suggest computing a matrix M using the method of the least squares,
+which minimizes the absolute difference between the trained
+task-specific vectors $V$ and their original embeddings W times that
+matrix ($M^{\top}W$): $M := \argmin_{W}\lVert V_{TS} - M^T\cdot
+V^*_{W2V}\rVert_F,$.
 
-Furthermore, a closer look at these systems revealed that:
-\begin{itemize}
-\item CRFs can learn meaningful weights for state- and
-  transition-features, although different features types might have
-  different effects on classification of opinion elements: whereas
-  \markable{sentiment}s benefited from all features used in our
-  experiments, \markable{source}s profited most from lexical and
-  complex attributes, and \markable{target}s were positively
-  influenced by morphological and syntactic features only;
-\item Apart from that, we analyzed the effect of different embedding
-  types on the net results of RNN systems, finding that least-squares
-  embeddings yield the best overall scores for these methods;
-\item Furthermore, even higher prediction scores for
-  \markable{sentiment}s can be achieved by narrowing the spans of
-  these elements to polar terms.  This, however, might negatively
-  affect the classification of \markable{source}s and
-  \markable{target}s;
-\item Even though context seems to play an important role, redefining
-  models' structures by increasing the order of their dependencies or
-  performing inference over trees instead of linear chains does not
-  bring much improvement.  We could, however, still outperform the
-  results of traditional first-order linear-chain CRFs with their
-  first- and second-order semi-Markov modifications;
-\item In the final step, we estimated the effect of text normalization
-  by rerunning all experiments on original (unnormalized) tweets.
-  This test showed that preprocessing is an extremely helpful
-  procedure, which might improve the results of ABSA methods by up to
-  3\%.
-\end{itemize}
+In the concluding sections, I investigate whether using alternative
+structure of computational graphs for CRFs and RNNs and providing
+unnormalized text to these methods as input can improve their results.
+As it turns out, conditional random fields benefit from increasing the
+order of their dependencies and performing predictions on spans rather
+individual tokens; RNNs, on the contrary, achieve their best scores
+with the standard 1st-order linear-chain structure.  Both approaches,
+however, strongly benefit from text normalization, suffering a quality
+drop by almost 3\% when this component is switched off.  Finally, I
+compare two different approaches to the definition of \emph{sentiment}
+spans: In the first approach I consider a \emph{sentiment} as minimal
+complete syntactic unit (typically a noun or verb phrase) that
+simultaneously comprise both the target of an evaluation and the
+evaluative phrase; in the second approach, I only assign the
+\emph{sentiment} tag the polar term that evaluates the target.  A
+comparison of both schemes shows that the former approach leads to
+better classification scores for \emph{source}s and \emph{target}s of
+opinions, whereas the second take is more amenable to the prediction
+of \emph{sentiment}s.
 
 \subsection{Chapter~5: Message-Level Sentiment Analysis}
 
