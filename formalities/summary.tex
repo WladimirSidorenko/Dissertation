@@ -272,30 +272,26 @@ long-short term memory network~\cite{Hochreiter:97}.  Their prediction
 quality, however, can be improved by initializing the word embedding
 matrix with word2vec vectors~\cite{Mikolov:13} and optimizing these
 values along with other parameters during the training.  Besides this,
-I propose to use a special fallback strategy for approximating
-task-specific vector representations of words ($V$) that have word2vec
-embeddings ($W$), but are absent in the training set.  In particular,
-I suggest computing a matrix M using the method of the least squares,
-which minimizes the absolute difference between the trained
-task-specific vectors $V$ and their original embeddings W times that
-matrix ($M^{\top}W$): $M := \argmin_{W}\lVert V_{TS} - M^T\cdot
-V^*_{W2V}\rVert_F,$.
+I propose to a new fallback strategy based on the method of least
+squares, which allows to approximate task-specific vector
+representations of words that have word2vec embeddings, but are
+missing from the training set.
 
 In the concluding sections, I investigate whether using alternative
 structure of computational graphs for CRFs and RNNs and providing
 unnormalized text to these methods as input can improve their results.
 As it turns out, conditional random fields benefit from increasing the
-order of their dependencies and performing predictions on spans rather
-individual tokens; RNNs, on the contrary, achieve their best scores
-with the standard 1st-order linear-chain structure.  Both approaches,
-however, strongly benefit from text normalization, suffering a quality
-drop by almost 3\% when this component is switched off.  Finally, I
-compare two different approaches to the definition of \emph{sentiment}
-spans: In the first approach I consider a \emph{sentiment} as minimal
-complete syntactic unit (typically a noun or verb phrase) that
-simultaneously comprise both the target of an evaluation and the
-evaluative phrase; in the second approach, I only assign the
-\emph{sentiment} tag the polar term that evaluates the target.  A
+order of their graph dependencies and performing predictions on spans
+(hypernodes) instead of individual tokens; RNNs, on the contrary,
+achieve their best scores with the standard 1st-order linear-chain
+structure.  Both approaches, however, strongly benefit from text
+normalization, suffering a quality drop by almost 3\% when this
+component is switched off.  Finally, I compare two different
+approaches to the definition of \emph{sentiment} spans: \emph{broad}
+and \emph{narrow}, in which I assign the \emph{sentiment} tag either
+to minimal complete syntactic unit (typically noun or verb phrase)
+that simultaneously comprise both the target of an evaluation and the
+evaluative phrase (\emph{broad}), or to the polar term only.  A
 comparison of both schemes shows that the former approach leads to
 better classification scores for \emph{source}s and \emph{target}s of
 opinions, whereas the second take is more amenable to the prediction
@@ -303,90 +299,45 @@ of \emph{sentiment}s.
 
 \subsection{Chapter~5: Message-Level Sentiment Analysis}
 
-Afterwards, in Chapter~\ref{chap:cgsa}, we addressed one of the most
-popular objective in contemporary sentiment analysis---message-level
-sentiment analysis (MLSA).  To get a better overview of the numerous
-existing systems, we compared three larger families of MLSA
-methods---dictionary-, machine-learning--, and deep-learning--based
-ones, finding that the last two groups performed significantly better
-than the lexicon-based approaches (the best macro-\F{}--scores of
-machine- and deep-learning methods run up to 0.677 and 0.69
-respectively, whereas the best lexicon-based solution
-[\citeauthor{Hu:04}, \citeyear{Hu:04}] only reached 0.641 macro-\F{}).
-Apart from this, we improved the results of many reimplemented
-approaches by changing their default configuration (\eg{} abandoning
-polarity changing rules of lexicon-based systems, using alternative
-classifiers for ML-based classifiers, or taking the least-squares
-embeddings for DL-based methods).  In addition to the numerous
-reimplementations of popular existing algorithms, we also proposed our
-own solution---lexicon-based attention (LBA), in which we tried to
-unite the lexicon and deep-learning paradigms by taking a
-bidirectional LSTM network and explicitly pointing its attention to
-the polar terms that appeared in the analyzed messages.  With this
-solution, we not only outperformed all alternative DL systems, but
-also improved on the scores of ML-based classifiers, attaining 0.69
-macro-\F{} and 0.73 micro-\F{} on the PotTS corpus.  Similarly to our
-findings of the previous chapter, we observed a strong positive effect
-of text normalization and task-specific embeddings with the
-least-squares approximation;
+Afterwards, in Chapter~5, I turn to a sentential task---message-level
+sentiment classification, whose goal is to predict the polarity
+(positive, negative, or neutral) of a single tweet.  In this part, I
+again compare the most prominent groups of methods: dictionary-,
+mechine-learning--, and deep-learning--based ones; and evaluate them
+on two different German corpora: my own PotTS dataset and the SB10k
+Twitter corpus~\cite{Cieliebak:17}, which has been explicitly
+annotated with message-level sentiments.
 
-Now the we have reached the end of the chapter, we would like to
-remind the reader that in this part of the thesis we have made the
-following findings and contributions:
-\begin{itemize}
-  \item we have compared three major families of message-level
-    sentiment analysis methods---lexicon-, machine-learning-- and
-    deep-learning--based ones, finding that the last two groups
-    significantly outperform lexicon-driven systems;
-  \item surprisingly, among all compared lexicon methods, the most
-    simple one (the classifier of~\citeauthor{Hu:04}
-    [\citeyear{Hu:04}]) produced the best macro- and micro-averaged
-    \F{}-results on the PotTS corpus (0.615 and 0.685 respectively)
-    and also yielded the highest macro \F{}-measure on the SB10k
-    dataset (0.421).  Other systems, however, could have improved
-    their scores if they better handled the negation of polar terms
-    (after switching off the negation component in the method
-    of~\citeauthor{Musto:14}, its macro-\F{} on the PotTS corpus
-    increased to 0.641, surpassing the benchmark
-    of~\citeauthor{Hu:04});
-  \item as expected, the ML-based system of~\citet{Mohammad:13}---the
-    winner of the inaugural run of SemEval task in sentiment analysis
-    of Twitter~\cite{Nakov:13}---also surpassed other ML competitors,
-    achieving highly competitive results: 0.674 macro- and 0.727
-    micro-\F{} on the PotTS data, and 0.564 macro- and 0.752
-    micro-averaged \F{}-measure on the SB10k test set;
-  \item as in the previous case, however, these results could have
-    been improved if the classifier dispensed with character-level and
-    part-of-speech features and used logistic regression instead of
-    SVM;
-  \item a much more varied situation was observed with
-    deep-learning--based systems, which frequently simply fell into
-    always predicting the majority class for all tweets, but sometimes
-    yielded extraordinarily good results as it was the case with our
-    proposed lexicon-based attention system, which attained 0.69
-    macro-\F{} on the PotTS corpus and 0.55 macro \F{}-score on the
-    SB10k dataset (0.73 and 0.75 micro-\F{} respectively), setting a
-    new state of the art for the former data;
-  \item speaking of word embeddings, we should note that almost all
-    DL-based approaches showed fairly low scores when they used
-    randomly initialized task-specific embeddings, but notably
-    improved their results after switching to pre-trained word2vec
-    vectors, and benefited even more from the least-squares fallback;
-  \item against our expectations, we could not overcome the majority
-    class pitfall of DL-based systems after adding more distantly
-    supervised training data, which, in general, only lowered the
-    scores of both ML- and DL-based methods.  Since this result
-    contradicts the findings of other authors, we hypothesize that
-    this degradation is primarily due to the differences in the class
-    distributions between automatically and manually labeled tweets;
-  \item on the other hand, we could see that using more qualitative
-    sentiment lexicons (especially manually curated and
-    dictionary-based ones) resulted in further improvements for the
-    systems that relied on this lexical resource;
-  \item last but not least, we proved the utility of the text
-    normalization step, which brought about significant improvements
-    for all tested methods, as confirmed by our last ablation test.
-\end{itemize}
+The presented comparison shows that English dictionary-based methods
+are least suitable for being applied to German data, due to the
+language specifics of their manually defined rules.  Machine-learning
+systems, however, are mostly language-independent and can be equally
+well applied to English and German microblogs.  A more diverse
+situation is observed for deep-learning systems, which perform
+relatively bad when when trained with randomly initialized word
+embeddings, but outperform most other methods when used with word2vec
+vectors, especially when applying the least-square fallback.
+
+For the last group of approaches, I also propose my own system---a
+bidirectional recurrent neural network with lexicon-based attention
+(LBA), which, in addition to the standard LSTM recurrence and
+traditional attention mechanism~\cite{Bahdanau:14}, assigns greater
+importance to terms that have higher polarity scores in the sentiment
+lexicon as well as their syntactic dependents, which might serve as
+contextual modifiers of polar terms.  My algorithm attains 0.69
+macro-\F{} and 0.73 micro-\F{} on the PotTS corpus, outperforming all
+other competitors on this dataset, and comes very close to the best
+overall scores on the SB10k test set.
+
+An extensive evaluation of all methods once again confirms the utility
+of the text normalization step and our linear-projection lexicon,
+which outperforms all other polarity lists when used in combination
+with the LBA classifier, reaching 0.69~macro-\F and 0.73~micro-\F{} on
+PotTS and attaining 0.55~macro\F{} and 0.73~micro-\F{} on the SB10k
+corpus.  An interesting finding, however, is that distant supervision
+(\ie{} training on noisily labeled tweets, whose labels are inferred
+from the occurrence of smileys) does not necessarily improve the
+results of message-level sentiment systems.
 
 \subsection{Chapter~6: Discourse-Aware Sentiment Analysis}
 
