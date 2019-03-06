@@ -36,28 +36,27 @@
 \maketitle
 
 Online communication services have not only revolutionized our
-interaction with other people (allowing us to stay in touch with
-friends, exchange ideas with colleagues, and get latest news from
-celebrities and politicians without leaving the desktop) but also
-opened the doors to numerous new dangers, such as cyber-attacks,
-online bullying, and deliberate manipulation of public
-opinion---dangers that can hardly be averted manually due to the
-immense amount of data exchanged on online platforms.  Therefore, if
-we want to protect our society from these looming threats, we urgently
-need more robust, higher-quality natural language processing (NLP)
-applications, which can recognize such menaces automatically, by
-analyzing uncensored texts.  Unfortunately, most NLP programs today
-have been created for standard language, as we know it from
-newspapers, or, in the best case, adapted to the specifics of English
-social media.
+everyday life (allowing us to stay in touch with friends, exchange
+ideas with colleagues, and get latest news from celebrities and
+politicians without leaving the desktop) but also opened the doors to
+numerous new dangers, such as cyber-attacks, online bullying, and
+deliberate manipulation of public opinion---dangers that can hardly be
+averted manually due to the immense amount of data exchanged on online
+platforms.  Therefore, if we want to protect our society from these
+looming threats, we urgently need more robust, higher-quality natural
+language processing (NLP) applications, which can recognize such
+menaces automatically, by analyzing uncensored texts.  Unfortunately,
+most NLP programs today have been created for standard language, as we
+know it from newspapers, or, in the best case, adapted to the
+specifics of English social media.
 
-This thesis reduces the existing deficit by entering the new frontier
-of German online communication and addressing one of its most prolific
-forms---users' conversations on Twitter.  In particular, it explores
-the ways and means by how people express their opinions on this
-service, examines current approaches to automatic mining of these
-feelings, and proposes new sentiment analysis methods, which
-outperform state-of-the-art techniques.
+My dissertation reduces the existing deficit by entering the new
+frontier of German online communication and addressing one of its most
+prolific forms---users' conversations on Twitter.  In particular, it
+explores the ways and means by how people express their opinions on
+this service, examines current approaches to automatic mining of these
+feelings, and proposes new sentiment analysis techniques, which
+outperform state-of-the-art methods.
 
 I perform these tasks on three different linguistic levels:
 \begin{itemize}
@@ -79,7 +78,7 @@ At each of these levels, I evaluate the most prominent classes of
 existing systems, seek to outperform their scores with my own
 solutions, and estimate the effect of different hyper-paramaters and
 input properties (such as word embedding types, feature groups, and
-text normalization) on the classification results.
+text normalization) on the net results of classification.
 
 \section{Research Questions}
 
@@ -123,15 +122,16 @@ Twitter API between March and September 2013, using extensive lists of
 hand-picked keywords, which, in my opinion, best described these
 topics.  As casual everyday posts, I considered microblogs from the
 German Twitter Snapshot~\cite{Scheffler:14}, which comprises
-$\approx97\%$ all German tweets (17M messages) posted in April 2013.
+$\approx97\%$ of all German tweets (17M messages) posted in April
+2013.
 
 To ensure a representative number of subjective opinions in the
 resulting corpus, I grouped all downloaded microblogs pertaining to
 the same topic into three formal classes:
 \begin{inparaenum}[(i)]
   \item tweets that contained a polar term from the sentiment lexicon
-    SentiWS~\cite{Remus:10},
-  \item messages that had an emoticon, and, finally,
+    SentiWS~\cite{Remus:10};
+  \item messages that had an emoticon; and, finally,
   \item all remaining microblogs.
 \end{inparaenum}
 Afterwards, I sampled an equal number of tweets (666) from each of the
@@ -155,13 +155,13 @@ that had to be annotated by human experts.  These were:
   \item\emph{intensifier}s, which represented elements that increased
     the expressivity and subjective sense of polar terms;
 
-  \item\emph{diminishers}s, which vice versa reduced the strength of a
+  \item\emph{diminisher}s, which vice versa reduced the strength of a
     polar term;
 
   \item and, finally, \emph{negation}s, which completely reversed the
     semantic orientation of a polar item (\eg{} ``\emph{nicht} gut''
     [\emph{not} good] or ``\emph{kein} schlechtes Beispiel''
-    [\emph{not} bad advice]).
+    [\emph{not} a bad advice]).
 \end{itemize}
 
 The annotation process was performed in three steps: first, two
@@ -176,8 +176,8 @@ proportional kappa---which differ in the way how they treat multiple
 annotations of the same tokens (\eg{} if one phrase was labeled as
 \emph{sentiment} several times by one annotator) and how they deal
 with partial matches of different annotations (\eg{} if two
-\emph{sentiment}s labeled by different experts agree on some, but not
-all of their tokens).  Using these measures, I estimate the
+\emph{sentiment}s labeled by different linguists agree on some, but
+not all of their tokens).  Using these measures, I estimate the
 inter-annotator agreement (IAA) of the experts at different stages of
 their work.  This study shows that, initially, both assistants could
 hardly agree on the mere notion of targeted opinions, but their
@@ -198,12 +198,12 @@ In Chapter~3, I turn to the first subsentential sentiment analysis
 task, in which I try to predict the polarity (positive, negative, or
 neutral) of single words in the text.
 
-For this purpose, I first evaluate the existing manually-curated
-German sentiment lexicons---SentiWS~\cite{Remus:10}, German Polarity
-Clues~\cite{Waltinger:10}, and the Zurich Polarity
-List~\cite{Clematide:10}---by directly comparing their entries with
+For this purpose, I first evaluate existing, manually-curated German
+sentiment lexicons---SentiWS \cite{Remus:10}, German Polarity Clues
+\cite{Waltinger:10}, and the Zurich Polarity List
+\cite{Clematide:10}---by directly comparing their entries with the
 annotated polar terms in the PotTS corpus.  This evaluation shows that
-the last resource (Zurich Polarity List) outperforms the other two
+the last resource (Zurich Polarity List) outperforms the first two
 competitors in terms of both macro- and micro-averaged \F{}-scores,
 reaching 0.589 and 0.955 \F{} respectively.
 
@@ -212,90 +212,96 @@ lexicon-generation methods: dictionary-, corpus-, and
 word-embedding--based ones.  The first of these groups induces
 polarity lists from a manually annotated lexical taxonomy
 \cite[\textsc{GermaNet}; ][]{Hamp:97}---a graph whose nodes represent
-sets of synonyms (synsets), which are connected to each other by their
-semantic relations (\eg{} meronymy-holonymy, hypernymy-hyponymy, or
-antonymy).  Corpus-based algorithms, on the contrary, infer sentiment
+sets of synonyms (synsets), which are connected to each other by
+semantic relations (meronymy-holonymy, hypernymy-hyponymy, antonymy
+etc.).  Corpus-based algorithms, on the contrary, infer sentiment
 lexicons from collocation statistics computed on raw, unlabeled data,
 by taking a set of terms with known semantic orientation (seed terms)
-and looking for other words that frequently co-occur with these seeds
-in text.  In the same vein, word-embedding--based methods generate
-lists of polar terms by looking for words whose vector representations
-(which are automatically learned by a classifier that predicts the
-occurrence of other words in the nearby context) are most similar to
-the embeddings of seed terms.
+and looking for other words that frequently co-occur with these seeds.
+In the same vein, word-embedding--based methods generate new polarity
+lists from words whose vector representations (which are automatically
+learned by a classifier that predicts the occurrence of other words in
+the nearby context) are most similar to the embeddings of seed terms.
 
-For the last group, I propose four new algrorithms, which induce
-sentiment lexicons by clustering words vectors with the methods of
-$k$-nearest neighbors, nearest centroids, principal component
-analysis, and my own linear projection algorithm.  In the last of
-these solutions, I first determine a line that maximizes the distance
-between the projections of seed terms with opposite semantic
-orientations, and then project the vectors of all remaining terms on
-this line, considering the distance of these projections to the origin
-as the respective polarity score.  My algorithm surpasses all existing
-alternatives in terms of micro-averaged \F{}-score, reaching 0.963
-micro-\F{}, and yields a very competitive macro-\F{} (0.462),
-outperforming all corpus- and word-embedding--based alternatives
-except for the method of $k$-nearest neighbors.
+Besides evaluating existing methods, I propose four new
+word-embedding--based solutions, which induce sentiment lexicons by
+clustering word vectors using the methods of
+\begin{inparaenum}[(i)]
+\item $k$-nearest neighbors,
+\item nearest centroids,
+\item principal component analysis, and
+\item my own linear projection algorithm.
+\end{inparaenum}
+In the last of these systems, I first determine a line that maximizes
+the distance between the projections of seed embeddings with opposite
+semantic orientations, and then project the vectors of all remaining
+terms on this line, considering the distances of these projections to
+the origin as the respective polarity scores.  My algorithm surpasses
+all existing alternatives in terms of micro-averaged \F{}-score,
+reaching 0.963 micro-\F{}, and yields a very competitive macro-\F{}
+(0.462), outperforming all corpus- and word-embedding--based
+approaches except for the method of $k$-nearest neighbors.
 
-In general, as shown by evaluation, the linear projection and $k$-NN
+As confirmed by the evaluation, the linear projection and $k$-NN
 algorithms are the only viable lexicon-generation solutions that
 dispense with any manually annotated linguistic resources and whose
-results are at least close to the scores of dictionary-based and
-manually-curated sentiment lexicons.  Additional experiments with
-different input settings also show that the quality of almost all
-automatically generated polarity lists can be further improved by
-using larger and less ambiguous sets of initial seed terms.
+results are at least close to the scores of manually-curated and
+dictionary-based sentiment lexicons.  Furthermore, additional
+experiments demonstrate that the quality of almost all automatically
+generated polarity lists can be further improved by using larger and
+less ambiguous sets of initial seed terms.
 
 \subsection{Chapter~4: Aspect-Based Sentiment Analysis}
 
-Another subsentential sentiment analysis task---that of automatic
-prediction of targets, holders, and evaluative text spans---is
-addressed in Chapter~4.  Following the current state of the art, I
-consider this objective as a sequence-labeling (SL) problem and
-approach it with two most popular SL techniques: conditional random
-fields~\cite[CRFs; ][]{Lafferty:01} and recurrent neural networks
-\cite[RNNs; ][]{Hochreiter:97,Cho:14a}.  For the former method, I
-devise an extensive set of feature attributes, which reflect different
-lexical, mophologic, and syntactic traits of the input; using these
-attributes, CRFs achieve 0.287 macro-\F{} for the three classes
-(sentiments, sources, and targets) on the PotTS test set.  An
-additional feature ablation of test demonstrates that complex
-features, which simutaneously reflect lexical and syntactic
-properties, are most useful for predicting sentiment spans; pure
-lexical attributes are most helpful when classifying opinion sources;
-and, finally, syntactic features work best when predicting targets.
+Another subsentential sentiment analysis task---automatic prediction
+of targets, holders, and text spans of opinions---is addressed in
+Chapter~4.  Following the current state of the art, I consider this
+objective as a sequence-labeling (SL) problem and approach it with two
+most popular SL techniques: conditional random fields~\cite[CRFs;
+][]{Lafferty:01} and recurrent neural networks \cite[RNNs;
+][]{Hochreiter:97,Cho:14a}.  For the former method, I devise an
+extensive set of feature attributes, which reflect different lexical,
+mophologic, and syntactic traits of the input.  Using these features,
+CRFs achieve 0.287 macro-\F{} for the three classes (sentiments,
+sources, and targets) on the PotTS test set.  An additional ablation
+test of these attributes shows that complex features, which
+simutaneously reflect lexical and syntactic properties, are most
+useful for predicting sentiment spans; pure lexical traits are most
+helpful when classifying sources; and syntactic attributes work best
+when predicting the targets of opinions.
 
 Unfortunately, recurrent neural networks yield lower results than
 CRFs, with the best scores (0.27 macro-\F{}) achieved by the
-long-short term memory network~\cite{Hochreiter:97}.  Their prediction
-quality, however, can be improved by initializing the word embedding
-matrix with word2vec vectors~\cite{Mikolov:13} and optimizing these
-values along with other parameters during the training.  Besides this,
-I propose to a new fallback strategy based on the method of least
-squares, which allows to approximate task-specific vector
-representations of words that have word2vec embeddings, but are
-missing from the training set.
+long-short term memory network~\cite[LSTM; ][]{Hochreiter:97}.  Their
+accuracy, however, can be improved by initializing the word embeddings
+with word2vec vectors~\cite{Mikolov:13} and optimizing these values
+along with other parameters during the training.  In addition to this,
+I propose a new fallback strategy based on the method of the ordinary
+least squares, which allows to approximate task-specific vector
+representations of words that have word2vec embeddings, but do not
+occur in the training set of the sentiment corpus.
 
 In the concluding sections, I investigate whether using alternative
 structure of computational graphs for CRFs and RNNs and providing
 unnormalized text to these methods as input can improve their results.
-As it turns out, conditional random fields benefit from increasing the
-order of their graph dependencies and performing predictions on spans
-(hypernodes) instead of individual tokens; RNNs, on the contrary,
-achieve their best scores with the standard 1st-order linear-chain
-structure.  Both approaches, however, strongly benefit from text
-normalization, suffering a quality drop by almost 3\% when this
-component is switched off.  Finally, I compare two different
-approaches to the definition of \emph{sentiment} spans: \emph{broad}
-and \emph{narrow}, in which I assign the \emph{sentiment} tag either
-to minimal complete syntactic unit (typically noun or verb phrase)
-that simultaneously comprise both the target of an evaluation and the
-evaluative phrase (\emph{broad}), or to the polar term only.  A
-comparison of both schemes shows that the former approach leads to
-better classification scores for \emph{source}s and \emph{target}s of
-opinions, whereas the second take is more amenable to the prediction
-of \emph{sentiment}s.
+As it turns out, CRFs benefit from increasing the order of their graph
+dependencies and yield better scores when classifying spans of the
+text (hypernodes) rather than individual tokens (single nodes); RNNs,
+on the contrary, achieve their best scores with the standard
+first-order linear-chain topology.  Both approaches, however, strongly
+profit from text normalization, showing a quality boost by almost 3\%
+when this preprocessing step is active.
+
+%% Finally, I compare two different approaches to the definition of
+%% \emph{sentiment} spans: \emph{broad} and \emph{narrow}, in which I
+%% assign the \emph{sentiment} tag either to minimal complete
+%% syntactic unit (typically noun or verb phrase) that simultaneously
+%% comprise both the target of an evaluation and the evaluative phrase
+%% (\emph{broad}), or to the polar term only.  A comparison of both
+%% schemes shows that the former approach leads to better
+%% classification scores for \emph{source}s and \emph{target}s,
+%% whereas the second take is more amenable to the prediction of
+%% \emph{sentiment}s.
 
 \subsection{Chapter~5: Message-Level Sentiment Analysis}
 
@@ -306,105 +312,80 @@ again compare the most prominent groups of methods: dictionary-,
 mechine-learning--, and deep-learning--based ones; and evaluate them
 on two different German corpora: my own PotTS dataset and the SB10k
 Twitter corpus~\cite{Cieliebak:17}, which has been explicitly
-annotated with message-level sentiments.
+annotated with message-level semantic orientations.
 
 The presented comparison shows that English dictionary-based methods
 are least suitable for being applied to German data, due to the
 language specifics of their manually defined rules.  Machine-learning
 systems, however, are mostly language-independent and can be equally
 well applied to English and German microblogs.  A more diverse
-situation is observed for deep-learning systems, which perform
-relatively bad when when trained with randomly initialized word
-embeddings, but outperform most other methods when used with word2vec
-vectors, especially when applying the least-square fallback.
+situation is observed for deep-learning classifiers, which perform
+relatively poor when trained with randomly initialized word vectors,
+but outperform many other methods when used with word2vec embeddings,
+especially with the least-square fallback.
 
-For the last group of approaches, I also propose my own system---a
+For the last group of methods, I also propose my own system---a
 bidirectional recurrent neural network with lexicon-based attention
 (LBA), which, in addition to the standard LSTM recurrence and
 traditional attention mechanism~\cite{Bahdanau:14}, assigns greater
 importance to terms that have higher polarity scores in the sentiment
-lexicon as well as their syntactic dependents, which might serve as
+lexicon, as well as their syntactic dependents, which might serve as
 contextual modifiers of polar terms.  My algorithm attains 0.69
 macro-\F{} and 0.73 micro-\F{} on the PotTS corpus, outperforming all
 other competitors on this dataset, and comes very close to the best
-overall scores on the SB10k test set.
+overall scores on the SB10k test data.
 
 An extensive evaluation of all methods once again confirms the utility
-of the text normalization step and our linear-projection lexicon,
-which outperforms all other polarity lists when used in combination
-with the LBA classifier, reaching 0.69~macro-\F and 0.73~micro-\F{} on
-PotTS and attaining 0.55~macro\F{} and 0.73~micro-\F{} on the SB10k
-corpus.  An interesting finding, however, is that distant supervision
-(\ie{} training on noisily labeled tweets, whose labels are inferred
-from the occurrence of smileys) does not necessarily improve the
-results of message-level sentiment systems.
+of text normalization and the linear-projection lexicon, which
+outperforms all other polarity lists on the PotTS corpus when used in
+combination with the LBA classifier, reaching 0.69~macro-\F and
+0.73~micro-\F{} on PotTS and attaining 0.55~macro-\F{} and
+0.73~micro-\F{} on the SB10k corpus.  An interesting finding, however,
+is that distant supervision (\ie{} training on tweets whose labels are
+automatically inferred from the polarity of their smileys) does not
+necessarily improve the results of message-level sentiment
+classification.
 
 \subsection{Chapter~6: Discourse-Aware Sentiment Analysis}
 
-Finally, in the last part, we tried to improve the results of the
-proposed LBA method by making it aware of the discourse structure.
-For this purpose, we segmented all microblogs from the PotTS and SB10k
-corpora into elementary discourse units, individually analyzing each
-of these segments with our MLSA classifier, and then estimated the
-overall polarity of a tweet by joining the polarity scores of its EDUs
-over the RST tree.  We proposed three different ways of doing this
-joining (latent CRFs, latent-marginalized CRFs, and Recursive
-Dirichlet Process), obtaining better results than existing
-discourse-aware sentiment methods and also outperforming the original
-discourse-unaware baseline.  In the concluding experiments, we further
-improved these scores by using manually annotated RST trees and richer
-subsets of discourse relations.
+Finally, in Chapter~6, I improve the accuracy of the proposed LBA
+classifier by making it aware of the discourse structure of tweets.
+For this purpose, I split all microblogs from the PotTS and SB10k
+corpora into elementary discourse units\footnote{An elementary
+  discourse unit Typically represents a single proposition.} (EDUs)
+using an ML-based discourse segmenter~\cite{Sidarenka:15} and
+construct a rhetorical structure tree of these units \cite{Mann:88}
+with the English discourse parser DPLP \cite{Ji:14}, which has been
+retrained on the Potsdam Commentary Corpus \cite{Stede:14}.
 
-At this point, our chapter has come to an end and, concluding it, we
-would like to recap that in this part of the thesis:
-\begin{itemize}
-  \item we have presented an overview of the most popular approaches
-    to automatic discourse analysis (RST, PDTB, and SDRT) and
-    explained why we think that one of these frameworks (Rhetorical
-    Structure Theory) would be more amenable to the purposes of
-    discourse-aware sentiment analysis than the others;
-  \item to substantiate our claims and to see whether the
-    lexicon-based attention system introduced in the previous chapter
-    would indeed benefit from awareness of discourse structure, we
-    segmented all microblogs from the PotTS and SB10k corpora into
-    elementary discourse units using the SVM-based segmenter
-    of~\citet{Sidarenka:15} and parsed these messages with the RST
-    parser of~\citet{Ji:14}, which had been previously retrained on
-    the Potsdam Commentary Corpus~\cite{Stede:14};
-  \item afterwards, we estimated the results of existing
-    discourse-aware sentiment methods (the systems
-    of~\citeauthor{Wang:15}~[\citeyear{Wang:15}] and
-    \citeauthor{Bhatia:15}~[\citeyear{Bhatia:15}]) and also evaluated
-    two simpler baselines (in which we predicted semantic orientation
-    of a tweet by taking the polarity of its last and root EDUs),
-    getting the best results with the R2N2 solution
-    of~\citet{Bhatia:15} (0.657 and 0.559 macro-\F{} on PotTS and
-    SB10k respectively);
-  \item we could, however, improve on these scores and also outperform
-    the plain LBA system (although by a not very large margin) with
-    our three proposed discourse-aware sentiment solutions (latent and
-    latent-marginalized conditional random fields and Recursive
-    Dirichlet Process), pushing the macro-averaged \F{}-score on PotTS
-    up to 0.678 and increasing the result on SB10k to 0.56 macro-\F{};
-  \item a subsequent evaluation of these approaches with different
-    settings showed that the results of all discourse-aware methods
-    largely correlated with the scores of the base sentiment
-    classifier and also revealed an important drawback of the
-    latent-marginalized CRFs, which failed to predict any positive or
-    negative instance on the test set of the SB10k corpus when trained
-    in combination with the lexicon-based approach of~\citet{Hu:04};
-  \item nevertheless, almost all DASA solutions could improve their
-    scores when tested on manually annotated RST trees or used with a
-    richer set of discourse relations.
-\end{itemize}
+Afterwards, I let the LBA system predict polarity scores of single
+EDUs and infer the overall polarity of a tweet from the polarity of
+its units.  In particular, I first evaluate three existing
+discourse-aware sentiment methods (the systems of
+\citeauthor{Wang:13}~[\citeyear{Wang:13}] and two approaches presented
+by~\citeauthor{Bhatia:15}~[\citeyear{Bhatia:15}]) on all microblogs
+that have more than one discourse segments, and then improve on the
+results of these classifiers with three new alternative solutions:
+latent and latent-marginalized conditional random fields and a
+recursive Dirichlet process.
+
+In the final steps, I estimate the effect of different base sentiment
+classifiers (\ie{} downstream systems that are used to predict the
+polarity scores of single EDUs) and the utility of different discourse
+relations, which are taken into account by discourse-aware systems.
+These experiments show that my proposed methods yield consistently
+good results with almost all settings, outperming their competitors in
+the prevailing major of the cases.  The only exception to this general
+tendency are the macro- and micro-averaged \F{}-scores achieved by the
+mehods of~\citet{Bhatia:15} on the SB10k corpus in combination with
+richer relation sets (0.572 macro-\F{} and 0.719 micro-\F{}), which
+surpass the results of my best solutions by 0.008 and 0.002
+respectively.
 
 \section{Conclusions}
-%% \addcontentsline{toc}{section}{Conclusions}
 
-Now that we have gone past all these landmarks, it is time to unbag
-the questions which we had asked ourselves at the beginning of this
-endeavor, and try to answer them again, equipped with all knowledge
-that we have acquired during our run.  Here we go:
+Based on these experiments, I come to the following conclusions
+regarding the initially pposed questions:
 
 \begin{itemize}
   \item\textbf{Can we apply opinion mining methods devised for
