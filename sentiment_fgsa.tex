@@ -115,7 +115,7 @@ unclear which units should be measured---single tokens or complete
 spans---and how partial matches should be counted in the latter case.
 One possibility to estimate the quality of ABSA prediction is to
 compute precision, recall, and \F{}-scores of predicted spans by using
-binary-overlap or exact-match metrics \cite[see][]{Choi:06,Breck:07}.
+binary-overlap or exact-match metrics~\cite[see][]{Choi:06,Breck:07}.
 The first method considers an automatically labeled span as correct if
 it has at least one token in common with a labeled element from the
 gold annotation.  The second metric only counts an automatic span as
@@ -131,16 +131,16 @@ Instead of relying on these measures, we decided to use a ``golden
 mean'' solution proposed by \citet{Johansson:10a}, in which they
 penalize predicted spans proportionally to the number of tokens whose
 labels are different from the gold annotation.  More precisely, given
-a set of manually annotated entities $\mathcal{S}$ and automatically
-tagged spans $\widehat{\mathcal{S}}$, \citeauthor{Johansson:10a}
-estimate precision of automatic assignment as:
+the sets of manually and automatically tagged spans ($\mathcal{S}$ and
+$\widehat{\mathcal{S}}$, respectively), \citeauthor{Johansson:10a}
+estimate the precision of automatic assignment as:
 \begin{equation}\label{eq:fgsa:jmmetric}
   P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
     \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},
 \end{equation}
 where $C(\mathcal{S},\widehat{\mathcal{S}})$ stands for the proportion
 of overlapping tokens across all pairs of manually ($s_i$) and
-automatically ($s_j$) annotated entities:
+automatically ($s_j$) annotated spans:
 \begin{equation*}
   C(\mathcal{S}, \widehat{\mathcal{S}}) = \sum_{s_i \in
     \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j),
@@ -148,13 +148,13 @@ automatically ($s_j$) annotated entities:
 and the $|\widehat{\mathcal{S}}|$ term denotes the total number of
 spans automatically labeled with the given tag.
 
-Similarly, recall of this assignment is estimated as:
+Similarly, the recall of this assignment is estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
     \widehat{\mathcal{S}})}{|\mathcal{S}|};
 \end{equation*}
 
-Using these two values, we can normally compute the \F{}-measure as:
+Using these two values, one can normally compute the \F{}-measure as:
 \begin{equation*}
   F_1 = 2\times\frac{P \times R}{P + R}.
 \end{equation*}
@@ -517,14 +517,14 @@ predicates, which, for simplicity, are listed in groups:
 \begin{itemize}
 \item\emph{formal}, which included the initial three characters of
   each token (\eg{} $\phi_{abc}(\mathbf{x}_m) = 1\mbox{ if
-  }\mathbf{x}_m\sim\mbox{ /\textasciicircum abc/ else } 0$), its last
+  }\mathbf{x}_m\sim\mbox{ /\textasciicircum{}abc/ else } 0$), its last
   three characters, and the general spelling class of that word (\eg{}
   alphanumeric, digit, or punctuation);
 
 \item\emph{morphological}, which encompassed part-of-speech tags of
-  analyzed tokens; grammatical case and gender of inflectable PoS
-  types; degree of comparison for adjectives; and mood, tense, and
-  person forms of verbs;
+  analyzed tokens, grammatical case and gender of inflectable PoS
+  types; degree of comparison for adjectives, as well as mood, tense,
+  and person forms of verbs;
 
 \item\emph{lexical}, which comprised the actual lemma and form of the
   tokens (using one-hot encoding), their polarity classes (positive,
@@ -950,7 +950,7 @@ been criticized for the high complexity of their recurrent unit.  In
 order to overcome this deficiency, while still keeping the gradients
 within an acceptable range, \citet{Cho:14a} proposed an alternative
 architecture called Gated Recurrent Units (GRU).  In this framework,
-the authors also use activation and forget gates ($\vec{i}^{(t)}$ and
+the authors also used activation and forget gates ($\vec{i}^{(t)}$ and
 $\vec{f}^{(t)}$) similar to the ones defined by~\citet{Hochreiter:97}:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right),\\
@@ -988,13 +988,13 @@ probability of the most likely tag.
 \textbf{Training.}\quad{}A neat property of LSTM and GRU is that the
 final equation, which is obtained after unrolling the recurrence loop,
 is differentiable with respect to all of its parameters, and can
-therefore be optimized with the usual gradient update techniques.
+therefore be optimized with standard gradient update techniques.
 Since most of these parameters, however, represent high-dimensional
 matrices or vectors, finding an optimal learning rate (\ie{} the size
 of the update step taken in the direction of the gradient) might pose
 considerable difficulties, leading either to prohibitively large
-training times (if the steps are too small) or a complete divergence
-of the trained model (if the steps are too large).
+training times (if the steps are too small) or complete divergence of
+the trained model (if the steps are too large).
 
 Several algorithms have been proposed for solving this problem,
 including the method of momentum~\cite{Rumelhart:88},
@@ -1798,14 +1798,13 @@ domain are standard-language news texts.
       Source & \textbf{0.328} & 0.314 & 0.303  & 0.263 & 0.298 & 0.306 & 0.256 & 0.262\\
       Target & \textbf{0.259} & 0.218 & 0.222 & 0.216 & 0.219 & 0.188 & 0.205 & 0.193\\\bottomrule
     \end{tabular}
-    \egroup
-    \caption[Results of fine-grained sentiment analysis with different
-    neural network topologies]{Results of fine-grained sentiment
+    \egroup{}
+    \caption[Results of aspect-based sentiment analysis with different
+    neural network topologies]{Results of aspect-based sentiment
       analysis with different neural network topologies\\ {\small
         lcLSTM---linear-chain LSTM, lcGRU---linear-chain GRU,
         trLSTM---tree-structured LSTM, trGRU---tree-structured
-        GRU;\\1, 2, and 3 in the superscripts denote the order}}
-    \label{fgsa:tbl:nn-topologies}
+        GRU;\\1, 2, and 3 in the superscripts denote the order}}\label{fgsa:tbl:nn-topologies}
   \end{center}
 \end{table*}
 
