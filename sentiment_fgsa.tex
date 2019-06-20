@@ -151,7 +151,7 @@ spans automatically labeled with the given tag.
 Similarly, the recall of this assignment is estimated as:
 \begin{equation*}
   R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
-    \widehat{\mathcal{S}})}{|\mathcal{S}|};
+    \widehat{\mathcal{S}})}{|\mathcal{S}|}.
 \end{equation*}
 
 Using these two values, one can normally compute the \F{}-measure as:
@@ -549,7 +549,7 @@ reflected several semantic and syntactic traits.  These were:
 \begin{itemize}
 \item the lemma of the syntactic parent;
 \item the part-of-speech tag and polarity class of the grandparent in
-  syntactic tree;
+  the syntactic tree;
 \item the lemma of the child node + dependency relation between the
   current token and its child;
 \item the PoS tag of the child node + its dependency relation + the
@@ -879,7 +879,7 @@ factors that account for this success are
 \item \emph{the ability of these systems to learn optimal feature
   representations automatically}, which favorably sets them apart from
   traditional supervised machine learning frameworks, such as SVMs or
-  CRFs, where all features need to be defined by user; and
+  CRFs, where all features need to be defined by the user; and
 \item \emph{the ability to deal with arbitrary sequence lengths},
   which advantageously distinguishes these methods from other NN
   architectures, such as plain feed-forward networks or convolutional
@@ -1000,18 +1000,17 @@ Several algorithms have been proposed for solving this problem,
 including the method of momentum~\cite{Rumelhart:88},
 AdaGrad~\cite{Duchi:11}, AdaDelta~\cite{Zeiler:12},
 RMSProp~\cite{Tieleman:12} etc.  In our experiments, we used the last
-of these options---the RMSProp technique of~\citet{Tieleman:12}---as
-this algorithm showed both a faster convergence and better
-classification results.
+of these options---RMSProp~\citet{Tieleman:12}---as this algorithm
+showed both a faster convergence and better classification results.
 
 Another important factor that could significantly influence the
-training results, were the initial values of models' parameters.  As
-shown by~\citet{He:15}, an inappropriate initialization of neural
-network might lead to a complete stalling of the whole learning
-process.  Following the recommended practices~\cite{Saxe:13}, we used
-orthogonal initialization for all linear transformation matrices, and
-applied uniform He sampling~\cite{He:15} for setting the initial
-values of bias vectors.
+results were the initial values of models' parameters.  As shown
+by~\citet{He:15}, an inappropriate initialization of neural network
+might lead to a complete stalling of the whole learning process.
+Following the recommended practices~\cite{Saxe:13}, we used orthogonal
+initialization for all linear transformation matrices, and applied
+uniform He sampling~\cite{He:15} for setting the initial values of
+bias vectors.
 
 Finally, due to a high imbalance of the target classes in the training
 set (where most of the instances represent objective statements
@@ -1718,8 +1717,7 @@ shown in Table~\ref{fgsa:tbl:crf-topologies}.
       CRF topologies]{Results of aspect-based sentiment analysis with
       different CRF topologies\\ {\small lcCRF---linear-chain CRFs,
         smCRF---semi-Markov CRFs, trCRF---tree-structured CRFs;\\1, 2,
-        3, and 4 in the superscripts denote the order}}
-    \label{fgsa:tbl:crf-topologies}
+        3, and 4 in the superscripts denote the order}}\label{fgsa:tbl:crf-topologies}
   \end{center}
 \end{table*}
 
@@ -1866,11 +1864,9 @@ preprocessing pipeline off this time.
        0.296 & 0.369 & 0.328 & %
        0.232 & 0.268 & 0.245 & 0.275\\\bottomrule
 
-    \end{tabular}
-    \egroup
+    \end{tabular}\egroup{}
     \caption{Results of aspect-based sentiment analysis with (w) and
-      without (w/o) text normalization}
-    \label{snt-fgsa:tbl:normalization}
+      without (w/o) text normalization}\label{snt-fgsa:tbl:normalization}
   \end{center}
 \end{table*}
 
