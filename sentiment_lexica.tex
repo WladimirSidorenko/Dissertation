@@ -120,7 +120,7 @@ polarity lists:
 \begin{itemize}
 \item\textbf{German Polarity Clues}~\cite[GPC;][]{Waltinger:10}, which
   contains 10,141 polar terms from the English sentiment lexicons
-  Subjectivity Clues \cite{Wilson:05} and SentiSpin~\cite{Takamura:05}
+  Subjectivity Clues~\cite{Wilson:05} and SentiSpin~\cite{Takamura:05}
   that were automatically translated into German and then manually
   revised by the author.  Apart from that, \citeauthor{Waltinger:10}
   also manually enriched these translations with their frequent
@@ -132,7 +132,7 @@ polarity lists:
     Clues, because these entries significantly worsened the evaluation
     results.}
 
-\item\textbf{SentiWS} \cite[SWS;][]{Remus:10}, which includes 1,818
+\item\textbf{SentiWS}~\cite[SWS;][]{Remus:10}, which includes 1,818
   positively and 1,650 negatively connoted terms along with their
   part-of-speech tags and inflections, which results in a total of
   32,734 word forms.  As in the previous case, the authors obtained
@@ -141,20 +141,20 @@ polarity lists:
   correcting these translations.  In addition to this, they expanded
   the translated set with words and phrases that frequently
   co-occurred with positive and negative seed terms in a corpus of
-  10,200 customer reviews or in the German Collocation Dictionary
-  \cite{Quasthoff:10};\footnote{Unfortunately, the authors do not
-    provide a breakdown of how many terms were obtained through
+  10,200 customer reviews or in the German Collocation
+  Dictionary~\cite{Quasthoff:10};\footnote{Unfortunately, the authors
+    do not provide a breakdown of how many terms were obtained through
     translation and how many of them were added during the expansion.}
 
 \item and, finally, the only the lexicon that was not obtained through
-  translation---the \textbf{Zurich Polarity List}
-  \cite[ZPL;][]{Clematide:10}, which features 8,000 subjective entries
-  extracted from \textsc{GermaNet} synsets \cite{Hamp:97}.  These
-  synsets had been manually annotated by human experts with their
-  prior polarities.  Since the authors, however, found the number of
-  polar adjectives obtained this way to be insufficient for their
-  classification experiments, they automatically enriched this lexicon
-  with more attributive terms, using the collocation method of
+  translation---the \textbf{Zurich Polarity
+    List}~\cite[ZPL;][]{Clematide:10}, which features 8,000 subjective
+  entries extracted from \textsc{GermaNet} synsets~\cite{Hamp:97}.
+  These synsets had been manually annotated by human experts with
+  their prior polarities.  Since the authors, however, found the
+  number of polar adjectives obtained this way to be insufficient for
+  their classification experiments, they automatically enriched this
+  lexicon with more attributive terms, using the collocation method of
   \citet{Hatzivassi:97}.
 \end{itemize}
 % Since all of these lexicons were created semi-automatically by either
@@ -172,7 +172,7 @@ shown in Table~\ref{snt-lex:tbl:gsl-res}.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.167\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -252,12 +252,11 @@ shown in Table~\ref{snt-lex:tbl:gsl-res}.
       \textbf{0.985} & 0.917 & 0.95 & %
       0.51 & 0.901 \\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Evaluation of semi-automatic German sentiment lexicons]{
       Evaluation of semi-automatic German sentiment lexicons\\ {\small
-        GPC -- German Polarity Clues, SWS -- SentiWS, ZPL -- Zurich
-        Polarity List}}
-    \label{snt-lex:tbl:gsl-res}
+        GPC --- German Polarity Clues, SWS --- SentiWS, ZPL --- Zurich
+        Polarity List}}\label{snt-lex:tbl:gsl-res}
   \end{center}
 \end{table}
 
@@ -286,7 +285,7 @@ perform in comparison with these resources.  According to
 (SLG) algorithms can be grouped into two main classes: dictionary- and
 corpus-based ones.  The former systems induce polarity lists from
 monolingual thesauri or lexical databases such as the Macquarie
-Dictionary \cite{Bernard:86} or \textsc{WordNet} \cite{Miller:95}.  A
+Dictionary~\cite{Bernard:86} or \textsc{WordNet}~\cite{Miller:95}.  A
 clear advantage of these methods is their relatively high precision,
 as they operate on manually annotated, carefully verified data.  At
 the same time, this precision might come at the price of reduced
@@ -415,16 +414,16 @@ experimented with three different methods:
   method, in which they randomly perturbed edge weights;
 \item finally, they compared both min-cut systems with the \emph{label
   propagation algorithm} of~\citet{Zhu:02}, which can be considered as
-  a probabilistic variant of the \citeauthor{Blair-Goldensohn:08}'s
+  a probabilistic variant of \citeauthor{Blair-Goldensohn:08}'s
   approach.
 \end{itemize}
 
 Further notable contributions to dictionary-based methods were made
 by~\citet{Mohammad:09}, who compiled an initial set of polar terms by
-using antonymous morphological patterns (\eg{} \emph{logical} --
-\emph{illogical}, \emph{honest} -- \emph{dishonest}, \emph{happy} --
+using antonymous morphological patterns (\eg{} \emph{logical} ---
+\emph{illogical}, \emph{honest} --- \emph{dishonest}, \emph{happy} ---
 \emph{unhappy}) and then expanded this set with the help of the
-Macquarie Thesaurus \cite{Bernard:86}; \citet{Awadallah:10}, who
+Macquarie Thesaurus~\cite{Bernard:86}; \citet{Awadallah:10}, who
 adopted a random walk approach, estimating word's polarity as a
 difference between the average number of steps a random walker had to
 make in order to reach a seed term from the positive or negative set;
@@ -445,7 +444,7 @@ For our experiments, we reimplemented the approaches of~\citet{Hu:04},
 \citet{Blair-Goldensohn:08}, \citet{Kim:04,Kim:06}, \citet{Esuli:06c},
 \citet{Rao:09}, and \citet{Awadallah:10}, and applied these methods to
 \textsc{GermaNet}\footnote{Throughout our experiments, we will use
-  \textsc{GermaNet} Version 9.} \cite{Hamp:97}, the German equivalent
+  \textsc{GermaNet} Version 9.}~\cite{Hamp:97}, the German equivalent
 of the \textsc{WordNet} taxonomy.
 
 In order to make this comparison more fair, we used the same set of
@@ -510,7 +509,7 @@ more than half of these walkers agreed on the same polarity class.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.146\columnwidth} % first columm
         >{\centering\arraybackslash}p{0.06\columnwidth} % second columm
         *{9}{>{\centering\arraybackslash}p{0.072\columnwidth}} % next nine columns
@@ -650,13 +649,12 @@ more than half of these walkers agreed on the same polarity class.
       0.97 & 0.958 & 0.964 & %
       0.446 & 0.929\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of dictionary-based approaches]{Results of
-      dictionary-based approaches\\ {\small HL -- \citet{Hu:04}, BG
-        -- \citet{Blair-Goldensohn:08}, KH -- \citet{Kim:04}, ES --
-        \citet{Esuli:06c}, RR -- \citet{Rao:09}, AR --
-        \citet{Awadallah:10}}}
-    \label{snt-lex:tbl:lex-res}
+      dictionary-based approaches\\ {\small HL --- \citet{Hu:04}, BG
+        --- \citet{Blair-Goldensohn:08}, KH --- \citet{Kim:04}, ES ---
+        \citet{Esuli:06c}, RR --- \citet{Rao:09}, AR ---
+        \citet{Awadallah:10}}}\label{snt-lex:tbl:lex-res}
   \end{center}
 \end{table}
 
@@ -842,7 +840,7 @@ Table~\ref{snt-lex:tbl:corp-meth}.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.167\columnwidth} % first columm
         >{\centering\arraybackslash}p{0.057\columnwidth} % second columm
         *{9}{>{\centering\arraybackslash}p{0.07\columnwidth}} % next nine columns
@@ -939,12 +937,11 @@ Table~\ref{snt-lex:tbl:corp-meth}.
       \textbf{0.964} & 0.998 & 0.98 & %
       0.418 & \textbf{0.962}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of corpus-based approaches]{Results of
-      corpus-based approaches\\ {\small TKM -- \citet{Takamura:05},
-        VEL -- \citet{Velikovich:10}, KIR -- \citet{Kiritchenko:14},
-        SEV -- \citet{Severyn:15}}}
-    \label{snt-lex:tbl:corp-meth}
+      corpus-based approaches\\ {\small TKM --- \citet{Takamura:05},
+        VEL --- \citet{Velikovich:10}, KIR --- \citet{Kiritchenko:14},
+        SEV --- \citet{Severyn:15}}}\label{snt-lex:tbl:corp-meth}
   \end{center}
 \end{table}
 
@@ -1215,8 +1212,7 @@ of function~$f$.\footnote{Unfortunately, function $f$ is neither
     between the projections of sample seeds with opposite semantic
     orientations ($\vec{p}_{\mathcal{S}}$ vs. $\vec{p}_{\mathcal{O}}$
     and $\vec{p}_+$ vs. $\vec{p}_\_$ respectively) on these lines are
-    highlighted in \textcolor{highlighter green}{green})}
-  \label{fig:linproj}
+    highlighted in \textcolor{highlighter green}{green})}\label{fig:linproj}
 \end{figure*}
 
 % \begin{minipage}{0.4\textwidth}
@@ -1267,7 +1263,7 @@ values for neutral items as $s^{neut}_{subj} = 1 -
 In the same way, we estimated the polarity score for the $i$-th word
 by first finding a polarity line~$\vec{b}_{pol}$ and then computing
 the respective score as~$s_{pol} = 1 +
-\frac{\delta^i_{pol}}{\delta^{max}_{pol}}$.
+\frac{\delta^i_{pol}}{{\delta}^{max}_{pol}}$.
 
 In the final step, we united both values $s_{subj}$ and $s_{pol}$ into
 a single score $s = \frac{1}{s_{subj} + s_{pol}}$ and sorted the
@@ -1362,19 +1358,18 @@ Figure~\ref{fig:linproj}.
       - \vars{O}_{pol}| |\forall\vars{p}_{pol}\in\vars{projections}_{pol}\}\right)$;
 
     \For{$\vars{i}\gets 1$; $\vars{i} <= \func{ncols}(\vars{M})$; $\vars{i}\gets\vars{i} + 1$}
-    \If {$\vars{i} \in \mathcal{S}$}
-    \State \textbf{continue};\Comment{known seeds will be added later by default}
-    \EndIf
-    \State $\vars{p}_{subj}$$\gets$\vars{projections}$_{subj}$[$i$];
+    \If{$\vars{i} \in \mathcal{S}$}
+    \State\textbf{continue};\Comment{known seeds will be added later by default}
+    \EndIf{}
+    \State{}$\vars{p}_{subj}$$\gets$\vars{projections}$_{subj}$[$i$];
 
-    \If {$|\vars{p}_{subj} - \mu_{\mathcal{O}}| > |\vars{p}_{subj} - \mu_{\mathcal{S}}|$}%
+    \If {$|\vars{p}_{subj}-\mu_{\mathcal{O}}| > |\vars{p}_{subj}-\mu_{\mathcal{S}}|$}%
     \Comment{if the $i$-th word is subjective}
 
-    \State\vars{score}$_{subj}\gets 1 + %
-    \frac{|\vars{p}_{subj} - \vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
+    \State\vars{score}$_{subj}\gets{}1 + %
+    \frac{|\vars{p}_{subj}-\vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
     \Else
-    \State\vars{score}$_{subj}\gets 1 - %
-    \frac{|\vars{p}_{subj} - \vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
+    \State\vars{score}$_{subj}\gets 1 - \frac{|\vars{p}_{subj}-\vars{O}_{subj}|}{\vars{max\_score}_{subj}}$;
     \EndIf
 
     \State $\vars{p}_{pol}\gets\vars{projections}_{pol}$[$i$];
@@ -1798,30 +1793,28 @@ Table~\ref{snt-lex:tbl:alt-seed-sets}.
       {\bfseries Comments}\\
       \midrule
       \citet{Hu:04} & 14 positive, 15 negative, and 10 neutral terms & adjectives %
-      & {{\itshape fantastisch, lieb, sympathisch, %
-          b\"ose, dumm, schwierig}} & polar terms translated from the original paper %
-      \cite{Hu:04}; neutral terms added by us;\\
+      & {{\itshape{}fantastisch, lieb, sympathisch, %
+          b\"ose, dumm, schwierig}} & polar terms translated from the original paper~\cite{Hu:04}; neutral terms added by us;\\
       \citet{Kim:04} & 60 positive, 60 negative, and 60 neutral terms & any & %
-      {\itshape fabelhaft, Hoffnung, lieben, h\"asslich, Missbrauch, t\"oten} %
+      {\itshape{}fabelhaft, Hoffnung, lieben, h\"asslich, Missbrauch, t\"oten} %
       & devised by us to match the cardinality of the original set with %
       neutral terms added extra;\\
       \citet{Esuli:06c} & 16 positive, 35 negative, and 4,122 neutral terms & %
-      any & {\itshape angenehm, ausgezeichnet, freundlich, %
+      any & {\itshape{}angenehm, ausgezeichnet, freundlich, %
         arm, bedauernswert, d\"urftig} & polar terms translated from the seed %
       set of \citet{Turney:03}; neutral terms automatically translated from %
       objective entries in the General Inquirer lexicon \cite{Stone:66};\\
       \citet{Remus:10} & 12 positive, 12 negative, and 10 neutral terms & %
-      adjectives & {\itshape gut, sch\"on, richtig, %
+      adjectives & {\itshape{}gut, sch\"on, richtig, %
         schlecht, unsch\"on, falsch} & %
       polar terms translated from the seed set of \citet{Turney:03}; %
       neutral terms added by us;\\
       \\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Overview of alternative seed sets]{ Overview of
       alternative seed sets\\ (all cardinalities are given with
-      respect to the resulting German translations)}
-    \label{snt-lex:tbl:alt-seed-sets}
+      respect to the resulting German translations)}\label{snt-lex:tbl:alt-seed-sets}
   \end{center}
 \end{table}
 
@@ -2358,24 +2351,24 @@ conclusions of this chapter as follows:
   present for every language;
 \item in this regard, a viable alternative to dictionary-based methods
   are SLG systems that induce polar lexicons from neural word
-  embeddings, which not only avoid the above limitations, but also
+  embeddings, which not only avoid the above limitations but also
   yield competitive (or even better) results;
 \item with at least two of such methods ($k$-NN and linear
   projection), we were able to establish a new state of the art for
   the macro- and micro-averaged \F-scores of automatically induced
   sentiment lexicons;
-\item we also checked how different types of embeddings were affecting
-  the performance of NWE-based SLG systems, noticing that the $k$-NN
-  and linear projection methods worked best with the standard word2vec
+\item we also checked how different types of embeddings affected the
+  performance of NWE-based SLG systems, noticing that the $k$-NN and
+  linear projection methods worked best with standard word2vec
   vectors, while nearest centroids and PCA yielded better results when
   using task-specific representations;
 \item furthermore, we saw that all NWE-based approaches benefited from
-  mean-scaling and length normalization of input vectors, getting an
-  improvement by up to~5\% in their macro-averaged \F-scores;
+  mean-scaling and length normalization of the input vectors, getting
+  an improvement by up to~5\% in their macro-averaged \F-scores;
 \item finally, an extensive evaluation of various sets of seed terms
   revealed that the results of almost all tested SLG algorithms
-  crucially depended on the quality of their initial seeds, with
-  larger balanced seed sets, \eg{} like the one proposed
+  crucially depend on the quality of their initial seeds, with larger
+  and more balanced seed sets, \eg{} like the one proposed
   by~\citet{Kim:04}, typically leading to much higher scores.
 \end{itemize}
 
