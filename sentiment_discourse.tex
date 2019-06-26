@@ -155,12 +155,11 @@ Example~\ref{dasa:exmp:rst-evidence}
   \item comprehended as the same in many respects,
   \item comprehended as differing in a few respects and
   \item compared with respect to one or more of these differences
-  \end{inparaenum}
-  ); because of an incompatibility that arises from the contrast, one
-  cannot have positive regard for both the situations presented in N and
-  S; comprehending S and the incompatibility between the situations
-  presented in N and S increases R's positive regard for the situation
-  presented in N
+  \end{inparaenum}); because of an incompatibility that arises from the contrast, one
+  cannot have positive regard for both the situations presented in N
+  and S\@; comprehending S and the incompatibility between the
+  situations presented in N and S increases R's positive regard for
+  the situation presented in N
 
   \textbf{Effect:} R's positive regard for N is increased
 
@@ -172,41 +171,42 @@ discourse units or subtrees, which were connected to each other via
 discourse relations.
 
 You can see an example of such a discourse tree from the original
-Rhetorical Structure Treebank \cite{Carlson:01a} in
+Rhetorical Structure Treebank~\cite{Carlson:01a} in
 Figure~\ref{dasa:fig:rst-tree}.
 
 \begin{figure*}[htb!]\label{dasa:fig:rst-tree}
   \input{rst.tex}
 \end{figure*}
 
-Despite its immense popularity and practical utility \cite[see
+Despite its immense popularity and practical utility~\cite[see
 ][]{Marcu:98,Yoshida:14,Bhatia:15,Goyal:16}, RST has often been
-criticized for the rigidness of the imposed tree structure
-\cite{Wolf:05} and unclear distinction between discourse relations
-\cite{Nicholas:94,Miltsakaki:04}.  As a result of this criticism, two
-alternative approaches to automatic discourse analysis were proposed
-in later works.
+criticized for the rigidness of the imposed tree
+structure~\cite{Wolf:05} and unclear distinction between discourse
+relations~\cite{Nicholas:94,Miltsakaki:04}.  As a result of this
+criticism, two alternative approaches to automatic discourse analysis
+were proposed in later works.
 
 \paragraph{PDTB.}
 
 One of these approaches, \emph{PDTB} (named so after the Penn
 Discourse Treebank [\citeauthor{Prasad:04}, \citeyear{Prasad:04}]),
-was developed by a research group at University of Pennsylvania
-\cite{Miltsakaki:04,Miltsakaki:04a,Prasad:08}.  Instead of fully
-specifying the hierarchical structure of the whole text and providing
-an all-embracing set of discourse relations, the authors of this
-theory mainly focused on the grammatical and lexical means that could
-connect two sentences (\emph{connectives}) and express a semantic
-relationship (\emph{sense}) between these predicates.  Typical such
-means are coordinating or subordinating conjunctions (\eg{}
-\emph{and}, \emph{because}, \emph{since}) and discourse adverbials
-(\eg{} \emph{however}, \emph{otherwise}, \emph{as a result}), which
-can denote a \textsc{Comparison}, a \textsc{Contingency}, or some
-other sense\footnote{In particular, the authors of PDTB distinguished
-  four major senses (\textsc{Comparison}, \textsc{Contingency},
-  \textsc{Expansion}, and \textsc{Temporal}), and subdivided each of
-  these categories into further subtypes, \eg{} \textsc{Comparison}
-  included \textsc{Concession} and \textsc{Contrast}, whereas
+was developed by a research group at University of
+Pennsylvania~\cite{Miltsakaki:04,Miltsakaki:04a,Prasad:08}.  Instead
+of fully specifying the hierarchical structure of the whole text and
+providing an all-embracing set of discourse relations, the authors of
+this theory mainly focused on the grammatical and lexical means that
+could connect two sentences (\emph{connectives}) and express a
+semantic relationship (\emph{sense}) between these predicates.
+Typical such means are coordinating or subordinating conjunctions
+(\eg{} \emph{and}, \emph{because}, \emph{since}) and discourse
+adverbials (\eg{} \emph{however}, \emph{otherwise}, \emph{as a
+  result}), which can denote a \textsc{Comparison}, a
+\textsc{Contingency}, or some other sense\footnote{In particular, the
+  authors of PDTB distinguished four major senses
+  (\textsc{Comparison}, \textsc{Contingency}, \textsc{Expansion}, and
+  \textsc{Temporal}), and subdivided each of these categories into
+  further subtypes, \eg{} \textsc{Comparison} included
+  \textsc{Concession} and \textsc{Contrast}, whereas
   \textsc{Contingency} sense was further divided into \textsc{Cause}
   and \textsc{Condition}.} between two sentential arguments
 (\textsc{Arg1} and \textsc{Arg2}).
@@ -641,19 +641,20 @@ An attempt to unite local and global coherence was made by
 \citet{McDonald:07}, who tried to simultaneously predict the polarity
 of a document and classify the semantic orientations of its sentences.
 For this purpose, the authors devised an undirected probabilistic
-graphical model based on the structured linear classifier
-\cite{Collins:02}.  Similarly to \citet{Pang:04}, they connected the
-label nodes of each sentence to the labels of its neighboring clauses
-and also linked these nodes to the overarching vertex representing the
-polarity of the text.  After optimizing this model with the MIRA
-learning algorithm \cite{Crammer:03}, \citeauthor{McDonald:07}
-achieved an accuracy of 82.2\% for document-level classification and
-62.6\% for sentence-level prediction on a corpus of online product
-reviews, outperforming pure document and sentence classifiers by up to
-four percent.  A crucial limitation of this system though was that its
-optimization required the gold labels of sentences and documents to be
-known at the training time, which considerably limited its
-applicability to other domains with no such data.
+graphical model based on the structured linear
+classifier~\cite{Collins:02}.  Similarly to \citet{Pang:04}, they
+connected the label nodes of each sentence to the labels of its
+neighboring clauses and also linked these nodes to the overarching
+vertex representing the polarity of the text.  After optimizing this
+model with the MIRA learning algorithm~\cite{Crammer:03},
+\citeauthor{McDonald:07} achieved an accuracy of 82.2\% for
+document-level classification and 62.6\% for sentence-level prediction
+on a corpus of online product reviews, outperforming pure document and
+sentence classifiers by up to four percent.  A crucial limitation of
+this system though was that its optimization required the gold labels
+of sentences and documents to be known at the training time, which
+considerably limited its applicability to other domains with no such
+data.
 
 %% A similar approach was also suggested by~\citet{Sadamitsu:08}, who
 %% attained 82.74\% accuracy on predicting the polarity of customer
@@ -818,7 +819,7 @@ message.\footnote{Drawing on the work of~\citet{Bhatia:15}, we obtain
   this representation using the DEP-DT algorithm of~\citet{Hirao:13}
   with a minor modification that we do not follow any satellite
   branches while computing the heads of abstract RST nodes in Step 1
-  of this procedure \cite[see][pp.~1516--1517]{Hirao:13}.}  In
+  of this procedure~\cite[see][pp.~1516--1517]{Hirao:13}.}  In
 particular, we define CRF graph $\mathcal{G}=(\mathcal{V},
 \mathcal{E})$ as a set of vertices $\mathcal{V}=
 \mathcal{Y}\cup\mathcal{X}$, in which $\mathcal{Y}=\{y_{(i,
@@ -1654,8 +1655,8 @@ segment at the top of the tree, which merely expresses a factual
 hypothesis, free of any polar connotation.
 \begin{example}[An Error Made by the \textsc{Root} System\newline]\label{snt:dasa:exmp:root-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    $[$Die NSA weiss auch von dir ...$]_1$ $[$N\"utzt uns auch nichts .$]_2$ $[$ \%NegSmiley$]_3$}\\
-  \noindent $[$The NSA also knows about you$]_1$ $[$It doesn't help us
+    $[$Die NSA weiss auch von dir \ldots$]_1$ $[$N\"utzt uns auch nichts .$]_2$ $[$ \%NegSmiley$]_3$}\\
+  \noindent $[$The NSA also knows about you \ldots$]_1$ $[$It doesn't help us
     either$]_2$ $[$ \%NegSmiley$]_3$\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
@@ -1671,7 +1672,7 @@ hypothesis, free of any polar connotation.
 Finally, the last example (\ref{snt:dasa:exmp:last-error}) shows an
 error made by the \textsc{Last} baseline system, which predicts the
 neutral label for a negative tweet based on the polarity of its
-right-most EDU.  This unit indeed admits some positive moments with
+right-most EDU\@.  This unit indeed admits some positive moments with
 regard to the sad news expressed in the first segment, but in contrast
 to the movie description from Example~\ref{disc-snt:exmp-pang02},
 where the last sentence completely overturned the polarity of the
@@ -1735,8 +1736,8 @@ and machine-learning--based MLSA methods (the systems of
            DASA approaches on the updated data, subsequently
            evaluating them on the PotTS and SB10k test sets.  The
            results of this evaluation are shown in
-           Figures~\ref{dasa:fig:potts-base-classifier} and
-           \ref{dasa:fig:sb10k-base-classifier}.
+           Figures~\ref{dasa:fig:potts-base-classifier}
+           and~\ref{dasa:fig:sb10k-base-classifier}.
 
 \begin{figure*}[htb!]
 { \centering
@@ -1773,8 +1774,8 @@ On this dataset, LBA still leads to higher macro-\F{}--scores for
 results of \textsc{LCRF}, \textsc{LMCRF}, \textsc{RDP}, and
 \textsc{No-Discourse}.  The SVM classifier is also the unequivocal
 leader in terms of the micro-averaged \F, yielding the highest scores
-for all systems except WNG.  Unfortunately, the lexicon-based
-predictor of \citet{Hu:04} performs much weaker than SVM and LBA: the
+for all systems except WNG\@.  Unfortunately, the lexicon-based
+predictor of \citet{Hu:04} performs much weaker than SVM and LBA:\ the
 highest macro- and micro-averaged \F{}-scores achieved with this
 approach run up to 0.422 (\textsc{RDP}) and 0.625 (\textsc{Last})
 respectively.  The most disappointing result for us, however, is that
@@ -1802,7 +1803,7 @@ the PotTS test set\footnote{Unfortunately, due to the limited
   set.} and tested all DASA approaches on these hand-crafted RST data.
 \begin{table}[bht!]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -1938,11 +1939,10 @@ the PotTS test set\footnote{Unfortunately, due to the limited
        \textbf{0.72} & 0.73 & \textbf{0.73} & %
        0.716 & \textbf{0.753}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of DASA methods on manually annotated RST
       trees]{Results of discourse-aware sentiment analysis methods on
-      the PotTS corpus with manually annotated RST trees}
-    \label{dasa:tbl:res-gold}
+      the PotTS corpus with manually annotated RST trees}\label{dasa:tbl:res-gold}
   \end{center}
 \end{table}
 
@@ -1974,12 +1974,11 @@ discourse-aware sentiment methods, this fact is of little help to us
 if we are bound to the output of an automatic parser. A common way to
 improve the quality of automatic RST analysis and ease the task of
 DASA methods is to reduce the number of discourse relations
-distinguished by the parsing system.  Drawing on the work of
-\citet{Bhatia:15}, we also used this approach, projecting all
-discourse relations from the Potsdam Commentary Corpus \cite{Stede:14}
+distinguished by the parsing system.  Drawing on the work of~\citet{Bhatia:15}, we also used this approach, projecting all
+discourse relations from the Potsdam Commentary Corpus~\cite{Stede:14}
 to the binary set of \textsc{Contrastive} and \textsc{Non-Contrastive}
 ones.  Although similar approximations were made in almost all other
-discourse-aware solutions \cite[cf.
+discourse-aware solutions~\cite[cf.
 ][]{Chenlo:13,Heerschop:11,Zhou:11}, we were not sure whether the
 subset that we used was indeed optimal and sufficient to reflect all
 possible discourse interactions that could play an important role in
@@ -1992,7 +1991,7 @@ set of all RST links from the Potsdam Commentary Corpus.  A detailed
 overview of these sets is given in Table~\ref{dasa:tbl:rst-rel-sets}.
 \begin{table}[hbt]
   \begin{center}
-    \bgroup
+    \bgroup{}
     \setlength\tabcolsep{0.8\tabcolsep}\scriptsize
     \begin{tabular}{p{0.135\columnwidth} % first columm
         *{1}{>{\centering\arraybackslash}p{0.4\columnwidth}}
@@ -2001,7 +2000,7 @@ overview of these sets is given in Table~\ref{dasa:tbl:rst-rel-sets}.
       \textbf{Scheme} & \textbf{Relation Set} & {\centering\textbf{Equivalence Classes}}\\\midrule
 
       \citeauthor{Bhatia:15} & \{\textsc{Contrastive},
-      \textsc{\bfseries Non-Contrastive}\} & \textsc{Contrastive} $=$
+      \textsc{\bfseries Non-Contrastive}\} & \textsc{Contrastive} $\defeq$
       \{\textsc{Antithesis}, \textsc{Antithesis-E},
       \textsc{Comparison}, \textsc{Concession},
       \textsc{Consequence-S}, \textsc{Contrast},
@@ -2035,22 +2034,21 @@ overview of these sets is given in Table~\ref{dasa:tbl:rst-rel-sets}.
 
       \citeauthor{Zhou:11} & \{\textsc{Contrast}, \textsc{Condition},
       \textsc{Continuation}, \textsc{Cause}, \textsc{Purpose},
-      \textsc{\bfseries Other}\} & \textsc{Contrast} $=$
+      \textsc{\bfseries Other}\} & \textsc{Contrast} $\defeq$
       \{\textsc{Antithesis}, \textsc{Concession}, \textsc{Contrast},
-      \textsc{Otherwise}\};\newline \textsc{Continuation} $=$
+      \textsc{Otherwise}\};\newline \textsc{Continuation} $\defeq$
       \{\textsc{Continuation}, \textsc{Parallel}\};\newline
-      \textsc{Cause} $=$ \{\textsc{Evidence}, \textsc{Nonvolitional-Cause},
+      \textsc{Cause} $\defeq$ \{\textsc{Evidence}, \textsc{Nonvolitional-Cause},
       \textsc{Nonvolitional-Result}, \textsc{Volitional Cause},
       \textsc{Volitional-Result}\};\\\bottomrule
 
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[RST relations used in different discourse-aware sentiment
       methods]{RST relations used in the original Potsdam Commentary
       Corpus and different discourse-aware sentiment methods\\ {\small
         (default relation [which subsumes the rest of the links] is
-        shown in \textbf{boldface})}}
-    \label{dasa:tbl:rst-rel-sets}
+        shown in \textbf{boldface})}}\label{dasa:tbl:rst-rel-sets}
   \end{center}
 \end{table}
 
@@ -2064,10 +2062,10 @@ especially in terms of relation \F{}.  In the most extreme case (\eg{}
 comprises 34 relations), these gains can reach up to seven
 percent. However, with respect to other metrics (span and nuclearity
 \F{}), the gaps are notably smaller and might even be in favor of the
-richer relation set (cf. nuclearity \F{} for PCC).
+richer relation set (cf.\ nuclearity \F{} for PCC).
 \begin{table}[htb]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.22\columnwidth} % first columm
         *{3}{>{\centering\arraybackslash}p{0.25\columnwidth}}} \toprule
 
@@ -2084,18 +2082,17 @@ richer relation set (cf. nuclearity \F{} for PCC).
 
       \citeauthor{Zhou:11} & 0.776 & 0.501 & 0.388\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of the DPLP parser on PCC~2.0]{Results of the
-      DPLP parser on PCC~2.0 with different relation schemes\\}
-    \label{dasa:tbl:dplp-results}
+      DPLP parser on PCC~2.0 with different relation schemes\\}\label{dasa:tbl:dplp-results}
   \end{center}
 \end{table}
 
 To see how this varying quality affected the net results of
 discourse-aware sentiment methods, we re-evaluated all DASA approaches
 on the updated automatic RST trees and show the results of this
-evaluation in Figures~\ref{dasa:fig:potts-rel-schemes} and
-\ref{dasa:fig:sb10k-rel-schemes}.
+evaluation in Figures~\ref{dasa:fig:potts-rel-schemes}
+and~\ref{dasa:fig:sb10k-rel-schemes}.
 \begin{figure*}[bh!]
 {
 \centering
