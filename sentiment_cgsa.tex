@@ -78,8 +78,8 @@ using the same adjusted version of Potts'
 tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
 lemmatized and assigned part-of-speech tags to these tokens with the
 \textsc{TreeTagger} of \citet{Schmid:95}, and obtained morphological
-features and syntactic trees with the \texttt{Mate} dependency parser
-\cite{Bohnet:13}.
+features and syntactic analyses with the \texttt{Mate} dependency
+parser~\cite{Bohnet:13}.
 % Apart from the PotTS dataset, we also applied this procedure to the
 % microblogs of the German Twitter snapshot~\cite{Scheffler:14}, which
 % will be used in our subsequent experiments on noisy supervision.
@@ -116,10 +116,10 @@ below:
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     \emoexpression[polarity=negative]{typisch} Bayern kaum ist der
     neue Papst da und schon haben sie ihn
-    \emoexpression[polarity=positive]{in der Tasche} ...}\\
-  \noindent \emoexpression[polarity=positive]{Typical} Bavaria The new
+    \emoexpression[polarity=negative]{in der Tasche} ...}\\
+  \noindent \emoexpression[polarity=negative]{Typical} Bavaria The new
   Pope is hardly there, as they already have him
-  \emoexpression[polarity=positive]{in their pocket}\\
+  \emoexpression[polarity=negative]{in their pocket}\\
   \noindent\textup{\bfseries\textcolor{darkred}{Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}
 \end{example}
@@ -162,13 +162,14 @@ The SB10k dataset comprises a total of 9,738 microblogs, which were
 sampled from a larger snapshot of 5M German tweets gathered between
 August and November~2013.  To ensure lexical diversity and
 proportional polarity distribution in this corpus, the authors first
-grouped all posts of this snapshot into 2,500 clusters using $k$-means
-with unigram features.  Afterwards, from each of these groups, they
-selected tweets that contained at least one positive or one negative
-term from the German Polarity Clues lexicon~\cite{Waltinger:10}.  Each
-message was subsequently annotated by at least three human experts
-from a pool of 34 different annotators.  The resulting inter-rater
-reliability (IRR) of this annotation run up to 0.39 Krippendorff's
+grouped all posts of this snapshot into 2,500 clusters using the
+$k$-means algorithm with unigram features.  Afterwards, from each of
+these groups, they selected tweets that contained at least one
+positive or one negative term from the German Polarity Clues
+lexicon~\cite{Waltinger:10}.  Each message was subsequently annotated
+by at least three human experts from a pool of 34 different
+annotators.  The resulting inter-rater reliability (IRR) of this
+annotation run up to 0.39 Krippendorff's
 $\alpha$~\cite{Krippendorff:07}.  Unfortunately, due to the
 restrictions of Twitter's terms of use, which only allow to distribute
 the ids of the microblogs and their labels, we could only retrieve
@@ -191,7 +192,7 @@ distribution in these data are shown in
 Table~\ref{snt-cgsa:tbl:corp-dist}.
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.163\columnwidth} % first columm
         *{6}{>{\centering\arraybackslash}p{0.135\columnwidth}}} % last two columns
       \toprule
@@ -204,8 +205,8 @@ Table~\ref{snt-cgsa:tbl:corp-dist}.
       \textbf{PotTS} & 3,380 & 1,541 & 2,558 & 513 & 0.66 & 0.4\\
       \textbf{SB10k} & 1,717 & 1,130 & 4,629 & 0 & 0.39 & \NA{}\\
       \textbf{GTS} & 3,326,829 & 350,775 & 19,453,669 & 73,776 & \NA{} & \NA{}\\\bottomrule
-\end{tabular}
-    \egroup
+    \end{tabular}
+    \egroup{}
     \caption[Polarity class distribution in PotTS, SB10k, and the
     German Twitter Snapshot]{Polarity class distribution in PotTS,
       SB10k, and the German
@@ -358,7 +359,7 @@ prior SO values of negated, intensified, and downtoned terms, ignoring
 irrealis and interrogative sentences, and adjusting the weights of
 specific document sections.  An extensive evaluation of this approach
 showed that the manual lexicon performed much better than
-automatically generated polarity lists including the Subjectivity
+automatically generated polarity lists, such as Subjectivity
 Dictionary~\cite{Wilson:05}, Maryland Polarity Set~\cite{Mohammad:09},
 and \textsc{SentiWordNet} of~\citet{Esuli:06c}.  Moreover, the authors
 also demonstrated that their method could be successfully applied to
@@ -444,12 +445,12 @@ probabilities of the tweet being subjective given the occurrences of
 the respective polar terms.\footnote{These probabilities were
   calculated automatically on the noisily labeled data set
   of~\citet{Go:09}.}  The authors considered a microblog as neutral if
-its absolute polarity was less than 25 and the subjectivity value was
+its absolute polarity was less than 25, and the subjectivity value was
 not greater than 0.5.  Otherwise, they assigned a positive or negative
 label to this message depending on the sign of the polarity score.
 With this approach, \citeauthor{Jurek:15} achieved an accuracy
 of~77.3\% on the manually annotated subset of the \citeauthor{Go:09}'s
-corpus and reached 74.2\% on the IMDB review corpus~\cite{Maas:11}.
+corpus and reached 74.2\% on the IMDB review dataset~\cite{Maas:11}.
 
 % Kolchyna et al., 2015
 Finally, \citet{Kolchyna:15} also explored two different ways of
@@ -531,7 +532,7 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -770,13 +771,12 @@ Table~\ref{snt-cgsa:tbl:lex-res}.
         0.34 & 0.13 & 0.19 & %
         0.66 & \textbf{0.86} & \textbf{0.75} & %
         0.235 & \textbf{0.606}\\\bottomrule
-\end{tabular}
-    \egroup
+    \end{tabular}
+    \egroup{}
     \caption[Results of lexicon-based MLSA methods]{
       Results of lexicon-based MLSA methods\\
       {\small HL~--~\citet{Hu:04}, TBD~--~\citet{Taboada:11}, MST~--~\citet{Musto:14},
-        JRK~--~\citet{Jurek:15}, KLCH~--~\citet{Kolchyna:15}}}
-    \label{snt-cgsa:tbl:lex-res}
+        JRK~--~\citet{Jurek:15}, KLCH~--~\citet{Kolchyna:15}}}\label{snt-cgsa:tbl:lex-res}
   \end{center}
 \end{table}
 
@@ -827,7 +827,7 @@ changes.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.16\columnwidth} % first columm
         *{10}{>{\centering\arraybackslash}p{0.082\columnwidth}}}
       \toprule
@@ -1059,11 +1059,10 @@ changes.
       % Micro-Averaged F1-Score (All Classes): 56.6176%
       --Other Modifiers & \NA{} & \NA{} & 0.406 & 0.566 & \NA{} &  %
       \NA{} & \NA{} & \NA{} & \NA{} & \NA{}\\\bottomrule
-\end{tabular}
-    \egroup
+    \end{tabular}
+    \egroup{}
     \caption{Effect of polarity-changing factors on lexicon-based MLSA
-      methods}
-    \label{snt-cgsa:tbl:lex-res-ablation}
+      methods}\label{snt-cgsa:tbl:lex-res-ablation}
   \end{center}
 \end{table}
 
@@ -1231,9 +1230,10 @@ greater than the absolute sum of two negative values for the terms
 
 \begin{example}[An Error Made by the System of~\citeauthor{Jurek:15}]\label{snt:cgsa:exmp:jurek-error-0}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    Normal bin ich ja nicht der mensch dwer sich beschwert wegen dem essen aber diese Pizza von Joeys... boah wie ekelhaft}\\
+    Normal bin ich ja nicht der mensch dwer sich beschwert wegen dem
+    essen aber diese Pizza von Joeys\ldots{} boah wie ekelhaft}\\
   \noindent Normally I'm not a person who complains about food but
-  this pizza from Joeys... Boah it's so disgusting\\[0.65em]
+  this pizza from Joeys\ldots{} Boah it's so disgusting\\[0.65em]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
@@ -1250,9 +1250,13 @@ provided case is still incorrect as it evidently confuses the positive
 class with the neutral polarity.
 
 \begin{example}[An Error Made by the System of~\citeauthor{Kolchyna:15}]\label{snt:cgsa:exmp:kolchyna-error-0}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    das H\"ort sich echt Super an! \%PosSmiley macht sami nicht auch so ein Video? Noah s\"usse beste Freunde! \heart \%User isilie saminator}\\
-  \noindent It sounds really fantastic! \%PosSmiley won't sami also make such a video? Noah's sweet best friends! \heart \%User isilie saminator\\[0.65em]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape das
+    H\"ort sich echt Super an! \%PosSmiley macht sami nicht auch so
+    ein Video? Noah s\"usse beste Freunde! \heart{} \%User isilie
+    saminator}\\
+  \noindent It sounds really fantastic! \%PosSmiley won't sami also
+  make such a video? Noah's sweet best friends! \heart{} \%User isilie
+  saminator\\[0.65em]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{green3}{positive}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
@@ -1271,8 +1275,10 @@ the closest neighbors of this microblog were indeed neutral, as we can
 see from the list below:
 
 \begin{enumerate}
-\item \textcolor{darkred}{\bfseries Tweet:} ``Not in my backyard'' -Mentalit\"at dt. Politik: ``N\"achster Castor geht wohl doch nach Gorleben... -\%Link antiatom''\\
-  \textit{``Not in my backyard'' -Mentality of German politics: ``Next Castor will probably still got to Gorleben... -\%Link antiatom''}\\
+\item \textcolor{darkred}{\bfseries Tweet:} ``Not in my backyard''
+  -Mentalit\"at dt. Politik: ``N\"achster Castor geht wohl doch nach
+  Gorleben\ldots{} -\%Link antiatom''\\
+  \textit{``Not in my backyard'' -Mentality of German politics: ``Next Castor will probably still got to Gorleben\ldots{} -\%Link antiatom''}\\
   \textcolor{darkred}{\bfseries Label:}~\textcolor{black}{neutral}\\
   \textcolor{darkred}{\bfseries Distance:}~$\expnumber{6.83}{-03}$;
 
@@ -1388,7 +1394,7 @@ that had a perfect inter-annotator agreement.
 %% the text using all of its sentences), boosting the accuracy of SO
 %% classification from~82.8 to~86.4\%.
 
-In order to check the effectiveness of the Na{\"i}ve Bayes approach,
+In order to check the effectiveness of the Na\"{\i}ve Bayes approach,
 \citet{Pang:02} compared the results of NB, MaxEnt, and SVM systems on
 the movie review classification task, trying to predict whether a
 review was perceived as thumbs up or thumbs down.  In contrast to the
@@ -1397,10 +1403,10 @@ objective, yielding 82.9\% accuracy when used with unigram features
 only.  This conclusion paved the way for the following triumph of the
 support-vector approach, which was dominating the whole sentiment
 research field for almost a decade ever since.  For example,
-\citet{Gamon:04} also trained an SVM predictor using a rich set of
+\citet{Gamon:04} also trained an SVM predictor using a set of
 linguistic and surface-level features (including part-of-speech
 trigrams, context-free phrase-structure patterns, and part-of-speech
-information coupled with semantic relations) to distinguish between
+information coupled with syntactic relations) to distinguish between
 positive and negative customer feedback, achieving 77.5\% accuracy and
 $\approx$0.77~\F{} by using only top 2,000 attributes that had the
 highest log-likelihood ratio with the target class.  % Interestingly
@@ -1608,7 +1614,7 @@ estimated the total sum of the lexicon scores for all message tokens
 and also separately calculated these statistics for each particular
 part-of-speech tag, considering them as additional attributes.
 Automatic features were obtained using the Sentiment140 and Hashtag
-Sentiment Base polarity lists \cite{Kiritchenko:14}.  Again, for each
+Sentiment Base polarity lists~\cite{Kiritchenko:14}.  Again, for each
 of these lexicons, for each of the two polarity classes, the authors
 produced four features representing the number of tokens with non-zero
 scores, the sum and the maximum of all respective lexicon values for
@@ -1691,7 +1697,7 @@ specifics were kept maximally close to their original descriptions.
       \multicolumn{3}{c}{\bfseries Positive} & %
       \multicolumn{3}{c}{\bfseries Negative} & %
       \multicolumn{3}{c}{\bfseries Neutral} & %
-      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
       \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
       \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
@@ -1876,12 +1882,11 @@ specifics were kept maximally close to their original descriptions.
        0.78 & 0.87 & 0.82 & %
        0.491 & 0.724\\\bottomrule
     \end{tabular}
-    \egroup
-    \caption[Results of ML-based MLSA methods]{
-      Results of machine-learning--based MLSA methods\\
-      {\small GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
-        GNT~--~\citet{Guenther:14}}}
-    \label{snt-cgsa:tbl:ml-res}
+    \egroup{}
+    \caption[Results of ML-based MLSA methods]{ Results of
+      machine-learning--based MLSA methods\\ {\small
+        GMN~--~\citet{Gamon:04}, MHM~--~\citet{Mohammad:13},
+        GNT~--~\citet{Guenther:14}}}\label{snt-cgsa:tbl:ml-res}
   \end{center}
 \end{table}
 
@@ -1978,7 +1983,7 @@ recomputing their scores.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.2\columnwidth} % first columm
         *{6}{>{\centering\arraybackslash}p{0.13097\columnwidth}}}
       \toprule
@@ -2011,10 +2016,9 @@ recomputing their scores.
       --Automatic Lexicons & \NA{} & \NA{} & 0.54 & 0.753 & \textbf{0.517} & 0.735\\
       --Manual Lexicons & \NA{} & \NA{} & 0.553 & 0.751 & 0.51 & \textbf{0.739}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Feature-ablation test of ML-based MLSA methods]{
-      Results of the feature-ablation test for ML-based MLSA methods}
-    \label{snt-cgsa:tbl:ml-res-ablation}
+      Results of the feature-ablation test for ML-based MLSA methods}\label{snt-cgsa:tbl:ml-res-ablation}
   \end{center}
 \end{table}
 
@@ -2088,7 +2092,7 @@ bigram among its top-ten entries.
 
 \begin{table}[hbt]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.47\tabcolsep}\scriptsize
     \begin{tabular}{>{\centering\arraybackslash}p{0.05\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.092\columnwidth}}} % next four columns
       \toprule
@@ -2108,11 +2112,10 @@ bigram among its top-ten entries.
           9 & NK-\$. & NEUT & 0.16 & *-? & NEUT & 0.062 & sch\"on-nicht & POS & 1.56\\
           10 & DM-ITJ & POS & 0.157 & ? & NEUT & 0.061 & applause & POS & 1.5\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Top-10 features learned by MLSA classifiers]{Top-10
       features learned by ML-based MLSA methods\\{\small (sorted by
-        the absolute values of their weights)}}
-    \label{fgsa:tbl:ml:to10-features}
+        the absolute values of their weights)}}\label{fgsa:tbl:ml:to10-features}
   \end{center}
 \end{table}
 
@@ -2122,11 +2125,11 @@ Another important factor that could significantly affect the quality
 of ML-based approaches was the underlying classification method, which
 was used to optimize the feature weights and make the final
 predictions.  Although most of the previous studies agree on the
-superior performance of support vector machines for this task
-\cite[see ][]{Pang:02,Gamon:04,Mohammad:13}, we decided to question
-these conclusions as well and reran our experiments, replacing the
-linear SVC predictor with the Na\"ive Bayes and Logistic Regression
-algorithms.
+superior performance of support vector machines for this
+task~\cite[see ][]{Pang:02,Gamon:04,Mohammad:13}, we decided to
+question these conclusions as well and reran our experiments,
+replacing the linear SVC predictor with the Na\"{\i}ve Bayes and
+Logistic Regression algorithms.
 
 Somewhat surprisingly, these changes indeed resulted in an
 improvement, especially in the case of the logistic classifier, which
@@ -2141,7 +2144,7 @@ Mohammmad's and G\"unther's analyzers.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.2\columnwidth} % first columm
         *{6}{>{\centering\arraybackslash}p{0.13097\columnwidth}}}
       \toprule
@@ -2158,18 +2161,17 @@ Mohammmad's and G\"unther's analyzers.
 
       \multicolumn{7}{c}{\cellcolor{cellcolor}PotTS}\\
       SVM & \textbf{0.453} & \textbf{0.617} & 0.674 & 0.727 & \textbf{0.624} & 0.673\\
-      Na{\"i}ve Bayes & 0.432 & 0.577 & 0.635 & 0.675 & 0.567 & 0.59\\
+      Na\"{\i}ve Bayes & 0.432 & 0.577 & 0.635 & 0.675 & 0.567 & 0.59\\
       Logistic Regression & 0.431 & 0.612 & \textbf{0.677} & \textbf{0.741} & \textbf{0.624} & \textbf{0.688}\\
 
       \multicolumn{7}{c}{\cellcolor{cellcolor}SB10k}\\
       SVM & 0.329 & \textbf{0.699} & \textbf{0.564} & 0.752 & 0.491 & 0.724\\
-      Na{\"i}ve Bayes & \textbf{0.351} & 0.637 & 0.516 & 0.755 & 0.453 & 0.675\\
+      Na\"{\i}ve Bayes & \textbf{0.351} & 0.637 & 0.516 & 0.755 & 0.453 & 0.675\\
       Logistic Regression & 0.309 & 0.693 & 0.553 & \textbf{0.772} & \textbf{0.512} & \textbf{0.75}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption{
-      Results of ML-based MLSA methods with different classifiers}
-    \label{snt-cgsa:tbl:ml-res-classifiers}
+      Results of ML-based MLSA methods with different classifiers}\label{snt-cgsa:tbl:ml-res-classifiers}
   \end{center}
 \end{table}
 
@@ -2200,7 +2202,7 @@ of~\citet{Gamon:04}.
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
     \upshape\textcolor{green3}{positive*}}\label{snt:cgsa:exmp:gamon-error}
 \end{example}
-\noindent{} In this case, the classifier incorrectly assigned a
+\noindent{} In this case, the classifier incorrectly assigned the
 positive label to a clearly negative microblog despite the presence of
 multiple negatively connoted terms (``zynische'' [\emph{cynical}],
 ``labern'' [\emph{to babble}], ``schlecht machen'' [\emph{to talk
@@ -2547,16 +2549,16 @@ separate sets of convolutions for each of these types.
 
 Although convolutional approaches still show competitive scores and
 are hard to outperform in practice, in recent time, they are gradually
-being superseded by recurrent neural networks \cite{Xu:16,Wang:15}.
+being superseded by recurrent neural networks~\cite{Xu:16,Wang:15}.
 One of the most prominent such systems has been recently proposed
-by~\citet{Baziotis:17}.  In their submission to SemEval~2017
-\cite{Rosenthal:17}, the authors used two successive bidirectional
-LSTM units (BiLSTMs).  In each of these units, they concatenated the
-results of the left-to-right recurrence
+by~\citet{Baziotis:17}.  In their submission to
+SemEval~2017~\cite{Rosenthal:17}, the authors used two successive
+bidirectional LSTM units (BiLSTMs).  In each of these units, they
+concatenated the results of the left-to-right recurrence
 ($\vec{h}^{(l)}_{i_{\rightarrow}}\in\mathbb{R}^{150}$) with the
 respective outputs of the right-to-left loop
 ($\vec{h}^{(l)}_{i_{\leftarrow}}\in\mathbb{R}^{150}$) and then passed
-the result of this concatenation ( $\vec{h}_i^{(l)} =
+the result of this concatenation ($\vec{h}_i^{(l)} =
 [\vec{h}^{(l)}_{i_{\rightarrow}},
   \vec{h}^{(l)}_{i_{\leftarrow}}]\in\mathbb{R}^{300}$) to the next
 layer of the network.  After getting the output of the second BiLSTM,
@@ -2568,20 +2570,21 @@ $a_i$ and then took the sum of these weighted vectors over all $i$
 positions:
 \begin{align}
   \vec{a} =&
-  \sum_{i=1}^{|\mathbf{x}|}a_i\vec{h}_i,\nonumber\\ \mbox{where }a_i
-  =&
-  \frac{\exp(e_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(e_j)},\nonumber\\ \textrm{s.t. }e_i
-  =& tanh\left(\vec{\alpha}\vec{h}^{(2)}_i + \beta_i\right).
+  \sum_{i=1}^{|\mathbf{x}|}a_i\vec{h}^{(2)}_i,\nonumber\\
+  \mbox{where }a_i =&
+  \frac{\exp(e_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(e_j)},\nonumber\\
+  \textrm{s.t. }e_i =&
+  \tanh\left(\vec{\alpha}\vec{h}^{(2)}_i + \beta_i\right).
 \end{align}\label{eq:cgsa:baziotis-attention}%
 The $\vec{\alpha}$ and $\beta$ terms in the above equations denote the
 attention parameters (score and bias), which are optimized during the
 training process.  To make the final prediction,
 \citeauthor{Baziotis:17} multiplied the attention vector $\vec{a}$
-with a matrix $W$ and computed element-wise softmax of this product,
+with matrix $W$ and computed element-wise softmax of this product,
 getting probability scores for each of the three polarity classes and
 choosing the label with the maximum score:
 \begin{align}
-  \hat{y} =& \argmax_y\left(softmax(W^\top\vec{a})_y\right).
+  \hat{y} =& \argmax\left(softmax(W^\top\vec{a})\right).
 \end{align}
 \noindent With this approach, the authors attained the first first
 place in Task~4 of SemEval-2017 (0.675~\F{}$^{+/-}$), being on a par
@@ -2638,18 +2641,18 @@ for all tweet tokens:
   \mbox{s.t. }f_i
   =& \left\{
   \begin{array}{ll}
-    tanh(abs(V[{w_i}]) + \epsilon) & \textrm{ if } w_i\in V\\
-    tanh(\epsilon) & \, \textrm{otherwise.} \\
+    \tanh(abs(V[{w_i}]) + \epsilon) & \textrm{ if } w_i\in V\\
+    \tanh(\epsilon) & \, \textrm{otherwise.} \\
   \end{array}
-  \right .
+  \right.
 \end{align*}\label{cgsa:eq:lba}%
 This way, we hoped to force the network to pay more attention to the
 BiLSTM outputs that were produced at the positions of polar terms
 rather than favoring arbitrary words in the message.
 
 Another important factor that could notably affect the polarity of a
-microblog were the so-called \emph{valence shifters}
-\cite[][]{Polanyi:06}---words and phrases such as ``kaum''
+microblog were the so-called \emph{valence
+  shifters}~\cite[][]{Polanyi:06}---words and phrases such as ``kaum''
 (\emph{hardly}) or ``nicht'' (\emph{not}) that could significantly
 change (or even reverse) the semantic orientation of polar terms.  To
 account for these phenomena, we added another type of attention---a
@@ -2660,13 +2663,13 @@ the modifying power of a token $w_i$, given its original word
 embedding $\vec{w}_i$ and the LSTM output of its parent in the
 dependency tree times the lexicon-based attention score of that parent
 ($\vec{b}_p := b_p\vec{h}_p$).  To keep the resulting attention scores
-within an appropriate range, we again used the same $tanh$
+within an appropriate range, we again used the same $\tanh$
 transformation and global normalization over all positions as we did
 in the previous two types:
 \begin{align*}
   \vec{c} =& \sum_{i=1}^{|\mathbf{x}|}c_i\vec{h}_i,\\ c_i =&
   \frac{\exp(g_i)}{\sum_{j=1}^{|\mathbf{x}|}\exp(g_j)},\\ g_i =&
-  \tanh\left(C [\vec{w}_i, \vec{b}_p]^\top\right).
+  \tanh\left(C [\vec{w}_i, \vec{b}_p]^{\top}\right).
 \end{align*}
 The $C$ term in the above equation represents a context-based
 attention matrix $\mathbb{R}^{200 \times 100}$; the $\vec{w}_i$
@@ -2685,11 +2688,14 @@ subjective term.
 At last, to make the final prediction, we concatenated the outputs of
 the three attention layers into a single matrix $A\in\mathbb{R}^{3
   \times 100}$ and multiplied it with a vector
-$\vec{w}\in\mathbb{R}^{1\times 100}$, applying softmax normalization
+$\vec{w}\in\mathbb{R}^{1\times{}100}$, applying softmax normalization
 at the end:
 \begin{align*}
-  \vec{o} =& softmax\left(A^\top\vec{w}\right),\textrm{ where}\\
-  A =& [\vec{a}, \vec{b}, \vec{c}].
+  \vec{o} =& softmax\left(A\vec{w}^\top\right),\textrm{ where}\\
+  A =& \begin{bmatrix}
+    \vec{a}\\
+    \vec{b}\\
+    \vec{c}\end{bmatrix}.
 \end{align*}
 
 Since introducing additional attention types increased the number of
@@ -2745,7 +2751,7 @@ the development set.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -2754,7 +2760,7 @@ the development set.
       \multicolumn{3}{c}{\bfseries Positive} & %
       \multicolumn{3}{c}{\bfseries Negative} & %
       \multicolumn{3}{c}{\bfseries Neutral} & %
-      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
       \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
       \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
@@ -3105,7 +3111,7 @@ the development set.
       0.72 & 0.98 & 0.83 & %
       0.298 & 0.723\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of DL-based MLSA methods]{Results of
       deep-learning--based MLSA methods\\ {\small Y\&C~--~\citet{Yessenalina:11},
         RAE~--~Recursive Auto-Encoder \cite{Socher:11},
@@ -3114,8 +3120,7 @@ the development set.
         SEV~--~\citet{Severyn:15}, BAZ~--~\citet{Baziotis:17},
         LBA$^{(1)}$~--~lexicon-based attention with one Bi-LSTM
         layer, LBA$^{(2)}$~--~lexicon-based attention with two Bi-LSTM
-        layers}}
-    \label{snt-cgsa:tbl:dl-res}
+        layers}}\label{snt-cgsa:tbl:dl-res}
   \end{center}
 \end{table}
 
@@ -3279,7 +3284,7 @@ than the losses in these single aspects.
       \multicolumn{3}{c}{\bfseries Positive} & %
       \multicolumn{3}{c}{\bfseries Negative} & %
       \multicolumn{3}{c}{\bfseries Neutral} & %
-      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
       \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
       \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
@@ -3534,7 +3539,7 @@ randomly initialized word vectors.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -3543,7 +3548,7 @@ randomly initialized word vectors.
       \multicolumn{3}{c}{\bfseries Positive} & %
       \multicolumn{3}{c}{\bfseries Negative} & %
       \multicolumn{3}{c}{\bfseries Neutral} & %
-      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
       \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
       \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
@@ -3709,11 +3714,10 @@ randomly initialized word vectors.
       0.79\posdelta{0.07} & 0.9\negdelta{0.08} & 0.84\posdelta{0.01} & %
       0.55\posdelta{0.25} & 0.75\posdelta{0.03}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of DL-based MLSA methods with least-squares
       embeddings]{Results of deep-learning--based MLSA methods with
-      least-squares embeddings}
-    \label{snt-cgsa:tbl:dl-res-lstsq}
+      least-squares embeddings}\label{snt-cgsa:tbl:dl-res-lstsq}
   \end{center}
 \end{table}
 
@@ -3842,8 +3846,8 @@ objective term, although it has a slight positive connotation as it
 expresses a wish of the author.
 
 \begin{example}[An Error Made by the BAZ System]\label{snt:cgsa:exmp:baziotis-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape \colorbox{white!1.4}{Wollte} \colorbox{blue!7.7}{meinen} \colorbox{white!3.6}{Kleiderschrank} \colorbox{blue!1.7}{aufr\"aumen} ... \colorbox{white!1.2}{sitze} \colorbox{green!4.6}{nun} \colorbox{green!31.5}{darin} \colorbox{green!2.8}{und} \colorbox{green!29.7}{singe} \colorbox{green!15.2}{Liebeslieder}...}\\
-  \noindent \colorbox{white!1.4}{Wanted} to \colorbox{blue!1.7}{clean up} \colorbox{blue!7.7}{my} \colorbox{white!3.6}{wardrobe}... \colorbox{green!4.6}{Now} \colorbox{white!1.2}{sitting} \colorbox{green!31.5}{in it} \colorbox{green!2.8}{and} \colorbox{green!29.7}{singing} \colorbox{green!15.2}{love songs}...\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape \colorbox{white!1.4}{Wollte} \colorbox{blue!7.7}{meinen} \colorbox{white!3.6}{Kleiderschrank} \colorbox{blue!1.7}{aufr\"aumen} \ldots \colorbox{white!1.2}{sitze} \colorbox{green!4.6}{nun} \colorbox{green!31.5}{darin} \colorbox{green!2.8}{und} \colorbox{green!29.7}{singe} \colorbox{green!15.2}{Liebeslieder}\ldots}\\
+  \noindent \colorbox{white!1.4}{Wanted} to \colorbox{blue!1.7}{clean up} \colorbox{blue!7.7}{my} \colorbox{white!3.6}{wardrobe}\ldots \colorbox{green!4.6}{Now} \colorbox{white!1.2}{sitting} \colorbox{green!31.5}{in it} \colorbox{green!2.8}{and} \colorbox{green!29.7}{singing} \colorbox{green!15.2}{love songs}\ldots\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{black}{neutral}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
@@ -3858,15 +3862,20 @@ Surprisingly, this term outweighs a whole bunch of neutral features
 such as ``gerade'' (\emph{right now}), ``Lust haben'' (\emph{to be up
   to}), ``was'' (\emph{something}) etc.  Admittedly, the first part of
 this message indeed expresses a positive attitude of the author, but
-this effect is invalidated by the second clause which shows the
+this effect is invalidated by the second clause, which shows the
 impossibility of that wish.
 
 \begin{example}[An Error Made by the LBA System]\label{snt:cgsa:exmp:lba-error}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     \colorbox{green!0.5!blue!0.4}{Gerade} \colorbox{green!89}{super} \colorbox{blue!0.3}{Lust}, mit \colorbox{white!2}{Carls} Haaren \colorbox{white!0.6}{was} zu \colorbox{green!1}{machen} \colorbox{green!0.3}{aber} \colorbox{white!2}{ca} 300 \colorbox{white!1}{km}
     \colorbox{white!1}{Distanz} halten \colorbox{blue!0.3}{mich} davon \colorbox{white!1}{ab}.}\\
-  \noindent \colorbox{green!0.5!blue!0.4}{Right now} \colorbox{green!89}{super} \colorbox{blue!0.3}{up to} \colorbox{green!1}{do} \colorbox{white!0.6}{something} with \colorbox{white!2}{Carl}'s hair, \colorbox{green!0.3}{but} \colorbox{white!2}{ca.} 300 \colorbox{white!1}{km}
-  \colorbox{white!1}{distance} keep \colorbox{blue!0.3}{me} \colorbox{white!1}{off} from this.\\[\exampleSep]
+  \noindent\colorbox{green!89}{Super} \colorbox{blue!0.3}{up to}
+  \colorbox{green!1}{do} \colorbox{white!0.6}{something} with
+  \colorbox{white!2}{Carl}'s hair \colorbox{green!0.5!blue!0.4}{right
+    now}, \colorbox{green!0.3}{but} \colorbox{white!2}{ca.} 300
+  \colorbox{white!1}{km} \colorbox{white!1}{distance} keep
+  \colorbox{blue!0.3}{me} \colorbox{white!1}{off} from
+  this.\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{black}{neutral}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
@@ -3899,7 +3908,7 @@ classifier on a larger corpus of automatically annotated messages was
 \citet{Read:05}, who gathered a set of 766,000 Usenet posts containing
 frownies or smileys, assigned a polarity label to each of these posts,
 judging by the type of the emoticons, and subsequently used a subset
-of these documents (22,000 posts) to optimize a Na{\"i}ve Bayes and
+of these documents (22,000 posts) to optimize a Na\"{\i}ve Bayes and
 SVM system.  Even though these classifiers could achieve a
 considerable accuracy (up to 70\%) on predicting the noisy labels of
 the remaining posts, they could not generalize to texts from other
@@ -3932,8 +3941,8 @@ and neutral tweets to get an equal number of instances for all classes
 addition to the manually analyzed PotTS and SB10k tweets.
 
 Since lexicon-based approaches were mostly independent of the training
-set, we decided to rerun our experiments only for ML-- and fastest
-DL--based methods (RNN, SEV, BAZ, and LBA),\footnote{In all subsequent
+set, we decided to rerun our experiments only for ML- and fastest
+DL-based methods (RNN, SEV, BAZ, and LBA),\footnote{In all subsequent
   evaluation experiments with DL-based systems, we will use
   pre-trained word2vec vectors (if applicable) with the least-squares
   fallback, and compare the results of these approaches to the
@@ -3944,7 +3953,7 @@ Table~\ref{snt-cgsa:tbl:distant-supervision}.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -3953,7 +3962,7 @@ Table~\ref{snt-cgsa:tbl:distant-supervision}.
       \multicolumn{3}{c}{\bfseries Positive} & %
       \multicolumn{3}{c}{\bfseries Negative} & %
       \multicolumn{3}{c}{\bfseries Neutral} & %
-      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}} & %
+      \multirow{2}{0.068\columnwidth}{\bfseries\centering Macro\newline \F{}$^{+/-}$} & %
       \multirow{2}{0.068\columnwidth}{\bfseries\centering Micro\newline \F{}}\\
       \cmidrule(lr){2-4}\cmidrule(lr){5-7}\cmidrule(lr){8-10}
 
@@ -4179,10 +4188,9 @@ Table~\ref{snt-cgsa:tbl:distant-supervision}.
       0.0\negdelta{0.79} & 0.0\negdelta{0.9} & 0.0\negdelta{0.84} & %
       0.12\negdelta{0.43} & 0.14\negdelta{0.61}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of MLSA methods with distant supervision]{
-      Results of MLSA methods with distantly supervised data}
-    \label{snt-cgsa:tbl:distant-supervision}
+      Results of MLSA methods with distantly supervised data}\label{snt-cgsa:tbl:distant-supervision}
   \end{center}
 \end{table}
 
@@ -4277,13 +4285,13 @@ approach still reaches the best overall observed score (0.73) with
 three tested resources (GPC, \textsc{LinProj}, and VEL).
 
 Regarding the performance of single lexicons, we can see that the best
-results are achieved with the manually curated \textsc{SentiWS}
-\cite{Remus:10} and Zurich Polarity List \cite{Clematide:10} followed
-by the dictionary-based approaches of~\citet{Blair-Goldensohn:08} and
-\citet{Rao:09}.  The method of the nearest centroids vice versa
-appears to be of the lowest utility for almost all systems, even
-though it demonstrated quite acceptable scores in our initial
-intrinsic evaluation.
+results are achieved with the manually curated
+\textsc{SentiWS}~\cite{Remus:10} and Zurich Polarity
+List~\cite{Clematide:10} followed by the dictionary-based approaches
+of~\citet{Blair-Goldensohn:08} and \citet{Rao:09}.  The method of the
+nearest centroids vice versa appears to be of the lowest utility for
+almost all systems, even though it demonstrated quite acceptable
+scores in our initial intrinsic evaluation.
 
 A similar situation also holds for the SB10k corpus, where the
 ML-based approaches of~\citet{Mohammad:13} and \citet{Guenther:14} and
@@ -4352,8 +4360,8 @@ the utilized polarity list.  The second biggest quality drop is
 demonstrated by the DL-based approaches BAZ, LBA$^{(1)}$, and
 LBA$^{(2)}$, which apparently also got confused by the higher lexical
 variety of the input and failed to optimize all their internal
-parameters to properly fit this diversity.  The remaining DL-- and
-ML--based classifiers (especially those of MHM, GNT, and RNTN) seem to
+parameters to properly fit this diversity.  The remaining DL- and
+ML-based classifiers (especially those of MHM, GNT, and RNTN) seem to
 be more resistant to the introduced changes, but still show a decrease
 by up to 0.04 macro- and 0.08 micro-\F{}.  The only exception in this
 case is the MVRNN system of~\citet{Socher:12}, which slightly improves
@@ -4373,7 +4381,7 @@ net results for all classes.
 
 \begin{table}[htb!]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -4849,10 +4857,9 @@ net results for all classes.
       0.73\negdelta{0.06} & 0.95\posdelta{0.05} & 0.82\negdelta{0.02} & %
       0.45\negdelta{0.1} & 0.72\negdelta{0.03}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of MLSA methods without text normalization]{
-      Results of MLSA methods without text normalization}
-    \label{snt-cgsa:tbl:res-no-normalization}
+      Results of MLSA methods without text normalization}\label{snt-cgsa:tbl:res-no-normalization}
   \end{center}
 \end{table}
 
@@ -4894,7 +4901,7 @@ remind the reader that in this part of the thesis we have made the
 following findings and contributions:
 \begin{itemize}
   \item we have compared three major families of message-level
-    sentiment analysis methods---lexicon-, machine-learning-- and
+    sentiment analysis methods: lexicon-, machine-learning-- and
     deep-learning--based ones, finding that the last two groups
     significantly outperform lexicon-driven systems;
   \item surprisingly, among all compared lexicon methods, the most
