@@ -25,7 +25,7 @@ overlook the structural nature of their input by either considering it
 as a single whole (\eg{} bag-of-features approaches) or analyzing it
 as a monotone sequence of equally important elements (\eg{} recurrent
 neural methods).  Unfortunately, both of these solutions violate the
-hierarchical principle of language \cite{Saussure:90,Hjelmslev:70},
+hierarchical principle of language~\cite{Saussure:90,Hjelmslev:70},
 which states that complex linguistic units are formed from smaller
 language elements in the bottom-up way, \eg{} words are created by
 putting together morphemes, sentences are made of several words, and
@@ -47,25 +47,26 @@ rest of the text.
 
 Exactly the lack of discourse information was one of the main reasons
 for the misclassifications made by the systems of \citet{Severyn:15},
-\citet{Baziotis:17}, and our own LBA method in Examples
-\ref{snt:cgsa:exmp:severyn-error}, \ref{snt:cgsa:exmp:baziotis-error},
-and \ref{snt:cgsa:exmp:lba-error}.  Since none of these approaches
-explicitly took discourse structure into account, we decided to check
-whether making the last of these solutions (the LBA classifier) aware
-of discourse phenomena would improve its results.  But before we
-present these experiments, we first would like to make a short
-digression into the theory of discourse and give an overview of the
-most popular approaches to text-level analysis that exist in the
-literature nowadays.  Afterwards, in Section~\ref{sec:dasa:data}, we
-will describe the way how we inferred discourse information for PotTS
-and SB10k tweets.  Then, in Section~\ref{sec:dasa:methods}, we will
-summarize the current state of the art in discourse-aware sentiment
-analysis (DASA) and also present our own methods, evaluating them on
-the aforementioned datasets.  After analyzing the effects of various
-common factors (such as the impact of the underlying sentiment
-classifier and the amenability of various discourse relation schemes
-to different DASA approaches), we will recap our results and summarize
-our findings in the last part of this chapter.
+\citet{Baziotis:17}, and our own LBA method in
+Examples~\ref{snt:cgsa:exmp:severyn-error},
+\ref{snt:cgsa:exmp:baziotis-error}, and~\ref{snt:cgsa:exmp:lba-error}.
+Since none of these approaches explicitly took discourse structure
+into account, we decided to check whether making the last of these
+solutions (the LBA classifier) aware of discourse phenomena would
+improve its results.  But before we present these experiments, we
+first would like to make a short digression into the theory of
+discourse and give an overview of the most popular approaches to
+text-level analysis that exist in the literature nowadays.
+Afterwards, in Section~\ref{sec:dasa:data}, we will describe the way
+how we inferred discourse information for PotTS and SB10k tweets.
+Then, in Section~\ref{sec:dasa:methods}, we will summarize the current
+state of the art in discourse-aware sentiment analysis (DASA) and also
+present our own methods, evaluating them on the aforementioned
+datasets.  After analyzing the effects of various common factors (such
+as the impact of the underlying sentiment classifier and the
+amenability of various discourse relation schemes to different DASA
+approaches), we will recap the results and summarize our findings in
+the last part of this chapter.
 
 \section{Discourse Analysis}\label{sec:dasa:theory}
 
@@ -75,27 +76,27 @@ means and which common ways there are to represent and analyze
 discourse automatically.
 
 In a nutshell, discourse analysis is an area of research which
-explores and analyzes language phenomena beyond the sentence level
-\cite{Stede:11}.  Although the scope of this research can be quite
-large, ranging from the use of pronouns in a sentence to the logical
-composition of the whole document, in our work we will primarily
-concentrate on the coherence structure of a text, \ie{} its
+explores and analyzes language phenomena beyond the sentence
+level~\cite{Stede:11}.  Although the scope of this research can be
+quite large, ranging from the use of pronouns in a sentence to the
+logical composition of the whole document, in our work we will
+primarily concentrate on the coherence structure of a text, \ie{} its
 segmentation into \emph{elementary discourse units} (typically single
 propositions) and induction of hierarchical \emph{coherence relations}
 (semantic or pragmatic links) between these EDUs.
 
 Although the idea of splitting the text into smaller meaningful pieces
 and inferring semantic relationships between these parts is anything
-but new, dating back to the very origins of general linguistics
-\cite{Aristotle:10} and in particular its structuralism branch
-\cite{Saussure:90}, an especially big surge of interest in this field
-happened in the 1970-s with the fundamental works of
+but new, dating back to the very origins of general
+linguistics~\cite{Aristotle:10} and in particular its structuralism
+branch~\cite{Saussure:90}, an especially big surge of interest in this
+field happened in the 1970-s with the fundamental works of
 \citet{vanDijk:72} and \citet{vanDijk:83}, who introduced the notion
 of local and global coherence, defining the former as a set of ``rules
 and conditions for the well-formed concatenation of pairs of sentences
 in a linearly ordered sequence'' and specifying the latter as
-constraints on the macro-structure of the narrative
-\cite[see][]{Hoey:83}.  Similar ideas were also proposed
+constraints on the macro-structure of the
+narrative~\cite[see][]{Hoey:83}.  Similar ideas were also proposed
 by~\citet{Longacre:79,Longacre:96}, who considered the paragraph as a
 unit of tagmemic grammar that was composed of multiple sentences
 according to a predefined set of compositional principles.  Almost
@@ -216,8 +217,8 @@ other sense\footnote{In particular, the authors of PDTB distinguished
 %% \textsc{Contra-Expectation}, and \textsc{Contrast}.
 
 Apart from \emph{explicitly} mentioned connectives, \citet{Prasad:04}
-also allowed for situations where connectives were missing but could
-be easily inferred from the text.  They called these cases
+also allowed for situations where a connective was missing but could
+be easily inferred from the text.  They called such cases
 \emph{implicit} discourse relations and demanded the arguments of such
 structures be determined as well.  Furthermore, if there was no
 connective at all, the authors of PDTB distinguished three different
@@ -266,7 +267,7 @@ dynamic semantics, and anaphora theory), this theory shares many of
 its features with Rhetorical Structure Theory, as it also assumes a
 graph-like structure of text and distinguishes between coordinating
 and subordinating relations.  However, unlike RST, Segmented Discourse
-Representation explicitly allows the text structure to be any graph
+Representation explicitly allows the text structure to be a multigraph
 and not only tree (\ie{} a discourse node can have multiple parents
 and can also be connected via multiple links to the same vertex),
 provided that it does not have crossing dependencies (\ie{} does not
@@ -322,8 +323,7 @@ similar to the \textsc{Comparison} relation defined by
            \draw[->] (p'') to node [xshift=-8mm,yshift=-0.35mm] {Commentary} (1c);
            \draw[->] (p'') to node [xshift=-0mm,yshift=0mm] {Source} (1d);
     \end{tikzpicture}
-    \caption{Example of an SDRT graph}
-    \label{dasa:fig:sdrt-graph}
+    \caption{Example of an SDRT graph}\label{dasa:fig:sdrt-graph}
   \end{center}
 \end{figure}
 
@@ -343,15 +343,15 @@ would be easiest to retrain on German data.  Fortunately, both of
 these concerns have lead us to the same solution---Rhetorical
 Structure Theory, which was the only formalism that explicitly
 guaranteed a single root for each analyzed text and also offered a
-wide variety of open-source parsing systems
-\cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
+wide variety of open-source parsing
+systems~\cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
 
 \section{Data Preparation}\label{sec:dasa:data}
 
 To prepare the data for our experiments, we split all microblogs from
 the PotTS and SB10k corpora into elementary discourse units using the
 ML-based discourse segmenter of \citet{Sidarenka:15}, which had been
-previously trained on the Potsdam Commentary Corpus \cite[PCC~2.0;
+previously trained on the Potsdam Commentary Corpus~\cite[PCC~2.0;
 ][]{Stede:14}.  After filtering out all tweets that had only one
 EDU,\footnote{Since the focus of this chapter is mainly on discourse
   phenomena, we skip all messages that consist of a single discourse
@@ -363,8 +363,8 @@ SB10k corpus.  In the next step, we assigned polarity scores to the
 segments of these microblogs with the help of our lexicon-based
 attention classifier, analyzing each elementary unit in isolation,
 independently of the rest of the tweet.  We again used the same
-70-10-20 split into training, development, and test sets as we did in
-the previous chapters.
+70--10--20 split into training, development, and test sets as we did
+in the previous chapters.
 
 %% This figure was generated using the iPython notebook
 %% `notebooks/dasa.ipynb`.
@@ -398,7 +398,7 @@ with more than three discourse units are extremely rare.  This is also
 not surprising regarding that the maximum length of a microblog is
 constrained to 140 characters.  Nonetheless, even with this severe
 length restriction, there still are a few messages that have up to 13
-EDUs.  Since it was somewhat unexpected for us to see that many
+EDUs.  Since it was somewhat surprising for us to see that many
 segments in a single tweet, we decided to have a closer look at these
 cases.  As it turned out, such high number of discourse units
 typically resulted from spurious punctuation marks, which were
@@ -406,7 +406,7 @@ carelessly used by Twitter users and evidently confused the segmenter
 (see Example~\ref{dasa:exmp:many-segments}).
 
 \begin{example}[SB10k Tweet with 13 EDUs]\label{dasa:exmp:many-segments}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} { \upshape
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
     [Guinness on Wheelchairs :]$_1$ [Das .]$_2$ [Ist .]$_3$ [Verdammt
       .]$_4$ [Noch .]$_5$ [Mal .]$_6$ [Einer .]$_7$ [Der .]$_8$
     [Besten .]$_9$ [Werbespots .]$_{10}$ [Des .]$_{11}$ [Jahrzehnts
@@ -437,19 +437,19 @@ discourse relations to the binary scheme $\{$\textsc{Contrastive},
 \textsc{Non-Contrastive}$\}$ as suggested
 by~\citet{Bhatia:15}.\footnote{See Table~\ref{dasa:tbl:rst-rel-sets}
   for more details regarding this mapping.}  In contrast to the
-original DPLP implementation though, we did not use Brown clusters
-\cite{Brown:92}, because this resource was not available for German,
-nor did we apply the linear projection of the features, because the
-released parser code was missing this component either.  In part due
-to these modifications, but mostly because of the specifics of the
-German language (richer morphology, higher lexical variety, and
-syntactic ambiguity) and a skewed distribution of discourse relation,
-the results of the retrained model were considerably lower than the
-figures reported for the English treebank, amounting to 0.777, 0.512,
-and 0.396~\F{} for span, nuclearity, and relation classification on
-PCC~2.0 versus corresponding 82.08, 71.13, and 61.63~\F{} on the RST
-Treebank.\footnote{Following \citet{Ji:14}, we use the span-based
-  evaluation metric of~\citet{Marcu:00}.}
+original DPLP implementation though, we did not use Brown
+clusters~\cite{Brown:92}, because this resource was not available for
+German, nor did we apply the linear projection of the features,
+because the released parser code was missing this component either.
+In part due to these modifications, but mostly because of the
+specifics of the German language (richer morphology, higher lexical
+variety, and syntactic ambiguity) and a skewed distribution of
+discourse relation, the results of the retrained model were
+considerably lower than the figures reported for the English treebank,
+amounting to 0.777, 0.512, and 0.396~\F{} for span, nuclearity, and
+relation classification on PCC~2.0 versus corresponding 82.08, 71.13,
+and 61.63~\F{} on the RST Treebank.\footnote{Following \citet{Ji:14},
+  we use the span-based evaluation metric of~\citet{Marcu:00}.}
 \begin{figure*}[htb]
   \input{twitter-rst.tex}
 \end{figure*}
@@ -514,7 +514,7 @@ both units as equally relevant and join them via the multi-nuclear
 % of~\citet{Pang:05} showed an improvement by up to~7\% over the
 % previous state of the art, boosting it to 59.37\% average accuracy.
 
-Now, before we use these data in our sentiment experiments, let us
+Now before we use these data in our sentiment experiments, let us
 first revise the most prominent approaches to discourse-aware
 sentiment analysis that exist in the literature nowadays.
 
@@ -522,7 +522,7 @@ sentiment analysis that exist in the literature nowadays.
   \noindent\upshape This film should be brilliant.  It sounds like a
   great plot, the actors are first grade, and the supporting cast is
   good as well, and Stallone is attempting to deliver a good
-  performance.  However, it can't hold up. \cite{Pang:02}
+  performance.  However, it can't hold up.~\cite{Pang:02}
 \end{example}
 
 As it turns out, even the very first works on opinion mining already
@@ -531,8 +531,8 @@ of the overall polarity of a text.  For example, in the seminal paper
 of~\citet{Pang:02}, where the authors tried to predict the semantic
 orientation of movie reviews, they quickly realized the fact that it
 was insufficient to rely on the mere presence or even the majority of
-polarity clues in text, because these clues could any time be reversed
-by a single counter-argument of the critic (see
+polarity clues in the text, because these clues could any time be
+reversed by a single counter-argument of the critic (see
 Example~\ref{disc-snt:exmp-pang02}).  This observation was also
 confirmed by \citet{Polanyi:06}, who ranked discourse relations among
 the most important factors that could significantly affect the
@@ -552,7 +552,7 @@ objective) based on its minimum cut; the second classifier then
 inferred the overall polarity of the text by only looking at the
 sentences from the first (subjective) group.  With this method,
 \citeauthor{Pang:04} achieved a statistically significant improvement
-(86.2\% versus 85.2\% for the Na{\"i}ve Bayes system and 86.15\%
+(86.2\% versus 85.2\% for the Na\"{\i}ve Bayes system and 86.15\%
 versus 85.45\% for SVM) over classifiers that analyzed all text
 sentences at once, without any filtering.
 %% (Later on, a similar approach was also proposed by
@@ -566,14 +566,14 @@ Although an oversimplification, the core idea that locally adjacent
 sentences are likely to share the same subjective orientation
 (\emph{local coherence}) was dominating the following DASA research
 for almost a decade.  For example, \citet{Riloff:03} also improved the
-accuracy of their Na{\"i}ve Bayes predictor of subjective expressions
+accuracy of their Na\"{\i}ve Bayes predictor of subjective expressions
 by almost two percent after adding a set of local coherence features.
 Similarly, \citet{Hu:04} could better disambiguate users' attitudes to
 particular product attributes by taking the semantic orientation of
 previous sentences into account.
 
 At the same time, another line of discourse-aware sentiment research
-concentrated on the joint classification of all opinions in text,
+concentrated on the joint classification of all opinions in the text,
 where in addition to predicting each sentiment in isolation, the
 authors also sought to maximize the ``total happiness'' (\emph{global
   coherence}) of these assignments, ensuring that related subjective
@@ -652,8 +652,8 @@ achieved an accuracy of 82.2\% for document-level classification and
 reviews, outperforming pure document and sentence classifiers by up to
 four percent.  A crucial limitation of this system though was that its
 optimization required the gold labels of sentences and documents to be
-known at training time, which considerably limited its applicability
-to other domains with no such data.
+known at the training time, which considerably limited its
+applicability to other domains with no such data.
 
 %% A similar approach was also suggested by~\citet{Sadamitsu:08}, who
 %% attained 82.74\% accuracy on predicting the polarity of customer
@@ -669,9 +669,9 @@ analyze only the topmost nucleus EDU of each sentence, whereas in the
 second approach, they expanded its input to all clauses that another
 classifier had considered as relevant to the main topic of the
 document.  Unfortunately, the former solution did not work out as well
-as expected, yielding 69\% accuracy on the corpus of Epinion reviews
-\cite{Taboada:06}, but the latter system could perform much better,
-achieving 73\% on this two-class prediction task.
+as expected, yielding 69\% accuracy on the corpus of Epinion
+reviews~\cite{Taboada:06}, but the latter system could perform much
+better, achieving 73\% on this two-class prediction task.
 
 Other ways of adding discourse information to a sentiment system were
 explored by \citet{Heerschop:11}, who experimented with three
@@ -741,18 +741,18 @@ In the R2N2 system, the authors largely adopted the RNN method
 of~\citet{Socher:13} by recursively computing the polarity scores of
 discourse units as:
 \begin{equation*}
-  \psi_i = tanh\left(K_n^{(r_i)} \psi_{n(i)} + K_s^{(r_i)}\psi_{s(i)} \right),
+  \psi_i = \tanh\left(K_n^{(r_i)} \psi_{n(i)} + K_s^{(r_i)}\psi_{s(i)} \right),
 \end{equation*}
 where $K_n^{(r_i)}$ and $K_s^{(r_i)}$ stand for the nucleus and
 satellite coefficients associated with the rhetorical relation $r_i$,
-and $\psi_{n(i)}$ and $\psi_{s(i)}$ represent the sentiment scores of
+and $\psi_{n(i)}$ and $\psi_{s(i)}$ represent sentiment scores of the
 nucleus and satellite of the $i$-th vertex.  This approach achieved
 84.1\% two-class accuracy on the movie review corpus
 of~\citet{Pang:04} and reached 85.6\% on the dataset
 of~\citet{Socher:13}.
 
-For the sake of completeness, we should note that there also exist
-discourse-aware sentiment approaches that build upon PDTB and SDRT.
+For the sake of completeness, we should also note that there exist
+discourse-aware sentiment approaches that build upon PDTB and SDRT\@.
 For example, \citet{Trivedi:13} proposed a method based on latent
 structural SVM~\cite{Yu:09}, where they represented each sentence as a
 vector of features produced by a feature function $\mathbf{f}(y,
@@ -873,7 +873,7 @@ automatically induced CRF tree in Figure~\ref{dasa:fig:latent-crf}.
 %% guesses for single EDUs, giving us at least a hypothetical possibility
 %% to overcome its general error.
 
-Now, before we describe the training of our model, let us briefly
+Now before we describe the training of our model, let us briefly
 recall that in the standard CRF optimization we typically try to find
 optimal parameters $\boldsymbol{\theta}^*$ that maximize the
 log-likelihood of all label sequences $\mathbf{y}^{(i)}$ on the
@@ -902,7 +902,7 @@ attributes.
 
 A crucial problem with this formulation though is that in our task,
 only a small subset of labels from $\mathbf{y}^{(i)}$ (namely those of
-the root node) are actually observed at training time, whereas the
+the root node) are actually observed at the training time, whereas the
 rest of the tags (those which pertain to EDUs) are unknown.  We will
 denote these observed and hidden subsets as $\mathbf{y}_o^{(i)}$ and
 $\mathbf{y}_h^{(i)}$ respectively.  Using this notation, we can
@@ -936,7 +936,7 @@ from Equation~\ref{dasa:eq:y_i} as the ground truth and penalize all
 labels that disagree with this sequence, we might overly commit
 ourselves to the model's guess of unknown tags and unduly discriminate
 against other possible hidden label assignments.  To mitigate this
-effect, we can instead penalize only one other sequence, namely, that
+effect, we can instead penalize only one other sequence, namely that
 which maximizes the probability of an incorrect label at the observed
 state:
 \begin{align*}
@@ -975,8 +975,8 @@ separable.  This brings us to the final formulation:
   - \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})\right)
 \end{align}
 At this point, we can notice that the resulting function is identical
-to the unconstrained minimization problem of structural SVM
-\cite{Taskar:03}, and we indeed can piggyback on one of the many
+to the unconstrained minimization problem of structural
+SVM~\cite{Taskar:03}, and we indeed can piggyback on one of the many
 efficient SVM-optimization techniques to learn the parameters of our
 model.  In particular, we use the block-coordinate Frank-Wolfe
 algorithm~\cite{Lacoste-Julien:13}, running it for 1,000 epochs or
@@ -1034,18 +1034,18 @@ probabilities:
 To simplify this expression, we can introduce the following
 abbreviations:
 \begin{align*}
-  a &= \exp\left(\sum_{t=0}^{T_i}\left[
+  a &\defeq \exp\left(\sum_{t=0}^{T_i}\left[
     \sum_v\boldsymbol{\theta}_v\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)
     + \sum_{c\in
       ch(t)}\sum_e\boldsymbol{\theta}_e\mathbf{f}_e\left(\mathbf{y}^{(i)}_{t},
     \mathbf{y}^{(i)}_{c}\right)\right]\right),\\
-  b &= \exp\left(\sum_{t=0}^{T_i}\left[
+  b &\defeq \exp\left(\sum_{t=0}^{T_i}\left[
     \sum_v\boldsymbol{\theta}_v\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{'(i)}_{t}\right)
     + \sum_{c\in
       ch(t)}\sum_e\boldsymbol{\theta}_e\mathbf{f}_e\left(\mathbf{y}^{'(i)}_{t},
     \mathbf{y}^{'(i)}_{c}\right)\right]\right).
 \end{align*}
-Now, we estimate the derivatives of functions $a$ and $b$ w.r.t. a
+Now we estimate the derivatives of functions $a$ and $b$ w.r.t.~a
 single parameter $\boldsymbol{\theta}_v$ as:
 \begin{align*}
   \frac{\partial{}a}{\partial\boldsymbol{\theta}_v} &= a\sum_{t=0}^{T_i}\mathbf{f}_v\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t}\right)\propto\mathbb{E}_{\mathbf{y}^{(i)}}\left[\mathbf{f}_v\right],\\
@@ -1228,8 +1228,8 @@ prevent situations where multiple objective segments vanquish the
 meaning of a single polar discourse unit.
 
 Afterwards, when seeing the $k$-th child of the $j$-th node in the RST
-tree, we compute the $\boldsymbol{\alpha}$ parameter of this node
-using the following formula:
+tree, we compute the $\boldsymbol{\alpha}$ parameter of this node as
+follows:
 \begin{align}
   \boldsymbol{\alpha}_{j_k}&= \boldsymbol{\beta}\odot\mathbf{z}^*_k +
   (\mathbf{1} -
@@ -1376,7 +1376,7 @@ The results of our proposed and baseline methods are shown in
 Table~\ref{dasa:tbl:res}.
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -1504,7 +1504,7 @@ Table~\ref{dasa:tbl:res}.
       \textbf{0.82} & 0.79 & \textbf{0.8} & %
       0.557 & 0.713\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Evaluation of DASA methods]{Results of discourse-aware
       sentiment analysis methods\\ {\small LCRF~--~latent conditional
         random fields, LMCRF~--~latent-marginalized conditional random
@@ -1514,8 +1514,7 @@ Table~\ref{dasa:tbl:res}.
         WNG~--~\citet{Wang:13}, \textsc{Last}~--~polarity determined
         by the last EDU, \textsc{Root}~--~polarity determined by the
         root EDU(s), \textsc{No-Discourse}~--~discourse-unaware
-        classifier}}
-    \label{dasa:tbl:res}
+        classifier}}\label{dasa:tbl:res}
   \end{center}
 \end{table}
 
@@ -2185,7 +2184,7 @@ would like to recap that in this part of the thesis:
     discourse-aware sentiment analysis than the others;
   \item to substantiate our claims and to see whether the
     lexicon-based attention system introduced in the previous chapter
-    would indeed benefit from awareness of discourse structure, we
+    would indeed benefit from information on discourse structure, we
     segmented all microblogs from the PotTS and SB10k corpora into
     elementary discourse units using the SVM-based segmenter
     of~\citet{Sidarenka:15} and parsed these messages with the RST
