@@ -99,7 +99,7 @@ by considering all tweets that contained only positive (negative)
 annotated \markable{polar term}s as positive (negative), and ignoring
 all messages that featured polar elements from both polarity classes
 (335 messages).  Finally, all microblogs without any
-\markable{sentiment}s or \markable{polar term}s) were regarded as
+\markable{sentiment}s or \markable{polar term}s were regarded as
 neutral.
 
 A few examples of such heuristically inferred labels are provided
@@ -128,7 +128,7 @@ reasonable decisions, assigning a positive label to the first tweet,
 which also expresses a positive sentiment, and labeling the second
 message as negative, since it contains two negative polar terms
 (``typisch'' [\emph{typical}] and ``in der Tasche haben'' [\emph{to
-    have sb. in one's pocket}]).
+    have sb.\ in one's pocket}]).
 
 But because our approach is still an approximation and consequently
 prone to errors (especially in the cases where the polarity of the
@@ -136,10 +136,10 @@ whole microblog differs from the semantic orientation of its polar
 terms, as in the first tweet in Example~\ref{snt:cgsa:exmp:anno2}, or
 when it is expressed without any explicit polar terms at all, as in
 the second microblog of this example), we decided to evaluate all MLSA
-methods also on another German Twitter corpus, SB10k
-\cite{Cieliebak:17}, which was introduced when we already started
-working on this chapter and which had been explicitly annotated with
-message-level polarities of the tweets.
+methods also on another German Twitter corpus,
+SB10k~\cite{Cieliebak:17}, which was introduced when we already
+started working on this chapter and which had been explicitly
+annotated with message-level polarities of the tweets.
 
 \begin{example}[Erroneous Sentiment
   Annotations]\label{snt:cgsa:exmp:anno2}
@@ -212,9 +212,8 @@ Table~\ref{snt-cgsa:tbl:corp-dist}.
     German Twitter Snapshot]{Polarity class distribution in PotTS,
       SB10k, and the German
       Twitter Snapshot (GTS)\\
-      \emph{(* -- the \emph{mixed} polarity was excluded from our
-        experiments)}}
-    \label{snt-cgsa:tbl:corp-dist}
+      \emph{(* --- the \emph{mixed} polarity was excluded from our
+        experiments)}}\label{snt-cgsa:tbl:corp-dist}
   \end{center}
 \end{table}
 
@@ -351,8 +350,8 @@ by~\citet{Taboada:11}, who introduced a manually compiled polarity
 list\footnote{The authors hand-annotated all occurrences of
   adjectives, nouns, and verbs found in a corpus of 400 Epinions
   reviews with ordinal categories ranging from -5 to 5 that reflected
-  the semantic orientation of a term (positive vs. negative) and its
-  polar strength (weak vs. strong).} and used this resource to
+  the semantic orientation of a term (positive vs.\ negative) and its
+  polar strength (weak vs.\ strong).} and used this resource to
 estimate the overall semantic orientation of texts.  Drawing on the
 ideas of~\citet{Polanyi:06}, the authors incorporated a set of
 additional heuristic rules into their computation by changing the
@@ -491,7 +490,7 @@ relatively simple baseline), \citet{Taboada:11}, \citet{Musto:14},
 to the test sets of these corpora.
 
 Based on our comparison in Chapter~\ref{chap:snt:lex}, we chose the
-Zurich Polarity List \cite{Clematide:10} as the primary sentiment
+Zurich Polarity List~\cite{Clematide:10} as the primary sentiment
 lexicon for the tested methods.  However, a significant drawback of
 this resource is that most of its entries have uniform weights, with
 their polarity scores being either 0.7 or 1.  We decided to keep the
@@ -504,11 +503,11 @@ Moreover, because some analyzers (\eg{} \citeauthor{Taboada:11}
 [\citeyear{Taboada:11}] and \citeauthor{Musto:14}
 [\citeyear{Musto:14}]) required the part-of-speech tags of lexicon
 entries, we automatically tagged all terms in this polarity list with
-the help of the \textsc{TreeTagger} \cite{Schmid:95}, choosing the
-most probable part-of-speech tag for each entry and also using the tag
-sequences whose probabilities were at least two times lower than the
-likelihood of the best assignment, duplicating the lexicon entries in
-the second case.
+the \textsc{TreeTagger}~\cite{Schmid:95}, choosing the most probable
+part-of-speech tag for each entry and also using the tag sequences
+whose probabilities were at least two times lower than the likelihood
+of the best assignment, duplicating the lexicon entries in the second
+case.
 
 Furthermore, since all of the systems except for that
 of~\citet{Kolchyna:15} by default returned continuous real values, but
@@ -796,7 +795,7 @@ micro-\F{} on the PotTS test set.
 
 The approach of~\citet{Taboada:11}, which can be viewed as an
 extension of the previous method, only surpasses the HL classifier
-w.r.t. the precision of positive and negative messages, but still
+w.r.t.\ the precision of positive and negative messages, but still
 loses more than 0.02 macro-\F{} due to a lower recall of the neutral
 class.  A better performance in this regard is shown by the analyzer
 of~\citet{Musto:14}, which shows a fairly strong recall of negative
@@ -1144,8 +1143,9 @@ not affect the sentiment score because ``?!'' is not included in the
 list of valid punctuation marks in the original implementation.)
 
 \begin{example}[An Error Made by the System of~\citeauthor{Taboada:11}]\label{snt:cgsa:exmp:taboada-error-1}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Die Konklave w\"ahlt den Papst und dann sagen sie Gott war es -- Wollt ihr mich verarschen ?!}\\
-  \noindent The conclave elects the Pope and then they say it was God -- do you wanna hoax me ?!\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Die Konklave w\"ahlt den Papst und dann sagen sie Gott war es --- Wollt ihr mich verarschen ?!}\\
+  \noindent The conclave elects the Pope and then they say it was God
+  --- do you wanna hoax me ?!\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
@@ -1347,8 +1347,8 @@ criticized for the rigidness of their classification\footnote{Since
   these systems only rely on the precomputed weights of lexicon
   entries, considering these coefficients as constant, their decision
   boundaries frequently appear to be suboptimal as many terms might
-  have different polarity and intensity values depending on the domain
-  \cite[see][]{Eisenstein:17,Yang:17}.} and the inability to
+  have different polarity and intensity values depending on the
+  domain~\cite[see][]{Eisenstein:17,Yang:17}.} and the inability to
 incorporate additional, non-lexical attributes into their final
 decisions.  Moreover, as noted by~\citet{Pang:02} and also confirmed
 empirically by~\citet{Riloff:03} and \citet{Gamon:04}, many linguistic
@@ -1360,7 +1360,7 @@ annotated corpora, lexicon-based systems have been gradually
 superseded by supervised machine-learning techniques.
 
 One of the first steps in this direction was taken
-by~\citet{Wiebe:99}, who used a Na{\"i}ve Bayes classifier to
+by~\citet{Wiebe:99}, who used a Na\"{\i}ve Bayes classifier to
 differentiate between subjective and objective statements.  Using
 binary features that reflected the presence of a pronoun, an
 adjective, a cardinal number, or a modal verb in the analyzed
@@ -1374,8 +1374,8 @@ Inspired by this success,~\citet{Yu:03} presented a more elaborated
 system in which they first distinguished between subjective and
 objective documents, then differentiated between polar and neutral
 sentences, and, finally, determined the polarity of that clauses.  As
-in the previous case, the authors used a Na{\"i}ve Bayes predictor for
-the document-level task, reaching a remarkable \F-score of~0.96 on
+in the previous case, the authors used a Na\"{\i}ve Bayes predictor
+for the document-level task, reaching a remarkable \F-score of~0.96 on
 this objective; and applied an ensemble of NB systems to predict the
 subjectivity of single sentences.  To determine the semantic
 orientation of subjective clauses, \citeauthor{Yu:03} averaged the
@@ -1435,7 +1435,7 @@ option.
 Finally, \citet{Ng:06} proposed a multi-stage SVM system, in which
 they first classified whether the given text was a review or not and
 then tried to predict its polarity.  Due to a better usage of
-higher-order $n$-grams (where, instead of na{\"i}vely considering all
+higher-order $n$-grams (where, instead of na\"{\i}vely considering all
 token sequences up to length $n$ as new features, the authors only
 took 5,000 most useful ones), \citet{Ng:06} even improved the state of
 the art on the \citeauthor{Pang:04}'s corpus, boosting the
@@ -1653,8 +1653,8 @@ character and word $n$-grams, word clusters, disambiguated senses, and
 lexicon scores of message tokens as features.  Similarly to the
 systems of~\citet{Mohammad:13} and \citet{Guenther:14}, the authors
 made heavy use of various kinds of polarity lists including
-AFINN-111~\cite{Nielsen:11}, Liu's Opinion Lexicon~\cite{Hu:04} ,
-General Inquirer~\cite{Stone:66}, MPQA Polarity List \cite{Wiebe:05a},
+AFINN-111~\cite{Nielsen:11}, Liu's Opinion Lexicon~\cite{Hu:04},
+General Inquirer~\cite{Stone:66}, MPQA Polarity List~\cite{Wiebe:05a},
 NRC Hashtag and Sentiment140 Lexicon~\cite{Mohammad:13}, as well as
 \textsc{SentiWordNet}~\cite{Esuli:06a}, additionally applying a whole
 set of preprocessing steps such as spelling correction, part-of-speech
@@ -1689,7 +1689,7 @@ specifics were kept maximally close to their original descriptions.
 
 \begin{table}[h]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -2040,10 +2040,10 @@ micro-averaged scores by almost 0.07 points on PotTS and 0.05~\F{} on
 SB10k.  One possible explanation for this degradation could be the
 differences in the utilized PoS taggers and tagsets: Whereas the
 original \citeauthor{Mohammad:13}'s classifier relied on a special
-Twitter-aware tagger \cite{Owoputi:13}, whose tags were explicitly
+Twitter-aware tagger~\cite{Owoputi:13}, whose tags were explicitly
 adjusted to the peculiarities of social media texts (including special
 labels for the @-mentions and \#hashtags), we instead used the output
-of the standard \textsc{TreeTagger} \cite{Schmid:95}, which, apart
+of the standard \textsc{TreeTagger}~\cite{Schmid:95}, which, apart
 from lacking any Twitter-specific information, was also trained on a
 completely different text genre (newspaper articles) and therefore a
 priori produced unreliable output.  As a consequence, the effect of
@@ -2109,7 +2109,7 @@ bigram among its top-ten entries.
           5 & MO-ITJ| & POS & 0.211 & c-h-e-i-s & NEG & 0.064 & Anziehen & POS & 1.67\\
           6 & A-DM-I & POS & 0.196 & h-a-h & POS & 0.064 & \textbackslash{}x016434 & POS & 1.65\\
           7 & A-MO-I & POS & 0.191 & t-\textvisiblespace{}-. & NEG & 0.064 & p\"archenabend & POS & 1.65\\
-          8 & NK-ITJ & POS & 0.165 & geil & POS & 0.062 & derien\heart\heart & POS & 1.65\\
+          8 & NK-ITJ & POS & 0.165 & geil & POS & 0.062 & derien\heart\heart{} & POS & 1.65\\
           9 & NK-\$. & NEUT & 0.16 & *-? & NEUT & 0.062 & sch\"on-nicht & POS & 1.56\\
           10 & DM-ITJ & POS & 0.157 & ? & NEUT & 0.061 & applause & POS & 1.5\\\bottomrule
     \end{tabular}
@@ -2241,7 +2241,7 @@ highest ranked features given below:
 \end{enumerate}
 this analyzer makes its decision based on rather general, but
 extremely heavy-weighted features, such as the placeholder token
-\texttt{*} or the PoS-tag features \texttt{\%PoS-CARD} and
+\texttt{*} or the PoS-tag features (\texttt{\%PoS-CARD} and
 \texttt{\%PoS-ADJD}).  As a result, its prediction succumbs to the
 neutral bias of these general attributes.
 
