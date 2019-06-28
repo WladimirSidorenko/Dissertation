@@ -48,25 +48,24 @@ rest of the text.
 Exactly the lack of discourse information was one of the main reasons
 for the misclassifications made by the systems of \citet{Severyn:15},
 \citet{Baziotis:17}, and our own LBA method in
-Examples~\ref{snt:cgsa:exmp:severyn-error},
-\ref{snt:cgsa:exmp:baziotis-error}, and~\ref{snt:cgsa:exmp:lba-error}.
-Since none of these approaches explicitly took discourse structure
-into account, we decided to check whether making the last of these
-solutions (the LBA classifier) aware of discourse phenomena would
-improve its results.  But before we present these experiments, we
-first would like to make a short digression into the theory of
-discourse and give an overview of the most popular approaches to
-text-level analysis that exist in the literature nowadays.
-Afterwards, in Section~\ref{sec:dasa:data}, we will describe the way
-how we inferred discourse information for PotTS and SB10k tweets.
-Then, in Section~\ref{sec:dasa:methods}, we will summarize the current
-state of the art in discourse-aware sentiment analysis (DASA) and also
-present our own methods, evaluating them on the aforementioned
-datasets.  After analyzing the effects of various common factors (such
-as the impact of the underlying sentiment classifier and the
-amenability of various discourse relation schemes to different DASA
-approaches), we will recap the results and summarize our findings in
-the last part of this chapter.
+Examples~\ref{snt:cgsa:exmp:severyn-error},\ \ref{snt:cgsa:exmp:baziotis-error},
+and~\ref{snt:cgsa:exmp:lba-error}.  Since none of these approaches
+explicitly took discourse structure into account, we decided to check
+whether making the last of these solutions (the LBA classifier) aware
+of discourse phenomena would improve its results.  But before we
+present these experiments, we first would like to make a short
+digression into the theory of discourse and give an overview of the
+most popular approaches to text-level analysis that exist in the
+literature nowadays.  Afterwards, in Section~\ref{sec:dasa:data}, we
+will describe the way how we inferred discourse information for PotTS
+and SB10k tweets.  Then, in Section~\ref{sec:dasa:methods}, we will
+summarize the current state of the art in discourse-aware sentiment
+analysis (DASA) and also present our own methods, evaluating them on
+the aforementioned datasets.  After analyzing the effects of various
+common factors (such as the impact of the underlying sentiment
+classifier and the amenability of various discourse relation schemes
+to different DASA approaches), we will recap the results and summarize
+our findings in the last part of this chapter.
 
 \section{Discourse Analysis}\label{sec:dasa:theory}
 
@@ -1630,7 +1629,7 @@ span 2.)
     $[$Kiessling ist ein Depp !$]_4$}\\
   \noindent $[$Great, who are these idiots in the DFB ? $]_1$ $[$It is
     a muppet show on LSD$]_2$ $[$It's no way been talked out !$]_3$
-  $[$Kiessling is a goof !$]_3$\\[\exampleSep]
+  $[$Kiessling is a goof !$]_4$\\[\exampleSep]
   \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
     \upshape\textcolor{midnightblue}{negative}}\\
   \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
@@ -2041,13 +2040,12 @@ overview of these sets is given in Table~\ref{dasa:tbl:rst-rel-sets}.
       \textsc{Cause} $\defeq$ \{\textsc{Evidence}, \textsc{Nonvolitional-Cause},
       \textsc{Nonvolitional-Result}, \textsc{Volitional Cause},
       \textsc{Volitional-Result}\};\\\bottomrule
-
     \end{tabular}
     \egroup{}
     \caption[RST relations used in different discourse-aware sentiment
       methods]{RST relations used in the original Potsdam Commentary
       Corpus and different discourse-aware sentiment methods\\ {\small
-        (default relation [which subsumes the rest of the links] is
+        (default relation, which subsumes the rest of the links, is
         shown in \textbf{boldface})}}\label{dasa:tbl:rst-rel-sets}
   \end{center}
 \end{table}
@@ -2191,9 +2189,9 @@ would like to recap that in this part of the thesis:
     discourse-aware sentiment methods (the systems
     of~\citeauthor{Wang:15}~[\citeyear{Wang:15}] and
     \citeauthor{Bhatia:15}~[\citeyear{Bhatia:15}]) and also evaluated
-    two simpler baselines (in which we predicted semantic orientation
-    of a tweet by taking the polarity of its last and root EDUs),
-    getting the best results with the R2N2 solution
+    two simpler baselines (in which we the predicted semantic
+    orientation of a tweet by taking the polarity of its last and root
+    EDUs), getting the best results with the R2N2 solution
     of~\citet{Bhatia:15} (0.657 and 0.559 macro-\F{} on PotTS and
     SB10k respectively);
   \item we could, however, improve on these scores and also outperform
