@@ -31,7 +31,8 @@ clean_thesis:
 # Main Thesis File
 ${MAIN_FILE}: %.pdf: %.tex ${BIBFILE} $(wildcard *.tex)
 	@set -e; \
-	pdflatex -halt-on-error -output-directory ${@D} $< && bibtex $(basename $<) && \
+	pdflatex -halt-on-error -output-directory ${@D} $< && \
+	bibtex -min-crossrefs=100 $(basename $<) && \
 	pdflatex -halt-on-error -output-directory ${@D} $< && pdflatex -halt-on-error \
 	-output-directory ${@D} $<
 
