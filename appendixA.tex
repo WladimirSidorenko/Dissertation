@@ -22,11 +22,11 @@
 In this assignment, your task is to annotate sentiments in a corpus of
 Twitter messages.  We define \emph{sentiments} as polar (either
 positive or negative) evaluative opinions about some persons,
-entities, or events.  Your goal is to annotate both the text spans
-denoting the opinions (\emph{sentiments}) and the text spans
-signifying the evaluated entities and events (\emph{sentiment
-  targets}).  In addition to that, you also have to label opinions'
-holders (\emph{sentiment sources}) and lexical elements that might
+entities, or events.  Your goal is to annotate both: text spans
+denoting the opinions (\emph{sentiments}) and text spans signifying
+the evaluated entities and events (\emph{sentiment targets}).  In
+addition to that, you also have to label opinions' holders
+(\emph{sentiment sources}) and lexical elements that might
 significantly affect the polarity or the intensity of a sentiment.
 These elements are:
 \begin{itemize}
@@ -139,7 +139,7 @@ following sections.
 evaluative opinions about people, entities, or events.
 
 According to this definition, a sentiment must always fulfill the
-following three conditions:
+following three criteria:
 \begin{itemize}
 \item it has to be \textbf{polar}, \ie{} it must always reflect either
   positive or negative attitude to its respective target.  Neutral,
@@ -176,25 +176,26 @@ the \texttt{sentiment} tags.
 
 We also consider contrastive comparisons as a special type of
 evaluations.  But unlike other sentiments, comparisons typically
-express a relative subjective judgment, \ie{} an object is regarded to
-be better or worse than another one, but we usually do not know
-whether the author actually likes or dislikes any of them.  To
-distinguish such cases, we have introduced a special
-\texttt{comparison} value for the \texttt{polarity} attribute of this
-element, which you should use to distinguish such cases.
+express a relative subjective judgment, \ie{} an object is regarded as
+better or worse than another one, but we usually do not know whether
+the author actually likes or dislikes any of them.  To distinguish
+such cases, we have introduced a special \texttt{comparison} value for
+the \texttt{polarity} attribute of this element, which you should use
+to distinguish such cases.
 
-You should not label as sentiments polar opinions whose truth status
-is unknown.  These are sentences like \textit{Ich wei\ss{} nicht, ob
-  ich meinen Bruder mag} (\textit{I don't know whether I like my
-  brother}).  In this example, neither we nor the author actually know
-whether the author likes or dislikes her brother.  Exceptions from
-this rule are cases like \textit{Ich zweifle, dass er ein guter Mensch
-  ist} (\textit{I doubt that he is a good man}) or \textit{Ich glaube
-  nicht, dass er diesen Preis verdient hat} (\textit{I don't think
-  that he has deserved this award}), which express author's
-disagreement with positive evaluations and, consequently, act as
-negative judgments.  Special care should be taken when dealing with
-questions and subjunctive sentences (see FAQ Section in the extended
+You should not label as \texttt{sentiments} polar opinions whose truth
+status is unknown.  These are sentences like \textit{Ich wei\ss{}
+  nicht, ob ich meinen Bruder mag} (\textit{I don't know whether I
+  like my brother}).  In this example, neither we nor the author
+actually know whether the author likes or dislikes her brother.
+Exceptions from this rule are cases like \textit{Ich zweifle, dass er
+  ein guter Mensch ist} (\textit{I doubt that he is a good man}) or
+\textit{Ich glaube nicht, dass er diesen Preis verdient hat}
+(\textit{I don't think that he has deserved this award}), which
+express author's disagreement with positive evaluations and,
+consequently, act as negative judgments.  Special care should be taken
+when dealing with questions and subjunctive sentences (see FAQ Section
+in the extended
 version\footnote{\url{https://github.com/WladimirSidorenko/PotTS/blob/master/docs/annotation_guidelines.pdf}}
 of these guidelines).
 
