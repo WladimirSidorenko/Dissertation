@@ -1,0 +1,483 @@
+%% -*- coding: utf-8; -*-
+% FILE: command.tex  Version 2.1
+% AUTHOR:
+% Universität Duisburg-Essen, Standort Duisburg
+% AG Prof. Dr. Günter Törner
+% Verena Gondek, Andy Braune, Henning Kerstan
+% Fachbereich Mathematik
+% Lotharstr. 65., 47057 Duisburg
+% entstanden im Rahmen des DFG-Projektes DissOnlineTutor
+% in Zusammenarbeit mit der
+% Humboldt-Universitaet zu Berlin
+% AG Elektronisches Publizieren
+% Joanna Rycko
+% und der
+% DNB - Deutsche Nationalbibliothek
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Packages
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amssymb}
+% \usepackage{amsthm}
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{breakurl}
+\usepackage[font={small,it},justification=centering]{caption}
+\usepackage{color}              % \definecolor
+\usepackage{colortbl}           % \cellcolor (colored tables)
+\usepackage{dirtree}            % \dirtree (draw directory structure)
+\usepackage{dsfont}
+\usepackage{etoolbox}           % \ifstrempty
+\usepackage{epigraph}           % \epigraph
+%% \usepackage{fancyhdr}
+\usepackage{footnote}
+\usepackage{graphicx}           % \scalebox
+\usepackage{hhline}             % \ifstrempty
+%% \usepackage{hyperref}           % clickable table of contents
+\usepackage{ifthen}             % \ifthenelse
+\usepackage{listings}           % for \lstlisting
+\usepackage{mathtools}          % \stackrel, \mathclap
+\usepackage{mdframed}           % gray background boxes
+\usepackage{multicol}           % for multiple columns in a table
+\usepackage{multirow}
+\usepackage[authoryear]{natbib}
+\usepackage{ntheorem}
+\usepackage{paralist}
+\usepackage{relsize}
+\usepackage{rst}
+\usepackage[detect-all]{siunitx}
+\usepackage{subcaption}
+\usepackage{tabularx}
+\usepackage{thmtools}
+\usepackage{tikz}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\usepackage{wasysym}            % smiley symbols
+\usepackage{wrapfig}
+\usepackage{xcolor}             % \colorlet
+
+\usetikzlibrary{arrows,backgrounds,calc,decorations.markings,%
+        positioning,shapes,shapes.misc,snakes}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Lengths
+\newlength{\oosixthClmnWidth}
+\setlength{\oosixthClmnWidth}{0.055\textwidth}
+
+\newlength{\clmnwidth}
+\setlength{\clmnwidth}{0.65\textwidth}
+%% \captionsetup[wraptable]{margin=1cm,width=4cm}
+
+\newlength{\exampleSep}
+\setlength{\exampleSep}{0.6em}
+
+%% RST drawing
+%% \setlength{\compressionWidth}{100pt}
+%% \setlength{\terminalWidth}{0pt}
+\setlength{\rstmiddleskip}{1.5em}
+
+\newlength{\hcrfwidth}
+\setlength{\hcrfwidth}{0.45\textwidth}
+\newlength{\hcrfheight}
+\setlength{\hcrfheight}{9em}
+
+%% Epigraph
+\setlength\epigraphwidth{.4\textwidth}
+\setlength\epigraphrule{0pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Colors
+\definecolor{chartreuse}{RGB}{127,255,0}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{darkgoldenrod4}{RGB}{139,101,8}
+\definecolor{darkred}{RGB}{139,0,0}
+\definecolor{darkslateblue}{RGB}{72,61,139}
+\definecolor{deeppink4}{RGB}{139,10,80}
+\definecolor{dodgerblue4}{RGB}{16,78,139}
+\definecolor{firebrick}{RGB}{178,34,34}
+\definecolor{gray69}{RGB}{176,176,176}
+\definecolor{gray76}{RGB}{194,194,194}
+\definecolor{gray80}{RGB}{204,204,204}
+\definecolor{gray84}{RGB}{214,214,214}
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{green2}{RGB}{0,238,0}
+\definecolor{green3}{RGB}{0,205,0}
+\definecolor{green}{RGB}{0,255,0}
+\definecolor{highlighter green}{RGB}{27,252,6}
+\definecolor{lightcyan4}{RGB}{122,139,139}
+\definecolor{midnightblue}{RGB}{25,25,112}
+\definecolor{orange3}{RGB}{205,133,0}
+\definecolor{red3}{RGB}{205,0,0}
+\definecolor{seagreen}{RGB}{46,139,87}
+\definecolor{violetred4}{RGB}{139,34,82}
+
+\colorlet{cellcolor}{gray84}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Commands
+\sisetup{range-phrase = \text{--}}
+\newcommand{\vars}{\texttt}
+\newcommand{\func}{\textrm}
+\newcommand{\ttranslate}[2]{#1
+
+\noindent\emph{#2}}
+
+\renewcommand{\cite}{\citep}
+\newcommand{\titlerule}{\rule{0.8\textwidth}{.4pt}}
+\providecommand{\shortcite}[1]{\cite{#1}}
+\newcommand{\texample}[1]{``\textit{#1}''}
+\newcommand{\done}[2][]{\todo[color=green3,#1]{#2}}
+
+\newcommand{\mtag}[3]{{{\upshape[}\ifstrempty{#3}{#2}{\textcolor{#3}{#2}}{\upshape]$_{\textrm{\bfseries\emph{\tiny
+          #1}}}$}}}
+\newcommand{\sentiment}[2][]{\mtag{sen\-ti\-ment\ifstrempty{#1}{}{:#1}}{#2}{}}
+\newcommand{\source}[2][]{\mtag{source\ifstrempty{#1}{}{:#1}}{#2}{darkgoldenrod4}}
+\newcommand{\target}[2][]{\mtag{tar\-get\ifstrempty{#1}{}{:#1}}{#2}{darkslateblue}}
+\newcommand{\emoexpression}[2][]{\mtag{po\-lar-\-term\ifstrempty{#1}{}{:#1}}{#2}{red}}
+\newcommand{\intensifier}[2][]{\mtag{in\-ten\-si\-fier\ifstrempty{#1}{}{:#1}}{#2}{cyan}}
+\newcommand{\diminisher}[2][]{\mtag{di\-mi\-ni\-sher\ifstrempty{#1}{}{:#1}}{#2}{}}
+\newcommand{\negation}[2][]{\mtag{ne\-ga\-tion\ifstrempty{#1}{}{:#1}}{#2}{deeppink4}}
+
+\newcommand{\argone}[2][]{\mtag{\ifstrempty{#1}{}{rel#1:}arg1}{#2}{darkgoldenrod4}}
+\newcommand{\argtwo}[2][]{\mtag{\ifstrempty{#1}{}{rel#1:}arg2}{#2}{darkslateblue}}
+\newcommand{\connective}[2][]{\mtag{\ifstrempty{#1}{}{rel#1:}con\-nec\-ti\-ve}{#2}{cyan}}
+
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\stddev}[1]{{\tiny$^{\pm#1}$}}
+\newcommand{\negdelta}[1]{\textsuperscript{\textcolor{red3}{-#1}}}
+\newcommand{\posdelta}[1]{\textsuperscript{\textcolor{seagreen}{+#1}}}
+\newcommand{\F}[0]{$F_1$}
+\newcommand{\NA}{\textcolor{gray69}{NA}}
+\newcommand{\expnumber}[2]{{#1}\mathrm{e}^{#2}}
+\newcommand{\cev}[1]{\reflectbox{\ensuremath{\vec{\reflectbox{\ensuremath{#1}}}}}}
+\newcommand{\norm}[1]{\left\lVert#1\right\rVert}
+\newcommand\given[1]{\:#1\vert\:}
+\newcommand{\heart}{\ensuremath\heartsuit}
+\newcommand{\defeq}{\vcentcolon=}
+\newcommand{\eqdef}{=\vcentcolon}
+\newcommand{\eg}{\textit{e.g.},}
+\newcommand{\ienocomma}{\textit{i.e.}}
+\newcommand{\ie}{\ienocomma,}
+\newcommand{\corpusDir}{\texttt{PotTS}}
+\newcommand{\nocontentsline}[3]{}
+\newcommand{\tocless}[2]{\bgroup\let\addcontentsline=\nocontentsline#1{#2}\egroup}
+
+\newcommand{\markable}[1]{\texttt{#1}}
+\newcommand{\attribute}[1]{\emph{\texttt{#1}}}
+
+%% Code Environment
+\NewDocumentCommand{\Colorbox}{O{\dimexpr\linewidth-2\fboxsep} m m}{%
+  \colorbox{#2}{\makebox[#1][l]{#3}}}
+\newcommand{\code}[1]{
+
+\smallskip\noindent\Colorbox{gray80}{\parbox{\textwidth}{\texttt{#1}}}\smallskip
+
+\noindent}
+
+\newcommand{\specialcell}[2][c]{%
+  \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\newcommand{\crfEdges}[2]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {Neg, Neut, Pos}
+        {
+           \foreach \chld in {Neg, Neut, Pos}
+             \path [-] (#1\prnt) edge node [factor] {} (#2\chld);
+        }
+    \end{scope}
+}
+
+\newcommand{\crfEdgesX}[2]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {SNT, TRG, SRC, NON}
+        {
+           \foreach \chld in {SNT, TRG, SRC, NON}
+             \path [-] (\prnt#1) edge node [factor] {} (\chld#2);
+        }
+    \end{scope}
+}
+
+\newcommand{\crfEdgesLatent}[2]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {Neg, Neut, Pos}
+        {
+           \foreach \chld in {Neg, Neut, Pos}
+           {
+             \path [-,transform canvas={xshift=-1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+             \path [-,transform canvas={xshift=1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+           }
+        }
+    \end{scope}
+}
+
+\newcommand{\crfColoredEdgesLatent}[4]{
+    \begin{scope}[on background layer]
+      \foreach \prnt in {Neg, Neut, Pos}
+        {
+           \foreach \chld in {Neg, Neut, Pos}
+           {
+             \ifthenelse{\(\equal{#1\prnt}{#3} \OR \equal{ANY}{#3}\)  %
+                          \AND \(\equal{#2\chld}{#4} \OR \equal{ANY}{#4}\)}{
+               \path [-,transform canvas={xshift=-1pt},highlight] (#1\prnt) edge node [factor,highlight] {} (#2\chld);
+               \path [-,transform canvas={xshift=1pt},highlight] (#1\prnt) edge node [factor,highlight] {} (#2\chld);
+             }{
+               \path [-,transform canvas={xshift=-1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+               \path [-,transform canvas={xshift=1pt}] (#1\prnt) edge node [factor] {} (#2\chld);
+             }
+           }
+        }
+    \end{scope}
+}
+
+%% 3 arguments:
+%% Arg1: list of (i, x, w) tuples, where i is the number of feature, x is its x position, and w stands for the feature weight
+%% Arg2: index of the parent node
+%% Arg3: y position of feature nodes
+\newcommand{\crfFeatures}[3]{
+    \foreach \i/\x/\w in {#1}
+    {
+        \node[xnode] (#2FEAT\i) at (\x, #3) {\w};
+        \foreach \prnt in {Neg, Neut, Pos}
+        {
+           \path [-] (#2FEAT\i) edge[] node [factor] {} (#2\prnt);
+        }
+    }
+}
+
+\newcommand{\crfColoredFeatures}[4]{
+    \foreach \i/\x/\w in {#1}
+    {
+        \node[xnode,highlight] (#2FEAT\i) at (\x, #3) {\w};
+        \foreach \prnt in {Neg, Neut, Pos}
+        {
+            \ifthenelse{\equal{\prnt}{#4} \OR \equal{ANY}{#4}}{
+              \path [-] (#2FEAT\i) edge[highlight] node [factor,highlight] {} (#2\prnt);
+            }{
+              \path [-] (#2FEAT\i) edge[] node [factor] {} (#2\prnt);
+            }
+        }
+    }
+}
+
+\newcommand{\crfFeaturesX}[3]{
+    \foreach \i/\x in {#1}
+    {
+        \node[xnode] (FEAT\i) at (\x, #3) {};
+        \begin{scope}[on background layer]
+          \foreach \prnt in {SNT, TRG, SRC, NON}
+          {
+            \path [-] (FEAT\i) edge node [factor] {} (\prnt#2);
+          }
+        \end{scope}
+    }
+}
+
+\newcommand{\crfFeaturesXX}[3]{
+    \foreach \i/\x in {#1}
+    {
+        \node[xnode] (FEAT\i) at (\x, #3) {};
+        \begin{scope}[on background layer]
+          \foreach \prnt in {SNT, TRG, SRC, DOTS, NON}
+          {
+            \path [-] (FEAT\i) edge node [factor] {} (\prnt#2);
+          }
+        \end{scope}
+    }
+}
+
+\newcommand{\crfFeaturesSemiMarkov}[3]{
+    \foreach \i/\x/\d in {#1}
+    {
+      \node[xnode] (FEAT\i) at (\x, #3) {};
+      \begin{scope}[on background layer]
+        \foreach \prnt in {SNT, TRG, SRC, NON}
+        {
+          \path [-] (FEAT\i) edge node [factor] {} (\prnt\d);
+        }
+      \end{scope}
+    }
+    \foreach \i/\x/\d in {#2}
+    {
+      \node[xnode] (FEAT\i) at (\x, #3) {};
+      \begin{scope}[on background layer]
+        \foreach \prnt in {SNT, TRG, SRC, NON}
+        {
+          \path [-] (FEAT\i) edge node [factor] {} (\prnt\d);
+        }
+      \end{scope}
+    }
+}
+
+%% 3 arguments:
+%% Arg1: left node
+%% Arg2: middle node
+%% Arg3: right node
+%% Arg4: hypernode label
+\newcommand{\hyperNode}[4]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(-0.49,0.)$)
+        to[out=90,in=180] ($(#2) + (0.,0.47)$)
+        to[out=0,in=90] ($(#3) + (0.49,0.)$)
+        to[out=270,in=0] ($(#2) + (0.,-0.47)$)
+        to[out=180,in=270] ($(#1) + (-0.49,0.)$);
+     \node[label] (Root) [above right=0em and 0.3em of #3] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #4}}};
+    \end{scope}
+}
+
+\newcommand{\hyperNodeX}[5]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(0.,0.49)$)
+        to[out=0,in=90] ($(#1) + (0.47,0.)$)
+        to[out=270,in=90] ($(#2) + (0.47,0.)$)
+        to[out=270,in=90] ($(#3) + (0.47,0.)$)
+        to[out=270,in=90] ($(#4) + (0.47,0.)$)
+        to[out=270,in=0] ($(#4) + (0.,-0.49)$)
+        to[out=180,in=270] ($(#4) + (-0.47,0.)$)
+        to[out=90,in=270] ($(#3) + (-0.47,0.)$)
+        to[out=90,in=270] ($(#2) + (-0.47,0.)$)
+        to[out=90,in=270] ($(#1) + (-0.47,0.)$)
+        to[out=90,in=180] ($(#1) + (0.,0.49)$);
+     \node[label] (Root) [above right=0em and 0.3em of #1] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #5}}};
+    \end{scope}
+}
+
+\newcommand{\hyperNodeXX}[6]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(0.,0.49)$)
+        to[out=0,in=90] ($(#1) + (0.87,0.)$)
+        to[out=270,in=90] ($(#2) + (0.87,0.)$)
+        to[out=270,in=90] ($(#3) + (0.87,0.)$)
+        to[out=270,in=90] ($(#4) + (0.87,0.)$)
+        to[out=270,in=90] ($(#5) + (0.87,0.)$)
+        to[out=270,in=0] ($(#5) + (0,-0.49)$)
+        to[out=180,in=270] ($(#5) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#4) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#3) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#2) + (-0.87,0.)$)
+        to[out=90,in=270] ($(#1) + (-0.87,0.)$)
+        to[out=90,in=180] ($(#1) + (0.,0.49)$);
+     \node[label] (Root) [above right=0em and 0.3em of #1] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #6}}};
+    \end{scope}
+}
+
+\newcommand{\hyperNodeTreeCRF}[5]{
+    \begin{scope}[on background layer,fill opacity=0.4]
+    %% Root
+     \filldraw[fill=darkslateblue!45] ($(#1)+(-0.49,0.)$)
+        to[out=90,in=180] ($(#2) + (0.,0.47)$)
+        to[out=0,in=180] ($(#3) + (0.,0.47)$)
+        to[out=0,in=90] ($(#4) + (0.49,0.)$)
+        to[out=270,in=0] ($(#3) + (0.,-0.47)$)
+        to[out=180,in=0] ($(#2) + (0.,-0.47)$)
+        to[out=180,in=270] ($(#1) + (-0.49,0.)$);
+     \node[label] (Root) [above right=0.3em and 0.em of #4] {%
+                  \textcolor{darkslateblue}{\textsc{\bfseries #5}}};
+    \end{scope}
+}
+
+%% Header, Footer, and Page Layout
+%% \fancyhf{}
+%% \fancyhead[L]{\leftmark}
+%% \rfoot{\thepage}
+%% \pagestyle{fancy}
+
+%% Tikz
+\makeatletter
+\tikzset{nomorepostaction/.code={\let\tikz@postactions\pgfutil@empty}}
+\tikzset{circle split part fill/.style  args={#1,#2}{%
+alias=tmp@name, % Jake's idea !!
+postaction={%
+insert path={
+\pgfextra{%
+\pgfpointdiff{\pgfpointanchor{\pgf@node@name}{center}}%
+{\pgfpointanchor{\pgf@node@name}{east}}%
+\pgfmathsetmacro\insiderad{\pgf@x}
+%\begin{scope}[on background layer]
+%\fill[#1] (\pgf@node@name.base) ([xshift=-\pgflinewidth]\pgf@node@name.east) arc
+%                    (0:180:\insiderad-0.5\pgflinewidth)--cycle;
+%\fill[#2] (\pgf@node@name.base) ([xshift=\pgflinewidth]\pgf@node@name.west)  arc
+%                     (180:360:\insiderad-0.5\pgflinewidth)--cycle;
+\fill[#1] (\pgf@node@name.base) ([xshift=-\pgflinewidth]\pgf@node@name.east) arc
+(0:180:\insiderad-\pgflinewidth)--cycle;
+\fill[#2] (\pgf@node@name.base) ([xshift=\pgflinewidth]\pgf@node@name.west)  arc
+(180:360:\insiderad-\pgflinewidth)--cycle;            %  \end{scope}
+}}}}}
+\makeatother
+
+%% Math
+\DeclareMathOperator{\E}{\mathop{\mathbb{E}}}
+
+% Line spacing in matrices
+\makeatletter
+\renewcommand*\env@matrix[1][\arraystretch]{%
+  \edef\arraystretch{#1}%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{*\c@MaxMatrixCols c}}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Environments
+% uncomment this and the `amsthm` package to get plain uncolored
+% examples
+% \newtheoremstyle{break}
+%   {\topsep}{\topsep}%
+%   {\itshape}{}%
+%   {\bfseries}{}%
+%   {\newline}{}%
+% \theoremstyle{break}
+% \newtheorem{example}{Example}[section]
+
+\theoremstyle{break}
+\theoremheaderfont{\bfseries\upshape}
+\newmdtheoremenv[%
+linecolor=gray,%
+leftmargin=35,%
+rightmargin=35,%
+backgroundcolor=gray!20,%
+innertopmargin=5pt]{example}{Example}[section]
+
+\newtheorem*{Example*}{Example}
+% allow fotnotes in tables
+\makesavenoteenv{tabular}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Hypersetup
+%% \hypersetup{
+%%     colorlinks=true,
+%%     linktoc=all,
+%%     citecolor=black,
+%%     filecolor=black,
+%%     linkcolor=midnightblue,
+%%     urlcolor=black
+%% }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% XML Highlighting
+\lstset{
+  basicstyle=\tiny,
+  columns=fullflexible,
+  showstringspaces=false,
+  commentstyle=\color{gray}\upshape
+}
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns,id,intensity,mmax_level,span,sarcasm,polarity,version,encoding}%
+}

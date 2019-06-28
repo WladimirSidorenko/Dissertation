@@ -1,0 +1,62 @@
+#!/usr/bin/gawk -f
+
+##################################################################
+function strip_comments() {
+    sub(/[[:space:]]+%.*$/, "", $0)
+    sub(/\(tabular)?newline({})?/, "", $0)
+    sub(/[[:space:]]+$/, "", $0)
+    sub(/\\midrule/, "", $0)
+    return $0
+}
+
+function strip_space(line) {
+    # gsub(/\\text(bf|sc)/, "", line)
+    gsub(/[{}]/, "", line)
+    sub(/[[:space:]]+$/, "", line)
+    sub(/^[[:space:]]+/, "", line)
+    sub(/\\\\/, "", line)
+    sub(/\\bottomrule/, "", line)
+    return line
+}
+
+##################################################################
+BEGIN {
+    line = ""
+    split("", lines)
+    line_cnt = 0
+}
+
+##################################################################
+strip_comments() && /&/ {
+    if ($0 ~ /\\\\$/) {
+	lines[++line_cnt] = line " " $0
+	line = ""
+    } else {
+	line = line " " $0
+
+    }
+}
+
+##################################################################
+END {
+    if (line) {
+	lines[++line_cnt] = line
+	line = ""
+    }
+
+    print "<table>\n<thead>\n<tr>"
+    cell_cnt = split(lines[1], fields, "&")
+    for (j = 1; j <= cell_cnt; ++j) {
+	print "<td>" fields[j] "</td>"
+    }
+    print "</tr>\n</thead>\n<tbody>"
+    for (i = 2; i <= line_cnt; ++i) {
+	print "<tr>"
+	cell_cnt = split(lines[i], fields, "&")
+	for (j = 1; j <= cell_cnt; ++j) {
+	    print "<td>" strip_space(fields[j]) "</td>"
+	}
+	print "</tr>"
+    }
+    print "</tbody>\n</table>"
+}

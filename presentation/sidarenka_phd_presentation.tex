@@ -1,0 +1,139 @@
+\documentclass{beamer}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Packages
+\include{command}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Macros and Definitions
+\definecolor{firebrick4}{RGB}{139,026,026}
+\definecolor{gray57}{RGB}{145,145,145}
+\definecolor{gray71}{RGB}{181,181,181}
+\definecolor{dodgerblue3}{RGB}{24,116,205}
+
+\setcounter{tocdepth}{1}
+
+\newlength{\picwidth}
+\setlength{\picwidth}{2.5cm}
+\newlength{\picheight}
+\setlength{\picheight}{2cm}
+
+\newlength{\firstcolumnwidth}
+\setlength{\firstcolumnwidth}{0.25\textwidth}
+\newlength{\mycolumnwidth}
+\setlength{\mycolumnwidth}{0.13\textwidth}
+
+\newcommand{\lexiconlimit}{Begrenztheit maschinenlesbarer Lexika}
+\newcommand{\genrespecifics}{Stilistische Besonderheiten des Textgenres}
+
+\newcommand{\totaloov}{\% der Tokens}
+\newcommand{\uniqoov}{\% der Types}
+
+\newcommand{\totalHunspellDictToken}{45.87}
+\newcommand{\totalHunspellDictType}{54.62}
+\newcommand{\totalTTaggerDictToken}{40.46}
+\newcommand{\totalTTaggerDictType}{43.36}
+
+\newcommand{\totalHunspellStyleToken}{41.65}
+\newcommand{\totalHunspellStyleType}{33.64}
+\newcommand{\totalTTaggerStyleToken}{48.02}
+\newcommand{\totalTTaggerStyleType}{44.59}
+
+\newcommand{\totalHunspellSpellToken}{11.87}
+\newcommand{\totalHunspellSpellType}{10.75}
+\newcommand{\totalTTaggerSpellToken}{9.09}
+\newcommand{\totalTTaggerSpellType}{8.23}
+
+\newsavebox\MBox{}
+\newcommand\Cline[2][red]{{\sbox\MBox{$#2$}%
+    \rlap{\usebox\MBox}\color{#1}\rule[-1.2\dp\MBox]{\wd\MBox}{0.5pt}}}
+
+
+\newcommand{\normquestions}[4]{
+  Fragen bei der Textnormalisierung:
+  \begin{itemize}
+    \item Wie relevant ist Textnormalisierung f\"ur deutsche Tweets? \textit{#1}
+    \item Was soll normalisiert werden? \textit{#2}
+    \item Wie soll normalisiert werden? \textit{#3}
+    \item Wie kann man die Qualit\"at der Textnormalisierung messen? \textit{#4}
+  \end{itemize}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Presentation Setup
+\mode<presentation>
+{
+  \usetheme{Ilmenau}
+  \usecolortheme{beaver}
+  \usefonttheme[onlylarge]{structuresmallcapsserif}
+}
+\setbeamercolor{title}{fg=dodgerblue4}
+\setbeamercolor{frametitle}{fg=dodgerblue4}
+\setbeamercolor*{palette secondary}{fg=dodgerblue4,bg=gray84}
+\setbeamercolor*{palette tertiary}{fg=white,bg=dodgerblue4}
+\setbeamercolor*{item}{fg=dodgerblue4}
+\setbeamercolor{alerted text}{fg=red}
+
+\setbeamerfont{author}{size=\scriptsize}
+\setbeamerfont{institute}{size=\scriptsize}
+\setbeamerfont{date}{size=\tiny}
+\setbeamerfont{normal text}{size=\scriptsize}
+
+\beamertemplatenavigationsymbolsempty{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title
+\title[]{Sentiment Analysis of German Twitter}
+\author[Sidarenka]{Uladzimir Sidarenka\\(Wladimir Sidorenko)}
+\institute[University of Potsdam]{University of Potsdam}
+\date{\today}
+
+\pgfdeclareimage[interpolate=true,height=2.5cm,width=2.5cm]{logo}{img/uni_potsdam_logo.png}
+\titlegraphic{\pgfuseimage{logo}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Document
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Title Page
+\begin{frame}{}
+  \titlepage{}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Table of Contents
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Task Definition and Experiment Setup
+\section{Introduction}
+\begin{frame}{}
+\emph{Sentiment Analysis} is a field of knowledge that deals with the
+analysis of emotions, sentiments, evaluations, and
+attitudes~\cite{Liu:12}.
+\includegraphics[width=\picwidth,height=\picheight]{img/may_tears.jpg}
+\includegraphics[width=\picwidth,height=\picheight]{img/may_tears.jpg}
+<img src="img/may_tears.jpg"/>
+<img src="img/trump_anger.jpg"/>
+<img src="img/erdogan.jpg"/>
+<img src="img/merkel_laugh.jpg"/>
+<img src="images/macron_putin.jpg"/>
+<img src="images/medvedev_rain.jpg"/>
+\end{frame}
+
+\begin{frame}{}
+  Main difficulties of sentiment analysis:
+  \begin{itemize}\pause{}
+  \item<+-> There can be different opinions (good, bad, mixed);
+  \item<+-> That can be expressed by different people (children and
+    adults, common people and celebrities);
+  \item<+-> On different topics (family, work, politics);
+  \item<+-> In different languages (English, Chinese, German);
+  \item<+-> In different communication channels (newspapers, emails,
+    social media);
+  \item<+-> At different language levels (via words, sentences
+    [utterances], or complete discourses).
+  \end{itemize}
+\end{frame}
+
+\end{document}
