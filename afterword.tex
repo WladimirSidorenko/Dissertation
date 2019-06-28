@@ -160,25 +160,25 @@ that we have acquired during our run.  Here we go:
     like to formulate at least a few rules of thumb, which came up
     during our experiments:
     \begin{itemize}
-      \item\textbf{Prefer methods which are closest to your training
-        objective} and which were trained under similar conditions
-        w.r.t. the amount of data, their class distribution and
+      \item\textbf{Prefer methods that are closest to your training
+        objective} and that were trained under similar conditions
+        w.r.t.\ the amount of data, their class distribution and
         domain;
       \item\textbf{Put every single setting of these methods into
         question}---bear in mind that things which work well in the
         original cases are not guaranteed to work in your
         situation.\footnote{In this respect, it is important to
           realize that every classification task is merely an attempt
-          to solve a system of equations, so that methods which are
+          to solve a system of equations, so that methods that are
           good at solving one system might completely fail to solve
-          other equations.}  The more options you try, the better will
-        be your results;
+          another set of equations.}  The more options you try, the
+        better will be your results;
       \item\textbf{Try using manually labeled resources for your
         target domain}, if they are available, but pay attention to
         the quality of their annotation---it often matters more than
         the corpus size;
       \item If there are manually annotated data, \textbf{prefer
-        machine-learning methods to hard-coded rules}--- they will
+        machine-learning methods to hard-coded rules}---they will
         penalize their bad components automatically by themselves;
       \item\textbf{Do not use randomly initialized word embeddings for
         deep-learning systems}---initialize them with language-model
@@ -199,13 +199,13 @@ that we have acquired during our run.  Here we go:
 
       \item With a limited amount of training data, \emph{aspect-based
         sentiment analysis} can be better addressed with probabilistic
-        graphical models such as conditional random fields with
+        graphical models, such as conditional random fields with
         hand-crafted features;
 
       \item On the other hand, plain \emph{message-level sentiment
         analysis} can be efficiently tackled with both machine- and
-        deep-learning algorithms (such as SVM, logistic regression, or
-        RNN);
+        deep-learning algorithms, such as SVM, logistic regression, or
+        RNN;
 
       \item But probabilistic graphical models strike back at
         \emph{discourse-aware sentiment methods}, where they might
@@ -242,13 +242,13 @@ that we have acquired during our run.  Here we go:
   \item\textbf{Does text normalization help analyze sentiments?}
 
     Yes, it definitely does.  As we could see in
-    Chapters~\ref{chap:fgsa} and \ref{chap:cgsa}, normalization
+    Chapters~\ref{chap:fgsa} and~\ref{chap:cgsa}, normalization
     significantly improves the quality of aspect-based and
     message-level sentiment analyses, boosting the results on the
     former task by up to 4\% (see
     Table~\ref{snt-fgsa:tbl:normalization}) and improving the
     macro-averaged \F{}-measure of message-level sentiment methods by
-    up to 25\% (see Table~\ref{snt-cgsa:tbl:res-no-normalization});
+    up to 25\% (see Table~\ref{snt-cgsa:tbl:res-no-normalization}).
 
     The only question that remained unanswered in this context is
     which normalization steps exactly improve the scores of sentiment
@@ -266,7 +266,7 @@ that we have acquired during our run.  Here we go:
     on PotTS mostly capitalizes on the normalization of slang terms.
     \begin{table}[htb!]
       \begin{center}
-        \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+        \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
         \begin{tabular}{p{0.162\columnwidth} % first columm
             *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
             *{2}{>{\centering\arraybackslash}p{0.068\columnwidth}}} % last two columns
@@ -400,10 +400,9 @@ that we have acquired during our run.  Here we go:
           0.78\negdelta{0.06} & 0.82\posdelta{0.02} & 0.8\negdelta{0.02} & %
           0.46\negdelta{0.09} & 0.7\negdelta{0.03}\\\bottomrule
         \end{tabular}
-        \egroup
+        \egroup{}
         \caption{LBA$^{(1)}$ results without single text normalization
-          steps}
-        \label{afterword:tbl:lba-normalization-steps}
+          steps}\label{afterword:tbl:lba-normalization-steps}
       \end{center}
     \end{table}
 
@@ -418,7 +417,7 @@ that we have acquired during our run.  Here we go:
       redefining the topologies of CRFs;
     \item our lexicon-based attention network outperformed many of
       its competitors on message-level classification;
-    \item and, finally,we surpassed the discourse-unware baseline and
+    \item and, finally, we surpassed the discourse-unware baseline and
       other existing discourse-aware sentiment solutions with the
       proposed latent-marginalized CRFs and Recursive Dirichlet
       Process.
@@ -462,19 +461,19 @@ In addition to open-sourcing all projects, we have also made a few
 attempts to increase the visibility of our research with the following
 publications:
 \begin{itemize}
-  \item the rule-based text normalization was described in
-    \cite{Sidarenka:13};
-  \item the PotTS corpus was presented in \cite{Sidarenka:16};
-  \item in \cite{Sidarenka:16b}, we summarized the evaluation of
+  \item the rule-based text normalization was described
+    in~\cite{Sidarenka:13};
+  \item the PotTS corpus was presented in~\cite{Sidarenka:16};
+  \item in~\cite{Sidarenka:16b}, we summarized the evaluation of
     existing sentiment lexicons (a separate paper on the linear
     projection algorithm was withdrawn by us due to a mistake in the
     initial implementation);
-  \item in \cite{Sidarenka:16a} and \cite{Sidarenka:17}, we described
+  \item in~\cite{Sidarenka:16a} and~\cite{Sidarenka:17}, we described
     our initial experiments on message-level classification;
   \item furthermore, we introduced the SVM-based discourse segmenter
-    in \cite{Sidarenka:15};
+    in~\cite{Sidarenka:15};
   \item and sketched our pilot study of discourse annotation in
-    Twitter in \cite{Sidarenka:15a}.
+    Twitter in~\cite{Sidarenka:15a}.
 \end{itemize}
 Unfortunately, due to the lack of experience at the initial stage of
 working on this dissertation and because of the time shortage at the
@@ -498,19 +497,19 @@ Analysis of German Twitter'', I have concentrated more on the
 I wish I had tried out more sophisticated cross-lingual methods for
 adapting English methods to German, elaborated more on linguistic
 traits of microblogs, and addressed the social aspect of the Twitter
-network.  The main reason why I have not done all these things is
-that, six years ago, whe I started working on this dissertation
-completely from scratch, with neither data, nor code, nor any proper
-plan in my head, I was so overwhelmed by the abundance of works on
-opinion mining and text normalization that I decided to answer the
-questions whether existing sentiment methods work, whether text
-normalization helps, and whether I could improve on these methods,
-first; regrettably, these questions have pretty much preoccupied me
-since then.  Another reason why I refrained from addressing certain
-topics (why, for example, I did not extend the Rhetorical Structure
-Theory to multilogues) is because properly handling these problems
-would require another dissertation and would certainly first need to
-be done for English in order to get any international attention.
+network.  The main reason why I have not done all these things is that
+six years ago, whe I started working on this dissertation completely
+from scratch, with neither data, nor code, nor any proper plan in my
+head, I was so overwhelmed by the abundance of works on opinion mining
+and text normalization that I decided to answer the questions whether
+existing sentiment methods work, whether text normalization helps, and
+whether I could improve on these methods, first; regrettably, these
+questions have pretty much preoccupied me since then.  Another reason
+why I refrained from addressing certain topics (why, for example, I
+did not extend the Rhetorical Structure Theory to multilogues) is
+because properly handling these problems would require another
+dissertation and would certainly first need to be done for English in
+order to get any international attention.
 
 
 \section*{Final Remarks}
@@ -523,9 +522,9 @@ other kinds of funny amusements.  Another good thing about it is that
 new carousels are now easier to build; existing amusement rides work
 better than in many other places, and all of them work for free; and,
 finally, the park itself might still entertain its occasional guests.
-You might have enjoyed this theme park as well, or you might have not.
-I appreciate either of your decisions and would like to thank you in
-any case for your visit.
+You might have enjoyed this theme park as well, or you might have
+not---I appreciate either of your decisions and would like to thank
+you in any case for your visit.
 \begin{figure*}[htb]
   \centering \includegraphics[height=5em]{img/bender.png}
 \end{figure*}
