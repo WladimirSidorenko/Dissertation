@@ -1189,7 +1189,7 @@ sparsemax operation~\cite{Martins:16}:
 \end{align}
 
 The main goal of matrix $M_r$ is to reflect contextual polarity
-changes that might be conveyed by discourse relations; for example, a
+changes that might be conveyed by discourse relations: for example, a
 contrastive link might stronger affect the polarity of the parent than
 a non-contrastive one (compare, for instance, the contrastive
 \emph{Many people support Trump, but he behaves like an alpha male}
@@ -1243,7 +1243,7 @@ for the $j$-th node after seeing its previous ($k-1$-th) child; and
 $\odot$ means elementwise multiplication.
 
 The only thing that we now need to do to the above
-$\boldsymbol{\alpha}_{j_k}$ term before we draw the actual probability
+$\boldsymbol{\alpha}_{j_k}$ term before drawing the actual probability
 $\boldsymbol{z}_{j_k}$ is to scale this vector by a certain amount in
 order to reduce the variance of the resulting Dirichlet
 distribution.\footnote{Because if we keep the
@@ -1263,7 +1263,7 @@ is zero; and $H\left(\boldsymbol{\alpha}_{j_k}\right)$ stands for the
 entropy of the $\boldsymbol{\alpha}_{j_k}$ vector.  Although this
 expression looks somewhat complicated, the intuition behind it is very
 simple: The $\xi$ term encodes our prior belief in the correctness of
-model's predictions (the higher its value, the more we trust the
+model's prediction (the higher its value, the more we trust the
 model); the cosine measures the similarity between the probabilities
 of parent and child (the more similar these probabilities, the greater
 will be the scale); and, finally, the entropy in the denominator tells
@@ -1332,8 +1332,8 @@ in-between the two juxtaposed classes as before.
 \begin{figure}[htb]
   \begin{center}
     \includegraphics[height=15em,width=0.4\linewidth]{img/rdp.png}
-    \caption[A plate diagram of Recursive Dirichlet Process]{A plate
-      diagram of Recursive Dirichlet Process\\{\small (without the
+    \caption[A plate diagram of the Recursive Dirichlet Process]{A plate
+      diagram of the Recursive Dirichlet Process\\{\small (without the
         final categorical draw)}}\label{dasa:fig:rdp-plate}
   \end{center}
 \end{figure}
@@ -1350,18 +1350,18 @@ prediction label $y$:
   y \sim Cat(\mathbf{z}_{\text{\textsc{Root}}}).
 \end{align*}
 
-Using this manually defined model with its hand-tuned fixed
-parameters, we can estimate our prior belief in the joint probability
-of hidden and observed variables $p(y, \mathbf{z})$.  As it turns out,
-knowing this belief is enough to derive another probability
-$q(\mathbf{z})$, which best approximates the distribution of only the
-latent nodes.  In particular, we define the structure of
-$q(\mathbf{z})$ to be the same as in $p(y, \mathbf{z})$, but deprive
-it of the last step (drawing of the observed label) and optimize the
-parameters $\boldsymbol{\theta}$ of this model ($\boldsymbol{\mu}_r$,
-$\boldsymbol{\Sigma}_r$, and the parameters of the Beta and $\chi^2$
-distributions) by maximizing the evidence lower bound between $p$ and
-$q$, using stochastic gradient descent\cite[see][]{Ranganath:14}:
+Using this manually defined model as a starting point, we can estimate
+our prior belief in the joint probability of hidden and observed
+variables $p(y, \mathbf{z})$.  As it turns out, knowing this belief is
+enough to derive another probability $q(\mathbf{z})$, which best
+approximates the distribution of only the latent nodes.  In
+particular, we define the structure of $q(\mathbf{z})$ to be the same
+as in $p(y, \mathbf{z})$, but deprive it of the last step (drawing of
+the observed label) and optimize the parameters $\boldsymbol{\theta}$
+of this model ($\boldsymbol{\mu}_r$, $\boldsymbol{\Sigma}_r$, and the
+parameters of the Beta and $\chi^2$ distributions) by maximizing the
+evidence lower bound between $p$ and $q$, using stochastic gradient
+descent\cite[see][]{Ranganath:14}:
 \begin{align*}
   \mathcal{L}\left(\boldsymbol{\theta}\right)
   &=\mathbb{E}_{q_{\boldsymbol{\theta}}(\mathbf{z})}%
@@ -1369,7 +1369,7 @@ $q$, using stochastic gradient descent\cite[see][]{Ranganath:14}:
     \log\left(q(\mathbf{z})\right)\right].
 \end{align*}
 We perform this optimization for 100 epochs, picking the parameters
-which yield the best macro-averaged \F{}-score on the set-aside
+that yield the best macro-averaged \F{}-score on the set-aside
 development data.
 
 The results of our proposed and baseline methods are shown in
