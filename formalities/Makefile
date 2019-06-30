@@ -8,23 +8,25 @@ DECLARATION_FILE := declaration.pdf
 PUBLICATIONS_FILE := publications.pdf
 REVIEWERS_FILE := reviewers.pdf
 SUMMARY_FILE := summary.pdf
+THESES_FILE := theses.pdf
 
 ##################################################################
 # Special Targets
 .DELETE_ON_ERROR:
 
 .PHONY: all application committee cv declaration publications reviewers \
-	summary \
+	summary theses \
 	clean clean_application clean_committee clean_cv \
 	clean_declaration clean_publications clean_reviewers \
-	clean_summary
+	clean_summary clean_theses
 
 ##################################################################
 # Main Target
-all: abstract application committee cv declaration publications reviewers summary
+all: abstract application committee cv declaration publications reviewers summary \
+	theses
 
 clean: clean_abstract clean_application clean_committee clean_cv clean_declaration \
-	clean_publications clean_reviewers clean_summary
+	clean_publications clean_reviewers clean_summary clean_theses
 	-rm -f *.lot *.log *.aux *.out *.bbl *.lof *.blg
 
 ##################################################################
@@ -82,6 +84,13 @@ summary: ${SUMMARY_FILE}
 
 clean_summary:
 	-rm -f ${SUMMARY_FILE}
+
+##################################################################
+# Theses
+theses: ${THESES_FILE}
+
+clean_theses:
+	-rm -f ${THESES_FILE}
 
 ##################################################################
 # PDF + BibTeX Files

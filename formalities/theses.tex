@@ -1,0 +1,136 @@
+\documentclass[11pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Packages
+\usepackage{amsmath}
+\usepackage{breakcites}
+\usepackage[authoryear]{natbib}
+\usepackage{paralist}
+\usepackage{titling}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Commands
+\newcommand{\ienocomma}{\textit{i.e.}}
+\newcommand{\ie}{\ienocomma,}
+\newcommand{\eg}{\textit{e.g.},}
+\newcommand{\F}[0]{$F_1$}
+\newcommand{\markable}[1]{\texttt{#1}}
+\newcommand{\attribute}[1]{\emph{\texttt{#1}}}
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\renewcommand{\cite}{\citep}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Lengths
+\setlength{\droptitle}{-11em}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Variables
+\author{\normalsize{}by Uladzimir Sidarenka}
+\title{\normalsize{}Main Claims of the Ph.D.~Dissertation\\[0.4em]
+  {\Large{}``Sentiment Analysis of German Twitter''}\\[0.4em]
+  to be defended on July 12, 2019\vspace{-4.2ex}}
+\date{\vspace{-3ex}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Document
+\begin{document}
+\maketitle
+
+In my dissertation, I address the problem of automatic analysis of
+sentiments (\ie{} subjective evaluative opinions) in German tweets.
+In particular, I investigate the ways and means by how people express
+their opinions in online microblogs, examine current approaches to
+automatic mining of these feelings, and propose my own methods that
+outperform many existing techniques.  I perform these tasks on three
+different linguistic levels: subsentential (level of words and
+phrases), sentential (level of single statements), and suprasentential
+(level of discourse), making thereby the following claims:
+
+\begin{enumerate}
+  \item I argue that \textbf{the analysis of subjective evaluative
+    opinions is an inherently difficult task even for human experts}.
+
+    This argument is empirically confirmed by an extensive
+    inter-annotator agreement (IAA) study that I performed while
+    creating the Potsdam Twitter Sentiment Corpus~(PotTS), which I
+    present in Chapter~2.
+
+  \item\textbf{The difficulty of this task crucially depends on the
+    topic and form of analyzed tweets}, \eg{} political messages
+    containing emoticons are more challenging to judge upon than
+    casual everyday microblogs without smileys.
+
+    This finding is again bolstered by the IAA results that I obtained
+    for tweets coming from different topics and formal categories.
+
+  \item\textbf{Most annotation ambiguities can be resolved by making
+    the experts aware of alternative interpretations by other
+    linguists}.
+
+    Since the IAA scores at the initial stage of working on the PotTS
+    corpus were relatively low (31.21\% $\kappa$), I applied a simple
+    adjudication step in which I highlighted the differences between
+    the annotations of two linguists and let them resolve these
+    disagreements independently of each other.  This procedure not
+    only boosted the $\kappa$-score almost twice but also allowed the
+    annotators to maintain a high level of mutual agreement when
+    annotating the rest of the data.
+\end{enumerate}
+Turning to the evaluation of particular sentiment analysis (SA)
+resources and methods, I claim that
+\begin{enumerate}
+\item\textbf{Existing automatically translated and manually revised
+  German sentiment lexicons have a better quality than the results of
+  automatic lexicon generation (LG) methods that are applied to German
+  data};
+
+\item\textbf{Among automatic LG methods, dictionary-based approaches
+  yield overall better scores than corpus and word-embedding--based
+  systems.  The last group, however, represents a good alternative to
+  dictionary-based solutions in case when a manually annotated lexical
+  ontology is absent};
+
+\item In Chapter~4, I turn my attention to \emph{aspect-based
+  sentiment analysis}, whose goal is to predict text spans of
+  sentiments, their holders, and targets.  Based on my experiments, I
+  come to the conclusion that \textbf{aspect-based sentiment analysis
+    is better addressed with probabilistic graphical models, such as
+    conditional random fields (CRFs), rather than recurrent neural
+    networks}.  Moreover, \textbf{the results of the standard
+    first-order linear-chain CRFs can be further improved by
+    increasing the order and redefining the structure of the CRF
+    graph};
+
+\item Afterwards in Chapter~5, I compare different approaches to
+  \emph{message-level sentiment analysis} (MLSA), where the task is to
+  classify the overall polarity of a tweet as positive, negative, or
+  neutral.  For this purpose, I compare three major groups of methods:
+  lexicon-, machine-learning--, and deep-learning--based ones, making
+  the conclusion that \textbf{message-level sentiment analysis is more
+    amenable to machine- and deep-learning--based paradigms} and that
+  \textbf{DL-based methods can further benefit from the incorporation
+    of sentiment-lexicon information};
+
+\item Finally, in the last chapter, I prove that \textbf{one can
+  further improve message-level SA results by taking into account the
+  discourse structure of the tweet}, \ie{} not analyzing the microblog
+  as a whole at once, but instead predicting the sentiment scores
+  separately for each of its sentences and inferring the polarity of
+  the tweet from these scores;
+\end{enumerate}
+
+Based on the experiments in the above chapters, I conclude that:
+\begin{enumerate}
+  \item To a large extent, \textbf{we can apply opinion mining methods
+    devised for standard English to German Twitter}, provided that the
+    original training objective, the evaluation metrics, as well as
+    the size and reliability of the training data used for these
+    methods are close to the respective parameters in the German SA
+    task at hand;
+  \item \textbf{The peculiarities and dificulties of the social-media
+    genre can be efficiently addressed with text normalization},
+    which, as I have shown in Chapters~4 and~5, not only improves the
+    scores of aspect-based sentiment analysis but signigicantly boosts
+    the accuracy of message-level classification as well.
+\end{enumerate}
+\end{document}
