@@ -1,35 +1,79 @@
+/* Overwriting Default Settings */
+.reveal h1 {
+    letter-spacing: normal;
+}
+
+.reveal div.prompt.input_prompt {
+    display: none;
+}
+
+html.img-right div.slide-background.present {
+    background-position: right;
+}
+
+/* External Fonts */
+@import "fonts.css"
+
+/* Animation */
+@import "animation.css"
+
 /* Title Page */
-.reveal .supertitle, .reveal .title, .reveal .author, .reveal .date, .reveal .institution {
+.reveal .supertitle, .reveal .title, .reveal .author,
+.reveal .date, .reveal .institution, .reveal h1.chapter-title {
     text-align: center;
     margin: auto;
-    width: 50%;
+    width: 100%;
+    font-family: Junicode, "Latin Modern Roman", Times, serif;
+    color: #00305e;
+}
+
+.reveal .supertitle {
+    padding-top: 12%;
+    padding-bottom: 2%;
+}
+
+.reveal .author p {
+    margin: 0;
+    padding: 0;
+}
+
+.reveal .supertitle, .reveal .author p {
+    vertical-align: middle;
+    font-variant: small-caps;
+    font-size: 18pt;
+}
+
+.reveal .author p.alternative-name {
+    vertical-align: middle;
+    font-size: 14pt;
 }
 
 .reveal .title {
     vertical-align: middle;
-    font-size: x-large;
+    font-size: 40pt;
     font-weight: bold;
     font-variant: small-caps;
-    padding-top: 0.5em;
-    padding-bottom: 1.25em;
+    padding-top: 5%;
+    padding-bottom: 6%;
 }
 
-.reveal .author, .reveal .institution {
-    font-size: medium;
-    padding-bottom: 0.75em;
+.rendered_html img.logo {
+    max-width: 15%;
+    height: auto;
+    margin: auto;
 }
 
-.reveal .supertitle, .reveal .date {
-    font-size: small;
-    font-style: italic;
+.reveal .institution {
+    padding-top: 0%;
+    padding-bottom: 0%;
 }
+
+.reveal .institution, .reveal .date {
+    font-size: 12pt;
+}
+
 
 /* Headings */
-h1.chapter {
-    margin-top: 35px;
-    margin-bottom: 35px;
-    font:  bold 12px/30px Times, serif;
-}
 
 /* Images */
 .heatmap {
