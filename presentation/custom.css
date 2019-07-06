@@ -1,21 +1,112 @@
 /* Overwriting Default Settings */
-.reveal h1 {
-    letter-spacing: normal;
-}
-
 .reveal div.prompt.input_prompt {
-    display: none;
+    width: 0;
+    padding: 0;
+    min-width: 0;
 }
 
 html.img-right div.slide-background.present {
     background-position: right;
 }
 
-/* External Fonts */
-@import "fonts.css"
+div .text_cell_render {
+    padding: 0 0.5em 0 0.4em;	/*needed for more concise bullet lists*/
+}
 
 /* Animation */
-@import "animation.css"
+@keyframes removed-item-animation {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        line-height: 0px;
+        font-size: 0px;
+        height: 0px;
+        display: none;
+    }
+}
+
+/* Fonts */
+* {
+    font-family: Junicode, "Latin Modern Roman", Times, serif;
+    color: #00305e;
+}
+
+/* Tables */
+table thead td {
+    font-style: bold;
+    text-align: center;
+}
+
+table {
+    width: 95%;
+}
+
+table.narrow {
+    width: 50%;
+}
+
+/* Images */
+.reveal section div.text_cell_render img {
+    margin: auto;
+}
+
+.reveal section ul li .examples img {
+    display: block;
+    height: 100%;
+    margin: 10px 30px;
+}
+
+.heatmap {
+    width: 45%;
+}
+
+img.fit {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+#right-bear-img, #left-bear-img {
+    width: 11em;
+}
+
+#merkel-twitter {
+    opacity: 07;
+}
+
+/* Divs */
+ul li .examples .left,
+ul li .examples .right {
+    display: inline-flex;
+    height: 10em;
+    margin: 5px 0px;
+    width: 45%;
+}
+
+ul li .examples .center {
+    height: 10em;
+    margin: 5px 0px;
+    width: 100%;
+}
+
+
+.fragment.visible:not(.current-fragment) .hide-on-next-fragment {
+    animation: removed-item-animation 0.4s cubic-bezier(0.6, -0.05, 0.9, 0.9) forwards;
+}
+
+ul li div.examples {
+    width: 100%;
+}
+
+#right-bear-div, #left-bear-div {
+    height: 12em;
+}
+
+#chuck-norris-div {
+    height: 14em;
+}
 
 /* Title Page */
 .reveal .supertitle, .reveal .title, .reveal .author,
@@ -72,25 +163,21 @@ html.img-right div.slide-background.present {
     font-size: 12pt;
 }
 
-
 /* Headings */
-
-/* Images */
-.heatmap {
-    width: 45%;
+.reveal h1.chapter-title {
+    letter-spacing: normal;
 }
 
-.chapter {
-    ;
+.reveal h1.chapter-title + img {
+    width: 25%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
-/* Tables */
-table {
-    width: 95%;
-}
-
-table.narrow {
-    width: 50%;
+.reveal h1, .reveal h2, .reveal h3, .reveal h4 {
+    font-family: Junicode, "Latin Modern Roman", Times, serif;
+    color: #00305e;
 }
 
 /* Example */
@@ -108,4 +195,10 @@ p.annotator1 {
 
 p.annotator2 {
     color: #0000cd;
+}
+
+/* Quotes */
+.reveal div.quote {
+    font-style: italic;
+    text-align: right;
 }
