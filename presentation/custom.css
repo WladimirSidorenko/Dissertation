@@ -24,16 +24,26 @@ div .text_cell_render {
     margin-bottom: 1em;
 }
 
+#annotation-scheme-title:first-child {
+    margin-bottom: 0em;
+}
+
 div.cell {
     padding: 0px;
 }
 
 .reveal .inner_cell ul li {
-    padding-bottom: 1em;
+    padding-bottom: 0.5em;
 }
 
 .reveal p {
     margin: 0;
+}
+
+.reveal .slide-number {
+    background-color: #FFF;
+    color: #00305e;
+    font-weight: bold;
 }
 
 /* Animation */
@@ -57,7 +67,7 @@ div.cell {
     color: #00305e;
 }
 
-.translation {
+.reveal .translation {
     font-style: italic;
 }
 
@@ -179,9 +189,13 @@ ul li .examples .right {
     width: 100%;
 }
 
-
 .fragment.visible:not(.current-fragment) .hide-on-next-fragment {
     animation: removed-item-animation 0.4s cubic-bezier(0.6, -0.05, 0.9, 0.9) forwards;
+}
+
+.fragment.visible:not(.current-fragment) .fade-out-on-next-fragment {
+    opacity: 0;
+    display: none;
 }
 
 ul li div.examples {
@@ -199,6 +213,20 @@ ul li div.examples {
 #merkel-twitter-div {
     height: 15em;
     margin-top: 2em;
+}
+
+.reveal .cell.left, .reveal .cell.right {
+    width: 45%;
+    display: inline-block;
+    margin: auto;
+    text-align: center;
+}
+
+.reveal div.row {
+    width: 85%;
+    margin-top: 1em;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Title Page */
@@ -230,6 +258,7 @@ ul li div.examples {
 .reveal .author p.alternative-name {
     vertical-align: middle;
     font-size: 14pt;
+    margin-bottom: 1em;
 }
 
 .reveal .title {
@@ -248,6 +277,7 @@ ul li div.examples {
 }
 
 .reveal .institution {
+    margin-top: 1em;
     padding-top: 0%;
     padding-bottom: 0%;
 }
@@ -278,13 +308,33 @@ ul li div.examples {
     background-color: #FFF;
     border: 3px solid #f59c00;
     width: 85%;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
 }
 
 .reveal div.example div.title {
-    padding: 0.3em 0 0.3em 0.6em;
+    padding: 0.2em 0 0.3em 0.6em;
     font-size: 20pt;
     text-align: left;
+}
+
+.reveal div.example .annotator1,
+.reveal div.example .annotator2 {
+    font-weight: bold;
+    font-size: 15pt;
+    text-align: left;
+}
+
+.reveal div.example .annotator1 {
+    padding: 0em 0.5em 0.3em 0.8em;
+    color: #cd0000;
+}
+
+.reveal div.example .annotator2 {
+    padding: 0.75em 0.5em 0.3em 0.8em;
+    color: mediumblue;
 }
 
 .reveal div.example div.tweet,
@@ -299,22 +349,168 @@ ul li div.examples {
     color: #707070;
 }
 
-.reveal div.example div span.tag {
+.reveal div.example div span.label {
     font-weight: bold;
     font-style: normal;
     margin-right: 0.75em;
+    color: #00305e;
 }
 
-p.annotator1, p.annotator2 {
-    font: bold;
+/* tags */
+.reveal div.example span.tag {
+    font-weight: bold;
+    font-style: normal;
+    font-size: small;
+    vertical-align: sub;
 }
 
-p.annotator1 {
-    color: #cd0000;
+/* sentiment tag */
+.reveal div.example div span.sentiment {
+    color: #483D8B;
 }
 
-p.annotator2 {
-    color: #0000cd;
+.reveal div.example div span.sentiment::before {
+    content: "[";
+    color: #483D8B;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.reveal div.example div span.sentiment::after {
+    content: "]";
+    color: #483D8B;
+    font-weight: bold;
+    font-style: normal;
+}
+
+.reveal div.example span.sentiment + span.tag {
+    color: #483D8B;
+}
+
+/* source tag */
+.reveal div.example div span.source {
+    color: #8B6508;
+}
+
+.reveal div.example div span.source::before {
+    content: "[";
+    color: #8B6508;
+    font-style: normal;
+}
+
+.reveal div.example div span.source::after {
+    content: "]";
+    color: #8B6508;
+    font-style: normal;
+}
+
+.reveal div.example span.source + span.tag {
+    color: #8B6508;
+}
+
+/* target tag */
+.reveal div.example div span.target {
+    color: darkred;
+}
+
+.reveal div.example div span.target::before {
+    content: "[";
+    color: darkred;
+    font-style: normal;
+}
+
+.reveal div.example div span.target::after {
+    content: "]";
+    color: darkred;
+    font-style: normal;
+}
+
+.reveal div.example span.target + span.tag {
+    color: darkred;
+}
+
+/* polar-term tag */
+.reveal div.example div span.polar-term {
+    color: #f59c00;
+}
+
+.reveal div.example div span.polar-term::before {
+    content: "[";
+    color: #f59c00;
+    font-style: normal;
+}
+
+.reveal div.example div span.polar-term::after {
+    content: "]";
+    color: #f59c00;
+    font-style: normal;
+}
+
+.reveal div.example span.polar-term + span.tag {
+    color: #f59c00;
+}
+
+/* intensifier tag */
+.reveal div.example div span.intensifier {
+    color: green;
+}
+
+.reveal div.example div span.intensifier::before {
+    content: "[";
+    color: green;
+    font-style: normal;
+}
+
+.reveal div.example div span.intensifier::after {
+    content: "]";
+    color: green;
+    font-style: normal;
+}
+
+.reveal div.example span.intensifier + span.tag {
+    color: green;
+}
+
+/* downtoner tag */
+.reveal div.example div span.downtoner {
+    color: cyan;
+}
+
+.reveal div.example div span.downtoner::before {
+    content: "[";
+    color: cyan;
+    font-style: normal;
+}
+
+.reveal div.example div span.downtoner::after {
+    content: "]";
+    color: cyan;
+    font-style: normal;
+}
+
+.reveal div.example span.downtoner + span.tag {
+    color: cyan;
+}
+
+/* negation tag */
+.reveal div.example div span.negation {
+    color: blue;
+}
+
+.reveal div.example div span.negation::before {
+    content: "[";
+    color: blue;
+    font-style: normal;
+}
+
+.reveal div.example div span.negation::after {
+    content: "]";
+    color: blue;
+    font-style: normal;
+}
+
+.reveal div.example span.negation + span.tag {
+    color: blue;
 }
 
 /* Quotes */

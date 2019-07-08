@@ -13683,12 +13683,12 @@ data from casual everyday conversations without any prefiltering.</p>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>Polar Terms</strong> (e.g., "gut" <em>"good"</em>, "schlecht" <em>"bad"</em>, "weinen" <em>"to cry"</em>, etc.);</li>
+<li><strong>Polar Terms</strong> (e.g., "gut" <em>good</em>, "schlecht" <em>bad</em>, "weinen" <em>to cry</em>, etc.);</li>
 </ul>
 <div class="examples hide-on-next-fragment">
     <div class="example">
         <div class="title">Example 2.1</div>
-        <div class="tweet"><span class="tag">Tweet:</span>RT @ProSieben: Gutes Datum, gutes Omen? Der neue #Papst ist am 13.M&#228;rz 2013 gew&#228;hlt.</div>
+        <div class="tweet"><span class="label">Tweet:</span>RT @ProSieben: Gutes Datum, gutes Omen? Der neue #Papst ist am 13.M&#228;rz 2013 gew&#228;hlt.</div>
         <div class="translation">RT @ProSieben: Good date, good omen? The new #Pope was elected on March 13, 2013.</div>
     </div>
 </div>
@@ -13714,7 +13714,7 @@ data from casual everyday conversations without any prefiltering.</p>
 <div class="examples hide-on-next-fragment">
     <div class="example">
         <div class="title">Example 2.2</div>
-        <div class="tweet"><span class="tag">Tweet:</span>RT "@GrumpyMerkel: :-[ ist das offizielle Smiley der Bundeskanzlerin der Bundesrepublik Deutschland" :-)</div>
+        <div class="tweet"><span class="label">Tweet:</span>RT "@GrumpyMerkel: :-[ ist das offizielle Smiley der Bundeskanzlerin der Bundesrepublik Deutschland" :-)</div>
         <div class="translation">RT "@GrumpyMerkel: :-[ is the official smiley of the federal chancellor of the German Federal Republic" :-)</div>
     </div>
 </div>
@@ -13730,7 +13730,7 @@ data from casual everyday conversations without any prefiltering.</p>
 <div class="examples hide-on-next-fragment">
     <div class="example">
         <div class="title">Example 2.3</div>
-        <div class="tweet"><span class="tag">Tweet:</span>Mehr Katz3n in der Politik und im Landtag NRW #opennrw #opennrw13 http://t.co/0nBTtG8EWW</div>
+        <div class="tweet"><span class="label">Tweet:</span>Mehr Katz3n in der Politik und im Landtag NRW #opennrw #opennrw13 http://t.co/0nBTtG8EWW</div>
         <div class="translation">More cats in the politics and in the state parliament of NRW #opennrw #opennrw13 http://t.co/0nBTtG8EWW</div>
     </div>
 </div>
@@ -13798,7 +13798,7 @@ data from casual everyday conversations without any prefiltering.</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Annotation-Scheme">Annotation Scheme<a class="anchor-link" href="#Annotation-Scheme">&#182;</a></h1>
+<h1 id="annotation-scheme-title"> Annotation Scheme</h1>
 </div>
 </div>
 </div><div class="fragment">
@@ -13806,36 +13806,21 @@ data from casual everyday conversations without any prefiltering.</p>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>sentiments</strong>, which were defined as <em>polar subjective evaluative opinions about people, entities, or events</em>, e.g.:
-<pre>
- <sentiment>Mir hat die letzte Folge von Games of Thrones gar nicht gefallen.</sentiment>
- <translation><sentiment>I absolutely didn't like the last episode of Game of Thrones.</sentiment></translation>
-</pre>
-With this element, we associated the following types of attributes, which also had to be specified by the experts:<ul>
-<li><strong><em>polarity</em></strong> with possible values <em>positive</em>, <em>negative</em>, and <em>comparative</em>;</li>
-<li><strong><em>intensity</em></strong> with possible values <em>weak</em>, <em>medium</em>, and <em>strong</em>;</li>
-<li>as well as the boolean attribute <strong>*<em>sarcasm</em></strong>.</li>
-</ul>
-</li>
-</ul>
-
-</div>
-</div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>targets</strong>, which are entities or events evaluated by opinions.
-<pre>
- [Mir hat [die letzte Folge von Games of Thrones]_target gar nicht gefallen.]_sentiment
- [I absolutely didn't like [the last episode of Game of Thrones]_target.]_sentiment
-</pre>
-This tag has the following attributes:<ul>
-<li>the boolean property <strong><em>preferred</em></strong>, which, however, only had to be used in comparative opinions;</li>
-<li>and two link-attributes <strong><em>anaph-ref</em></strong>, which connects an a pronomial target to its antecedent, and <strong><em>sentiment-ref</em></strong>, which links the target to its respective opinion if the target is located at the intersection of two sentiments.</li>
-</ul>
-</li>
+<li><strong>sentiments</strong>, which were defined as <em>polar subjective evaluative opinions about people, entities, or events</em>, e.g.:<div class="fade-out-on-next-fragment">
+  <div class="example">
+       <div class="title">Example 2.4</div>
+       <div class="tweet"><span class="label">Tweet:</span><span class="sentiment">Mir hat die letzte Folge von Games of Thrones gar nicht gefallen.</span><span class="tag">sentiment</span></div>
+       <div class="translation"><span class="sentiment">I absolutely didn't like the last episode of Game of Thrones.</span><span class="tag">sentiment</span></div>
+  </div>
+  <p>
+    <strong>Attributes</strong>:
+  </p>
+  <ul>
+  <li><strong>polarity</strong>: <em>positive</em>, <em>negative</em>, and <em>comparative</em>;</li>
+  <li><strong>intensity</strong>: <em>weak</em>, <em>medium</em>, and <em>strong</em>;</li>
+  <li><strong>sarcasm</strong>: <em>true</em>, <em>false</em>.</li>
+  </ul>
+  </div></li>
 </ul>
 
 </div>
@@ -13845,17 +13830,49 @@ This tag has the following attributes:<ul>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>sources</strong>, which mark the immediate authors of opinions.
-<pre>
- [[Mir]_source hat [die letzte Folge von Games of Thrones]_target gar nicht gefallen.]_sentiment
- [[I]_source absolutely didn't like [the last episode of Game of Thrones]_target.] sentiment
-</pre>
-and have only one possible attributes, <strong><em>sentiment-ref</em></strong>, defined in the same way as above.</li>
+<li><strong>targets</strong>, which are <em>entities or events evaluated by opinions</em>.<div class="fade-out-on-next-fragment">
+    <div class="example">
+        <div class="title">Example 2.5</div>
+        <div class="tweet"><span class="label">Tweet:</span>Mir hat <span class="target">die letzte Folge von Games of Thrones</span><span class="tag">target</span> gar nicht gefallen.</div>
+        <div class="translation">I absolutely didn't like <span class="target">the last episode of Game of Thrones</span><span class="tag">target</span>.</div>
+    </div>
+  <p>
+    <strong>Attributes</strong>:
+  </p>
+  <ul>
+      <li><strong>preferred</strong>: <em>true</em>, <em>false</em>;</li>
+      <li><strong>anaph-ref</strong>: &xrarr;;</li>
+      <li><strong>sentiment-ref</strong>: &xrarr;.</li>
+  </ul>
+  </div></li>
 </ul>
 
 </div>
 </div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>sources</strong>, which mark the immediate <em>authors of the opinions</em>.<div class="fade-out-on-next-fragment">
+    <div class="example">
+        <div class="title">Example 2.6</div>
+        <div class="tweet"><span class="label">Tweet:</span><span class="source">Mir</span><span class="tag">source</span> hat die letzte Folge von Games of Thrones gar nicht gefallen.</div>
+        <div class="translation"><span class="source">I</span><span class="tag">source</span> absolutely didn't like the last episode of Game of Thrones.</div>
+    </div>
+  <p>
+    <strong>Attributes</strong>:
+  </p>
+  <ul>
+    <li><strong>sentiment-ref</strong>: &xrarr;.</li>
+  </ul>
+  </div></li>
+</ul>
+
 </div>
+</div>
+</div><aside class="notes">
+
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -13863,27 +13880,30 @@ and have only one possible attributes, <strong><em>sentiment-ref</em></strong>, 
 
 </div>
 </div>
-</div></div><div class="fragment">
+</div>
+</aside></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong><em>polar terms</em></strong>, which are defined as words or idioms that have a distinguishable evaluative
-lexical meaning (e.g., "ekelhaft" [<em>disgusting</em>], "lieben" [<em>to love</em>], "Held" [<em>hero</em>], "wie die Pest meiden" [<em>to
-avoid like the pest</em>]).
-<pre>
- [[Mir]_source hat [die letzte Folge von Games of Thrones]_target gar nicht [gefallen]_polar_term.]_sentiment
- [[I]_source absolutely didn't [like]_polar_term [the last episode of Game of Thrones]_target.] sentiment
-</pre>
-The attributes of these elements are:<ul>
-<li>polarity (<em>positive</em>, <em>negative</em>);</li>
-<li>intensity (<em>weak</em>, <em>medium</em>, <em>strong</em>);</li>
-<li>sarcasm (<em>true</em>, <em>false</em>);</li>
-<li>subjective-fact (<em>true</em>, <em>false</em>);</li>
-<li>uncertain (<em>true</em>, <em>false</em>);</li>
-<li>sentiment-ref.</li>
-</ul>
-</li>
+<li><strong>polar terms</strong>, which were defined as <em>words or idioms that have a distinguishable evaluative lexical meaning</em> (e.g., "ekelhaft" <em>disgusting</em>, "lieben" <em>to love</em>, "Held" <em>hero</em>, "wie die Pest meiden" <em>to avoid like the pest</em>).<div class="fade-out-on-next-fragment">
+ <div class="example">
+     <div class="title">Example 2.7</div>
+     <div class="tweet"><span class="label">Tweet:</span>Mir hat die letzte Folge von Games of Thrones gar nicht <span class="polar-term">gefallen</span><span class="tag">polar-term</span>.</div>
+     <div class="translation">I absolutely didn't <span class="polar-term">like</span><span class="tag">polar-term</span> the last episode of Game of Thrones.</div>
+ </div>
+  <p>
+    <strong>Attributes</strong>:
+  </p>
+  <ul>
+  <li><strong>polarity</strong>: <em>positive</em>, <em>negative</em>;</li>
+  <li><strong>intensity</strong>: <em>weak</em>, <em>medium</em>, <em>strong</em>;</li>
+  <li><strong>sarcasm</strong>: <em>true</em>, <em>false</em>;</li>
+  <li><strong>subjective-fact</strong>: <em>true</em>, <em>false</em>;</li>
+  <li><strong>uncertain</strong>: <em>true</em>, <em>false</em>;</li>
+  <li><strong>sentiment-ref</strong>: &xrarr;.</li>
+  </ul>
+ </div></li>
 </ul>
 
 </div>
@@ -13893,12 +13913,20 @@ The attributes of these elements are:<ul>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong><em>intensifiers</em></strong> and <strong><em>diminishers</em></strong> are elements that increase (reduce) the expressivity and subjective sense of a polar term (e.g., "sehr" [<em>very</em>], "super" [<em>super</em>], "stark" [<em>strongly</em>], "kaum" [<em>hardly</em>]).
-The attributes of these elements are:<ul>
-<li>degree (<em>medium</em>, <em>strong</em>);</li>
-<li>polar-term-ref.</li>
-</ul>
-</li>
+<li><strong>intensifiers</strong> and <strong>diminishers</strong> are <em>elements that increase (reduce) the expressivity and subjective sense of a polar term</em> (e.g., "sehr" <em>very</em>, "super" <em>super</em>, "stark" <em>strongly</em>, "kaum" <em>hardly</em>);<div class="fade-out-on-next-fragment">
+ <div class="example">
+     <div class="title">Example 2.8</div>
+     <div class="tweet"><span class="label">Tweet:</span>Mir hat die letzte Folge von Games of Thrones <span class="intensifier">gar</span><span class="tag">intensifier</span> nicht gefallen.</div>
+     <div class="translation">I <span class="intensifier">absolutely</span><span class="tag">intensifier</span> didn't like the last episode of Game of Thrones.</div>
+ </div>
+  <p>
+    <strong>Attributes</strong>:
+  </p>
+  <ul>
+  <li><strong>degree</strong>: <em>medium</em>, <em>strong</em>;</li>
+  <li><strong>polar-term-ref</strong>: &xrarr;.</li>
+  </ul>
+</div></li>
 </ul>
 
 </div>
@@ -13908,15 +13936,19 @@ The attributes of these elements are:<ul>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>and, finally, <strong><em>negations</em></strong>, which are grammatical or lexical means that reverse the semantic orientation of a polar term. (e.g., "nicht" [<em>not</em>]).
-<pre>
- [[Mir]_source hat [die letzte Folge von Games of Thrones]_target gar [nicht]_negation [gefallen]_polar_term.]_sentiment
- [[I]_source absolutely did[n't]_negation [like]_polar_term [the last episode of Game of Thrones]_target.] sentiment
-</pre>
-The only attribute of this element is:<ul>
-<li>polar-term.</li>
-</ul>
-</li>
+<li>and, finally, <strong><em>negations</em></strong>, which are grammatical or lexical means that reverse the semantic orientation of a polar term. (e.g., "nicht" <em>not</em>).<div class="hide-on-next-fragment">
+ <div class="example">
+ <div class="title">Example 2.9</div>
+ <div class="tweet"><span class="tag">Tweet:</span>Mir hat die letzte Folge von Games of Thrones gar <span class="negation">nicht</span><span class="tag">negation</span> gefallen.</div>
+ <div class="translation">I absolutely did<span class="negation">n't</span><span class="tag">negation</span> like the last episode of Game of Thrones.</div>
+ </div>
+  <p>
+    <strong>Attributes</strong>:
+  </p>
+  <ul>
+<li><strong>polar-term-ref</strong>: &xrarr;.</li>
+  </ul>
+</div></li>
 </ul>
 
 </div>
@@ -13925,7 +13957,7 @@ The only attribute of this element is:<ul>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h1><p>For estimating the inter-annotator agreement, I adopted the popular $\kappa$ metric (Cohen, 1960):</p>
+<h1 id="Inter-Annotator-Agreement">Inter-Annotator Agreement<a class="anchor-link" href="#Inter-Annotator-Agreement">&#182;</a></h1><p>For estimating the inter-annotator agreement, I adopted the popular $\kappa$ metric (Cohen, 1960):</p>
 $$\kappa = \frac{p_o - p_c}{1 - p_c},$$<p>where $p_o$ denotes the observed agreement and $p_c$ is the agreement by chance.</p>
 
 </div>
@@ -13955,42 +13987,65 @@ second annotation respectively, i.e., $c_1 = \frac{A_1}{T}$ and $c_2 = \frac{A_2
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><p class="annotator1">Annotation 1:</p>
-[Mein Vater hasst [dieses schöne Buch] sentiment .] sentiment</p>
-<p>[My father hates [this nice book] sentiment .] sentiment</p>
-<p><p class="annotator2">Annotation 2:</p>
-Mein [Vater hasst [dieses schöne Buch] sentiment .]_sentiment</p>
-<p>My [father hates [this nice book] sentiment .]_sentiment</p>
+<div class="example">
+    <div class="title">Example 2.10</div>
+    <div class="annotator1">Annotation 1:</div>
+    <div class="tweet"><span class="label">Tweet:</span><span class="sentiment">Mein Vater hasst <span class="sentiment">dieses schöne Buch</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+    <div class="translation"><span class="sentiment">My father hates <span class="sentiment">this nice book</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+    <div class="annotator2">Annotation 2:</div>
+    <div class="tweet"><span class="label">Tweet:</span>Mein <span class="sentiment">Vater hasst <span class="sentiment">dieses schöne Buch</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+    <div class="translation">My <span class="sentiment">father hates <span class="sentiment">this nice book</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+</div><div class="row">
+<div class="cell left">
+<strong>Binary $\kappa$</strong>
+<p>
+A$_1$ = $10$
+</p>
+<p>
+A$_2$ = $9$
+</p>
+<p>
+M$_1$ = A$_1$
+</p>
+<p>
+M$_2$ = A$_2$
+</p>
+<p>
+$\kappa = 1$
+</p>
+</div>
+<div class="cell right">
+<strong>Proportional $\kappa$</strong>
+<p>
+A$_1 = 7$
+</p>
+<p>
+A$_2 = 6$
+</p>
+<p>
+M$_1 = 6$
+</p>
+<p>
+M$_2 = 6$
+</p>
+<p>
+$\kappa$ = $0$
+</p>
+</div>
+</div>
+</div>
+</div>
+</div><aside class="notes">
 
-</div>
-</div>
-</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Binary $\kappa$</strong></p>
-<p>$A_1 = 10$</p>
-<p>$A_2 = 10$</p>
-<p>$M_1 = A_1$</p>
-<p>$M_2 = A_2$</p>
-<p>$\kappa = 1$</p>
+<p>To address these issues, we introduced two different agreement metrics---binary and proportional kappa.  With the former variant, we counted tokens belonging to overlapping annotation spans of the same class multiple times (\ie{} $A_1$ and $A_2$ would amount to $10$ and $9$ respectively in the above tweet) and considered all tokens belonging to the given annotated element as matching if this span agreed with the annotation from the other expert on at least one token (\ie{} $M_1$ and $M_2$ would have the same values as $A_1$ and $A_2$ in this case).  With the latter metric, every labeled token was counted only once (\ie{} the numbers of labeled words in the first and second annotations would be $7$ and $6$ respectively), and we only calculated the actual number of tokens with matching labels when computing the $M$ scores (\ie{} both $M_1$ and $M_2$ would be equal to $6$).</p>
 
 </div>
 </div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Proportional $\kappa$</strong></p>
-<p>$A_1 = 7$</p>
-<p>$A_2 = 6$</p>
-<p>$M_1 = 6$</p>
-<p>$M_2 = 6$</p>
-<p>$\kappa = 0$</p>
-
 </div>
-</div>
-</div></div></section><section>
+</aside></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14003,15 +14058,15 @@ Mein [Vater hasst [dieses schöne Buch] sentiment .]_sentiment</p>
     <td colspan=5>Proportional $\kappa$</td>
           </tr>
 <tr>
-<td>$M_1$ </td>
-<td>$A_1$ </td>
-<td>$M_2$ </td>
-<td>$A_2$ </td>
+<td>M$_1$ </td>
+<td>A$_1$ </td>
+<td>M$_2$ </td>
+<td>A$_2$ </td>
 <td>$\kappa$</td>
-<td>$M_1$</td>
-<td>$A_1$</td>
-<td>$M_2$</td>
-<td>$A_2$</td>
+<td>M$_1$</td>
+<td>A$_1$</td>
+<td>M$_2$</td>
+<td>A$_2$</td>
 <td>$\kappa$</td>
 </tr>
   </thead>
@@ -14124,15 +14179,15 @@ Mein [Vater hasst [dieses schöne Buch] sentiment .]_sentiment</p>
     <td colspan=5>Proportional $\kappa$</td>
           </tr>
 <tr>
-<td>$M_1$ </td>
-<td>$A_1$ </td>
-<td>$M_2$ </td>
-<td>$A_2$ </td>
+<td>M$_1$ </td>
+<td>A$_1$ </td>
+<td>M$_2$ </td>
+<td>A$_2$ </td>
 <td>$\kappa$</td>
-<td>$M_1$</td>
-<td>$A_1$</td>
-<td>$M_2$</td>
-<td>$A_2$</td>
+<td>M$_1$</td>
+<td>A$_1$</td>
+<td>M$_2$</td>
+<td>A$_2$</td>
 <td>$\kappa$</td>
 </tr>
   </thead>
@@ -14245,15 +14300,15 @@ Mein [Vater hasst [dieses schöne Buch] sentiment .]_sentiment</p>
     <td colspan=5>Proportional $\kappa$</td>
           </tr>
 <tr>
-<td>$M_1$ </td>
-<td>$A_1$ </td>
-<td>$M_2$ </td>
-<td>$A_2$ </td>
+<td>M$_1$ </td>
+<td>A$_1$ </td>
+<td>M$_2$ </td>
+<td>A$_2$ </td>
 <td>$\kappa$</td>
-<td>$M_1$</td>
-<td>$A_1$</td>
-<td>$M_2$</td>
-<td>$A_2$</td>
+<td>M$_1$</td>
+<td>A$_1$</td>
+<td>M$_2$</td>
+<td>A$_2$</td>
 <td>$\kappa$</td>
 </tr>
   </thead>
@@ -14385,48 +14440,56 @@ Mein [Vater hasst [dieses schöne Buch] sentiment .]_sentiment</p>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Qualitative-Analysis">Qualitative Analysis<a class="anchor-link" href="#Qualitative-Analysis">&#182;</a></h1><div class="example">
-  <p class="annotator1">Annotation 1:</p>
-  @TinaPannes immerhin ist die #afd nicht dabei ,
-  <div class="translation">@TinaPannes anyway the #afd is not there ,</div><p><p class="annotator2">Annotation 2:</p>
-  @TinaPannes <sentiment><target>immerhin ist die #afd nicht dabei</target> ,</sentiment></p>
-<div class="translation">@TinaPannes <sentiment><target>anyway the #afd is not there</target> ,</sentiment></div>
+<h1 id="Qualitative-Analysis">Qualitative Analysis<a class="anchor-link" href="#Qualitative-Analysis">&#182;</a></h1>
 </div>
 </div>
-</div>
-</div></section><section>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<example>
-<p class="annotator1">Annotation 1:</p>
-<sentiment>Koalition wirft der SPD <target>Blockadehaltung</target> vor</sentiment>
-<div class="translation"><sentiment>Coalition accuses the SPD of <target>blocking politics</target></sentiment></div>
-
-<p class="annotator2">Annotation 2:</p>
-<sentiment>Koalition wirft [der SPD] target Blockadehaltung vor</sentiment>
-<div class="translation"><sentiment>Coalition accuses [the SPD] target of blocking politics</sentiment></div>
-</example>
+<div class="hide-on-next-fragment">
+<div class="example">
+  <div class="title">Example 2.11</div>
+  <div class="annotator1">Annotation 1:</div>
+  <div class="tweet"><span class="label">Tweet:</span>@TinaPannes immerhin ist die #afd nicht dabei 🙂</div>
+  <div class="translation">@TinaPannes anyway the #afd is not there <span style="font-style:normal;">🙂</span></div><div class="annotator2">Annotation 2:</div>
+  <div class="tweet"><span class="label">Tweet:</span>@TinaPannes <span class="sentiment"><span class="target">immerhin ist die #afd nicht dabei</span><span class="tag">target</span> 🙂</span><span class="tag">sentiment</span></div>
+  <div class="translation">@TinaPannes <span class="sentiment"><span class="target">anyway the #afd is not there</span><span class="tag">target</span> <span style="font-style:normal;">🙂</span></span><span class="tag">sentiment</span></div>
 </div>
 </div>
-</div></section><section>
+</div>
+</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<example>
-<p class="annotator1">Annotation 1:</p>
-Syrien vor dem Angriff&mdash;bringen diese Bomben den Frieden?
-
-<div class="translation">Syria facing an attack&mdash;will these bombs bring peace?</div>
-
-<p class="annotator2">Annotation 2:</p>
-Syrien vor dem <polarterm>Angriff</polarterm>&mdash;bringen diese <polarterm>Bomben</polarterm> polar-term den [Frieden] polar-term ?
-
-<div class="translation">Syria facing an <polarterm>attack</polarterm>&mdash;will these <polarterm>bombs</polarterm> polar-term bring [peace] polar-term ?</div>
-</example>
+<div class="hide-on-next-fragment">
+<div class="example">
+<div class="title">Example 2.12</div>
+<div class="annotator1">Annotation 1:</div>
+<div class="tweet"><span class="label">Tweet:</span><span class="sentiment">Koalition wirft der SPD <span class="target">Blockadehaltung</span><span class="tag">target</span> vor</span><span class="tag">sentiment</span></div>
+<div class="translation"><span class="sentiment">Coalition accuses the SPD of <span class="target">blocking politics</span><span class="tag">target</span></span><span class="tag">sentiment</span></div><div class="annotator2">Annotation 2:</div>
+<div class="tweet"><span class="label">Tweet:</span><span class="sentiment">Koalition wirft <span class="target">der SPD</span><span class="tag">target</span> target Blockadehaltung vor</span><span class="tag">sentiment</span></div>
+<div class="translation"><span class="sentiment">Coalition accuses <span class="target">the SPD</span><span class="tag">target</span> of blocking politics</span><span class="tag">sentiment</span></div>
 </div>
 </div>
-</div></section><section>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="example">
+<div class="title">Example 2.13</div>
+<div class="annotator1">Annotation 1:</div>
+<div class="tweet"><span class="label">Tweet:</span>Syrien vor dem Angriff&mdash;bringen diese Bomben den Frieden?</div>
+<div class="translation">Syria facing an attack&mdash;will these bombs bring peace?</div><div class="annotator2">Annotation 2:</div>
+<div class="tweet"><span class="label">Tweet:</span>Syrien vor dem <span class="polar-term">Angriff</span><span class="tag">polar-term</span>&mdash;bringen diese <span class="polar-term">Bomben</span><span class="tag">polar-term</span> polar-term den <span class="polar-term">Frieden</span><span class="tag">polar-term</span> ?</div>
+<div class="translation">Syria facing an <span class="polar-term">attack</span><span class="tag">polar-term</span>&mdash;will these <span class="polar-term">bombs</span><span class="tag">polar-term</span> bring <span class="polar-term">peace</span><span class="tag">polar-term</span> ?</div>
+</div>
+</div>
+</div>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14481,14 +14544,18 @@ Syrien vor dem <polarterm>Angriff</polarterm>&mdash;bringen diese <polarterm>Bom
 agreement scores of sentiments and polar terms</caption>
     <thead>
 <tr>
-<td rowspan="2">Selection Criteria</td>
+<td rowspan="3">Selection Criteria</td>
 <td colspan="4">Correlation Coefficients</td>
 </tr>
 <tr>
+<td colspan="2">Sentiments</td>
+<td colspan="2">Polar Terms</td>
+</tr>
+<tr>
 <td> # of Elements </td>
-<td>$\rho$ </td>
+<td>agreement</td>
 <td> # of elements </td>
-<td>$\rho$</td>
+<td>agreement</td>
 </tr>
 </thead>
 <tbody>
@@ -14587,7 +14654,7 @@ agreement scores of sentiments and polar terms</caption>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>As it turned out, marking these elements poses a significant challenge even to professional linguists, with their mutual inter-annotator agreement on sentiments hardly reaching 35% (which is generally considered as a low IAA);</li>
+<li>At the beginning, the mutual <strong>inter-annotator agreement</strong> of the experts could hardly reach <strong>35%</strong> (low IAA);</li>
 </ul>
 
 </div>
@@ -14597,7 +14664,7 @@ agreement scores of sentiments and polar terms</caption>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>These difficulties, however, can be largely reduced if we let the annotators resolve their contradicting  cases (the IAA on sentiments, in this case, rises to);</li>
+<li>But it could be significantly improved by applying an <strong>adjudication step</strong>, which increased the IAA score to $\approx$ <strong>59%</strong>;</li>
 </ul>
 
 </div>
@@ -14607,17 +14674,7 @@ agreement scores of sentiments and polar terms</caption>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>After adjudication, the inter-rater reliability remains at a constantly high level (sentiment IAA $\approx$ 59%);</li>
-</ul>
-
-</div>
-</div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Finally, we could see a significant correlation between the initial selection criteria and the number and reliability of annotated sentiments.</li>
+<li>Last but not least, we could see a significant <strong>correlation between the initial selection criteria and the number and reliability of annotated opinions and their elements</strong>.</li>
 </ul>
 
 </div>
@@ -14626,15 +14683,16 @@ agreement scores of sentiments and polar terms</caption>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 class="chapter">Chapter III: Lexicons</h1>
+<p><h1 class="chapter-title animated">Chapter III: Lexicons</h1>
+<img src="img/lexicon.jpg" alt="Sentiment Lexicon"></p>
+
 </div>
 </div>
-</div></section></section><section><section>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Lexicon-Types">Lexicon Types<a class="anchor-link" href="#Lexicon-Types">&#182;</a></h1><p>Main types of sentiment lexicons are:</p>
-
+<h1 id="Lexicon-Types">Lexicon Types<a class="anchor-link" href="#Lexicon-Types">&#182;</a></h1>
 </div>
 </div>
 </div><div class="fragment">
@@ -14662,17 +14720,34 @@ agreement scores of sentiments and polar terms</caption>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>automatic:<ul>
-<li>dictionary-based;</li>
-<li>corpus-based;</li>
-<li>word-embedding&ndash;based ones.</li>
+<li><p>automatic:</p>
+<ul>
+<li><p>dictionary-based;</p>
+</li>
+<li><p>corpus-based;</p>
+</li>
+<li><p>word-embedding&ndash;based ones.</p>
+</li>
 </ul>
 </li>
 </ul>
 
 </div>
 </div>
-</div></div></section></section><section><section>
+</div></div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h1><ul>
+<li><p><strong>intrinsic</strong>;</p>
+</li>
+<li><p><strong>extrinsic</strong>.</p>
+</li>
+</ul>
+
+</div>
+</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14684,11 +14759,7 @@ agreement scores of sentiments and polar terms</caption>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>German Polarity Clues</strong> (GPC; Waltinger, 2010), which contains 10,141 polar terms
-from the English sentiment lexicons Subjectivity Clues (Wilson et al., 2005) and Sen-
-tiSpin (Takamura et al., 2005) that were automatically translated into German and
-then manually revised by the author. Apart from that, Waltinger also manually en-
-riched these translations with their frequent synonyms and 290 negated phrases; 3</li>
+<li><strong>German Polarity Clues</strong> (GPC; Waltinger, 2010), which contains <strong>10,141</strong> polar terms;</li>
 </ul>
 
 </div>
@@ -14697,16 +14768,7 @@ riched these translations with their frequent synonyms and 290 negated phrases; 
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>SentiWS</strong> (SWS; Remus et al., 2010), which includes 1,818 positively and 1,650 nega-
-tively connoted terms along with their part-of-speech tags and inflections, which results
-in a total of 32,734 word forms. As in the previous case, the authors obtained the initial
-entries for their resource by translating an English polarity list (the General Inquirer
-lexicon) and then manually correcting these translations. In addition to this, they
-expanded the translated set with words and phrases that frequently co-occurred with
-positive and negative seed terms in a corpus of 10,200 customer reviews or in the
-German Collocation Dictionary (Quasthoff, 2010); 4</li>
-</ul>
+<p>These terms were automatically obtained from the English sentiment lexicons Subjectivity Clues (Wilson et al., 2005) and SentiSpin (Takamura et al., 2005) that were automatically translated into German and then manually revised by the author. Apart from that, Waltinger also manually en riched these translations with their frequent synonyms and 290 negated phrases; 3</p>
 
 </div>
 </div>
@@ -14715,19 +14777,43 @@ German Collocation Dictionary (Quasthoff, 2010); 4</li>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>and, finally, the only the lexicon that was not obtained through translation—the
-<strong>Zurich Polarity List</strong> (ZPL; Clematide and Klenner, 2010), which features 8,000 sub-
-jective entries extracted from GermaNet synsets (Hamp and Feldweg, 1997). These
-synsets had been manually annotated by human experts with their prior polarities.
-Since the authors, however, found the number of polar adjectives obtained this way
-to be insufficient for their classification experiments, they automatically enriched this
-lexicon with more attributive terms, using the collocation method of Hatzivassiloglou
-and McKeown (1997).</li>
+<li><strong>SentiWS</strong> (SWS; Remus et al., 2010), which includes <strong>1,818</strong> positive and <strong>1,650</strong> negative entries (<strong>32,734</strong> word forms);</li>
 </ul>
 
 </div>
 </div>
-</div></div></section></section><section><section>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>As in the previous case, the authors obtained the initial entries for their resource by translating an English polarity list (the General Inquirer lexicon) and then manually correcting these translations. In addition to this, they expanded the translated set with words and phrases that frequently co-occurred with positive and negative seed terms in a corpus of 10,200 customer reviews or in the
+German Collocation Dictionary (Quasthoff, 2010);</p>
+
+</div>
+</div>
+</div>
+</aside></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>the <strong>Zurich Polarity List</strong> (ZPL; Clematide and Klenner, 2010), which features <strong>8,000</strong> subjective terms extracted from <strong>GermaNet</strong> synsets (Hamp and Feldweg, 1997).</li>
+</ul>
+
+</div>
+</div>
+</div><aside class="notes">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>These synsets had been manually annotated by human experts with their prior polarities. Since the authors, however, found the number of polar adjectives obtained this way to be insufficient for their classification experiments, they automatically enriched this lexicon with more attributive terms, using the collocation method of Hatzivassiloglou and McKeown (1997).</p>
+
+</div>
+</div>
+</div>
+</aside></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14738,19 +14824,19 @@ and McKeown (1997).</li>
 <td colspan="3">Positive Expressions</td>
 <td colspan="3">Negative Expressions</td>
 <td colspan="3">Neutral Terms</td>
-<td rowspan="2">Macro-$F_1$</td>
-<td rowspan="2">Micro-$F_1$</td>
+<td rowspan="2">Macro-F$_1$</td>
+<td rowspan="2">Micro-F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 </tr>
 </thead>
 <tr>
@@ -14774,7 +14860,7 @@ and McKeown (1997).</li>
 <td>0.379</td>
 <td>0.484</td>
 <td>0.344</td>
-<td>0.402</td>
+<td class="best">0.402</td>
 <td>0.977</td>
 <td>0.975</td>
 <td>0.976</td>
@@ -14797,27 +14883,27 @@ and McKeown (1997).</li>
 </tr>
 <tr>
 <td>GPC $\cap$ SWS $\cap$ ZPL</td>
-<td><b>0.527</b></td>
+<td class="best">0.527</td>
 <td>0.372</td>
-<td><b>0.436</b></td>
-<td><b>0.618</b></td>
+<td class="best">0.436</td>
+<td class="best">0.618</td>
 <td>0.244</td>
 <td>0.35</td>
 <td>0.973</td>
-<td><b>0.99</b></td>
-<td><b>0.982</b></td>
-<td><b>0.589</b></td>
-<td><b>0.964</b></td>
+<td class="best">0.99</td>
+<td class="best">0.982</td>
+<td class="best">0.589</td>
+<td class="best">0.964</td>
 </tr>
 <tr>
 <td>GPC $\cup$ SWS $\cup$ ZPL</td>
 <td>0.202</td>
-<td>0.562</td>
+<td class="best">0.562</td>
 <td>0.297</td>
 <td>0.195</td>
-<td>0.532</td>
+<td class="best">0.532</td>
 <td>0.286</td>
-<td>0.985</td>
+<td class="best">0.985</td>
 <td>0.917</td>
 <td>0.95</td>
 <td>0.51</td>
@@ -14826,14 +14912,14 @@ and McKeown (1997).</li>
 </table>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Dictionary-Based-Lexicons">Dictionary-Based Lexicons<a class="anchor-link" href="#Dictionary-Based-Lexicons">&#182;</a></h1>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14843,7 +14929,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14853,7 +14939,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14863,7 +14949,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14873,7 +14959,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14883,7 +14969,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14895,19 +14981,19 @@ and McKeown (1997).</li>
 <td colspan="3">Positive Expressions</td>
 <td colspan="3">Negative Expressions</td>
 <td colspan="3">Neutral Terms</td>
-<td rowspan="2">Macro-$F_1$</td>
-<td rowspan="2">Micro-$F_1$</td>
+<td rowspan="2">Macro-F$_1$</td>
+<td rowspan="2">Micro-F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 </tr>
 </thead>
 <tr>
@@ -15063,14 +15149,14 @@ and McKeown (1997).</li>
 </table>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Corpus-Based-Lexicons">Corpus-Based Lexicons<a class="anchor-link" href="#Corpus-Based-Lexicons">&#182;</a></h1>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15080,7 +15166,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15090,7 +15176,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15100,7 +15186,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15110,7 +15196,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15122,19 +15208,19 @@ and McKeown (1997).</li>
 <td colspan="3">Positive Expressions</td>
 <td colspan="3">Negative Expressions</td>
 <td colspan="3">Neutral Terms</td>
-<td rowspan="2">Macro-$F_1$</td>
-<td rowspan="2">Micro-$F_1$</td>
+<td rowspan="2">Macro-F$_1$</td>
+<td rowspan="2">Micro-F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 <td>Precision</td>
 <td>Recall</td>
-<td>$F_1$</td>
+<td>F$_1$</td>
 </tr>
 </thead>
 <tr>
@@ -15245,7 +15331,7 @@ and McKeown (1997).</li>
 </table>
 </div>
 </div>
-</div></section></section><section><section>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15312,7 +15398,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15447,14 +15533,14 @@ and McKeown (1997).</li>
 </table>
 </div>
 </div>
-</div></section></section><section><section>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Effect-of-Word-Embeddings">Effect of Word Embeddings<a class="anchor-link" href="#Effect-of-Word-Embeddings">&#182;</a></h2>
+<h1 id="Word-Embeddings">Word Embeddings<a class="anchor-link" href="#Word-Embeddings">&#182;</a></h1>
 </div>
 </div>
-</div></section><section>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15464,7 +15550,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div></section><section>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15474,7 +15560,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div></section><section>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15484,7 +15570,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div></section><section>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15494,15 +15580,15 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Effect-of-Word-Embeddings">Effect of Word Embeddings<a class="anchor-link" href="#Effect-of-Word-Embeddings">&#182;</a></h2><p><img src="img/potts_embeddings.png" alt="t-SNE visualization of different word-embedding types"/></p>
+<h1 id="Word-Embeddings">Word Embeddings<a class="anchor-link" href="#Word-Embeddings">&#182;</a></h1><p><img src="img/potts_embeddings.png" alt="t-SNE visualization of different word-embedding types"/></p>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15524,12 +15610,12 @@ and McKeown (1997).</li>
 <td>NC</td>
 <td>0.398</td>
 <td>0.398</td>
-<td><div class="best">0.401</div></td>
+<td clas="best">0.401</td>
 <td>0.399</td>
 </tr>
 <tr>
 <td>$k$-NN</td>
-<td><div class="best">0.468</div></td>
+<td class="best">0.468</td>
 <td>0.43</td>
 <td>0.398</td>
 <td>0.392</td>
@@ -15539,11 +15625,11 @@ and McKeown (1997).</li>
 <td>0.398</td>
 <td>0.398</td>
 <td>0.404</td>
-<td><div class="best">0.409</div></td>
+<td class="best">0.409</td>
 </tr>
 <tr>
 <td>LP</td>
-<td><div class="best">0.462</div></td>
+<td class="best">0.462</td>
 <td>0.441</td>
 <td>0.398</td>
 <td>0.399</td>
@@ -15552,14 +15638,14 @@ and McKeown (1997).</li>
 </table>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Effect-of-Vector-Normalization">Effect of Vector Normalization<a class="anchor-link" href="#Effect-of-Vector-Normalization">&#182;</a></h2>
+<h1 id="Vector-Normalization">Vector Normalization<a class="anchor-link" href="#Vector-Normalization">&#182;</a></h1>
 </div>
 </div>
-</div>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15569,7 +15655,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15589,7 +15675,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15599,21 +15685,21 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Effect-of-Vector-Normalization">Effect of Vector Normalization<a class="anchor-link" href="#Effect-of-Vector-Normalization">&#182;</a></h2><table>
+<h1 id="Vector-Normalization">Vector Normalization<a class="anchor-link" href="#Vector-Normalization">&#182;</a></h1><table>
 <thead>
 <tr>
 <td rowspan="2">SLG Method</td>
 <td colspan="4">Vector Normalization</td>
 </tr>
 <tr>
-<td>mean normalization + length normalization</td>
+<td>no normalization</td>
 <td>mean normalization</td>
 <td>length normalization</td>
-<td>no normalization</td>
+<td>mean normalization + length normalization</td>
 </tr>
 </thead>
 <tbody>
@@ -15626,34 +15712,37 @@ and McKeown (1997).</li>
 </tr>
 <tr>
 <td>$k$-NN</td>
-<td>0.468</td>
+<td>0.417</td>
 <td>0.418</td>
 <td>0.467</td>
-<td>0.417</td>
+<td>0.468</td>
 </tr>
 <tr>
 <td>PCA</td>
-<td>0.398</td>
+<td>0.396</td>
 <td>0.396</td>
 <td>0.398</td>
-<td>0.396</td>
+<td>0.398</td>
 </tr>
 <tr>
 <td>LP</td>
-<td>0.462</td>
+<td>0.442</td>
 <td>0.416</td>
 <td>0.461</td>
-<td>0.442</td>
+<td>0.462</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Effect-of-Seed-Sets">Effect of Seed Sets<a class="anchor-link" href="#Effect-of-Seed-Sets">&#182;</a></h2><table>
+<h1 id="Seed-Sets">Seed Sets<a class="anchor-link" href="#Seed-Sets">&#182;</a></h1><table>
+    <caption>
+        Overview of alternative seed sets
+    </caption>
 <thead>
 <tr>
 <td>Seed Set</td>
@@ -15679,18 +15768,18 @@ and McKeown (1997).</li>
 <td>Esuli and Sebastiani (2006)</td>
 <td>16 positive, 35 negative, and 4,122 neutral terms</td>
 <td>any</td>
-<td>angenehm, ausgezeichnet, freundlich, arm, bedauernswert, dürftig</td>
+<td class="example">angenehm, ausgezeichnet, freundlich, arm, bedauernswert, dürftig</td>
 </tr>
 <tr>
 <td>Remus (2010)</td>
 <td>12 positive, 12 negative, and 10 neutral terms</td>
 <td>adjectives</td>
-<td>gut, schön, richtig, schlecht, unschön, falsch</td>
+<td class="example">gut, schön, richtig, schlecht, unschön, falsch</td>
 </tr>
 </table>
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15698,7 +15787,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15706,7 +15795,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -15714,7 +15803,7 @@ and McKeown (1997).</li>
 
 </div>
 </div>
-</div></section></section><section><section>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
