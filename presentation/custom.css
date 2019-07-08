@@ -5,6 +5,10 @@
     min-width: 0;
 }
 
+.reveal div.text_cell.rendered + div.fragment {
+    margin-top: 1em;
+}
+
 html.img-right div.slide-background.present {
     background-position: right;
 }
@@ -13,8 +17,23 @@ div .text_cell_render {
     padding: 0 0.5em 0 0.4em;	/* needed for more concise bullet lists */
 }
 
-.rendered_html h2:first-child {
-    margin-bottom: 0.636em;
+.rendered_html h1:first-child,
+.rendered_html h2:first-child,
+.rendered_html h3:first-child,
+.rendered_html h4:first-child {
+    margin-bottom: 1em;
+}
+
+div.cell {
+    padding: 0px;
+}
+
+.reveal .inner_cell ul li {
+    padding-bottom: 1em;
+}
+
+.reveal p {
+    margin: 0;
 }
 
 /* Animation */
@@ -38,21 +57,62 @@ div .text_cell_render {
     color: #00305e;
 }
 
+.translation {
+    font-style: italic;
+}
+
 /* Tables */
-table thead td {
-    font-style: bold;
+.reveal table thead tr td {
+    font-weight: bold;
+    font-style: normal;
     text-align: center;
 }
 
-table {
-    width: 95%;
+/* first cell in a row */
+.reveal table tbody tr + td {
+    text-align: left;
 }
 
-table.narrow {
+/* all other cells in the table */
+.reveal table tbody td + td {
+    text-align: center;
+}
+
+.reveal table tbody tr td.example {
+    font-size: 12px;
+}
+
+.reveal table {
+    font-size: 16px;
+    width: 95%;
+    caption-side: bottom;
+}
+
+.reveal table.narrow {
     width: 50%;
 }
 
+.reveal table caption {
+    color: #5E5E5E;
+    font-size: 17px;
+    text-align: center;
+    padding-top: 2em;
+}
+
 /* Images */
+.reveal figure figure {
+    width: 45%;
+    display: inline-block;
+    margin: 0 1em 0 1em;
+}
+
+.reveal figure figcaption {
+    text-align: center;
+    font-size: 17px;
+    color: #5E5E5E;
+    margin-top: 1em;
+}
+
 .reveal img.faded {
     box-shadow: inset 0 0 40px 16px;
 }
@@ -67,8 +127,15 @@ table.narrow {
     margin: 10px 30px;
 }
 
-.heatmap {
-    width: 45%;
+.reveal section div.text_cell_render img.heatmap {
+    width: 100%;
+    display: inline-block;
+    margin: 0.5em;
+}
+
+.reveal .examples .center img {
+    height: 100%;
+    width: auto;
 }
 
 img.fit {
@@ -87,8 +154,14 @@ img.fit {
     box-shadow: 0 0 40px 20px rgba(30, 139, 195, 1);
 }
 
+#screencapture-twitter {
+    height: 33em;
+    width: 25em;
+}
+
 #chuck-norris-div img {
-    width: 12em;
+    width: 20em;
+    margin: auto;
 }
 
 /* Divs */
@@ -100,8 +173,8 @@ ul li .examples .right {
     width: 45%;
 }
 
-ul li .examples .center {
-    height: 10em;
+.reveal section.present .examples .center {
+    height: 15em;
     margin: 5px 0px;
     width: 100%;
 }
@@ -125,6 +198,7 @@ ul li div.examples {
 
 #merkel-twitter-div {
     height: 15em;
+    margin-top: 2em;
 }
 
 /* Title Page */
@@ -200,8 +274,35 @@ ul li div.examples {
 }
 
 /* Example */
-.example {
-    background-color: gray75;
+.reveal div.example {
+    background-color: #FFF;
+    border: 3px solid #f59c00;
+    width: 85%;
+    margin: auto;
+}
+
+.reveal div.example div.title {
+    padding: 0.3em 0 0.3em 0.6em;
+    font-size: 20pt;
+    text-align: left;
+}
+
+.reveal div.example div.tweet,
+.reveal div.example div.translation {
+    padding: 0em 0.5em 0.3em 0.8em;
+    font-size: 15pt;
+    text-align: left;
+}
+
+.reveal div.example div.translation {
+    font-style: italic;
+    color: #707070;
+}
+
+.reveal div.example div span.tag {
+    font-weight: bold;
+    font-style: normal;
+    margin-right: 0.75em;
 }
 
 p.annotator1, p.annotator2 {
