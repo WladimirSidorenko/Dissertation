@@ -14730,25 +14730,47 @@ abide   positive        2
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Lexicon-Types">Lexicon Types<a class="anchor-link" href="#Lexicon-Types">&#182;</a></h1><ul>
-<li><p><strong>manual</strong>;</p>
-</li>
-<li><p><strong>semi-automatic</strong>;</p>
-</li>
-<li><p><strong>automatic</strong>.</p>
-</li>
+<h1 id="Lexicon-Types">Lexicon Types<a class="anchor-link" href="#Lexicon-Types">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>manual</strong>;</li>
 </ul>
 
 </div>
 </div>
-</div></section><section>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>semi-automatic</strong>;</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>automatic</strong>.</li>
+</ul>
+
+</div>
+</div>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h1>
 </div>
 </div>
-</div></section><section>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14758,7 +14780,7 @@ abide   positive        2
 
 </div>
 </div>
-</div></section><section>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -14768,12 +14790,23 @@ abide   positive        2
 
 </div>
 </div>
-</div></section><section>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h1><ul>
+<li><p><strong>corpus-based intrinsic:</strong>
+For each token in the corpus,</p>
 <ul>
-<li><strong>corpus-based intrinsic</strong>:.</li>
+<li>If the token is <strong>annotated as a polar term</strong> and is <strong>present in the lexicon with the same polarity</strong>, consider it as **true positive (TP);</li>
+<li>If the token is <strong>not annotated as a polar term</strong>, but is <strong>present in the lexicon</strong>, regard it as <strong>false positive (FP)</strong>;</li>
+<li>If the token is <strong>annotated as a polar term</strong>, but is <strong>absent in the lexicon or has a different polarity</strong>, consider it as **false negative (FN);</li>
+</ul>
+<p>With these metrics, we can normally estimate the <strong>precision (P)</strong> as:
+$$P = \frac{TP}{TP + FP}$$
+and the <strong>recall (R)</strong>:
+$$R = \frac{TP}{TP + FN}$$</p>
+</li>
 </ul>
 
 </div>
