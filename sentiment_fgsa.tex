@@ -440,10 +440,10 @@ successively changed in the direction of their gradient until they
 reach the minimum of the loss function.
 
 From Equation~\ref{snt:fgsa:eq:crf-ell}, we can see that the partial
-derivative of log-likelihood w.r.t. a single feature weight $w_j$ is:
+derivative of log-likelihood w.r.t\@. a single feature weight $w_j$ is:
 \begin{equation*}
   \frac{\partial}{\partial w_j}\ell =%
-  \sum_{n=1}^N\sum_{m=1}^Mf_j(x_{m}, y_{m-1}, y_{m}) -%
+  \sum_{n=1}^N\sum_{m=1}^{M}f_j(x_{m}, y_{m-1}, y_{m}) -%
   \sum_{n=1}^N\sum_{m=1}^{M}\sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}f_j(x_{m},%
   y'_{m-1}, y''_{m})P(y',y''|\mathbf{x}^{(n)}),
 \end{equation*}
@@ -464,17 +464,17 @@ the corpus.
 
 The marginal probabilities of these feature, which are required for
 computing their expectations, can be estimated dynamically using the
-forward-backward (FB) algorithm \cite{Rabiner:90}, which is a
-particular case of the more general belief propagation method
-\cite[see][p.~81]{Barber:12}.
+forward-backward (FB) algorithm~\cite{Rabiner:90}, which is a
+particular case of the more general belief propagation
+method~\cite[see][p.~81]{Barber:12}.
 
 \noindent\textbf{Inference.}\quad{}Once optimal feature weights are
 found, one can unproblematically compute the most likely label
-assignment for a new instance by using the Viterbi algorithm
-\cite{Viterbi:67}, which effectively corresponds to the forward pass
-of the FB method with the summation over the alternative preceding
-states replaced by the maximum operator (hence the other name for this
-algorithm, ``max-product'').
+assignment for a new instance by using the Viterbi
+algorithm~\cite{Viterbi:67}, which effectively corresponds to the
+forward pass of the FB method with the summation over the alternative
+preceding states replaced by the maximum operator (hence the other
+name for this algorithm, ``max-product'').
 
 \noindent\textbf{Features.}\quad{}A crucial component that accounts
 for a huge part of the success (or failure) of CRFs is features that
@@ -598,10 +598,9 @@ classifier.
       Test Set & 0.37 & 0.28 & 0.319 & 0.305 & 0.244 & 0.271 & 0.304 & %
       0.244 & 0.271 & 0.287\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption{Results of aspect-based sentiment analysis with the
-      first-order linear-chain CRFs}
-    \label{snt-fgsa:tbl:crf-res}
+      first-order linear-chain CRFs}\label{snt-fgsa:tbl:crf-res}
   \end{center}
 \end{table*}
 
@@ -614,7 +613,7 @@ rechecking the performance of the model on the development set.
 
 \begin{table}[hbt]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.47\tabcolsep}\scriptsize
     \begin{tabular}{p{0.14\columnwidth} % first columm
         *{6}{>{\centering\arraybackslash}p{0.13\columnwidth}}} % next five columns
       \toprule
@@ -627,15 +626,14 @@ rechecking the performance of the model on the development set.
           Source & 0.309 & 0.321\posdelta{0.012} & 0.313\posdelta{0.004} & 0.265\negdelta{0.044} & 0.359\posdelta{0.05} & 0.271\negdelta{0.038}\\
           Target & 0.26 & 0.282\posdelta{0.022} & 0.252\negdelta{0.008} & 0.263\posdelta{0.003} & 0.233\negdelta{0.027} & 0.263\posdelta{0.003}\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Results of the feature ablation tests for the CRF
-    model]{Results of the feature ablation tests for the CRF
-      model\\{\small\itshape (negative changes w.r.t. the original
+      model]{Results of the feature ablation tests for the CRF
+      model\\{\small\itshape (negative changes w.r.t\@. the original
         scores on the development set are shown in
         \textsuperscript{\textcolor{red3}{red}}; positive changes are
         depicted in \textsuperscript{\textcolor{seagreen}{green}}
-        superscripts)\footnotemark}}
-    \label{tbl:ablation}
+        superscripts)\footnotemark}}\label{tbl:ablation}
   \end{center}
 \end{table}
 
@@ -659,7 +657,7 @@ lexical and complex attributes.
 
 \begin{table}[hbt]
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.47\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.47\tabcolsep}\scriptsize
     \begin{tabular}{%
         >{\centering\arraybackslash}p{0.045\columnwidth} % first columm
         >{\centering\arraybackslash}p{0.3\columnwidth} % second columm
