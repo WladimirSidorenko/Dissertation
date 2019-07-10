@@ -15840,14 +15840,37 @@ vectors as positive and negative scores of corresponding words.</p>
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Linear-Projection">Linear Projection<a class="anchor-link" href="#Linear-Projection">&#182;</a></h1><p>Given two sets of vectors with opposite semantic orientations ($\mathcal{P} =\{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and $\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$),
 we are looking for a line $\vec{b}$ that maximizes the distance between the projections of embeddings from these sets on that line, i.e.:</p>
-$$\vec{b} = argmax_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b} - \frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}\right\rVert^2=argmax_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\left(\vec{p}_{+}-\vec{p}_{-}\right)}{\vec{b}^2}\vec{b}\right\rVert^2,$$<p>where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the projection of a word embedding with the positive polarity on line $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the respective projection of a negative seed term.</p>
-<p>Considering the $argmax$ argument in the above expression as our objective function $f$, we can compute the gradient of $f$ with respect
+$$\vec{b} = \mathrm{argmax}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b} - \frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}\right\rVert^2=\mathrm{argmax}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\left(\vec{p}_{+}-\vec{p}_{-}\right)}{\vec{b}^2}\vec{b}\right\rVert^2,$$<p>where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the projection of a word embedding with the positive polarity on line $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the respective projection of a negative seed term.</p>
+<p>Considering the $\mathrm{argmax}$ argument in the above expression as our objective function $f$, we can compute the gradient of $f$ with respect
 to $\vec{b}$ as follows:
 $$\nabla_{\vec{b}} f = \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(\Delta - \gamma\vec{b}\right),$$</p>
 <p>where $\Delta$ stands for the difference between the positive and negative vectors $\vec{p}_{+}$ and $\vec{p}_{-}$: $\Delta =
 \vec{p}_{+}-\vec{p}_{-}$; and $\gamma$ denotes the dot product of this difference with vector $\vec{b}$: $\gamma = \Delta \cdot
 \vec{b}$.</p>
 
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Linear-Projection">Linear Projection<a class="anchor-link" href="#Linear-Projection">&#182;</a></h1><div class="row" id="linproj">
+<div class="cell left">
+<figure>
+<img src="img/linproj_polarity.png" alt="Polarity Line Determined by the LinProj Algorithm" id="linproj-right"/>
+<figcaption>
+Subjectivity Line
+</figcaption>
+</figure>
+</div><div class="cell right">
+<figure>
+<img src="img/linproj_subjectivity.png" alt="Subjectivity Line Determined by the LinProj Algorithm" id="linproj-right"/>
+<figcaption>
+Subjectivity Line
+</figcaption>
+</figure>
+</div>
+</div>
 </div>
 </div>
 </div></section><section>
@@ -16016,7 +16039,7 @@ $$\nabla_{\vec{b}} f = \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(\Delta - \gam
 <li>task-specific;</li>
 </ul>
 <div class="hide-on-next-fragment">
-  <img src="img/vo-zhang.png" alt="task-specific vectors" id="vo-zhang2"/>
+  <img src="img/task-specific.png" alt="task-specific vectors" id="task-specific"/>
 </div>
 </div>
 </div>
@@ -16027,16 +16050,13 @@ $$\nabla_{\vec{b}} f = \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(\Delta - \gam
 <ul>
 <li>task-specific + word2vec;</li>
 </ul>
-<div class="cell row">
-<div class="cell left">
 <div class="hide-on-next-fragment">
-  <img src="img/word2vec.png" alt="word2vec vectors" id="word2vec3"/>
-</div>
-</div>
-<div class="cell right">
-<div class="hide-on-next-slide">
-  <img src="img/vo-zhang.png" alt="task-specific vectors" id="vo-zhang3"/>
-</div>
+  <div class="row" id="task-specific-word2vec">
+  <div class="cell left">
+    <img src="img/word2vec.png" alt="word2vec vectors" id="word2vec3"/>
+  </div><div class="cell right">
+    <img src="img/task-specific.png" alt="task-specific vectors" id="task-specific2"/>
+  </div>
 </div>
 </div>
 </div>
@@ -16047,7 +16067,7 @@ $$\nabla_{\vec{b}} f = \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(\Delta - \gam
 <ul>
 <li>task-specific with least-squares mapping.</li>
 </ul>
-$$W = argmin_{W}\lVert E_{TS} - W^T\cdot E_{W2V}\rVert_F$$<p>where $E_{TS} \in \mathbb{n\times m}$ is the matrix of task-specific embeddings and $E^*_{W2V} \in \mathbb{n\times m}$ is the corresponding matrix of word2vec vectors.  Then we can approximate task-specific representations of terms missing in the task-specific corpus as:</p>
+$$W = \mathrm{argmin}_{W}\lVert E_{TS} - W^T\cdot E_{W2V}\rVert_F$$<p>where $E_{TS} \in \mathbb{n\times m}$ is the matrix of task-specific embeddings and $E^*_{W2V} \in \mathbb{n\times m}$ is the corresponding matrix of word2vec vectors.  Then we can approximate task-specific representations of terms missing in the task-specific corpus as:</p>
 $$E^*_{TS} = W^T\cdot E^*_{W2V}$$
 </div>
 </div>
@@ -16419,10 +16439,16 @@ Macro-averaged F-scores of NWE-based methods with different vector normalization
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h1><div class="example">
-  TODO: provide an example
-  <div class="translation">TODO</div>
-</div><ul>
+<h1 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h1><p><div class="example">
+    <div class="title">Example 4.1</div>
+    <div class="annotator1">Manual Annotation:</div>
+    <div class="tweet"><span class="label">Tweet:</span><span class="sentiment">Mein Vater hasst <span class="sentiment">dieses schöne Buch</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+    <div class="translation"><span class="sentiment">My father hates <span class="sentiment">this nice book</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+    <div class="annotator2">Annotation 2:</div>
+    <div class="tweet"><span class="label">Tweet:</span>Mein <span class="sentiment">Vater hasst <span class="sentiment">dieses schöne Buch</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+    <div class="translation">My <span class="sentiment">father hates <span class="sentiment">this nice book</span><span class="tag">sentiment</span> .</span><span class="tag">sentiment</span></div>
+&lt;/div&gt;</p>
+<ul>
 <li><p><strong>exact match</strong>;</p>
 </li>
 <li><p><strong>binary overlap</strong>;</p>
@@ -17552,18 +17578,68 @@ procedure, which might improve the results of ABSA methods by up to
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h2><p>To estimate the quality of compared systems, I rely on two established evaluation metrics that are commonly used to measure the MLSA results:</p>
+<h2 id="Methods">Methods<a class="anchor-link" href="#Methods">&#182;</a></h2>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><p><strong>macro-averaged $F_1$-score</strong> over two main polarity classes (positive and negative):
-$$F_1 = \frac{F_{pos} + F_{neg}}{2} $$'</p>
-</li>
-<li><p>and <strong>micro-averaged $F_1$-score</strong> over all three semantic orientations (positive, negative, and neutral), which essentially corresponds to accuracy.</p>
-</li>
+<li>lexicon-based methods;</li>
 </ul>
 
 </div>
 </div>
-</div></section><section>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>machine-learning&ensp;based methods;</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>deep-learing&ensp;based methods.</li>
+</ul>
+
+</div>
+</div>
+</div></div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h2>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>macro-averaged $F_1$-score</strong> over two main polarity classes (positive and negative):
+$$F_1 = \frac{F_{pos} + F_{neg}}{2} $$</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>and <strong>micro-averaged $F_1$-score</strong> over all three semantic orientations (positive, negative, and neutral), which essentially corresponds to accuracy.</li>
+</ul>
+
+</div>
+</div>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -17691,18 +17767,6 @@ a substantial part of the original dataset.</p>
 -->
 </tbody>
 </table>
-</div>
-</div>
-</div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Methods">Methods<a class="anchor-link" href="#Methods">&#182;</a></h2><ul>
-<li>lexicon-based methods;</li>
-<li>machine-learning&ensp;based methods;</li>
-<li>deep-learing&ensp;based methods.</li>
-</ul>
-
 </div>
 </div>
 </div></section><section>
