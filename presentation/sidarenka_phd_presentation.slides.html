@@ -21161,36 +21161,66 @@ where $K_n^{(r_i)}$ and $K_s^{(r_i)}$ stand for the nucleus and satellite coeffi
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Given a dataset $\mathcal{D}=\left\{\left(\mathbf{x}^{(i)}, \mathbf{y}^{(i)}\right)\right\}_{i=1}^{N}$, we want to find parameters $\boldsymbol{\theta}^*$, s.t.:</p>
-$$\boldsymbol{\theta}^* = \underset{\boldsymbol{\theta}}{\operatorname{argmax}}\ell(\boldsymbol{\theta}) = \sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right)\right),$$<p>where the conditional likelihood is normally defined as:</p>
+$$\boldsymbol{\theta}^* = \underset{\boldsymbol{\theta}}{\operatorname{argmax}}\ell(\boldsymbol{\theta}) = \sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right)\right);$$<div class="hide-on-next-fragment">
+where the conditional likelihood is normally defined as:
+
 $$p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right) =   \frac{\exp\left(\sum_{t=1}^{T_i}\sum_k\boldsymbol{\theta}_k\mathbf{f}_k\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t-t},\mathbf{y}^{(i)}_{t}\right)\right)}{Z}.$$
 </div>
 </div>
-</div></div><div class="fragment">
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span> 
-</pre></div>
-
-    </div>
 </div>
-</div>
-
 </div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
 <figure>
+    <img src="img/latent-crf.png" alt="Latent Conditional Random Fields" id="latent-crf"/>
+    <figcaption>
+        Example of an automatically constructed RST-based latent-CRF tree
+    </figcaption>
+</figure>
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+<strong>Correct assignment</strong> is any assignment of latent variables that leads to the maximum probability of the correct observed label:
+$$\mathbf{y}^{(i)} =[\mathbf{y}_o^{(i)}, \mathbf{y}_h^{*(i)}],$$
+where
+$$\mathbf{y}_h^{*(i)} =\underset{\boldsymbol{y}_h^{(i)}}{\operatorname{argmax}}p\left(\mathbf{y}_o^{(i)}\vert\mathbf{x}^{(i)}\right).$$
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+<strong>Wrong assignment</strong> is any assignment of latent variables that leads to the maximum probability of a wrong observed label:
+$$\mathbf{y}^{'(i)} = \underset{\boldsymbol{y}_h^{'(i)}\neq\mathbf{y}_o^{(i)}}{\operatorname{argmax}}p\left([\mathbf{y}_o^{'(i)},
+    \mathbf{y}_h^{*(i)}]\vert\mathbf{x}^{(i)}\right)$$
+where
+$$\mathbf{y}_h^{*(i)} =\underset{\boldsymbol{y}_h^{(i)}}{\operatorname{argmax}}p\left(\mathbf{y}_o^{'(i)}\vert\mathbf{x}^{(i)}\right).$$
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+    <figure>
 <figure>
-<img src="img/latent-crf-correct.png" alt="Computational path of the probability of the correct label in latent CRF">
+<img src="img/latent-crf-correct.png" alt="Computational path of the probability of the correct label in latent CRF" id="lcrf-left"/>
 <figcaption>
 Correct label
 </figcaption>
 </figure>
 <figure>
-<img src="img/latent-crf-wrong.png" alt="Computational path of the probability of the wrong label in latent CRF">
+<img src="img/latent-crf-wrong.png" alt="Computational path of the probability of the wrong label in latent CRF"/>
 <figcaption>
 Wrong label
 </figcaption>
@@ -21199,6 +21229,15 @@ Wrong label
 Confronted computational paths in latent and latent Conditional Random Fields
 </figcaption>
 </figure>
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$\boldsymbol{\theta}^* = \underset{\boldsymbol{\theta}}{\operatorname{argmax}} \sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\right)\right) - \log\left(p\left(\mathbf{y}^{'(i)}\right)\right)= \underset{\boldsymbol{\theta}}{\operatorname{argmax}}\sum_{i=1}^{N}\log\left(\exp\left(\boldsymbol{\theta}^{\top}\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)})\right)\right) - \log\left(\exp\left(\boldsymbol{\theta}^{\top}\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})\right)\right)
+= \underset{\boldsymbol{\theta}}{\operatorname{argmax}}\sum_{i=1}^{N}\boldsymbol{\theta}^{\top}\left(\mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{(i)}) - \mathbf{f}(\mathbf{x}^{(i)},\mathbf{y}^{'(i)})\right).$$
 </div>
 </div>
 </div></div></section><section>
@@ -21212,6 +21251,14 @@ Confronted computational paths in latent and latent Conditional Random Fields
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+$$  p\left(\mathbf{Y}_o{=}\mathbf{y}_o\right) = \sum_{\mathbf{y}_h} p\left(\mathbf{Y}_o{=}\mathbf{y}_o,\mathbf{Y}_h{=}\mathbf{y}_h\right)$$
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
 <figure>
 <figure>
 <img src="img/latent-mcrf-correct.png" alt="Computational path of the probability of the correct label in latent marginalized CRF">
@@ -21231,6 +21278,14 @@ Confronted computational paths in latent and Latent-Marginalized Conditional Ran
 </figure>
 </div>
 </div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+$$\boldsymbol{\theta}^* = \underset{\boldsymbol{\theta}}{\operatorname{argmax}}\sum_{i=1}^{N}\frac{p(\mathbf{y}^{(i)})}{p(\mathbf{y}^{'(i)})}$$
+</div>
+</div>
 </div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -21242,77 +21297,112 @@ Confronted computational paths in latent and Latent-Marginalized Conditional Ran
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-$$p_{\theta}(y,\mathbf{z})=p_{\theta}(y|\mathbf{z})p_{\theta}(\mathbf{z})$$$$\theta_{max} = \underset{\theta}{\operatorname{argmax}}p_{\theta}(y)$$
+<p>Let $p_{\theta}(y)$ be the probability of observed label $y \in \{🥺, 😐, 😊\}$, parameterized by parameter $\theta$, and let $\mathbf{z}\in\mathbb{R}^{n\times 3}$ denote latent random variables.</p>
+<p>Our task is to find $\theta_{max}$, s.t.:</p>
+$$\theta_{max} = \underset{\theta}{\operatorname{argmax}}\log{p_{\theta}(y)}$$
 </div>
 </div>
 </div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-$$p_{\theta_{max}}(\mathbf{z}|y) = \frac{p_{\theta_{max}}(\mathbf{x}, \mathbf{z})}{\int p_{\theta_{max}}(y, \mathbf{z})\mathrm{d}\mathbf{z}}$$
+$$\log{p_{\theta}(y)} = \log{\int p_{\theta}(y, \mathbf{z})\mathrm{d}\mathbf{z}}$$
 </div>
 </div>
 </div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-$$q_{\phi}\approx p_{\theta_{max}}(\mathbf{z}|\mathbf{x})$$
+$$q_{\phi}(\mathbf{z})\approx p_{\theta_{max}}(\mathbf{z}|y)$$
 </div>
 </div>
 </div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Objective function</strong>:
-$$\mathrm{ELBO}\overset{\Delta}{=}\mathbb{E}_{q_{\phi}(\boldsymbol{z})}\left[\log p_{\theta}(\boldsymbol{x},\boldsymbol{z}) - \log q_{\phi}(\boldsymbol{z})\right]$$</p>
-
+$$\mathrm{ELBO}\overset{\Delta}{=}\mathbb{E}_{q_{\phi}(\boldsymbol{z})}\left[\log p_{\theta}(y,\boldsymbol{z}) - \log q_{\phi}(\boldsymbol{z})\right]$$
 </div>
 </div>
 </div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>I associate a random variable $z_{j_k} \in \mathbb{R}^{3}_{+}$ with every RST node $i$, which represents the probabilities of polarity classes (negative, neutral, and positive) for that node after seeing its $k$-th child:
-$$z_{j_k} \sim Dir(\boldsymbol{\alpha}).$$</p>
-<p>I set the initial values of these variables (i.e., $z_{j_0}$) to the scores predicted by the LBA classifier for EDUs and the root nodes, and set them to zeroes for abstract nodes.  Then when analyzing the $k$-th child of that node, I compute the score that comes from that child as follows:
-$$\boldsymbol{z}^{*} = \textrm{sparsemax}(M_r\boldsymbol{z}_k^{\top}),$$
-where the $M_r \sim \mathcal{N}_{3\times3}(\boldsymbol{\mu}_r, \boldsymbol{\Sigma}_r)$ matrix reflects contextual changes introduced by discourse relation $r$ that holds between parent and child.  The initial priors for this parameter are:
-$$  \boldsymbol{\mu}_r=\begin{bmatrix}
-  1 &amp; 0 &amp; 0\\
-  0 &amp; 0.3 &amp; 0\\
-  0 &amp; 0 &amp; 1
-  \end{bmatrix}$$
-and
-$$
-  \boldsymbol{\Sigma}_r=\begin{bmatrix}
-  1 &amp; 1 &amp; 1\\
-  1 &amp; 1 &amp; 1\\
-  1 &amp; 1 &amp; 1
-  \end{bmatrix}.
-$$</p>
-<p>Then I compute the $\boldsymbol{\alpha}$ parameters as:
-$$  \boldsymbol{\alpha}_{j_k} = \boldsymbol{\beta}\odot\boldsymbol{z}^*_k +
-  (\boldsymbol{1} -
-  \boldsymbol{\beta})\odot\boldsymbol{z}_{j_{k-1}},
-$$
-where $\boldsymbol{\beta}\in\mathbb{R}^3$ is another multivariate
-random variable sampled from the Beta distribution $B(5., 5.)$, which
-controls the amount of information we want to pass from child to its
-parent.</p>
-<p>The only thing that I need to do to the above $\boldsymbol{\alpha}_{j_k}$ term before drawing the actual probability
-$\boldsymbol{z}_{j_k}$ is to scale this vector by a certain amount in
-order to reduce the variance of the resulting Dirichlet
-distribution.\footnote{Because if we keep the
-  $\boldsymbol{\alpha}_{j_k}$ vector from Equation~\ref{dasa:eq:alpha}
-  unchanged, most of its values will be in the range $[0,\ldots,1]$
-  which will lead to an extremely high variance of the Dirichlet
-  distribution.} In particular, we compute this scaling factor as
-follows:
-$$\textrm{scale} = \frac{\xi \times \left(0.1 + \cos\left(\boldsymbol{z}^*_k, \boldsymbol{z}_{j_{k-1}}\right)\right)}{H\left(\boldsymbol{\alpha}_{j_k}\right)};$$
-where $\xi$ is a model parameter sampled from a $\chi^2$-distribution: $\xi\sim\chi^2(34)$; 0.1 is a constant used to prevent zero scales in the cases when $\cos\left(\mathbf{z}^*_k, \mathbf{z}_{j_{k-1}}\right)$ is zero; and $H\left(\boldsymbol{\alpha}_{j_k}\right)$ stands for the entropy of the $\boldsymbol{\alpha}_{j_k}$ vector.</p>
-<p>Finally, to predict the final polarity label for the whole tweet, I simply draw a value from a Categorical distribution, using the value $\boldsymbol{z}_{\text{\textsc{Root}}}$ as its parameter:
-$$y \sim Cat(\mathbf{z}_{\text{Root}}).$$</p>
+<h1 id="Recursive-Dirichlet-Process:-$p(y,\boldsymbol{z})$">Recursive Dirichlet Process: $p(y,\boldsymbol{z})$<a class="anchor-link" href="#Recursive-Dirichlet-Process:-$p(y,\boldsymbol{z})$">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+I associate a random variable $z_{j_k} \in \mathbb{R}^{3}_{+}$ with every RST node $i$, which represents the probabilities of polarity classes (🥺, 😐,😊) for that node after seeing its $k$-th child, e.g. $z_{1_2} = [0.2, 0.4, 0.3]$:
 
+$$z_{j_k} \sim Dir(\boldsymbol{\alpha}),$$
+
+setting the initial values of these variables (i.e., $z_{j_0}$) to the scores predicted by the LBA classifier for EDUs and the root node, and setting them to zeroes for abstract nodes.
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+Then when analyzing the $k+1$-th child of node $j$, I compute the updated score $z_{j_{k+1}}$ as:
+$$\boldsymbol{z}_{k+1}^{*} = \operatorname{sparsemax}(M_r\boldsymbol{z}_{k+1}^{\top}),$$
+where the $M_r \in \mathbb{R}^{3\times3}$ is a parameter matrix the reflects contextual changes introduced by discourse relation $r$:
+$$  M_r \sim \mathcal{N}_{3\times3}\left(\begin{bmatrix}
+  1 & 0 & 0\\
+  0 & 0.3 & 0\\
+  0 & 0 & 1
+  \end{bmatrix}, \begin{bmatrix}
+  1 & 1 & 1\\
+  1 & 1 & 1\\
+  1 & 1 & 1
+  \end{bmatrix}\right)$$
+
+Then I compute the $\boldsymbol{\alpha}$ parameters as:
+$$  \boldsymbol{\alpha}_{j_{k+1}} = \boldsymbol{\beta}\odot\boldsymbol{z}^*_k +
+  (\boldsymbol{1} -
+  \boldsymbol{\beta})\odot\boldsymbol{z}_{j_{k+1}},
+$$
+where $\boldsymbol{\beta}\in\mathbb{R}^3$ is another multivariate random variable sampled from the Beta distribution $B(5., 5.)$.
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+The only thing that I need to do to the above $\boldsymbol{\alpha}_{j_k}$ term before drawing the actual probability $\boldsymbol{z}_{j_{k+1}}$ is to scale this vector by a certain amount in order to reduce the variance of the resulting Dirichlet:
+$$\textrm{scale} = \frac{\xi \times \left(0.1 + \cos\left(\boldsymbol{z}^*_k, \boldsymbol{z}_{j_{k-1}}\right)\right)}{H\left(\boldsymbol{\alpha}_{j_k}\right)};$$
+where $\xi$ is a model parameter sampled from $\xi\sim\chi^2(34)$; 0.1 is a constant used to prevent zero scales in the cases when $\cos\left(\mathbf{z}^*_k, \mathbf{z}_{j_{k-1}}\right)$ is zero; and $H\left(\boldsymbol{\alpha}_{j_k}\right)$ stands for the entropy of the $\boldsymbol{\alpha}_{j_k}$ vector.
+</div>
+</div>
+</div>
+</div></div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="RDP:-Plate-Diagram">RDP: Plate Diagram<a class="anchor-link" href="#RDP:-Plate-Diagram">&#182;</a></h1><figure>
+<img src="img/rdp.png" alt="A plate diagram of Recursive Dirichlet Process" id="rdp-plate">
+<figcaption>
+A plate diagram of the Recursive Dirichlet Process
+</figcaption>
+</figure>
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="RDP:-Probability-Computation">RDP: Probability Computation<a class="anchor-link" href="#RDP:-Probability-Computation">&#182;</a></h1><figure>
+<img src="img/dirichlet-process.png" alt="Recursive Dirichlet Process" id="rdp-computation">
+<figcaption>
+Probability distributions of polar classes computed by the Recursive Dirichlet Process
+</figcaption>
+</figure>
 </div>
 </div>
 </div><aside class="notes">
@@ -21331,22 +21421,10 @@ node [the values in the vector represent the scores for the negative, neutral, a
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="RDP-(Plate-Diagram)">RDP (Plate Diagram)<a class="anchor-link" href="#RDP-(Plate-Diagram)">&#182;</a></h1><figure>
-<img src="img/rdp.png" alt="A plate diagram of Recursive Dirichlet Process" id="rdp-plate">
-<figcaption>
-A plate diagram of the Recursive Dirichlet Process
-</figcaption>
-</figure>
-</div>
-</div>
-</div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Results-(PotTS)">Results (PotTS)<a class="anchor-link" href="#Results-(PotTS)">&#182;</a></h1><table>
 <caption>
 Results of discourse-aware sentiment analysis methods on the PotTS corpus<br/>
-<em>LCRF &mdash; latent conditional random fields, LMCRF &mdash; latent-marginalized conditional random fields, RDP &mdash; recursive Dirichlet process, DDR &mdash; discourse-depth reweighting~(Bhatia et al., 2015), R2N2 &mdash; rhetorical recursive neural network (Bhatia et al., 2015), WNG &mdash; (Wang et al, 2013), Last &mdash; polarity determined by the last EDU, Root &mdash; polarity determined by the root EDU(s), No-Discourse &mdash; discourse-unaware classifier</em>
+<em>LCRF &mdash; latent conditional random fields, LMCRF &mdash; latent-marginalized conditional random fields, RDP &mdash; recursive Dirichlet process, DDR &mdash; discourse-depth reweighting (Bhatia et al., 2015), R2N2 &mdash; rhetorical recursive neural network (Bhatia et al., 2015), WNG &mdash; (Wang et al, 2013), Last &mdash; polarity determined by the last EDU, Root &mdash; polarity determined by the root EDU(s), No-Discourse &mdash; discourse-unaware classifier</em>
 </caption>
 <thead>
 <tr>
@@ -21354,8 +21432,8 @@ Results of discourse-aware sentiment analysis methods on the PotTS corpus<br/>
 <td colspan="3">Positive</td>
 <td colspan="3">Negative</td>
 <td colspan="3">Neutral</td>
-<td rowspan="2">Macro-F$_1$</td>
-<td rowspan="2">Micro-F$_1$</td>
+<td rowspan="2">Macro<br/>F$_1$</td>
+<td rowspan="2">Micro<br/>F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -21510,7 +21588,7 @@ Results of discourse-aware sentiment analysis methods on the PotTS corpus<br/>
 <h1 id="Results-(SB10k)">Results (SB10k)<a class="anchor-link" href="#Results-(SB10k)">&#182;</a></h1><table>
 <caption>
 Results of discourse-aware sentiment analysis methods on the SB10k corpus<br/>
-<em>LCRF &mdash; latent conditional random fields, LMCRF &mdash; latent-marginalized conditional random fields, RDP &mdash; recursive Dirichlet process, DDR &mdash; discourse-depth reweighting~(Bhatia et al., 2015), R2N2 &mdash; rhetorical recursive neural network (Bhatia et al., 2015), WNG &mdash; (Wang et al, 2013), Last &mdash; polarity determined by the last EDU, Root &mdash; polarity determined by the root EDU(s), No-Discourse &mdash; discourse-unaware classifier</em>
+<em>LCRF &mdash; latent conditional random fields, LMCRF &mdash; latent-marginalized conditional random fields, RDP &mdash; recursive Dirichlet process, DDR &mdash; discourse-depth reweighting (Bhatia et al., 2015), R2N2 &mdash; rhetorical recursive neural network (Bhatia et al., 2015), WNG &mdash; (Wang et al, 2013), Last &mdash; polarity determined by the last EDU, Root &mdash; polarity determined by the root EDU(s), No-Discourse &mdash; discourse-unaware classifier</em>
 </caption>
 <thead>
 <tr>
@@ -21518,8 +21596,8 @@ Results of discourse-aware sentiment analysis methods on the SB10k corpus<br/>
 <td colspan="3">Positive</td>
 <td colspan="3">Negative</td>
 <td colspan="3">Neutral</td>
-<td rowspan="2">Macro-F$_1$</td>
-<td rowspan="2">Micro-F$_1$</td>
+<td rowspan="2">Macro<br/>F$_1$</td>
+<td rowspan="2">Micro<br/>F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
