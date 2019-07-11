@@ -14928,6 +14928,14 @@ $$R^* = \frac{TP^+ + TP^- + TP^0}{TP^+ + FN^+ + TP^- + FN^- + TP^0 + FN^0}.$$
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Data">Data<a class="anchor-link" href="#Data">&#182;</a></h1><p>I used <strong>400 randomly selected tweets</strong> annotated by the first expert as <strong>development set</strong> for tweaking the parameters and determining the optimal size of automatic lexicons, and utilized the <strong>whole corpus</strong> annotated by the other linguist for <strong>testing</strong> (3,459 positive and 2,755 negative labeled term; 1,738 and 1,943 unique expressions respectively).</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Semi-Automatic-Lexicons">Semi-Automatic Lexicons<a class="anchor-link" href="#Semi-Automatic-Lexicons">&#182;</a></h1>
 </div>
 </div>
@@ -15010,8 +15018,8 @@ German Collocation Dictionary (Quasthoff, 2010);</p>
 <td colspan="3">Positive Expressions</td>
 <td colspan="3">Negative Expressions</td>
 <td colspan="3">Neutral Terms</td>
-<td rowspan="2">Macro F$_1$</td>
-<td rowspan="2">Micro F$_1$</td>
+<td rowspan="2">Macro<br/>F$_1$</td>
+<td rowspan="2">Micro<br/>F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -15337,8 +15345,8 @@ where $P(c)$ is the prior probability of the class (estimated as the number of w
 <td colspan="3">Positive Expressions</td>
 <td colspan="3">Negative Expressions</td>
 <td colspan="3">Neutral Terms</td>
-<td rowspan="2">Macro-F$_1$</td>
-<td rowspan="2">Micro-F$_1$</td>
+<td rowspan="2">Macro<br/>F$_1$</td>
+<td rowspan="2">Micro<br/>F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -15589,8 +15597,8 @@ where $P(c)$ is the prior probability of the class (estimated as the number of w
 <td colspan="3">Positive Expressions</td>
 <td colspan="3">Negative Expressions</td>
 <td colspan="3">Neutral Terms</td>
-<td rowspan="2">Macro-F$_1$</td>
-<td rowspan="2">Micro-F$_1$</td>
+<td rowspan="2">Macro<br/>F$_1$</td>
+<td rowspan="2">Micro<br/>F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -15840,7 +15848,7 @@ vectors as positive and negative scores of corresponding words.</p>
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Linear-Projection">Linear Projection<a class="anchor-link" href="#Linear-Projection">&#182;</a></h1><p>Given two sets of vectors with opposite semantic orientations ($\mathcal{P} =\{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and $\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$),
 we are looking for a line $\vec{b}$ that maximizes the distance between the projections of embeddings from these sets on that line, i.e.:</p>
-$$\vec{b} = \underset{\vec{b}}{\operatorname{argmax}}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b} - \frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}\right\rVert^2=\underset{\vec{b}}{\operatorname{argmax}}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\left(\vec{p}_{+}-\vec{p}_{-}\right)}{\vec{b}^2}\vec{b}\right\rVert^2,$$<p>where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the projection of a word embedding with the positive polarity on line $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the respective projection of a negative seed term.</p>
+$$\vec{b} = \underset{\vec{b}}{\operatorname{argmax}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b} - \frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}\right\rVert^2=\underset{\vec{b}}{\operatorname{argmax}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\left(\vec{p}_{+}-\vec{p}_{-}\right)}{\vec{b}^2}\vec{b}\right\rVert^2,$$<p>where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the projection of a word embedding with the positive polarity on line $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the respective projection of a negative seed term.</p>
 <p>Considering the $\operatorname{argmax}$ argument in the above expression as our objective function $f$, we can compute the gradient of $f$ with respect
 to $\vec{b}$ as follows:
 $$\nabla_{\vec{b}} f = \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(\Delta - \gamma\vec{b}\right),$$</p>
@@ -15889,8 +15897,8 @@ Subjectivity Line
 <td colspan="3">Positive Expressions</td>
 <td colspan="3">Negative Expressions</td>
 <td colspan="3">Neutral Terms</td>
-<td rowspan="2">Macro-F$_1$</td>
-<td rowspan="2">Micro-F$_1$</td>
+<td rowspan="2">Macro<br/>F$_1$</td>
+<td rowspan="2">Micro<br/>F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -16067,7 +16075,7 @@ Subjectivity Line
 <ul>
 <li><strong>task-specific with least-squares mapping</strong>.</li>
 </ul>
-$$W = \mathrm{argmin}_{W}\lVert E_{TS} - W^T\cdot E_{W2V}\rVert_F$$<p>where $E_{TS} \in \mathbb{n\times m}$ is the matrix of task-specific embeddings and $E^*_{W2V} \in \mathbb{n\times m}$ is the corresponding matrix of word2vec vectors.  Then we can approximate task-specific representations of terms missing in the task-specific corpus as:</p>
+$$W = \mathrm{argmin}_{W}\lVert E_{TS} - W^T\cdot E_{W2V}\rVert_F$$<p>where $E_{TS} \in \mathbb{R}^{n\times m}$ is the matrix of task-specific embeddings and $E^*_{W2V} \in \mathbb{R}^{n\times m}$ is the corresponding matrix of word2vec vectors.  Then we can approximate task-specific representations of terms missing in the task-specific corpus as:</p>
 $$E^*_{TS} = W^T\cdot E^*_{W2V}$$
 </div>
 </div>
@@ -16407,8 +16415,8 @@ Macro-averaged F-scores of NWE-based methods with different vector normalization
   <div class="tweet"><span class="label">Tweet:</span><span class="sentiment"><span class="source">Mir</span><span class="tag">source</span> hat <span class="target">die letzte Folge von Games of Thrones</span><span class="tag">target</span> gar nicht gefallen.</span><span class="tag">sentiment</span></div>
   <div class="translation"><span class="sentiment"><span class="source">I</span><span class="tag">source</span> absolutely didn't like <span class="target">the last episode of Game of Thrones</span><span class="tag">target</span>.</span><span class="tag">sentiment</span></div>
   <div class="arrow">$\rightarrow$</div>
-  <div class="pre">Mir/SRC hat/SNT die/TRG letzte/TRG Folge/TRG von/TRG Games/TRG of/TRG Thrones/TRG gar/SNT nicht/SNT gefallen/SNT ./SNT</div>
-  <div class="pre">I/SRC absolutely/SNT did/SNT n't/SNT like/SNT the/TRG last/TRG episode/TRG of/TRG Game/TRG of/TRG Thrones/TRG ./SNT</div>
+  <div class="tweet"><span class="pre">Mir/SRC hat/SNT die/TRG letzte/TRG Folge/TRG von/TRG Games/TRG of/TRG Thrones/TRG gar/SNT nicht/SNT gefallen/SNT ./SNT</span></div>
+  <div class="translation"><span class="pre">I/SRC absolutely/SNT did/SNT n't/SNT like/SNT the/TRG last/TRG episode/TRG of/TRG Game/TRG of/TRG Thrones/TRG ./SNT</span></div>
 </div>
 </div>
 </div>
@@ -16459,12 +16467,12 @@ Macro-averaged F-scores of NWE-based methods with different vector normalization
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Evaluation-Metrics">Evaluation Metrics<a class="anchor-link" href="#Evaluation-Metrics">&#182;</a></h1><div class="example">
-  <div class="title">Example 4.1</div>
-  <div class="tweet"><span class="label">Tweet:</span><span class="sentiment"><span class="source">Mir</span><span class="tag">source</span> hat <span class="target">die letzte Folge von Games of Thrones</span><span class="tag">target</span> gar nicht gefallen.</span></div>
-  <div class="translation"><span class="sentiment"><span class="source">I</span><span class="tag">source</span> absolutely didn't like <span class="target">the last episode of Game of Thrones</span><span class="tag">target</span></span><span class="tag">sentiment</span>.</div>
-  <div class="arrow">&rarr;</div>
-  <div class="pre">Mir/SRC hat/SNT die/TRG letzte/TRG Folge/TRG von/TRG Games/TRG of/TRG Thrones/TRG gar/SNT nicht/SNT gefallen/SNT ./SNT</div>
-  <div class="pre">I/SRC absolutely/SNT did/SNT n't/SNT like/SNT the/TRG last/TRG episode/TRG of/TRG Game/TRG of/TRG Thrones/TRG ./SNT</div>
+  <div class="title">Example 4.2</div>
+  <div class="annotator1">Gold Annotation:</div>
+  <div class="tweet"><span class="pre">Mir/SRC hat/SNT <strong style="color:darkred;">die/TRG</strong> letzte/TRG Folge/TRG von/TRG Games/TRG of/TRG Thrones/TRG gar/SNT nicht/SNT gefallen/SNT ./SNT</span></div>
+  <div class="translation"><span class="pre">I/SRC absolutely/SNT did/SNT n't/SNT like/SNT <strong style="color:darkred;">the/TRG</strong> last/TRG episode/TRG of/TRG Game/TRG of/TRG Thrones/TRG ./SNT</span></div><div class="annotator2">Predicted Annotation:</div>
+  <div class="tweet"><span class="pre">Mir/SRC hat/SNT <strong style="color:darkred;">die/NON</strong> letzte/TRG Folge/TRG von/TRG Games/TRG of/TRG Thrones/TRG gar/SNT nicht/SNT gefallen/SNT ./SNT</span></div>
+  <div class="translation"><span class="pre">I/SRC absolutely/SNT did/SNT n't/SNT like/SNT <strong style="color:darkred;">the/NON</strong> last/TRG episode/TRG of/TRG Game/TRG of/TRG Thrones/TRG ./SNT</span></div>
 </div>
 </div>
 </div>
@@ -16493,7 +16501,7 @@ Macro-averaged F-scores of NWE-based methods with different vector normalization
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>proportional overlap</strong>: <strong>0.5</strong>.</li>
+<li><strong>proportional overlap</strong>: <strong>0.857</strong>.</li>
 </ul>
 
 </div>
@@ -16502,35 +16510,131 @@ Macro-averaged F-scores of NWE-based methods with different vector normalization
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Proportional-Overlap">Proportional Overlap<a class="anchor-link" href="#Proportional-Overlap">&#182;</a></h1><p>Given two sets of manually and automatically tagged spans ($\mathcal{S}$ and $\widehat{\mathcal{S}}$, respectively), we estimate the precision of automatic assignment as:
+<h1 id="Proportional-Overlap">Proportional Overlap<a class="anchor-link" href="#Proportional-Overlap">&#182;</a></h1><div class="example">
+  <div class="title">Example 4.2</div>
+  <div class="annotator1">Gold Annotation:</div>
+  <div class="tweet"><span class="pre">Mir/SRC hat/SNT <strong style="color:darkred;">die/TRG</strong> letzte/TRG Folge/TRG von/TRG Games/TRG of/TRG Thrones/TRG gar/SNT nicht/SNT gefallen/SNT ./SNT</span></div><div class="annotator2">Predicted Annotation:</div>
+  <div class="tweet"><span class="pre">Mir/SRC hat/SNT <strong style="color:darkred;">die/NON</strong> letzte/TRG Folge/TRG von/TRG Games/TRG of/TRG Thrones/TRG gar/SNT nicht/SNT gefallen/SNT ./SNT</span></div>
+</div>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+Given two sets of manually and automatically tagged spans ($\mathcal{S}$ and $\widehat{\mathcal{S}}$, respectively), we estimate the precision of automatic assignment as:
 $$P(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
     \widehat{\mathcal{S}})}{|\widehat{\mathcal{S}}|},$$
-where $C(\mathcal{S},\widehat{\mathcal{S}})$ stands for the proportion of overlapping tokens across all pairs of manually ($s_i$) and automatically ($s_j$) annotated spans:</p>
-$$C(\mathcal{S}, \widehat{\mathcal{S}}) = \sum_{s_i \in
-    \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j),$$<p>and the $|\widehat{\mathcal{S}}|$ term denotes the total number of spans automatically labeled with the given tag.</p>
-<p>Similarly, the recall of this assignment is estimated as:</p>
-$$R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S},
-    \widehat{\mathcal{S}})}{|\mathcal{S}|}.$$<p>Using these two values, one then normally computes the $F_1$-measure as:</p>
+where $C(\mathcal{S},\widehat{\mathcal{S}})$ stands for the proportion of overlapping tokens across all pairs of manually ($s_i$) and automatically ($s_j$) annotated spans:
+
+$$C(\mathcal{S}, \widehat{\mathcal{S}}) = \sum_{s_i \in \mathcal{S}}\sum_{s_j \in \widehat{\mathcal{S}}}c(s_i, s_j).$$
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="hide-on-next-fragment">
+Similarly, the recall of this assignment is estimated as:
+
+$$R(\mathcal{S}, \widehat{\mathcal{S}}) = \frac{C(\mathcal{S}, \widehat{\mathcal{S}})}{|\mathcal{S}|}.$$
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Using these two values, one then normally computes the $F_1$-measure as:</p>
 $$F_1 = 2\times\frac{P \times R}{P + R}.$$
 </div>
 </div>
-</div></section><section>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Data-Preparation">Data Preparation<a class="anchor-link" href="#Data-Preparation">&#182;</a></h1><p>*</p>
-
+<h1 id="Data-Preparation">Data Preparation<a class="anchor-link" href="#Data-Preparation">&#182;</a></h1>
 </div>
 </div>
-</div></section><section>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Conditional-Random-Fields">Conditional Random Fields<a class="anchor-link" href="#Conditional-Random-Fields">&#182;</a></h1><p><strong>Conditional random fields</strong> are an undirected discriminative probabilistic graphical model, which estimates the conditional probability of a set of unobserved variables $\ma$</p>
+<ul>
+<li><strong>preprocessed</strong> all tweets with a <strong>rule-based text normalization system</strong> (Sidarenka et al., 2013);<div class="hide-on-next-fragment">
+<ul>
+<li><strong>unified Twitter-specific phenomena</strong> (e.g., "@GrumpyMerkel" $\rightarrow$ "%User", "😊" $\rightarrow$ "%PosSmiley", "#glücklich" $\rightarrow$ "glücklich");</li>
+<li><strong>restored frequent misspellings</strong> (e.g., "zuguckn" $\rightarrow$ "zugucken", "Tach" $\rightarrow$ "Tag");</li>
+<li><strong>replaced frequent slang terms and abbrebiations with their standard-language
+equivalents</strong> (e.g., "n bissl" $\rightarrow$ "ein bisschen", "iwie" $\rightarrow$ "irgendwie").</li>
+</ul>
+</div></li>
+</ul>
 
 </div>
 </div>
-</div></section><section>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>tokenized</strong> all messages with an adjusted version of <strong>Christopher Potts' social-media tokenizer</strong>;</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>lemmatized</strong> and <strong>part-of-speech tagged</strong> these tokens with <strong>TreeTagger</strong> (Schmid, 1995);</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Afterwards, I obtained <strong>morphological and syntactic analyses</strong> with the help of <strong>Mate dependency parser</strong> (Bohnet et al., 2013);</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>Finally, I used <strong>70%</strong> of these data for <strong>training</strong>, <strong>10% as development set</strong>, and the remaining <strong>20%</strong> for <strong>testing</strong>.</li>
+</ul>
+
+</div>
+</div>
+</div></div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Conditional-Random-Fields">Conditional Random Fields<a class="anchor-link" href="#Conditional-Random-Fields">&#182;</a></h1><p><strong>Conditional random fields</strong> are an undirected discriminative probabilistic graphical model, which estimates the conditional probability of of unobserved variables $\mathbf{y}$ given an input $\mathbf{x}$ as:
+$$P\left(\mathbf{y}|\mathbf{x}\right) = \frac{\exp{\left(\sum_{m=1}^{M}\sum_{j}w_{j} \cdot f_j(x_{m}, y_{m-1}, y_{m})\right)}}{Z},$$
+where $Z$ is a normalization factor computed over all possible label assignments :
+$$Z =\sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}\exp\left(\sum_{m=1}^{M}\sum_{j}w_{j} \cdot f_j(x_{m}, y'_{m-1}, y''_{m})\right).$$</p>
+
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="img/folc-crf.png" alt="First-order Linear Chain CRF" id="folc-crf-definition"/></p>
+
+</div>
+</div>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -16834,78 +16938,48 @@ Results of the feature ablation tests for the CRF model
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Recurrent-Neural-Networks">Recurrent Neural Networks<a class="anchor-link" href="#Recurrent-Neural-Networks">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">TODO</span><span class="p">:</span> <span class="n">Definition</span>
-</pre></div>
+<h1 id="Recurrent-Neural-Networks">Recurrent Neural Networks<a class="anchor-link" href="#Recurrent-Neural-Networks">&#182;</a></h1><p><strong>Recurrent neural networks</strong> (RNN) are a class of artificial neural networks where connections between nodes form a directed graph along a temporal sequence and which can use their internal state (memory) to process sequences of arbitrary lengths.</p>
 
-    </div>
 </div>
 </div>
-
-</div></section><section>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="LSTM">LSTM<a class="anchor-link" href="#LSTM">&#182;</a></h2><p>The main components of a long-short term memory network are:</p>
 <ul>
-<li><p>An <strong>input gate</strong> $\vec{i}^{(t)}$, which controls how much input information will be used for the current prediction:
-$$\vec{i}^{(t)} = \sigma\left(W_i\cdot \vec{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right);$$
-where $\sigma$ denotes the sigmoid function; $W_i$, $U_i$, and $\vec{b_i}$ represent model's parameters; and $\vec{x}^{(t)}$ and $\vec{h}^{(t-1)}$ stand for the input and previous hidden states respectively;</p>
+<li><strong>LSTM</strong><div class="hide-on-next-fragment">
+<img src="img/lstm.png" alt="LSTM Cell Architecture" id="lstm"/>
+</div></li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li><strong>GRU</strong></li>
+</ul>
+<div class="hide-on-next-fragment">
+<img src="img/gru.png" alt="GRU Cell Architecture" id="gru"/>
+</div>
+</div>
+</div>
+</div></div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h1><ul>
+<li><p>I <strong>upsampled</strong> subjective tweets by randomly repeating microblogs that contained seniments until I got an equal proportion of subjective and objective messages in the training set;</p>
 </li>
-<li><p>A <strong>forget gate</strong> $\vec{f}^{(t)}$, which controls how much previous information will be used for the current prediction:
-$$\vec{f}^{(t)} = \sigma\left(W_i\cdot \vec{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right);$$</p>
+<li><p>I <strong>initialized</strong> all matrix parameters to random <strong>orthogonal</strong> matrices and used <strong>uniform He sampling</strong> (He et al., 2015) for setting the initial values of bias vectores;</p>
 </li>
-<li><p>An <strong>intermediate update vector</strong> $\widetilde{c}^{(t)}$:
-$$\widetilde{c}^{(t)} = tanh\left(W_c\cdot \vec{x}^{(t)} + U_c \cdot \vec{h}^{(t-1)} + \vec{b}_c\right);$$</p>
+<li><p>I used <strong>categorical hinge-loss</strong> as <strong>objective function</strong>;</p>
 </li>
-<li><p>The <strong>final update vector</strong> $\vec{c}^{(t)}$, which is a combination of the intermediate and previous updates:
-$$\vec{c}^{(t)} = \vec{i}^{(t)} \odot \widetilde{c}^{(t)} + \vec{f}^{(t)} \odot \vec{c}^{(t-1)};$$</p>
+<li><p>&hellip; and trained the models for <strong>256 epochs</strong> using the <strong>RMSProp algorithm</strong> (Tielemann and Hinton, 2012), <strong>selecting the parameters that achieved the highest macro-averaged F$_1$-score on the dev data</strong> during training.</p>
 </li>
 </ul>
-<p>Using the final update, we can then compute the new <strong>hidden state</strong> $\vec{h}^{(t)}$ and <strong>output vector</strong> $\vec{o}^{(t)}$ for position $t$:
-$$\vec{o}^{(t)} = \sigma\left(W_o\cdot \vec{x}^{(t)} + U_o \cdot \vec{h}^{(t-1)} + V_o \cdot \vec{c}^{(t)} + \vec{b}_o\right),$$
-$$\vec{h}^{(t)} = \vec{o}^{(t)} \odot tanh(\vec{c}^{(t)}).$$</p>
-
-</div>
-</div>
-</div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="GRU">GRU<a class="anchor-link" href="#GRU">&#182;</a></h2><p>A gated recurrent unit network is fundamentally similar to LSTM in that it also features:</p>
-<ul>
-<li><p>An <strong>input gate</strong> $\vec{i}^{(t)}$:
-$$\vec{i}^{(t)} = \sigma\left(W_i\cdot \vec{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right);$$</p>
-</li>
-<li><p>A <strong>forget gate</strong> $\vec{f}^{(t)}$:
-$$\vec{f}^{(t)} = \sigma\left(W_i\cdot \vec{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right);$$</p>
-</li>
-<li><p>An <strong>update vector</strong> $\widetilde{c}^{(t)}$:
-$$\widetilde{c}^{(t)} = tanh\left(W_c\cdot \mathbf{x}^{(t)} + U_c \cdot \left(\vec{f}^{(t)} \odot \vec{h}^{(t-1)}\right)  + \vec{b}_c\right);$$</p>
-</li>
-</ul>
-<p>But in contrast to LSTM, this update vector is used directly to compute the <strong>hidden state</strong> $\vec{h}^{(t)}$, which simultaneously serves as the <strong>output</strong> of the model:
-$$  \vec{h}^{(t)} = \vec{i}^{(t)} \odot \vec{h}^{(t-1)} + \left(\vec{1} -\vec{i}^{(t)}\right) \odot \widetilde{c}^{(t)}.$$</p>
-
-</div>
-</div>
-</div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h2><p>Since the size of our tagset (four tags) was obviously to small for keeping relevant context information in the hidden and output states ($\vec{h}^{(t)}$ and $\vec{o}^{(t)}$), I set the size of these vectors to 100 and multiplied them with matrix $O\in\mathbb{R}^{4 \times 100}$ to obtain the final prediction:
-$$\hat{y}^{(t)} = \underset{y}{\operatorname{argmax}}(O\cdot\vec{o}^{(t)}).$$</p>
-<p>Due to a high imbalance of targets classes (with most of the words having the tag NON), I <strong>upsampled</strong> subjective tweets by randomly repeating microblogs that contained seniments until I got an equal proportion of subjective and objective messages in the training set.  Furthermore, I used <em>hinge-loss</em> as optimized <strong>objective function</strong>:
-$$L = \sum_{i}^{N}\sum_{t=0}^{\lvert\vec{x}_i\rvert}\max\left(0, c + \max\limits_{y'\neq y}\vec{p}_{t,y'} - \vec{p}_{t,y}\right) + \alpha \left\lVert{}O\right\rVert^2_2$$</p>
-<p>Finally, I initialized the values of all matrix parameters to random <strong>orthogonal</strong> matrices and used <strong>uniform He sampling</strong> (He et al., 2015) for initializing the values of bias terms.  Afterwards, I ran the training for <strong>256 epochs</strong>, using <strong>RMSProp algorithm</strong> (Tielemann and Hinton, 2012) for optimization and selecting the parameters that yielded the highest macro-averaged $F_1$-score on the dev data during the training.</p>
 
 </div>
 </div>
@@ -16923,7 +16997,7 @@ Results of aspect-based sentiment analysis with recurrent neural networks
 <td colspan="3">Sentiment</td>
 <td colspan="3">Source</td>
 <td colspan="3">Target</td>
-<td>Macro<br/>F$_1$</td>
+<td rowspan="2">Macro<br/>F$_1$</td>
 </tr>
 <tr>
 <td>Precision</td>
@@ -16957,14 +17031,15 @@ Results of aspect-based sentiment analysis with recurrent neural networks
 <tr>
 <td>Test Set</td>
 <td>0.29<span class="stddev">0.03</span></td>
-<td>0.31<span class="stddev">0.11</span></td>
-<td>0.29<span class="stddev">0.03</span></td>
-<td>0.25<span class="stddev">0.02</span></td>
-<td>0.31<span class="stddev">0.0</span></td>
-<td>0.27<span class="stddev">0.01</span></td>
+<td class="best">0.31<span class="stddev">0.11</span></td>
+<td class="best">0.29<span class="stddev">0.03</span></td>
+<td class="best">0.25<span class="stddev">0.02</span></td>
+<td class="best">0.31<span class="stddev">0.0</span></td>
+<td class="best">0.27<span class="stddev">0.01</span></td>
 <td>0.23<span class="stddev">0.02</span></td>
-<td>0.25<span class="stddev">0.05</span></td>
-<td>0.24<span class="stddev">0.01</span></td>
+<td class="best">0.25<span class="stddev">0.05</span></td>
+<td class="best">0.24<span class="stddev">0.01</span></td>
+<td class="best">0.27<span class="stddev">0.02</span></td>
 </tr>
 <tr>
 <tr>
@@ -16985,13 +17060,13 @@ Results of aspect-based sentiment analysis with recurrent neural networks
 </tr>
 <tr>
 <td>Test Set</td>
-<td>0.3<span class="stddev">0.01</span></td>
+<td class="best">0.3<span class="stddev">0.01</span></td>
 <td>0.26<span class="stddev">0.06</span></td>
 <td>0.28<span class="stddev">0.03</span></td>
 <td>0.22<span class="stddev">0.03</span></td>
 <td>0.28<span class="stddev">0.02</span></td>
 <td>0.24<span class="stddev">0.02</span></td>
-<td>0.24<span class="stddev">0.03</span></td>
+<td class="best">0.24<span class="stddev">0.03</span></td>
 <td>0.21<span class="stddev">0.07</span></td>
 <td>0.22<span class="stddev">0.03</span></td>
 <td>0.25<span class="stddev">0.01</span></td>
@@ -17131,28 +17206,30 @@ Results of aspect-based sentiment analysis with different word embedding types
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <div class="hide-on-next-fragment">
-<h2>Broad Interpretation<h2>
-<div class="example">
-  <div class="tweet"><span class="seniment"><span class="target">Francis</span> makes a very <span class="polar-term">good</span> impression on <span class="source">me</span>!<span class="emoexpression">:)</span></span></div><p>$\rightarrow$</p>
-<p>Francis/TRG makes/SNT a/SNT very/SNT good/SNT impression/SNT on/SNT me/SRC !/SNT :)/SNT
-&lt;/div&gt;
-&lt;/div&gt;</p>
+<h2>Broad Interpretation</h2>
 
+   <div class="example">
+     <div class="title">Example 4.3</div>
+     <div class="tweet"><span class="label">Tweet:</span><span class="sentiment"><span class="target">Francis</span><span class="tag">target</span> makes a very <span class="polar-term">good</span><span class="tag">polar-term</span> impression on <span class="source">me</span><span class="tag">source</span>! <span class="polar-term">:)</span><span class="tag">polar-term</span></span><span class="tag">sentiment</span></div>
+     <div class="arrow">$\rightarrow$</div>
+     <div class="tweet"><span class="pre">Francis/TRG makes/SNT a/SNT very/SNT good/SNT impression/SNT on/SNT me/SRC !/SNT :)/SNT</span></div>
+    </div>        
 </div>
 </div>
-</div></div></section><section>
+</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Narrow-Interpretation">Narrow Interpretation<a class="anchor-link" href="#Narrow-Interpretation">&#182;</a></h2><div class="example">
-
-  <div class="tweet"><span class="seniment"><span class="target">Francis</span> makes a very <span class="polar-term">good</span> impression on <span class="source">me</span>!<span class="emoexpression">:)</span></span></div><p>$\rightarrow$</p>
-<p>Francis/TRG makes/NON a/NON very/NON good/SNT impression/NON on/NON me/SRC !/NON :)/SNT
-&lt;/div&gt;</p>
-
+     <div class="title">Example 4.3</div>
+     <div class="tweet"><span class="label">Tweet:</span><span class="sentiment"><span class="target">Francis</span><span class="tag">target</span> makes a very <span class="polar-term">good</span><span class="tag">polar-term</span> impression on <span class="source">me</span><span class="tag">source</span>! <span class="polar-term">:)</span><span class="tag">polar-term</span></span><span class="tag">sentiment</span></div>
+     <div class="arrow">$\rightarrow$</div>
+     <div class="tweet"><span class="pre">Francis/TRG makes/NON a/NON very/NON good/SNT impression/NON on/NON me/SRC !/NON :)/SNT</span></div>
+    </div>
 </div>
 </div>
-</div></section><section>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -17807,21 +17884,6 @@ $$F_1 = \frac{F_{pos} + F_{neg}}{2} $$</li>
 </div>
 </div>
 </div></div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Data-Preparation">Data Preparation<a class="anchor-link" href="#Data-Preparation">&#182;</a></h2><p>As in the previous experiments, I</p>
-<ul>
-<li>preprocessed all tweets with the text normalization system of Sidarenka et al. (2013},</li>
-<li>tokenized them with the adjusted version of Christopher Potts' tokenizer,</li>
-<li>lemmatized and assigned part-of-speech tags to these tokens with the TreeTagger of Schmid (1995),</li>
-<li>and obtained morphological and syntactic analyses with the Mate dependency parser (Bohnet et al., 2013);</li>
-<li>I again split the 70-10-20 percent </li>
-</ul>
-
-</div>
-</div>
-</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21288,7 +21350,6 @@ $$  p\left(\mathbf{Y}_o{=}\mathbf{y}_o\right) = \sum_{\mathbf{y}_h} p\left(\math
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<div class="hide-on-next-fragment">
 <figure>
 <figure>
 <img src="img/latent-mcrf-correct.png" alt="Computational path of the probability of the correct label in latent marginalized CRF">
@@ -21306,7 +21367,6 @@ Wrong label
 Confronted computational paths in latent and Latent-Marginalized Conditional Random Fields
 </figcaption>
 </figure>
-</div>
 </div>
 </div>
 </div></div><div class="fragment">
@@ -22209,8 +22269,13 @@ Results of discourse-aware sentiment classifiers with different relation schemes
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <div class="answer hide-on-next-fragment">
-  &mdash; Yes, we can, with the proposed linear projection, lexicon-based attention, latent-marginalized CRFs, and RDP algorithms as well as alternative CRF structures and least-squares word embeddings;
-  </div>
+    <ul>
+    <li><strong>generation of sentiment lexicons</strong> is most amenable to <strong>dictionary- and NWE-based methods</strong>;</li>
+        <li><strong>aspect-based sentiment analysis</strong> is better addressed with <strong>probabilistic graphical models</strong> such as <em>Conditional Random Fields</em>;</li>
+        <li><strong>message-level sentiment analysis</strong> shows best scores in conjunction with <strong>ML- and DL-based methods</strong>;</li>
+        <li>finally, <strong>probabilistic graphical models</strong> can still beat neural networks on the task of <strong>discourse-aware sentiment analysis</strong>;</li>
+</ul>
+        </div>
 </div>
 </div>
 </div></div><div class="fragment">
@@ -22228,7 +22293,7 @@ Results of discourse-aware sentiment classifiers with different relation schemes
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <div class="answer hide-on-next-fragment">
-  &mdash; Yes, we can, with the proposed linear projection, lexicon-based attention, latent-marginalized CRFs, and RDP algorithms as well as alternative CRF structures and least-squares word embeddings;
+  &mdash; Yes, we can, with the proposed <strong>linear projection</strong>, <strong>lexicon-based attention</strong>, <strong>latent-marginalized CRFs</strong>, and <strong>RDP algorithms</strong> as well as alternative CRF structures and <strong>least-squares word embeddings</strong>;
   </div>
 </div>
 </div>

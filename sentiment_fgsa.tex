@@ -413,11 +413,11 @@ $\mathbf{y}^{(i)}$ given $\mathbf{x}^{(i)}$ over the whole corpus:
 \end{equation}
 The log-likelihood $\ell(\mathbf{y}^{(n)}|\mathbf{x}^{(n)})$ in this
 equation is commonly estimated as the logarithm of globally (\ie{}
-w.r.t. to the whole instance) normalized softmax function:
+w.r.t\@. to the whole instance) normalized softmax function:
 \begin{equation}\label{snt:fgsa:eq:crf-ell}
   \ell\left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right) =
   \ln\left(P(\mathbf{y}^{(n)}|\mathbf{x}^{(n)})\right) =
-  \ln\left(\frac{ \exp\left(\sum_{m=1}^{M}\sum_jw_{j} \cdot f_j(x_{m},
+  \ln\left(\frac{ \exp\left(\sum_{m=1}^{M}\sum_{j}w_{j} \cdot f_j(x_{m},
     y_{m-1}, y_{m})\right)}{Z}\right),
 \end{equation}
 where $M$ stands for the length of the $n$-th training instance;
@@ -427,8 +427,8 @@ corresponding weight of this feature; and $Z$ is a normalization
 factor calculated over all possible label assignments:
 \begin{equation*}
   Z =
-  \sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}\exp\left(\sum_{m=1}^{M}\sum_jw_{j}
-  \times f_j(x_{m}, y'_{m-1}, y''_{m})\right).
+  \sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}\exp\left(\sum_{m=1}^{M}\sum_{j}w_{j}
+  \cdot f_j(x_{m}, y'_{m-1}, y''_{m})\right).
 \end{equation*}
 Since this normalizing term appears in the denominator, and couples
 together all feature weights that need to be optimized, it becomes
@@ -579,7 +579,7 @@ classifier.
 
 \begin{table*}
   \begin{center}
-    \bgroup \setlength\tabcolsep{0.1\tabcolsep}\scriptsize
+    \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
         *{9}{>{\centering\arraybackslash}p{0.074\columnwidth}} % next nine columns
         *{1}{>{\centering\arraybackslash}p{0.136\columnwidth}}} % last two columns

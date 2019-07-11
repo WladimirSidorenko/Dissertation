@@ -118,10 +118,11 @@ div.cell {
     font-weight: bold;
 }
 
-reveal table tbody tr td.separator {
+.reveal table tbody tr td.separator {
     background-color: slategray;
     color: white;
     font-weight: bold;
+    text-align: center;
 }
 
 .reveal table {
@@ -149,6 +150,10 @@ reveal table tbody tr td.separator {
 
 .reveal table#discourse-relation-schemes thead tr td:first-child {
     width: 7em;
+}
+
+.reveal table#top10-crf-features tbody tr td {
+    font-size: small;
 }
 
 .reveal table#discourse-relation-schemes tbody tr td + td {
@@ -197,6 +202,11 @@ reveal table tbody tr td.separator {
     display: block;
     height: 100%;
     margin: 10px 30px;
+}
+
+.reveal section ul + .hide-on-next-fragment img {
+    height: 15em;
+    margin: auto;
 }
 
 .reveal section div.text_cell_render img.heatmap {
@@ -343,6 +353,14 @@ img.fit {
     height: 11em;
 }
 
+#folc-crf-definition {
+    height: 15em;
+}
+
+#lstm, #gru {
+    height: 17em;
+}
+
 /* Divs and Spans */
 ul li .examples .left,
 ul li .examples .right {
@@ -434,10 +452,16 @@ ul li div.examples {
 
 .reveal .negdelta, .reveal .posdelta, .stddev {
     vertical-align: super;
-    font-size: small;
+    font-size: x-small;
 }
 
 .reveal .negdelta {
+    color: red;
+}
+
+.reveal .negdelta::before {
+    content: "-";
+    font-size: x-small;
     color: red;
 }
 
@@ -445,10 +469,20 @@ ul li div.examples {
     color: green;
 }
 
+.reveal .posdelta::before {
+    content: "+";
+    font-size: x-small;
+    color: green;
+}
+
+.reveal .stddev {
+    vertical-align: super;
+    font-size: x-small;
+}
+
 .reveal .stddev::before {
     content: "±";
-    vertical-align: super;
-    font-size: small;
+    font-size: x-small;
 }
 
 .reveal .default-rel {
@@ -581,6 +615,16 @@ ul li div.examples {
     display: block;
 }
 
+.reveal div.example div.tweet span.pre {
+    font-family: monospace sans-serif;
+}
+
+.reveal div.example div.translation span.pre {
+    font-size: large;
+    font-style: normal;
+    color: gray;
+}
+
 .reveal div.example span.gold-label,
 .reveal div.example span.predicted-label {
     font-weight: bold;
@@ -602,6 +646,12 @@ ul li div.examples {
     color: darkred;
     /* color: #00305e; */
 }
+
+.reveal div.example div.arrow {
+    padding-left: 0.8em;
+    color: #707070;
+}
+
 
 /* tags */
 .reveal div.example span.tag {
