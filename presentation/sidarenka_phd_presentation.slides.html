@@ -15840,8 +15840,8 @@ vectors as positive and negative scores of corresponding words.</p>
 <div class="text_cell_render border-box-sizing rendered_html">
 <h1 id="Linear-Projection">Linear Projection<a class="anchor-link" href="#Linear-Projection">&#182;</a></h1><p>Given two sets of vectors with opposite semantic orientations ($\mathcal{P} =\{\vec{p}_{+_1},\ldots,\vec{p}_{+_m}\}$ and $\mathcal{N} = \{\vec{p}_{-_1},\ldots,\vec{p}_{-_n}\}$),
 we are looking for a line $\vec{b}$ that maximizes the distance between the projections of embeddings from these sets on that line, i.e.:</p>
-$$\vec{b} = \mathrm{argmax}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b} - \frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}\right\rVert^2=\mathrm{argmax}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\left(\vec{p}_{+}-\vec{p}_{-}\right)}{\vec{b}^2}\vec{b}\right\rVert^2,$$<p>where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the projection of a word embedding with the positive polarity on line $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the respective projection of a negative seed term.</p>
-<p>Considering the $\mathrm{argmax}$ argument in the above expression as our objective function $f$, we can compute the gradient of $f$ with respect
+$$\vec{b} = \underset{\vec{b}}{\operatorname{argmax}}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b} - \frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}\right\rVert^2=\underset{\vec{b}}{\operatorname{argmax}}_{\vec{b}}\frac{1}{2}\sum_{\vec{p}_+}\sum_{\vec{p}_-}\left\lVert\frac{\vec{b}\cdot\left(\vec{p}_{+}-\vec{p}_{-}\right)}{\vec{b}^2}\vec{b}\right\rVert^2,$$<p>where $\frac{\vec{b}\cdot\vec{p}_+}{\vec{b}^2}\vec{b}$ is the projection of a word embedding with the positive polarity on line $\vec{b}$, and $\frac{\vec{b}\cdot\vec{p}_-}{\vec{b}^2}\vec{b}$ is the respective projection of a negative seed term.</p>
+<p>Considering the $\operatorname{argmax}$ argument in the above expression as our objective function $f$, we can compute the gradient of $f$ with respect
 to $\vec{b}$ as follows:
 $$\nabla_{\vec{b}} f = \sum_{\vec{p}_+}\sum_{\vec{p}_-}\gamma\left(\Delta - \gamma\vec{b}\right),$$</p>
 <p>where $\Delta$ stands for the difference between the positive and negative vectors $\vec{p}_{+}$ and $\vec{p}_{-}$: $\Delta =
@@ -16898,7 +16898,7 @@ $$  \vec{h}^{(t)} = \vec{i}^{(t)} \odot \vec{h}^{(t-1)} + \left(\vec{1} -\vec{i}
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h2 id="Training">Training<a class="anchor-link" href="#Training">&#182;</a></h2><p>Since the size of our tagset (four tags) was obviously to small for keeping relevant context information in the hidden and output states ($\vec{h}^{(t)}$ and $\vec{o}^{(t)}$), I set the size of these vectors to 100 and multiplied them with matrix $O\in\mathbb{R}^{4 \times 100}$ to obtain the final prediction:
-$$\hat{y}^{(t)} = argmax(O\cdot\vec{o}^{(t)}).$$</p>
+$$\hat{y}^{(t)} = \underset{y}{\operatorname{argmax}}(O\cdot\vec{o}^{(t)}).$$</p>
 <p>Due to a high imbalance of targets classes (with most of the words having the tag NON), I <strong>upsampled</strong> subjective tweets by randomly repeating microblogs that contained seniments until I got an equal proportion of subjective and objective messages in the training set.  Furthermore, I used <em>hinge-loss</em> as optimized <strong>objective function</strong>:
 $$L = \sum_{i}^{N}\sum_{t=0}^{\lvert\vec{x}_i\rvert}\max\left(0, c + \max\limits_{y'\neq y}\vec{p}_{t,y'} - \vec{p}_{t,y}\right) + \alpha \left\lVert{}O\right\rVert^2_2$$</p>
 <p>Finally, I initialized the values of all matrix parameters to random <strong>orthogonal</strong> matrices and used <strong>uniform He sampling</strong> (He et al., 2015) for initializing the values of bias terms.  Afterwards, I ran the training for <strong>256 epochs</strong>, using <strong>RMSProp algorithm</strong> (Tielemann and Hinton, 2012) for optimization and selecting the parameters that yielded the highest macro-averaged $F_1$-score on the dev data during the training.</p>
@@ -17112,16 +17112,15 @@ Results of aspect-based sentiment analysis with different word embedding types
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Evaluation">Evaluation<a class="anchor-link" href="#Evaluation">&#182;</a></h1>
+<h1 id="Evaluation:-Annotation-Scheme">Evaluation: Annotation Scheme<a class="anchor-link" href="#Evaluation:-Annotation-Scheme">&#182;</a></h1>
 </div>
 </div>
 </div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Annotation-Scheme-(Example)">Annotation Scheme (Example)<a class="anchor-link" href="#Annotation-Scheme-(Example)">&#182;</a></h2><p><strong>Broad Interpretation:</strong></p>
-<div class="example">
-  <div class="seniment"><div class="target">Francis</div> makes a <div class="intensifier">very</div> <div class="emoexpression">good</div> impression on <div class="source">me</div>!<div class="emoexpression">:)</div></div><p>$\rightarrow$</p>
+<h2 id="Broad-Interpretation">Broad Interpretation<a class="anchor-link" href="#Broad-Interpretation">&#182;</a></h2><div class="example">
+  <div class="tweet"><span class="seniment"><span class="target">Francis</span> makes a very <span class="polar-term">good</span> impression on <span class="source">me</span>!<span class="emoexpression">:)</span></span></div><p>$\rightarrow$</p>
 <p>Francis/TRG makes/SNT a/SNT very/SNT good/SNT impression/SNT on/SNT me/SRC !/SNT :)/SNT
 &lt;/div&gt;</p>
 
@@ -17131,9 +17130,9 @@ Results of aspect-based sentiment analysis with different word embedding types
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p><strong>Narrow Interpretation:</strong></p>
-<div class="example">
-  <div class="seniment"><div class="target">Francis</div> makes a <div class="intensifier">very</div> <div class="emoexpression">good</div> impression on <div class="source">me</div>!<div class="emoexpression">:)</div></div><p>$\rightarrow$</p>
+<h2 id="Narrow-Interpretation">Narrow Interpretation<a class="anchor-link" href="#Narrow-Interpretation">&#182;</a></h2><div class="example">
+
+  <div class="tweet"><span class="seniment"><span class="target">Francis</span> makes a very <span class="polar-term">good</span> impression on <span class="source">me</span>!<span class="emoexpression">:)</span></span></div><p>$\rightarrow$</p>
 <p>Francis/TRG makes/NON a/NON very/NON good/SNT impression/NON on/NON me/SRC !/NON :)/SNT
 &lt;/div&gt;</p>
 
@@ -17625,10 +17624,20 @@ Results of aspect-based sentiment analysis with different word embedding types
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Conclusions">Conclusions<a class="anchor-link" href="#Conclusions">&#182;</a></h1>
+<h1 id="Summary-and-Conclusions">Summary and Conclusions<a class="anchor-link" href="#Summary-and-Conclusions">&#182;</a></h1>
 </div>
 </div>
 </div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<ul>
+<li>In this chapter, I have compared two popular approaches to aspect-based sentiment analysis: <strong>conditional random fields</strong> and <strong>recurrent neural networks</strong>;</li>
+</ul>
+
+</div>
+</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -19075,7 +19084,7 @@ $$e_i = tanh\left(\vec{\alpha}\vec{h}^{(2)}_i + \beta_i\right)$$</li>
 </ol>
 <p>The $\vec{a}$ and $b$ terms in the above equations represent automatically learned attention parameters, and the $\vec{h}^{(2)}_i$ represents the concatenated output of the second bidirectional LSTM layer produced at the $i$-th tweet token: $\vec{h}_i^{(2)} = [\vec{h}^{(2)}_{i_{\rightarrow}}, \vec{h}^{(2)}_{i_{\leftarrow}}]\in\mathbb{R}^{300}$.</p>
 <p>In the final step, Baziotis et al. multiplied the output of the attention layer with matrix $W$ and selected the label with the highest resulting score:
-$$\hat{y} = argmax\left(softmax(W^\top\vec{a})\right).$$</p>
+$$\hat{y} = \underset{y}{\operatorname{argmax}}\left(softmax(W^\top\vec{a})\right).$$</p>
 
 </div>
 </div>
@@ -20983,9 +20992,8 @@ Distribution of elementary discourse units and polarity classes in the training 
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Finally, I <strong>derived RST trees for the segmented tweets with the DPLP parser</strong> (Yi and Eisenstein, 2014) that I had previously retrained on the Potsdam Commentary Corpus (PCC 2.0; Stede and Neumann, 2014).</li>
+<li>Finally, I <strong>derived RST trees for the segmented tweets with the DPLP parser</strong> (Yi and Eisenstein, 2014) that I had previously retrained on the Potsdam Commentary Corpus (PCC 2.0; Stede and Neumann, 2014).  Following Bhatia et al. (2015), I used a binary discourse relation scheme, only distinguishing between <strong>contrastive</strong> and <strong>non-contrastive</strong> relations. </li>
 </ul>
-<p>Following Bhatia et al. (2015), I used a binary discourse relation scheme, only distinguishing between <strong>contrastive</strong> and <strong>non-contrastive</strong> relations.</p>
 
 </div>
 </div>
@@ -21145,37 +21153,85 @@ where $K_n^{(r_i)}$ and $K_s^{(r_i)}$ stand for the nucleus and satellite coeffi
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Latent-CRFs">Latent CRFs<a class="anchor-link" href="#Latent-CRFs">&#182;</a></h1><figure>
-<img src="img/latent-crf-correct.png" alt="Computational path of the probability of the correct label in latent CRF">
-<figcaption>
-Computational path of the probability of the correct label in latent CRF
-</figcaption>
-</figure><figure>
-<img src="img/latent-crf-wrong.png" alt="Computational path of the probability of the wrong label in latent CRF">
-<figcaption>
-Computational path of the probability of the wrong label in latent CRF
-</figcaption>
-</figure>
+<h1 id="Latent-CRFs">Latent CRFs<a class="anchor-link" href="#Latent-CRFs">&#182;</a></h1>
 </div>
 </div>
-</div></section><section>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Latent-Marginalized-CRFs">Latent Marginalized CRFs<a class="anchor-link" href="#Latent-Marginalized-CRFs">&#182;</a></h1><figure>
-<img src="img/latent-mcrf-correct.png" alt="Computational path of the probability of the correct label in latent marginalized CRF">
+<p>Given a dataset $\mathcal{D}=\left\{\left(\mathbf{x}^{(i)}, \mathbf{y}^{(i)}\right)\right\}_{i=1}^{N}$, we want to find parameters $\boldsymbol{\theta}^*$, s.t.:</p>
+$$\boldsymbol{\theta}^* = \underset{\boldsymbol{\theta}}{\operatorname{argmax}}\ell(\boldsymbol{\theta}) = \sum_{i=1}^{N}\log\left(p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right)\right),$$<p>where the conditional likelihood is normally defined as:</p>
+$$p\left(\mathbf{y}^{(i)}\vert\mathbf{x}^{(i)}; \boldsymbol{\theta}\right) =   \frac{\exp\left(\sum_{t=1}^{T_i}\sum_k\boldsymbol{\theta}_k\mathbf{f}_k\left(\mathbf{x}^{(i)}_t,\mathbf{y}^{(i)}_{t-t},\mathbf{y}^{(i)}_{t}\right)\right)}{Z}.$$
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span> 
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<figure>
+<figure>
+<img src="img/latent-crf-correct.png" alt="Computational path of the probability of the correct label in latent CRF">
 <figcaption>
-Computational path of the correct label
+Correct label
 </figcaption>
-</figure><figure>
-<img src="img/latent-mcrf-wrong.png" alt="Computational path of the probability of the wrong label in latent marginalized CRF">
+</figure>
+<figure>
+<img src="img/latent-crf-wrong.png" alt="Computational path of the probability of the wrong label in latent CRF">
 <figcaption>
-Computational path of the wrong label
+Wrong label
+</figcaption>
+</figure>
+<figcaption>
+Confronted computational paths in latent and latent Conditional Random Fields
 </figcaption>
 </figure>
 </div>
 </div>
-</div></section><section>
+</div></div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Latent-Marginalized-CRFs">Latent Marginalized CRFs<a class="anchor-link" href="#Latent-Marginalized-CRFs">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<figure>
+<figure>
+<img src="img/latent-mcrf-correct.png" alt="Computational path of the probability of the correct label in latent marginalized CRF">
+<figcaption>
+Correct label
+</figcaption>
+</figure>
+<figure>
+<img src="img/latent-mcrf-wrong.png" alt="Computational path of the probability of the wrong label in latent marginalized CRF">
+<figcaption>
+Wrong label
+</figcaption>
+</figure>
+<figcaption>
+Confronted computational paths in latent and Latent-Marginalized Conditional Random Fields
+</figcaption>
+</figure>
+</div>
+</div>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21899,10 +21955,12 @@ Results of discourse-aware sentiment classifiers with different relation schemes
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 class="chapter-title animate">Conclusions</h1>
+<p><h1 class="chapter-title animate">Final</h1>
+<img src="img/final.png" alt="Final Falg" id="final-flag"/></p>
+
 </div>
 </div>
-</div>
+</div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -21914,7 +21972,7 @@ Results of discourse-aware sentiment classifiers with different relation schemes
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>In my dissertation, I have presented a corpus of $\approx8,000$ German tweets, which pertain to four different topics (federal elections, papal conclave, general political discussions, and casual everyday conversations) and were sampled according to three formal criteria (tweets containing a polar term, messages having a smiley, and all remaining microblogs).  After annotating the corpus in three steps (initial, adjudication, and final), I have attained a reliable level of inter-annotator agreement for all elements (sentiments, sources, targets, polar terms, downtoners, negations, and intensifiers), finding that both selection criteria (topics and formal traits) significantly affected the distribution of sentiments and polar terms and the reliability of their annotation;</li>
+<li>In this presentation, I have presented a <strong>corpus of $\approx8,000$ German tweets, which had been annotated with sentiments, sources, targets, polar terms, intensifiers, diminishers, and negations)</strong> and I also conducted an <strong>inter-annotator agreement study on that corpus</strong>;</li>
 </ul>
 
 </div>
@@ -21924,8 +21982,7 @@ Results of discourse-aware sentiment classifiers with different relation schemes
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Then, I have compared existing German sentiment lexicons, which were translated from English resources and
-revised by human experts, with lexicons that were generated automatically from scratch with the help of state-of-the-art dictionary-, corpus -, and word-embedding&ndash;based methods.  An evaluation of these approaches on our corpus showed that semi-automatically translated polarity lists were generally better than the automatically induced ones, reaching 0.587 macro-$F_1$ and attaining 0.955 micro-$F_1$&ndash; score on the prediction of polar terms.  Furthermore, among fully automatic methods, dictionary-based systems showed stronger results than their corpus- and word-embedding&ndash;based competitors, yielding 0.479 macro-$F_1$ and 0.962 micro-$F_1$.  We could, however, improve on the latter metric (pushing it to 0.963) with our proposed linear projection solution, in which we first found a line that maximized the mutual distance between the projections of seed vectors with opposite semantic orientations and then projected the embeddings of all remaining words on that line, considering the distance of these projections to the median as polarity scores of respective terms;</li>
+<li>On the level of <strong>words</strong>, I have <strong>compared existing German sentiment lexicons with automatically generated polarity lists</strong> and also <strong>proposed several new NWE-bsed methods</strong>;</li>
 </ul>
 
 </div>
@@ -21935,9 +21992,7 @@ revised by human experts, with lexicons that were generated automatically from s
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>In Chapter 4, I turned the attention to the aspect-based sentiment analysis, in which I tried to predict the
-spans of sentiments, targets, and holders of the opinions using two most popular approaches to this task&mdash;conditional random fields and recurrent neural networks.  I obtained my best results (0.287
-macro-$F_1$) with the first-order linear-chain CRFs and could increase these scores by using alternative topologies of CRFs (second-order linear-chain and semi-Markov CRFs), also boosting the macro-averaged $F_1$to 0.38 by taking a narrower interpretation  of sentiment spans (in which I only assigned the <em>sentiment</em> tag to polar terms).  Further evaluation of these methods proved the utility of the text normalization step (which raised the macro-$F_1$ of the CRF-method by almost 3%) and task-specific word embeddings with the least-squares fallback (which improved the macro-$F_1$--score of the GRU system by 1.4%);</li>
+<li>On the level of <strong>syntactic constituents</strong>, I have <strong>evaluated common approaches to aspect-based sentiment analysis (CRFs and RNNs)</strong> and als came up with several <strong>improvements of these models (alternative graph structures and word embedding types)</strong>;</li>
 </ul>
 
 </div>
@@ -21947,7 +22002,7 @@ macro-$F_1$) with the first-order linear-chain CRFs and could increase these sco
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Afterwards, in Chapter 5, I addressed one of the most popular objective in contemporary sentiment analysis&mdash;<strong>message-level sentiment analysis</strong> (MLSA).  To get a better overview of the numerous existing systems, I compared three larger families of MLSA methods: <strong>dictionary-</strong>, <strong>machine-learning&ndash;</strong>, and <strong>deep-learning&ndash;based</strong> ones; finding that <strong>the last two groups performed significantly better</strong> than the lexicon-based approaches (the best macro-$F_1$&ndash;scores of machine- and deep-learning methods run up to 0.677 and 0.69 respectively, whereas the best lexicon-based solution [Hu and Liu, 2004] only reached 0.641 macro-$F_1$).  Apart from this, I improved the results of many reimplemented approaches by changing their default configuration (e.g., abandoning polarity changing rules of lexicon-based systems, using alternative classifiers in ML-based systems, or taking the least-squares embeddings for DL-based methods).  In addition to the numerous reimplementations of popular existing algorithms, I also my own solution&mdash;<strong>lexicon-based attention</strong> (LBA), in which I tried to unite the lexicon and deep-learning paradigms by taking a bidirectional LSTM network and explicitly pointing its attention to the polar terms that appeared in the analyzed messages.  With this solution, I not only outperformed all alternative DL systems but also improved on the scores of ML-based classifiers, attaining 0.69 macro-$F_1$ and 0.73 micro-$F_1$ on the PotTS corpus.  Similarly to the findings in the previous chapter, I observed a strong positive effect of text normalization and task-specific embeddings with the least-squares approximation;</li>
+<li>On the level of <strong>statements</strong>, I have <strong>compared three groups of message-level sentiment methods (dictionary-, ML-, and DL-based ones)</strong> and also <strong>proposed my own lexicon-based attention system</strong>;</li>
 </ul>
 
 </div>
@@ -21957,183 +22012,7 @@ macro-$F_1$) with the first-order linear-chain CRFs and could increase these sco
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>Finally, in the last part, I tried to improve the results of the proposed LBA solution by making it aware of the discourse structure.  For this purpose, I segmented all microblogs from the PotTS and SB10k corpora into elementary discourse units, individually analyzing each of these segments with our MLSA classifier, and then estimated the overall polarity of a tweet by joining the polarity scores of its EDUs over the RST tree.  We proposed three different ways of doing this joining (latent CRFs, latent-marginalized CRFs, and Recursive Dirichlet Process), obtaining better results than existing discourse-aware sentiment methods and also outperforming the original discourse-unaware baseline.  In the concluding experiments, we further improved these scores by using manually annotated RST trees and richer subsets of iscourse relations.</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="General-Conclusions">General Conclusions<a class="anchor-link" href="#General-Conclusions">&#182;</a></h1>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Can we apply opinion mining methods devised for standard English to German Twitter?</strong></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Yes, we can, but the success of these approaches might significantly vary depending on the task, the size and the reliability of the training data, as well as the evaluation metric that we use.  I can, however, provide a few general rules of thumb:</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Prefer methods that are closest to your training objective and that were trained under similar conditions w.r.t. the amount of data, their class distribution and domain;</strong></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Put every single setting of these methods into question</strong>;</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Try using manually labeled resources for your target domain, if they are available, but pay attention to the quality of their annotation&mdash;it often matters more than the corpus size;</strong></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Prefer machine-learning methods to hard-coded rules</strong>&mdash;they will penalize their bad components automatically by themselves;</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Do not use randomly initialized word embeddings for deep-learning systems</strong>&amp;mdashinitialize them with language-model vectors;</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Which groups of approaches are best suited for which sentiment tasks?</strong></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Sentiment lexicon generation</strong> is more amenable to dictionary-based solutions and my proposed word-embedding&ndash;based algorithms;</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Aspect-based sentiment analysis</strong> can be better addressed with probabilistic graphical models, such as conditional random fields;</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Message-level sentiment analysis</strong> can be efficiently tackled with both machine- and deep-learning approaches;</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li>Finally, <strong>probabilistic graphical models</strong> strike back at discourse-aware opinion mining.</li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>How much do word- and discourse-level analyses affect message-level sentiment classification?</strong></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>My evaluation showed that the macro-averaged $F_1$-scores of our proposed lexicon-based attention system varied   by up to 14% (from 0.64 to 0.69 macro-$F_1$ on the PotTS corpus, and from 0.44 to 0.58 on SB10k) depending on     the lexicon used. At the same, discourse enhancements could only improve the results of LBA by at most 1.5%       percent (from 0.677 to 0.678 on PotTS, and from 0.557 to 0.572 on SB10k).</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Does text normalization help analyze sentiments?</strong></li>
-</ul>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Yes, it definitely does. Normalization significantly improved the quality of aspect-based and message-level sentiment analyses, boosting the results on the former task by up to 4% and improving the macro-averaged $F_1$-measure of message-level sentiment methods by up to 25%;</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Can we do better than existing approaches?</strong>
-Yes, we can with the proposed:</li>
-<li><strong>linear-projection algorithm</strong>;</li>
-<li><strong>alternative CRF topologies</strong>;</li>
-<li><strong>lexicon-based attention network</strong>;</li>
-<li>and <strong>latent-marginalized CRFs</strong> and <strong>Recursive Dirichlet Process</strong>.</li>
+<li>Finally, on the level of <strong>discourse</strong>, I <strong>evaluated existing discourse-aware sentiment methods and proposed three additional algorithms for this task (LCRF, LMCRFs, and RDP)</strong>.</li>
 </ul>
 
 </div>
@@ -22142,7 +22021,7 @@ Yes, we can with the proposed:</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Contributions">Contributions<a class="anchor-link" href="#Contributions">&#182;</a></h1>
+<h1 id="Answers-to-Research-Questions">Answers to Research Questions<a class="anchor-link" href="#Answers-to-Research-Questions">&#182;</a></h1>
 </div>
 </div>
 </div><div class="fragment">
@@ -22150,7 +22029,7 @@ Yes, we can with the proposed:</li>
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li>The <strong>Potsdam Twitter Sentiment Corpus</strong>: <a href="https://github.com/WladimirSidorenko/PotTS">https://github.com/WladimirSidorenko/PotTS</a>;</li>
+<li>How difficult is it to analyze sentiments for humans and computers?</li>
 </ul>
 
 </div>
@@ -22159,8 +22038,22 @@ Yes, we can with the proposed:</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<div class="answer hide-on-next-fragment">
+  <ul>
+    <li>Initial IAA on sentiments 31% proportional $\kappa$ (but could be improved to 61% via adjudication);</li>
+    <li>Sentiment Lexicons: 0.479 macro-F$_1$ and 0.963 micro-F$_1$;</li>
+    <li>Aspect-Based Sentiment Analysis: 0.305 macro-F$_1$;</li>
+    <li>Message-Level Sentiment Analysis: 0.674 macro- and 0.727 micro-F$_1$ on PotTS, and 0.564 macro- and 0.752 micro-F$_1$ on the SB10k test set;</li>
+  </ul>
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>Lexicon Generation Methods</strong>: <a href="https://github.com/WladimirSidorenko/SentiLex">https://github.com/WladimirSidorenko/SentiLex</a>;</li>
+<li>Which factors might affect this difficulty?</li>
 </ul>
 
 </div>
@@ -22169,8 +22062,17 @@ Yes, we can with the proposed:</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<div class="answer hide-on-next-fragment">
+  &mdash; Topic and form of the tweets;
+  </div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>Text-Normalization Pipeline</strong> and <strong>Aspect-Based Sentiment Methods</strong>: <a href="https://github.com/WladimirSidorenko/TextNormalization">https://github.com/WladimirSidorenko/TextNormalization</a>;</li>
+<li>Can we apply opinion mining methods devised for standard English to German Twitter?</li>
 </ul>
 
 </div>
@@ -22179,8 +22081,17 @@ Yes, we can with the proposed:</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<div class="answer hide-on-next-fragment">
+  &mdash; Yes, we can, but the success of these approaches might significantly vary depending on the task, the size, and the reliability of the training data, as well as the evaluation metric that we use;
+  </div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>MLSA Approaches</strong>: <a href="https://github.com/WladimirSidorenko/CGSA">https://github.com/WladimirSidorenko/CGSA</a>;</li>
+<li>Which groups of approaches are best suited for which sentiment tasks?</li>
 </ul>
 
 </div>
@@ -22189,8 +22100,17 @@ Yes, we can with the proposed:</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<div class="answer hide-on-next-fragment">
+  &mdash; Yes, we can, with the proposed linear projection, lexicon-based attention, latent-marginalized CRFs, and RDP algorithms as well as alternative CRF structures and least-squares word embeddings;
+  </div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>Discourse-Aware Sentiment Systems</strong>: <a href="https://github.com/WladimirSidorenko/DASA">https://github.com/WladimirSidorenko/DASA</a>;</li>
+<li>Can we do better than existing methods?</li>
 </ul>
 
 </div>
@@ -22199,8 +22119,17 @@ Yes, we can with the proposed:</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
+<div class="answer hide-on-next-fragment">
+  &mdash; Yes, we can, with the proposed linear projection, lexicon-based attention, latent-marginalized CRFs, and RDP algorithms as well as alternative CRF structures and least-squares word embeddings;
+  </div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
 <ul>
-<li><strong>Discourse Segmenter</strong>: <a href="https://github.com/WladimirSidorenko/DiscourseSegmenter">https://github.com/WladimirSidorenko/DiscourseSegmenter</a>;</li>
+<li>Does text normalization help analyze sentiments?</li>
 </ul>
 
 </div>
@@ -22209,23 +22138,45 @@ Yes, we can with the proposed:</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Retrained Discourse Parser</strong>: <a href="https://github.com/WladimirSidorenko/RSTParser">https://github.com/WladimirSidorenko/RSTParser</a>;</li>
-</ul>
-
+<div class="answer">
+  &mdash; Yes, it definitely does.
 </div>
 </div>
-</div></div><div class="fragment">
+</div>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<ul>
-<li><strong>Extended Version of RST Markup Tool</strong>: <a href="https://github.com/WladimirSidorenko/RSTTool">https://github.com/WladimirSidorenko/RSTTool</a>.</li>
+<h1 id="Contributions">Contributions<a class="anchor-link" href="#Contributions">&#182;</a></h1><ul>
+<li><p>The <strong>Potsdam Twitter Sentiment Corpus</strong>: <a href="https://github.com/WladimirSidorenko/PotTS">https://github.com/WladimirSidorenko/PotTS</a>;</p>
+</li>
+<li><p><strong>Lexicon Generation Methods</strong>: <a href="https://github.com/WladimirSidorenko/SentiLex">https://github.com/WladimirSidorenko/SentiLex</a>;</p>
+</li>
+<li><p><strong>Text-Normalization Pipeline</strong> and <strong>Aspect-Based Sentiment Methods</strong>: <a href="https://github.com/WladimirSidorenko/TextNormalization">https://github.com/WladimirSidorenko/TextNormalization</a>;</p>
+</li>
+<li><p><strong>MLSA Approaches</strong>: <a href="https://github.com/WladimirSidorenko/CGSA">https://github.com/WladimirSidorenko/CGSA</a>;</p>
+</li>
+<li><p><strong>Discourse-Aware Sentiment Systems</strong>: <a href="https://github.com/WladimirSidorenko/DASA">https://github.com/WladimirSidorenko/DASA</a>;</p>
+</li>
+<li><p><strong>Discourse Segmenter</strong>: <a href="https://github.com/WladimirSidorenko/DiscourseSegmenter">https://github.com/WladimirSidorenko/DiscourseSegmenter</a>;</p>
+</li>
+<li><p><strong>Retrained Discourse Parser</strong>: <a href="https://github.com/WladimirSidorenko/RSTParser">https://github.com/WladimirSidorenko/RSTParser</a>;</p>
+</li>
+<li><p><strong>Extended Version of RST Markup Tool</strong>: <a href="https://github.com/WladimirSidorenko/RSTTool">https://github.com/WladimirSidorenko/RSTTool</a>.</p>
+</li>
 </ul>
 
 </div>
 </div>
-</div></div></section></section>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><img src="img/thesis_defense.png" alt="Thesis Defense" id="thesis-defense" /></p>
+
+</div>
+</div>
+</div></section></section>
 </div>
 </div>
 
