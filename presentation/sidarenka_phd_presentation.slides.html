@@ -17895,10 +17895,25 @@ $$F_1 = \frac{F_{pos} + F_{neg}}{2} $$</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Data-Preparation:-Inference-of-Gold-Labels">Data Preparation: Inference of Gold Labels<a class="anchor-link" href="#Data-Preparation:-Inference-of-Gold-Labels">&#182;</a></h1>
+<h1 id="Data-Preparation">Data Preparation<a class="anchor-link" href="#Data-Preparation">&#182;</a></h1>
 </div>
 </div>
 </div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I pre-processed, tokenized, pos-tagged, and parsed all messages in the same way as I did in the previous chapter.  I again used the 70-10-20 split into training, development, and test set.</p>
+
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Inference-of-Gold-Labels">Inference of Gold Labels<a class="anchor-link" href="#Inference-of-Gold-Labels">&#182;</a></h2>
+</div>
+</div>
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
@@ -17942,44 +17957,67 @@ $$F_1 = \frac{F_{pos} + F_{neg}}{2} $$</li>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Inference-of-Gold-Labels:-Examples">Inference of Gold Labels: Examples<a class="anchor-link" href="#Inference-of-Gold-Labels:-Examples">&#182;</a></h1><div class="hyde-on-next-fragment">
-<div class="example">
-<div class="title"></div>
-<div class="tweet">Ich finde den Papst <span class="polar-term positive">putzig</span> <span class="polar-term positive">🙂</span>
-<div class="translation">I find the Pope <span class="polar-term positive">cute</span> <span class="polar-term positive">🙂</span></div>
-<div class="label correct positive">positive</div>
+<h1 id="Inference-of-Gold-Labels">Inference of Gold Labels<a class="anchor-link" href="#Inference-of-Gold-Labels">&#182;</a></h1>
 </div>
 </div>
-</div>
-</div></section><section>
+</div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <div class="example">
-<div class="emoexpression negative">typisch</div> Bayern kaum ist der neue Papst da und schon haben sie ihn <div class="emoexpression negative">in der Tasche</div>&#8230;
-<div class="translation"><div class="emoexpression negative">typical</div></div> Bavaria The new Pope is hardly there, as they already have him <div class="emoexpression negative">in their pocket</div>
-<div class="label negative">negative</div>
+  <div class="title">Example 5.1</div>
+  <div class="tweet"><span class="label">Tweet:</span><span class="sentiment">Ich finde den Papst <span class="polar-term">putzig</span><span class="tag">polar-term</span> <span class="polar-term positive">🙂</span><span class="tag">polar-term</span></span><span class="tag">sentiment</span></div>
+  <div class="translation"><span class="sentiment">I find the pope <span class="polar-term">cute</span><span class="tag">polar-term</span> <span class="polar-term positive" style="font-style: normal;">🙂</span><span class="tag">polar-term</span></span><span class="tag">sentiment</span></div><div class="label"><span class="label">Correct Label:</span><span class="gold-label positive" style="padding-left: 0.4em;">positive</span></div>
+  <div class="label"><span class="label">Inferred Label:</span><span class="predicted-label positive">positive</span></div>
 </div>
 </div>
 </div>
-</div><aside class="notes">
-
+</div></div><div class="fragment">
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <div class="example">
-Unser Park, unser Geld, unsere Stadt! -NICHT unser Finanzminister! <div class="emoexpression positive">🙂</div> #schmid #spd #s21 #btw13
-<div class="translation">Our park, our money, our city! -NOT our Finance Minister! <div class="emoexpression positive">🙂</div> #schmid #spd #s21 #btw13</div>
-<div class="label positive erroneous">positive</div>
-</div><div class="example">
-Auf die Lobby-FDP von heute kann Deutschland verzichten&#8230;
+  <div class="title">Example 5.2</div>
+  <div class="tweet"><span class="label">Tweet:</span><span class="sentiment"><span class="polar-term">typisch</span><span class="tag">polar-term</span> Bayern kaum ist der neue Papst da und schon haben sie ihn <span class="polar-term">in der Tasche</span><span class="tag">polar-term</span>&#8230;</span><span class="tag">sentiment</span></div>
+  <div class="translation"><span class="sentiment"><span class="polar-term">typical</span><span class="tag">polar-term</span> Bavaria The new Pope is hardly there, as they already have him <span class="polar-term">in their pocket</span><span class="tag">polar-term</span>&#8230;</span><span class="tag">sentiment</span></div><div class="label"><span class="label">Correct Label:</span><span class="gold-label negative" style="padding-left: 0.4em;">negative</span></div>
+  <div class="label"><span class="label">Inferred Label:</span><span class="predicted-label negative">negative</span></div>
+</div>
+</div>
+</div>
+</div></div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Inference-of-Gold-Labels">Inference of Gold Labels<a class="anchor-link" href="#Inference-of-Gold-Labels">&#182;</a></h1>
+</div>
+</div>
+</div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="example">
+  <div class="title">Example 5.3</div>
+<div class="tweet"><span class="label">Tweet:</span>Unser Park, unser Geld, unsere Stadt! -NICHT unser Finanzminister! <span class="polar-term">🙂</span><span class="tag">polar-term</span> #schmid #spd #s21 #btw13</div>
+<div class="translation">Our park, our money, our city! -NOT our Finance Minister! <span class="polar-term positive" style="font-style: normal;">🙂</span><span class="tag">polar-term</span> #schmid #spd #s21 #btw13</div>
+  <div class="label"><span class="label">Correct Label:</span><span class="gold-label negative" style="padding-left: 0.4em;">negative</span></div>
+  <div class="label"><span class="label">Inferred Label:</span><span class="predicted-label positive">positive*</span></div>
+</div>
+</div>
+</div>
+</div></div><div class="fragment">
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div class="example">
+  <div class="title">Example 5.4</div>
+<div class="tweet"><span class="label">Tweet:</span>Auf die Lobby-FDP von heute kann Deutschland verzichten&#8230;</div>
 <div class="translation">Germany can go without today's lobby FDP</div>
-<div class="label positive erroneous">neutral</div>
+  <div class="label"><span class="label">Correct Label:</span><span class="gold-label negative" style="padding-left: 0.4em;">negative</span></div>
+  <div class="label"><span class="label">Inferred Label:</span><span class="predicted-label neutral">neutral*</span></div>
 </div>
 </div>
 </div>
-</div>
-</aside></section><section>
+</div></div></section><section>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
