@@ -2396,7 +2396,7 @@ associating an additional matrix $W_w$ with each vocabulary word $w$
 and performing the inference simultaneously over both vector and
 matrix representations:
 \begin{align*}
-  \vec{w}_p = tanh\left(W_v \begin{bmatrix}W_r\vec{w}_l\\
+  \vec{w}_p = \tanh\left(W_v \begin{bmatrix}W_r\vec{w}_l\\
       W_l \vec{w}_r\end{bmatrix} \right),\\
   W_p = W_m \begin{bmatrix}W_l;\\
     W_r\end{bmatrix};
@@ -2409,9 +2409,9 @@ these vertices.  The compositionality matrices
 $W_v\in\mathbb{R}^{n\times 2n}$ and $W_m\in\mathbb{R}^{n\times 2n}$
 were shared across all instances and learned along with the vector
 embeddings.  This model, called Matrix-Vector Recursive Neural Network
-(MVRNN), surpassed the RAE system on the IMDB movie review dataset
-\cite{Pang:05}, attaining 0.91 Kullback-Leibler divergence between the
-assigned scores and probabilities of correct labels.
+(MVRNN), surpassed the RAE system on the IMDB movie review
+dataset~\cite{Pang:05}, attaining 0.91 Kullback-Leibler divergence
+between the assigned scores and probabilities of correct labels.
 
 Yet another improvement, a Recursive Neural Tensor Network (RNTN), was
 presented by~\citet{Socher:13}.  In this system, the authors again
