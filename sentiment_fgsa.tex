@@ -9,15 +9,15 @@
 % Humboldt-Universitaet zu Berlin AG Elektronisches Publizieren Joanna
 % Rycko und der DNB - Deutsche Nationalbibliothek
 
-\chapter{Aspect-Based Sentiment Analysis}\label{chap:fgsa}
+\chapter{Fine-Grained Sentiment Analysis}\label{chap:fgsa}
 
-Aspect-based sentiment analysis (ABSA) deals with identification of
+Fine-grained sentiment analysis (FGSA) deals with identification of
 subjective evaluative opinions (\emph{sentiments}), holders of these
 opinions (\emph{sources}), and their respective evaluated entities
 (\emph{targets}) in text.  Since an accurate automatic prediction of
 these elements would allow us to track the public's attitude towards
 literally any object (\eg{} a product, a service, or a political
-decision), ABSA is traditionally considered as one of the most
+decision), FGSA is traditionally considered as one of the most
 attractive, necessary, but, unfortunately, also challenging objectives
 in the opinion-mining field.
 
@@ -107,13 +107,13 @@ these systems.
 
 \section{Evaluation Metrics}
 
-Because aspect-based sentiment analysis operates on \emph{spans} of
+Because fine-grained sentiment analysis operates on \emph{spans} of
 sentiment labels, which typically consist of multiple contiguous tags,
 we cannot straightforwardly apply metrics that are used to evaluate
 the classification of single instances to this objective, as it is
 unclear which units should be measured---single tokens or complete
 spans---and how partial matches should be counted in the latter case.
-One possibility to estimate the quality of ABSA prediction is to
+One possibility to estimate the quality of FGSA prediction is to
 compute precision, recall, and \F{}-scores of predicted spans by using
 binary-overlap or exact-match metrics~\cite[see][]{Choi:06,Breck:07}.
 The first method considers an automatically labeled span as correct if
@@ -599,7 +599,7 @@ classifier.
       0.244 & 0.271 & 0.287\\\bottomrule
     \end{tabular}
     \egroup{}
-    \caption{Results of aspect-based sentiment analysis with the
+    \caption{Results of fine-grained sentiment analysis with the
       first-order linear-chain CRFs}\label{snt-fgsa:tbl:crf-res}
   \end{center}
 \end{table*}
@@ -1174,7 +1174,7 @@ that a human expert can encode with manually defined attributes.
       0.24\stddev{0.03} & 0.21\stddev{0.07} & 0.22\stddev{0.03} & 0.25\stddev{0.01}\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Results of aspect-based sentiment analysis with recurrent
+    \caption{Results of fine-grained sentiment analysis with recurrent
       neural networks}
     \label{snt-fgsa:tbl:rnn-res}
   \end{center}
@@ -1250,7 +1250,7 @@ otherwise cause a notable degradation of literally every other aspect.
        0.213 & 0.26 & 0.233 & 0.264\\\bottomrule
     \end{tabular}
     \egroup
-    \caption{Results of aspect-based sentiment analysis with different
+    \caption{Results of fine-grained sentiment analysis with different
       word embeddings}
     \label{snt-fgsa:tbl:embeddings}
   \end{center}
@@ -1298,7 +1298,7 @@ experiments.
 
 \section{Evaluation}
 
-After estimating the results of popular ABSA approaches with their
+After estimating the results of popular FGSA approaches with their
 (mostly) standard settings, evaluating their specific components
 (features and word embeddings), and looking at their sample errors, we
 also decided to investigate the impact of common factors, such as
@@ -1310,7 +1310,7 @@ results of these experiments are presented below.
 
 \subsection{Annotation Scheme}
 
-As the first factor that could affect the quality of automatic ABSA
+As the first factor that could affect the quality of automatic FGSA
 methods, we considered the annotation scheme that we used to create
 the corpus.  As described in Section~\ref{subsec:snt:ascheme}, we
 initially asked our experts to assign the \markable{sentiment} label
@@ -1504,7 +1504,7 @@ main evaluative sense of the whole subjective statement.
 
     \end{tabular}
     \egroup
-    \caption{Results of aspect-based analysis with broad and narrow
+    \caption{Results of fine-grained analysis with broad and narrow
       sentiment interpretations}
     \label{snt-fgsa:tbl:broad-narrow}
   \end{center}
@@ -1711,8 +1711,8 @@ shown in Table~\ref{fgsa:tbl:crf-topologies}.
       Target & 0.258 & 0.235 & 0.24 & 0.229 & 0.287 & \textbf{0.309} & 0.301 & 0.292 & 0.243\\\bottomrule
     \end{tabular}
     \egroup{}
-    \caption[Results of aspect-based sentiment analysis with different
-      CRF topologies]{Results of aspect-based sentiment analysis with
+    \caption[Results of fine-grained sentiment analysis with different
+      CRF topologies]{Results of fine-grained sentiment analysis with
       different CRF topologies\\ {\small lcCRF---linear-chain CRFs,
         smCRF---semi-Markov CRFs, trCRF---tree-structured CRFs;\\1, 2,
         3, and 4 in the superscripts denote the order}}\label{fgsa:tbl:crf-topologies}
@@ -1795,8 +1795,8 @@ domain are standard-language news texts.
       Target & \textbf{0.259} & 0.218 & 0.222 & 0.216 & 0.219 & 0.188 & 0.205 & 0.193\\\bottomrule
     \end{tabular}
     \egroup{}
-    \caption[Results of aspect-based sentiment analysis with different
-    neural network topologies]{Results of aspect-based sentiment
+    \caption[Results of fine-grained sentiment analysis with different
+    neural network topologies]{Results of fine-grained sentiment
       analysis with different neural network topologies\\ {\small
         lcLSTM---linear-chain LSTM, lcGRU---linear-chain GRU,
         trLSTM---tree-structured LSTM, trGRU---tree-structured
@@ -1816,7 +1816,7 @@ Even though these transformations were supposed to improve the
 grammaticality of the sentences, an opposite consequence of this
 normalization was the loss of (potentially valuable) surface features.
 In order to check which of these effects had a stronger influence on
-the ABSA results, we repeated the evaluation once again, turning the
+the FGSA results, we repeated the evaluation once again, turning the
 preprocessing pipeline off this time.
 
 \begin{table*}[bht!]
@@ -1863,7 +1863,7 @@ preprocessing pipeline off this time.
        0.232 & 0.268 & 0.245 & 0.275\\\bottomrule
 
     \end{tabular}\egroup{}
-    \caption{Results of aspect-based sentiment analysis with (w) and
+    \caption{Results of fine-grained sentiment analysis with (w) and
       without (w/o) text normalization}\label{snt-fgsa:tbl:normalization}
   \end{center}
 \end{table*}
@@ -1987,7 +1987,7 @@ degradation when the preprocessing module is switched off.
 %% However, before we proceed to another topic, we first would like to
 %% conclude with a short summary of related work on the fine-grained
 %% opinion mining.  At this point we should note that, due to its high
-%% social impact and big economic importance, ABSA has always been an
+%% social impact and big economic importance, FGSA has always been an
 %% area of active research in the sentiment analysis community.  One of
 %% the first groundbreaking steps in this direction was made
 %% by~\citet{Nasukawa:03}, who proposed a lexicon-based approach for
@@ -2108,7 +2108,7 @@ degradation when the preprocessing module is switched off.
 %% matrix $W$ and the tensor $V$ were learned automatically during
 %% training.
 
-%% A recurrent approach to the ABSA problem was proposed
+%% A recurrent approach to the FGSA problem was proposed
 %% by~\citet{Irsoy:14a}, who explored deep bidirectional neural networks
 %% for predicting DSEe and ESEs on the MPQA corpus.  In particular, they
 %% estimated the label probabilities $\vec{y}$ for the $t$-th token as:
@@ -2135,7 +2135,7 @@ degradation when the preprocessing module is switched off.
 
 Summarizing the above findings, we would like to remind the reader
 that in this chapter we have evaluated two most common approaches to
-aspect-based sentiment analysis: conditional random fields and
+fine-grained sentiment analysis: conditional random fields and
 recurrent neural networks.  Our experiments showed that CRFs with
 manually defined features outperform both recurrent neural networks
 (LSTM and GRU), reaching a macro-averaged \F-score of~0.287 on
@@ -2168,12 +2168,12 @@ Furthermore, a closer look at these systems revealed that:
 \item In the final step, we estimated the effect of text normalization
   by rerunning all experiments with original (unnormalized) tweets.
   This test showed that preprocessing is an extremely helpful
-  procedure, which might improve the results of ABSA methods by up to
+  procedure, which might improve the results of FGSA methods by up to
   3\%.
 \end{itemize}
 
 %% With these observations, we hope to have provided a better insight
-%% into the abilities of modern ABSA approaches, the importance of their
+%% into the abilities of modern FGSA approaches, the importance of their
 %% hyper-parameter settings, and the general amenability of the German
 %% Twitter domain to an automatic extraction of fine-grained opinions.
 %% Even though we did our best to make this description and evaluation as
@@ -2181,7 +2181,7 @@ Furthermore, a closer look at these systems revealed that:
 %% to explore and potential ways to improve the presented results: It
 %% would, for instance, be extremely helpful to evaluate other polarity
 %% lists (produced by different SLG methods) in combination with the
-%% described ABSA methods.\footnote{Unfortunately, we were not able to do
+%% described FGSA methods.\footnote{Unfortunately, we were not able to do
 %%   this analysis by ourselves due to prohibitively long training times:
 %%   a single run of an RNN classifier was taking more than 27 hours on a
 %%   very strong machine.}  Another interesting opportunity would be a
