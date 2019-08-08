@@ -29,7 +29,7 @@ We begin our comparison by first presenting two metrics that we will
 use in our subsequent evaluation.  After briefly describing the data
 preparation step, we proceed to the actual estimation of popular
 lexicon-, ML-, and DL-based approaches, explaining and evaluating them
-in Sections~\ref{sec:cgsa:lexicon-based}, \ref{sec:cgsa:ml-based},
+in Sections~\ref{sec:cgsa:lexicon-based},~\ref{sec:cgsa:ml-based},
 and~\ref{sec:cgsa:dl-based}.  Finally, we conclude with an extensive
 evaluation of different hyperparameters and settings (including the
 impact of additional noisily labeled training data, various types of
@@ -72,9 +72,10 @@ class.
 
 \section{Data Preparation}\label{sec:cgsa:data}
 
-As in the previous experiments, we preprocessed all tweets with the
-text normalization system of~\citet{Sidarenka:13}, tokenized them
-using the same adjusted version of Potts'
+As in the previous experiments, we preprocessed all tweets labeled by
+the second annotator with the text normalization system
+of~\citet{Sidarenka:13}, tokenized them using the same adjusted
+version of Potts'
 tokenizer,\footnote{\url{http://sentiment.christopherpotts.net/code-data/happyfuntokenizing.py}}
 lemmatized and assigned part-of-speech tags to these tokens with the
 \textsc{TreeTagger} of \citet{Schmid:95}, and obtained morphological
@@ -85,7 +86,7 @@ parser~\cite{Bohnet:13}.
 % will be used in our subsequent experiments on noisy supervision.
 
 We again divided our corpus into training, development, and test sets,
-using 70\% of tweets for learning, 10\% for tuning and picking the
+using 70\% of the tweets for learning, 10\% for tuning and picking
 optimal model parameters, and the remaining 20\% for evaluating the
 results.  Drawing on the work of~\citet{Wiebe:05a}, we inferred the
 polarity of these microblogs, which we will consider as gold labels in
@@ -95,10 +96,14 @@ positive (negative) annotated \markable{sentiment}s, skipping all
 microblogs that simultaneously contained multiple labeled opinions
 with different semantic orientations (178 tweets). In the cases when
 there was no \markable{sentiment}, we recoursed to a fallback strategy
-by considering all tweets that contained only positive (negative)
-annotated \markable{polar term}s as positive (negative), and ignoring
-all messages that featured polar elements from both polarity classes
-(335 messages).  Finally, all microblogs without any
+by considering all tweets that contained exclusively positive
+(negative) annotated \markable{polar term}s as positive (negative),
+and ignoring all messages that featured polar elements from both
+polarity classes (335 messages).\footnote{Note that we inferred all
+  message-level labels based on \emph{annotated} \markable{sentiment}s
+  and \markable{polar term}s and did not rely on the mere occurrence
+  of positive or negative smileys, which not necessarily implied an
+  expression of polarity.}  Finally, all microblogs without any
 \markable{sentiment}s or \markable{polar term}s were regarded as
 neutral.
 
@@ -186,7 +191,7 @@ emoticons, regarding the rest of the microblogs as neutral.  In
 contrast to the previous two datasets, whose labels were inferred or
 directly obtained from manual annotations, we will not use this
 automatically tagged corpus for evaluation, but will only harness it
-for training in our later distant-supervision experiments.
+for training in our later weak-supervision experiments.
 
 The resulting statistics on the number of messages and polarity class
 distribution in these data are shown in
@@ -2718,7 +2723,7 @@ is shown in Figure~\ref{cgsa:fig:lba}.
 % the likelihood that $t$ occurred in a positive or negative microblog.
 % Since this training required a substantial amount of data, the authors
 % leveraged a big collection of automatically downloaded tweets,
-% obtaining noisy sentiment labels for these microblogs with the distant
+% obtaining noisy sentiment labels for these microblogs with the weak
 % supervision method of~\citet{Go:09}.  The second part of this
 % system---manually designed features---were mostly inspired by the work
 % of~\citet{Mohammad:13} and included $n$-grams, word clusters,
@@ -3896,10 +3901,10 @@ training data, switching to a different type of sentiment lexicon, or
 using unnormalized text as input would improve or, vice versa, lower
 the classification scores.
 
-\subsection{Distant Supervision}
+\subsection{Weak Supervision}
 
 The first avenue that we are going to explore in this evaluation is
-the effect of distantly supervised data---an additional collection of
+the effect of weakly supervised data---an additional collection of
 training tweets that have been automatically labeled with sentiment
 tags based on the occurrence of some sufficiently reliable formal
 criteria, such as emoticons or hashtags.
@@ -3915,7 +3920,7 @@ considerable accuracy (up to 70\%) on predicting the noisy labels of
 the remaining posts, they could not generalize to texts from other
 genres (movie reviews and newswire articles) where they hardly
 outperformed the random-chance baseline. With the onset of the Twitter
-era, this idea of distant supervision has experienced its renaissance
+era, this idea of weak supervision has experienced its renaissance
 with the works of \citet{Go:09}, \citet{Pak:10}, and
 \citet{Barbosa:10}.
 
@@ -3950,7 +3955,7 @@ DL-based methods (RNN, SEV, BAZ, and LBA),\footnote{In all subsequent
   respective scores in Table~\ref{snt-cgsa:tbl:dl-res-lstsq}.} which
 still incurred running times up to five days for some systems.  The
 results of this evaluation are shown in
-Table~\ref{snt-cgsa:tbl:distant-supervision}.
+Table~\ref{snt-cgsa:tbl:weak-supervision}.
 
 \begin{table}[h]
   \begin{center}
@@ -4190,8 +4195,8 @@ Table~\ref{snt-cgsa:tbl:distant-supervision}.
       0.12\negdelta{0.43} & 0.14\negdelta{0.61}\\\bottomrule
     \end{tabular}
     \egroup{}
-    \caption[Results of MLSA methods with distant supervision]{
-      Results of MLSA methods with distantly supervised data}\label{snt-cgsa:tbl:distant-supervision}
+    \caption[Results of MLSA methods with weak supervision]{
+      Results of MLSA methods with weakly supervised data}\label{snt-cgsa:tbl:weak-supervision}
   \end{center}
 \end{table}
 
@@ -4940,7 +4945,7 @@ following findings and contributions:
     improved their results after switching to pre-trained word2vec
     vectors, and benefited even more from the least-squares fallback;
   \item against our expectations, we could not overcome the majority
-    class pitfall of DL-based systems after adding more distantly
+    class pitfall of DL-based systems after adding more weakly
     supervised training data, which, in general, only lowered the
     scores of both ML- and DL-based methods.  Since this result
     contradicts the findings of other authors, we hypothesize that
