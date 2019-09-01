@@ -975,10 +975,10 @@ Rennwagen'' [\emph{a real sports car}]), which was much more frequent
 in the analyzed snapshot and typically appeared in a negative context,
 \eg{} ``ein richtiger Bombenanschlag'' (\emph{a real bomb attack}) or
 ``ein richtiger Terrorist'' (\emph{a real terrorist}).  As a
-consequence, methods that relied on distant supervision had to deal
-with extremely unbalanced training data (716,210 positive instances
-versus 92,592 negative ones) and got stuck in a local optimum from the
-very beginning of their training.
+consequence, methods that relied on weak supervision had to deal with
+extremely unbalanced training data (716,210 positive instances versus
+92,592 negative ones) and got stuck in a local optimum from the very
+beginning of their training.
 
 \subsection{NWE-Based Methods}\label{subsec:snt:lex:nwe}
 
@@ -992,7 +992,7 @@ applications~\cite{Manning:15}.  Unfortunately, these advances have
 largely bypassed the generation of sentiment lexicons, up to a few
 exceptions introduced by the works of~\citet{Tang:14a} and
 \citet{Vo:16}.  In the former approach, the authors used a large
-collection of distantly labeled tweets in order to learn hybrid word
+collection of weakly labeled tweets in order to learn hybrid word
 embeddings.  In contrast to standard word2vec
 vectors~\cite{Mikolov:13} and purely task-specific
 representations~\cite{Collobert:11}, such embeddings were optimized
@@ -1009,7 +1009,7 @@ negative scores of corresponding words.
 
 In order to evaluate these systems, we reimplemented both methods,
 extending them to three-way classification (positive, negative, and
-neutral), and applied them to distantly labeled snapshot tweets.
+neutral), and applied them to weakly labeled snapshot tweets.
 
 Apart from these solutions, we also came up with the following
 alternative ways of generating polarity lists from neural word

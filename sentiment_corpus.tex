@@ -41,7 +41,7 @@ such as part-of-speech tagging or syntactic parsing, it typically
 suffices to define the language domain to sample from (since the
 phenomena of interest are usually frequent and uniformly spread), for
 semantically demanding tasks with many diverse ways of expression one
-also needs to consider various in-domain factors that might
+also needs to consider various in-domain factors, which might
 significantly affect the final distribution, making the resulting
 corpus either utterly sparse or excessively biased.
 
@@ -196,9 +196,10 @@ This list included:
   %% context.  \end{inparaenum}
 
 \item
-  we specified \textbf{\markable{target}}s as \emph{entities or events
-    evaluated by opinions}.  For this item, we introduced the
-  following three attributes:
+  we specified \textbf{\markable{target}}s as \emph{(real,
+    hypothetical, or collective) entities, properties, or propositions
+    (states or events) evaluated by opinions}.  For this item, we
+  introduced the following three attributes:
   \begin{itemize}
     \item
       a boolean property \attribute{preferred}, which distinguished
@@ -637,18 +638,19 @@ steps:
   \item In the second step, in order to improve the inter-rater
     reliability, we automatically determined all differences between
     the two annotations and highlighted non-matching tokens with a
-    separate class of tags. Afterwards, we let the experts resolve
-    these discrepancies by either correcting their own decisions or
+    separate class of tags.  Then we let the experts resolve these
+    discrepancies by either correcting their own decisions or
     rejecting the variants of the other coder.  As in the previous
     stage, we allowed the annotators to consult their supervisor (the
-    author of this thesis), but did not let them communicate with each
-    other directly.  This adjudication step significantly improved all
-    annotations: The agreement on \markable{sentiment}s increased by
-    30.73\%, reaching 61.94\%.  Similar effects were observed for
-    \markable{target}s, \markable{source}s, \markable{polar term}s,
-    and their modifiers;
+    author of this thesis), also updating the FAQ section of the
+    guidelines based on their questions, but did not let them
+    communicate with each other directly.  This adjudication step
+    significantly improved all annotations: The agreement on
+    \markable{sentiment}s increased by 30.73\%, reaching 61.94\%.
+    Similar effects were observed for \markable{target}s,
+    \markable{source}s, \markable{polar term}s, and their modifiers;
   \item After resolving all differences, our assistants proceeded with
-    the annotation of remaining files.  Working completely
+    the annotation of the remaining files.  Working completely
     independently, one of the experts annotated 78.8\% of the corpus,
     whereas the second annotator labeled the complete dataset.
 \end{itemize}
@@ -1183,7 +1185,10 @@ are easiest to analyze in microblogs that contain emoticons.
 To confirm the correlation between the topics and formal groups on the
 one hand and the number and reliability of \markable{sentiment}s and
 \markable{polar term}s on the other hand, we computed the correlation
-coefficients ($\rho$) of these factors.
+coefficients ($\rho$) of these factors, considering each particular
+topic and formal group as a binary variable and measuring the
+association of this variable with the number and agreement of
+annotated elements.
 \begin{table}[thb!]
   \begin{center}
     \bgroup\setlength\tabcolsep{0.47\tabcolsep}\scriptsize
