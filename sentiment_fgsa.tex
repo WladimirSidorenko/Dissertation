@@ -319,7 +319,7 @@ The main reasons for the success of this model are:
 %% \end{example}
 \item and, finally, the \emph{avoidance of the label bias problem},
   which other discriminative classifiers, such as maximum entropy
-  Markov networks \cite{McCallum:00}, are known to be susceptible to.
+  Markov networks~\cite{McCallum:00}, are known to be susceptible to.
   \begin{example}[Label Bias Problem]
     The label bias problem arises in the cases where a locally optimal
     decision outweighs globally superior solutions.  Consider, for
@@ -380,7 +380,7 @@ The main reasons for the success of this model are:
     A different situation is observed with the CRFs, where the
     normalizing factor in the denominator is computed over the whole
     input sequence without factorizing into individual terms for each
-    transition as it is done in MEMM.  This way, the probability of
+    transition as it is done in MEMM\@.  This way, the probability of
     the correct labels will run up to:
     \begin{align*}
       P(KON, ADV, NN, VA) =& P(KON)\times
@@ -570,12 +570,11 @@ training data, achieving a macro-averaged \F-score of~0.904.  These
 parameters, however, only partially generalize to unseen tweets,
 leading to notably lower \F-results on the test corpus (0.287), which
 indicates an overfitting of the training data, although we did our
-best to combat this effect.\footnote{To mitigate overfitting, we used
-  early stopping and higher regularization parameters.}  Another
-notable tendency, which can be observed both on the training and test
-sets, is that the recall of the CRF system is generally lower than its
-precision.  This again can be attributed to the high variance of the
-classifier.
+best to mitigate this effect (early stopping and higher regularization
+parameters).  Another notable tendency, which can be observed both on
+the training and test sets, is that the recall of the CRF system is
+generally lower than its precision.  This again can be attributed to
+the high variance of the classifier.
 
 \begin{table*}
   \begin{center}
@@ -681,12 +680,11 @@ lexical and complex attributes.
           9 & deprel[0]|deprel[1]=NK|AMS $\rightarrow$ NON & 12.92 & SRC $\rightarrow$ SRC & 2.19\\
           10 & trailChar=te. $\rightarrow$ NON & 12.77 & SRC $\rightarrow$ TRG & -2.07\\\bottomrule
     \end{tabular}
-    \egroup
+    \egroup{}
     \caption[Top-10 state and transition features learned by the CRF
     model]{Top-10 state and transition features learned by the CRF
       model\\{\small (sorted by the absolute values of their
-        weights)}}
-    \label{fgsa:tbl:ablation}
+        weights)}}\label{fgsa:tbl:ablation}
   \end{center}
 \end{table}
 
