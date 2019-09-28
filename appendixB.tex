@@ -42,7 +42,7 @@ These elements are:
     \emph{besonders} (\emph{especially}), or \emph{insbesondere}
     (\emph{particularly}).  Typical examples of diminishers are
     \emph{ein wenig} (\emph{a little}), \emph{ein bisschen} (\emph{a
-      bit}), \emph{gewisserma\ss{}en} (\emph{to a certain degree})
+      bit}), \emph{gewisserma\ss{}en} (\emph{to a certain degree}),
     etc.;
     \item and, finally, \emph{negations}, which are words or
       expressions that completely flip the polarity of a polar term or
@@ -81,7 +81,7 @@ you by the supervisor.  In order to load an annotation file into your
 \texttt{MMAX2} program, click on the menu \texttt{File -> Load}.  In
 the displayed pop-up window, select the path to the
 \corpusDir{}\texttt{/anno\-ta\-tor-ANNOTATOR\_ID} directory, and click
-on one of the \texttt{*.mmax} files in that folder.
+on one of the \texttt{*.mmax} files in this folder.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -144,8 +144,8 @@ following three criteria:
 \item it has to be \textbf{polar}, \ie{} it must always reflect either
   positive or negative attitude to its respective target.  Neutral,
   non-evaluative statements such as \textit{Ich glaube, er wird heute
-    fr\"uher kommen} (\textit{I think he will be earlier today}) do
-  not represent \texttt{sentiment}s;
+    fr\"uher kommen} (\textit{I think he will be earlier today}) must
+  not be marked as \texttt{sentiment}s;
 
 \item it has to be \textbf{subjective}, \ie{} you must not assign this
   tag to statements of objective facts, such as \textit{Beim Angriff
@@ -159,7 +159,7 @@ following three criteria:
   properties.  You should not regard cases like \textit{Ich bin heute
     so gl\"ucklich} (\textit{I am so happy today}) as
   \texttt{sentiment}s, because such statements do not evaluate
-  anything in particular, but simply express general mood.
+  anything in particular, but only express general mood of the author.
 \end{itemize}
 
 \paragraph{Example.} Typical examples of sentiments are evaluative
@@ -177,34 +177,33 @@ the \texttt{sentiment} tags.
 We also consider contrastive comparisons as a special type of
 evaluations.  But unlike other sentiments, comparisons typically
 express a relative subjective judgment, \ie{} an object is regarded as
-better or worse than another one, but we usually do not know whether
-the author actually likes or dislikes any of them.  To distinguish
-such cases, we have introduced a special \texttt{comparison} value for
-the \texttt{polarity} attribute of this element, which you should use
-to distinguish such cases.
+better or worse than another, but we usually do not know whether the
+author actually likes or dislikes any of them.  To distinguish such
+cases, we have introduced a special \texttt{comparison} value for the
+\texttt{polarity} attribute of this element, which you should use to
+distinguish such cases.
 
 You should not label as \texttt{sentiments} polar opinions whose truth
 status is unknown.  These are sentences like \textit{Ich wei\ss{}
   nicht, ob ich meinen Bruder mag} (\textit{I don't know whether I
-  like my brother}).  In this example, neither we nor the author
-actually know whether the author likes or dislikes her brother.
-Exceptions from this rule are cases like \textit{Ich zweifle, dass er
-  ein guter Mensch ist} (\textit{I doubt that he is a good man}) or
-\textit{Ich glaube nicht, dass er diesen Preis verdient hat}
-(\textit{I don't think that he has deserved this award}), which
-express author's disagreement with positive evaluations and,
-consequently, act as negative judgments.  Special care should be taken
-when dealing with questions and subjunctive sentences (see FAQ Section
-in the extended
+  like my brother}), where neither we nor the author actually know
+whether the author likes or dislikes her brother.  Exceptions from
+this rule are cases like \textit{Ich zweifle, dass er ein guter Mensch
+  ist} (\textit{I doubt that he is a good man}) or \textit{Ich glaube
+  nicht, dass er diesen Preis verdient hat} (\textit{I don't think
+  that he has deserved this award}), which express author's
+disagreement with positive evaluations and, consequently, acts as a
+negative judgment.  Special care should be taken when dealing with
+questions and subjunctive sentences though (see FAQ Section in the
+extended
 version\footnote{\url{https://github.com/WladimirSidorenko/PotTS/blob/master/docs/annotation_guidelines.pdf}}
 of these guidelines).
 
 \paragraph{Boundaries.} \texttt{sentiment} tags should
 enclose both the evaluated object (target) and the evaluative
-expression (typically a polar-term).  After determining these two
-elements, you shall put the \texttt{sentiment} tags around the
-\emph{minimal complete syntactic or discourse-level unit in which both
-  (target and evaluation expression) appear together}.
+expression (typically a polar-term), \ie{} you should put these tags
+around the \emph{minimal complete syntactic or discourse-level unit in
+  which both (target and evaluation expression) appear together}.
 
 In Example~\ref{exmp:book}, for instance, the evaluated object is
 \textit{Buch} (\textit{book}), the evaluative expression is
@@ -223,7 +222,7 @@ expressed by complete clauses or even multiple sentences (discourse
 units).  In these cases, a \texttt{sentiment} span still has to be
 \emph{complete}, \ie{} it should capture the common syntactic or
 discourse-level ancestor of the evaluative expression and its target,
-as well as all other descendents of that common ancestor element, and
+as well as all other descendents of that common ancestor element; and
 it has to be \emph{minimal}, \ie{} it should only enclose the closest
 possible ancestor, without including its parent or sibling elements.
 
@@ -266,15 +265,16 @@ you should next set the values of its attributes, which are summarized
 in Table~\ref{tbl:sentiment}.
 \begin{center}
   \begin{table}[htb!]
-    \begin{tabular}{lcp{0.957\clmnwidth}}\toprule
+    \begin{tabular}{m{0.25\clmnwidth}>{\centering\arraybackslash}m{0.25\clmnwidth}m{0.92\clmnwidth}}
+      \toprule
       \textbf{Attribute} & \textbf{Value} & \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule
       %%%%%%%%%%%%%%%%%%%
 
-      \multirow[c]{3}{*}[-2.5cm]{polarity} & \textit{positive} & sentiment expresses a positive attitude to
+      \multirow[c]{3}{*}[-2.5cm]{polarity} & \multirow[c]{1}{*}{\textit{positive}} & sentiment expresses a positive attitude to
       its respective target, \eg{} \textit{Es war ein fantastischer
         Abend (It was a fantastic evening)};\\\cmidrule{2-3}
 
-      & \textit{negative\newline(default)} & sentiment expresses a
+      & \textit{\shortstack{negative\\(default)}} & sentiment expresses a
       negative attitude to its respective target, \eg{} \textit{Seine
         Schwester ist einfach unausstehlich (His sister is simply
         obnoxious)}\\\cmidrule{2-3}
@@ -291,7 +291,7 @@ in Table~\ref{tbl:sentiment}.
       \eg{} \textit{Der Auftritt war mehr oder weniger gut (The
         appearance was more or less good)}\\\cmidrule{2-3}
 
-      & \textit{medium\newline(default)} & sentiment has a middle
+      & \textit{\shortstack{medium\\(default)}} & sentiment has a middle
       emotional expressivity, \eg{} \textit{Mir hat das neue Album gut
         gefallen (I enjoyed the new album)}\\\cmidrule{2-3}
 
@@ -312,8 +312,8 @@ in Table~\ref{tbl:sentiment}.
       the \texttt{sarcasm} attribute to \texttt{true}.\\\cmidrule{2-3}
 
       \multirow[c]{-2}{*}[2.7cm]{sarcasm} &
-      \textit{false\newline(default)} & no sarcasm is present---the
-      polar attitude has its literal meaning.\\\bottomrule
+      \textit{\shortstack{false\\(default)}} & no sarcasm is
+      present---polar attitude has its literal meaning.\\\bottomrule
     \end{tabular}
     \caption{Attributes of \texttt{sentiment}s}\label{tbl:sentiment}
   \end{table}
@@ -322,9 +322,9 @@ in Table~\ref{tbl:sentiment}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \tocless\subsection{target}
 \paragraph{Definition.} \emph{Targets} are objects or events
-evaluated by a sentiment.
+that are evaluated by a sentiment.
 
-Because sentiments are required to be evaluative, there must always be
+Because sentiments are required to be evaluative, there always must be
 at least one target for each \texttt{sentiment} element.
 
 \paragraph{Example.} An example of a sentiment target is given in
@@ -337,8 +337,8 @@ Mein Bruder ist nicht begeistert von \target{dem neuen Call of Duty}.
 \end{example}
 In this message, the author tells us about the opinion of her brother
 regarding the new version of a computer game.  The computer game is
-the object of evaluation, so you shall label it as a \texttt{target}
-element.
+the object of this evaluation, so you shall label it as a
+\texttt{target}.
 
 \paragraph{Boundaries.} As for \texttt{sentiment}s, you have to put
 the \texttt{target} tags around the minimal complete syntactic or
@@ -373,24 +373,26 @@ object that is dispreferred in the comparison (see Example~\ref{exmp:trg-comp}).
 are given in Table~\ref{tbl:target}.
 \begin{center}
   \begin{table}[htb!]
-    \begin{tabular}{lcp{0.895\clmnwidth}}\toprule
+    \begin{tabular}{m{0.25\clmnwidth}>{\centering\arraybackslash}m{0.25\clmnwidth}m{0.92\clmnwidth}}\toprule
       \textbf{Attribute} & \textbf{Value} & \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule
 
-      & \textit{true} (default) & in comparisons, this value means
-      that the respective target is considered better than another
-      compared object, \eg{} \textit{\emph{Die neue Frisur} passt ihr
-        garantiert besser als die alte (\emph{The new hairstyle} suits
-        her definitely better than the old one)};\\\cmidrule{2-3}
+      \multirow{-2}{*}[-2cm]{preferred} &
+      \textit{\shortstack{true\\(default)}} & in comparisons,
+      this value means that the respective target is considered better
+      than another compared object, \eg{} \textit{\emph{Die neue
+          Frisur} passt ihr garantiert besser als die alte (\emph{The
+          new hairstyle} suits her definitely better than the old
+        one)};\\\cmidrule{2-3}
 
-      \multirow{-2}{*}{preferred} & \textit{false} & in comparisons,
+      & \textit{false} & in comparisons,
       this value signifies the target element that is considered worse
       than its counterpart, \eg{} \textit{Die zweite Saison von
         Breaking Bad war viel spannender als \emph{die dritte} (The
         second season of Breaking Bad was much more exciting than
         \emph{the third one})};\\\midrule
 
-      sentiment-ref & \textit{$\longrightarrow$\newline(directed
-        edge)} & a directed edge pointing from \texttt{target} to its
+      sentiment-ref & \textit{\shortstack{$\longrightarrow$\\(directed
+        edge)}} & a directed edge pointing from \texttt{target} to its
       respective \texttt{sentiment}.  You need to draw this edge in
       two cases:
       \begin{itemize}
@@ -403,7 +405,7 @@ are given in Table~\ref{tbl:target}.
         \texttt{sentiment} span;
       \end{itemize}\\\midrule
 
-      anaph-ref & \textit{$\longrightarrow$\newline(directed edge)} &
+      anaph-ref & \textit{\shortstack{$\longrightarrow$\\(directed edge)}} &
       a directed edge pointing from \texttt{target} expressed by a
       pronoun or pronominal adverb to its respective non-pronominal
       antecedent (in order to draw this edge, you also need to
@@ -463,13 +465,13 @@ tag are fully identical to the attributes of the \texttt{target}
 elements and are recapped in Table~\ref{tbl:source}.
 \begin{center}
   \begin{table}[htb!]
-    \begin{tabular}{lcp{0.895\clmnwidth}}\toprule
+    \begin{tabular}{m{0.25\clmnwidth}>{\centering\arraybackslash}m{0.25\clmnwidth}m{0.92\clmnwidth}}\toprule
       \textbf{Attribute} & \textbf{Value} & \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule
 
-      sentiment-ref & \textit{$\longrightarrow$\newline(directed
-        edge)} & see Table~\ref{tbl:target}\\\midrule
+      sentiment-ref & \textit{\shortstack{$\longrightarrow$\\(directed
+        edge)}} & see Table~\ref{tbl:target}\\\midrule
 
-      anaph-ref & \textit{$\longrightarrow$\newline(directed edge)} &
+      anaph-ref & \textit{\shortstack{$\longrightarrow$\\(directed edge)}} &
       see Table~\ref{tbl:target}\\\bottomrule
     \end{tabular}
     \caption{Attributes of \texttt{source}s}\label{tbl:source}
@@ -572,49 +574,49 @@ Further attributes of \texttt{polar-term}s include \texttt{intensity},
 are summarized in Table~\ref{tbl:polar-term}.
 \begin{center}
   \begin{table}[htb!]
-    \begin{tabular}{lcp{0.895\clmnwidth}}\toprule
+    \begin{tabular}{m{0.25\clmnwidth}>{\centering\arraybackslash}m{0.25\clmnwidth}m{0.92\clmnwidth}}\toprule
       \textbf{Attribute} & \textbf{Value} & \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule
       %%%%%%%%%%%%%%%%%%%
 
-      & \textit{positive} & polar term has a positive evaluative
+      \multirow{2}{*}[-0.7cm]{polarity} & \textit{positive} & polar term has a positive evaluative
       meaning, \eg{} \textit{gut (good), verhimmeln (to ensky),
         Prachtkerl (corker)} etc.\\\cmidrule{2-3}
 
-      \multirow{-2}{*}{polarity} & \textit{negative\newline(default)}
+      & \textit{\shortstack{negative\\(default)}}
       & polar term expresses a negative evaluation of its target,
       \eg{} \textit{versauen (to botch up), rotzig (snotty),
         Dreckskerl (scum)} etc.\\\midrule
 
       %%%%%%%%%%%%%%%%%%%
 
-      & \textit{weak} & polar-term has a weak evaluative sense, \eg{}
+      \multirow{3}{*}[-1.1cm]{intensity} & \textit{weak} & polar-term has a weak evaluative sense, \eg{}
       \textit{solala (so-so), nullachtf\"unfzehn (vanilla),
         durchschnittlich (mediocre)} etc.\\\cmidrule{2-3}
 
-      & \textit{medium\newline(default)} & polar-term has middle
+      & \textit{\shortstack{medium\\(default)}} & polar-term has middle
       stylistic expressivity, \eg{} \textit{gut (good), schlecht
         (bad), robust (tough)} etc.\\\cmidrule{2-3}
 
-      \multirow{-3}{*}{intensity} & \textit{strong} & polar-term
+      & \textit{strong} & polar-term
       expresses a very strong positive or negative evaluation, \eg{}
       \textit{allerbeste (bettermost), zum Kotzen (to make one puke),
         Kacke (shit)} etc.\\\midrule
 
       %%%%%%%%%%%%%%%%%%%%
 
-      \multirow{2}{*}{sarcasm} & \textit{true} & polar-term is
+      \multirow{2}{*}[-0.4cm]{sarcasm} & \textit{true} & polar-term is
       derisive, \ie{} its actual polarity is the opposite of its
       primary lexical sense even though there are no negations in the
       surrounding context\\\cmidrule{2-3}
 
-      & \textit{false\newline(default)} & no sarcasm is present---the
+      & \textit{\shortstack{false\\(default)}} & no sarcasm is present---the
       term has its literal polar meaning; this is the
       default\\\midrule
 
       %%%%%%%%%%%%%%%%%%%
 
-      sentiment-ref & \textit{$\longrightarrow$\newline(directed
-        edge)} & an arrow pointing to the \texttt{sentiment} that this
+      sentiment-ref & \textit{\shortstack{$\longrightarrow$\\(directed
+        edge)}} & an arrow pointing to the \texttt{sentiment} that this
       \texttt{polar-term} belongs to.  You should only draw this edge
       if a \texttt{polar-term} is located at an intersection of two
       \texttt{sentiment}s or outside of the \texttt{sentiment} span
@@ -661,22 +663,22 @@ Further possible attributes of \texttt{intensifier}s are shown in
 Table~\ref{tbl:intensifier}.
 \begin{center}
   \begin{table}[htb]
-    \begin{tabular}{lcp{0.895\clmnwidth}}\toprule
+    \begin{tabular}{m{0.25\clmnwidth}>{\centering\arraybackslash}m{0.25\clmnwidth}m{0.92\clmnwidth}}\toprule
       \textbf{Attribute} & \textbf{Value} & \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule
 
-      & \textit{medium (default)} & the intensifier moderately
+      \multirow{-2}{*}[-1.25cm]{degree} & \textit{\shortstack{medium\\(default)}} & the intensifier moderately
       increases the polar sense of the polar term,
       \eg{} \textit{ziemlich (quite), recht (fairly)} etc.\\\cmidrule{2-3}
 
-      \multirow{-2}{*}{degree} & \textit{strong} & the intensifier
-      strongly increases the polar sense and stylistic markedness of
-      the polar term, \eg{} \textit{sehr (very), super (super), stark
-        (strongly)} etc.\\\midrule
+      & \textit{strong} & the intensifier strongly increases the polar
+      sense and stylistic markedness of the polar term, \eg{}
+      \textit{sehr (very), super (super), stark (strongly)}
+      etc.\\\midrule
 
       %%%%%%
 
-      polar-term-ref & \textit{$\longrightarrow$\newline(directed
-        edge)} & a directed edge pointing from the intensifier to the
+      polar-term-ref & \textit{\shortstack{$\longrightarrow$\\(directed
+        edge)}} & a directed edge pointing from the intensifier to the
       \texttt{polar-term} whose meaning is being
       intensified\\\bottomrule
     \end{tabular}
@@ -705,19 +707,19 @@ attributes of \texttt{diminisher}s mainly coincide with those of
 intensifiers and are summarized in Table~\ref{tbl:diminisher}.
 \begin{center}
   \begin{table}[hb]
-    \begin{tabular}{lcp{0.895\clmnwidth}}\toprule
+    \begin{tabular}{m{0.25\clmnwidth}>{\centering\arraybackslash}m{0.25\clmnwidth}m{0.92\clmnwidth}}\toprule
       \textbf{Attribute} & \textbf{Value} & \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule
 
-      & \textit{medium (default)} & diminisher moderately decreases
+      \multirow{2}{*}[-0.5cm]{degree} & \textit{\shortstack{medium\\(default)}} & diminisher moderately decreases
       the polar sense of its respective \texttt{polar-term},
       \eg{} \textit{wenig (few), bisschen (little)} etc.\\\cmidrule{2-3}
 
-      \multirow{-2}{*}{degree} & \textit{strong} & diminisher strongly
+      & \textit{strong} & diminisher strongly
       decreases the polar sense of the \texttt{polar-term},
       \eg{} \textit{kaum (hardly)} etc.\\\midrule
 
-      polar-term-ref & \textit{$\longrightarrow$\newline(directed
-        edge)} & see Table~\ref{tbl:intensifier}\\\bottomrule
+      polar-term-ref & \textit{\shortstack{$\longrightarrow$\\(directed
+        edge)}} & see Table~\ref{tbl:intensifier}\\\bottomrule
     \end{tabular}
     \caption{Attributes of \texttt{diminisher}s}\label{tbl:diminisher}
   \end{table}
@@ -774,11 +776,12 @@ negated.  Like intensifiers and diminishers, negations must always
 refer to at least one polar item.
 \begin{center}
   \begin{table}
-    \begin{tabular}{lcp{0.875\clmnwidth}}\toprule % noqa
-      \textbf{Attribute} & \textbf{Value} & \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule
-      polar-term-ref & \textit{$\longrightarrow$\newline(directed
-        edge)} & an edge from \texttt{negation} to the
-      \texttt{polar-term} being negated\\\bottomrule
+    \begin{tabular}{m{0.25\clmnwidth}>{\centering\arraybackslash}m{0.25\clmnwidth}m{0.92\clmnwidth}}\toprule % noqa
+      \textbf{Attribute} & \textbf{Value} &
+      \multicolumn{1}{c}{\textbf{Meaning}}\\\midrule polar-term-ref &
+      \textit{\shortstack{$\longrightarrow$\\(directed edge)}} & an edge from
+      \texttt{negation} to the \texttt{polar-term} being
+      negated\\\bottomrule
     \end{tabular}
     \caption{Attributes of \texttt{negation}s}\label{tbl:negation}
   \end{table}
@@ -901,7 +904,7 @@ suggested \#Spiegel title ``wie Welzer~, Sloterdijk und andere Promi
   squander the democracy: Sluggish~, frustrated}'').  The author finds
 this title good, and the annotation of this sentiment then looks as
 follows:
-\begin{Example*}
+\begin{example}
   \sentiment[polarity=positive,intensity=medium,sarcasm=false,id=1]{RT
     \source[sentiment\_ref=1]{@JochenFlasbarth}~:\\ \emoexpression[polarity=positive,intensity=medium,sarcasm=false,
       sentiment\_ref=1]{Guter} \#Spiegel-Titel~,
@@ -916,19 +919,19 @@ follows:
     \target[sentiment\_ref=1]{how Welzer~, Sloterdijk, and other
       celebrity non-voters squander the democracy~: Sluggish~,\\
       frustrated}})
-\end{Example*}
+\end{example}
 The negative opinion, which is expressed by the terms
 \textit{verspielen} (\textit{to squander}), \textit{tr\"age}
 (\textit{sluggish}), and \textit{frustriert} (\textit{frustrated}),
 obviously relates to the celebrity non-voters, \textit{Welzer} and
 \textit{Sloterdijk}; so, we annotate this evaluation as:
 
-\begin{Example*}
+\begin{example}
   \scriptsize
   \sentiment[{\tiny polarity=negative,intensity=medium,sarcasm=false,id=2}]{RT
     \source[sentiment\_ref=2]{@JochenFlasbarth}~: Guter
-    \#Spiegel-Titel~, wie \target[sentiment\_ref=2]{Welzer}~,\\
-    \target[sentiment\_ref=2]{Sloterdijk} und
+    \#Spiegel-Titel~, wie\\\target[sentiment\_ref=2]{Welzer}~,
+    \target[sentiment\_ref=2]{Sloterdijk}\\und
     \target[sentiment\_ref=2]{andere Promi \#Nichtw\"ahler} die
     Demokratie\\
     \emoexpression[polarity=negative,intensity=medium,sarcasm=false,sentiment\_ref=2]{verspielen}~:\\
@@ -937,7 +940,7 @@ obviously relates to the celebrity non-voters, \textit{Welzer} and
 
   {\scriptsize(\sentiment[polarity=negative,intensity=medium,sarcasm=false,id=2]{RT
       \source[sentiment\_ref=2]{@JochenFlasbarth}~: A good \#Spiegel
-      title~, how \target[sentiment\_ref=2]{Welzer}~,\\
+      title~, how\\\target[sentiment\_ref=2]{Welzer}~,
       \target[sentiment\_ref=2]{Sloterdijk},\\ and
       \target[sentiment\_ref=2]{other celebrity non-voters}\\
       \emoexpression[polarity=negative,intensity=medium,sarcasm=false,sentiment\_ref=2]{squander}
@@ -947,7 +950,7 @@ obviously relates to the celebrity non-voters, \textit{Welzer} and
       \emoexpression[polarity=negative,intensity=medium,sarcasm=false,
         sentiment\_ref=2]{frustrated}\\
     })}
-\end{Example*}
+\end{example}
 
 In both cases, \textit{@JochenFlasbarth} is the original author of the
 cited opinion, so we should label it as a \texttt{source}.  But since
