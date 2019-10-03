@@ -397,16 +397,19 @@ The main reasons for the success of this model are:
     labeling.
   \end{example}
 \end{enumerate}
-\textbf{Training.}\quad{}CRFs have these useful properties due to a
-neatly formulated objective function in which they seek to optimize
-the global log-likelihood of gold labels $\mathbf{Y}$ conditioned on
-training data $\mathbf{X}$.  In particular, given a set of training
-instances $\mathcal{D} = \{(\mathbf{x}^{(n)},
-\mathbf{y}^{(n)})\}_{n=1}^N$, where $\mathbf{x}^{(n)}$ stands for the
-input variables of the $n$-th instance, and $\mathbf{y}^{(n)}$ denotes
-its respective gold labels, CRFs try to find feature coefficients
-$\mathbf{w}$ that maximize the log-probabilities $\ell$ of
-$\mathbf{y}^{(i)}$ given $\mathbf{x}^{(i)}$ over the whole corpus:
+
+\paragraph{Training.}
+
+CRFs have these useful properties due to a neatly formulated objective
+function in which they seek to optimize the global log-likelihood of
+gold labels $\mathbf{Y}$ conditioned on training data $\mathbf{X}$.
+In particular, given a set of training instances $\mathcal{D} =
+\{(\mathbf{x}^{(n)}, \mathbf{y}^{(n)})\}_{n=1}^N$, where
+$\mathbf{x}^{(n)}$ stands for the input variables of the $n$-th
+instance, and $\mathbf{y}^{(n)}$ denotes its respective gold labels,
+CRFs try to find feature coefficients $\mathbf{w}$ that maximize the
+log-probabilities $\ell$ of $\mathbf{y}^{(i)}$ given
+$\mathbf{x}^{(i)}$ over the whole corpus:
 \begin{equation}\label{snt:fgsa:eq:crf-w}
   \mathbf{w} = \argmax_{\mathbf{w}}\sum_{n=1}^N\ell
   \left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right).
@@ -420,7 +423,7 @@ w.r.t\@. to the whole instance) normalized softmax function:
   \ln\left(\frac{ \exp\left(\sum_{m=1}^{M}\sum_{j}w_{j} \cdot f_j(x_{m},
     y_{m-1}, y_{m})\right)}{Z}\right),
 \end{equation}
-where $M$ stands for the length of the $n$-th training instance;
+where $M$ stands for the length of the $n$-th training example;
 $f_j(x_{m}, y_{m-1}, y_{m})$ denotes the value of the $j$-th feature
 function $f$ at the sequence position $m$; $w_j$ represents the
 corresponding weight of this feature; and $Z$ is a normalization
@@ -430,7 +433,7 @@ factor calculated over all possible label assignments:
   \sum_{y'\in\mathcal{Y},y''\in\mathcal{Y}}\exp\left(\sum_{m=1}^{M}\sum_{j}w_{j}
   \cdot f_j(x_{m}, y'_{m-1}, y''_{m})\right).
 \end{equation*}
-Since this normalizing term appears in the denominator, and couples
+Since this normalizing term appears in the denominator and couples
 together all feature weights that need to be optimized, it becomes
 prohibitively expensive to find the best solution to
 Equation~\ref{snt:fgsa:eq:crf-w} analytically, with a single shot.  A
@@ -454,7 +457,7 @@ $N$ (the size of the corpus) can be transformed into:
   \mathbf{y})] - \E_{\mathbf{w}}[f_j(\mathbf{x}, \mathbf{y})],
 \end{equation*}
 where the first term ($\E[f_j(\mathbf{x}, \mathbf{y})]$) is the
-expectation of the feature $f_j$ under the empirical distribution; and
+expectation of the feature $f_j$ under the empirical distribution, and
 the second term ($\E_{\mathbf{w}}[f_j(\mathbf{x}, \mathbf{y})]$) is
 the same expectation under model's parameters $\mathbf{w}$.  In other
 words, the optimal solution to the log-likelihood objective in
@@ -462,23 +465,49 @@ Equation~\ref{snt:fgsa:eq:crf-ell} is achieved when model's
 expectation of features matches their (true) empirical expectation on
 the corpus.
 
-The marginal probabilities of these feature, which are required for
+The marginal probabilities of these features, which are required for
 computing their expectations, can be estimated dynamically using the
 forward-backward (FB) algorithm~\cite{Rabiner:90}, which is a
 particular case of the more general belief propagation
 method~\cite[see][p.~81]{Barber:12}.
 
-\noindent\textbf{Inference.}\quad{}Once optimal feature weights are
-found, one can unproblematically compute the most likely label
-assignment for a new instance by using the Viterbi
-algorithm~\cite{Viterbi:67}, which effectively corresponds to the
-forward pass of the FB method with the summation over the alternative
-preceding states replaced by the maximum operator (hence the other
-name for this algorithm, ``max-product'').
+The only modification that one usually makes to the final objective
+function~\ref{snt:fgsa:eq:crf-w} in practice, before optimizing it on
+the provided training set, is the addition of so-called
+\emph{regularization terms} (L1 and L2), which penalize excessively
+high feature weights, thus preventing the model from overfitting the
+training data:
+\begin{equation}\label{snt:fgsa:eq:crf-w-regulari}
+\mathbf{w} = \argmax_{\mathbf{w}}\sum_{n=1}^N\ell
+\left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right) -
+\lambda_1\lVert\mathbf{w}\rVert_1 - \lambda_2\lVert\mathbf{w}\rVert_2,
+\end{equation}
+where $\lambda_1$ and $\lambda_2$ are manually set hyper-parameters,
+which control the amount of penalty that we want to impose on the L1
+and L2 norms of the weight vector.
 
-\noindent\textbf{Features.}\quad{}A crucial component that accounts
-for a huge part of the success (or failure) of CRFs is features that
-are provided to this classifier as input.
+In our experiments, we have also adopted this enhanced objective,
+using hyper-parameter values that yielded the best results on the
+held-out development set.  Furthermore, in order to reduce the noise
+that is typically introduced by rare, sporadic features, we only
+optimized the weights of features that occurred two or more times in
+the training corpus, ignoring all singleton attributes in these data.
+
+\paragraph{Inference.}
+
+Once optimal feature weights have been learned, one can
+unproblematically compute the most likely label assignment for a new
+instance by using the Viterbi algorithm~\cite{Viterbi:67}, which
+effectively corresponds to the forward pass of the FB method with the
+summation over the alternative preceding states replaced by the
+maximum operator (hence the other name for this algorithm,
+``max-product'').
+
+\paragraph{Features.}
+
+A crucial component that accounts for a huge part of the success (or
+failure) of CRFs is features that are provided to this classifier as
+input.
 
 Traditionally, feature functions in CRFs are divided into transition-
 and state-based ones.  Transition features represent real- or
@@ -563,18 +592,41 @@ reflected several semantic and syntactic traits.  These were:
     of~\citet{Clematide:10} for computing these scores.}
 \end{itemize}
 
-\textbf{Results.}\quad{}The results of our experiments are shown in
+\paragraph{Results.}
+
+The results of our experiments are shown in
 Table~\ref{snt-fgsa:tbl:crf-res}.  As we can see from the table, with
-the given set of features, CRF model can perfectly well fit the
-training data, achieving a macro-averaged \F-score of~0.904.  These
-parameters, however, only partially generalize to unseen tweets,
-leading to notably lower \F-results on the test corpus (0.287), which
-indicates an overfitting of the training data, although we did our
-best to mitigate this effect (early stopping and higher regularization
-parameters).  Another notable tendency, which can be observed both on
-the training and test sets, is that the recall of the CRF system is
-generally lower than its precision.  This again can be attributed to
-the high variance of the classifier.
+the given set of features, CRF can perfectly well fit the training
+data, achieving a macro-averaged \F-score of~0.904.  This model,
+however, can only partially generalize to unseen messages, where its
+macro-\F{} reaches merely~0.287, despite the fact that the size of the
+training corpus is almost 3.5 times bigger than the size of the test
+set (5,616 versus 1,584 tweets).
+
+To better understand the reason for this effect, we compared all
+features appearing in the latter set with the attributes that occurred
+in the training part of the corpus, and, as it turned out, more than
+two thirds of all unique test features (34,186 out of 49,626) have
+never been observed during the training and consequently had no
+meaningful model weights.
+
+%% There are 5,616 training tweets, 792 development and 1,584 test microblogs.
+%% ./scripts/cmp_features --min-cnt=2 lingtmp/sentiment/crf/train/ lingtmp/sentiment/crf/devtest/
+%% Features in first dataset: 34597
+%% Features in second dataset: 28579
+%% Common features: 11317
+%% Total features: 51859
+
+%% ./scripts/cmp_features --min-cnt=2 lingtmp/sentiment/crf/train/ lingtmp/sentiment/crf/test/
+%% Features in first dataset: 34597
+%% Features in second dataset: 49626
+%% Common features: 15440
+%% Total features: 68783
+
+%% Another notable tendency that can be observed both on the training and
+%% test sets, is that the recall of the CRF system is generally lower
+%% than its precision.  This again can be attributed to the high variance
+%% of the classifier.
 
 \begin{table*}
   \begin{center}
@@ -603,12 +655,14 @@ the high variance of the classifier.
   \end{center}
 \end{table*}
 
+\todo[inline]{Add picture of hyper-parameters.}
+
 \subsection{Feature Analysis}
 
-To see whether the primary reason for this overfitting was suboptimal
-features that we provided to the system as input, we performed an
-ablation test, removing one group of state attributes at a time and
-rechecking the performance of the model on the development set.
+In order to better estimate the effect of features on the net results
+of the CRF system, we performed an ablation test, removing one group
+of state attributes at a time and rechecking the performance of the
+model on the development data.
 
 \begin{table}[hbt]
   \begin{center}
@@ -896,15 +950,17 @@ $\vec{h}^{(t-1)}$ denotes the state of the hidden vector at the
 previous time step; and $\mathbf{x}^{(t)}$ is the input vector at
 position $t$.
 
-\textbf{LSTM.}\quad{}A fundamental problem that arises from the above
-definition is that the gradients of model's parameters rapidly vanish
-to zero or explode to infinity (depending on whether the absolute
-values of $\vec{h}$ are less or greater than one) as the length of the
-input sequence increases.  In order to solve this issue,
-\citet{Hochreiter:97} proposed the long short-term memory mechanism
-(LSTM), in which they explicitly incorporate the goal of keeping the
-gradients within an appropriate range.  In particular, given an input
-sequence $\mathbf{x}$, they introduce a special \emph{activation unit}
+\paragraph{LSTM.}
+
+A fundamental problem that arises from the above definition is that
+the gradients of model's parameters rapidly vanish to zero or explode
+to infinity (depending on whether the absolute values of $\vec{h}$ are
+less or greater than one) as the length of the input sequence
+increases.  In order to solve this issue, \citet{Hochreiter:97}
+proposed the long short-term memory mechanism (LSTM), in which they
+explicitly incorporate the goal of keeping the gradients within an
+appropriate range.  In particular, given an input sequence
+$\mathbf{x}$, they introduce a special \emph{activation unit}
 $\vec{i}^{(t)}$:
 \begin{align*}
   \vec{i}^{(t)} &= \sigma\left(W_i\cdot \mathbf{x}^{(t)} + U_i \cdot \vec{h}^{(t-1)} + \vec{b}_i\right);
@@ -940,7 +996,9 @@ the new value of the hidden state $\vec{h}^{(t)}$:
   \vec{h}^{(t)} &= \vec{o}^{(t)} \odot tanh(\vec{c}^{(t)}).
 \end{align*}
 
-\textbf{GRU.}\quad{}Despite their enormous
+\paragraph{GRU.}
+
+Despite their enormous
 popularity~\cite[\eg{}][]{Filippova:15,Ghosh:16,Rao:16}, LSTMs have
 been criticized for the high complexity of their recurrent unit.  In
 order to overcome this deficiency, while still keeping the gradients
@@ -981,16 +1039,18 @@ product:
 and considering the greatest value in the resulting vector as the
 probability of the most likely tag.
 
-\textbf{Training.}\quad{}A neat property of LSTM and GRU is that the
-final equation, which is obtained after unrolling the recurrence loop,
-is differentiable with respect to all of its parameters, and can
-therefore be optimized with standard gradient update techniques.
-Since most of these parameters, however, represent high-dimensional
-matrices or vectors, finding an optimal learning rate (\ie{} the size
-of the update step taken in the direction of the gradient) might pose
-considerable difficulties, leading either to prohibitively large
-training times (if the steps are too small) or complete divergence of
-the trained model (if the steps are too large).
+\paragraph{Training.}
+
+A neat property of LSTM and GRU is that the final equation, which is
+obtained after unrolling the recurrence loop, is differentiable with
+respect to all of its parameters, and can therefore be optimized with
+standard gradient update techniques.  Since most of these parameters,
+however, represent high-dimensional matrices or vectors, finding an
+optimal learning rate (\ie{} the size of the update step taken in the
+direction of the gradient) might pose considerable difficulties,
+leading either to prohibitively large training times (if the steps are
+too small) or complete divergence of the trained model (if the steps
+are too large).
 
 Several algorithms have been proposed for solving this problem,
 including the method of momentum~\cite{Rumelhart:88},
@@ -1036,20 +1096,23 @@ development set, and trained the final model for 256 epochs, choosing
 parameter values that maximized the macro-averaged \F-score on the
 development set.
 
-\textbf{Inference.}\quad{}Since each of the above approaches (LSTM and
-GRU) explicitly defines an output unit, the inference of the most
-likely label assignment for an input instance $\mathbf{x}$ is
-straightforward and amounts to finding the $\argmax$ value of the
-output vector at each time step of the recurrence:
+\paragraph{Inference.}
+
+Since each of the above approaches (LSTM and GRU) explicitly defines
+an output unit, the inference of the most likely label assignment for
+an input instance $\mathbf{x}$ is straightforward and amounts to
+finding the $\argmax$ value of the output vector at each time step of
+the recurrence:
 \begin{equation*}
   \mathbf{\hat{y}} =
   \argmax{\vec{p}^{(1)}},\argmax{\vec{p}^{(2)}},\ldots,\argmax{\vec{p}^{(|\mathbf{x}|)}}.
 \end{equation*}
 
-\textbf{Results.}\quad{}To account for the random factors in the
-initialization, we repeated each training experiment three times, and
-show the mean and standard deviation of these results in
-Table~\ref{snt-fgsa:tbl:rnn-res}.
+\paragraph{Results.}
+
+To account for the random factors in the initialization, we repeated
+each training experiment three times, and show the mean and standard
+deviation of these results in Table~\ref{snt-fgsa:tbl:rnn-res}.
 
 As we can see from the table, the LSTM model shows generally better
 scores than the GRU system on both training and test sets.  The only
