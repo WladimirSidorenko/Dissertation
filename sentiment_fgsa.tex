@@ -477,7 +477,7 @@ the provided training set, is the addition of so-called
 \emph{regularization terms} (L1 and L2), which penalize excessively
 high feature weights, thus preventing the model from overfitting the
 training data:
-\begin{equation}\label{snt:fgsa:eq:crf-w-regulari}
+\begin{equation}\label{snt:fgsa:eq:crf-w-regularization}
 \mathbf{w} = \argmax_{\mathbf{w}}\sum_{n=1}^N\ell
 \left(\mathbf{y}^{(n)}|\mathbf{x}^{(n)}\right) -
 \lambda_1\lVert\mathbf{w}\rVert_1 - \lambda_2\lVert\mathbf{w}\rVert_2,
@@ -655,14 +655,51 @@ meaningful model weights.
   \end{center}
 \end{table*}
 
-\todo[inline]{Add picture of hyper-parameters.}
+%% This figure was generated using the iPython notebook `notebooks/cgsa.ipynb`.
+\begin{figure*}[bht]
+{
+\centering
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/fgsa_lambda1.png}
+  \caption{$\lambda_1$}\label{fgsa:fig:crf-lambda1}
+\end{subfigure}%
+\begin{subfigure}{.5\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{img/fgsa_lambda2.png}
+  \caption{$\lambda_2$}\label{fgsa:fig:crf-lambda2}
+\end{subfigure}
+}
+\caption[CRF results for different regularization values]{Results of
+  the linear-chain CRF system for different values of regularization
+  parameters}\label{fgsa:fig:crf-regularization}
+\end{figure*}
+
+Another factor that could significantly affect the generalization
+performance of the CRF system was the regularization parameters
+$\lambda_1$ and $\lambda_2$, which controlled the amount of penalty
+imposed on too big (absolute or squared) feature weights (see
+Equation~\ref{snt:fgsa:eq:crf-w-regularization}).  Because we set
+these parameters based on the model's results on the held-out
+development data, a possible reason for rather low scores on the test
+set could be a considerable difference between the development
+messages and tweets appearing in the test corpus.  To see whether it
+indeed was the case, we recomputed the \F{}-scores on the development
+and test sets for different $\lambda$ values and present the results
+of this computation in Figure~\ref{fgsa:fig:crf-regularization}.  As
+is evident from the figure, model's results on the development data
+largely correlate with its performance on the test set, and almost
+monotonically decrease with larger $\lambda$s.  Consequently, we
+hardly can expect major \F{}-improvements from higher values of these
+hyper-parameters and should rather concentrate on the choice and
+utility of existing feature attributes.
 
 \subsection{Feature Analysis}
 
-In order to better estimate the effect of features on the net results
-of the CRF system, we performed an ablation test, removing one group
-of state attributes at a time and rechecking the performance of the
-model on the development data.
+In order to estimate the effect of different features on the net
+results of the CRF system, we performed an ablation test, removing one
+group of state attributes at a time and rechecking the performance of
+the model on the development data.
 
 \begin{table}[hbt]
   \begin{center}
@@ -744,13 +781,11 @@ lexical and complex attributes.
 
 In order to get a better insight into the learned model's parameters,
 we additionally extracted top-ten state and transition features,
-ranked by the absolute values of their weights.  As we can see from
-the statistics in Table~\ref{fgsa:tbl:ablation}, three of the five
-highest-ranked state attributes (``meiste'' [\emph{most}] and
-``rettungsschirme'' [\emph{bailout}], which typically indicate a
-\markable{target}, and ``urlauberin'' [\emph{holiday}], which
-frequently correlates with \markable{sentiment}s) are complex features
-reflecting the lemma of the syntactic parent.  Another common group of
+ranked by absolute values of their weights.  As we can see from the
+statistics in Table~\ref{fgsa:tbl:ablation}, three of five top-ranked
+state attributes (``meiste'' [\emph{most}], ``rettungsschirme''
+[\emph{bailout}], and ``urlauberin'') are complex features that
+reflect the lemma of the syntactic parent.  Another common group of
 features is lemma and form of the current token: here, we again
 encounter the word ``meisten'' (\emph{most}), which, however,
 indicates the absence of any sentiment entities this time, and we also
@@ -761,16 +796,16 @@ tags; the remaining feature (``thomasopperman'') is a person name,
 which frequently appears as sentiment's \markable{target} in our
 corpus.
 
-An interesting pattern can be observed for transition features: As we
+An interesting pattern can be observed with transition features: As we
 can see from the results, top three of these attributes indicate a
 strong belief that an objective token is very unlikely to be followed
-by a \markable{target}, \markable{source}, or \markable{sentiment} tag
+by a \markable{target}, \markable{source}, or \markable{sentiment}
 (hence, the high negative weights of transitions emanating from
 \textsc{NON}).  It is, however, quite common that a \textsc{NON} tag
-will precede another \textsc{NON} instance (as we can see from line 5
-of the table).  Other transitions also mainly reflect plausible
-regularities: It is, for instance, uncommon that a \markable{target}
-of an opinion will appear immediately before a source
+will precede another \textsc{NON} (as we can see from line 5 of the
+table).  Other transitions also mainly reflect plausible regularities:
+It is, for instance, uncommon that a \markable{target} of an opinion
+will appear immediately before a source
 (\textsc{TRG}$\rightarrow$\textsc{SRC} $= -2.99$); in the same vein,
 it is fairly improbable that the SRC tag will precede a
 \markable{target} element (\textsc{SRC}$\rightarrow$\textsc{TRG} $=
