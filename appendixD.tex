@@ -1,0 +1,337 @@
+% FILE: appendixA.tex  Version 2.1
+% AUTHOR:
+% Universität Duisburg-Essen, Standort Duisburg
+% AG Prof. Dr. Günter Törner
+% Verena Gondek, Andy Braune, Henning Kerstan
+% Fachbereich Mathematik
+% Lotharstr. 65., 47057 Duisburg
+% entstanden im Rahmen des DFG-Projektes DissOnlineTutor
+% in Zusammenarbeit mit der
+% Humboldt-Universitaet zu Berlin
+% AG Elektronisches Publizieren
+% Joanna Rycko
+% und der
+% DNB - Deutsche Nationalbibliothek
+
+\chapter{CRF Training and Inference}\label{chap:apdx:crf-inference}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Traditionally, the main objective of CRF's training consists in
+finding such feature parameters $\bm{\Theta}$ that maximize the
+log-likelihood of a training set
+$\mathcal{D}=\{(\bm{x}[m],\bm{y}[m])\}_{m=1}^M$ (where $M$ represents
+the total number of training examples, $\bm{x}[m]$ denotes the feature
+vector of the $m$-th example, and $\bm{y}[m]$ stands for the vector of
+its gold labels):
+\begin{equation}\label{eqn:llhood}\scriptstyle
+  \begin{split}
+    \bm{\Theta} = \argmax_{\bm{\Theta}}
+    \sum\limits_{m=1}^{M}\ell_{\bm{Y}|\bm{X}} = \argmax_{\bm{\Theta}}
+    \sum\limits_{m=1}^{M}\ln{p_{\bm{\Theta}}(\bm{y}[m]|\bm{x}[m])}.
+  \end{split}
+\end{equation}
+The conditional probability of gold labels for the $m$-th training
+instance ($p_{\bm{\Theta}}(\bm{y}[m]|\bm{x}[m])$) is typically
+computed as:
+\begin{equation*}\label{eqn:prob}\scriptstyle
+  \begin{split}
+    p_{\bm{\Theta}}(\bm{y}[m]|\bm{x}[m]) =
+    \frac{\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\bm{y}[m],
+      \bm{x}, i)\Big)}{Z_{\bm{x}}},
+  \end{split}
+\end{equation*}
+where $n$ represents the total length of that instance (in the case of
+sentences, $n$ is usually the number of tokens); $\theta_k$ and
+$\mathit{f}_k$ are the weight and the value of the $k$-th feature; and
+$Z_{\bm{x}}$ is a normalization factor, which is estimated over all
+possible features $f$ and label assignments $\mathcal{Y}^n$:
+\begin{equation*}\small
+  \begin{split}
+    Z_{\bm{x}} \defeq \sum\limits_{\bm{y}' \in
+      \mathcal{Y}^n}\exp\Big(\sum\limits_{i=1}^n\sum\limits_{k}\theta_{k}\mathit{f}_{k}(\bm{y}',
+    \bm{x}[m], i)\Big).
+  \end{split}
+\end{equation*}
+The partial derivatives of feature weights, which are needed for
+optimizing the log-likelihood in Equation~\ref{eqn:llhood}, are known
+to be equal to the difference between the empirical and model's
+expectation of features over the whole training corpus:
+\begin{equation}\label{eqn:pderiv}\small
+  \begin{split}
+    \frac{\partial}{\partial{\theta_k}}\ell_{\bm{Y}|\bm{X}} = &
+    \sum\limits_{m=1}^M\sum\limits_{i=1}^n\big(\mathit{f}_k(\bm{y}[m],
+    \bm{x}[m], i) - \bm{E}_{\bm{\Theta}}[\mathit{f}_k(\mathcal{Y}^n, \bm{x}, i)] \big)
+  \end{split}
+\end{equation}
+
+\tocless\subsection{Linear-chain CRFs}
+
+In the case of first-order linear-chain CRFs, these derivatives are
+usually estimated with the help of the forward-backward algorithm (a
+specific case of the belief-propagation method~[\citeauthor{Pearl:82},
+  \citeyear{Pearl:82}]), which can be briefly described as follows.
+
+For each position $i$ of training instance $\bm{x}[m]$ and for each
+label $y$ of tagset $\mathcal{Y}$, one first computes the forward
+score $\alpha[y][i]$ as:
+\begin{equation}\label{eqn:folc-alpha}\small
+  \begin{split}
+    \alpha[y][i] =& \sum\limits_{y' \in\mathcal{Y}}\alpha[y'][i-1]t(y',y,i-1,i)s(y,i)
+  \end{split}
+\end{equation}
+where $t(y',y,i-1,i)$ is the exponentiated sum of transition features
+$\mathit{f}_t(y', y, \bm{x}, i-1, i)$ (which denote the transition
+from label $y'$ at position $i-1$ to label $y$ at position $i$)
+multiplied with their respective weights $\theta_t$:
+\begin{equation*}\label{eqn:sm-trans-score}\small
+  \begin{split}
+    t(y',y,i-1,i)\defeq\exp\Big(\sum\limits_{t}\theta_t\mathit{f}_t(y',y,\bm{x},i-1,i)\Big).
+  \end{split}
+\end{equation*}
+Similarly, $s(y, i)$ denotes the exponent of the sum of state features
+$f_s$ times their weights $\theta_s$:
+\begin{equation*}\label{eqn:sm-trans-score}\small
+  \begin{split}
+    s(y,i)\defeq\exp\Big(\sum\limits_{s}\theta_s\mathit{f}_s(y, \bm{x},
+    i)\Big).
+  \end{split}
+\end{equation*}
+
+The normalizing factor $Z_{\bm{x}}$ is then easily estimated as the
+sum of all values from the last column of matrix $\alpha$:
+\begin{equation*}\small
+  Z_{\bm{x}} = \sum\limits_{y \in \mathcal{Y}}\alpha[y][n].
+\end{equation*}
+
+After estimating the forward scores, one compute the backward scores
+$\beta$ by applying the same procedure in reverse---from right to
+left:
+\begin{equation}\label{eqn:folc-beta}\small
+  \begin{split}
+    \beta[y][i] =& \sum\limits_{y' \in
+      \mathcal{Y}}\beta[y'][i+1]t(y,y',i,i+1)s(y',i+1).%
+  \end{split}
+\end{equation}
+
+The marginal probabilities $p_m$ of state and transition features are
+then estimated as:
+\begin{equation*}\label{eqn:folc-tmarginal}\small
+  \begin{split}
+    p_m(\mathit{f}_s(y, \bm{x},i)) =&\frac{1}{Z_{\bm{x}}}%
+    \alpha[y][i]\beta[y][i];\\%
+    p_m(\mathit{f}_t(y', y, \bm{x}, i-1, i)) &=\frac{1}{Z_{\bm{x}}}%
+    \alpha[y'][i-1] \beta[y][i] s(y,i).
+  \end{split}
+\end{equation*}
+
+Knowing these probabilities, one can easily obtain the gradient of
+feature weights using Equation~\ref{eqn:pderiv}.
+
+\tocless\subsection{Semi-Markov CRFs} In contrast to linear-chain
+CRFs, semi-Markov conditional random fields do not model transitions
+between identical labels (\eg{} \textsc{Source} $\rightarrow$
+\textsc{Source}), but instead try to partition the input into
+contiguous spans of identical tags and infer the most likely label
+assignment for these spans.
+
+In order to do so, the model first determines the maximum possible
+length ($L$) of a segment with identical labels that exists in the
+training set.  The forward and backward scores are then calculated as:
+\begin{equation}\label{eqn:sm-alpha}\small
+  \begin{split}
+    \alpha[y][i] =&
+    \sum\limits_{d=0}^{L-1}\sum\limits_{\{y'\in\mathcal{Y}|y'\ne{}y\}}%
+    \alpha[y'][i-d-1]\\%
+    &\times t(y',y,i-d-1,i-d)s(y,[i-d,i]);
+  \end{split}
+\end{equation}
+
+\begin{equation}\label{eqn:sm-beta}\small
+  \begin{split}
+    \beta[y][i] =& \sum\limits_{d=0}^{L-1}%
+    \sum\limits_{\{y'\in\mathcal{Y}|y'\ne{}y\}}\beta[y'][i+d+1]\\%
+    &\times t(y,y',\bm{x},i+d,i+d+1)s(y,[i,i+d]);
+  \end{split}
+\end{equation}
+where $s(y,[i,i+d])$ is the exponentiated sum of all state features
+$s(y, j)$ that are activated on the interval $[i,\dots,i+d]$.
+%% (it could, for example, be the same binary state feature as in the
+%% previous section but it would be activated multiple times if
+%% $y=$\textsc{Target} and the span $[x_{i-d}, \dots, x_i]$ contains
+%% multiple capitalized words).
+
+The marginal probabilities of state and transition features are then
+computed as:
+\begin{equation*}\label{eqn:sm-marginal}\small
+  \begin{split}
+    p_m(&\mathit{f}_s(y,\bm{x},[i-d,i])) =\frac{1}{Z_{\bm{x}}}%
+    s(y,[i-d,i])\\%
+    &\times\sum\limits_{\{y'\in\mathcal{Y}|y'\ne{}y\}}%
+    \alpha[i-d-1][y']t(y',y,i-d-1,i-d)\\%
+    &\times\sum\limits_{\{y''\in\mathcal{Y}|y''\ne{}y\}}%
+    \beta[i+1][y'']t(y,y'',i,i+1);\\%
+  \end{split}
+\end{equation*}
+and
+\begin{equation*}\small
+  \begin{split}
+    p_m(\mathit{f}_t(y',y,\bm{x},[i-d,i]))&=\frac{1}{Z_{\bm{x}}}\alpha[y'][i-1]\beta[y][i]\\%
+    &\times{}t(y',y,i-1,i).%
+  \end{split}
+\end{equation*}
+
+%% Assuming that the time needed to compute each feature is constant, the
+%% asymptotic running time of this algorithm is $\mathcal{O}(n) =
+%% nL|\mathcal{Y}|^2$ where $|\mathcal{Y}|$ is the size of the underlying
+%% tagset.
+
+\tocless\subsection{Higher-order CRFs}
+
+In contrast to first-order models, which only consider the scores of
+one immediate label to the left when computing the $\alpha$ values or
+one immediate label to the right when estimating the $\beta$ scores,
+higher-order CRFs keep separate track of each \emph{sequence of
+  labels} that might precede or follow the currently analyzed token.
+
+In particular, instead of simply computing the scores for each tagset
+label $y \in \mathcal{Y}$ at each sentence position $i$, higher-order
+conditional random fields estimate these values for complete sequence
+of tags $y_{1}, \ldots, y_{d}$, where $d$ is the order of the model.
+
+This extension is possible for both linear-chain- and semi-Markov
+CRFs, and the way of estimating forward and backward scores as well as
+computing marginal probabilities $p_m$ is almost identical to the
+respective original implementations.  The only differences in the
+higher-order case are that
+\begin{itemize}
+  \item it now becomes possible to use state and transition features
+    that are associated with label chains up to length $d$ and not
+    only single tags (\eg{} instead of using a state feature which
+    tells that verbs starting with ``mis'' are likely to be
+    \texttt{sentiment}s, one can refine the feature function and say
+    that such words very probably represent \texttt{sentiment}s
+    preceded by \texttt{source}s, \ie{} are associated with the label
+    sequence <\texttt{source}, \texttt{sentiment}>);
+  \item secondly, when estimating the scores $\alpha[y_{1}, \ldots,
+    y_{d}][i]$ and $\beta[y_{1}, \ldots, y_{d}][i]$, one does not
+    simply iterate over all cells of the previous or next column of
+    the corresponding matrix, but only considers those preceding or
+    following states that allow the label sequence $y_{1}, \ldots,
+    y_{d}$ at the $i$-th position.  That is,
+    Equations~\ref{eqn:folc-alpha} and~\ref{eqn:folc-beta} become:
+\begin{equation*}
+  \begin{split}
+    \alpha[y_{1}, \ldots, y_{d}][i] =& \sum\limits_{\{y'_{1},\ldots,y'_{d}\in\mathcal{Y}^d|y'_{2},\ldots,y'_{d}=y_{1},\ldots,y_{d-1}\}}\alpha[y'_{1},\ldots,y'_{d}][i-1]\\
+    &\times t\left(\left(y'_{1},\ldots,y'_{d}\right),\left(y_{1},\ldots,y_{d}\right),i-1,i\right)s\left((y_{1},\ldots,y_{d}),i\right)
+  \end{split}
+\end{equation*}
+and
+\begin{equation*}
+  \begin{split}
+    \beta[y_{1},\ldots,y_{d}][i] =& \sum\limits_{\{y'_{1},\ldots,y'_{d}\in\mathcal{Y}^d|y_{2},\ldots,y_{d} = y'_{1},\ldots,y'_{d-1}\}}\beta[y'_{1},\ldots,y'_{d}][i+1]\\
+    &\times t\left(\left(y_{1},\ldots,y_{d}\right),\left(y'_{1},\ldots,y'_{d}\right),i,i+1\right)s\left((y'_{1},\ldots,y'_{d}),i+1\right),
+  \end{split}
+\end{equation*}
+respectively.  The same change also applies to
+Equations~\ref{eqn:sm-alpha} and~\ref{eqn:sm-beta} in the case of
+semi-Markov models.
+\end{itemize}
+
+%% It should, however, be noted that the number of label sequences (which
+%% is the first dimension of matrices $\alpha$ and $\beta$) increases
+%% exponentially with the order of the model and can achieve
+%% $\sum_{i=1}^d\left\vert\mathcal{Y}\right\vert^i$ for the linear-chain
+%% CRF and
+%% $\sum_{i=1}^d{\left(\left\vert\mathcal{Y}\right\vert{}-1\right)}^{i}$
+%% for the semi-Markov model.\footnote{We sum over all powers from 1 to
+%%   $d$ because higher-order models usually subsume all lower-order
+%%   dependencies.}
+
+%% In order to alleviate this exponential growth, we applied the
+%% heutistical algorithm of \citet{Nguyen:14} which we can briefly
+%% describe as follows: Let $\mathcal{Z} = \{z^1,\ldots,z^M\}$ denote the
+%% set of all label patterns up to length $d$ that were observed in the
+%% training set and let $\mathcal{A}$ denote the union of all tagset
+%% labels $\{y| y \in \mathcal{Y}\}$ and proper prefixes of the label
+%% patterns: $\mathcal{A} =
+%% \mathcal{Y}\cup\{z^{i}_{1:k}|1\leq{}k<\vert{}z^{i}\vert{},1\leq{}i\leq{}M\}$.
+%% Then, forward scores of the label patterns $\mathcal{A}$ for
+%% semi-Markov models can be computed using the following formula:
+%% \begin{equation*}\label{eqn:ho-alpha}\small
+%%   \begin{split}
+%%     \alpha[a][i] =&
+%%     \sum\limits_{d=0}^{L-1}\sum\limits_{\{a'\in\mathcal{A}|a\leq{}^{s}_{\mathcal{A}}a'y\}}%
+%%     \alpha[a'][i-d-1]\\%
+%%     &\times t(a',a,i-d-1,i-d)s(a,[i-d,i]);\\%
+%%   \end{split}
+%% \end{equation*}
+%% where $a\leq{}^{s}_{\mathcal{A}}a'y$ means that $a$ is the longest
+%% possible suffix in $\mathcal{A}$ for the concatenation of the prefix
+%% $a'$ and the label $y$.
+
+%% The set of backward states $\mathcal{B}$ is then constructed by
+%% concatenating every prefix $a \in \mathcal{A}$ with every tagset label
+%% $y \in \mathcal{Y}$: $\mathcal{B} = \mathcal{A}\mathcal{Y}$.  The
+%% backward scores $\beta$ are then computed for every state
+%% $b\in\mathcal{B}$ in a similar way as the forward states $\mathcal{A}$
+%% using the longest suffix relation:
+%% \begin{equation*}\label{eqn:ho-alpha}\small
+%%   \begin{split}
+%%     \beta[b][i] =& \sum\limits_{d=0}^{L-1}%
+%%     \sum\limits_{\{b'\in\mathcal{B}|b'\leq{}^{s}_{\mathcal{S}}by\}}\beta[b'][i+d+1]\\%
+%%     &\times t(b,b',\bm{x},i+d,i+d+1)s(b,[i,i+d]);
+%%   \end{split}
+%% \end{equation*}
+
+%% A detailed description of the computation of marginal probabilities
+%% can be found in \citet{Nguyen:14}.
+
+\tocless\subsection{Tree-structured CRFs}
+%% As difficult as it might seem to be, the forward-backward algorithm is
+%% just a simplified version of a more powerful algorithm that can be
+%% applied to any acyclic graph structures and which is commonly referred
+%% to as belief-propagation \cite{Pearl:82}.
+
+The main difference between applying the belief-propagation algorithm
+to trees instead of linear chains is that the inference flow happens
+in a ``vertical'' way---from tree's leaves to its root and vice
+versa---whereas in the standard forward-backward setting, we typically
+compute the scores ``horizontally''---from the left-most word of a
+sequence to the right-most one and then in the opposite direction.
+
+More precisely, the $\alpha$ and $\beta$ scores for trees are
+estimated as:
+\begin{equation*}\label{eqn:tree-alpha-beta}\small
+  \begin{split}
+    \alpha[y][p] =& \prod\limits_{c \in \text{children}(p)}\left(%
+    \sum\limits_{y' \in \mathcal{Y}} \alpha[y'][c] t(y',y,\bm{x},c, p)\right)%
+    s(y, p);\\%
+    \beta[y][c] =& \sum \limits_{y' \in \mathcal{Y}} %
+    \frac{\alpha[y'][p]\beta[y'][p]}{\alpha_{c\rightarrow{}p}}%
+    t(y, y', \bm{x},c,p);
+  \end{split}
+\end{equation*}
+where $p$ is the index of the parent node of token $c$, and
+$\alpha_{c\rightarrow{}p}$ is the part of the $\alpha$ score of token
+$p$ that has been previously propagated to it from its child $c$:
+\begin{equation*}\small
+  \begin{split}
+ \alpha_{c \rightarrow{} p} &\defeq \sum\limits_{y'' \in \mathcal{Y}} \alpha[y''][c] t(y'',y,\bm{x},c,p)
+  \end{split}
+\end{equation*}
+
+The normalizing factor $Z_{\bm{x}}$ and marginal probabilities of
+state features are calculated in the same way as for the linear-chain
+models with the only difference that the partition factor $Z$ is
+computed as the sum of the $\alpha$-scores of the root word $r$ and
+not of the last word $n$ of the instance.
+
+The marginal probabilities of transition features are computed using
+the following equation:
+\begin{equation*}\label{eqn:tree-tmarginal}\small
+  \begin{split}
+    p_m(\mathit{f}_t(y', y, \bm{x},c,p)) =&%
+    \frac{\alpha[y'][c]t(y', y, c, p)\alpha[y][p]\beta[y][p]}{\alpha_{c\rightarrow{}p}Z_{\bm{x}}}.
+  \end{split}
+\end{equation*}
