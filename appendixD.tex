@@ -17,6 +17,8 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\tocless\section{Training}
+
 Traditionally, the main objective of CRF's training consists in
 finding such feature parameters $\bm{\Theta}$ that maximize the
 log-likelihood of a training set
@@ -335,3 +337,88 @@ the following equation:
     \frac{\alpha[y'][c]t(y', y, c, p)\alpha[y][p]\beta[y][p]}{\alpha_{c\rightarrow{}p}Z_{\bm{x}}}.
   \end{split}
 \end{equation*}
+
+\tocless\section{Inference}
+
+Once model parameters have been learned, one applies the optimized
+model to new, unseen instances in order to predict their most probable
+labels---a task which is commonly refered to as \emph{inference}.
+
+For CRFs, inference actually boils down to computing the matrix
+$\alpha$ with the following minor modifications:
+\begin{itemize}
+\item First of all, instead of taking the sum over all previous labels
+  $y'\in\mathcal{Y}$ when computing $\alpha[y][i]$, one only estimates
+  the maximum possible score for that cell that is possible
+  w.r.t.\ the probabilities of its preceding labels;
+
+\item Second, apart from storing the maximum (unnormalized)
+  probability of label $y$ at the $i$-th position, one also stores the
+  label at the previous position ($i-1$) that has lead to the maximum
+  value of $\alpha[y][i]$.
+\end{itemize}
+In other words, in the case of linear-chain CRFs, we transform
+Equation~\ref{eqn:folc-alpha} into:
+\begin{equation}\label{eqn:folc-viterbi}\small
+  \begin{split}
+    \alpha[y][i] =& <\max_{y' \in\mathcal{Y}}\left(a(y',y,i-1,i)\right),
+    \argmax_{y' \in\mathcal{Y}}\left(a(y',y,i-1,i)\right)>
+  \end{split}
+\end{equation}
+where
+\begin{equation*}\small
+  \begin{split}
+    a(y',y,i-1,i) \defeq \alpha[y'][i-1][0]t(y',y,i-1,i)s(y,i).
+  \end{split}
+\end{equation*}
+
+We similarly modify the $\alpha$-computation in the semi-Markov case,
+but this time, apart from remembering the highest possible probability
+of the $y$-th label at the $i$-th position and its most likely
+predecessor, we also need to store the most probable length of the tag
+span $y$, \ie{}:
+\begin{equation*}\small
+  \begin{split}
+    \alpha[y][i] =& <\max_{y' \in\mathcal{Y}, d \in [1,\ldots,L]}\left(a(y',y,d,i)\right),
+    \argmax_{y' \in\mathcal{Y}, d \in [1,\ldots,L]}\left(a(y',y,d,i)\right)>
+  \end{split}
+\end{equation*}
+with $a$ now defined as:
+\begin{equation*}\small
+  \begin{split}
+    a(y',y,d,i) \defeq \alpha[y'][i-d-1][0]t(y',y,i-d-1,i-d)s(y,[i-d,i]).
+  \end{split}
+\end{equation*}
+
+Finally, in the case of tree-structured CRFs, we could have basically
+completely re-used the formula from Equation~\ref{eqn:folc-viterbi} if
+each tree node only had one child.  But since, most of the time, this
+is rarely the case, we need to circumvent the need for storing
+multiple child labels in a single $\alpha$ cell because this
+significantly slows down the inference due to additional memory
+allocation on the fly.  The way we do that is by applying the
+following trick: instead of storing in each cell $\alpha[y][i]$ the
+maximum possible score for the $y$-th tag at the $i$-th position and
+the labels of its children that have lead to this score, we store the
+score and the most likely tag of the $i$-th node that yielded the
+maximum possible value for the $y$-th tag at the parent position,
+\ie{}:
+\begin{equation}\small
+  \begin{split}
+    \alpha[y][c] =& <\max_{y' \in\mathcal{Y}}\left(a(y',y,c,p)\right),
+    \argmax_{y' \in\mathcal{Y}}\left(a(y',y,c,p)\right)>
+  \end{split}
+\end{equation}
+where
+\begin{equation*}\small
+  \begin{split}
+    a(y',y,i-1,i) \defeq \alpha[y'][c][0]t(y',y,c,p)s(y,p).
+  \end{split}
+\end{equation*}
+with $c$ denoting the index of the child, and $p$ standing for the
+index of the parent.
+
+After computing the scores for the final node, we scan the last (root)
+column of the $\alpha$ matrix for the maximum value and trace back the
+complete sequence of labels that has yielded this score---a procedure
+which is commonly known as the Viterbi algorithm.
