@@ -30,8 +30,8 @@ however, much like the definition of the term \emph{sentiment} itself,
 is neither complete nor universally accepted.  The main reasons for
 this are
 \begin{inparaenum}[(i)]
-  \item a frequently blurred boundary between the subjective and
-    objective parts of information and
+  \item a frequently blurred boundary between subjective and objective
+    parts of information and
   \item the heterogeneity of the language system itself, to which the
     SA methods are applied.
 \end{inparaenum}
@@ -59,12 +59,12 @@ main types of SA\@:
     polarity of the whole text.
 \end{itemize}
 Each of these types has its own specifics, and each of them needs to
-be addressed with its unique methods.  Therefore, speaking of the
-general difficulty of opinion mining for a specific domain is in the
-same way wrong as judging about the amenability of this domain to the
-whole natural language processing: one needs to specify a particular
-task and evaluate it with its own metrics.  Thus, to estimate the
-complexity of sentiment analysis on German Twitter, we will address
+be addressed with its unique methods.  Therefore, speaking of general
+difficulty of opinion mining for a specific domain is in the same way
+wrong as judging about the amenability of this domain to the whole
+natural language processing: one needs to specify a particular task
+and evaluate it with its own metrics.  Thus, to estimate the
+complexity of sentiment analysis for German Twitter, we will address
 all three levels of SA\@: subsentential, sentential, and
 suprasentential.
 
@@ -158,22 +158,22 @@ One of the main problems that people working on opinion mining are
 usually confronted with in the first place is the choice of the domain
 to deal with. Since sentiment analysis is a highly domain-dependent
 task \citep[see][]{Aue:05,Blitzer:07,Li:08}---\ie{} systems trained on
-one text genre can rarely generalize to other linguistic
+one text genre can hardly generalize to other linguistic
 variations---a natural question that arises in this context is which
 of the domains should be addressed first in this case.
 
 While earlier sentiment works were primarily concerned with narratives
 \citep{Wiebe:90a,Wiebe:94} or newspaper texts
 \citep{Wiebe:03,Wiebe:05,Bautin:08}, it soon became clear that social
-media provide a much more fertile ground for mining people's opinions.
-Among the first who tried to extract users' attitudes from online
-forums were \citet{Das:01}. For this purpose, the authors manually
+media provide a much more fertile ground for mining people's
+attitudes.  Among the first who tried to extract users' opinions from
+online forums were \citet{Das:01}. For this purpose, they manually
 annotated a collection of 500 messages from an economic chat board
 with three polarity classes (\emph{buy}, \emph{sell}, and \emph{null})
 and then trained five different classifiers on these data.  Using the
-trained systems, they classified the semantic orientation of the
-remaining 25,000 forum posts, trying to predict stock prices based on
-the polarities of these snippets.
+trained systems, the authors classified the semantic orientation of
+the remaining 25,000 forum posts, trying to predict stock prices based
+on the polarities of these snippets.
 %% This study revealed that user chats strongly correlated with stock
 %% developments in a reactive way: changes in stock prices had
 %% typically lead to fluctuations of public opinions but not vica
@@ -184,11 +184,11 @@ opinion mining field, with further notable works introduced by
 \citet{Glance:05}, who analyzed users' opinions on Usenet with
 hand-crafted rules; \citet{Antweiler:04}, who investigated how
 postings on message boards correlated with stock volatility;
-\citet{Ghose:07}, who examined the effect of opinions on the pricing
-power in online marketplaces; and, finally, \citet{Turney:02}, who
-classified Epinions reviews into \emph{recommended} (thumbs up) and
-\emph{not recommended} (thumbs down) ones based on the pointwise
-mutual information of their adjectives.
+\citet{Ghose:07}, who examined the effect of opinions on pricing in
+online marketplaces; and, finally, \citet{Turney:02}, who classified
+Epinions reviews into \emph{recommended} (thumbs up) and \emph{not
+  recommended} (thumbs down) ones based on the pointwise mutual
+information of their adjectives.
 
 %% \citet{Glance:05} also used sentiment analysis for business
 %% intelligence purposes by mining users' opinions on Usenet newsgroups
@@ -303,16 +303,17 @@ this classification.  \citet{Agarwal:11}, however, questioned this
 finding, arguing that POS-specific polarity features were a better
 alternative.
 
-Like opinion mining of product reviews, sentiment analysis of Twitter
-could not go unnoticed by the economic and sociological communities.
-An attempt to address political issues using this platform was made
-by~\citet{Tumasjan:10}, who analyzed users' opinions about German
-federal elections in 2009 by automatically translating 100,000 tweets
-into English and subsequently classifying these messages with the
-proprietary LIWC software~\cite{Pannebaker:07}.  This study showed
-that not only sentiments but even the mere numbers of microblogs
-mentioning political parties strongly correlated with the results of
-election polls.
+As in the case of opinion mining of product reviews, sentiment
+analysis of Twitter could not go unnoticed by the economic and
+sociological communities.  An attempt to address political issues
+using this platform was made by~\citet{Tumasjan:10}, who analyzed
+users' opinions about German federal elections in 2009 by
+automatically translating 100,000 tweets into English and subsequently
+classifying these messages with the proprietary LIWC
+software~\cite{Pannebaker:07}.  This study showed that not only
+sentiments but even the mere numbers of microblogs mentioning
+political parties strongly correlated with the results of election
+polls.
 
 %% One of the first attempts to analyze tweets from these perspectives
 %% was made by \citet{Jansen:09}, who studied microblogs' power as
@@ -338,7 +339,7 @@ of \citet{Mohammad:13}, which won three out of four subtasks
 polarity prediction of polar terms in Twitter).  This solution relied
 on an extensive set of hand-crafted features, powered by multiple
 manually- and automatically-generated sentiment lexicons.  The authors
-emphasized the crucial importance of the lexical resources, which
+emphasized the crucial importance of lexical resources, which
 increased the classification scores by almost $8.5\%$.  Other
 competing submissions~\cite{Becker:13,Guenther:13,Kokciyan:13} used a
 similar approach, but had considerably fewer feature attributes.
