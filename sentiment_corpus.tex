@@ -164,14 +164,14 @@ This list included:
 
 \begin{itemize}
 \item
-  \textbf{\markable{sentiment}}s, which we defined as \emph{polar
+  \textbf{\markable{sentiment}}s, which were defined as \emph{polar
     subjective evaluative opinions about people, entities, or events}.
   According to our definition, a \markable{sentiment} always had to
   evaluate an entity that was explicitly mentioned in text---the
   target; and the annotators had to label both the target and its
-  respective evaluative expression with this tag. Apart from tagging
-  the text span, they also had to specify the following attributes of
-  opinions:
+  respective evaluative expression with the \markable{sentiment}
+  tag. Apart from tagging the text span, they also had to specify the
+  following attributes of opinions:
   \begin{itemize}
   \item\attribute{polarity}, which reflected the attitude of opinion's
     holder to the evaluated entity.  Following
@@ -214,7 +214,7 @@ This list included:
     \item and, finally, another edge feature,
       \attribute{sentiment-ref}, which had to link \markable{target}s
       to their respective \markable{sentiment}s in the cases when the
-      \markable{target} span was located at the intersection of two
+      \markable{target} span was located at intersection of two
       opinions;
   \end{itemize}
 
@@ -574,7 +574,7 @@ agreement $p_c$ as:
   p_c = c_1 \times c_2 + (1.0 - c_1) \times (1.0 - c_2).
 \end{equation*}
 where $c_1$ and $c_2$ are the proportions of tokens annotated with the
-given class in the first and second annotations respectively, \ie{}
+given class in the first and second annotations, respectively, \ie{}
 $c_1 = \frac{A_1}{T}$ and $c_2 = \frac{A_2}{T}$.
 
 Two questions that arose during this computation though were
@@ -610,17 +610,17 @@ To address these issues, we introduced two different agreement
 metrics---\emph{binary} and \emph{proportional} kappa.  With the
 former variant, we counted tokens belonging to overlapping annotation
 spans of the same class multiple times (\ie{} $A_1$ and $A_2$ would
-amount to $10$ and $9$ respectively in the above tweet) and considered
-all tokens belonging to the given annotated element as matching if
-this span agreed with the annotation from the other expert on at least
-one token (\ie{} $M_1$ and $M_2$ would have the same values as $A_1$
-and $A_2$ in this case).  With the latter metric, every labeled token
-was counted only once (\ie{} the numbers of labeled words in the first
-and second annotations would be $7$ and $6$ respectively), and we only
-calculated the actual number of tokens with matching labels when
-computing the $M$ scores (\ie{} both $M_1$ and $M_2$ would be equal to
-$6$).  The final value of the binary kappa in
-Example~\ref{example:snt:iaa} would consequently run up to~1.0,
+amount to $10$ and $9$, respectively, in the above tweet) and
+considered all tokens belonging to the given annotated element as
+matching if this span agreed with the annotation from the other expert
+on at least one token (\ie{} $M_1$ and $M_2$ would have the same
+values as $A_1$ and $A_2$ in this case).  With the latter metric,
+every labeled token was counted only once (\ie{} the numbers of
+labeled words in the first and second annotations would be $7$ and
+$6$, respectively), and we only calculated the actual number of tokens
+with matching labels when computing the $M$ scores (\ie{} both $M_1$
+and $M_2$ would be equal to $6$).  The final value of the binary kappa
+in Example~\ref{example:snt:iaa} would consequently run up to~1.0
 because this metric would consider both annotations as perfectly
 matching, since every labeled \markable{sentiment} agreed with the
 other annotation on at least one token.  The proportional kappa,
@@ -642,7 +642,7 @@ steps:
   \item In the second step, in order to improve the inter-rater
     reliability, we automatically determined all differences between
     the two annotations and highlighted non-matching tokens with a
-    separate class of tags.  Then we let the experts resolve these
+    separate class of tags.  Then, we let the experts resolve these
     discrepancies by either correcting their own decisions or
     rejecting the variants of the other coder.  As in the previous
     stage, we allowed the annotators to consult their supervisor (the
@@ -654,9 +654,10 @@ steps:
     Similar effects were observed for \markable{target}s,
     \markable{source}s, \markable{polar term}s, and their modifiers;
   \item After resolving all differences, our assistants proceeded with
-    the annotation of the remaining files.  Working completely
-    independently, one of the experts annotated 78.8\% of the corpus,
-    whereas the second annotator labeled the complete dataset.
+    the annotation of remaining files.  Working completely
+    independently, one of the experts has annotated 78.8\% of the
+    corpus, whereas the second annotator has labeled the complete
+    dataset.
 \end{itemize}
 
 \section{Evaluation}\label{sec:eval}
@@ -733,14 +734,14 @@ A different situation is observed for \markable{polar terms} and
 elements is above 50\%, for both $\kappa$-measures.  Obviously,
 defining these entities as lexical units has significantly eased the
 detection of their boundaries.  This effect becomes even more evident
-when we look at \markable{diminisher}s and \markable{negation}s, where
+if we look at \markable{diminisher}s and \markable{negation}s, where
 the $A$ and $M$ scores are absolutely identical for both metrics.  It
 means that both annotators always agreed on the boundaries of these
-elements if they agreed on their presence.  Unfortunately, due to a
+elements when they agreed on their presence.  Unfortunately, due to a
 rather small number of these tags in the corpus (with only 3 cases of
 \markable{diminisher}s and 21 cases of \markable{negation}s), the
-overall agreement of these labels is relatively small too, amounting
-to $33.32\%$ and $28.69\%$ respectively.
+overall agreement on these labels is relatively small too, amounting
+to $33.32\%$ and $28.69\%$, respectively.
 
 \subsection{Adjudication Step}\label{subsec:eval-adjudication-step}
 
@@ -798,15 +799,16 @@ recheck each other's decisions.
   \label{tbl:snt:agrmnt-adjud}
 \end{table*}
 As we can see from the results in Table~\ref{tbl:snt:agrmnt-adjud},
-this procedure significantly improved the inter-rater reliability of
-all annotated elements: the binary scores of \markable{sentiment}s and
-\markable{target}s increased by $29.87\%$ and $30.18\%$ respectively.
-An even greater improvement is observed for \markable{source}s, whose
-binary kappa improved by remarkable $38.38\%$.  A similar tendency
-applies to the proportional metric, where the agreement of
-\markable{sentiment}s gained $30.73\%$, reaching $61.94\%$.  Likewise,
-the reliability of opinion targets and holders improved by $30.42\%$
-and $37.37\%$, running up to $57.27\%$ and $71.12\%$.
+this procedure has significantly improved the inter-rater reliability
+of all annotated elements: the binary scores of \markable{sentiment}s
+and \markable{target}s increased by $29.87\%$ and $30.18\%$,
+respectively.  An even greater improvement is observed for
+\markable{source}s, whose binary kappa improved by remarkable
+$38.38\%$.  A similar tendency applies to the proportional metric,
+where the agreement of \markable{sentiment}s gained $30.73\%$,
+reaching $61.94\%$.  Likewise, the reliability of opinion targets and
+holders improved by $30.42\%$ and $37.37\%$, running up to $57.27\%$
+and $71.12\%$.
 
 %% In general, however, we can see that the second annotator labeled
 %% almost twice as many \markable{sentiment}s and \markable{target}s as
@@ -820,13 +822,13 @@ and $37.37\%$, running up to $57.27\%$ and $71.12\%$.
 
 As in the previous step, the highest agreement scores are attained by
 \markable{polar term}s, whose reliability notably surpasses the 80\%
-benchmark, which means an almost perfect agreement level.
-Interestingly enough, only 193 out of 3,290 terms annotated by the
-first expert did not match the labelings of the second annotator.
-Another interesting observation is that the difference between the
-binary and proportional scores of \markable{polar terms} only amounts
-to 3.04\%, which implies that the assistants could unproblematically
-determine the boundaries of these elements in most of the cases.
+benchmark, which means an almost perfect agreement.  Interestingly
+enough, only 193 out of 3,290 terms annotated by the first expert did
+not match the labelings of the second annotator.  Another interesting
+observation is that the difference between the binary and proportional
+scores of \markable{polar terms} only amounts to 3.04\%, which implies
+that the assistants could unproblematically determine the boundaries
+of these elements in most of the cases.
 
 Somewhat surprisingly, the agreement of \markable{intensifier}s
 improved notably less.  A closer look at the annotated cases revealed
@@ -893,7 +895,7 @@ Table~\ref{tbl:snt:agrmnt-final}.
 
 This time, we can observe a slight decrease of the results: the
 proportional score for \markable{sentiment}s dropped by $3.12\%$,
-whereas the agreement of \markable{target}s was more persistent and
+whereas the agreement on \markable{target}s was more persistent and
 lost only $0.66\%$, going down to $56.61\%$.  The most dramatic
 changes occurred for \markable{source}s, whose proportional value
 deteriorated by notable $7.02\%$, sinking to $64.1\%$.  Nonetheless,
@@ -913,7 +915,7 @@ number of these elements in the corpus.
 
 In general, we can see that the reliability of all elements in the
 final dataset is at least moderate, with \markable{polar term}s being
-the most reliably annotated elements ($\kappa_{\textrm{p}}=80.29\%$)
+the most reliably annotated elements ($\kappa_{\textrm{p}}=80.29\%$),
 and \markable{intensifier}s setting a lower bound on the agreement
 ($\kappa_{\textrm{p}}=49.71\%$).
 
@@ -938,8 +940,8 @@ In this tweet, the first annotator obviously overlooked the emoticon
 \smiley{} at the end of the message, whereas the second expert
 correctly recognized it as an evaluation of the previous sentence.
 Because the first assistant did not label any \markable{sentiment} at
-all, she also automatically disagreed on the assignment of the
-\markable{target} tag.
+all, she also automatically disagreed on the \markable{target} of this
+opinion.
 
 %% At this point, we should note that it also was legitimate to consider
 %% the noun phrase ``die \#afd'' (\emph{the \#afd}) as the object of the
@@ -998,7 +1000,7 @@ Example~\ref{snt:exmp:emo-disagr}
   \noindent\textcolor{darkslateblue}{\textbf{\itshape Annotation
       2:}}\\ \upshape{}Syrien vor dem
   \emoexpression{\textcolor{red}{Angriff}}---bringen diese
-  \emoexpression{\textcolor{red}{Bomben}} den
+  \emoexpression{\textcolor{red}{Bomben}} den\\
   \emoexpression{\textcolor{red}{Frieden}}?\\[0.3em]
   \noindent\itshape{}Syria facing an
   \upshape\emoexpression{\textcolor{red}{\itshape{}attack}\upshape}\itshape{}---will
@@ -1019,14 +1021,14 @@ annotator considered them as polar items.
 %% be a better solution when comparing the corpus annotation with the
 %% existing sentiment lexica.
 We should, however, admit that this difference is partially due to the
-adjudication procedure that we used in step two, because at the
+adjudication procedure that we used in step two; because at the
 initial stage, our experts had had opposite preferences regarding
-these entities (the first annotator had labeled these terms, whereas
-the second assistant had usually skipped them).  During the revision,
-however, both assistants changed their minds after looking at the
+these entities: the first annotator had labeled these terms, whereas
+the second assistant had usually skipped them.  During the revision,
+however, both assistants have changed their minds after looking at the
 decisions of the other linguist.  Therefore, one needs to keep in mind
 the risk of mutual concession when applying the adjudication method in
-future.
+the future.
 
 %% Although the adjudication step significantly improved the reliability
 %% of other \markable{polar term}s and tags, the risk of mutual
@@ -1036,13 +1038,13 @@ future.
 \subsection{Attributes Agreement}\label{subsec:eval-qualitative-analysis}
 
 In order to see whether our annotators also agreed on the attributes
-of the assigned tags, we estimated the Cohen's kappa for the polarity
-and the Krippendorff's alpha \cite{Krippendorff:07} for the intensity
-of matching \markable{sentiment}s and \markable{polar term}s.  The
-reason for choosing two different metrics in this case is that
+of the tags, we estimated the Cohen's kappa for the polarity and the
+Krippendorff's alpha~\cite{Krippendorff:07} for the intensity of
+matching \markable{sentiment}s and \markable{polar term}s.  The reason
+for choosing two different metrics in this case is that
 \attribute{polarity} is a categorical feature, whose value takes on
 one of the predefined classes (\emph{positive}, \emph{negative}, or
-\emph{comparison}); whereas \attribute{intensity} is an ordinal
+\emph{comparison}), whereas \attribute{intensity} is an ordinal
 attribute, whose value can range on a scale from zero (\emph{weak}) to
 two (\emph{strong}).  Since disagreements that are further apart on
 the scale need to be penalized more strongly than small divergences,
@@ -1097,10 +1099,9 @@ and objective speech events (a rough counterpart of our
 corresponding results for the intensity of expressive subjective
 elements (\markable{polar term}s in our case), however, were much
 worse, amounting to only 46\%, even though the $\kappa$-value for
-their polarity run up to 72\%.  Hence, the reliability of the
-annotated attributes in our corpus still outperforms the respective
-agreement in MPQA on almost all aspects except for sentiment
-intensity.
+their polarity run up to 72\%.  Hence, the reliability of annotated
+attributes in our corpus still outperforms the respective agreement in
+MPQA on almost all aspects except for sentiment intensity.
 
 %% We should, however, note that the annotation scheme used for the
 %% latter dataset did not provide a specific attribute for the
@@ -1233,9 +1234,9 @@ annotated elements.
 As we can see from the results in Table~\ref{sent:tbl:corr-coeff},
 both criteria (topics and form) have a positive correlation with the
 number of annotated elements and their reliability.  The highest
-$\rho$-score for \markable{sentiment}s is achieved by the tweets
+$\rho$-score for \markable{sentiment}s is achieved by tweets
 describing federal elections and messages containing polar terms,
-where it amounts to 0.312 and 0.445 respectively.  A slightly
+where it amounts to 0.312 and 0.445, respectively.  A slightly
 different situation is observed for \markable{polar term}s: the
 highest scores for this element both in terms of the number of
 annotated items and their reliability are achieved by casual everyday
@@ -1349,7 +1350,7 @@ German microblogs that had been manually annotated by two human
 experts with sentiments, targets, sources, polar terms, and their
 modifying elements.
 
-We obtained the initial data for this corpus by tracking tweets about
+We obtained initial data for this corpus by tracking tweets about
 German federal elections, papal conclave, discussions of general
 political topics, and casual everyday conversations between spring and
 autumn 2013.  Afterwards, we grouped these messages into three classes
