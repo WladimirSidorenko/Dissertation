@@ -23,10 +23,10 @@ For this purpose, we will first evaluate existing German sentiment
 lexicons on our corpus.  Since most of these resources, however, were
 created semi-automatically by translating English polarity lists and
 then manually post-editing and expanding these translations, we will
-also look whether methods that were used to produce the original
-English lexicons would yield comparable results when applied to German
-data directly.  Finally, we will analyze whether one of the most
-popular areas of research in contemporary computational linguistics,
+also look whether methods that were used to produce original English
+lexicons would yield comparable results when applied to German data
+directly.  Finally, we will analyze whether one of the most popular
+areas of research in contemporary computational linguistics,
 distributed vector representations of words~\cite{Mikolov:13}, can
 produce better polarity lists than previous approaches.  In the
 concluding step, we will investigate the effect of different
@@ -35,20 +35,20 @@ concluding our findings in the last part of this chapter.
 
 \section{Data}\label{sec:snt-lex:data}
 
-As development set for our experiments, we will use 400 randomly
-selected tweets annotated by the first expert.  As gold test set for
-evaluating the lexicons, we will utilize the complete corpus labeled
-by the second linguist.  These test data comprise a total of 6,040
-positive and 3,055 negative terms.  But because many of these
-expressions represent emoticons, which, on the one hand, are a priori
-absent in common lexical taxonomies such as
+As \emph{development set} for our experiments, we will use \emph{400
+  randomly selected tweets} annotated by the first expert.  As gold
+\emph{test set} for evaluating the lexicons, we will utilize the
+\emph{complete corpus labeled by the second linguist}.  These test
+data comprise a total of 6,040 positive and 3,055 negative terms.  But
+because many of these expressions represent emoticons, which, on the
+one hand, are a priori absent in common lexical taxonomies such as
 \textsc{WordNet}~\cite{Miller:95,Miller:07} or
 \textsc{GermaNet}~\cite{Hamp:97} and therefore not amenable to methods
 that rely on these resources, but on the other hand, can be easily
 captured by regular expressions, we decided to exclude non-alphabetic
 smileys altogether from our study.  This left us with a set of 3,459
 positive and 2,755 negative labeled terms (1,738 and 1,943 unique
-expressions respectively), whose $\kappa$-agreement run up to 59\%.
+expressions, respectively), whose $\kappa$-agreement run up to 59\%.
 
 \section{Evaluation Metrics}\label{sec:snt-lex:eval-metrics}
 
@@ -409,9 +409,9 @@ experimented with three different methods:
   hypernyms and then determined a minimum cut between the polarity
   clusters using the algorithm of~\citet{Blum:01};
 \item since this approach, however, always partitioned the graph in
-  the same way even if there were many possible splits with the same
-  cost, the authors also proposed a \emph{randomized} version of this
-  method, in which they randomly perturbed edge weights;
+  the same way even if there were multiple possible splits with the
+  same cost, the authors also proposed a \emph{randomized} version of
+  this method, in which they randomly perturbed edge weights;
 \item finally, they compared both min-cut systems with the \emph{label
   propagation algorithm} of~\citet{Zhu:02}, which can be considered as
   a probabilistic variant of \citeauthor{Blair-Goldensohn:08}'s
@@ -482,16 +482,16 @@ children (\eg{} ``bewertungsspezifisch'' [\emph{appraisal-specific}]
 is a neutral term in contrast to its immediate hyponyms ``gut''
 [\emph{good}] and ``schlecht'' [\emph{bad}]), and
 \texttt{is\_related\_to} could connect both synonyms and antonyms of
-the same term (\eg{} this relation holds between the words ``Form''
+the same term (\eg{} this relation holds between words ``Form''
 [\emph{shape}] and ``unf\"ormig'' [\emph{misshapen}], but at the same
-time, also connects the noun ``Dame'' [\emph{lady}] to its derived
+time, it also connects noun ``Dame'' [\emph{lady}] to its derived
 adjective ``damenhaft'' [\emph{ladylike}]).
 
 We fine-tuned the hyper-parameters of all approaches by using grid
 search and optimizing the macro-averaged \F{}-score on the development
 set.  In particular, instead of waiting for the full convergence of
-the eigenvector in the approach of \citet{Blair-Goldensohn:08},
-we constrained the maximum number of multiplications to five.  Our
+the eigenvector in the approach of \citet{Blair-Goldensohn:08}, we
+constrained the maximum number of multiplications to five.  Our
 experiments showed that this limitation had a crucial impact on the
 quality of the resulting polarity list (\eg{} after five
 multiplications, the average precision of its positive terms amounted
@@ -499,13 +499,13 @@ to 0.499, reaching an average \F{}-score of 0.26 for this class; after
 ten more iterations though, this precision decreased dramatically to
 0.043, pulling the \F{}-score down to 0.078).  Furthermore, we limited
 the maximum number of iterations in the label-propagation method of
-\citet{Rao:09} to 300, although the effect of this setting was
-much weaker than in the previous case (by comparison, the scores
-achieved after 30 runs differed only by a few hundredths from the
-results obtained after 300 iterations).  Finally, in the method of
-\citet{Awadallah:10}, we allowed for seven simultaneous walkers
-with a maximum number of 17 steps each, considering a word as polar if
-more than half of these walkers agreed on the same polarity class.
+\citet{Rao:09} to 300, although the effect of this setting was much
+weaker than in the previous case (by comparison, the scores achieved
+after 30 runs differed only by a few hundredths from the results
+obtained after 300 iterations).  Finally, in the method of
+\citet{Awadallah:10}, we allowed for seven simultaneous walkers with a
+maximum number of 17 steps each, considering a word as polar if more
+than a half of these walkers agreed on the same polarity class.
 
 \begin{table}[h]
   \begin{center}
@@ -810,18 +810,20 @@ For our experiments, we reimplemented the approaches
 of~\citet{Takamura:05}, \citet{Velikovich:10}, \citet{Kiritchenko:14}
 and~\citet{Severyn:15}, and applied these methods to the German
 Twitter Snapshot~\cite{Scheffler:14}, a collection of 24~M German
-microblogs, which we previously used to sample one part of our
-sentiment corpus.  We normalized all messages of this snapshot with
-the rule-based normalization pipeline of~\citet{Sidarenka:13}, which
-will be described in more detail in the next chapter, and lemmatized
-all tokens with the \textsc{TreeTagger} of~\citet{Schmid:95}.
-Afterwards, we constructed a collocation graph from all normalized
-lemmas that appeared at least four times in the snapshot.  For the
-method of \citet{Takamura:05}, we additionally used \textsc{GermaNet}
-in order to add more links between electrons.  As in the previous
-experiments, all hyper-parameters (including the size of the lexicons)
-were fine-tuned on the development set by maximizing the
-macro-averaged \F{}-score on these data.
+microblogs, which we previously used for sampling one part of our
+sentiment corpus.
+
+We normalized all messages of this snapshot with the rule-based
+normalization pipeline of~\citet{Sidarenka:13}, which will be
+described in more detail in the next chapter, and lemmatized all
+tokens with the \textsc{TreeTagger} of~\citet{Schmid:95}.  Afterwards,
+we constructed a collocation graph from all normalized lemmas that
+appeared at least four times in the snapshot.  For the method of
+\citet{Takamura:05}, we additionally used \textsc{GermaNet} in order
+to add more links between electrons.  As in the previous experiments,
+all hyper-parameters (including the size of the lexicons) were
+fine-tuned on the development set by maximizing the macro-averaged
+\F{}-score on these data.
 
 The results of this evaluation are presented in
 Table~\ref{snt-lex:tbl:corp-meth}.
@@ -1180,9 +1182,9 @@ to~$\vec{b}$ as follows: {\small%
                \gamma\left(\Delta - \gamma\vec{b}\right),\label{eq:prj-line-grad}%
 \end{align}\normalsize}%
 where $\Delta$ stands for the difference between the positive and
-negative vectors~$\vec{p}_{+}$ and~$\vec{p}_{-}$: $\Delta =
+negative vectors~$\vec{p}_{+}$ and~$\vec{p}_{-}$: $\Delta \defeq
 \vec{p}_{+}-\vec{p}_{-}$; and $\gamma$ denotes the dot product of this
-difference with vector~$\vec{b}$: $\gamma = \Delta \cdot
+difference with vector~$\vec{b}$: $\gamma \defeq \Delta \cdot
 \vec{b}$.\footnote{The details of this gradient computation are given
   in Appendix~\ref{chap:apdx:lex-grad}.}  With this gradient, we then
 optimized $\vec{b}$ using gradient ascent until we reached a maximum
@@ -1659,7 +1661,7 @@ apparently not strong enough to overcome this confusion.
 \subsubsection{Vector Normalization}\label{subsec:snt-lex:eowet}
 
 Another factor that influenced the quality of NWE-induced polarity
-lists was length normalization and mean scaling of the input vectors,
+lists was length normalization and mean scaling of input vectors,
 which we applied at the very beginning of the training.
 
 To check the effect of this procedure, we reran our algorithms without
@@ -2366,8 +2368,8 @@ conclusions of this chapter as follows:
   vectors, while nearest centroids and PCA yielded better results when
   using task-specific representations;
 \item furthermore, we saw that all NWE-based approaches benefited from
-  mean-scaling and length normalization of the input vectors, getting
-  an improvement by up to~5\% in their macro-averaged \F-scores;
+  mean-scaling and length normalization of input vectors, improving by
+  up to~5\% on their macro-averaged \F-scores;
 \item finally, an extensive evaluation of various sets of seed terms
   revealed that the results of almost all tested SLG algorithms
   crucially depend on the quality of their initial seeds, with larger
@@ -2376,6 +2378,6 @@ conclusions of this chapter as follows:
 \end{itemize}
 
 Bearing this knowledge in mind, we will now move on to exploring
-further opinion-mining fields, fine-grained and message-level
+further opinion-mining fields: fine-grained and message-level
 sentiment analysis, in which sentiment lexicons are traditionally
 considered as one of the most valuable building blocks.
