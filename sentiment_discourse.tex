@@ -15,9 +15,8 @@
 
 \chapter{Discourse-Aware Sentiment Analysis}\label{chap:discourse}
 
-Although message-level sentiment analysis methods presented in the
-previous chapter do a fairly good job at classifying the overall
-polarity of a message,
+Although message-level sentiment analysis methods do a fairly good job
+at classifying the overall polarity of a message,
 %% putting their best leg forward to incorporate the compositional
 %% principle into that prediction,
 a crucial limitation of all these systems is that they completely
@@ -235,6 +234,7 @@ authors of reported speech.
 
 Example~\ref{dasa:exmp:pdtb-analysis} shows the previous fragment of
 the Rhetorical Treebank now annotated according to the PDTB scheme.
+
 As we can see from the analysis, PDTB is indeed more flexible than
 RST, as it allows its discourse units (arguments) to overlap, be
 disjoint or even embedded into other segments.  The assignment of
@@ -641,7 +641,7 @@ corpus~\cite{Carletta:05}.
 
 An attempt to unite local and global coherence was made by
 \citet{McDonald:07}, who tried to simultaneously predict the polarity
-of a document and classify the semantic orientations of its sentences.
+of a document and classify semantic orientations of its sentences.
 For this purpose, the authors devised an undirected probabilistic
 graphical model based on the structured linear
 classifier~\cite{Collins:02}.  Similarly to \citet{Pang:04}, they
@@ -939,9 +939,9 @@ from Equation~\ref{dasa:eq:y_i} as the ground truth and penalize all
 labels that disagree with this sequence, we might overly commit
 ourselves to the model's guess of unknown tags and unduly discriminate
 against other possible hidden label assignments.  To mitigate this
-effect, we can instead penalize only one other sequence, namely that
-which maximizes the probability of an incorrect label at the observed
-state:
+effect, we can instead penalize only one other sequence, namely the
+one that maximizes the probability of an incorrect label at the
+observed state:
 \begin{align*}
   \mathbf{y}^{'(i)}&=\argmax_{\mathbf{y}_o^{'(i)}\neq\mathbf{y}_o^{(i)}}p\left([\mathbf{y}_o^{'(i)},
     \mathbf{y}_h^{*(i)}]\vert\mathbf{x}^{(i)}\right)\text{,
@@ -1377,7 +1377,7 @@ development data.
 
 The results of our proposed and baseline methods are shown in
 Table~\ref{dasa:tbl:res}.
-\begin{table}[h]
+\begin{table}[hbt]
   \begin{center}
     \bgroup\setlength\tabcolsep{0.1\tabcolsep}\scriptsize
     \begin{tabular}{p{0.162\columnwidth} % first columm
@@ -1548,24 +1548,8 @@ class.
 \subsection{Error Analysis}
 
 Although our methods performed quite competitive, we decided to still
-have a closer look at their errors in order to understand their
-remaining potential weaknesses better.
-\begin{example}[An Error Made by the \textsc{LCRF} System\newline]\label{snt:dasa:exmp:lcrf-error}
-  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
-    $[$Boah , also doch wieder ein Mann , oder ?$]_1$ $[$ODER ?$]_2$
-    $[$papst$]_3$}\\
-  \noindent $[$Boah, a man again, isn't it ?$]_1$ $[$ISN'T ?$]_2$
-  $[$pope$]_3$\\[\exampleSep]
-  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
-    \upshape\textcolor{midnightblue}{negative}}\\
-  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
-    \upshape\textcolor{black}{neutral*}}%
-    {
-      \begin{center}
-        \input{lcrf-error}
-      \end{center}
-    }
-\end{example}
+look at their remaining errors in order to understand the reasons for
+their potential weaknesses.
 
 The first such error shown in Example~\ref{snt:dasa:exmp:lcrf-error}
 was made by the latent CRF system, which erroneously considered a
@@ -1585,12 +1569,28 @@ results from the node features (the state score for this polarity is
 equal to 0.524, whereas the negative class only obtains a score of
 -0.118).\footnote{All scores for this example are given in the
   logarithm domain.}
+\begin{example}[An Error Made by the \textsc{LCRF} System\newline]\label{snt:dasa:exmp:lcrf-error}
+  \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape
+    $[$Boah , also doch wieder ein Mann , oder ?$]_1$ $[$ODER ?$]_2$
+    $[$papst$]_3$}\\
+  \noindent $[$Boah, a man again, isn't it ?$]_1$ $[$ISN'T ?$]_2$
+  $[$pope$]_3$\\[\exampleSep]
+  \noindent\textup{\bfseries\textcolor{darkred}{Gold Label:}}\hspace*{4.3em}\textbf{%
+    \upshape\textcolor{midnightblue}{negative}}\\
+  \noindent\textup{\bfseries\textcolor{darkred}{Predicted Label:}}\hspace*{2em}\textbf{%
+    \upshape\textcolor{black}{neutral*}}%
+    {
+      \begin{center}
+        \input{lcrf-error}
+      \end{center}
+    }
+\end{example}
 
 As it turns out, high neutral node scores of the root are also the
 main reason for the misclassification in
 Example~\ref{snt:dasa:exmp:lmcrf-error}, where the LMCRF system also
 confuses the negative polarity with the neutral class.  This time,
-however, messages coming from leaves suggest almost equal
+however, messages coming from the leaves suggest almost equal
 probabilities for both semantic orientations, so that feature scores
 of the root completely call the shots in the final decision.
 \begin{example}[An Error Made by the \textsc{LMCRF} System\newline]\label{snt:dasa:exmp:lmcrf-error}
@@ -1796,7 +1796,7 @@ the set of discourse relations distinguished by the parser system.
 Although improving the results of DPLP let alone manually annotating
 the complete PotTS and SB10k datasets was beyond the scope of our
 dissertation (even though we have made such attempt, see
-\citeauthor{Sidarenka:15a} [\citeyear{Sidarenka:15a}]), we decided to
+[\citeauthor{Sidarenka:15a}, \citeyear{Sidarenka:15a}]), we decided to
 check whether at least evaluating the DASA methods on manually
 annotated data would improve their results.  For this purpose, we
 asked a student assistant to segment and parse 88\% of the tweets from
@@ -1954,8 +1954,8 @@ scores of all systems except \textsc{WNG}, \textsc{Last}, and
 macro-averaged \F{}-measure of the discourse-unaware classifier
 improves from 0.677 to 0.716, as does its micro-\F{}--score, which
 rises from 0.706 to 0.753 \F{}.  These last changes, however, are
-exclusively due to the reduced size of the test data (on which the LDA
-classifier performs on better than on the full test set), since the
+exclusively due to the reduced size of the test data (on which the
+base classifier performs better than on the full test set), since the
 discourse-unaware method does not take RST trees into account.
 Unfortunately, this time, \textsc{No-Discourse} also outperforms all
 discourse-aware approaches in terms of the micro-averaged \F{},
@@ -1966,8 +1966,8 @@ Recursive Dirichlet Process on the macro-averaged metric, yielding a
 %% micro-\F{}--score of the discourse-unaware baseline either, even
 %% though it achieves the same \F{}-results for the positive and neutral
 %% classes as the discourse-unaware method.
-Another surprising finding for us is that in gold discourse
-annotation, EDUs which determine the actual polarity of the tweet are
+Another surprising finding for us is that in the gold discourse
+annotation, EDUs that determine the actual polarity of the tweet are
 unlikely to appear either at the end of a message or at the top of its
 RST tree, which leads to the degradation of the scores for the
 \textsc{Last} and \textsc{Root} baselines.
@@ -2054,9 +2054,9 @@ overview of these sets is given in Table~\ref{dasa:tbl:rst-rel-sets}.
   \end{center}
 \end{table}
 
-To check whether cardinalities of these sets indeed correlate with the
-quality of automatic RST parsing, we evaluated each retrained system
-on the held-out PCC test data and present the results of this
+To check whether cardinalities of these sets indeed correlated with
+the quality of automatic RST parsing, we evaluated each retrained
+system on the held-out PCC test data and present the results of this
 evaluation in Table~\ref{dasa:tbl:dplp-results}.  As is evident from
 the scores, coarser relation schemes in fact improve parsing quality,
 especially in terms of relation \F{}.  In the most extreme case (\eg{}
@@ -2135,7 +2135,7 @@ reweighting strongly benefits from the full unconstrained set of PCC
 relations, which is probably due to the better nuclearity
 classification achieved with this scheme.  Finally, \textsc{WNG} and
 \textsc{Root} reach their best results with the relation subsets
-proposed by~\citeauthor{Chenlo:14} and \citeauthor{Heerschop:11}
+proposed by~\citeauthor{Chenlo:14} and \citeauthor{Heerschop:11},
 respectively.
 
 \begin{figure*}[htb!]
@@ -2200,9 +2200,9 @@ would like to recap that in this part of the thesis:
     SB10k respectively);
   \item we could, however, improve on these scores and also outperform
     the plain LBA system (although by a not very large margin) with
-    our three proposed discourse-aware sentiment solutions (latent and
+    our three proposed discourse-aware sentiment solutions: latent and
     latent-marginalized conditional random fields and Recursive
-    Dirichlet Process), pushing the macro-averaged \F{}-score on PotTS
+    Dirichlet Process; pushing the macro-averaged \F{}-score on PotTS
     up to 0.678 and increasing the result on SB10k to 0.56 macro-\F{};
   \item a subsequent evaluation of these approaches with different
     settings showed that the results of all discourse-aware methods
