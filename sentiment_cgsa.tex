@@ -53,8 +53,8 @@ supposed to emphasize the ability of a classifier to distinguish
 between opposite semantic orientations.  Although it seemingly ignores
 the neutral class, this type of misclassifications is indirectly taken
 into account as well, because confusing the neutral label with another
-polarity will automatically pull down the values of either $F_{pos}$
-or $F_{neg}$.
+polarity will automatically pull down the values of $F_{pos}$ or
+$F_{neg}$.
 
 The second metric, \emph{micro-averaged \F-score}, explicitly
 considers all three semantic orientations (positive, negative, and
@@ -129,7 +129,7 @@ below:
     \upshape\textcolor{midnightblue}{negative}}
 \end{example}
 As we can see from the examples, our simple rule makes fairly
-reasonable decisions, assigning a positive label to the first tweet,
+reasonable decisions, assigning the positive class to the first tweet,
 which also expresses a positive sentiment, and labeling the second
 message as negative, since it contains two negative polar terms
 (``typisch'' [\emph{typical}] and ``in der Tasche haben'' [\emph{to
@@ -186,12 +186,12 @@ In addition to the aforementioned two corpora (PotTS and SB10k), we
 also automatically annotated all microblogs of the German Twitter
 Snapshot~\cite{Scheffler:14} by following the procedure
 of~\citet{Read:05} and~\citet{Go:09} and assigning the positive
-(negative) class to the tweets that contained the respective
-emoticons, regarding the rest of the microblogs as neutral.  In
-contrast to the previous two datasets, whose labels were inferred or
-directly obtained from manual annotations, we will not use this
-automatically tagged corpus for evaluation, but will only harness it
-for training in our later weak-supervision experiments.
+(negative) class to the tweets that contained respective emoticons,
+regarding the rest of the microblogs as neutral.  In contrast to the
+previous two datasets, whose labels were inferred or directly obtained
+from manual annotations, we will not use this automatically tagged
+corpus for evaluation, but will only harness it for training in our
+later weak-supervision experiments.
 
 The resulting statistics on the number of messages and polarity class
 distribution in these data are shown in
@@ -506,7 +506,7 @@ signs for the terms with opposite semantic orientations.\footnote{We
   scoring later in Section~\ref{cgsa:subsec:eval:lexicons}.}
 Moreover, because some analyzers (\eg{} \citeauthor{Taboada:11}
 [\citeyear{Taboada:11}] and \citeauthor{Musto:14}
-[\citeyear{Musto:14}]) required the part-of-speech tags of lexicon
+[\citeyear{Musto:14}]) required part-of-speech tags of lexicon
 entries, we automatically tagged all terms in this polarity list with
 the \textsc{TreeTagger}~\cite{Schmid:95}, choosing the most probable
 part-of-speech tag for each entry and also using the tag sequences
@@ -1143,9 +1143,10 @@ of the colloquial term ``verarschen'' (\emph{to hoax}) suggests that
 the tweet at hand is negative.  Alas, the occurrence of another verb
 (``wollt'' [\emph{wanna}]) is interpreted as an irrealis clue, which
 prevents further SO computation and leads to a zero score to the whole
-message.  (Please note that the occurrence of the question mark does
-not affect the sentiment score because ``?!'' is not included in the
-list of valid punctuation marks in the original implementation.)
+message.\footnote{Please note that the occurrence of the question mark
+  does not affect the sentiment score because ``?!'' is not included
+  in the list of valid punctuation marks in the original
+  implementation.}
 
 \begin{example}[An Error Made by the System of~\citeauthor{Taboada:11}]\label{snt:cgsa:exmp:taboada-error-1}
   \noindent\textup{\bfseries\textcolor{darkred}{Tweet:}} {\upshape Die Konklave w\"ahlt den Papst und dann sagen sie Gott war es --- Wollt ihr mich verarschen ?!}\\
@@ -2052,7 +2053,7 @@ of the standard \textsc{TreeTagger}~\cite{Schmid:95}, which, apart
 from lacking any Twitter-specific information, was also trained on a
 completely different text genre (newspaper articles) and therefore a
 priori produced unreliable output.  As a consequence, the effect of
-the part-of-speech information is rather harmful, and the only aspect
+part-of-speech information is rather harmful, and the only aspect
 where it comes in handy is the macro-averaged \F{} on the PotTS
 corpus, which improves by 0.003 when these features are used.  A
 better alternative in this regard could be the Twitter-specific tagger
@@ -2182,18 +2183,18 @@ Mohammmad's and G\"unther's analyzers.
 \end{table}
 
 Even though our results contradict previous claims in the literature,
-we would advise against premature generalizations and conclusions at
-this point and stress the fact that different classifiers might have
-fairly varying results on different datasets.  Therefore, higher
-scores of the logistic regression on our corpora do not preclude
-better SVM results on the official SemEval data.
+we would advise against premature conclusions at this point and stress
+the fact that different classifiers might have fairly varying results
+on different datasets.  Therefore, higher scores of the logistic
+regression on our corpora do not preclude better SVM results on the
+official SemEval data.
 
 \subsection{Error Analysis}\label{subsec:cgsa:ml-methods:err-analysis}
 
 As in our previous experiments, we also decided to have a closer look
-at errors produced by each tested systems.  For this purpose, we again
+at errors produced by each tested system.  For this purpose, we again
 collected misclassifications that were unique to only one of the
-classifiers, and provide some examples of these error cases below.
+classifiers, and provide some examples of these errors below.
 
 The first wrong result shown in
 Example~\ref{snt:cgsa:exmp:gamon-error} was produced by the system
@@ -2245,7 +2246,7 @@ highest ranked features given below:
 \item \texttt{t-\textvisiblespace{}-n} (\textcolor{green3}{positive}): 0.0556721202587;
 \end{enumerate}
 this analyzer makes its decision based on rather general, but
-extremely heavy-weighted features, such as the placeholder token
+extremely heavy-weighted features, such as placeholder token
 \texttt{*} or the PoS-tag features (\texttt{\%PoS-CARD} and
 \texttt{\%PoS-ADJD}).  As a result, its prediction succumbs to the
 neutral bias of these general attributes.
@@ -2390,8 +2391,8 @@ product:
 where $\vec{w}_l$ and $\vec{w}_r$ represent the embeddings of the left
 and right dependents respectively.  By applying a max-margin
 classifier to the final phrase vector, the authors could improve the
-state of the art on predicting the sentence-level polarity of user's
-blog posts~\cite{Potts:10} and also outperformed the system
+state of the art on predicting sentence-level polarity of user's blog
+posts~\cite{Potts:10} and also outperformed the system
 of~\citet{Nasukawa:03} on the MPQA dataset~\cite{Wiebe:05}, achieving
 86.4\% accuracy on predicting contextual polarity of opinionated
 expressions.
@@ -2680,12 +2681,12 @@ in the previous two types:
 The $C$ term in the above equation represents a context-based
 attention matrix $\mathbb{R}^{200 \times 100}$; the $\vec{w}_i$
 variable denotes the word embedding of the $i$-th token; and the
-$\vec{b}_p$ term stands for the value of the vector $\vec{b}$ (the
-result of the lexicon-based attention from Equation~\ref{cgsa:eq:lba})
-at position $p$ (the index of the syntactic parent of $w_i$).  With
-this classifier, we hoped to amplify the importance of shifting words
-in the cases when the immediate syntactic ancestors of these tokens
-were highly subjective expressions (\eg{} ``Er hat die Pr\"ufung kaum
+$\vec{b}_p$ term stands for the value of vector $\vec{b}$ (the result
+of lexicon-based attention from Equation~\ref{cgsa:eq:lba}) at
+position $p$ (the index of syntactic parent of $w_i$).  With this
+classifier, we hoped to amplify the importance of shifting words in
+the cases when the immediate syntactic ancestors of these tokens were
+highly subjective expressions (\eg{} ``Er hat die Pr\"ufung kaum
 bestanden'' [\emph{He hardly passed the exam}] or ``Ich mag den neuen
 Bundesminister nicht'' [\emph{I do not like the new federal
     minister}]), but ignore them when they did not relate to any
@@ -2708,8 +2709,8 @@ Since introducing additional attention types increased the number of
 model parameters, we removed one of the intermediate Bi-LSTM layers in
 the network to counterbalance this effect and report our results for
 both settings: using one and two Bi-LSTM units (denoted as LBA$^{(1)}$
-and LBA$^{(2)}$ respectively).  The final architecture of our approach
-is shown in Figure~\ref{cgsa:fig:lba}.
+and LBA$^{(2)}$, respectively).  The final architecture of our
+approach is shown in Figure~\ref{cgsa:fig:lba}.
 
 % \done[inline]{\citet{Tang:14b}}
 
@@ -3259,7 +3260,7 @@ examples.  We will now investigate both of these factors in detail.
 \subsection{Word Embeddings}
 
 As in the previous chapters, we decided to replace randomly
-initialized word vectors in the very first layer of the vector-based
+initialized word vectors in the very first layer of vector-based
 neural networks with pretrained word2vec embeddings, keeping this
 parameter fixed during the optimization.  As we can see from the
 figures in Table~\ref{snt-cgsa:tbl:dl-res-word2vec}, this operation
@@ -3528,14 +3529,14 @@ and pushing our LBA$^{(1)}$ system even above its most challenging
 competitors.  A similar effect is also observed with other systems,
 first of all BAZ and LBA$^{(2)}$, which yield similarly good results
 for all polarities.  Nevertheless, like in the previous case, these
-improvements usually cause a drop of the recall for the most frequent
+improvements usually cause a drop in the recall for the most frequent
 class of the respective dataset, which is especially severe for the
 system of \citeauthor{Baziotis:17} on the PotTS data (-0.28 on
 positive messages) and the LBA$^{(1)}$ approach on the SB10k test set
 (-0.17 on neutral tweets).  Furthermore, the convolutional system of
 \citeauthor{Severyn:15} and recursive neural tensor approach
 of~\citet{Socher:13} fail to predict any negative tweet on PotTS and
-SB10k respectively, which also leads to a notable drop of their
+SB10k, respectively, which also leads to a notable drop of their
 overall macro-\F--values.  These drops, however, are rather
 exceptional, as the same system of \citeauthor{Severyn:15} shows an
 extraordinary big boost of the results on the SB10k corpus (+0.45
@@ -3916,21 +3917,20 @@ frownies or smileys, assigned a polarity label to each of these posts,
 judging by the type of the emoticons, and subsequently used a subset
 of these documents (22,000 posts) to optimize a Na\"{\i}ve Bayes and
 SVM system.  Even though these classifiers could achieve a
-considerable accuracy (up to 70\%) on predicting the noisy labels of
-the remaining posts, they could not generalize to texts from other
-genres (movie reviews and newswire articles) where they hardly
-outperformed the random-chance baseline. With the onset of the Twitter
-era, this idea of weak supervision has experienced its renaissance
-with the works of \citet{Go:09}, \citet{Pak:10}, and
-\citet{Barbosa:10}.
+considerable accuracy (up to 70\%) on predicting noisy labels of the
+remaining posts, they could not generalize to texts from other genres
+(movie reviews and newswire articles) where they hardly outperformed
+the random-chance baseline. With the onset of the Twitter era, this
+idea of weak supervision has experienced its renaissance with the
+works of \citet{Go:09}, \citet{Pak:10}, and \citet{Barbosa:10}.
 
 In order to check the effect of such noisily annotated data on our
 tested methods, we also automatically labeled all messages from the
 German Twitter Snapshot~\cite{Scheffler:14} based on the occurrences
 of smileys: In particular, we considered a microblog as positive if
 its normalized version contained the token \texttt{\%PositiveSmiley}
-with no other facial expressions.  Similarly to this, we regarded a
-message as negative if the only emoticon in this tweet was
+with no other facial expressions.  Likewise, we regarded a message as
+negative if the only emoticon in this tweet was
 \texttt{\%NegativeSmiley}.  We skipped all posts that contained both
 types of smileys, and assigned the rest of the messages to the neutral
 class. (A detailed breakdown of the final distribution is given in
@@ -3940,14 +3940,15 @@ Since it was impossible to utilize the whole snapshot for the training
 due to limited computational resources (only reading the dataset into
 memory would require 9.3Gb RAM, not to mention the space required for
 storing the embeddings and features), we confined ourselves to one
-sixth of these data, which resulted in 4~M messages.  Moreover, to
-mitigate the extreme skewness of this corpus, we downsampled positive
-and neutral tweets to get an equal number of instances for all classes
-(59,000 microblogs for each polarity) and used these examples in
-addition to the manually analyzed PotTS and SB10k tweets.
+sixth of these data, which still resulted in 4~M messages.
+Furthermore, to mitigate the extreme skewness of this corpus, we
+downsampled positive and neutral tweets to get an equal number of
+instances for all classes (59,000 microblogs for each polarity) and
+used these examples in addition to the manually analyzed PotTS and
+SB10k tweets.
 
 Since lexicon-based approaches were mostly independent of the training
-set, we decided to rerun our experiments only for ML- and fastest
+set, we decided to rerun our experiments only with ML- and fastest
 DL-based methods (RNN, SEV, BAZ, and LBA),\footnote{In all subsequent
   evaluation experiments with DL-based systems, we will use
   pre-trained word2vec vectors (if applicable) with the least-squares
@@ -4215,10 +4216,10 @@ severe, but still substantial degradation is also observed with the
 machine-learning systems of \citeauthor{Mohammad:09} and
 \citeauthor{Guenther:13} as well as our DL-based LBA$^{(1)}$ method,
 whose macro-averaged \F{}-scores go down by 0.15, 0.12, and 0.26
-points on the former corpus and sink by 0.21, 0.15, 0.21 respectively
-on the latter dataset.  The micro-averaged \F{}-results of these
-methods, however, decrease to a much smaller degree, since the main
-drops happen on the negative class, which is by far the least
+points on the former corpus and sink by 0.21, 0.15, 0.21,
+respectively, on the latter dataset.  The micro-averaged \F{}-results
+of these methods, however, decrease to a much smaller degree, since
+the main drops happen on the negative class, which is by far the least
 represented polarity in both corpora.  The micro-averages of the
 remaining systems seem to be affected even less, but are still worse
 than the results obtained without the snapshot data.  We hypothesize
@@ -4293,7 +4294,7 @@ three tested resources (GPC, \textsc{LinProj}, and VEL).
 Regarding the performance of single lexicons, we can see that the best
 results are achieved with the manually curated
 \textsc{SentiWS}~\cite{Remus:10} and Zurich Polarity
-List~\cite{Clematide:10} followed by the dictionary-based approaches
+List~\cite{Clematide:10}, followed by the dictionary-based approaches
 of~\citet{Blair-Goldensohn:08} and \citet{Rao:09}.  The method of the
 nearest centroids vice versa appears to be of the lowest utility for
 almost all systems, even though it demonstrated quite acceptable
@@ -4378,7 +4379,7 @@ positively influence the overall statistics of this method.
 Regarding the breakdown of single polarity classes, we can see that
 most of the rare improvements affect the recall of positive and
 neutral messages, with the biggest gains demonstrated by the RAE and
-RNTN approaches ($+0.37$ and $+0.11$ respectively).  Other positive
+RNTN approaches ($+0.37$ and $+0.11$, respectively).  Other positive
 changes are fairly sporadic and produced by only few classifiers
 (first of all, MVRNN).  Nevertheless, even in these exceptional cases,
 the improvements are typically so small that they hardly outweigh the
@@ -4883,7 +4884,7 @@ initial experiments, but the decrease is much smaller in comparison
 with the PotTS corpus.  A sad exception in this case is a major drop
 of the recall of neutral messages ($-0.79$) demonstrated by our
 LBA$^{(1)}$ system, which, in turn, results in a significant decrease
-of its macro- and micro-averaged \F{}-scores ($-0.14$ and $-0.46$
+of its macro- and micro-averaged \F{}-scores ($-0.14$ and $-0.46$,
 respectively).  Other approaches (including the sibling method
 LBA$^{(2)}$) behave much more stable in this regard and their average
 decrease amounts to $-0.06$ macro- and $-0.03$ micro-\F{}.
@@ -4913,7 +4914,7 @@ following findings and contributions:
   \item surprisingly, among all compared lexicon methods, the most
     simple one (the classifier of~\citeauthor{Hu:04}
     [\citeyear{Hu:04}]) produced the best macro- and micro-averaged
-    \F{}-results on the PotTS corpus (0.615 and 0.685 respectively)
+    \F{}-results on the PotTS corpus (0.615 and 0.685, respectively)
     and also yielded the highest macro \F{}-measure on the SB10k
     dataset (0.421).  Other systems, however, could have improved
     their scores if they better handled the negation of polar terms
@@ -4937,7 +4938,7 @@ following findings and contributions:
     yielded extraordinarily good results as it was the case with our
     proposed lexicon-based attention system, which attained 0.69
     macro-\F{} on the PotTS corpus and 0.55 macro \F{}-score on the
-    SB10k dataset (0.73 and 0.75 micro-\F{} respectively), setting a
+    SB10k dataset (0.73 and 0.75 micro-\F{}, respectively), setting a
     new state of the art for the former data;
   \item speaking of word embeddings, we should note that almost all
     DL-based approaches showed fairly low scores when they used
