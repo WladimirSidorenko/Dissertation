@@ -52,7 +52,7 @@ seen along this way:
 \item In Chapter~\ref{chap:fgsa}, we turned our attention to the
   fine-grained sentiment analysis, in which we tried to predict the
   spans of sentiments, targets, and holders of opinions using two most
-  popular approaches to this task---conditional random fields and
+  popular approaches to this task: conditional random fields and
   recurrent neural networks.  We obtained our best results (0.287
   macro-\F{}) with the first-order linear-chain CRFs.  We could,
   however, increase these scores by using alternative topologies of
@@ -84,14 +84,14 @@ seen along this way:
   existing algorithms, we also proposed our own
   solution---lexicon-based attention (LBA), in which we tried to unite
   the lexicon and deep-learning paradigms by taking a bidirectional
-  LSTM network and explicitly pointing its attention to the polar
-  terms that appeared in the analyzed messages.  With this solution,
-  we not only outperformed all alternative DL systems but also
-  improved on the scores of ML-based classifiers, attaining 0.69
-  macro-\F{} and 0.73 micro-\F{} on the PotTS corpus.  Similarly to
-  our findings of the previous chapter, we observed a strong positive
-  effect of text normalization and task-specific embeddings with the
-  least-squares approximation;
+  LSTM network and explicitly pointing its attention to polar terms
+  that appeared in the analyzed messages.  With this solution, we not
+  only outperformed all alternative DL systems but also improved on
+  the scores of ML-based classifiers, attaining 0.69 macro-\F{} and
+  0.73 micro-\F{} on the PotTS corpus.  Similarly to our findings of
+  the previous chapter, we observed a strong positive effect of text
+  normalization and task-specific embeddings with the least-squares
+  approximation;
 
 \item Finally, in the last part, we tried to improve the results of
   the proposed LBA method by making it aware of the discourse
@@ -100,13 +100,13 @@ seen along this way:
   individually analyzing each of these segments with our MLSA
   classifier, and then estimated the overall polarity of a tweet by
   joining the polarity scores of its EDUs over the RST tree.  We
-  proposed three different ways of doing this joining (latent CRFs,
-  latent-marginalized CRFs, and Recursive Dirichlet Process),
-  obtaining better results than existing discourse-aware sentiment
-  methods and also outperforming the original discourse-unaware
-  baseline.  In the concluding experiments, we further improved these
-  scores by using manually annotated RST trees and richer subsets of
-  discourse relations.
+  proposed three different ways of doing this joining: latent CRFs,
+  latent-marginalized CRFs, and Recursive Dirichlet Process; obtaining
+  better results than existing discourse-aware sentiment methods and
+  also outperforming the original discourse-unaware baseline.  In the
+  concluding experiments, we further improved these scores by using
+  manually annotated RST trees and richer subsets of discourse
+  relations.
 \end{itemize}
 
 
@@ -176,7 +176,7 @@ that we have acquired during our run.  Here we go:
       \item\textbf{Try using manually labeled resources for your
         target domain}, if they are available, but pay attention to
         the quality of their annotation---it often matters more than
-        corpus size;
+        the corpus size;
       \item If there are manually annotated data, \textbf{prefer
         machine-learning methods to hard-coded rules}---they will
         penalize their bad components automatically by themselves;
@@ -410,9 +410,9 @@ that we have acquired during our run.  Here we go:
 
     Yes, we can:
     \begin{itemize}
-    \item we improved the macro-averaged results of exisitng
-      lexicon-generation methods with our proposed linear projection
-      algorithms;
+    \item we improved the macro-averaged results of existing
+      lexicon-generation methods with our proposed linear-projection
+      algorithm;
     \item we increased the scores of fine-grained analysis by
       redefining the topologies of CRFs;
     \item our lexicon-based attention network outperformed many of
@@ -453,7 +453,7 @@ experiments:
   \begin{itemize}
   \item\url{https://github.com/WladimirSidorenko/DiscourseSegmenter},
   \item\url{https://github.com/WladimirSidorenko/RSTParser}, and
-  \item\url{https://github.com/WladimirSidorenko/RSTTool} respectively.
+  \item\url{https://github.com/WladimirSidorenko/RSTTool}, respectively.
   \end{itemize}
 \end{itemize}
 
@@ -476,14 +476,14 @@ publications:
     Twitter in~\cite{Sidarenka:15a}.
 \end{itemize}
 Unfortunately, due to the lack of experience at the initial stage of
-working on this dissertation and because of the time shortage at the
-concluding stage, I\footnote{Throughout this work we have been using
-  the scientific ``we,'' considering the reader as a companion in our
-  marathon.  But because at this point I start describing the
-  limitations of this work, which I am the only person responsible
-  for, I would like to exclude the reader from this criticism by
-  switching to the solitary ``I''.} was not able to publish more or at
-higher-level venues.  I apologize for that.
+working on this dissertation and limited time at the concluding stage,
+I\footnote{Throughout this work we have been using the scientific
+  ``we,'' considering the reader as a companion in our marathon.  But
+  because at this point I start describing the limitations of this
+  work, which I am the only person responsible for, I would like to
+  exclude the reader from this criticism by switching to the solitary
+  ``I''.} was not able to publish more or at higher-level venues.  I
+apologize for that.
 
 
 \section*{Limitations}
@@ -497,19 +497,19 @@ Analysis of German Twitter'', I have concentrated more on the
 I wish I had tried out more sophisticated cross-lingual methods for
 adapting English methods to German, elaborated more on linguistic
 traits of microblogs, and addressed the social aspect of the Twitter
-network.  The main reason why I have not done all these things is that
-six years ago, whe I started working on this dissertation completely
-from scratch, with neither data, nor code, nor any proper plan in my
-head, I was so overwhelmed by the abundance of works on opinion mining
-and text normalization that I decided to answer the questions whether
-existing sentiment methods work, whether text normalization helps, and
-whether I could improve on these methods, first; regrettably, these
-questions have pretty much preoccupied me since then.  Another reason
-why I refrained from addressing certain topics (why, for example, I
-did not extend the Rhetorical Structure Theory to multilogues) is
-because properly handling these problems would require another
-dissertation and would certainly first need to be done for English in
-order to get any international attention.
+network.  The main reason why I have not done all these things is
+that, six years ago, when I started working on this dissertation
+completely from scratch, with neither code, nor data, nor any proper
+plan in my head, I was so overwhelmed by the abundance of works on
+opinion mining and text normalization that I decided to answer the
+questions whether existing sentiment methods work, whether text
+normalization helps, and whether I could improve on these methods,
+first.  Regrettably, these questions have pretty much preoccupied me
+since then.  Another reason why I refrained from addressing certain
+topics (why, for example, I did not extend the Rhetorical Structure
+Theory to multilogues) is because properly handling these problems
+would require another dissertation and would certainly first need to
+be done for English in order to get any international attention.
 
 
 \section*{Final Remarks}
@@ -520,11 +520,11 @@ theme park on the moon.  Although this park is still missing a slot
 machine and a few carousels, it does have a nice card table and many
 other kinds of funny amusements.  Another good thing about it is that
 new carousels are now easier to build; existing amusement rides work
-better than in many other places, and all of them work for free; and,
-finally, the park itself might still entertain its occasional guests.
-You might have enjoyed this theme park as well, or you might have
-not---I appreciate either of your decisions and would like to thank
-you in any case for your visit.
+for free and better than in many other places; and, finally, the park
+itself might still entertain its occasional guests.  You might have
+enjoyed this theme park as well, or you might have not---I appreciate
+either of your decisions and would like to thank you in any case for
+your visit.
 \begin{figure*}[htb]
   \centering \includegraphics[height=5em]{img/bender.png}
 \end{figure*}
