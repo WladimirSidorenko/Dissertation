@@ -348,26 +348,6 @@ systems~\cite[\eg][]{Hernault:10,Feng:14,Ji:14,Yoshida:14,Joty:15}.
 \section{Data Preparation}\label{sec:dasa:data}
 
 To prepare the data for our experiments, we split all microblogs from
-the PotTS and SB10k corpora into elementary discourse units using the
-ML-based discourse segmenter of \citet{Sidarenka:15}, which had been
-previously trained on the Potsdam Commentary Corpus~\cite[PCC~2.0;
-][]{Stede:14}.  After filtering out all tweets that had only one
-EDU,\footnote{Since the focus of this chapter is mainly on discourse
-  phenomena, we skip all messages that consist of a single discourse
-  segment, because their overall polarity is unaffected by the
-  discourse structure and can be normally determined with the standard
-  discourse-unaware sentiment techniques.} we obtained 4,771 messages
-(12,137 segments) for PotTS and 3,763 posts (9,625 segments) for the
-SB10k corpus.  In the next step, we assigned polarity scores to the
-segments of these microblogs with the help of our lexicon-based
-attention classifier, analyzing each elementary unit in isolation,
-independently of the rest of the tweet.  We again used the same
-70--10--20 split into training, development, and test sets as we did
-in the previous chapters, considering message-level labels inferred
-from the annotation of the second expert as gold standard for the
-PotTS corpus and using provided manual sentiment labels for tweets as
-reference for the SB10k data.
-
 %% This figure was generated using the iPython notebook
 %% `notebooks/dasa.ipynb`.
 \begin{figure*}[htb]
@@ -392,6 +372,26 @@ reference for the SB10k data.
             training and development sets of PotTS and
             SB10k}\label{dasa:fig:data-distribution}
 \end{figure*}
+
+the PotTS and SB10k corpora into elementary discourse units using the
+ML-based discourse segmenter of \citet{Sidarenka:15}, which had been
+previously trained on the Potsdam Commentary Corpus~\cite[PCC~2.0;
+][]{Stede:14}.  After filtering out all tweets that had only one
+EDU,\footnote{Since the focus of this chapter is mainly on discourse
+  phenomena, we skip all messages that consist of a single discourse
+  segment, because their overall polarity is unaffected by the
+  discourse structure and can be normally determined with the standard
+  discourse-unaware sentiment techniques.} we obtained 4,771 messages
+(12,137 segments) for PotTS and 3,763 posts (9,625 segments) for the
+SB10k corpus.  In the next step, we assigned polarity scores to the
+segments of these microblogs with the help of our lexicon-based
+attention classifier, analyzing each elementary unit in isolation,
+independently of the rest of the tweet.  We again used the same
+70--10--20 split into training, development, and test sets as we did
+in the previous chapters, considering message-level labels inferred
+from the annotation of the second expert as gold standard for the
+PotTS corpus and using provided manual sentiment labels for tweets as
+reference for the SB10k data.
 
 As we can see from the statistics in
 Figure~\ref{dasa:fig:data-distribution}, most tweets that consist of
@@ -520,13 +520,6 @@ Now before we use these data in our sentiment experiments, let us
 first revise the most prominent approaches to discourse-aware
 sentiment analysis that exist in the literature nowadays.
 
-\begin{example}[Polarity reversal via discourse antithesis]\label{disc-snt:exmp-pang02}
-  \noindent\upshape This film should be brilliant.  It sounds like a
-  great plot, the actors are first grade, and the supporting cast is
-  good as well, and Stallone is attempting to deliver a good
-  performance.  However, it can't hold up.~\cite{Pang:02}
-\end{example}
-
 As it turns out, even the very first works on opinion mining already
 pointed out the importance of discourse phenomena for classification
 of the overall polarity of a text.  For example, in the seminal paper
@@ -563,6 +556,13 @@ sentences at once, without any filtering.
 %% the most indicative sentences and then classified the document [as
 %% either positive or negative] with the help of this subset,
 %% achieving 93.22\% accuracy on the aforementioned IMDB dataset.)
+
+\begin{example}[Polarity reversal via discourse antithesis]\label{disc-snt:exmp-pang02}
+  \noindent\upshape This film should be brilliant.  It sounds like a
+  great plot, the actors are first grade, and the supporting cast is
+  good as well, and Stallone is attempting to deliver a good
+  performance.  However, it can't hold up.~\cite{Pang:02}
+\end{example}
 
 Although an oversimplification, the core idea that locally adjacent
 sentences are likely to share the same subjective orientation
