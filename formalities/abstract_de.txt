@@ -1,0 +1,78 @@
+Titel:
+
+Sentimentanalyse deutschen Twitters
+
+
+Zusammenfassung:
+
+Die enorme Popularität von Online-Kommunikationsdiensten in den
+letzten Jahrzehnten hat nicht unser Leben massiv geändert (wo
+Nachrichten sich wie Fegefeuer übers Internet ausbreiten, Präsidenten
+ihre Entscheidungen auf Twitter ankündigen, und Ergebnisse politischer
+Wahlen in Facebook entschieden werden) sondern auch zu einem
+dramatischen Anstieg der Datenmenge geführt, die über solche
+Plattformen ausgetauscht werden.  Deswegen braucht man heutzutage
+dringend neue, zuverlässige, qualitätvolle NLP-Programme, um
+gesselschaftliche Bedürfnisse und Risiken automatisch aus unzensierten
+Nutzernachrichten erkennen und abschätzen zu können.  Leider wurden
+die meisten modernen NLP-Anwendungen entweder für standardsprachliche
+Texte kreiert (wie wir sie aus Zeitungstexten kennen) oder im besten
+Fall an die Spezifika englischer Social Media angepasst.
+
+Diese Dissertation reduziert den bestehenden Rückstand auf diesem
+Gebiet, indem sie das ``Neuland'' der deutschen Online-Kommunikation
+betritt und sich einer seiner am meist verbreitesten Form
+zuwendet---Nutzerdiskussionen auf Twitter.  Genauer gesagt, diese
+Arbeit erforscht die Art und Weise, wie Leute ihre Meinungen auf
+diesem Online-Service äußern, analysiert existierende Verfahren zur
+automatischen Erkennung solcher Gefühle und schlägt neue Methoden vor,
+die
+
+Zu diesem Zweck stelle ich ein neues Korpus deutscher Tweets vor, die
+manuell mit Sentimenten (polaren Meinungen), ihren Quellen (sources)
+und Zielen (targets) sowie lexikalischen polaren Elementen und deren
+kontextuellen Modifizierern annotiert wurden.  Mit Hilfe dieser Daten
+
+------------------------------------------------------------------
+
+\noindent This thesis reduces the existing deficit by entering the new
+frontier of German online communication and addressing one of its most
+prolific forms---users' conversations on Twitter.  In particular, it
+explores the ways and means by how people express their opinions on
+this service, examines current approaches to automatic mining of these
+feelings, and proposes novel methods that outperform state-of-the-art
+techniques.  For this purpose, I introduce a new corpus of German
+tweets that have been manually annotated with sentiments, their
+targets and holders, as well as lexical polarity items and their
+contextual modifiers.
+%% A detailed inter-annotator agreement study of our dataset shows that
+%% not only are sentiments difficult to analyze for people, but this task
+%% becomes even more challenging in the presence of emoticons or when
+%% dealing with political topics.
+Using these data, I explore four major areas of sentiment research:
+\begin{inparaenum}[(i)]
+\item generation of sentiment lexicons,
+\item aspect-based opinion mining,
+\item message-level polarity classification, and
+\item discourse-aware sentiment analysis.
+\end{inparaenum}
+In the first task, I compare three popular groups of lexicon
+generation methods: dictionary-, corpus-, and word-embedding--based
+ones, finding that dictionary-based systems generally yield better
+polarity lists than the last two groups.  Apart from this, I propose a
+linear projection algorithm, whose results surpass many existing
+automatically-generated lexicons.  Afterwords, in the second task, I
+examine two common approaches to automatic prediction of sentiment
+spans, their sources, and targets: conditional random fields (CRFs)
+and recurrent neural networks, obtaining higher scores with the former
+model and improving these results even further by redefining the
+structure of CRF graphs.  When dealing with message-level polarity
+classification, I juxtapose three major sentiment paradigms: lexicon-,
+machine-learning--, and deep-learning--based systems, and try to unite
+the first and last of these method groups by introducing a
+bidirectional neural network with lexicon-based attention. Finally, in
+order to make the new classifier aware of microblogs' discourse
+structure, I let it separately analyze the elementary discourse units
+of each tweet and infer the overall polarity of a message from the
+scores of its EDUs with the help of two new approaches:
+latent-marginalized CRFs and Recursive Dirichlet Process.
