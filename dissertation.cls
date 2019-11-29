@@ -31,7 +31,7 @@
 \DeclareStringOption{babel}
 \DeclareStringOption{geometry}
 \DeclareStringOption{report}
-\DeclareStringOption{hyperref}
+%% \DeclareStringOption{hyperref}
 
 % Übergib die Parameter an die Pakete
 \ProcessKeyvalOptions*
@@ -147,29 +147,29 @@
 \RequirePackage{ifpdf}
 
 \ifpdf
-\PassOptionsToPackage{%
-	pdftitle={\@TitleASCII},
-	pdfauthor={\@SurnameASCII},
-	pdfsubject={\@Type},
-	pdfkeywords={\@Keywords},
-	pdfpagemode=UseOutlines,
-        colorlinks=true,					% bitte nicht ändern!
-	linkcolor=black,					% bitte nicht ändern!
-	filecolor=black,					% bitte nicht ändern!
-	urlcolor=black,						% bitte nicht ändern!
-	citecolor=black,					% bitte nicht ändern!
-	pdftex=true,              % bitte nicht ändern!
-	plainpages=false,         % bitte nicht ändern!
-	hypertexnames=false,      % bitte nicht ändern!
-	pdfpagelabels=true,       % bitte nicht ändern!
-	hyperindex=true,
-        pdfa=true}{hyperref} % bitte nicht ändern! NEU: PDF/A-flag
+%% \PassOptionsToPackage{%
+%% 	pdftitle={\@TitleASCII},
+%% 	pdfauthor={\@SurnameASCII},
+%% 	pdfsubject={\@Type},
+%% 	pdfkeywords={\@Keywords},
+%% 	pdfpagemode=UseOutlines,
+%%         colorlinks=true,					% bitte nicht ändern!
+%% 	linkcolor=black,					% bitte nicht ändern!
+%% 	filecolor=black,					% bitte nicht ändern!
+%% 	urlcolor=black,						% bitte nicht ändern!
+%% 	citecolor=black,					% bitte nicht ändern!
+%% 	pdftex=true,              % bitte nicht ändern!
+%% 	plainpages=false,         % bitte nicht ändern!
+%% 	hypertexnames=false,      % bitte nicht ändern!
+%% 	pdfpagelabels=true,       % bitte nicht ändern!
+%% 	hyperindex=true,
+%%         pdfa=true}{hyperref} % bitte nicht ändern! NEU: PDF/A-flag
 
-\ifx\DOT@hyperref\@empty
-  \RequirePackage{hyperref}
-\else
-  \expandafter\RequirePackage\expandafter[\DOT@hyperref]{hyperref}
-\fi
+%% \ifx\DOT@hyperref\@empty
+%%   \RequirePackage{hyperref}
+%% \else
+%%   \expandafter\RequirePackage\expandafter[\DOT@hyperref]{hyperref}
+%% \fi
 
 \else
    %hier können Sie gegebenenfalls Befehle umdefinieren,
